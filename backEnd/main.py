@@ -16,25 +16,26 @@ global loss
 
 @app.route('/test', methods=['GET', 'POST'])
 def test():
-    inf = request.json
+    inf = request.json          # information get from the front-end
     r = 0
-    fileName = inf[0]["attribute"]["sourceFile"] + ".json"
+    inputName = inf[0]["attribute"]["sourceFile"]
+    outputName = ""
 
     for index in range(1,len(inf)):
         print(inf[index]["label"])
-        outputName = ""
+        
         if inf[index]["label"] == "FillNa":
 
             fileobj = open('./DataPreprocessing/FillNa.scala', 'r')     # open scala file where your spark code lies
             fillingNumber = inf[index]["attribute"]["fillingNumber"]
-            outputName = fileName + "_afterFillNa.json"
+            outputName = inputName + "_afterFillNa"
 
             try:
                 code = fileobj.read()
             finally:
                 fileobj.close()
 
-            data_mine = {'code': code % (fileName,fillingNumber,outputName)}
+            data_mine = {'code': code % (inputName+'.json',fillingNumber,outputName+'.json')}
 
             session_url = 'http://localhost:8998/sessions/0'
             compute = requests.post(session_url+'/statements', data=json.dumps(data_mine), headers=headers)
@@ -52,6 +53,40 @@ def test():
 
 
             pprint.pprint(r.json())
+
+            inputName = outputName
+
+        elif inf[index]["label"] == "MaxMinScaler":
+            fileobj = open('./DataPreprocessing/MaxMinScaler.scala', 'r')
+            outputName = inputName + "_afterMaxMinScaler"
+
+            try:
+                code = fileobj.read()
+            finally:
+                fileobj.close()
+
+            data_mine = {'code': code % (inputName+'.json',outputName+'.json')}
+
+            session_url = 'http://localhost:8998/sessions/0'
+            compute = requests.post(session_url+'/statements', data=json.dumps(data_mine), headers=headers)
+
+            result_url = host + compute.headers['location']
+
+            r = requests.get(result_url, headers=headers)
+            print(r.json())
+
+            while(True):
+                r = requests.get(result_url, headers=headers)
+                if r.json()['state'] == 'available':
+                    print("finish")
+                    break
+
+
+            pprint.pprint(r.json())
+
+            inputName = outputName
+
+
 
         print(inf[index]["attribute"])
 
