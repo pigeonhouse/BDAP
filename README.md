@@ -1,1 +1,1 @@
-A big data platform for both education and businessssss
+A big data platform for both education and business use
