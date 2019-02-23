@@ -16,6 +16,19 @@ global loss
 
 @app.route('/test', methods=['GET', 'POST'])
 def test():
+    # data_mine = {'kind': 'spark'}
+    # create_session = requests.post(host + '/sessions', data=json.dumps(data_mine), headers=headers)
+    # session_url = host + create_session.headers['location']
+
+    # while(True):                
+    #     r = requests.get(session_url, headers=headers)
+    #     if r.json()['state'] == 'idle':
+    #         print("started")
+    #         break
+
+    # code above aims for open a new livy session, it is suggested to open it in andvance to avoid wasting time 
+
+    
     inf = request.json          # information get from the front-end
     r = 0
     inputName = inf[0]["attribute"]["sourceFile"]
@@ -91,18 +104,6 @@ def test():
         print(inf[index]["attribute"])
 
     
-    # data_mine = {'kind': 'spark'}
-    # create_session = requests.post(host + '/sessions', data=json.dumps(data_mine), headers=headers)
-    # session_url = host + create_session.headers['location']
-
-    # while(True):                
-    #     r = requests.get(session_url, headers=headers)
-    #     if r.json()['state'] == 'idle':
-    #         print("started")
-    #         break
-
-    # code above aims for open a new livy session, it is suggested to open it in andvance to avoid wasting time 
-
     
     #requests.delete(session_url, headers=headers)  
         
