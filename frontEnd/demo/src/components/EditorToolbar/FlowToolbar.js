@@ -7,15 +7,14 @@ import {AppendingLineChart} from "../linechart/linechart.ts";
 import d3 from "d3"
 import {run} from "../Models/MnistTest/mnist"
 import { withPropsAPI } from '@src';
-
+import store from '../../store';
+import { getStopLineAction, getShowLineAction } from '../../store/actionCreate';
 
 class FlowToolbar extends React.Component {
 
   state = {
     visible: false,
-    running : false,
-
-     }
+  }
 
 
   livyTest = () =>{
@@ -167,11 +166,16 @@ class FlowToolbar extends React.Component {
       visible: false,
     });
   }
-
+  stopLine = () =>{
+    const action = getStopLineAction();
+    store.dispatch(action);
+    console.log(store.getState().running);
+  }
   showLine = () =>{
-
+    const action = getShowLineAction();
+    store.dispatch(action);
+    console.log(store.getState().running);
     run(100);
-    
   }
 
 

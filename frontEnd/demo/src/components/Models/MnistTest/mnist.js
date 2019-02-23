@@ -21,6 +21,7 @@
 import {IMAGE_H, IMAGE_W, MnistData} from './data';
 import {AppendingLineChart} from "../../linechart/linechart.ts";
 import d3 from "d3"
+import store from '../../../store'
 
 import {showTestResults} from './ui';
 
