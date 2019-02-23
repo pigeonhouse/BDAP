@@ -80,6 +80,18 @@ class FlowItemPanel extends React.Component {
             }}
            
           /></ItemPanel></Menu.Item>
+
+          <Menu.Item key="6"><ItemPanel><Item
+            type="node"
+            size="200*40"
+            shape="flow-rect"
+            model={{
+              // color: '#722ED1',
+              label: 'MaxMinScaler',
+              attr:{'rows':'unknown'}
+            }}
+           
+          /></ItemPanel></Menu.Item>
           
         </MenuItemGroup>
       </SubMenu>
