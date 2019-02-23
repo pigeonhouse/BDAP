@@ -1,0 +1,26 @@
+.item-panel {
+  flex: 1;
+  background: #FAFAFA;
+
+  :global {
+    .ant-card {
+      background: #FAFAFA;
+    }
+
+    .ant-card-body {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+
+      > div {
+        margin-bottom: 16px;
+      }
+    }
+  }
+}
+.scrollapp {
+  overflow-x: hidden;
+  overflow-y: auto;
+  
+}
+.scrollapp::-webkit-scrollbar{width:0;}
