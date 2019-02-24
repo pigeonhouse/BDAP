@@ -19,8 +19,6 @@ while(i < 10){
 val df = spark.read.json("/examples/%s").na.fill(%d)
 df.write.format("json").save("hdfs:///examples/%s")
 
-//scaledData.write.format("json").save("hdfs:///examples/scaledData")
-
 
 /**  
 
