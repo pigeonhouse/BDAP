@@ -54,7 +54,7 @@ class FlowItemPanel extends React.Component {
             model={{
               // color: '#13C2C2',
               label: 'ConvNet',
-              attr:{'learningRate':0.1}
+              attr:{'learningRate':0.1, poolSize: 2, strides: 2}
             }}
             
           /></ItemPanel></Menu.Item>

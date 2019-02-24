@@ -86,6 +86,13 @@ class NodeDetail extends React.Component {
     }
 
     const { label } = item.getModel();
+    const { attr } = item.getModel();
+    var arr = []
+    for (let i in attr) {
+        let o = {};
+        o[i] = attr[i];
+        arr.push(o)
+    }
 
     return (
       <Card type="inner" title="参数" bordered={false}>
@@ -98,6 +105,16 @@ class NodeDetail extends React.Component {
               })(<Input onBlur={this.handleSubmit} />)
             }
           </Item>
+          {arr.map((item)=>{
+            const itemKey = Object.keys(item)[0];
+            return <Item label={itemKey} {...inlineFormItemLayout}>
+                    {
+                      getFieldDecorator(`attr.${itemKey}` , {
+                        initialValue: item[itemKey],
+                      })(<Input onBlur={this.handleSubmit} />)
+                    }
+                  </Item>;
+          })}
 
         </Form>
       </Card>
