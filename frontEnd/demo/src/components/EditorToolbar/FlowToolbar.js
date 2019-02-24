@@ -98,49 +98,51 @@ class FlowToolbar extends React.Component {
     var isLegal = 0;
     var noneed = 1;
     const inf = propsAPI.save();
-    const lenE = inf.edges.length;
-    const LenE =lenE;
 
-    if (lenE > 0) {
-      var Sourc;
-      let path = new Array(inf.nodes.length).fill(0);
+    if(inf.hasOwnProperty('edges')){
+      if (inf.nodes.length > 1) {
+        var Sourc;
+        const lenE = inf.edges.length;
+        const LenE =lenE;
+        let path = new Array(inf.nodes.length).fill(0);
 
-      for (let indexN of inf.nodes.keys()) {
-        if ('Input' === inf.nodes[indexN].label) {
-          Sourc = inf.nodes[indexN].id;
-          path[indexN] = 1;
-          noneed = 0;
-          break;
+        for (let indexN of inf.nodes.keys()) {
+          if ('Input' === inf.nodes[indexN].label) {
+            Sourc = inf.nodes[indexN].id;
+            path[indexN] = 1;
+            noneed = 0;
+            break;
+          }
         }
-      }
-      if(noneed === 0) {
-        for (var k = 0; k < lenE; k++) {
+        if(noneed === 0) {
+          for (var k = 0; k < lenE; k++) {
 
-          for (let indexE of inf.edges.keys()) {
-            if (Sourc === inf.edges[indexE].source) {
-              Sourc = inf.edges[indexE].target;
+            for (let indexE of inf.edges.keys()) {
+              if (Sourc === inf.edges[indexE].source) {
+                Sourc = inf.edges[indexE].target;
 
-              for (let indexN of inf.nodes.keys()) {
-                if (inf.nodes[indexN].id === Sourc) {
-                  if (path[indexN] === 0) {
-                    if (k === LenE - 1 && inf.nodes[indexN].label === 'Output') {
-                      isLegal = 1;
-                      break;
+                for (let indexN of inf.nodes.keys()) {
+                  if (inf.nodes[indexN].id === Sourc) {
+                    if (path[indexN] === 0) {
+                      if (k === LenE - 1 && inf.nodes[indexN].label === 'Output') {
+                        isLegal = 1;
+                        break;
+                      } else {
+                        path[indexN] = 1;
+                        break;
+                      }
                     } else {
-                      path[indexN] = 1;
+                      noneed = 1;
                       break;
                     }
-                  } else {
-                    noneed = 1;
-                    break;
                   }
                 }
+                break;
               }
+            }
+            if (noneed === 1) {
               break;
             }
-          }
-          if (noneed === 1) {
-            break;
           }
         }
       }
