@@ -14,8 +14,8 @@ class FlowToolbar extends React.Component {
 
   state = {
     visible: false,
+    stream : new Array(),
   }
-
 
   livyTest = () =>{
   const init={
@@ -90,7 +90,7 @@ class FlowToolbar extends React.Component {
       }
     }
     console.log(stream)
-    return stream
+    this.setState({stream : stream})
   }
   
  handleLegal() {
@@ -174,10 +174,11 @@ class FlowToolbar extends React.Component {
     console.log(store.getState().running);
   }
   showLine = () =>{
-    const action = getShowLineAction();
-    store.dispatch(action);
-    console.log(store.getState().running);
-    run(100);
+    // const action = getShowLineAction();
+    // store.dispatch(action);
+    // console.log(store.getState().running);
+    // run(100);
+    console.log(this.state.stream)
   }
 
 
