@@ -10,7 +10,7 @@ import { withPropsAPI } from '@src';
 import store from '../../store';
 import { getStopLineAction, getShowLineAction } from '../../store/actionCreate';
 import Papa from 'papaparse'
-
+import {LinearRegression} from '../Models/SimpleLinearRegression/SimpleLinearRegression.js'
 class FlowToolbar extends React.Component {
 
   state = {
@@ -183,14 +183,15 @@ class FlowToolbar extends React.Component {
     // store.dispatch(action);
     // console.log(store.getState().running);
     // run(100);
-    console.log(this.state.stream)
-    var step = this.state.stream
-    console.log(step[0]["label"])
-    console.log(step[0]["attribute"])
-    for(let index = 1; index < step.length; index++){
-      console.log(step[index]["label"])
-      console.log(step[index]["attribute"])
-    }
+    LinearRegression();
+    // console.log(this.state.stream)
+    // var step = this.state.stream
+    // console.log(step[0]["label"])
+    // console.log(step[0]["attribute"])
+    // for(let index = 1; index < step.length; index++){
+    //   console.log(step[index]["label"])
+    //   console.log(step[index]["attribute"])
+    // }
 
   }
 
@@ -202,7 +203,7 @@ class FlowToolbar extends React.Component {
     console.log(e.target.files[0]);
       reader.onload = function(e) {
       console.log(e.target.result);
-       var results = Papa.parse(e.target.result);
+       var results = Papa.parse(e.target.result,{header:true,dynamicTyping: true});
        console.log(results);
       }
   }
@@ -310,7 +311,7 @@ class FlowToolbar extends React.Component {
           
           <div id="images">  </div>
           
-          <Button type="primary" onClick={this.showLine}>start</Button>
+          <Button type="primary" onClick={()=>this.showLine()}>start</Button>
           <span> </span>
           <Button type="primary" onClick={this.stopLine}>stop</Button>
 
