@@ -9,6 +9,7 @@ import {run} from "../Models/MnistTest/mnist"
 import { withPropsAPI } from '@src';
 import store from '../../store';
 import { getStopLineAction, getShowLineAction } from '../../store/actionCreate';
+import Papa from 'papaparse'
 
 class FlowToolbar extends React.Component {
 
@@ -36,18 +37,20 @@ class FlowToolbar extends React.Component {
   }
 
   returnLoss = () =>{
-    const init={
-      method: 'GET', 
-    }
-    fetch(
-      'http://localhost:5000/returnLoss',init
-    )
-      .then(res => res.json())
-      .then(data => {
-        console.log(data)
-        this.setState({users: data})
-      })
-      .catch(e => console.log('错误:', e))
+    // const init={
+    //   method: 'GET', 
+    // }
+    // fetch(
+    //   'http://localhost:5000/returnLoss',init
+    // )
+    //   .then(res => res.json())
+    //   .then(data => {
+    //     console.log(data)
+    //     this.setState({users: data})
+    //   })
+    //   .catch(e => console.log('错误:', e))
+
+
   }
   
   showDetail(){
@@ -91,6 +94,8 @@ class FlowToolbar extends React.Component {
     }
     console.log(stream)
     this.setState({stream : stream})
+
+
   }
   
  handleLegal() {
@@ -179,6 +184,27 @@ class FlowToolbar extends React.Component {
     // console.log(store.getState().running);
     // run(100);
     console.log(this.state.stream)
+    var step = this.state.stream
+    console.log(step[0]["label"])
+    console.log(step[0]["attribute"])
+    for(let index = 1; index < step.length; index++){
+      console.log(step[index]["label"])
+      console.log(step[index]["attribute"])
+    }
+
+  }
+
+  testFile = (e)=>{
+    var files = e.target.files; // FileList object
+    var reader = new FileReader();
+    console.log(reader);
+    reader.readAsText(files[0],'gbk');
+    console.log(e.target.files[0]);
+      reader.onload = function(e) {
+      console.log(e.target.result);
+       var results = Papa.parse(e.target.result);
+       console.log(results);
+      }
   }
 
 
@@ -287,10 +313,14 @@ class FlowToolbar extends React.Component {
           <Button type="primary" onClick={this.showLine}>start</Button>
           <span> </span>
           <Button type="primary" onClick={this.stopLine}>stop</Button>
+
+          <input type="file" id="files" name="files[]" onChange={(e)=>this.testFile(e)} multiple />
+	        <output id="list"></output>
         </Modal>
 
-        <Button className={styles.buttonRight1} href='#'>用户</Button>
-        <Button className={styles.buttonRight2} href='#'>退出</Button>
+
+        {/* <Button className={styles.buttonRight1} href='#'>用户</Button>
+        <Button className={styles.buttonRight2} href='#'>退出</Button> */}
         {/* <Link to='/' className={styles.buttonRight2}>退出</Link>
               <Route exact={true}path='/' component={Home}></Route> */}
 
