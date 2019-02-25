@@ -1,6 +1,6 @@
 import SimpleLinearRegression from 'ml-regression-simple-linear';
 
-export function LinearRegression(){
+export function OneVarLinearRegression(){
     const x = [0.5, 1, 1.5, 2, 2.5];
     const y = [0, 1, 2, 3, 4];
     

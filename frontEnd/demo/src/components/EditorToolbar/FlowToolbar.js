@@ -10,7 +10,7 @@ import { withPropsAPI } from '@src';
 import store from '../../store';
 import { getStopLineAction, getShowLineAction } from '../../store/actionCreate';
 import Papa from 'papaparse'
-import {LinearRegression} from '../Models/SimpleLinearRegression/SimpleLinearRegression.js'
+import {OneVarLinearRegression} from '../Models/OneVarLinearRegression/OneVarLinearRegression.js'
 class FlowToolbar extends React.Component {
 
   state = {
@@ -183,7 +183,7 @@ class FlowToolbar extends React.Component {
     // store.dispatch(action);
     // console.log(store.getState().running);
     // run(100);
-    LinearRegression();
+    OneVarLinearRegression();
     // console.log(this.state.stream)
     // var step = this.state.stream
     // console.log(step[0]["label"])
@@ -198,13 +198,24 @@ class FlowToolbar extends React.Component {
   testFile = (e)=>{
     var files = e.target.files; // FileList object
     var reader = new FileReader();
-    console.log(reader);
+    //console.log(reader);
     reader.readAsText(files[0],'gbk');
-    console.log(e.target.files[0]);
+    //console.log(e.target.files[0]);
       reader.onload = function(e) {
-      console.log(e.target.result);
+      //console.log(e.target.result);
        var results = Papa.parse(e.target.result,{header:true,dynamicTyping: true});
-       console.log(results);
+       //console.log(results.data[0])
+       var fieldNameArray = results.meta.fields;
+       var allData = new Array();
+       for(let indexOfCols = 0; indexOfCols < fieldNameArray.length; indexOfCols++){
+         var colName = fieldNameArray[indexOfCols];
+         var colValue = new Array();
+         for (let indexOfRows = 0; indexOfRows < results.data.length - 1; indexOfRows++){
+            colValue.push(results.data[indexOfRows][colName])
+         }
+         allData.push({"label":colName,"data":colValue})
+       }
+       console.log(allData)
       }
   }
 
