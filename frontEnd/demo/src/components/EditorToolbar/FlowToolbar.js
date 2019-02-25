@@ -12,6 +12,7 @@ import { getStopLineAction, getShowLineAction } from '../../store/actionCreate';
 import Papa from 'papaparse'
 import {OneVarLinearRegression} from '../Models/OneVarLinearRegression/OneVarLinearRegression.js'
 import Download from '../DataOperate/download'
+import Selectword from '../DataOperate/selectword'
 class FlowToolbar extends React.Component {
 
   state = {
@@ -312,6 +313,7 @@ class FlowToolbar extends React.Component {
           list = {[["name1", "123", "some other info"], ["name2", "city2", "more info"]]}
           filename = {'test'}
         />
+        <Selectword></Selectword>
 
         <Modal title="Basic Modal" visible={this.state.visible}
           onOk={this.handleOk} onCancel={this.handleCancel}
