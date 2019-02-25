@@ -11,6 +11,8 @@ import store from '../../store';
 import { getStopLineAction, getShowLineAction } from '../../store/actionCreate';
 import Papa from 'papaparse'
 import {OneVarLinearRegression} from '../Models/OneVarLinearRegression/OneVarLinearRegression.js'
+import Download from '../DataOperate/download'
+import Selectword from '../DataOperate/selectword'
 class FlowToolbar extends React.Component {
 
   state = {
@@ -350,6 +352,11 @@ class FlowToolbar extends React.Component {
         <Button  onClick={()=>this.showDetail()}>run</Button>
         <Button onClick={()=>this.livyTest()}>spark-test</Button>
         <Button onClick={()=>this.returnLoss()}>return-loss</Button>
+        <Download 
+          list = {[["name1", "123", "some other info"], ["name2", "city2", "more info"]]}
+          filename = {'test'}
+        />
+        <Selectword></Selectword>
 
         <Modal title="Basic Modal" visible={this.state.visible}
           onOk={this.handleOk} onCancel={this.handleCancel}
