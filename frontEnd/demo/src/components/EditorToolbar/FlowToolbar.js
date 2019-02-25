@@ -15,7 +15,6 @@ class FlowToolbar extends React.Component {
 
   state = {
     visible: false,
-    stream : new Array(),
   }
 
   livyTest = () =>{
@@ -195,28 +194,72 @@ class FlowToolbar extends React.Component {
 
   }
 
-  testFile = (e)=>{
+  setTest = (allData,fieldNameArray,vectorLength) =>{
+    this.setState({
+      dataSet:allData,
+      labelArray:fieldNameArray,
+      length:vectorLength
+    })
+  }
+
+  readFile = (e)=>{
     var files = e.target.files; // FileList object
     var reader = new FileReader();
-    //console.log(reader);
+    var fieldNameArray = new Array();
+    var allData = new Array();
+    var vectorLength = new Array();
+
     reader.readAsText(files[0],'gbk');
     //console.log(e.target.files[0]);
       reader.onload = function(e) {
+      
       //console.log(e.target.result);
        var results = Papa.parse(e.target.result,{header:true,dynamicTyping: true});
-       //console.log(results.data[0])
-       var fieldNameArray = results.meta.fields;
-       var allData = new Array();
-       for(let indexOfCols = 0; indexOfCols < fieldNameArray.length; indexOfCols++){
-         var colName = fieldNameArray[indexOfCols];
+       fieldNameArray.push(results.meta.fields);
+       vectorLength.push(results.data.length - 1)
+
+       var n = new Array();
+      //  console.log(results)
+       for(let indexOfCols = 0; indexOfCols < fieldNameArray[0].length; indexOfCols++){
+         var colName = fieldNameArray[0][indexOfCols];
          var colValue = new Array();
          for (let indexOfRows = 0; indexOfRows < results.data.length - 1; indexOfRows++){
             colValue.push(results.data[indexOfRows][colName])
          }
-         allData.push({"label":colName,"data":colValue})
+         n[colName] = colValue
        }
+       allData.push(n)
        console.log(allData)
+       
       }
+      console.log(allData)
+      this.setTest(allData,fieldNameArray,vectorLength)
+
+  }
+
+  makeFile = ()=>{
+    var allData = this.state.dataSet[0]
+
+    var fieldNameArray = this.state.labelArray[0]
+
+    var vectorlength = this.state.length[0]
+    
+    var newData = new Array();
+
+    for(let indexOfRows = 0;indexOfRows < vectorlength; indexOfRows++){
+      var row = new Array();
+      for(let indexOfCols = 0; indexOfCols < fieldNameArray.length; indexOfCols++ ){
+          row.push(allData[fieldNameArray[indexOfCols]][indexOfRows])
+      }
+      newData.push(row);
+    }
+    var csv = Papa.unparse({
+      "fields": fieldNameArray,
+      "data": newData
+    });
+
+    console.log(csv)
+
   }
 
 
@@ -324,10 +367,12 @@ class FlowToolbar extends React.Component {
           
           <Button type="primary" onClick={()=>this.showLine()}>start</Button>
           <span> </span>
-          <Button type="primary" onClick={this.stopLine}>stop</Button>
+          <Button type="primary" onClick={()=>this.stopLine()}>stop</Button>
 
-          <input type="file" id="files" name="files[]" onChange={(e)=>this.testFile(e)} multiple />
+          <input type="file" id="files" name="files[]" onChange={(e)=>this.readFile(e)} multiple />
 	        <output id="list"></output>
+          <Button type="primary" onClick={()=>this.makeFile()}>makeFile</Button>
+
         </Modal>
 
 

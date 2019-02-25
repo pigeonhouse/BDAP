@@ -1,12 +1,12 @@
 import SimpleLinearRegression from 'ml-regression-simple-linear';
 
-export function OneVarLinearRegression(){
-    const x = [0.5, 1, 1.5, 2, 2.5];
-    const y = [0, 1, 2, 3, 4];
+export function OneVarLinearRegression(DataSet, col1_Name, col2_Name){
+    const x = DataSet[col1_Name];
+    const y = DataSet[col2_Name];
     
     const regression = new SimpleLinearRegression(x, y);
     
-    console.log(regression.slope,regression.intercept,regression.coefficients)
+    console.log(regression.slope,regression.intercept)
 
     // regression.predict(3); // 5
     // regression.computeX(3.5); // 2.25
