@@ -22,7 +22,7 @@ class NodeDetail extends React.Component {
   state = {
     visible: false,
     running : false,
-     }
+  }
 
   handleSubmit = (e) => {
     e.preventDefault();
@@ -36,11 +36,9 @@ class NodeDetail extends React.Component {
       }
 
       const item = getSelected()[0];
-
       if (!item) {
         return;
       }
-
       executeCommand(() => {
         update(item, {
           ...values,
@@ -49,7 +47,20 @@ class NodeDetail extends React.Component {
       });
     });
   }
-
+  changeColor = (e)=>{
+    e.preventDefault();
+    const { propsAPI } = this.props;
+    const { getSelected, executeCommand, update, find } = propsAPI;
+    const item1 = getSelected()[0];
+    console.log(item1)
+    const values = {state_icon_url:'https://gw.alipayobjects.com/zos/rmsportal/czNEJAmyDpclFaSucYWB.svg'}
+    executeCommand(() => {
+      const item = find(item1.id);
+      update(item, {
+        ...values,
+      });
+    });
+  }
   showModal = () => {
     console.log(a)
     this.setState({
@@ -57,8 +68,6 @@ class NodeDetail extends React.Component {
     });
 
   }
-
-
 
   handleOk = (e) => {
     console.log(e);
@@ -80,7 +89,7 @@ class NodeDetail extends React.Component {
     const { getSelected } = propsAPI;
 
     const item = getSelected()[0];
-
+    
     if (!item) {
       return null;
     }
@@ -115,7 +124,7 @@ class NodeDetail extends React.Component {
                     }
                   </Item>;
           })}
-
+          <Item><Button onClick={this.changeColor}>down</Button></Item>
         </Form>
       </Card>
     );
