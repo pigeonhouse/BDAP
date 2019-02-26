@@ -22,7 +22,7 @@ import {IMAGE_H, IMAGE_W, MnistData} from './data';
 import {AppendingLineChart} from "../../linechart/linechart.ts";
 import d3 from "d3"
 import store from '../../../store'
-
+import { Conv, Dens, FillN, MaxM, Inp, Outp} from '../../../store/actionCreate';
 import {showTestResults} from './ui';
 
 // This is a helper class for drawing loss graphs and MNIST images to the
@@ -301,10 +301,74 @@ async function load() {
 //   await train(model, () => showPredictions(model));
 // });
 
-export async function run(b){
-    await load();
-    const model = createModel();
-    model.summary();
-    await train(model, () => showPredictions(model),b);
+function CONVNET(Dataset) {
+  // noinspection JSAnnotator
+  const action = Conv(Dataset);
+  store.dispatch(action);
+  console.log(store.getState().Dataset);
+};
+function DENSENET(Dataset) {
+  const action = Dens(Dataset);
+  store.dispatch(action);
+  console.log(store.getState().Dataset);
+}
+
+function FILLNA(Dataset) {
+  const action = FillN(Dataset);
+  store.dispatch(action);
+  console.log(store.getState().Dataset);
+}
+
+function MAXMINSCALER(Dataset) {
+  const action = MaxM(Dataset);
+  store.dispatch(action);
+  console.log(store.getState().Dataset);
+}
+
+function INPUT(Dataset) {
+  const action = Inp(Dataset);
+  store.dispatch(action);
+  console.log(store.getState().Dataset);
+}
+
+function OUTPUT(Dataset) {
+  const action = Outp(Dataset);
+  store.dispatch(action);
+  console.log(store.getState().Dataset);
+}
+
+
+export function run() {
+
+  //await load();
+  // const model = createModel();
+  // model.summary();
+  // await train(model, () => showPredictions(model),b);
+  console.log(stream);
+
+  for (let k = 0; k < stream.length; k++) {
+    switch (stream[indexS].label) {
+      case 'Input':
+        INPUT();
+        break;
+      case 'Output':
+        OUTPUT();
+        break;
+      case 'DenseNet':
+        DENSENET();
+        break;
+      case 'ConvNet':
+        CONVNET();
+        break;
+      case 'FillNa':
+        FILLNA();
+        break;
+      case 'MaxMinScaler':
+        MAXMINSCALER();
+        break;
+      default:
+        break;
+    }
+  }
 
 }

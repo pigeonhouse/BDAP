@@ -220,8 +220,8 @@ class FlowToolbar extends React.Component {
     // const action = getShowLineAction();
     // store.dispatch(action);
     // console.log(store.getState().running);
-    // run(100);
-    OneVarLinearRegression();
+    run();
+    //OneVarLinearRegression();
     // console.log(this.state.stream)
     // var step = this.state.stream
     // console.log(step[0]["label"])
