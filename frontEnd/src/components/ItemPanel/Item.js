@@ -16,7 +16,6 @@ class Item extends React.Component {
 
   handleMouseDown = () => {
     const { type, size, shape, model } = this.props;
-
     if (this.page) {
       this.page.beginAdd(type, {
         type,
