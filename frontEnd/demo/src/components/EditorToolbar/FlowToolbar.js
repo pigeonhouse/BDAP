@@ -60,7 +60,7 @@ class FlowToolbar extends React.Component {
     });
     const { propsAPI } = this.props;
     console.log(propsAPI.save())
-    
+
     const inf = propsAPI.save();
 
     var Sourc = 0;
@@ -68,35 +68,69 @@ class FlowToolbar extends React.Component {
     var stream = new Array();
     var attribute = new Array();
 
-    for (let indexN of inf.nodes.keys()) {
-      if ('Input' === inf.nodes[indexN].label) {
-        Sourc = inf.nodes[indexN].id;
-        attribute = inf.nodes[indexN].attr
-        stream.push({"label":tag,"attribute":attribute})
-        break;
-      }
-    }
 
-    for (var k = 0; k < inf.nodes.length; k++) {
+    if(inf.hasOwnProperty('edges')){
+      let Deg = new Array(inf.nodes.length).fill(0);
+
       for (let indexE of inf.edges.keys()) {
-        if (Sourc === inf.edges[indexE].source) {
-          Sourc = inf.edges[indexE].target;   
-          for (let indexN of inf.nodes.keys()) {
-            if (Sourc === inf.nodes[indexN].id) {
-              tag = inf.nodes[indexN].label;
-              attribute = inf.nodes[indexN].attr
-              stream.push({"label":tag,"attribute":attribute})
-              break;
+        Sourc = inf.edges[indexE].target;
+        for (let indexN of inf.nodes.keys()) {
+          if (Sourc === inf.nodes[indexN].id) {
+            Deg[indexN]++;
+          }
+        }
+      }
+      console.log(Deg);
+
+      for (var k = 0; k < inf.nodes.length; ) {
+        for (let indexN of inf.nodes.keys()){
+          if(Deg[indexN] === 0){
+            k++;
+            Deg[indexN]--;
+            Sourc = inf.nodes[indexN].id;
+            tag = inf.nodes[indexN].label;
+            attribute = inf.nodes[indexN].attr;
+            stream.push({"label":tag,"attribute":attribute});
+            for (var i = 0; i < inf.edges.length; i++){
+              if(Sourc === inf.edges[i].source){
+                for (var m = 0; m < inf.nodes.length; m++){
+                  if(inf.nodes[m].id === inf.edges[i].target){
+                    Deg[m]--;
+                  }
+                }
+              }
             }
           }
-          break;
         }
       }
     }
-    console.log(stream)
-    this.setState({stream : stream})
-
-
+    // if(inf.hasOwnProperty('edges')){
+    // for (let indexN of inf.nodes.keys()) {
+    //   if ('Input' === inf.nodes[indexN].label) {
+    //     Sourc = inf.nodes[indexN].id;
+    //     attribute = inf.nodes[indexN].attr
+    //     stream.push({"label":tag,"attribute":attribute});
+    //     break;
+    //   }
+    // }
+    // for (var k = 0; k < inf.nodes.length; k++) {
+    //   for (let indexE of inf.edges.keys()) {
+    //     if (Sourc === inf.edges[indexE].source) {
+    //       Sourc = inf.edges[indexE].target;
+    //       for (let indexN of inf.nodes.keys()) {
+    //         if (Sourc === inf.nodes[indexN].id) {
+    //           tag = inf.nodes[indexN].label;
+    //           attribute = inf.nodes[indexN].attr
+    //           stream.push({"label":tag,"attribute":attribute})
+    //           break;
+    //         }
+    //       }
+    //       break;
+    //     }
+    //   }
+    // }
+    console.log(stream);
+    return stream
   }
   
  handleLegal() {
