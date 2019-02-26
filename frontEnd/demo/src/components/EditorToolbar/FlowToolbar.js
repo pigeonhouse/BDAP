@@ -261,6 +261,9 @@ class FlowToolbar extends React.Component {
     });
 
     console.log(csv)
+    this.setState({
+      finalData:csv
+    })
 
   }
 
@@ -352,10 +355,7 @@ class FlowToolbar extends React.Component {
         <Button  onClick={()=>this.showDetail()}>run</Button>
         <Button onClick={()=>this.livyTest()}>spark-test</Button>
         <Button onClick={()=>this.returnLoss()}>return-loss</Button>
-        <Download 
-          list = {[["name1", "123", "some other info"], ["name2", "city2", "more info"]]}
-          filename = {'test'}
-        />
+
         <Selectword></Selectword>
 
         <Modal title="Basic Modal" visible={this.state.visible}
@@ -379,6 +379,10 @@ class FlowToolbar extends React.Component {
           <input type="file" id="files" name="files[]" onChange={(e)=>this.readFile(e)} multiple />
 	        <output id="list"></output>
           <Button type="primary" onClick={()=>this.makeFile()}>makeFile</Button>
+          <Download 
+          list = {this.state.finalData}
+          filename = {'test'}
+        />
 
         </Modal>
 

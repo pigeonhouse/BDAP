@@ -6,15 +6,10 @@ class Downlowd extends Component{
     }
     downFile = ()=> {
         const { list, filename } = this.props;
-        let data = "";
-        list.forEach(function(infoArray){
-            let row = infoArray.join(",");
-            data += row + "\n";
-        });
         var elementA = document.createElement('a');
         elementA.download = filename + ".csv";
         elementA.style.display = 'none';
-        var blob = new Blob([data], {
+        var blob = new Blob([list], {
                 type: "text/csv;charset="+ 'utf-8' + ";"
         });
         elementA.href = URL.createObjectURL(blob);
