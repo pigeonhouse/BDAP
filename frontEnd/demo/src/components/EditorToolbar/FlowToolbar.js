@@ -54,10 +54,13 @@ class FlowToolbar extends React.Component {
 
   }
   
-  showDetail(){
+  showDetail = ()=>{
     this.setState({
       visible: true,
     });
+
+
+    this.handleLegal()
     const { propsAPI } = this.props;
     console.log(propsAPI.save())
 
@@ -133,7 +136,7 @@ class FlowToolbar extends React.Component {
     return stream
   }
   
- handleLegal() {
+ handleLegal = ()=> {
     const { propsAPI } = this.props;
     var isLegal = 0;
     var noneed = 1;
@@ -385,10 +388,9 @@ class FlowToolbar extends React.Component {
           </Tooltip>
         </Command>
         
-        <Button  onClick={()=>this.handleLegal()}>isLegal</Button>
         <Button  onClick={()=>this.showDetail()}>run</Button>
-        <Button onClick={()=>this.livyTest()}>spark-test</Button>
-        <Button onClick={()=>this.returnLoss()}>return-loss</Button>
+        {/* <Button onClick={()=>this.livyTest()}>spark-test</Button>
+        <Button onClick={()=>this.returnLoss()}>return-loss</Button> */}
 
         <Selectword></Selectword>
 
