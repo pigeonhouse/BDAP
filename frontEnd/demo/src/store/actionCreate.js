@@ -1,4 +1,4 @@
-import {STOP_LINE_CHANGE, SHOW_LINE_CHANGE, ConvNet, DenseNet, FillNa, MaxMinScaler, DElete} from './storeType'
+import {STOP_LINE_CHANGE, SHOW_LINE_CHANGE, ConvNet, DenseNet, FillNa, MaxMinScaler, DElete, UPLOAD, INf} from './storeType'
 
 export const getStopLineAction = () => ({
     type: STOP_LINE_CHANGE
@@ -24,4 +24,15 @@ export const MaxM = (id) => ({
 });
 export const Delete = () => ({
     type: DElete
+});
+export const UpL = (id, allData,fieldNameArray,vectorLength) => ({
+    type: UPLOAD,
+    id,
+    allData,
+    fieldNameArray,
+    vectorLength
+});
+export const UpINF = (inf) => ({
+    type: INf,
+    inf
 });

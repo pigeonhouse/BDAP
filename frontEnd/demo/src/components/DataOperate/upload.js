@@ -1,6 +1,10 @@
 import React, {Component} from 'react';
-import { Button, Icon, Upload } from 'antd'
+import { Button, Input } from 'antd'
 import Papa from 'papaparse'
+import { withPropsAPI } from '@src';
+import { dispatch } from 'd3';
+import store from '../../store';
+import {UpL} from '../../store/actionCreate';
 
 class Uploadfile extends Component{
     constructor(props){
@@ -61,12 +65,23 @@ class Uploadfile extends Component{
                 n[colName] = colValue
         }
         allData.push(n)
-        console.log(allData)
-        
+
         }
+<<<<<<< HEAD
+        this.setTest(allData,fieldNameArray,vectorLength);
+
+        const { propsAPI } = this.props;
+        const { getSelected } = propsAPI;
+    
+        const item = getSelected()[0];
+
+        const action = UpL(item.id, allData,fieldNameArray,vectorLength);
+        store.dispatch(action);
+=======
         console.log(allData)
         this.setTest(allData,fieldNameArray,vectorLength)
-
+        
+>>>>>>> e559b7762cd0c3568be4fb25804cd25fc97ca81a
     }
     setTest = (allData,fieldNameArray,vectorLength) =>{
         this.setState({
@@ -78,13 +93,18 @@ class Uploadfile extends Component{
     render(){
         return (
             <div>
-                <input type="file" id='files' name='files[]' onChange={(e)=>this.readFile(e)} multiple/>
-                
-
+                <Input
+                    type="file" 
+                    id='files' 
+                    name='files[]' 
+                    onChange={(e)=>this.readFile(e)} 
+                    multiple
+                >
+                </Input>
                 <Button type="primary" onClick={()=>this.makeFile()}>makeFile</Button>
             </div>
         );
     }
 }
 
-export default Uploadfile;
+export default withPropsAPI(Uploadfile);

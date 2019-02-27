@@ -5,3 +5,5 @@ export const DenseNet = 'DenseNet';
 export const FillNa = 'FillNa';
 export const MaxMinScaler = 'MaxMinScaler';
 export const DElete = 'Delete';
+export const UPLOAD = 'UpLoad';
+export const INf = 'INF';

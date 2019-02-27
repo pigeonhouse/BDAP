@@ -5,10 +5,10 @@ import styles from './index.less';
 import iconfont from '../../theme/iconfont.less';
 import {AppendingLineChart} from "../linechart/linechart.ts";
 import d3 from "d3"
-import {run} from "../Models/MnistTest/mnist"
+import {run} from "../Models/run.js"
 import { withPropsAPI } from '@src';
 import store from '../../store';
-import { getStopLineAction, getShowLineAction } from '../../store/actionCreate';
+import { getStopLineAction, getShowLineAction, UpINF } from '../../store/actionCreate';
 import Papa from 'papaparse'
 import {OneVarLinearRegression} from '../Models/MachineLearning/Regression/OneVarLinearRegression.js'
 import {OneVarPolynomialRegression} from '../Models/MachineLearning/Regression/OneVarPolynomialRegression'
@@ -66,7 +66,15 @@ class FlowToolbar extends React.Component {
     console.log(propsAPI.save())
 
     const inf = propsAPI.save();
+<<<<<<< HEAD
 
+    const action = UpINF(inf);
+    console.log(action);
+    console.log(inf);
+    store.dispatch(action);
+
+=======
+>>>>>>> e559b7762cd0c3568be4fb25804cd25fc97ca81a
     var Sourc = 0;
     var tag = 'Input';
     var stream = new Array();
@@ -94,7 +102,7 @@ class FlowToolbar extends React.Component {
             Sourc = inf.nodes[indexN].id;
             tag = inf.nodes[indexN].label;
             attribute = inf.nodes[indexN].attr;
-            stream.push({"label":tag,"attribute":attribute});
+            stream.push({'id':Sourc,"label":tag,"attribute":attribute});
             for (var i = 0; i < inf.edges.length; i++){
               if(Sourc === inf.edges[i].source){
                 for (var m = 0; m < inf.nodes.length; m++){
@@ -134,7 +142,7 @@ class FlowToolbar extends React.Component {
     //   }
     // }
     console.log(stream);
-    return stream
+    run(stream);
   }
   
  handleLegal = ()=> {
@@ -221,7 +229,7 @@ class FlowToolbar extends React.Component {
     // const action = getShowLineAction();
     // store.dispatch(action);
     // console.log(store.getState().running);
-    OneVarPolynomialRegression();
+    
     //OneVarLinearRegression();
     // console.log(this.state.stream)
     // var step = this.state.stream
@@ -318,13 +326,13 @@ class FlowToolbar extends React.Component {
           </Tooltip>
         </Command>
         
-        <Button  onClick={()=>this.showDetail()}>run</Button>
+        <Button onClick={()=>this.showDetail()}>run</Button>
         {/* <Button onClick={()=>this.livyTest()}>spark-test</Button>
         <Button onClick={()=>this.returnLoss()}>return-loss</Button> */}
+{/* 
+        <Selectword></Selectword> */}
 
-        <Selectword></Selectword>
-
-        <Modal title="Basic Modal" visible={this.state.visible}
+        {/* <Modal title="Basic Modal" visible={this.state.visible}
           onOk={this.handleOk} onCancel={this.handleCancel}
         >
           <p>iter:
@@ -342,15 +350,18 @@ class FlowToolbar extends React.Component {
           <span> </span>
           <Button type="primary" onClick={()=>this.stopLine()}>stop</Button>
 
-          <input type="file" id="files" name="files[]" onChange={(e)=>this.readFile(e)} multiple />
-	        <output id="list"></output>
+<<<<<<< HEAD
+          {/* <input type="file" id="files" name="files[]" onChange={(e)=>this.readFile(e)} multiple />
+	        <output id="list"></output> */}
           <Button type="primary" onClick={()=>this.makeFile()}>makeFile</Button>
+=======
+>>>>>>> e559b7762cd0c3568be4fb25804cd25fc97ca81a
           <Download 
           list = {this.state.finalData}
           filename = {'test'}
         />
 
-        </Modal>
+        </Modal> */}
 
 
         {/* <Button className={styles.buttonRight1} href='#'>用户</Button>
@@ -365,5 +376,3 @@ class FlowToolbar extends React.Component {
 }
 
 export default withPropsAPI(FlowToolbar);
-export const { propsAPI } = this.props;
-export const inf = propsAPI.save();

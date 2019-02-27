@@ -24,7 +24,6 @@ import d3 from "d3"
 import store from '../../../store'
 import { Conv, Dens, FillN, MaxM, Delete} from '../../../store/actionCreate';
 import {showTestResults} from './ui';
-import { inf } from '../../EditorToolbar/FlowToolbar';
 
 // This is a helper class for drawing loss graphs and MNIST images to the
 // window. For the purposes of understanding the machine learning bits, you can
@@ -302,6 +301,8 @@ async function load() {
 //   await train(model, () => showPredictions(model));
 // });
 
+var inf = store.getState().picture;
+
 function CONVNET(id) {
   const action = Conv(id);
   store.dispatch(action);
@@ -334,12 +335,12 @@ function DELETE() {
 function INPUT(_id) {
   // const action = Inp(id);
   // store.dispatch(action);
-  let inff = store.getState().Dataset;
+  // let inff = store.getState().Dataset;
 
-  for(let k = 0; k < inff.length; k++){
-    if(inff[k].id === _id)
-      console.log(inff[k].data);
-  }
+  // for(let k = 0; k < inff.length; k++){
+  //   if(inff[k].id === _id)
+  //     // console.log(inff[k].data);
+  // }
   //对接upload
 }
 
@@ -366,18 +367,20 @@ function OUTPUT(_id) {
 }
 
 
-export function run() {
+export function run(stream) {
 
   //await load();
   // const model = createModel();
   // model.summary();
   // await train(model, () => showPredictions(model),b);
-  console.log(stream);
+  // console.log('1212112121212121212112212121')
+  // console.log(stream);
+  // console.log('1212112121212121212112212121')
 
   for (let k = 0; k < stream.length; k++) {
     switch (stream[k].label) {
       case 'Input':
-        INPUT(stream[k].id);
+        // INPUT(stream[k].id);
         break;
       case 'Output':
         OUTPUT(stream[k].id);
@@ -399,5 +402,5 @@ export function run() {
     }
   }
 
-  DELETE();
+  //DELETE();
 }
