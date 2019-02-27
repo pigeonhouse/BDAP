@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import { Button, Icon } from 'antd'
+import { Button, Icon, Upload } from 'antd'
 class Uploadfile extends Component{
     constructor(props){
         super(props);
@@ -44,19 +44,19 @@ class Uploadfile extends Component{
         reader.readAsText(files[0],'gbk');
         reader.onload = function(e) {
         
-        var results = Papa.parse(e.target.result,{header:true,dynamicTyping: true});
-        fieldNameArray.push(results.meta.fields);
-        vectorLength.push(results.data.length - 1)
+            var results = Papa.parse(e.target.result,{header:true,dynamicTyping: true});
+            fieldNameArray.push(results.meta.fields);
+            vectorLength.push(results.data.length - 1)
 
-        var n = new Array();
-        //  console.log(results)
-        for(let indexOfCols = 0; indexOfCols < fieldNameArray[0].length; indexOfCols++){
-            var colName = fieldNameArray[0][indexOfCols];
-            var colValue = new Array();
-            for (let indexOfRows = 0; indexOfRows < results.data.length - 1; indexOfRows++){
-            colValue.push(results.data[indexOfRows][colName])
-            }
-            n[colName] = colValue
+            var n = new Array();
+            //  console.log(results)
+            for(let indexOfCols = 0; indexOfCols < fieldNameArray[0].length; indexOfCols++){
+                var colName = fieldNameArray[0][indexOfCols];
+                var colValue = new Array();
+                for (let indexOfRows = 0; indexOfRows < results.data.length - 1; indexOfRows++){
+                colValue.push(results.data[indexOfRows][colName])
+                }
+                n[colName] = colValue
         }
         allData.push(n)
         console.log(allData)
@@ -76,9 +76,9 @@ class Uploadfile extends Component{
     render(){
         return (
             <div>
-                <Button type="file" onChange={(e)=>this.readFile(e)} multiple >
-                    <Icon type="upload" />upload
-                </Button>
+                <input type="file" id='files' name='files[]' onChange={(e)=>this.readFile(e)} multiple/>
+                
+
                 <Button type="primary" onClick={()=>this.makeFile()}>makeFile</Button>
             </div>
         );
