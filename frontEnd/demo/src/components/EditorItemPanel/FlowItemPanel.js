@@ -40,7 +40,8 @@ class FlowItemPanel extends React.Component {
             shape='flow-test'
             model={{
               label: 'Input',
-              attr:{'sourceFile':'people'}
+              attr:{'sourceFile':'people'},
+              select_status: true
             }}
             
           /></ItemPanel></Menu.Item>
