@@ -10,7 +10,7 @@ class Selectword extends Component{
             key: '1',
             title: `content`,
             description: `description of content`,
-            chosen: true,
+            chosen: false,
           }],
         targetKeys: ['1'],
     }
@@ -47,7 +47,10 @@ class Selectword extends Component{
     render(){
         return (
             <div>
-                <Button onClick={this.displayTransfer}>selectword</Button>
+                <Button 
+                    onClick={this.displayTransfer}
+                    style={{width:'206px',marginBottom:'10px'}}
+                >selectword</Button>
 
                 <Modal title="Selectword" visible={this.state.visible}
                     onOk={this.handleOk} onCancel={this.handleCancel}

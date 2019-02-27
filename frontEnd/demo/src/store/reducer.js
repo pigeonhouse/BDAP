@@ -2,7 +2,7 @@ import {STOP_LINE_CHANGE, SHOW_LINE_CHANGE, ConvNet, DenseNet, FillNa, MaxMinSca
 
 const defaultState = {
     running: '',
-    Dataset: ''
+    Dataset: [{}],
 }
 
 export default (state = defaultState, action) => {
