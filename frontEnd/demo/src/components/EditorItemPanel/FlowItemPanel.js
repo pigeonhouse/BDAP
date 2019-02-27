@@ -12,7 +12,7 @@ class FlowItemPanel extends React.Component {
   render() {
     return (
       <Menu
-      span={4}
+      span={5}
       defaultSelectedKeys={['1']}
       defaultOpenKeys={['sub1']}
       mode="inline"
@@ -109,12 +109,83 @@ class FlowItemPanel extends React.Component {
           
         </MenuItemGroup>
       </SubMenu>
-      <SubMenu key="sub2" title={<span><Icon type="appstore" /><span>Iris</span></span>}>
-        <Menu.Item key="5">Option 5</Menu.Item>
-        <Menu.Item key="6">Option 6</Menu.Item>
-        <SubMenu key="sub3" title="Submenu">
-          <Menu.Item key="7">Option 7</Menu.Item>
-          <Menu.Item key="8">Option 8</Menu.Item>
+
+      <SubMenu key="sub2" title={<span><Icon type="appstore" /><span>机器学习</span></span>}>
+      <SubMenu key="sub3" title="回归">
+      <MenuItemGroup>
+        <Menu.Item key="5"><ItemPanel><Item
+            type="node"
+            size="200*40"
+            shape='flow-test'
+            model={{
+              label: '单变量线性回归',
+              attr:{'sourceFile':'people'}
+            }}
+            
+          /></ItemPanel></Menu.Item>
+        <Menu.Item key="6"><ItemPanel><Item
+            type="node"
+            size="200*40"
+            shape='flow-test'
+            model={{
+              label: '单变量多项式回归',
+              attr:{'sourceFile':'people'}
+            }}
+            
+          /></ItemPanel></Menu.Item>
+          <Menu.Item key="6"><ItemPanel><Item
+            type="node"
+            size="200*40"
+            shape='flow-test'
+            model={{
+              label: '多变量线性回归',
+              attr:{'sourceFile':'people'}
+            }}
+            
+          /></ItemPanel></Menu.Item>
+          <Menu.Item key="6"><ItemPanel><Item
+            type="node"
+            size="200*40"
+            shape='flow-test'
+            model={{
+              label: '决策树回归',
+              attr:{'sourceFile':'people'}
+            }}
+            
+          /></ItemPanel></Menu.Item>
+          <Menu.Item key="6"><ItemPanel><Item
+            type="node"
+            size="200*40"
+            shape='flow-test'
+            model={{
+              label: '随机森林回归',
+              attr:{'sourceFile':'people'}
+            }}
+            
+          /></ItemPanel></Menu.Item>
+          </MenuItemGroup>
+      </SubMenu>
+        <SubMenu key="sub3" title="分类">
+          <Menu.Item key="7"><ItemPanel><Item
+            type="node"
+            size="200*40"
+            shape='flow-test'
+            model={{
+              label: '朴素贝叶斯',
+              attr:{'sourceFile':'people'}
+            }}
+            
+          /></ItemPanel></Menu.Item>
+          <Menu.Item key="8"><ItemPanel><Item
+            type="node"
+            size="200*40"
+            shape='flow-test'
+            model={{
+              label: '支持向量机',
+              attr:{'sourceFile':'people'}
+            }}
+            
+          /></ItemPanel></Menu.Item>
         </SubMenu>
       </SubMenu>
       <SubMenu key="sub4" title={<span><Icon type="setting" /><span>Titanic</span></span>}>

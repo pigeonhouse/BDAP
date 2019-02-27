@@ -10,7 +10,8 @@ import { withPropsAPI } from '@src';
 import store from '../../store';
 import { getStopLineAction, getShowLineAction } from '../../store/actionCreate';
 import Papa from 'papaparse'
-import {OneVarLinearRegression} from '../Models/OneVarLinearRegression/OneVarLinearRegression.js'
+import {OneVarLinearRegression} from '../Models/MachineLearning/Regression/OneVarLinearRegression.js'
+import {OneVarPolynomialRegression} from '../Models/MachineLearning/Regression/OneVarPolynomialRegression'
 import Download from '../DataOperate/download'
 import Rightsymbol from '../DataOperate/rightsymbol'
 class FlowToolbar extends React.Component {
@@ -220,7 +221,7 @@ class FlowToolbar extends React.Component {
     // const action = getShowLineAction();
     // store.dispatch(action);
     // console.log(store.getState().running);
-    run();
+    OneVarPolynomialRegression();
     //OneVarLinearRegression();
     // console.log(this.state.stream)
     // var step = this.state.stream
