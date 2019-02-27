@@ -365,3 +365,5 @@ class FlowToolbar extends React.Component {
 }
 
 export default withPropsAPI(FlowToolbar);
+export const { propsAPI } = this.props;
+export const inf = propsAPI.save();

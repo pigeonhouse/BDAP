@@ -4,5 +4,4 @@ export const ConvNet = 'ConvNet';
 export const DenseNet = 'DenseNet';
 export const FillNa = 'FillNa';
 export const MaxMinScaler = 'MaxMinScaler';
-export const Input = 'Input';
-export const Output = 'Output';
+export const DElete = 'Delete';

@@ -22,8 +22,9 @@ import {IMAGE_H, IMAGE_W, MnistData} from './data';
 import {AppendingLineChart} from "../../linechart/linechart.ts";
 import d3 from "d3"
 import store from '../../../store'
-import { Conv, Dens, FillN, MaxM, Inp, Outp} from '../../../store/actionCreate';
+import { Conv, Dens, FillN, MaxM, Delete} from '../../../store/actionCreate';
 import {showTestResults} from './ui';
+import { inf } from '../../EditorToolbar/FlowToolbar';
 
 // This is a helper class for drawing loss graphs and MNIST images to the
 // window. For the purposes of understanding the machine learning bits, you can
@@ -301,40 +302,67 @@ async function load() {
 //   await train(model, () => showPredictions(model));
 // });
 
-function CONVNET(Dataset) {
-  // noinspection JSAnnotator
-  const action = Conv(Dataset);
+function CONVNET(id) {
+  const action = Conv(id);
   store.dispatch(action);
-  console.log(store.getState().Dataset);
+  //console.log(store.getState().Dataset);
 };
-function DENSENET(Dataset) {
-  const action = Dens(Dataset);
+function DENSENET(id) {
+  const action = Dens(id);
   store.dispatch(action);
-  console.log(store.getState().Dataset);
+  //console.log(store.getState().Dataset);
 }
 
-function FILLNA(Dataset) {
-  const action = FillN(Dataset);
+function FILLNA(id) {
+  const action = FillN(id);
   store.dispatch(action);
-  console.log(store.getState().Dataset);
+  //console.log(store.getState().Dataset);
 }
 
-function MAXMINSCALER(Dataset) {
-  const action = MaxM(Dataset);
+function MAXMINSCALER(id) {
+  const action = MaxM(id);
   store.dispatch(action);
-  console.log(store.getState().Dataset);
+  //console.log(store.getState().Dataset);
 }
 
-function INPUT(Dataset) {
-  const action = Inp(Dataset);
+function DELETE() {
+  const action = Delete();
   store.dispatch(action);
-  console.log(store.getState().Dataset);
+  //console.log(store.getState().Dataset);
 }
 
-function OUTPUT(Dataset) {
-  const action = Outp(Dataset);
-  store.dispatch(action);
-  console.log(store.getState().Dataset);
+function INPUT(_id) {
+  // const action = Inp(id);
+  // store.dispatch(action);
+  let inff = store.getState().Dataset;
+
+  for(let k = 0; k < inff.length; k++){
+    if(inff[k].id === _id)
+      console.log(inff[k].data);
+  }
+  //对接upload
+}
+
+function OUTPUT(_id) {
+  let temStore = store.getState().Dataset;
+  let outpStore = [];
+
+  for(let k = 0; k < inf.edges.length; k++){
+    if(inf.edges[k].target === _id)
+      for(let p = 0; p < inf.nodes.length; p++){
+        if(inf.edges[k].source === inf.nodes[p].id){
+            let id = inf.nodes[p].id;
+            for(let m = 0; m < temStore.length; m++){
+              if(temStore[m].id === id){
+                outpStore.push(temStore[m]);
+              }
+            }
+            break;
+        }
+      }
+  }
+  //outpStore为和对应output模块相连的模块，对应仓库中输出的所有元素集
+  //对接展示方案的函数
 }
 
 
@@ -347,28 +375,29 @@ export function run() {
   console.log(stream);
 
   for (let k = 0; k < stream.length; k++) {
-    switch (stream[indexS].label) {
+    switch (stream[k].label) {
       case 'Input':
-        INPUT();
+        INPUT(stream[k].id);
         break;
       case 'Output':
-        OUTPUT();
+        OUTPUT(stream[k].id);
         break;
       case 'DenseNet':
-        DENSENET();
+        DENSENET(stream[k].id);
         break;
       case 'ConvNet':
-        CONVNET();
+        CONVNET(stream[k].id);
         break;
       case 'FillNa':
-        FILLNA();
+        FILLNA(stream[k].id);
         break;
       case 'MaxMinScaler':
-        MAXMINSCALER();
+        MAXMINSCALER(stream[k].id);
         break;
       default:
         break;
     }
   }
 
+  DELETE();
 }

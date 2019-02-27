@@ -1,4 +1,4 @@
-import {STOP_LINE_CHANGE, SHOW_LINE_CHANGE, ConvNet, DenseNet, FillNa, MaxMinScaler, Input, Output} from './storeType'
+import {STOP_LINE_CHANGE, SHOW_LINE_CHANGE, ConvNet, DenseNet, FillNa, MaxMinScaler, DElete} from './storeType'
 
 export const getStopLineAction = () => ({
     type: STOP_LINE_CHANGE
@@ -6,27 +6,22 @@ export const getStopLineAction = () => ({
 export const getShowLineAction = () => ({
     type: SHOW_LINE_CHANGE
 });
-export const Conv = (Dataset) => ({
+export const Conv = (id) => ({
     type: ConvNet,
-    Dataset
+    id
 });
-export const Dens = (Dataset) => ({
+export const Dens = (id) => ({
     type: DenseNet,
-    Dataset
+    id
 });
-export const FillN = (Dataset) => ({
+export const FillN = (id) => ({
     type: FillNa,
-    Dataset
+    id
 });
-export const MaxM = (Dataset) => ({
+export const MaxM = (id) => ({
     type: MaxMinScaler,
-    Dataset
+    id
 });
-export const Inp = (Dataset) => ({
-    type: Input,
-    Dataset
-});
-export const Outp = (Dataset) => ({
-    type: Output,
-    Dataset
+export const Delete = () => ({
+    type: DElete
 });
