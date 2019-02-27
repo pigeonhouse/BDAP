@@ -67,7 +67,6 @@ class Uploadfile extends Component{
         allData.push(n)
 
         }
-<<<<<<< HEAD
         this.setTest(allData,fieldNameArray,vectorLength);
 
         const { propsAPI } = this.props;
@@ -77,11 +76,6 @@ class Uploadfile extends Component{
 
         const action = UpL(item.id, allData,fieldNameArray,vectorLength);
         store.dispatch(action);
-=======
-        console.log(allData)
-        this.setTest(allData,fieldNameArray,vectorLength)
-        
->>>>>>> e559b7762cd0c3568be4fb25804cd25fc97ca81a
     }
     setTest = (allData,fieldNameArray,vectorLength) =>{
         this.setState({

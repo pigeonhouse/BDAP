@@ -350,12 +350,9 @@ class FlowToolbar extends React.Component {
           <span> </span>
           <Button type="primary" onClick={()=>this.stopLine()}>stop</Button>
 
-<<<<<<< HEAD
           {/* <input type="file" id="files" name="files[]" onChange={(e)=>this.readFile(e)} multiple />
 	        <output id="list"></output> */}
           <Button type="primary" onClick={()=>this.makeFile()}>makeFile</Button>
-=======
->>>>>>> e559b7762cd0c3568be4fb25804cd25fc97ca81a
           <Download 
           list = {this.state.finalData}
           filename = {'test'}
