@@ -1,5 +1,7 @@
 import React, {Component} from 'react';
 import { Button, Icon, Upload } from 'antd'
+import Papa from 'papaparse'
+
 class Uploadfile extends Component{
     constructor(props){
         super(props);

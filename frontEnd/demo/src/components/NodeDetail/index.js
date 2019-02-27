@@ -1,6 +1,10 @@
 import React from 'react';
 import { Card, Form, Input, Modal, Button } from 'antd';
 import { withPropsAPI } from '@src';
+import Selectword from '../DataOperate/selectword'
+import Download from '../DataOperate/download'
+import Show from '../DataOperate/Datashow/index.js'
+import Uploadfile from '../DataOperate/upload';
 import {AppendingLineChart} from "../linechart/linechart.ts";
 import d3 from "d3"
 
@@ -82,7 +86,23 @@ class NodeDetail extends React.Component {
       visible: false,
     });
   }
-
+  isSelectVisible(select_status){
+    if(select_status)
+    return <Selectword style={{margin:0}}></Selectword>;
+  }
+  isInputOutput(label){
+    if(label === 'Output')
+    return (
+      <div>
+        <Show style={{minWidth:'206px',marginBottom:'10px'}}></Show>
+        <Download></Download>
+      </div>
+    );
+    else if(label === 'Input')
+    return (
+      <Uploadfile></Uploadfile>
+    );
+  }
 
   render() {
     const { form, propsAPI } = this.props;
@@ -97,6 +117,7 @@ class NodeDetail extends React.Component {
 
     const { label } = item.getModel();
     const { attr } = item.getModel();
+    const { select_status } = item.getModel();
     var arr = []
     for (let i in attr) {
         let o = {};
@@ -115,6 +136,7 @@ class NodeDetail extends React.Component {
               })(<Input onBlur={this.handleSubmit} />)
             }
           </Item>
+          {this.isSelectVisible(select_status)}
           {arr.map((item)=>{
             const itemKey = Object.keys(item)[0];
             return <Item label={itemKey} {...inlineFormItemLayout}>
@@ -125,7 +147,7 @@ class NodeDetail extends React.Component {
                     }
                   </Item>;
           })}
-          <Item><Button onClick={this.changeColor}>down</Button></Item>
+           {this.isInputOutput(label)}
         </Form>
       </Card>
     );
