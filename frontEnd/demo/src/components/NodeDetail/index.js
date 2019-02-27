@@ -1,12 +1,8 @@
 import React from 'react';
 import { Card, Form, Input, Modal, Button } from 'antd';
 import { withPropsAPI } from '@src';
-import Selectword from '../DataOperate/selectword'
-import Download from '../DataOperate/download'
-import Show from '../DataOperate/Datashow/index.js'
 import {AppendingLineChart} from "../linechart/linechart.ts";
 import d3 from "d3"
-import Uploadfile from '../DataOperate/upload';
 
 const { Item } = Form;
 
@@ -87,23 +83,6 @@ class NodeDetail extends React.Component {
     });
   }
 
-  isSelectVisible(select_status){
-    if(select_status)
-    return <Selectword style={{margin:0}}></Selectword>;
-  }
-  isInputOutput(label){
-    if(label === 'Output')
-    return (
-      <div>
-        <Show style={{minWidth:'206px',marginBottom:'10px'}}></Show>
-        <Download></Download>
-      </div>
-    );
-    else if(label === 'Input')
-    return (
-      <Uploadfile></Uploadfile>
-    );
-  }
 
   render() {
     const { form, propsAPI } = this.props;
@@ -118,7 +97,6 @@ class NodeDetail extends React.Component {
 
     const { label } = item.getModel();
     const { attr } = item.getModel();
-    const { select_status } = item.getModel();
     var arr = []
     for (let i in attr) {
         let o = {};
@@ -130,17 +108,16 @@ class NodeDetail extends React.Component {
       <Card type="inner" title="参数" bordered={false}>
         <Form onSubmit={this.handleSubmit}>
 
-          <Item label="label" {...inlineFormItemLayout} style={{margin:1}}>
+          <Item label="label" {...inlineFormItemLayout}>
             {
               getFieldDecorator('label', {
                 initialValue: label,
               })(<Input onBlur={this.handleSubmit} />)
             }
           </Item>
-          {this.isSelectVisible(select_status)}
           {arr.map((item)=>{
             const itemKey = Object.keys(item)[0];
-            return <Item label={itemKey} {...inlineFormItemLayout} style={{margin:1}}>
+            return <Item label={itemKey} {...inlineFormItemLayout}>
                     {
                       getFieldDecorator(`attr.${itemKey}` , {
                         initialValue: item[itemKey],
@@ -148,7 +125,7 @@ class NodeDetail extends React.Component {
                     }
                   </Item>;
           })}
-          {this.isInputOutput(label)}
+          <Item><Button onClick={this.changeColor}>down</Button></Item>
         </Form>
       </Card>
     );

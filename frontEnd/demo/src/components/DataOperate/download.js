@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import { Button } from 'antd'
-class Download extends Component{
+class Downlowd extends Component{
     constructor(props){
         super(props);
     }
@@ -20,12 +20,9 @@ class Download extends Component{
 
     render(){
         return (
-            <Button 
-                onClick={this.downFile}
-                style={{width:'206px',marginBottom:'10px'}}
-            >download</Button>
+            <Button onClick={this.downFile}>download</Button>
         );
     }
 }
 
-export default Download;
+export default Downlowd;
