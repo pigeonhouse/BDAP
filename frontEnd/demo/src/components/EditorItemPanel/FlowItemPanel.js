@@ -111,7 +111,7 @@ class FlowItemPanel extends React.Component {
 
       <SubMenu key="sub2" title={<span><Icon type="appstore" /><span>机器学习</span></span>}>
       <SubMenu key="sub3" title="回归">
-      <MenuItemGroup>
+      
         <Menu.Item key="5"><ItemPanel><Item
             type="node"
             size="200*40"
@@ -162,7 +162,7 @@ class FlowItemPanel extends React.Component {
             }}
             
           /></ItemPanel></Menu.Item>
-          </MenuItemGroup>
+         
       </SubMenu>
         <SubMenu key="sub3" title="分类">
           <Menu.Item key="7"><ItemPanel><Item
