@@ -234,14 +234,6 @@ class FlowToolbar extends React.Component {
 
   }
 
-  setTest = (allData,fieldNameArray,vectorLength) =>{
-    this.setState({
-      dataSet:allData,
-      labelArray:fieldNameArray,
-      length:vectorLength
-    })
-  }
-
 
   render() {
     return (

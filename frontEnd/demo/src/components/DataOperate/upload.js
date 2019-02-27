@@ -66,6 +66,13 @@ class Uploadfile extends Component{
         this.setTest(allData,fieldNameArray,vectorLength)
 
     }
+    setTest = (allData,fieldNameArray,vectorLength) =>{
+        this.setState({
+          dataSet:allData,
+          labelArray:fieldNameArray,
+          length:vectorLength
+        })
+      }
     render(){
         return (
             <div>
