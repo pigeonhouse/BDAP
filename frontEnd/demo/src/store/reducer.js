@@ -1,10 +1,10 @@
 import {STOP_LINE_CHANGE, SHOW_LINE_CHANGE, ConvNet, DenseNet, FillNa, MaxMinScaler, DElete} from './storeType'
-import { inf } from '../components/EditorToolbar/FlowToolbar';
 
 const defaultState = {
     running: '',
     Dataset: [{'id':111, 'data':[1,2,3]}]
 }
+
 
 export default (state = defaultState, action) => {
     if (action.type === STOP_LINE_CHANGE) {
@@ -35,8 +35,12 @@ export default (state = defaultState, action) => {
             }
         }
         //在这里做你想做的事
+
         //处理data的过程接入处理函数，输入函数为来的all_data
         //接你的函数吧；
+
+
+
         let processed_data = [];    //假设这是处理后的输出结果;
         let end_data = {'id':action.id,'data':processed_data};    //处理完了all_data，再把数据存入redux;
         newState.Dataset.push(end_data);        //okk

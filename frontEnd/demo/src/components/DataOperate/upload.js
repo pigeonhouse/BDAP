@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import { Button, Icon, Upload } from 'antd'
+import { Button, Input } from 'antd'
 import Papa from 'papaparse'
 
 class Uploadfile extends Component{
@@ -66,7 +66,7 @@ class Uploadfile extends Component{
         }
         console.log(allData)
         this.setTest(allData,fieldNameArray,vectorLength)
-
+        
     }
     setTest = (allData,fieldNameArray,vectorLength) =>{
         this.setState({
@@ -78,9 +78,14 @@ class Uploadfile extends Component{
     render(){
         return (
             <div>
-                <input type="file" id='files' name='files[]' onChange={(e)=>this.readFile(e)} multiple/>
-                
-
+                <Input
+                    type="file" 
+                    id='files' 
+                    name='files[]' 
+                    onChange={(e)=>this.readFile(e)} 
+                    multiple
+                >
+                </Input>
                 <Button type="primary" onClick={()=>this.makeFile()}>makeFile</Button>
             </div>
         );

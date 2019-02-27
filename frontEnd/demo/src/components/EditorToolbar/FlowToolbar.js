@@ -5,7 +5,7 @@ import styles from './index.less';
 import iconfont from '../../theme/iconfont.less';
 import {AppendingLineChart} from "../linechart/linechart.ts";
 import d3 from "d3"
-import {run} from "../Models/MnistTest/mnist"
+import {run} from "../Models/run.js"
 import { withPropsAPI } from '@src';
 import store from '../../store';
 import { getStopLineAction, getShowLineAction } from '../../store/actionCreate';
@@ -66,7 +66,6 @@ class FlowToolbar extends React.Component {
     console.log(propsAPI.save())
 
     const inf = propsAPI.save();
-
     var Sourc = 0;
     var tag = 'Input';
     var stream = new Array();
@@ -134,7 +133,7 @@ class FlowToolbar extends React.Component {
     //   }
     // }
     console.log(stream);
-    return stream
+    run(stream);
   }
   
  handleLegal = ()=> {
@@ -318,13 +317,13 @@ class FlowToolbar extends React.Component {
           </Tooltip>
         </Command>
         
-        <Button  onClick={()=>this.showDetail()}>run</Button>
+        <Button onClick={()=>this.showDetail()}>run</Button>
         {/* <Button onClick={()=>this.livyTest()}>spark-test</Button>
         <Button onClick={()=>this.returnLoss()}>return-loss</Button> */}
+{/* 
+        <Selectword></Selectword> */}
 
-        <Selectword></Selectword>
-
-        <Modal title="Basic Modal" visible={this.state.visible}
+        {/* <Modal title="Basic Modal" visible={this.state.visible}
           onOk={this.handleOk} onCancel={this.handleCancel}
         >
           <p>iter:
@@ -342,15 +341,12 @@ class FlowToolbar extends React.Component {
           <span> </span>
           <Button type="primary" onClick={()=>this.stopLine()}>stop</Button>
 
-          <input type="file" id="files" name="files[]" onChange={(e)=>this.readFile(e)} multiple />
-	        <output id="list"></output>
-          <Button type="primary" onClick={()=>this.makeFile()}>makeFile</Button>
           <Download 
           list = {this.state.finalData}
           filename = {'test'}
         />
 
-        </Modal>
+        </Modal> */}
 
 
         {/* <Button className={styles.buttonRight1} href='#'>用户</Button>
@@ -365,5 +361,3 @@ class FlowToolbar extends React.Component {
 }
 
 export default withPropsAPI(FlowToolbar);
-export const { propsAPI } = this.props;
-export const inf = propsAPI.save();
