@@ -7,9 +7,9 @@ export function OneVarPolynomialRegression(){
 
     const regression = new PolynomialRegression(x, y, degree);
 
-    console.log(regression.predict([10,20,30])); // Apply the model to some x value. Prints 2.6.
-    // console.log(regression.coefficients); // Prints the coefficients in increasing order of power (from 0 to degree).
-    // console.log(regression.toString(3)); // Prints a human-readable version of the function.
-    // console.log(regression.toLaTeX());
-    // console.log(regression.score(x, y));
+    console.log(regression.predict(80)); // Apply the model to some x value. Prints 2.6.
+    console.log(regression.coefficients); // Prints the coefficients in increasing order of power (from 0 to degree).
+    console.log(regression.toString(3)); // Prints a human-readable version of the function.
+    console.log(regression.toLaTeX());
+    console.log(regression.score(x, y));
 }

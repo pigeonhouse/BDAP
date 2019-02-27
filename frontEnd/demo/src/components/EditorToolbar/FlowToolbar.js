@@ -10,7 +10,6 @@ import { withPropsAPI } from '@src';
 import store from '../../store';
 import { getStopLineAction, getShowLineAction } from '../../store/actionCreate';
 import Papa from 'papaparse'
-import {DecisionTreeRegression} from '../Models/MachineLearning/Regression/DecisionTree'
 import {OneVarLinearRegression} from '../Models/MachineLearning/Regression/OneVarLinearRegression.js'
 import {OneVarPolynomialRegression} from '../Models/MachineLearning/Regression/OneVarPolynomialRegression'
 import Download from '../DataOperate/download'
@@ -222,8 +221,7 @@ class FlowToolbar extends React.Component {
     // const action = getShowLineAction();
     // store.dispatch(action);
     // console.log(store.getState().running);
-    DecisionTreeRegression();
-    //OneVarPolynomialRegression();
+    OneVarPolynomialRegression();
     //OneVarLinearRegression();
     // console.log(this.state.stream)
     // var step = this.state.stream
