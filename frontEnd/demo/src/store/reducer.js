@@ -1,12 +1,13 @@
-import { STOP_LINE_CHANGE, 
-        SHOW_LINE_CHANGE, 
-        ConvNet, 
-        DenseNet, 
-        FillNa, 
-        MaxMinScaler, 
-        DElete, 
-        UPLOAD, 
-        INf } from './storeType'
+import {
+    STOP_LINE_CHANGE, 
+    SHOW_LINE_CHANGE, 
+    ConvNet, 
+    DenseNet, 
+    FillNa, 
+    MaxMinScaler, 
+    DElete, 
+    UPLOAD, 
+    INf } from './storeType'
 
 const defaultState = {
     running: '',
@@ -55,7 +56,8 @@ export default (state = defaultState, action) => {
                 all_attr.push(inf.nodes[k].attr);
             }
         }
-
+        console.log(all_data)
+        console.log(all_attr)
         //现在终于可以chachacha了
 
         let outcome = [];
@@ -112,6 +114,5 @@ export default (state = defaultState, action) => {
         newState.picture = action.inf;
         return newState;
     }
-
     return state;
 }

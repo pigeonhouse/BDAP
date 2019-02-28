@@ -34,7 +34,6 @@ class Uploadfile extends Component{
           "data": newData
         });
     
-        console.log(csv)
         this.setState({
           finalData:csv
         })
@@ -44,7 +43,7 @@ class Uploadfile extends Component{
         var files = e.target.files; // FileList object
         var reader = new FileReader();
         var fieldNameArray = new Array();
-        var allData = new Array();
+        var allData = [];
         var vectorLength = new Array();
 
         reader.readAsText(files[0],'gbk');
@@ -54,7 +53,7 @@ class Uploadfile extends Component{
             fieldNameArray.push(results.meta.fields);
             vectorLength.push(results.data.length - 1)
 
-            var n = new Array();
+            var n = {};
             //  console.log(results)
             for(let indexOfCols = 0; indexOfCols < fieldNameArray[0].length; indexOfCols++){
                 var colName = fieldNameArray[0][indexOfCols];
@@ -68,14 +67,14 @@ class Uploadfile extends Component{
 
         }
         this.setTest(allData,fieldNameArray,vectorLength);
-        console.log(allData)
 
         const { propsAPI } = this.props;
         const { getSelected } = propsAPI;
     
         const item = getSelected()[0];
-
+        console.log(allData)
         const action = UpL(item.id, allData,fieldNameArray,vectorLength);
+        
         store.dispatch(action);
     }
     setTest = (allData,fieldNameArray,vectorLength) =>{

@@ -63,13 +63,13 @@ class FlowToolbar extends React.Component {
 
     this.handleLegal()
     const { propsAPI } = this.props;
-    console.log(propsAPI.save())
+    // console.log(propsAPI.save())
 
     const inf = propsAPI.save();
 
     const action = UpINF(inf);
-    console.log(action);
-    console.log(inf);
+    // console.log(action);
+    // console.log(inf);
     store.dispatch(action);
 
     var Sourc = 0;
