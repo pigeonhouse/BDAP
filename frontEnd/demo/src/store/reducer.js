@@ -1,5 +1,12 @@
-import {STOP_LINE_CHANGE, SHOW_LINE_CHANGE, ConvNet, DenseNet, FillNa, MaxMinScaler, DElete, UPLOAD, INf} from './storeType'
-import {STOP_LINE_CHANGE, SHOW_LINE_CHANGE, ConvNet, DenseNet, FillNa, MaxMinScaler, DElete} from './storeType'
+import { STOP_LINE_CHANGE, 
+        SHOW_LINE_CHANGE, 
+        ConvNet, 
+        DenseNet, 
+        FillNa, 
+        MaxMinScaler, 
+        DElete, 
+        UPLOAD, 
+        INf } from './storeType'
 
 const defaultState = {
     running: '',
@@ -56,9 +63,6 @@ export default (state = defaultState, action) => {
         newState.Dataset.push(outcome);
         return newState;
     }
-
-
-
 
 
 

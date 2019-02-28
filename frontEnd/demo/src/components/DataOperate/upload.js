@@ -68,6 +68,7 @@ class Uploadfile extends Component{
 
         }
         this.setTest(allData,fieldNameArray,vectorLength);
+        console.log(allData)
 
         const { propsAPI } = this.props;
         const { getSelected } = propsAPI;

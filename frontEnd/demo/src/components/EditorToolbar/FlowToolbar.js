@@ -66,15 +66,12 @@ class FlowToolbar extends React.Component {
     console.log(propsAPI.save())
 
     const inf = propsAPI.save();
-<<<<<<< HEAD
 
     const action = UpINF(inf);
     console.log(action);
     console.log(inf);
     store.dispatch(action);
 
-=======
->>>>>>> e559b7762cd0c3568be4fb25804cd25fc97ca81a
     var Sourc = 0;
     var tag = 'Input';
     var stream = new Array();
@@ -352,13 +349,13 @@ class FlowToolbar extends React.Component {
 
           {/* <input type="file" id="files" name="files[]" onChange={(e)=>this.readFile(e)} multiple />
 	        <output id="list"></output> */}
-          <Button type="primary" onClick={()=>this.makeFile()}>makeFile</Button>
+          {/* <Button type="primary" onClick={()=>this.makeFile()}>makeFile</Button>
           <Download 
           list = {this.state.finalData}
           filename = {'test'}
         />
 
-        </Modal> */}
+        </Modal> */} */}
 
 
         {/* <Button className={styles.buttonRight1} href='#'>用户</Button>
