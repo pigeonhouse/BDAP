@@ -38,7 +38,6 @@ for (let i = 0; i < 100; i++) {
 
 class FlowContextMenu extends React.Component {
 
-
   state = { visible: false }
   showModal = () => {
     this.setState({
