@@ -12,37 +12,71 @@ import {
 import styles from './index.less';
 import iconfont from '../../theme/iconfont.less';
 import store from '../../store'
+import { withPropsAPI } from '@src';
 
-const columns = [{
-  title: 'Name',
-  dataIndex: 'name',
-  width: 150,
-}, {
-  title: 'Age',
-  dataIndex: 'age',
-  width: 150,
-}, {
-  title: 'Address',
-  dataIndex: 'address',
-}];
+// const columns = [{
+//   title: 'Name',
+//   dataIndex: 'name',
+//   width: 150,
+// }, {
+//   title: 'Age',
+//   dataIndex: 'age',
+//   width: 150,
+// }, {
+//   title: 'Address',
+//   dataIndex: 'address',
+// }];
 
-const data = [];
-for (let i = 0; i < 100; i++) {
-  data.push({
-    key: i,
-    name: `Edward King ${i}`,
-    age: 32,
-    address: `London, Park Lane no. ${i}`,
-  });
-}
+// const data = [];
+// for (let i = 0; i < 100; i++) {
+//   data.push({
+//     key: i,
+//     name: `Edward King ${i}`,
+//     age: 32,
+//     address: `London, Park Lane no. ${i}`,
+//   });
+// }
 
 class FlowContextMenu extends React.Component {
 
   state = { visible: false }
+
   showModal = () => {
     this.setState({
       visible: true,
     });
+    const { propsAPI } = this.props;
+    this.setState({currentId : propsAPI.getSelected()[0].id})
+    const data = store.getState().Dataset
+    
+    for(let i = 0; i < data.length; i++){
+      if(data[i].id == propsAPI.getSelected()[0].id){
+        const rawData = data[i]
+        console.log(rawData)
+        var columns = new Array()
+        for(let j = 0; j < rawData.fieldNameArray[0].length; j++){
+            columns.push({
+              title : rawData.fieldNameArray[0][j],
+              dataIndex: rawData.fieldNameArray[0][j],
+              // width : 50,
+            })
+        }
+        this.setState({col:columns})
+        var datas = new Array()
+        for(let m = 0; m < rawData.vectorLength[0]; m++){
+          var temp = new Array();
+          for(let k = 0; k < rawData.fieldNameArray[0].length; k++){
+            var colName = rawData.fieldNameArray[0][k]
+            temp[colName] = rawData.allData[0][k][0].value[m]
+          }
+          datas.push(temp)
+        }
+        this.setState({data:datas})
+
+        break
+      }
+    }
+    //onsole.log(this.state.dataSet)
     console.log(store.getState())
   }
   handleOk = (e) => {
@@ -86,7 +120,7 @@ class FlowContextMenu extends React.Component {
         <Modal title="Basic Modal" visible={this.state.visible}
           onOk={this.handleOk} onCancel={this.handleCancel} width={800}
         >
-          <Table columns={columns} dataSource={data} pagination={{ pageSize: 70 }} scroll={{ y: 340 }} bordered />
+          <Table columns={this.state.col} dataSource={this.state.data} pagination={{ pageSize: 70 }} scroll={{ y: 340 }} bordered />
 
         </Modal>
 
@@ -169,4 +203,4 @@ class FlowContextMenu extends React.Component {
   }
 }
 
-export default FlowContextMenu;
+export default withPropsAPI(FlowContextMenu);

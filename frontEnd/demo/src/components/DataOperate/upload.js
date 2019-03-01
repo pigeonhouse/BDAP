@@ -53,7 +53,7 @@ class Uploadfile extends Component{
             fieldNameArray.push(results.meta.fields);
             vectorLength.push(results.data.length - 1)
 
-            var n = {};
+            var n = new Array();
             //  console.log(results)
             for(let indexOfCols = 0; indexOfCols < fieldNameArray[0].length; indexOfCols++){
                 var colName = fieldNameArray[0][indexOfCols];
@@ -61,7 +61,7 @@ class Uploadfile extends Component{
                 for (let indexOfRows = 0; indexOfRows < results.data.length - 1; indexOfRows++){
                 colValue.push(results.data[indexOfRows][colName])
                 }
-                n[colName] = colValue
+                n.push([{label:colName,value:colValue}])
         }
         allData.push(n)
 
