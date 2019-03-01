@@ -8,11 +8,8 @@ const MenuItemGroup = Menu.ItemGroup;
 class Item extends React.Component {
   constructor(props) {
     super(props);
-
     this.bindEvent();
   }
-
-
 
   handleMouseDown = () => {
     const { type, size, shape, model } = this.props;
@@ -36,10 +33,12 @@ class Item extends React.Component {
 
   render() {
     const { model } = this.props;
-
     return (
-      <div style={{ cursor: 'pointer' }} onMouseDown={this.handleMouseDown}>
-      <div><Icon type='bars'/>{<span label={model.label}>{model.label}</span>}</div>
+      <div 
+        style={{ cursor: 'pointer' }} 
+        onMouseDown={this.handleMouseDown}
+      >
+        <div style={{paddingLeft:5,fontSize:13, cursor:'move'}}><Icon type='bars'/><span>{model.label}</span></div>
       </div>
     );
   }

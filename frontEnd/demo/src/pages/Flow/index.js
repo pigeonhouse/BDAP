@@ -25,7 +25,6 @@ class FlowPage extends React.Component {
         </Row>
         <Row type="flex" className={styles.editorBd}>
           <Col span={4} className={styles.editorSidebar}>
-   
             <FlowItemPanel />
           </Col>
           <Col span={16} className={styles.editorContent}>

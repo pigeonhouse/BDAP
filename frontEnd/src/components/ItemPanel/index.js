@@ -2,6 +2,7 @@ import React from 'react';
 import { pick } from '@utils';
 import withGGEditorContext from '@common/context/GGEditorContext/withGGEditorContext';
 import Item from './Item';
+import styles from './index.less'
 
 
 class ItemPanel extends React.Component {
@@ -36,7 +37,9 @@ class ItemPanel extends React.Component {
 
     return (
 
-      <div id={this.containerId} {...pick(this.props, ['style', 'className'])}>
+      <div id={this.containerId} {...pick(this.props, ['style', 'className'])}
+        className={styles.divstyle}
+      >
         {children}
       </div>
 

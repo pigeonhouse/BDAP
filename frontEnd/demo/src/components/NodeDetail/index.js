@@ -51,21 +51,6 @@ class NodeDetail extends React.Component {
       });
     });
   }
-  changeColor = (e)=>{
-    e.node = [{shape: 'flow-test', state_icon_url:''}];
-    e.preventDefault();
-    const { propsAPI } = this.props;
-    const { getSelected, executeCommand, update, find } = propsAPI;
-    const item1 = getSelected()[0];
-    console.log(item1)
-    // const values = {state_icon_url:'https://gw.alipayobjects.com/zos/rmsportal/czNEJAmyDpclFaSucYWB.svg'}
-    executeCommand(() => {
-      const item = find(item1.id);
-      update(item, {
-        ...values,
-      });
-    });
-  }
   showModal = () => {
     console.log(a)
     this.setState({
@@ -100,7 +85,7 @@ class NodeDetail extends React.Component {
     );
     else if(label === 'Input')
     return (
-      <Uploadfile></Uploadfile>
+      <Uploadfile ></Uploadfile>
     );
   }
 
