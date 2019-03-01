@@ -60,7 +60,8 @@ export default (state = defaultState, action) => {
         console.log(all_attr)
         //现在终于可以chachacha了
 
-        let outcome = all_data;
+        let outcome = all_data[0];
+        outcome.id = action.id;
 
         newState.Dataset.push(outcome);
         return newState;
@@ -92,7 +93,8 @@ export default (state = defaultState, action) => {
         console.log(all_attr)
         //现在终于可以chachacha了
 
-        let outcome = all_data;
+        let outcome = all_data[0];
+        outcome.id = action.id;
 
         newState.Dataset.push(outcome);
         return newState;
