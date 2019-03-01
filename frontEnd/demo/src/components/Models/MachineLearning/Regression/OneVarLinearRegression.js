@@ -12,7 +12,7 @@ export function OneVarLinearRegression(DataSetTrain, featureColName, labelColNam
 
     DataSetTest[outputColName] = predictArray;
 
-    console.log("a")
+    // console.log("a")
 
     // regression.computeX(3.5); // 2.25
     
