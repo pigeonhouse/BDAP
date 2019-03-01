@@ -60,7 +60,7 @@ export default (state = defaultState, action) => {
         console.log(all_attr)
         //现在终于可以chachacha了
 
-        let outcome = [];
+        let outcome = all_data;
 
         newState.Dataset.push(outcome);
         return newState;
@@ -69,7 +69,32 @@ export default (state = defaultState, action) => {
 
 
     if (action.type === FillNa) {
-        newState.Dataset.push(end_data);
+
+        const newState = JSON.parse(JSON.stringify(state));
+        let all_data = [];
+        let all_attr = [];
+        for (let k = 0; k < inf.edges.length; k++){
+            if(inf.edges[k].target === action.id){
+                for(let p = 0; p < newState.Dataset.length; p++){
+                    if(inf.edges[k].source === newState.Dataset[p].id){
+                        all_data.push(newState.Dataset[p]);
+                        break;
+                    }
+                }
+            }
+        }
+        for(let k = 0; k < inf.nodes.length; k++){
+            if(inf.nodes[k].id === action.id){
+                all_attr.push(inf.nodes[k].attr);
+            }
+        }
+        console.log(all_data)
+        console.log(all_attr)
+        //现在终于可以chachacha了
+
+        let outcome = all_data;
+
+        newState.Dataset.push(outcome);
         return newState;
     }
     if (action.type === MaxMinScaler) {
