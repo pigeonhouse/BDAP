@@ -58,7 +58,7 @@ class FlowContextMenu extends React.Component {
             columns.push({
               title : rawData.fieldNameArray[0][j],
               dataIndex: rawData.fieldNameArray[0][j],
-              // width : 50,
+               width : 50,
             })
         }
         this.setState({col:columns})
@@ -77,18 +77,22 @@ class FlowContextMenu extends React.Component {
       }
     }
     //onsole.log(this.state.dataSet)
-    console.log(store.getState())
+    //console.log(store.getState())
   }
   handleOk = (e) => {
     console.log(e);
     this.setState({
       visible: false,
+      col:[],
+      data:[]
     });
   }
   handleCancel = (e) => {
     console.log(e);
     this.setState({
       visible: false,
+      col:[],
+      data:[]
     });
   }
 
