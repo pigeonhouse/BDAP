@@ -121,7 +121,8 @@ export default (state = defaultState, action) => {
                     if(Dataset[p].id === _id){
                         Dataset.splice(p,1);
                     }
-                    p++;
+                    else
+                        p++;
                 }
             }
         }

@@ -21,7 +21,7 @@ class Uploadfile extends Component{
         var vectorlength = this.state.length[0]
         
         var newData = new Array();
-    
+
         for(let indexOfRows = 0;indexOfRows < vectorlength; indexOfRows++){
           var row = new Array();
           for(let indexOfCols = 0; indexOfCols < fieldNameArray.length; indexOfCols++ ){
@@ -87,15 +87,21 @@ class Uploadfile extends Component{
     render(){
         return (
             <div>
+              <div>
                 <Input
                     type="file" 
                     id='files' 
                     name='files[]' 
+                    size='large'
                     onChange={(e)=>this.readFile(e)} 
                     multiple
                 >
                 </Input>
-                <Button type="primary" onClick={()=>this.makeFile()}>makeFile</Button>
+                </div>
+                <p></p>
+                <div>
+                <Button type="primary" icon = "download" onClick={()=>this.makeFile()}>makeFile</Button>
+                </div>
             </div>
         );
     }
