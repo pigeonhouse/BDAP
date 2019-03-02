@@ -9,11 +9,8 @@ import {run} from "../Models/run.js"
 import { withPropsAPI } from '@src';
 import store from '../../store';
 import { getStopLineAction, getShowLineAction, UpINF } from '../../store/actionCreate';
-import Papa from 'papaparse'
 import {OneVarLinearRegression} from '../Models/MachineLearning/Regression/OneVarLinearRegression.js'
 import {OneVarPolynomialRegression} from '../Models/MachineLearning/Regression/OneVarPolynomialRegression'
-import Download from '../DataOperate/download'
-import Selectword from '../DataOperate/selectword'
 class FlowToolbar extends React.Component {
 
   state = {
@@ -67,10 +64,10 @@ class FlowToolbar extends React.Component {
 
     const inf = propsAPI.save();
 
-    const action = UpINF(inf);
-    // console.log(action);
-    // console.log(inf);
-    store.dispatch(action);
+    // const action = UpINF(inf);
+    // // console.log(action);
+    // // console.log(inf);
+    // store.dispatch(action);
 
     var Sourc = 0;
     var tag = 'Input';
@@ -89,7 +86,7 @@ class FlowToolbar extends React.Component {
           }
         }
       }
-      console.log(Deg);
+      // console.log(Deg);
 
       for (var k = 0; k < inf.nodes.length; ) {
         for (let indexN of inf.nodes.keys()){
@@ -139,7 +136,7 @@ class FlowToolbar extends React.Component {
     //   }
     // }
     console.log(stream);
-    run(stream);
+    run(stream, propsAPI);
   }
   
  handleLegal = ()=> {
@@ -323,7 +320,7 @@ class FlowToolbar extends React.Component {
           </Tooltip>
         </Command>
         
-        {/* <Button onClick={()=>this.showDetail()}>run</Button> */}
+        <Button onClick={()=>this.showDetail()}>run</Button>
         {/* <Button onClick={()=>this.livyTest()}>spark-test</Button>
         <Button onClick={()=>this.returnLoss()}>return-loss</Button> */}
 {/* 
@@ -355,7 +352,7 @@ class FlowToolbar extends React.Component {
           filename = {'test'}
         />
 
-        </Modal> */} */}
+        </Modal> */} 
 
 
         {/* <Button className={styles.buttonRight1} href='#'>用户</Button>

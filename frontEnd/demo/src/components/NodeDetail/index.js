@@ -71,10 +71,6 @@ class NodeDetail extends React.Component {
       visible: false,
     });
   }
-  isSelectVisible(select_status){
-    if(select_status)
-    return <Selectword style={{margin:0}}></Selectword>;
-  }
   isInputOutput(label){
     if(label === 'Output')
     return (
@@ -103,6 +99,18 @@ class NodeDetail extends React.Component {
     const { label } = item.getModel();
     const { attr } = item.getModel();
     const { select_status } = item.getModel();
+    var targetid = [];
+    if(select_status){
+      for(let i = 0;i < select_status;i++){
+        targetid.push(0);
+      }
+      const inf = propsAPI.save().edges;
+      for(let i in inf){
+          if(inf[i].target === item.id && inf[i].targetAnchor < select_status){
+            targetid[inf[i].targetAnchor] = inf[i].source;
+          }
+      }
+    }
     var arr = []
     for (let i in attr) {
         let o = {};
@@ -113,7 +121,6 @@ class NodeDetail extends React.Component {
     return (
       <Card type="inner" title="参数" bordered={false}>
         <Form onSubmit={this.handleSubmit}>
-
           <Item label="label" {...inlineFormItemLayout}>
             {
               getFieldDecorator('label', {
@@ -121,7 +128,12 @@ class NodeDetail extends React.Component {
               })(<Input onBlur={this.handleSubmit} />)
             }
           </Item>
-          {this.isSelectVisible(select_status)}
+          {targetid.map((value)=>{
+            return <Selectword 
+                      id={value}
+                      style={{margin:0}}
+                    ></Selectword>;
+          })}
           {arr.map((item)=>{
             const itemKey = Object.keys(item)[0];
             return <Item label={itemKey} {...inlineFormItemLayout}>
@@ -132,7 +144,7 @@ class NodeDetail extends React.Component {
                     }
                   </Item>;
           })}
-           {this.isInputOutput(label)}
+          {this.isInputOutput(label)}
         </Form>
       </Card>
     );

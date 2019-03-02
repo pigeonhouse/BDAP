@@ -62,8 +62,18 @@ export default (state = defaultState, action) => {
 
         let outcome = all_data[0];
         outcome.id = action.id;
-
-        newState.Dataset.push(outcome);
+        
+        var isdo = [];
+        for(let i = 0;i < newState.Dataset.length;i++)
+            if(newState.Dataset[i].id === action.id){
+                newState.Dataset[i].allData = outcome.allData;
+                newState.Dataset[i].fieldNameArray = outcome.fieldNameArray;
+                newState.Dataset[i].vectorLength = outcome.vectorLength;
+                isdo.push(0);
+            }
+        if(isdo.length === 0){
+            newState.Dataset.push(outcome);
+        }
         return newState;
     }
 
@@ -121,8 +131,7 @@ export default (state = defaultState, action) => {
                     if(Dataset[p].id === _id){
                         Dataset.splice(p,1);
                     }
-                    else
-                        p++;
+                    p++;
                 }
             }
         }
@@ -131,10 +140,21 @@ export default (state = defaultState, action) => {
     }
     if (action.type === UPLOAD) {
         const newState = JSON.parse(JSON.stringify(state));
-        newState.Dataset.push({'id':action.id,
+
+        var isdo = [];
+        for(let i = 0;i < newState.Dataset.length;i++)
+            if(newState.Dataset[i].id === action.id){
+                newState.Dataset[i].allData = action.allData;
+                newState.Dataset[i].fieldNameArray = action.fieldNameArray;
+                newState.Dataset[i].vectorLength = action.vectorLength;
+                isdo.push(0);
+            }
+        if(isdo.length === 0){
+            newState.Dataset.push({'id':action.id,
                         'allData':action.allData,
                         'fieldNameArray':action.fieldNameArray,
                         'vectorLength':action.vectorLength})
+        }
         return newState;
     }
     if(action.type === INf){

@@ -21,7 +21,8 @@ class FlowItemPanel extends React.Component {
             name = {'flow-test'}
             config =  {{
               anchor: [
-                [ 0.5, 0],
+                [ 0.33, 0],
+                [ 0.66, 0],
                 [ 0.5, 1]
               ]
             }}
@@ -33,10 +34,14 @@ class FlowItemPanel extends React.Component {
           <Menu.Item key="1" > <ItemPanel><Item
             type="node"
             size="200*40"
-            shape='flow-rect'
+            shape='flow-test'
             model={{
               label: 'Input',
-              attr:{'sourceFile':'people'}
+              attr:{'sourceFile':'people'},
+              Dataset: [],
+              labelArray: [], 
+              length: 0,
+              select_status: 3
             }}         
           /></ItemPanel></Menu.Item>
           <Menu.Item key="2"><ItemPanel><Item
@@ -48,17 +53,14 @@ class FlowItemPanel extends React.Component {
               label: 'Output',
               attr:{'targetFile':'new_people'}
             }}           
-          /></ItemPanel></Menu.Item>
-        
+          /></ItemPanel></Menu.Item>       
         </SubMenu>
-
         <SubMenu key="g2" title="Model">      
           <Menu.Item key="3"><ItemPanel><Item
             type="node"
             size="200*40"
             shape="flow-rect"
             model={{
-              // color: '#13C2C2',
               label: 'ConvNet',
               attr:{'learningRate':0.1, poolSize: 2, strides: 2}
             }}         
@@ -66,13 +68,15 @@ class FlowItemPanel extends React.Component {
           <Menu.Item key="4"><ItemPanel><Item
             type="node"
             size="200*40"
-            shape="flow-rect"
+            shape="flow-test"
             model={{
-              // color: '#722ED1',
               label: 'DenseNet',
-              attr:{'learningRate':0.1}
-            }}
-            
+              attr: {'learningRate':0.1},
+              Dataset: [],
+              labelArray: [], 
+              length: 0,
+              select_status: 3
+            }}          
           /></ItemPanel></Menu.Item>
           <Menu.Item key="5"><ItemPanel><Item
             type="node"

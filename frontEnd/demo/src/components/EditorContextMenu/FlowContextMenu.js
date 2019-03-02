@@ -96,9 +96,6 @@ class FlowContextMenu extends React.Component {
     });
   }
 
-  
-
-
   render() {
     return (
       <ContextMenu className={styles.contextMenu}>
@@ -115,6 +112,7 @@ class FlowContextMenu extends React.Component {
               <span>删除</span>
             </div>
           </Command>
+          
           <div className={styles.item} onClick={this.showModal}>
               <i className={`${iconfont.iconfont} ${iconfont.iconCopyO}`} />
               <span>展示</span>
