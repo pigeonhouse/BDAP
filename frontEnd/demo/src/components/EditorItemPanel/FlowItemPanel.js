@@ -107,7 +107,22 @@ class FlowItemPanel extends React.Component {
       </SubMenu>
 
       <SubMenu key="sub1" title={<span><Icon type="mail" /><span>数据预处理</span></span>}>
-      <Menu.Item key="6"><ItemPanel><Item
+      <Menu.Item key="7"><ItemPanel><Item
+            type="node"
+            size="200*40"
+            shape="flow-test"
+            model={{
+              // color: '#722ED1',
+              label: '缺失值填充',
+              attr:{ type:'mean' },
+              Dataset: [],
+              labelArray: [], 
+              length: 0,
+              select_status: 3
+            }}
+           
+          /></ItemPanel></Menu.Item>
+      <Menu.Item key="8"><ItemPanel><Item
             type="node"
             size="200*40"
             shape="flow-test"
@@ -127,7 +142,7 @@ class FlowItemPanel extends React.Component {
       <SubMenu key="sub2" title={<span><Icon type="appstore" /><span>机器学习</span></span>}>
         <SubMenu key="g3" title="回归">
         
-          <Menu.Item key="7"><ItemPanel><Item
+          <Menu.Item key="9"><ItemPanel><Item
               type="node"
               size="200*40"
               shape='flow-test'
@@ -141,7 +156,7 @@ class FlowItemPanel extends React.Component {
               }}
               
             /></ItemPanel></Menu.Item>
-          <Menu.Item key="8"><ItemPanel><Item
+          <Menu.Item key="10"><ItemPanel><Item
               type="node"
               size="200*40"
               shape='flow-test'
@@ -151,7 +166,7 @@ class FlowItemPanel extends React.Component {
               }}
               
             /></ItemPanel></Menu.Item>
-            <Menu.Item key="9"><ItemPanel><Item
+            <Menu.Item key="11"><ItemPanel><Item
               type="node"
               size="200*40"
               shape='flow-test'
@@ -161,7 +176,7 @@ class FlowItemPanel extends React.Component {
               }}
               
             /></ItemPanel></Menu.Item>
-            <Menu.Item key="10"><ItemPanel><Item
+            <Menu.Item key="12"><ItemPanel><Item
               type="node"
               size="200*40"
               shape='flow-test'
@@ -171,7 +186,7 @@ class FlowItemPanel extends React.Component {
               }}
               
             /></ItemPanel></Menu.Item>
-            <Menu.Item key="11"><ItemPanel><Item
+            <Menu.Item key="13"><ItemPanel><Item
               type="node"
               size="200*40"
               shape='flow-test'
@@ -184,7 +199,7 @@ class FlowItemPanel extends React.Component {
         </SubMenu>
 
         <SubMenu key="g4" title="分类">
-          <Menu.Item key="12"><ItemPanel><Item
+          <Menu.Item key="14"><ItemPanel><Item
             type="node"
             size="200*40"
             shape='flow-test'
@@ -194,7 +209,7 @@ class FlowItemPanel extends React.Component {
             }}
             
           /></ItemPanel></Menu.Item>
-          <Menu.Item key="13"><ItemPanel><Item
+          <Menu.Item key="15"><ItemPanel><Item
             type="node"
             size="200*40"
             shape='flow-test'

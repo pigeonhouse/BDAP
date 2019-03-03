@@ -2,6 +2,7 @@ import store from '../../store'
 import { Conv, Dens, FillN, MaxM, Delete} from '../../store/actionCreate';
 import {OneVarLinearRegression} from '../Models/MachineLearning/Regression/OneVarLinearRegression'
 import { Scaler } from '../Models/MachineLearning/DataPreprocessing/Scaler';
+import { FillNa } from '../Models/MachineLearning/DataPreprocessing/FillNa'
 // var inf = store.getState().picture;
 
 // function CONVNET(id) {
@@ -123,10 +124,15 @@ export function run(stream, propsAPI) {
 
   for (let k = 1; k < stream.length; k++) {
     const all_data = inputdata(stream[k].id, propsAPI);
+    console.log("stream:")
+    console.log(stream)
     var outcome = new Array()
     switch (stream[k].label) {
       case '单变量线性回归':
           outcome.push(OneVarLinearRegression(all_data))
+          break
+      case '缺失值填充':
+          outcome.push(FillNa(all_data))
           break
       case '归一化':
           outcome.push(Scaler(all_data))
