@@ -1,16 +1,22 @@
 import SimpleLinearRegression from 'ml-regression-simple-linear';
 
-export function OneVarLinearRegression(DataSetTrain, featureColName, labelColName,DataSetTest,predictColName,outputColName){
-    const x = DataSetTrain[featureColName];
-    const y = DataSetTrain[labelColName];
+export function OneVarLinearRegression(allData){
+
+    console.log(allData)
+
+     const x = allData[1].Dataset[2][0].value;
+     const y = allData[1].Dataset[1][0].value;
     
     const regression = new SimpleLinearRegression(x, y);
-    
+    console.log("单变量线性回归结果")
     console.log(regression.slope,regression.intercept)
+    console.log("----------------------")
 
-    const predictArray = regression.predict(DataSetTest[predictColName]); // 5
+    return allData
 
-    DataSetTest[outputColName] = predictArray;
+    // const predictArray = regression.predict(DataSetTest[predictColName]); // 5
+
+    // DataSetTest[outputColName] = predictArray;
 
     // regression.computeX(3.5); // 2.25
     

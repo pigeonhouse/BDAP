@@ -71,7 +71,6 @@ class Uploadfile extends Component{
           }
           const item = getSelected()[0];
           update(item, {...values});
-          console.log(propsAPI.save());
         }
         // this.setTest(allData,fieldNameArray,vectorLength);
 

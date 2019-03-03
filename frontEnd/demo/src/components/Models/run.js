@@ -1,5 +1,7 @@
 import store from '../../store'
 import { Conv, Dens, FillN, MaxM, Delete} from '../../store/actionCreate';
+import {OneVarLinearRegression} from '../Models/MachineLearning/Regression/OneVarLinearRegression'
+import { Scaler } from '../Models/MachineLearning/DataPreprocessing/Scaler';
 // var inf = store.getState().picture;
 
 // function CONVNET(id) {
@@ -116,35 +118,47 @@ function deletedata(propsAPI){
     }
   }
 }
+
 export function run(stream, propsAPI) {
 
   for (let k = 1; k < stream.length; k++) {
     const all_data = inputdata(stream[k].id, propsAPI);
-    console.log(all_data)
-    // switch (stream[k].label) {
-    //   case 'Input':
-    //     // INPUT(stream[k].id);
-    //     break;
-    //   case 'Output':
-    //     OUTPUT(stream[k].id);
-    //     break;
-    //   case 'DenseNet':
-    //     DENSENET(stream[k].id);
-    //     break;
-    //   case 'ConvNet':
-    //     CONVNET(stream[k].id);
-    //     break;
-    //   case 'FillNa':
-    //     FILLNA(stream[k].id);
-    //     break;
-    //   case 'MaxMinScaler':
-    //     MAXMINSCALER(stream[k].id);
-    //     break;
-    //   default:
-    //     break;
-    // }
-    let outcome = all_data[1];
-    outputdata(stream[k].id, outcome, propsAPI);
+    var outcome = new Array()
+    switch (stream[k].label) {
+      case '单变量线性回归':
+          outcome.push(OneVarLinearRegression(all_data))
+          break
+      case '归一化':
+          outcome.push(Scaler(all_data))
+          break
+      // case 'Input':
+      //   // INPUT(stream[k].id);
+      //   break;
+      // case 'Output':
+      //   OUTPUT(stream[k].id);
+      //   break;
+      // case 'DenseNet':
+      //   DENSENET(stream[k].id);
+      //   break;
+      // case 'ConvNet':
+      //   CONVNET(stream[k].id);
+      //   break;
+      // case 'FillNa':
+      //   FILLNA(stream[k].id);
+      //   break;
+      // case 'MaxMinScaler':
+      //   MAXMINSCALER(stream[k].id);
+      //   break;
+      default:
+        break;
+    }
+    //let outcome = all_data[1];
+    //console.log(outcome)
+    outputdata(stream[k].id, outcome[0][1], propsAPI);
   }
-  deletedata(propsAPI);
+
+  console.log("最终图信息")
+  console.log(propsAPI.save())
+  console.log("-------------------------------")
+  //deletedata(propsAPI);
 }

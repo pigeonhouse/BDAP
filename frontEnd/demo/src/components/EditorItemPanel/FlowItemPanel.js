@@ -98,11 +98,30 @@ class FlowItemPanel extends React.Component {
               // color: '#722ED1',
               label: 'MaxMinScaler',
               attr:{'rows':'unknown'}
+              
             }}
            
           /></ItemPanel></Menu.Item>
           
         </SubMenu>
+      </SubMenu>
+
+      <SubMenu key="sub1" title={<span><Icon type="mail" /><span>数据预处理</span></span>}>
+      <Menu.Item key="6"><ItemPanel><Item
+            type="node"
+            size="200*40"
+            shape="flow-test"
+            model={{
+              // color: '#722ED1',
+              label: '归一化',
+              attr:{},
+              Dataset: [],
+              labelArray: [], 
+              length: 0,
+              select_status: 3
+            }}
+           
+          /></ItemPanel></Menu.Item>
       </SubMenu>
 
       <SubMenu key="sub2" title={<span><Icon type="appstore" /><span>机器学习</span></span>}>
@@ -114,7 +133,11 @@ class FlowItemPanel extends React.Component {
               shape='flow-test'
               model={{
                 label: '单变量线性回归',
-                attr:{'sourceFile':'people'}
+                attr:{},
+                Dataset: [],
+                labelArray: [], 
+                length: 0,
+                select_status: 3
               }}
               
             /></ItemPanel></Menu.Item>

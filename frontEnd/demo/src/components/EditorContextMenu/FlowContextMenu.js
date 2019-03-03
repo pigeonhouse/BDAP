@@ -46,38 +46,38 @@ class FlowContextMenu extends React.Component {
       visible: true,
     });
     const { propsAPI } = this.props;
-    this.setState({currentId : propsAPI.getSelected()[0].id})
-    const data = store.getState().Dataset
-    
-    for(let i = 0; i < data.length; i++){
-      if(data[i].id == propsAPI.getSelected()[0].id){
-        const rawData = data[i]
-        console.log(rawData)
-        var columns = new Array()
-        for(let j = 0; j < rawData.fieldNameArray[0].length; j++){
-            columns.push({
-              title : rawData.fieldNameArray[0][j],
-              dataIndex: rawData.fieldNameArray[0][j],
-               width : 50,
-            })
-        }
-        this.setState({col:columns})
-        var datas = new Array()
-        for(let m = 0; m < rawData.vectorLength[0]; m++){
-          var temp = new Array();
-          for(let k = 0; k < rawData.fieldNameArray[0].length; k++){
-            var colName = rawData.fieldNameArray[0][k]
-            temp[colName] = rawData.allData[0][k][0].value[m]
-          }
-          datas.push(temp)
-        }
-        this.setState({data:datas})
 
-        break
+    var currentId = propsAPI.getSelected()[0].id
+    var saveData = propsAPI.save().nodes
+    var currentData = new Array()
+
+    for(let i = 0; i < saveData.length; i++){
+      if(currentId == saveData[i].id){       
+          currentData.push(saveData[i].Dataset)
       }
     }
-    //onsole.log(this.state.dataSet)
-    //console.log(store.getState())
+    currentData = currentData[0]
+
+    var columns = new Array()
+    for(let i = 0; i < currentData.length; i++){
+      columns.push({
+                   title : currentData[i][0].label,
+                   dataIndex: currentData[i][0].label,
+                   width : 50,
+                 })
+    }
+    this.setState({col:columns})
+
+    var datas = new Array()
+    for(let i = 0; i < currentData[0][0].value.length; i++){
+      var temp = new Array()
+      for(let j = 0; j < currentData.length; j++){
+        temp[currentData[j][0].label] = currentData[j][0].value[i]
+      }
+      datas.push(temp)
+    }
+    this.setState({data:datas})
+
   }
   handleOk = (e) => {
     console.log(e);
@@ -120,7 +120,7 @@ class FlowContextMenu extends React.Component {
         </NodeMenu>
 
         <Modal title="Basic Modal" visible={this.state.visible}
-          onOk={this.handleOk} onCancel={this.handleCancel} width={800}
+          onOk={this.handleOk} onCancel={this.handleCancel} width={900}
         >
           <Table columns={this.state.col} dataSource={this.state.data} pagination={{ pageSize: 70 }} scroll={{ y: 340 }} bordered />
 
