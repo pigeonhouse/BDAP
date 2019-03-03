@@ -10,7 +10,7 @@ class FlowItemPanel extends React.Component {
   render() {
     return (
       <Menu
-      defaultOpenKeys={['sub1']}
+      defaultOpenKeys={['sub1','sub2','sub3']}
       mode="inline"
       className={styles.scrollapp}
       style={{maxHeight:676}}
@@ -57,8 +57,7 @@ class FlowItemPanel extends React.Component {
             extend = {'flow-rect'}
           />
         </GGEditor>
-      <SubMenu key="sub1" title={<span><Icon type="mail" /><span>Mnist</span></span>}>
-        <SubMenu key="g1" title="Data" style={{verticalAlign: 'middle'}}>        
+      <SubMenu key="sub1" title={<span><Icon type="mail" /><span>数据源</span></span>}>
           <Menu.Item key="1" > <ItemPanel><Item
             type="node"
             size="200*40"
@@ -132,9 +131,9 @@ class FlowItemPanel extends React.Component {
           /></ItemPanel></Menu.Item>
            
         </SubMenu> */}
-      </SubMenu>
 
-      <SubMenu key="sub1" title={<span><Icon type="mail" /><span>数据预处理</span></span>}>
+
+      <SubMenu key="sub2" title={<span><Icon type="mail" /><span>数据预处理</span></span>}>
       <Menu.Item key="7"><ItemPanel><Item
             type="node"
             size="200*40"
@@ -167,7 +166,7 @@ class FlowItemPanel extends React.Component {
           /></ItemPanel></Menu.Item>
       </SubMenu>
 
-      <SubMenu key="sub2" title={<span><Icon type="appstore" /><span>机器学习</span></span>}>
+      <SubMenu key="sub3" title={<span><Icon type="appstore" /><span>机器学习</span></span>}>
         <SubMenu key="g3" title="回归">
         
           <Menu.Item key="9"><ItemPanel><Item
@@ -249,7 +248,7 @@ class FlowItemPanel extends React.Component {
           /></ItemPanel></Menu.Item>
         </SubMenu>
       </SubMenu>
-      <SubMenu key="sub4" title={<span><Icon type="setting" /><span>Titanic</span></span>}>
+      <SubMenu key="sub4" title={<span><Icon type="setting" /><span>深度学习</span></span>}>
         <Menu.Item key="14">Option 9</Menu.Item>
         <Menu.Item key="15">Option 10</Menu.Item>
         <Menu.Item key="16">Option 11</Menu.Item>

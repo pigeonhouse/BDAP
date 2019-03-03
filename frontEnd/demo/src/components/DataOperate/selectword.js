@@ -31,6 +31,7 @@ class Selectword extends Component{
             mockdata.push({
                 key: i.toString(),
                 title: labelArray[i][0],
+                description: labelArray[i][0]
             });
             if(labelArray[i][1])
             targetkeys.push(i.toString());

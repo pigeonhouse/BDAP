@@ -122,7 +122,7 @@ class FlowContextMenu extends React.Component {
         <Modal title="Basic Modal" visible={this.state.visible}
           onOk={this.handleOk} onCancel={this.handleCancel} width={900}
         >
-          <Table columns={this.state.col} dataSource={this.state.data} pagination={{ pageSize: 70 }} scroll={{ y: 340 }} bordered />
+          <Table columns={this.state.col} dataSource={this.state.data} pagination={{ pageSize: 70 }} scroll={{ y: 340 }} bordered size="small" />
 
         </Modal>
 
