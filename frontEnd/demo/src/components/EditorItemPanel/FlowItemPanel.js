@@ -18,12 +18,40 @@ class FlowItemPanel extends React.Component {
       <GGEditor style={{height:0}}>
           <Flow />
           <RegisterNode 
-            name = {'flow-test'}
+            name = {'two-one'}
             config =  {{
               anchor: [
                 [ 0.33, 0],
                 [ 0.66, 0],
                 [ 0.5, 1]
+              ]
+            }}
+            extend = {'flow-rect'}
+          />
+          <RegisterNode 
+            name = {'one-one'}
+            config =  {{
+              anchor: [
+                [ 0.5, 0],
+                [ 0.5, 1]
+              ]
+            }}
+            extend = {'flow-rect'}
+          />
+          <RegisterNode 
+            name = {'zero-one'}
+            config =  {{
+              anchor: [
+                [ 0.5, 1]
+              ]
+            }}
+            extend = {'flow-rect'}
+          />
+          <RegisterNode 
+            name = {'one-zero'}
+            config =  {{
+              anchor: [
+                [ 0.5, 0]
               ]
             }}
             extend = {'flow-rect'}
@@ -34,7 +62,7 @@ class FlowItemPanel extends React.Component {
           <Menu.Item key="1" > <ItemPanel><Item
             type="node"
             size="200*40"
-            shape='flow-test'
+            shape='zero-one'
             model={{
               label: 'Input',
               attr:{'sourceFile':'people'},
@@ -47,15 +75,15 @@ class FlowItemPanel extends React.Component {
           <Menu.Item key="2"><ItemPanel><Item
             type="node"
             size="200*40"
-            shape="flow-rect"
+            shape="one-zero"
             model={{
               // color: '#FA8C16',
               label: 'Output',
               attr:{'targetFile':'new_people'}
             }}           
           /></ItemPanel></Menu.Item>       
-        </SubMenu>
-        <SubMenu key="g2" title="Model">      
+       </SubMenu>
+         {/* <SubMenu key="g2" title="Model">      
           <Menu.Item key="3"><ItemPanel><Item
             type="node"
             size="200*40"
@@ -68,7 +96,7 @@ class FlowItemPanel extends React.Component {
           <Menu.Item key="4"><ItemPanel><Item
             type="node"
             size="200*40"
-            shape="flow-test"
+            shape="two-one"
             model={{
               label: 'DenseNet',
               attr: {'learningRate':0.1},
@@ -102,15 +130,15 @@ class FlowItemPanel extends React.Component {
             }}
            
           /></ItemPanel></Menu.Item>
-          
-        </SubMenu>
+           
+        </SubMenu> */}
       </SubMenu>
 
       <SubMenu key="sub1" title={<span><Icon type="mail" /><span>数据预处理</span></span>}>
       <Menu.Item key="7"><ItemPanel><Item
             type="node"
             size="200*40"
-            shape="flow-test"
+            shape="one-one"
             model={{
               // color: '#722ED1',
               label: '缺失值填充',
@@ -125,7 +153,7 @@ class FlowItemPanel extends React.Component {
       <Menu.Item key="8"><ItemPanel><Item
             type="node"
             size="200*40"
-            shape="flow-test"
+            shape="one-one"
             model={{
               // color: '#722ED1',
               label: '归一化',
@@ -145,7 +173,7 @@ class FlowItemPanel extends React.Component {
           <Menu.Item key="9"><ItemPanel><Item
               type="node"
               size="200*40"
-              shape='flow-test'
+              shape='two-one'
               model={{
                 label: '单变量线性回归',
                 attr:{},
@@ -159,7 +187,7 @@ class FlowItemPanel extends React.Component {
           <Menu.Item key="10"><ItemPanel><Item
               type="node"
               size="200*40"
-              shape='flow-test'
+              shape='two-one'
               model={{
                 label: '单变量多项式回归',
                 attr:{'sourceFile':'people'}
@@ -169,7 +197,7 @@ class FlowItemPanel extends React.Component {
             <Menu.Item key="11"><ItemPanel><Item
               type="node"
               size="200*40"
-              shape='flow-test'
+              shape='two-one'
               model={{
                 label: '多变量线性回归',
                 attr:{'sourceFile':'people'}
@@ -179,7 +207,7 @@ class FlowItemPanel extends React.Component {
             <Menu.Item key="12"><ItemPanel><Item
               type="node"
               size="200*40"
-              shape='flow-test'
+              shape='two-one'
               model={{
                 label: '决策树回归',
                 attr:{'sourceFile':'people'}
@@ -189,7 +217,7 @@ class FlowItemPanel extends React.Component {
             <Menu.Item key="13"><ItemPanel><Item
               type="node"
               size="200*40"
-              shape='flow-test'
+              shape='two-one'
               model={{
                 label: '随机森林回归',
                 attr:{'sourceFile':'people'}
@@ -202,7 +230,7 @@ class FlowItemPanel extends React.Component {
           <Menu.Item key="14"><ItemPanel><Item
             type="node"
             size="200*40"
-            shape='flow-test'
+            shape='two-one'
             model={{
               label: '朴素贝叶斯',
               attr:{'sourceFile':'people'}
@@ -212,7 +240,7 @@ class FlowItemPanel extends React.Component {
           <Menu.Item key="15"><ItemPanel><Item
             type="node"
             size="200*40"
-            shape='flow-test'
+            shape='two-one'
             model={{
               label: '支持向量机',
               attr:{'sourceFile':'people'}

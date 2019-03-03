@@ -76,7 +76,7 @@ function inputdata(id, propsAPI){
 
   const modelarray = currentitem.model.labelArray;
   for(let m in modelarray){
-    if(modelarray[m][1] === false)
+    if(modelarray[m][1] === true)
       labelArray.push(modelarray[m][0])
   }
   all_data.push({
@@ -86,8 +86,9 @@ function inputdata(id, propsAPI){
   for (let k in inf.edges){
     if(inf.edges[k].target === id){
       let item = find(inf.edges[k].source);
+      var re = JSON.parse(JSON.stringify(item.model.Dataset))
       all_data.push({
-        Dataset: item.model.Dataset,
+        Dataset: re,
         length: item.model.length,
         targetAnchor: inf.edges[k].targetAnchor
       });
