@@ -60,7 +60,7 @@ class FlowToolbar extends React.Component {
 
     this.handleLegal()
     const { propsAPI } = this.props;
-    // console.log(propsAPI.save())
+    console.log(propsAPI.save())
 
     const inf = propsAPI.save();
 
@@ -73,21 +73,26 @@ class FlowToolbar extends React.Component {
     var tag = 'Input';
     var stream = new Array();
     var attribute = new Array();
+    var labelarray = new Array();
 
 
     if(inf.hasOwnProperty('edges')){
       let Deg = new Array(inf.nodes.length).fill(0);
-
+      var sourceId = new Array(inf.nodes.length).fill(0);
+      for(let i in sourceId) {
+        sourceId[i] = new Array();
+      }
       for (let indexE of inf.edges.keys()) {
         Sourc = inf.edges[indexE].target;
+        let targetanchor = inf.edges[indexE].targetAnchor;
+        let source = inf.edges[indexE].source;
         for (let indexN of inf.nodes.keys()) {
           if (Sourc === inf.nodes[indexN].id) {
             Deg[indexN]++;
+            sourceId[indexN][targetanchor] = source;
           }
         }
       }
-      // console.log(Deg);
-
       for (var k = 0; k < inf.nodes.length; ) {
         for (let indexN of inf.nodes.keys()){
           if(Deg[indexN] === 0){
@@ -96,7 +101,14 @@ class FlowToolbar extends React.Component {
             Sourc = inf.nodes[indexN].id;
             tag = inf.nodes[indexN].label;
             attribute = inf.nodes[indexN].attr;
-            stream.push({'id':Sourc,"label":tag,"attribute":attribute});
+            labelarray = inf.nodes[indexN].labelArray;
+            stream.push({
+                        'id':Sourc,
+                        "label":tag,
+                        "attribute":attribute,
+                        "labelarray":labelarray,
+                        "sourceid":sourceId[indexN]
+                      });
             for (var i = 0; i < inf.edges.length; i++){
               if(Sourc === inf.edges[i].source){
                 for (var m = 0; m < inf.nodes.length; m++){
