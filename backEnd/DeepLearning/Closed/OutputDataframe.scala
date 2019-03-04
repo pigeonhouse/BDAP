@@ -15,10 +15,10 @@ object OutputDataframe {
     Engine.init
 
     val id = "456789"
-    val previous = Array("54612a04")
+    val previous = "54612a04"
     val project = "demo"
     val numRows = 20
-    val file = "hdfs://localhost:9000/" + project + "/" + id + ".json"
+    val file = "hdfs://localhost:9000/" + project + "/" + previous + ".json"
 
     val df1 = SQLContext.read.format("json").load(file)
     df1.show(20)
