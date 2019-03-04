@@ -28,7 +28,7 @@ object LSTM_ {
     val previous = "1"
     val batchSize = 133
     val Maxepoch = 1000
-    val file = "/home/hadoop/BigDL/" + project + "/" + previous + ".parquet"
+    val file = "/home/hadoop/BigDL/" + project + "/" + previous + ".json"
 
     val df1 = SQLContext.read.format("json").load(file)
     val df_1 = df1.rdd.map{case Row(v: Double) => v}
