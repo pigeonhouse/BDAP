@@ -19,13 +19,13 @@ class FlowToolbar extends React.Component {
 
   livyTest = () =>{
   const init={
-    method: 'POST', 
+    method: 'GET', 
     body:JSON.stringify(this.showDetail()),
     mode: 'cors',
     headers: {'Content-Type': 'application/json'},
     }
     fetch(
-      'http://localhost:5000/test',init
+      'http://localhost:5000/test'
     )
       .then(res => res.json())
       .then(data => {
@@ -321,8 +321,8 @@ class FlowToolbar extends React.Component {
         </Command>
         
         <Button onClick={()=>this.showDetail()}>run</Button>
-        {/* <Button onClick={()=>this.livyTest()}>spark-test</Button>
-        <Button onClick={()=>this.returnLoss()}>return-loss</Button> */}
+       <Button onClick={()=>this.livyTest()}>spark-test</Button>
+       {/* <Button onClick={()=>this.returnLoss()}>return-loss</Button> */}
 {/* 
         <Selectword></Selectword> */}
 

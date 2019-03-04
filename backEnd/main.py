@@ -16,6 +16,37 @@ global loss
 
 @app.route('/test', methods=['GET', 'POST'])
 def test():
+
+
+    fileobj = open('./test.scala', 'r')     # open scala file where your spark code lies
+
+    try:
+        code = fileobj.read()
+    finally:
+        fileobj.close()
+
+    data_mine = {'code': code }
+
+    session_url = 'http://localhost:8998/sessions/0'
+    compute = requests.post(session_url+'/statements', data=json.dumps(data_mine), headers=headers)
+
+    result_url = host + compute.headers['location']
+
+    r = requests.get(result_url, headers=headers)
+    print(r.json())
+
+    while(True):
+        r = requests.get(result_url, headers=headers)
+        if r.json()['state'] == 'available':
+            print("finish")
+            break
+
+
+    pprint.pprint(r.json())
+
+    return "finish"
+
+
     # data_mine = {'kind': 'spark'}
     # create_session = requests.post(host + '/sessions', data=json.dumps(data_mine), headers=headers)
     # session_url = host + create_session.headers['location']
@@ -29,79 +60,79 @@ def test():
     # code above aims for open a new livy session, it is suggested to open it in andvance to avoid wasting time 
 
     
-    inf = request.json          # information get from the front-end
-    r = 0
-    inputName = inf[0]["attribute"]["sourceFile"]
-    outputName = ""
+    # inf = request.json          # information get from the front-end
+    # r = 0
+    # inputName = inf[0]["attribute"]["sourceFile"]
+    # outputName = ""
 
-    for index in range(1,len(inf)):
-        print(inf[index]["label"])
+    # for index in range(1,len(inf)):
+    #     print(inf[index]["label"])
         
-        if inf[index]["label"] == "FillNa":
+    #     if inf[index]["label"] == "FillNa":
 
-            fileobj = open('./DataPreprocessing/FillNa.scala', 'r')     # open scala file where your spark code lies
-            fillingNumber = inf[index]["attribute"]["fillingNumber"]
-            outputName = inputName + "_afterFillNa"
+    #         fileobj = open('./DataPreprocessing/FillNa.scala', 'r')     # open scala file where your spark code lies
+    #         fillingNumber = inf[index]["attribute"]["fillingNumber"]
+    #         outputName = inputName + "_afterFillNa"
 
-            try:
-                code = fileobj.read()
-            finally:
-                fileobj.close()
+    #         try:
+    #             code = fileobj.read()
+    #         finally:
+    #             fileobj.close()
 
-            data_mine = {'code': code % (inputName+'.json',fillingNumber,outputName+'.json')}
+    #         data_mine = {'code': code % (inputName+'.json',fillingNumber,outputName+'.json')}
 
-            session_url = 'http://localhost:8998/sessions/0'
-            compute = requests.post(session_url+'/statements', data=json.dumps(data_mine), headers=headers)
+    #         session_url = 'http://localhost:8998/sessions/0'
+    #         compute = requests.post(session_url+'/statements', data=json.dumps(data_mine), headers=headers)
 
-            result_url = host + compute.headers['location']
+    #         result_url = host + compute.headers['location']
 
-            r = requests.get(result_url, headers=headers)
-            print(r.json())
+    #         r = requests.get(result_url, headers=headers)
+    #         print(r.json())
 
-            while(True):
-                r = requests.get(result_url, headers=headers)
-                if r.json()['state'] == 'available':
-                    print("finish")
-                    break
-
-
-            pprint.pprint(r.json())
-
-            inputName = outputName
-
-        elif inf[index]["label"] == "MaxMinScaler":
-            fileobj = open('./DataPreprocessing/MaxMinScaler.scala', 'r')
-            outputName = inputName + "_afterMaxMinScaler"
-
-            try:
-                code = fileobj.read()
-            finally:
-                fileobj.close()
-
-            data_mine = {'code': code % (inputName+'.json',outputName+'.json')}
-
-            session_url = 'http://localhost:8998/sessions/0'
-            compute = requests.post(session_url+'/statements', data=json.dumps(data_mine), headers=headers)
-
-            result_url = host + compute.headers['location']
-
-            r = requests.get(result_url, headers=headers)
-            print(r.json())
-
-            while(True):
-                r = requests.get(result_url, headers=headers)
-                if r.json()['state'] == 'available':
-                    print("finish")
-                    break
+    #         while(True):
+    #             r = requests.get(result_url, headers=headers)
+    #             if r.json()['state'] == 'available':
+    #                 print("finish")
+    #                 break
 
 
-            pprint.pprint(r.json())
+    #         pprint.pprint(r.json())
 
-            inputName = outputName
+    #         inputName = outputName
+
+    #     elif inf[index]["label"] == "MaxMinScaler":
+    #         fileobj = open('./DataPreprocessing/MaxMinScaler.scala', 'r')
+    #         outputName = inputName + "_afterMaxMinScaler"
+
+    #         try:
+    #             code = fileobj.read()
+    #         finally:
+    #             fileobj.close()
+
+    #         data_mine = {'code': code % (inputName+'.json',outputName+'.json')}
+
+    #         session_url = 'http://localhost:8998/sessions/0'
+    #         compute = requests.post(session_url+'/statements', data=json.dumps(data_mine), headers=headers)
+
+    #         result_url = host + compute.headers['location']
+
+    #         r = requests.get(result_url, headers=headers)
+    #         print(r.json())
+
+    #         while(True):
+    #             r = requests.get(result_url, headers=headers)
+    #             if r.json()['state'] == 'available':
+    #                 print("finish")
+    #                 break
+
+
+    #         pprint.pprint(r.json())
+
+    #         inputName = outputName
 
 
 
-        print(inf[index]["attribute"])
+    #     print(inf[index]["attribute"])
 
     
     
@@ -109,7 +140,7 @@ def test():
         
     #close the session, if you open the session outside this file, ignore it
 
-    return r.text
+    #return r.text
 
 @app.route('/realTime', methods=['GET', 'POST'])        # for transferring data while training
 def realTime():
