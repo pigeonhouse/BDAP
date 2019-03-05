@@ -110,12 +110,17 @@ class NodeDetail extends React.Component {
             targetid[inf[i].targetAnchor] = inf[i].source;
           }
       }
+      if(select_status > 1)
+      targetid=[targetid[0], ...targetid];
     }
+    console.log(targetid)
     var arr = []
-    for (let i in attr) {
+    if(label !== '特征区间化' && label !== '特征分组归类' && label !== '特征二进制化'){
+      for (let i in attr) {
         let o = {};
         o[i] = attr[i];
         arr.push(o)
+      }
     }
 
     return (
@@ -128,9 +133,11 @@ class NodeDetail extends React.Component {
               })(<Input onBlur={this.handleSubmit} />)
             }
           </Item>
-          {targetid.map((value)=>{
+          {targetid.map((value, index)=>{
             return <Selectword 
                       id={value}
+                      label={label}
+                      index={index}
                       style={{margin:0}}
                     ></Selectword>;
           })}

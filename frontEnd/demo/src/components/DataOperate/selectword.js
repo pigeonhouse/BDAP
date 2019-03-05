@@ -1,6 +1,9 @@
 import React, {Component} from 'react';
 import { Button, Modal, Transfer } from 'antd'
 import { withPropsAPI } from '@src';
+import FeatureRegion from './FeatureRegion.js'
+import FeatureGroup from './FeatureGroup.js'
+import FeatureBinary from './FeatureBinary.js'
 class Selectword extends Component{
     constructor(props){
         super(props);
@@ -8,7 +11,8 @@ class Selectword extends Component{
     state = {
         visible: false,
         mockData: [],
-        targetKeys: []
+        targetKeys: [],
+        labelArray: []
     }
     
     displayTransfer = () => {
@@ -16,14 +20,21 @@ class Selectword extends Component{
         const { find, getSelected } = propsAPI;
         var item;
         var labelArray = [];
-        if(getSelected()[0].model.labelArray.length !== 0){
+        if(getSelected()[0].model.labelArray[this.props.index].length !== 0){
             item = getSelected()[0];
-            labelArray = item.model.labelArray;
+            labelArray = item.model.labelArray[this.props.index];
         }
         else {
             item = find(this.props.id);
-            for(var i in item.model.labelArray)
-                labelArray.push([item.model.labelArray[i][0], false]);
+            if(item.model.select_status > 1){
+                let tail = item.model.labelArray.length-1;
+                for(var i in item.model.labelArray[tail])
+                    labelArray.push([item.model.labelArray[tail][i][0], false]);
+            }
+            else {
+                for(var i in item.model.labelArray)
+                    labelArray.push([item.model.labelArray[i][0], false]);
+            }
         }
         let mockdata = [];
         let targetkeys = [];
@@ -31,7 +42,8 @@ class Selectword extends Component{
             mockdata.push({
                 key: i.toString(),
                 title: labelArray[i][0],
-                description: labelArray[i][0]
+                description: labelArray[i][0],
+                chosen: labelArray[i][1]
             });
             if(labelArray[i][1])
             targetkeys.push(i.toString());
@@ -56,7 +68,9 @@ class Selectword extends Component{
             }
             else labelArray.push([mockdata[i].title, false]);
         }
-        const values = {labelArray:labelArray};
+        let labelarray = JSON.parse(JSON.stringify(item.model.labelArray))
+        labelarray[this.props.index] = labelArray;
+        const values = {labelArray:labelarray};
         executeCommand(()=>{
             update(item, {
                 ...values
@@ -65,6 +79,7 @@ class Selectword extends Component{
         console.log(propsAPI.save())
         this.setState({
             visible: false,
+            labelArray: labelarray
         });
     }
     
@@ -83,15 +98,31 @@ class Selectword extends Component{
     handleSearch = (dir, value) => {
         console.log('search:', dir, value);
     };
-    isselect=()=>{
+    isSelect=()=>{
         if(this.props.id === 0)
         return (<div><Button disabled>选择字段</Button><br /><br /></div>)
         else return <Button onClick={this.displayTransfer}>选择字段</Button>
+
+    }
+    featuresOperate=()=>{
+        if(this.props.label === '特征区间化')
+        return <FeatureRegion 
+                labelArray={this.state.labelArray}
+                ></FeatureRegion>
+        else if(this.props.label === '特征分组归类')
+        return <FeatureGroup
+                labelArray={this.state.labelArray}
+                ></FeatureGroup>
+        else if(this.props.label === '特征二进制化')
+        return <FeatureBinary
+                labelArray={this.state.labelArray}
+                ></FeatureBinary>
     }
     render(){
         return (
             <div>
-                {this.isselect()}
+                {this.isSelect()}
+                {this.featuresOperate()}
                 <Modal title="选择字段" visible={this.state.visible}
                     onOk={this.handleOk} onCancel={this.handleCancel}
                     style={{}}
