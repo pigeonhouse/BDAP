@@ -17,34 +17,36 @@ global loss
 @app.route('/test', methods=['GET', 'POST'])
 def test():
 
+    print(request.json)
+    return ("finish")
 
-    fileobj = open('./test.scala', 'r')     # open scala file where your spark code lies
+    # fileobj = open('./test.scala', 'r')     # open scala file where your spark code lies
 
-    try:
-        code = fileobj.read()
-    finally:
-        fileobj.close()
+    # try:
+    #     code = fileobj.read()
+    # finally:
+    #     fileobj.close()
 
-    data_mine = {'code': code }
+    # data_mine = {'code': code }
 
-    session_url = 'http://localhost:8998/sessions/0'
-    compute = requests.post(session_url+'/statements', data=json.dumps(data_mine), headers=headers)
+    # session_url = 'http://localhost:8998/sessions/0'
+    # compute = requests.post(session_url+'/statements', data=json.dumps(data_mine), headers=headers)
 
-    result_url = host + compute.headers['location']
+    # result_url = host + compute.headers['location']
 
-    r = requests.get(result_url, headers=headers)
-    print(r.json())
+    # r = requests.get(result_url, headers=headers)
+    # print(r.json())
 
-    while(True):
-        r = requests.get(result_url, headers=headers)
-        if r.json()['state'] == 'available':
-            print("finish")
-            break
+    # while(True):
+    #     r = requests.get(result_url, headers=headers)
+    #     if r.json()['state'] == 'available':
+    #         print("finish")
+    #         break
 
 
-    pprint.pprint(r.json())
+    # pprint.pprint(r.json())
 
-    return "finish"
+    # return "finish"
 
 
     # data_mine = {'kind': 'spark'}
