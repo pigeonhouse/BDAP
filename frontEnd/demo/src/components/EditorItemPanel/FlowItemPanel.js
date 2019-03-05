@@ -236,7 +236,7 @@ class FlowItemPanel extends React.Component {
               shape='two-one'
               model={{
                 label: '单变量线性回归',
-                select_status: 2,
+                select_status: 3,
                 attr:{},
                 Dataset: [],
                 labelArray: [], 

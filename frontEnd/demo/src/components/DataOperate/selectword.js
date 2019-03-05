@@ -85,8 +85,8 @@ class Selectword extends Component{
     };
     isselect=()=>{
         if(this.props.id === 0)
-        return (<div><Button disabled>选择字段</Button><br /><br /></div>)
-        else return <Button onClick={this.displayTransfer}>选择字段</Button>
+        return (<div><Button disabled style={{width:180}}>选择字段</Button><br /><br /></div>)
+        else return (<div><Button onClick={this.displayTransfer} style={{width:180}}>选择字段</Button><br /><br /></div>)
     }
     render(){
         return (
