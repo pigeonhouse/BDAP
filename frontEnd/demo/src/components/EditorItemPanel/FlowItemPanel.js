@@ -239,9 +239,8 @@ class FlowItemPanel extends React.Component {
                 select_status: 3,
                 attr:{},
                 Dataset: [],
-                labelArray: [], 
+                labelArray: [[],[],[]], 
                 length: 0,
-                
               }}
               
             /></ItemPanel></Menu.Item>
