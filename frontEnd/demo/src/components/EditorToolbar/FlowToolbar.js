@@ -18,16 +18,17 @@ class FlowToolbar extends React.Component {
   }
 
   livyTest = () =>{
+  console.log(this.state.data)
   const init={
-    method: 'GET', 
-    body:JSON.stringify(this.showDetail()),
+    method: 'POST', 
+    body:JSON.stringify(this.state.data),
     mode: 'cors',
     headers: {'Content-Type': 'application/json'},
     }
     fetch(
-      'http://localhost:5000/test'
+      'http://localhost:5000/test',init
     )
-      .then(res => res.json())
+      //.then(res => res.json())
       .then(data => {
         console.log(data.output.data)
         this.setState({users: data})
@@ -106,8 +107,8 @@ class FlowToolbar extends React.Component {
                         'id':Sourc,
                         "label":tag,
                         "attribute":attribute,
-                        "labelarray":labelarray,
-                        "sourceid":sourceId[indexN]
+                        "labelArray":labelarray,
+                        "sourceId":sourceId[indexN]
                       });
             for (var i = 0; i < inf.edges.length; i++){
               if(Sourc === inf.edges[i].source){
@@ -148,6 +149,9 @@ class FlowToolbar extends React.Component {
     //   }
     // }
     console.log(stream);
+    this.setState({
+      data:stream
+    })
     run(stream, propsAPI);
   }
   
