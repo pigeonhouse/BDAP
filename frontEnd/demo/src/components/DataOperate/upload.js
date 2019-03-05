@@ -1,9 +1,29 @@
 import React, {Component} from 'react';
-import { Button, Input } from 'antd'
+import { Button, Input ,Upload,Icon} from 'antd'
 import Papa from 'papaparse'
 import { withPropsAPI } from '@src';
 import store from '../../store';
 import {UpL} from '../../store/actionCreate';
+import styles from './inputStyle.less'
+
+const props = {
+  name: 'file',
+  action: '',
+  headers: {
+    authorization: 'authorization-text',
+  },
+  onChange(info) {
+    if (info.file.status !== 'uploading') {
+      console.log(info.file, info.fileList);
+    }
+    if (info.file.status === 'done') {
+      message.success(`${info.file.name} file uploaded successfully`);
+    } else if (info.file.status === 'error') {
+      message.error(`${info.file.name} file upload failed.`);
+    }
+  },
+};
+
 
 class Uploadfile extends Component{
     constructor(props){
@@ -39,7 +59,9 @@ class Uploadfile extends Component{
     
       }
     readFile = (e)=>{
-        var files = e.target.files; // FileList object
+        var files = e.target.files;
+        //var files = e; // FileList object
+        console.log(files)
         var reader = new FileReader();
         const { propsAPI } = this.props;
         const { getSelected, update, executeCommand } = propsAPI;
@@ -72,11 +94,7 @@ class Uploadfile extends Component{
           const item = getSelected()[0];
           update(item, {...values});
         }
-        // this.setTest(allData,fieldNameArray,vectorLength);
 
-        // const action = UpL(item.id, allData,fieldNameArray,vectorLength);
-        
-        // store.dispatch(action);
 
     }
     setTest = (allData,fieldNameArray,vectorLength) =>{
@@ -86,18 +104,25 @@ class Uploadfile extends Component{
           length:vectorLength
         })
       }
+
     render(){
         return (
             <div>
-                <Input
-                    type="file" 
-                    id='files' 
-                    name='files[]' 
-                    onChange={(e)=>this.readFile(e)} 
-                    multiple
-                >
-                </Input>
-                <Button type="primary" onClick={()=>this.makeFile()}>makeFile</Button>
+                
+                <input type="file" style={{position:"absolute" ,opacity:0}} onChange={(e)=>this.readFile(e)}></input>
+                {/* <Button>本地文件</Button> */}
+               
+                  <Icon type="upload"/> 上传本地文件
+                
+                {/* <button className="btn btn-primary" style={{width:"150px",height:"30px"}}></button> */}
+                
+                {/* <label for="file">Choose a file</label> */}
+                {/* <Button type="primary" onClick={()=>this.makeFile()}>makeFile</Button> */}
+                 {/* <Upload onChange={(e)=>this.readFile(e)} >
+                <Button>
+                  <Icon type="upload" /> 上传本地数据
+                </Button>
+                </Upload> */}
             </div>
         );
     }

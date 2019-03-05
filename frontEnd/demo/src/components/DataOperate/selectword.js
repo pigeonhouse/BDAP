@@ -85,14 +85,14 @@ class Selectword extends Component{
     };
     isselect=()=>{
         if(this.props.id === 0)
-        return <Button disabled>selectword</Button>
-        else return <Button onClick={this.displayTransfer}>selectword</Button>
+        return (<div><Button disabled>选择字段</Button><br /><br /></div>)
+        else return <Button onClick={this.displayTransfer}>选择字段</Button>
     }
     render(){
         return (
             <div>
                 {this.isselect()}
-                <Modal title="Selectword" visible={this.state.visible}
+                <Modal title="选择字段" visible={this.state.visible}
                     onOk={this.handleOk} onCancel={this.handleCancel}
                     style={{}}
                 >

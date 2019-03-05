@@ -1,5 +1,5 @@
 import React from 'react';
-import { Card } from 'antd';
+import { Card ,Upload} from 'antd';
 import { ItemPanel, Item } from '@src';
 import styles from './index.less';
 import { Menu, Icon } from 'antd';
@@ -63,15 +63,28 @@ class FlowItemPanel extends React.Component {
             size="200*40"
             shape='zero-one'
             model={{
-              label: 'Input',
-              attr:{'sourceFile':'people'},
+              label: '本地数据',
+              attr:{},
               Dataset: [],
               labelArray: [], 
               length: 0,
-              select_status: 3
+              //select_status: 3
             }}         
           /></ItemPanel></Menu.Item>
-          <Menu.Item key="2"><ItemPanel><Item
+          <Menu.Item key="2" > <ItemPanel><Item
+            type="node"
+            size="200*40"
+            shape='zero-one'
+            model={{
+              label: 'hdfs数据',
+              attr:{},
+              Dataset: [],
+              labelArray: [], 
+              length: 0,
+              //select_status: 3
+            }}         
+          /></ItemPanel></Menu.Item>
+          {/* <Menu.Item key="2"><ItemPanel><Item
             type="node"
             size="200*40"
             shape="one-zero"
@@ -80,7 +93,7 @@ class FlowItemPanel extends React.Component {
               label: 'Output',
               attr:{'targetFile':'new_people'}
             }}           
-          /></ItemPanel></Menu.Item>       
+          /></ItemPanel></Menu.Item>        */}
        </SubMenu>
          {/* <SubMenu key="g2" title="Model">      
           <Menu.Item key="3"><ItemPanel><Item
@@ -141,11 +154,12 @@ class FlowItemPanel extends React.Component {
             model={{
               // color: '#722ED1',
               label: '缺失值填充',
+              select_status: 1,
               attr:{ type:'mean' },
               Dataset: [],
               labelArray: [], 
               length: 0,
-              select_status: 3
+              
             }}
            
           /></ItemPanel></Menu.Item>
@@ -160,7 +174,54 @@ class FlowItemPanel extends React.Component {
               Dataset: [],
               labelArray: [], 
               length: 0,
-              select_status: 3
+              select_status: 1
+            }}
+           
+          /></ItemPanel></Menu.Item>
+
+          <Menu.Item key="9"><ItemPanel><Item
+            type="node"
+            size="200*40"
+            shape="one-one"
+            model={{
+              // color: '#722ED1',
+              label: '特征区间化',
+              attr:{},
+              Dataset: [],
+              labelArray: [], 
+              length: 0,
+              select_status: 1
+            }}
+          /></ItemPanel></Menu.Item>
+
+            <Menu.Item key="10"><ItemPanel><Item
+            type="node"
+            size="200*40"
+            shape="one-one"
+            model={{
+              // color: '#722ED1',
+              label: '特征分组归类',
+              attr:{},
+              Dataset: [],
+              labelArray: [], 
+              length: 0,
+              select_status: 1
+            }}
+           
+          /></ItemPanel></Menu.Item>
+
+          <Menu.Item key="11"><ItemPanel><Item
+            type="node"
+            size="200*40"
+            shape="one-one"
+            model={{
+              // color: '#722ED1',
+              label: '特征二进制化',
+              attr:{},
+              Dataset: [],
+              labelArray: [], 
+              length: 0,
+              select_status: 1
             }}
            
           /></ItemPanel></Menu.Item>
@@ -175,11 +236,12 @@ class FlowItemPanel extends React.Component {
               shape='two-one'
               model={{
                 label: '单变量线性回归',
+                select_status: 2,
                 attr:{},
                 Dataset: [],
                 labelArray: [], 
                 length: 0,
-                select_status: 3
+                
               }}
               
             /></ItemPanel></Menu.Item>

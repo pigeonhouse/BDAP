@@ -79,7 +79,7 @@ class NodeDetail extends React.Component {
         <Download></Download>
       </div>
     );
-    else if(label === 'Input')
+    else if(label === '本地数据')
     return (
       <Uploadfile ></Uploadfile>
     );

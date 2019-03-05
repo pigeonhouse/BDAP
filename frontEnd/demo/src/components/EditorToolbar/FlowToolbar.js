@@ -337,7 +337,7 @@ class FlowToolbar extends React.Component {
         </Command>
         
         <Button onClick={()=>this.showDetail()}>run</Button>
-       <Button onClick={()=>this.livyTest()}>spark-test</Button>
+       {/* <Button onClick={()=>this.livyTest()}>spark-test</Button> */}
        {/* <Button onClick={()=>this.returnLoss()}>return-loss</Button> */}
 {/* 
         <Selectword></Selectword> */}
