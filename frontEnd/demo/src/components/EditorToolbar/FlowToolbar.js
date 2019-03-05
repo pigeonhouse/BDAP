@@ -30,7 +30,7 @@ class FlowToolbar extends React.Component {
     )
       //.then(res => res.json())
       .then(data => {
-        console.log(data.output.data)
+        console.log(res)
         this.setState({users: data})
       })
       .catch(e => console.log('错误:', e))
