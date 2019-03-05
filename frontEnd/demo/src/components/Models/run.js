@@ -125,8 +125,8 @@ export function run(stream, propsAPI) {
 
   for (let k = 1; k < stream.length; k++) {
     const all_data = inputdata(stream[k].id, propsAPI);
-    console.log("操作前数据")
-    console.log(all_data)
+    console.log("stream:")
+    console.log(stream)
     var outcome = new Array()
     switch (stream[k].label) {
       case '单变量线性回归':
