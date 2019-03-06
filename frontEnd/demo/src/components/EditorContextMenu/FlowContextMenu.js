@@ -73,23 +73,14 @@ class FlowContextMenu extends React.Component {
                  })
     }
     this.setState({col:columns})
-    let wocData_id = new Array();
-    let wocData_id1 = new Array();
-    let wocData_id2 = new Array();
     var datas = new Array()
     for(let i = 0; i < currentData[0][0].value.length; i++){
       var temp = new Array()
       for(let j = 0; j < currentData.length; j++){
         temp[currentData[j][0].label] = currentData[j][0].value[i]
       }
-      // wocData_id.push(currentData[0][0].value[i]);
-      // wocData_id1.push(currentData[1][0].value[i]);
-      //wocData_id2.push(currentData[2][0].value[i]);
       datas.push(temp)
     }
-    this.setState({id:wocData_id})
-    this.setState({data1:wocData_id1})
-    this.setState({data2:wocData_id2})
     this.setState({data:datas})
   }
 
