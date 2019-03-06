@@ -5,6 +5,8 @@ import Selectword from '../DataOperate/selectword'
 import Download from '../DataOperate/download'
 import Show from '../DataOperate/Datashow/index.js'
 import Uploadfile from '../DataOperate/upload';
+import styles from './index.less';
+import Feature from '../DataOperate/Feature.js'
 import {AppendingLineChart} from "../linechart/linechart.ts";
 import d3 from "d3"
 
@@ -84,7 +86,6 @@ class NodeDetail extends React.Component {
       <Uploadfile ></Uploadfile>
     );
   }
-
   render() {
     const { form, propsAPI } = this.props;
     const { getFieldDecorator } = form;
@@ -113,7 +114,6 @@ class NodeDetail extends React.Component {
       if(select_status > 1)
       targetid=[targetid[0], ...targetid];
     }
-    console.log(targetid)
     var arr = []
     if(label !== '特征区间化' && label !== '特征分组归类' && label !== '特征二进制化'){
       for (let i in attr) {
@@ -124,13 +124,19 @@ class NodeDetail extends React.Component {
     }
 
     return (
-      <Card type="inner" title="参数" bordered={false}>
+      <Card 
+        type="inner" 
+        title="参数" 
+        bordered={false} 
+        style={{paddingRight:0}}
+        className={styles.scrollapp}
+      >
         <Form onSubmit={this.handleSubmit}>
           <Item label="label" {...inlineFormItemLayout}>
             {
               getFieldDecorator('label', {
                 initialValue: label,
-              })(<Input  onBlur={this.handleSubmit} />)
+              })(<Input onBlur={this.handleSubmit} />)
             }
           </Item>
           {targetid.map((value, index)=>{

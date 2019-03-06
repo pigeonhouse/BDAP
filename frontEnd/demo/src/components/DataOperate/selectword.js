@@ -1,9 +1,7 @@
 import React, {Component} from 'react';
 import { Button, Modal, Transfer } from 'antd'
 import { withPropsAPI } from '@src';
-import FeatureRegion from './FeatureRegion.js'
-import FeatureGroup from './FeatureGroup.js'
-import FeatureBinary from './FeatureBinary.js'
+import Feature from './Feature.js'
 class Selectword extends Component{
     constructor(props){
         super(props);
@@ -14,7 +12,17 @@ class Selectword extends Component{
         targetKeys: [],
         labelArray: []
     }
-    
+    featuresOperate=(label)=>{
+        console.log('update')
+        console.log(this.state.labelArray)
+        if(label === '特征区间化' 
+        || label === '特征分组归类'
+        || label === '特征二进制化')
+        return <Feature
+                    label={label}
+                    labelArray={this.state.labelArray}
+                ></Feature>
+    }
     displayTransfer = () => {
         const { propsAPI } = this.props;
         const { find, getSelected } = propsAPI;
@@ -109,29 +117,15 @@ class Selectword extends Component{
     };
     isSelect=()=>{
         if(this.props.id === 0)
-        return (<div><Button disabled style={{width:180}}>选择字段</Button><br /><br /></div>)
-        else return (<div><Button onClick={this.displayTransfer} style={{width:180}}>选择字段</Button><br /><br /></div>)
+        return (<div><Button style={{width:180}} disabled>选择字段</Button><br /><br /></div>)
+        else return <Button style={{width:180}} onClick={this.displayTransfer}>选择字段</Button>
 
-    }
-    featuresOperate=()=>{
-        if(this.props.label === '特征区间化')
-        return <FeatureRegion 
-                labelArray={this.state.labelArray}
-                ></FeatureRegion>
-        else if(this.props.label === '特征分组归类')
-        return <FeatureGroup
-                labelArray={this.state.labelArray}
-                ></FeatureGroup>
-        else if(this.props.label === '特征二进制化')
-        return <FeatureBinary
-                labelArray={this.state.labelArray}
-                ></FeatureBinary>
     }
     render(){
         return (
             <div>
                 {this.isSelect()}
-                {this.featuresOperate()}
+                {this.featuresOperate(this.props.label)}
                 <Modal title="选择字段" visible={this.state.visible}
                     onOk={this.handleOk} onCancel={this.handleCancel}
                     style={{}}
