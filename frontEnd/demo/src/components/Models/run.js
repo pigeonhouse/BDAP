@@ -209,7 +209,7 @@ class Run extends Component{
               break
           case '卷积神经网络':
               this.showModal()
-              //runMnist()
+              runMnist()
 
           // case 'Input':
           //   // INPUT(stream[k].id);
@@ -382,7 +382,14 @@ class Run extends Component{
       <Modal title="Modal Data" visible={this.state.visible}
           onOk={this.handleOk} onCancel={this.handleCancel} width={900}
         >
-          
+          <p>iter:
+            <div id="iter-number"></div>
+          </p>
+          <p>train-loss:
+            <div id="loss-train"></div>
+          </p>
+          <div id="linechart"></div>
+        
       </Modal>
         </div>
     );
