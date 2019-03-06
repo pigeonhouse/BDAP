@@ -4,12 +4,39 @@ export function OneVarLinearRegression(allData){
 
     console.log(allData)
 
-     const x = allData[1].Dataset[2][0].value;
-     const y = allData[1].Dataset[1][0].value;
+    const trainFeatureName = allData[0].labelArray[0][0];
+    const trainLabelName = allData[0].labelArray[1][0];
+    const testFeatureName = allData[0].labelArray[2][0];
+
+    var trainFeatureValue = new Array();
+    var trainLabelValue = new Array();
+    var testFeatureValue = new Array();
+
+    for(let i = 0; i < allData[1].Dataset.length; i++){
+        if(allData[1].Dataset[i][0].label==trainFeatureName){
+            trainFeatureValue.push(allData[1].Dataset[i][0].value)
+        }
+        else if (allData[1].Dataset[i][0].label==trainLabelName){
+            trainLabelValue.push(allData[1].Dataset[i][0].value)
+        }
+    }
+    for(let i = 0; i < allData[2].Dataset.length; i++){
+        if(allData[2].Dataset[i][0].label==testFeatureName){
+            testFeatureValue.push(allData[2].Dataset[i][0].value)
+        }
+    }
     
-    const regression = new SimpleLinearRegression(x, y);
+    trainFeatureValue = trainFeatureValue[0]
+    trainLabelValue = trainLabelValue[0]
+    testFeatureValue = testFeatureValue[0]
+
+
+
+    const regression = new SimpleLinearRegression(trainFeatureValue,trainLabelValue);
     console.log("单变量线性回归结果")
     console.log(regression.slope,regression.intercept)
+    const predictArray = regression.predict(testFeatureValue)
+    console.log(predictArray)
     console.log("----------------------")
 
     return allData
