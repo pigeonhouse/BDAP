@@ -9,7 +9,7 @@ var rex = {
     renew: function(indx){
         if(indx.hasOwnProperty('length')){}
         else{
-            indx = ["-1", "-1", "-1"];
+            indx = [];
         }
         ind = indx;
         console.log("ind");
@@ -19,12 +19,7 @@ var rex = {
 };
 const LineMarkerEcharts = createReactClass({
     getOtion: function(props, index) {
-        // console.log("index");
-        // console.log(index);
-        // for(let i in index){
-        //     index[i] = Number(index[i]);
-        // }
-        // console.log(index);
+        console.log("111111111111111111111111")
         if(index[0] == undefined){v0 =[]}
         else{var v0 = props[index[0]][0].value;}
         if(index[1] == undefined){v1 = [], l1 = ""}
@@ -123,16 +118,19 @@ const LineMarkerEcharts = createReactClass({
         const { getSelected } = propsAPI;
         const item = getSelected()[0];
         let code = "<ReactEcharts " +
+
             "    option={this.getOtion()} " +
             // "    style={{height: '350px', width: '1000px'}}  " +
             "    className='react_for_echarts' />";
         return (    
                     <div>
                         <Select re = {rex} data = {item.model.Dataset} amount = {3}/>
+                        
                         <ReactEcharts
                             option={this.getOtion(item.model.Dataset, ind)}
                             // style={{height: '350px', width: '1000px'}}
                             className='react_for_echarts' /> 
+                        {/* <button onClick = {this.getOtion(item.model.Dataset, ind)}>renew</button> */}
                     </div>
         );
     }

@@ -42,6 +42,7 @@ import  DistributeScatter from './DistributeScatter';
 class FlowContextMenu extends React.Component {
 
   state = { 
+    loading:false,
     visible: false,
     Nvisible: false,
     Svisible:false
@@ -83,26 +84,6 @@ class FlowContextMenu extends React.Component {
     }
     this.setState({data:datas})
   }
-
-  showSModal = () => {
-    this.setState({
-      Svisible: true,
-    });
-    this.Datum();
-  }
-  handleSOk = (e) => {
-    console.log(e);
-    this.setState({
-      Svisible: false,
-    });
-  } 
-  handleSCancel = (e) => {
-    console.log(e);
-    this.setState({
-      Svisible: false,
-    });
-  }
-
   showNModal = () => {
     this.setState({
       Nvisible: true,
@@ -112,8 +93,11 @@ class FlowContextMenu extends React.Component {
   handleNOk = (e) => {
     console.log(e);
     this.setState({
-      Nvisible: false,
+      loading: true,
     });
+    setTimeout(()=>{
+      this.setState({loading:false});
+    },3000)
   }
   handleNCancel = (e) => {
     console.log(e);

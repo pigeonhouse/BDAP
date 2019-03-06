@@ -17,8 +17,6 @@ class Select extends React.Component {
     }
 
     handleOk = () => {
-        console.log("this.state.targetKeys");
-        console.log(this.state.targetKeys);
         this.props.re.renew(this.state.targetKeys);
         this.setState({
             visible: false,
