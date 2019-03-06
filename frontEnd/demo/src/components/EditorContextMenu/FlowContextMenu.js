@@ -181,10 +181,10 @@ class FlowContextMenu extends React.Component {
           <Icon type="line-chart" />
           <span>图形化展示-折线/柱状图</span>
           </div>
-          <div className={styles.item} onClick={this.showSModal}>
+          {/* <div className={styles.item} onClick={this.showSModal}>
           <Icon type="dot-chart" />
           <span>图形化展示-散点图</span>
-          </div>
+          </div> */}
         </NodeMenu>
       
         <Modal
@@ -195,7 +195,7 @@ class FlowContextMenu extends React.Component {
             bodyStyle={{height: '450px'}}
             width={1000}
           >
-            <LineMarkerEcharts d2={this.state.data2} d1={this.state.data1} id={this.state.id} col={this.state.col} Data={this.state.data}/>
+            <LineMarkerEcharts />
         </Modal>
         <Modal
             title="Modal"
@@ -205,7 +205,7 @@ class FlowContextMenu extends React.Component {
             bodyStyle={{height: '450px'}}
             width={800}
           >
-            <DistributeScatter col={this.state.col} Data={this.state.data}/>
+            <DistributeScatter />
         </Modal>
 
         <Modal title="Modal Data" visible={this.state.visible}

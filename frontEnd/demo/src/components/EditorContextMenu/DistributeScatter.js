@@ -19,6 +19,7 @@ const DistributeScatter = createReactClass({
             },
             tooltip : {
                 // trigger: 'axis',
+                
                 showDelay : 0,
                 formatter : function (params) {
                     if (params.value.length > 1) {
