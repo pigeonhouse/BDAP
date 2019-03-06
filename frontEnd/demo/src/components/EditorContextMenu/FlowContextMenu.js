@@ -52,12 +52,17 @@ class FlowContextMenu extends React.Component {
     var currentId = propsAPI.getSelected()[0].id
     var saveData = propsAPI.save().nodes
     var currentData = new Array()
+  
     for(let i = 0; i < saveData.length; i++){
       if(currentId == saveData[i].id){       
           currentData.push(saveData[i].Dataset)
       }
     }
     currentData = currentData[0]
+
+    console.log("-----------------")
+    console.log(currentData)
+    console.log("-----------------")
 
     var columns = new Array()
     for(let i = 0; i < currentData.length; i++){
@@ -77,9 +82,9 @@ class FlowContextMenu extends React.Component {
       for(let j = 0; j < currentData.length; j++){
         temp[currentData[j][0].label] = currentData[j][0].value[i]
       }
-      wocData_id.push(currentData[0][0].value[i]);
-      wocData_id1.push(currentData[1][0].value[i]);
-      wocData_id2.push(currentData[2][0].value[i]);
+      // wocData_id.push(currentData[0][0].value[i]);
+      // wocData_id1.push(currentData[1][0].value[i]);
+      //wocData_id2.push(currentData[2][0].value[i]);
       datas.push(temp)
     }
     this.setState({id:wocData_id})

@@ -130,7 +130,7 @@ class NodeDetail extends React.Component {
             {
               getFieldDecorator('label', {
                 initialValue: label,
-              })(<Input onBlur={this.handleSubmit} />)
+              })(<Input  onBlur={this.handleSubmit} />)
             }
           </Item>
           {targetid.map((value, index)=>{
@@ -143,11 +143,11 @@ class NodeDetail extends React.Component {
           })}
           {arr.map((item)=>{
             const itemKey = Object.keys(item)[0];
-            return <Item label={itemKey} {...inlineFormItemLayout}>
+            return <Item style={{width:310}} label={itemKey} {...inlineFormItemLayout}>
                     {
                       getFieldDecorator(`attr.${itemKey}` , {
                         initialValue: item[itemKey],
-                      })(<Input onBlur={this.handleSubmit} />)
+                      })(<Input style={{width:80}} onBlur={this.handleSubmit} />)
                     }
                   </Item>;
           })}

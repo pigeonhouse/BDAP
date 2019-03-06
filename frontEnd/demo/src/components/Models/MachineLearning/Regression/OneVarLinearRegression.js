@@ -7,6 +7,7 @@ export function OneVarLinearRegression(allData){
     const trainFeatureName = allData[0].labelArray[0][0];
     const trainLabelName = allData[0].labelArray[1][0];
     const testFeatureName = allData[0].labelArray[2][0];
+    const testLabelName = allData[0].all_attr['预测集列名']
 
     var trainFeatureValue = new Array();
     var trainLabelValue = new Array();
@@ -37,6 +38,8 @@ export function OneVarLinearRegression(allData){
     console.log(regression.slope,regression.intercept)
     const predictArray = regression.predict(testFeatureValue)
     console.log(predictArray)
+    allData[2].Dataset.push([{label:testLabelName,value:predictArray}])
+    console.log(allData)
     console.log("----------------------")
 
     return allData

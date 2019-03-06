@@ -174,12 +174,15 @@ class Run extends Component{
         switch (stream[k].label) {
           case '单变量线性回归':
               outcome.push(OneVarLinearRegression(all_data))
+              this.outputdata(stream[k].id, outcome[0][2], propsAPI);
               break
           case '缺失值填充':
               outcome.push(FillNa(all_data))
+              this.outputdata(stream[k].id, outcome[0][1], propsAPI);
               break
           case '归一化':
               outcome.push(Scaler(all_data))
+              this.outputdata(stream[k].id, outcome[0][1], propsAPI);
               break
           // case 'Input':
           //   // INPUT(stream[k].id);
@@ -203,8 +206,8 @@ class Run extends Component{
             break;
         }
         //let outcome = all_data[1];
-        //console.log(outcome)
-        this.outputdata(stream[k].id, outcome[0][1], propsAPI);
+
+        
       }
     }
   
