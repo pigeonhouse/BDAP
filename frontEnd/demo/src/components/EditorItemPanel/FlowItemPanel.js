@@ -77,7 +77,7 @@ class FlowItemPanel extends React.Component {
             shape='zero-one'
             model={{
               label: 'hdfs数据',
-              attr:{},
+              attr:{"location":""},
               Dataset: [],
               labelArray: [], 
               length: 0,

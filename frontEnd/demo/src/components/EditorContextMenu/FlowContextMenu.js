@@ -166,11 +166,11 @@ class FlowContextMenu extends React.Component {
 
           <div className={styles.item} onClick={this.showModal}>
           <Icon type="form" />
-          <span>数据展示</span>
+          <span>数据预览</span>
           </div>
           <div className={styles.item} onClick={this.showNModal}>
           <Icon type="line-chart" />
-          <span>图形化展示-折线/柱状图</span>
+          <span>图形化展示</span>
           </div>
           {/* <div className={styles.item} onClick={this.showSModal}>
           <Icon type="dot-chart" />
