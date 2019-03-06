@@ -164,14 +164,14 @@ async function train(model, onIteration, batchSize) {
   // too few examples and will not generalize well. Larger batch sizes require
   // more memory resources and aren't guaranteed to perform better.
 
-//   const batchSize = 50;
+   //const batchSize = 100;
 
   // Leave out the last 15% of the training data for validation, to monitor
   // overfitting during training.
   const validationSplit = 0.15;
 
   // Get number of training epochs from the UI.
-  const trainEpochs = 1;
+  const trainEpochs = 3;
 
   // We'll keep a buffer of loss and accuracy values over time.
   let trainBatchCount = 0;
@@ -310,6 +310,6 @@ export async function runMnist() {
   await load();
   const model = createModel();
   model.summary();
-  await train(model, () => showPredictions(model));
+  await train(model, () => showPredictions(model),200);
 
 }

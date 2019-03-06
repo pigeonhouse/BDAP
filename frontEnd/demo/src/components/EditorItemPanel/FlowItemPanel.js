@@ -317,7 +317,7 @@ class FlowItemPanel extends React.Component {
             shape='one-one'
             model={{
               label: '卷积神经网络',
-              attr:{'学习率':0.01,'激活函数':'relu','卷积步长':2,'优化器':'rmsprop','遍历次数':1}
+              attr:{'激活函数':'relu','卷积步长':2,'优化器':'rmsprop','batchSize':50,'遍历次数':1}
             }}
           /></ItemPanel></Menu.Item>
       </SubMenu>
