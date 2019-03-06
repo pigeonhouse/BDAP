@@ -5,7 +5,7 @@ import styles from './index.less';
 import iconfont from '../../theme/iconfont.less';
 import {AppendingLineChart} from "../linechart/linechart.ts";
 import d3 from "d3"
-import {run} from "../Models/run.js"
+import Run from "../Models/run.js"
 import { withPropsAPI } from '@src';
 import store from '../../store';
 import { getStopLineAction, getShowLineAction, UpINF } from '../../store/actionCreate';
@@ -52,170 +52,7 @@ class FlowToolbar extends React.Component {
 
 
   }
-  
-  showDetail = ()=>{
-    this.setState({
-      visible: true,
-    });
 
-
-    this.handleLegal()
-    const { propsAPI } = this.props;
-    console.log(propsAPI.save())
-
-    const inf = propsAPI.save();
-
-    // const action = UpINF(inf);
-    // // console.log(action);
-    // // console.log(inf);
-    // store.dispatch(action);
-
-    var Sourc = 0;
-    var tag = 'Input';
-    var stream = new Array();
-    var attribute = new Array();
-    var labelarray = new Array();
-
-
-    if(inf.hasOwnProperty('edges')){
-      let Deg = new Array(inf.nodes.length).fill(0);
-      var sourceId = new Array(inf.nodes.length).fill(0);
-      for(let i in sourceId) {
-        sourceId[i] = new Array();
-      }
-      for (let indexE of inf.edges.keys()) {
-        Sourc = inf.edges[indexE].target;
-        let targetanchor = inf.edges[indexE].targetAnchor;
-        let source = inf.edges[indexE].source;
-        for (let indexN of inf.nodes.keys()) {
-          if (Sourc === inf.nodes[indexN].id) {
-            Deg[indexN]++;
-            sourceId[indexN][targetanchor] = source;
-          }
-        }
-      }
-      for (var k = 0; k < inf.nodes.length; ) {
-        for (let indexN of inf.nodes.keys()){
-          if(Deg[indexN] === 0){
-            k++;
-            Deg[indexN]--;
-            Sourc = inf.nodes[indexN].id;
-            tag = inf.nodes[indexN].label;
-            attribute = inf.nodes[indexN].attr;
-            labelarray = inf.nodes[indexN].labelArray;
-            stream.push({
-                        'id':Sourc,
-                        "label":tag,
-                        "attribute":attribute,
-                        "labelArray":labelarray,
-                        "sourceId":sourceId[indexN]
-                      });
-            for (var i = 0; i < inf.edges.length; i++){
-              if(Sourc === inf.edges[i].source){
-                for (var m = 0; m < inf.nodes.length; m++){
-                  if(inf.nodes[m].id === inf.edges[i].target){
-                    Deg[m]--;
-                  }
-                }
-              }
-            }
-          }
-        }
-      }
-    }
-    // if(inf.hasOwnProperty('edges')){
-    // for (let indexN of inf.nodes.keys()) {
-    //   if ('Input' === inf.nodes[indexN].label) {
-    //     Sourc = inf.nodes[indexN].id;
-    //     attribute = inf.nodes[indexN].attr
-    //     stream.push({"label":tag,"attribute":attribute});
-    //     break;
-    //   }
-    // }
-    // for (var k = 0; k < inf.nodes.length; k++) {
-    //   for (let indexE of inf.edges.keys()) {
-    //     if (Sourc === inf.edges[indexE].source) {
-    //       Sourc = inf.edges[indexE].target;
-    //       for (let indexN of inf.nodes.keys()) {
-    //         if (Sourc === inf.nodes[indexN].id) {
-    //           tag = inf.nodes[indexN].label;
-    //           attribute = inf.nodes[indexN].attr
-    //           stream.push({"label":tag,"attribute":attribute})
-    //           break;
-    //         }
-    //       }
-    //       break;
-    //     }
-    //   }
-    // }
-    console.log(stream);
-    this.setState({
-      data:stream
-    })
-    run(stream, propsAPI);
-  }
-  
- handleLegal = ()=> {
-    const { propsAPI } = this.props;
-    var isLegal = 0;
-    var noneed = 1;
-    const inf = propsAPI.save();
-
-    if(inf.hasOwnProperty('edges')){
-      if (inf.nodes.length > 1) {
-        var Sourc;
-        const lenE = inf.edges.length;
-        const LenE =lenE;
-        let path = new Array(inf.nodes.length).fill(0);
-
-        for (let indexN of inf.nodes.keys()) {
-          if ('Input' === inf.nodes[indexN].label) {
-            Sourc = inf.nodes[indexN].id;
-            path[indexN] = 1;
-            noneed = 0;
-            break;
-          }
-        }
-        if(noneed === 0) {
-          for (var k = 0; k < lenE; k++) {
-
-            for (let indexE of inf.edges.keys()) {
-              if (Sourc === inf.edges[indexE].source) {
-                Sourc = inf.edges[indexE].target;
-
-                for (let indexN of inf.nodes.keys()) {
-                  if (inf.nodes[indexN].id === Sourc) {
-                    if (path[indexN] === 0) {
-                      if (k === LenE - 1 && inf.nodes[indexN].label === 'Output') {
-                        isLegal = 1;
-                        break;
-                      } else {
-                        path[indexN] = 1;
-                        break;
-                      }
-                    } else {
-                      noneed = 1;
-                      break;
-                    }
-                  }
-                }
-                break;
-              }
-            }
-            if (noneed === 1) {
-              break;
-            }
-          }
-        }
-      }
-    }
-    if(isLegal === 1) {
-      alert('legal');
-    }else{
-      alert('illegal');
-    }
-
-  }
 
   handleOk = (e) => {
     console.log(e);
@@ -336,7 +173,7 @@ class FlowToolbar extends React.Component {
           </Tooltip>
         </Command>
         
-        <Button onClick={()=>this.showDetail()}>run</Button>
+        <Run></Run>
        {/* <Button onClick={()=>this.livyTest()}>spark-test</Button> */}
        {/* <Button onClick={()=>this.returnLoss()}>return-loss</Button> */}
 {/* 

@@ -18,11 +18,13 @@ class Selectword extends Component{
     displayTransfer = () => {
         const { propsAPI } = this.props;
         const { find, getSelected } = propsAPI;
-        var item;
+        var item = getSelected()[0];
         var labelArray = [];
-        if(getSelected()[0].model.labelArray[this.props.index].length !== 0){
-            item = getSelected()[0];
+        if(item.model.select_status > 1 && item.model.labelArray[this.props.index].length !== 0){
             labelArray = item.model.labelArray[this.props.index];
+        }
+        else if(item.model.select_status === 1 && item.model.labelArray.length !== 0){
+            labelArray = item.model.labelArray;
         }
         else {
             item = find(this.props.id);
@@ -68,8 +70,15 @@ class Selectword extends Component{
             }
             else labelArray.push([mockdata[i].title, false]);
         }
-        let labelarray = JSON.parse(JSON.stringify(item.model.labelArray))
-        labelarray[this.props.index] = labelArray;
+        let labelarray = [];
+        if(item.model.select_status > 1)
+        {
+            labelarray = JSON.parse(JSON.stringify(item.model.labelArray))
+            labelarray[this.props.index] = labelArray;
+        }
+        else {
+            labelarray = labelArray;
+        }
         const values = {labelArray:labelarray};
         executeCommand(()=>{
             update(item, {
