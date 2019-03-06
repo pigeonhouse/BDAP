@@ -4,8 +4,9 @@ import {OneVarLinearRegression} from '../Models/MachineLearning/Regression/OneVa
 import { Scaler } from '../Models/MachineLearning/DataPreprocessing/Scaler';
 import { FillNa } from '../Models/MachineLearning/DataPreprocessing/FillNa'
 import React, { Component } from 'react'
-import { Button } from 'antd'
+import { Button,Modal } from 'antd'
 import { withPropsAPI } from '@src';
+import { runMnist } from './MnistTest/mnist';
 // var inf = store.getState().picture;
 
 // function CONVNET(id) {
@@ -72,6 +73,28 @@ import { withPropsAPI } from '@src';
 // }
 
 class Run extends Component{
+  state = { 
+    visible: false,
+  }
+  showModal = () => {
+    this.setState({
+      visible: true,
+    });
+  }
+
+  handleOk = (e) => {
+    console.log(e);
+    this.setState({
+      visible: false,
+    });
+  }
+  handleCancel = (e) => {
+    console.log(e);
+    this.setState({
+      visible: false,
+    });
+  }
+
   showDetail = ()=>{
     // this.handleLegal()
     const { propsAPI } = this.props;
@@ -184,6 +207,10 @@ class Run extends Component{
               outcome.push(Scaler(all_data))
               this.outputdata(stream[k].id, outcome[0][1], propsAPI);
               break
+          case '卷积神经网络':
+              this.showModal()
+              //runMnist()
+
           // case 'Input':
           //   // INPUT(stream[k].id);
           //   break;
@@ -349,7 +376,15 @@ class Run extends Component{
   
   render(){
     return (
+      <div>
       <Button onClick={()=>this.showDetail()}>run</Button>
+
+      <Modal title="Modal Data" visible={this.state.visible}
+          onOk={this.handleOk} onCancel={this.handleCancel} width={900}
+        >
+          
+      </Modal>
+        </div>
     );
   }
 }

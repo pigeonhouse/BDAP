@@ -311,10 +311,15 @@ class FlowItemPanel extends React.Component {
         </SubMenu>
       </SubMenu>
       <SubMenu key="sub4" title={<span><Icon type="setting" /><span>深度学习</span></span>}>
-        <Menu.Item key="14">Option 9</Menu.Item>
-        <Menu.Item key="15">Option 10</Menu.Item>
-        <Menu.Item key="16">Option 11</Menu.Item>
-        <Menu.Item key="17">Option 12</Menu.Item>
+      <Menu.Item key="15"><ItemPanel><Item
+            type="node"
+            size="200*40"
+            shape='one-one'
+            model={{
+              label: '卷积神经网络',
+              attr:{'学习率':0.01,'激活函数':'relu','卷积步长':2,'优化器':'rmsprop','遍历次数':1}
+            }}
+          /></ItemPanel></Menu.Item>
       </SubMenu>
     </Menu>
     );
