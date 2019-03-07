@@ -58,6 +58,7 @@
     "ml-array-standard-deviation": "^1.1.1",
     "ml-array-variance": "^1.1.1",
     "ml-cart": "^1.0.8",
+    "ml-cross-validation": "^1.2.0",
     "ml-naivebayes": "^3.0.0",
     "ml-random-forest": "^1.0.3",
     "ml-regression": "^4.4.2",
