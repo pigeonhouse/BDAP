@@ -3,6 +3,7 @@ import { Conv, Dens, FillN, MaxM, Delete} from '../../store/actionCreate';
 import {OneVarLinearRegression} from '../Models/MachineLearning/Regression/OneVarLinearRegression'
 import { Scaler } from '../Models/MachineLearning/DataPreprocessing/Scaler';
 import { FillNa } from '../Models/MachineLearning/DataPreprocessing/FillNa'
+import {NaiveBayes} from '../Models/MachineLearning/Classification/NaiveBayes'
 import React, { Component } from 'react'
 import { Button,Modal } from 'antd'
 import { withPropsAPI } from '@src';
@@ -210,6 +211,10 @@ class Run extends Component{
           case '卷积神经网络':
               this.showModal()
               runMnist()
+              break
+          case '朴素贝叶斯':
+              NaiveBayes()
+              break
 
           // case 'Input':
           //   // INPUT(stream[k].id);
