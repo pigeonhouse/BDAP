@@ -14,7 +14,6 @@ class Feature extends Component{
         }
     }
     shouldComponentUpdate(){
-      console.log('shoule')
       if(this.state.labelArray.length === 0)
       return true;
       const { propsAPI } = this.props;
@@ -27,19 +26,19 @@ class Feature extends Component{
       }
       return false;
     }
-    featureType=(labelArray)=>{
+    featureType=(tag)=>{
       const { propsAPI } = this.props;
       const { getSelected } = propsAPI;
       const item = getSelected()[0];
-      const label = item.model.label;
-      if(label === '特征区间化')
-      return <FeatureRegion 
-              labelArray = {labelArray}/>
-      else if(label === '特征分组归类')
+      if(item.model.label === '特征区间化'){
+        return <FeatureRegion 
+              tag = {tag}/>
+      }
+      else if(item.model.label === '特征分组归类')
       return <FeatureGroup
-            labelArray = {labelArray}/>
+              tag = {tag}/>
       else return <FeatureBinary
-            labelArray = {labelArray}/>
+              tag = {tag}/>
     }
     render(){
         var arr=[];
@@ -53,8 +52,6 @@ class Feature extends Component{
                 arr.push(labelArray[i][0]);
             }
         }
-        console.log('arr')
-        console.log(this.props.labelArray)
         return (
             <div>
                 {arr.map((item)=>{
