@@ -13,8 +13,8 @@ class Selectword extends Component{
         labelArray: []
     }
     featuresOperate=(label)=>{
-        console.log('update')
-        console.log(this.state.labelArray)
+        // console.log('update')
+        // console.log(this.state.labelArray)
         if(label === '特征区间化' 
         || label === '特征分组归类'
         || label === '特征二进制化')

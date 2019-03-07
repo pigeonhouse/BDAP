@@ -1,5 +1,5 @@
 import React from 'react'
-import { Modal, Table , Icon} from 'antd';
+import { Modal, Table , Icon,Collapse} from 'antd';
 import {
   Command,
   NodeMenu,
@@ -15,29 +15,7 @@ import store from '../../store'
 import { withPropsAPI } from '@src';
 import LineMarkerEcharts from './LineMarkerEcharts';
 import  DistributeScatter from './DistributeScatter';
-// const columns = [{
-//   title: 'Name',
-//   dataIndex: 'name',
-//   width: 150,
-// }, {
-//   title: 'Age',
-//   dataIndex: 'age',
-//   width: 150,
-// }, {
-//   title: 'Address',
-//   dataIndex: 'address',
-// }];
-
-// const data = [];
-// for (let i = 0; i < 100; i++) {
-//   data.push({
-//     key: i,
-//     name: `Edward King ${i}`,
-//     age: 32,
-//     address: `London, Park Lane no. ${i}`,
-//   });
-// }
-
+const Panel = Collapse.Panel;
 
 class FlowContextMenu extends React.Component {
 
@@ -45,7 +23,9 @@ class FlowContextMenu extends React.Component {
     loading:false,
     visible: false,
     Nvisible: false,
-    Svisible:false
+    Svisible:false,
+    MlEvaluteVisible:false,
+    evalution:[[]]
   }
 
   Datum = () => {
@@ -60,10 +40,6 @@ class FlowContextMenu extends React.Component {
       }
     }
     currentData = currentData[0]
-
-    console.log("-----------------")
-    console.log(currentData)
-    console.log("-----------------")
 
     var columns = new Array()
     for(let i = 0; i < currentData.length; i++){
@@ -114,23 +90,43 @@ class FlowContextMenu extends React.Component {
   }
 
   handleOk = (e) => {
-    console.log(e);
     this.setState({
       visible: false,
+      MlEvaluteVisible: false,
       col:[],
       data:[]
     });
   }
   handleCancel = (e) => {
-    console.log(e);
     this.setState({
       visible: false,
+      MlEvaluteVisible: false,
       col:[],
       data:[]
     });
   }
-
+  modelEvaluation = ()=>{
+    const { propsAPI } = this.props;
+    var currentId = propsAPI.getSelected()[0].id
+    var saveData = propsAPI.save().nodes
+    var currentNode = new Array()
+  
+    for(let i = 0; i < saveData.length; i++){
+      if(currentId == saveData[i].id){       
+          currentNode.push(saveData[i])
+      }
+    }
+    currentNode = currentNode[0]
+    if (currentNode.group == "ml"){
+        var ev = currentNode.attr.evaluateResult
+        this.setState({evalution:ev})
+        this.setState({MlEvaluteVisible:true})
+    }
+    else alert("NOT A ML MODEL")
+  }
+  
   render() {
+    
     return (
       <ContextMenu className={styles.contextMenu}>
       
@@ -152,16 +148,49 @@ class FlowContextMenu extends React.Component {
           <Icon type="form" />
           <span>数据预览</span>
           </div>
+
           <div className={styles.item} onClick={this.showNModal}>
           <Icon type="line-chart" />
           <span>图形化展示</span>
           </div>
+
+          <div className={styles.item} onClick={this.modelEvaluation}>
+          <Icon type="solution" />
+          <span>模型评估</span>
+          </div>
+
+
           {/* <div className={styles.item} onClick={this.showSModal}>
           <Icon type="dot-chart" />
           <span>图形化展示-散点图</span>
           </div> */}
         </NodeMenu>
       
+
+        <Modal title="模型评估" visible={this.state.MlEvaluteVisible}
+          onOk={this.handleOk} onCancel={this.handleCancel} width={500}
+        >
+          <Collapse bordered={false} >
+          {this.state.evalution.map((pair,index)=>{
+            return (<Panel header={pair[0]+" : "+pair[1]}  key={index} style={{fontSize:25,marginBottom: 24,border: 0}}>
+                        <p style={{fontSize:15,lineHeight:2}}>{pair[2]}</p>
+                      </Panel>)
+          }
+
+          )}
+            {/* <Panel header={this.state.title}  key="1" style={{fontSize:30,marginBottom: 24,border: 0}}>
+              <p style={{fontSize:20}}>{text}</p>
+            </Panel>
+            <Panel header="This is panel header 2" key="2" style={{fontSize:30,marginBottom: 24,border: 0}}>
+              <p style={{fontSize:20}}>{text}</p>
+            </Panel>
+            <Panel header="This is panel header 3" key="3" style={{fontSize:30,marginBottom: 24,border: 0}}>
+              <p style={{fontSize:20}}>{text}</p>
+          </Panel> */}
+        </Collapse>
+        </Modal>
+
+
         <Modal
             title="Modal"
             visible={this.state.Nvisible}

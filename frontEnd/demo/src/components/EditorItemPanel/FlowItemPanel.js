@@ -241,6 +241,7 @@ class FlowItemPanel extends React.Component {
                 Dataset: [],
                 labelArray: [[],[],[]], 
                 length: 0,
+                group:"ml"
                 
               }}
               
@@ -251,7 +252,8 @@ class FlowItemPanel extends React.Component {
               shape='two-one'
               model={{
                 label: '单变量多项式回归',
-                attr:{'sourceFile':'people'}
+                attr:{'sourceFile':'people'},
+                group:"ml"
               }}
               
             /></ItemPanel></Menu.Item>
@@ -261,7 +263,8 @@ class FlowItemPanel extends React.Component {
               shape='two-one'
               model={{
                 label: '多变量线性回归',
-                attr:{'sourceFile':'people'}
+                attr:{'sourceFile':'people'},
+                group:"ml"
               }}
               
             /></ItemPanel></Menu.Item>
@@ -271,7 +274,8 @@ class FlowItemPanel extends React.Component {
               shape='two-one'
               model={{
                 label: '决策树回归',
-                attr:{'sourceFile':'people'}
+                attr:{'sourceFile':'people'},
+                group:"ml"
               }}
               
             /></ItemPanel></Menu.Item>
@@ -281,7 +285,8 @@ class FlowItemPanel extends React.Component {
               shape='two-one'
               model={{
                 label: '随机森林回归',
-                attr:{'sourceFile':'people'}
+                attr:{'sourceFile':'people'},
+                group:"ml"
               }}
               
             /></ItemPanel></Menu.Item>         
@@ -294,7 +299,8 @@ class FlowItemPanel extends React.Component {
             shape='two-one'
             model={{
               label: '朴素贝叶斯',
-              attr:{'sourceFile':'people'}
+              attr:{'sourceFile':'people'},
+              group:"ml"
             }}
             
           /></ItemPanel></Menu.Item>
@@ -304,7 +310,8 @@ class FlowItemPanel extends React.Component {
             shape='two-one'
             model={{
               label: '支持向量机',
-              attr:{'sourceFile':'people'}
+              attr:{'sourceFile':'people'},
+              group:"ml"
             }}
             
           /></ItemPanel></Menu.Item>

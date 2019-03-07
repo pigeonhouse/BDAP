@@ -16,9 +16,12 @@ export function NaiveBayes(){
         return model.predict(testFeatures);
     });
     const accuracy = confusionMatrix.getAccuracy();
-    //console.log(confusionMatrix)
+    console.log(confusionMatrix)
     console.log("准确率：")
     console.log(accuracy*100+"%")
+
+    
+
     
     //model.train(Xtrain, Ytrain);
 
