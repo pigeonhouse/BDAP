@@ -16,12 +16,27 @@ class Selectword extends Component{
         // console.log('update')
         // console.log(this.state.labelArray)
         if(label === '特征区间化' 
-        || label === '特征分组归类'
-        || label === '特征二进制化')
+        || label === '特征分组归类')
         return <Feature
                     label={label}
                     labelArray={this.state.labelArray}
                 ></Feature>
+        else if(label === '特征二进制化'){
+            const { propsAPI } = this.props;
+            const { getSelected, executeCommand, update } = propsAPI;
+            const item = getSelected()[0];
+            let labelArray = [];
+            for(let i in this.state.labelArray){
+                if(this.state.labelArray[i][1]){
+                    labelArray.push(this.state.labelArray[i][0])
+                }
+            }
+            const attr = {attr: labelArray};
+            console.log(attr)
+            executeCommand(()=>{
+                update(item, {...attr})
+            })
+        }
     }
     displayTransfer = () => {
         const { propsAPI } = this.props;

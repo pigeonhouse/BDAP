@@ -28,7 +28,7 @@ class Feature extends Component{
     }
     featureType=(tag)=>{
       const { propsAPI } = this.props;
-      const { getSelected } = propsAPI;
+      const { getSelected} = propsAPI;
       const item = getSelected()[0];
       if(item.model.label === '特征区间化'){
         return <FeatureRegion 
@@ -36,8 +36,6 @@ class Feature extends Component{
       }
       else if(item.model.label === '特征分组归类')
       return <FeatureGroup
-              tag = {tag}/>
-      else return <FeatureBinary
               tag = {tag}/>
     }
     render(){
