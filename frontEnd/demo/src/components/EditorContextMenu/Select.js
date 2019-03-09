@@ -21,6 +21,7 @@ class Select extends React.Component {
         this.setState({
             visible: false,
         });
+        this.props.trans();
     }
     handleVisible = () => {
         this.setState({
@@ -54,10 +55,11 @@ class Select extends React.Component {
   filterOption = (inputValue, option) => option.description.indexOf(inputValue) > -1
 
   handleChange = (targetKeys) => {
-      if(targetKeys.length <= this.props.amount){
+      if(targetKeys.length <= this.props.amount_max && targetKeys.length >= this.props.amount_min){
         this.setState({ targetKeys });
       }
-      else alert('You can only chose '+this.props.amount+' set of data');
+      else if(targetKeys.length < this.props.amount_min) {alert('You can chose at least '+this.props.amount_min+' set of data')}
+      else alert('You can chose at most '+this.props.amount_max+' set of data');
   }
 
   handleSearch = (dir, value) => {

@@ -18,7 +18,6 @@ import  DistributeScatter from './DistributeScatter';
 const Panel = Collapse.Panel;
 
 class FlowContextMenu extends React.Component {
-
   state = { 
     loading:false,
     visible: false,
@@ -72,8 +71,8 @@ class FlowContextMenu extends React.Component {
       loading: true,
     });
     setTimeout(()=>{
-      this.setState({loading:false});
-    },3000)
+      this.setState({loading:false, Nvisible:false});
+    },100)
   }
   handleNCancel = (e) => {
     console.log(e);
@@ -124,7 +123,14 @@ class FlowContextMenu extends React.Component {
     }
     else alert("NOT A ML MODEL")
   }
-  
+  trans = () => {
+    this.setState({
+      loading: true,
+    });
+    setTimeout(()=>{
+      this.setState({loading:false});
+    },100)
+  }
   render() {
     
     return (
@@ -197,11 +203,12 @@ class FlowContextMenu extends React.Component {
             onOk={this.handleNOk}
             onCancel={this.handleNCancel}
             bodyStyle={{height: '450px'}}
-            width={1000}
+            width={1100}
           >
-            <LineMarkerEcharts />
+          
+          <LineMarkerEcharts trans={()=>this.trans()}/>
         </Modal>
-        <Modal
+        {/* <Modal
             title="Modal"
             visible={this.state.Svisible}
             onOk={this.handleSOk}
@@ -210,7 +217,7 @@ class FlowContextMenu extends React.Component {
             width={800}
           >
             <DistributeScatter />
-        </Modal>
+        </Modal> */}
 
         <Modal title="Modal Data" visible={this.state.visible}
           onOk={this.handleOk} onCancel={this.handleCancel} width={900}
