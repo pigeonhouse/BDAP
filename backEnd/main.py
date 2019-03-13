@@ -12,7 +12,41 @@ def hello_world():
 
 host = 'http://localhost:8998'
 headers = {'Content-Type': 'application/json'}
-global loss
+
+global returnData
+
+@app.route('/inputFile',methods=['GET', 'POST'])
+def inputFile():
+    inf = request.json
+
+    fileobj = open('./readColInf.scala', 'r')     # open scala file where your spark code lies
+
+    try:
+        code = fileobj.read()
+    finally:
+        fileobj.close()
+
+    data_mine = {'code': code }
+
+    session_url = 'http://localhost:8998/sessions/0'
+    compute = requests.post(session_url+'/statements', data=json.dumps(data_mine), headers=headers)
+
+    result_url = host + compute.headers['location']
+
+    r = requests.get(result_url, headers=headers)
+    print(r.json())
+
+    while(True):
+        r = requests.get(result_url, headers=headers)
+        if r.json()['state'] == 'available':
+            print("finish")
+            break
+
+
+    pprint.pprint(r.json())
+
+    return json.dumps(returnData)
+
 
 @app.route('/test', methods=['GET', 'POST'])
 def test():
@@ -155,6 +189,12 @@ def returnLoss():
     print(loss)
     return json.dumps({"loss":"%f"%loss})
 
+@app.route('/postTest', methods=['GET', 'POST'])
+def postTest():
+    print(request.json)
+    global returnData
+    returnData = request.json
+    return "received"
 
 if __name__ == '__main__':
     app.run(debug=True, host='0.0.0.0')
