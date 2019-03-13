@@ -18,7 +18,7 @@ object OutputDataframe {
     val previous = "54612a04"
     val project = "demo"
     val numRows = 20
-    val file = "hdfs://localhost:9000/" + project + "/" + previous
+    val file = "hdfs://localhost:9000/" + project + "/" + id
 
     val df1 = SQLContext.read.format("json").load(file)
     df1.show(20)

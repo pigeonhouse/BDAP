@@ -4,27 +4,29 @@ import com.intel.analytics.bigdl.utils.Engine
 import org.apache.spark.SparkContext
 import org.apache.spark.sql.{SQLContext, SaveMode}
 import org.apache.spark.sql.functions.col
-import org.apache.spark.sql.types.DoubleType
 
-object InputCSV {
+object ChooseCol {
   def main(args: Array[String]): Unit = {
-
     val conf = Engine.createSparkConf()
-      .setAppName("InputCSV")
+      .setAppName("ChooseCol")
       .set("spark.task.maxFailures", "1")
     val sc = new SparkContext(conf)
     val SQLContext = new SQLContext(sc)
     Engine.init
 
-    val file = "file:///home/hadoop/bigdl/src/international-airline-passengers.csv"
-    val project = "demo"
-    val id = "0"
-    val aim = "passengers"
+    val project = "Taitanic"
+    val id = "1"
+    val aim = "PassengerId Name Age Sex Parch Pclass"
+    val previous = "0"
+    val file = "/home/hadoop/BigDL/" + project + "/" + previous
 
-    val df = SQLContext.load("com.databricks.spark.csv", Map("path" -> file, "header" -> "true"))
-    val df1 = df.select(col(aim).cast(DoubleType)).withColumnRenamed("cast(" + aim + " as double)", aim)
+    val df = SQLContext.read.format("json").load(file)
+    val aimarray = aim.split(" ")
 
-    df1.write.format("json")
+    var df_ = df
+    df_ = df_.select(aimarray.map(A => col(A)): _*)
+
+    df_.write.format("json")
       .mode(SaveMode.Append)
       .save("/home/hadoop/BigDL/" + project + "/" + id)
 
