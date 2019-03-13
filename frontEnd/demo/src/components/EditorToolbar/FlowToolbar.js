@@ -6,6 +6,7 @@ import iconfont from '../../theme/iconfont.less';
 import {AppendingLineChart} from "../linechart/linechart.ts";
 import d3 from "d3"
 import Run from "../Models/run.js"
+import SparkRun from "../sparkRun"
 import { withPropsAPI } from '@src';
 import store from '../../store';
 import { getStopLineAction, getShowLineAction, UpINF } from '../../store/actionCreate';
@@ -174,7 +175,7 @@ class FlowToolbar extends React.Component {
         </Command>
         
         <Run></Run>
-        <Button onClick={()=>this.livyTest}>sparkTest</Button>
+        <SparkRun></SparkRun>
        {/* <Button onClick={()=>this.livyTest()}>spark-test</Button> */}
        {/* <Button onClick={()=>this.returnLoss()}>return-loss</Button> */}
 {/* 
