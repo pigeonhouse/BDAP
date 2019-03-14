@@ -24,15 +24,17 @@ class nodes:
 
     def matchfunction(self, code):
         if self.label == "Input":
-            data_mine = {'code': code % (self.attribute['sourceFile'], self.id)}
+            data = {'code': code % (self.attribute['sourceFile'], self.id)}
         elif self.label == "缺失值填充":
-            data_mine = {'code': code % (self.attribute['type'], self.id, ArraytoString(self.sourceID))}
+            data = {'code': code % (self.attribute['type'], self.id, ArraytoString(self.sourceID))}
         elif self.label == "归一化":
-            data_mine = {'code': code % (self.id, ArraytoString(self.sourceID))}
+            data = {'code': code % (self.id, ArraytoString(self.sourceID))}
+        elif self.label =='localFile':
+            data = {'code':code }
         else:
-            data_mine = None
+            data = None
 
-        return data_mine
+        return data
 
     def excuted(self):
         fileobj = open("./Closed/" + self.label + ".scala", "r")
@@ -44,11 +46,32 @@ class nodes:
 
         data_mine = self.matchfunction(code)
 
-        print(data_mine)
+        session_url = 'http://localhost:8998/sessions/0'
+        compute = requests.post(session_url+'/statements', data=json.dumps(data_mine), headers=headers)
+
+        result_url = host + compute.headers['location']
+
+        r = requests.get(result_url, headers=headers)
+        print(r.json())
+
+        while(True):
+            r = requests.get(result_url, headers=headers)
+            if r.json()['state'] == 'available':
+                print("finish")
+                break
+
+        pprint.pprint(r.json())
 
 
 app = Flask(__name__, static_folder="./front_end/static", template_folder="./front_end/")
 CORS(app)
+
+@app.route('/postTest', methods=['GET', 'POST'])
+def postTest():
+    print(request.json)
+    global returnData
+    returnData = request.json
+    return "received"
 
 
 @app.route('/')
@@ -58,6 +81,36 @@ def hello_world():
 host = 'http://localhost:8998'
 headers = {'Content-Type': 'application/json'}
 global loss
+
+@app.route('/handleInput', methods=['GET', 'POST']) 
+def handleInput():
+    print(request.json)
+    fileobj = open("./handleInput.scala", "r")
+
+    try:
+        code = fileobj.read()
+    finally:
+        fileobj.close()
+
+    data_mine = {'code':code % request.json}
+    headers = {'Content-Type': 'application/json'}
+    session_url = 'http://localhost:8998/sessions/0'
+    compute = requests.post(session_url+'/statements', data=json.dumps(data_mine), headers=headers)
+
+    result_url = host + compute.headers['location']
+
+    r = requests.get(result_url, headers=headers)
+    print(r.json())
+
+    while(True):
+        r = requests.get(result_url, headers=headers)
+        if r.json()['state'] == 'available':
+            print("finish")
+            break
+
+    pprint.pprint(r.json())
+    return "get"
+
 
 @app.route('/test', methods=['GET', 'POST'])
 def test():
@@ -69,8 +122,10 @@ def test():
         node_.append(node)
 
     for node in node_:
+        print(node.label)
         node.excuted()
 
+    
     return ("finish")
 
 

@@ -64,6 +64,7 @@ class FlowItemPanel extends React.Component {
             shape='zero-one'
             model={{
               label: '本地数据',
+              elabel:'localFile',
               attr:{},
               Dataset: [],
               labelArray: [], 
@@ -77,7 +78,8 @@ class FlowItemPanel extends React.Component {
             shape='zero-one'
             model={{
               label: 'hdfs数据',
-              attr:{"location":""},
+              elabel:'hdfsFile',
+              attr:{},
               Dataset: [],
               labelArray: [], 
               length: 0,
@@ -154,6 +156,7 @@ class FlowItemPanel extends React.Component {
             model={{
               // color: '#722ED1',
               label: '缺失值填充',
+              elabel:'Fillna',
               select_status: 1,
               attr:{ type:'mean' },
               Dataset: [],
@@ -170,6 +173,7 @@ class FlowItemPanel extends React.Component {
             model={{
               // color: '#722ED1',
               label: '归一化',
+              elabel:'MinMaxScaler',
               attr:{},
               Dataset: [],
               labelArray: [], 

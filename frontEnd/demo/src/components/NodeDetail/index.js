@@ -4,7 +4,8 @@ import { withPropsAPI } from '@src';
 import Selectword from '../DataOperate/selectword'
 import Download from '../DataOperate/download'
 import Show from '../DataOperate/Datashow/index.js'
-import Uploadfile from '../DataOperate/upload';
+import Uploadfile from '../DataOperate/upload'
+import HdfsFile from '../DataOperate/hdfsFile'
 import styles from './index.less';
 import Feature from '../DataOperate/Feature.js'
 import {AppendingLineChart} from "../linechart/linechart.ts";
@@ -80,11 +81,17 @@ class NodeDetail extends React.Component {
         <Show style={{minWidth:'206px',marginBottom:'10px'}}></Show>
         <Download></Download>
       </div>
-    );
+    )
+    else if(label === 'hdfs数据')
+    return(
+      <HdfsFile ></HdfsFile>
+    )
     else if(label === '本地数据')
     return (
+      
       <Uploadfile ></Uploadfile>
-    );
+    )
+
   }
   render() {
     const { form, propsAPI } = this.props;
