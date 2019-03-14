@@ -6,24 +6,6 @@ import store from '../../store';
 import {UpL} from '../../store/actionCreate';
 import styles from './inputStyle.less'
 
-const props = {
-  name: 'file',
-  action: '',
-  headers: {
-    authorization: 'authorization-text',
-  },
-  onChange(info) {
-    if (info.file.status !== 'uploading') {
-      console.log(info.file, info.fileList);
-    }
-    if (info.file.status === 'done') {
-      message.success(`${info.file.name} file uploaded successfully`);
-    } else if (info.file.status === 'error') {
-      message.error(`${info.file.name} file upload failed.`);
-    }
-  },
-};
-
 
 class Uploadfile extends Component{
     constructor(props){
@@ -83,6 +65,9 @@ class Uploadfile extends Component{
               }
               n.push([{label:colName,value:colValue}])
           }
+          console.log(n)
+          console.log(fieldNameArray)
+          console.log(vectorLength)
           let m = fieldNameArray[0].map((item)=>{
             return [item, false];
           })

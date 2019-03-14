@@ -66,6 +66,8 @@ class nodes:
 app = Flask(__name__, static_folder="./front_end/static", template_folder="./front_end/")
 CORS(app)
 
+global returnData
+
 @app.route('/postTest', methods=['GET', 'POST'])
 def postTest():
     print(request.json)
@@ -109,7 +111,22 @@ def handleInput():
             break
 
     pprint.pprint(r.json())
-    return "get"
+
+    data = returnData
+
+    colName = data['colName'].split(",")
+    s = []
+    for name in colName:
+        temp = [{}]
+        temp[0]['label'] = name
+        temp[0]['value'] = data[name].split(",")
+        s.append(temp)
+    re = [s]
+    re.append([colName])
+    re.append(len(data[name].split(",")))
+
+    return json.dumps(re)
+
 
 
 @app.route('/test', methods=['GET', 'POST'])

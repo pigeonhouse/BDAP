@@ -25,15 +25,32 @@ class HdfsFile extends Component{
         mode: 'cors',
         headers: {'Content-Type': 'application/json'},
         }
+        const { propsAPI } = this.props;
+        const { getSelected, update, executeCommand } = propsAPI;
+
         fetch(
             'http://localhost:5000/handleInput',init
         )
             .then(res => res.json())
             .then(data => {
-            console.log(res)
-            this.setState({users: data})
+            console.log(data)
+            let m = data[1][0].map((item)=>{
+                return [item, false];
+              })
+              const values = {
+                  Dataset:data[0],
+                  labelArray:m, 
+                  length:data[2]
+              }
+              const item = getSelected()[0];
+              update(item, {...values});
+
+            this.setState({
+                alldata: data,
             })
-            .catch(e => console.log('错误:', e))   
+            })
+            .catch(e => console.log('错误:', e)) 
+
     }
 
     render(){
