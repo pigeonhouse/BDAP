@@ -26,6 +26,7 @@ class FeatureRegion extends Component {
     executeCommand(() => {
       update(item,{attr});
     });
+    console.log(propsAPI.save())
   }
   handleSubmit2 = (e) => {
     e.preventDefault();

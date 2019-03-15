@@ -1,13 +1,16 @@
-import store from '../../store'
-import { Conv, Dens, FillN, MaxM, Delete} from '../../store/actionCreate';
-import {OneVarLinearRegression} from '../Models/MachineLearning/Regression/OneVarLinearRegression'
-import { Scaler } from '../Models/MachineLearning/DataPreprocessing/Scaler';
-import { FillNa } from '../Models/MachineLearning/DataPreprocessing/FillNa'
-import {NaiveBayes} from '../Models/MachineLearning/Classification/NaiveBayes'
+import {OneVarLinearRegression} from './MachineLearning/Regression/OneVarLinearRegression'
+import { Scaler } from './MachineLearning/DataPreprocessing/Scaler';
+import { FillNa } from './MachineLearning/DataPreprocessing/FillNa'
+import {NaiveBayes} from './MachineLearning/Classification/NaiveBayes'
 import React, { Component } from 'react'
 import { Button,Modal } from 'antd'
 import { withPropsAPI } from '@src';
 import { runMnist } from './MnistTest/mnist';
+import {featureBinary} from './FeatureOperate/featureBinary'
+import {MutiVarLinearRegression} from './MachineLearning/Regression/MutiVarLinearRegression'
+import {OneVarPolynomialRegression} from './MachineLearning/Regression/OneVarPolynomialRegression'
+import {DecisionTreeRegression} from './MachineLearning/Regression/DecisionTree'
+import {RandomForest} from './MachineLearning/Regression/RandomForest'
 // var inf = store.getState().picture;
 
 // function CONVNET(id) {
@@ -200,6 +203,26 @@ class Run extends Component{
               outcome.push(OneVarLinearRegression(all_data))
               this.outputdata(stream[k].id, outcome[0][2], propsAPI);
               break
+          case '多变量线性回归':
+              outcome.push(MutiVarLinearRegression(all_data))
+              this.outputdata(stream[k].id, outcome[0], propsAPI);
+              break
+          case '单变量多项式回归':
+              outcome.push(OneVarPolynomialRegression(all_data))
+              this.outputdata(stream[k].id, outcome[0], propsAPI);
+              break
+          case '决策树回归':
+              outcome.push(DecisionTreeRegression(all_data))
+              this.outputdata(stream[k].id, outcome[0], propsAPI);
+              break
+          case '随机森林回归':
+              outcome.push(RandomForest(all_data))
+              this.outputdata(stream[k].id, outcome[0], propsAPI);
+              break
+          case '朴素贝叶斯':
+              outcome.push(NaiveBayes(all_data))
+              this.outputdata(stream[k].id, outcome[0], propsAPI);
+              break
           case '缺失值填充':
               outcome.push(FillNa(all_data))
               this.outputdata(stream[k].id, outcome[0][1], propsAPI);
@@ -215,7 +238,10 @@ class Run extends Component{
           case '朴素贝叶斯':
               NaiveBayes()
               break
-
+          case '特征二进制化':
+              outcome.push(featureBinary(all_data));
+              this.outputdata(stream[k].id, outcome[0], propsAPI);
+              break;
           // case 'Input':
           //   // INPUT(stream[k].id);
           //   break;
@@ -343,11 +369,10 @@ class Run extends Component{
       if(inf.edges[k].target === id){
         let item = find(inf.edges[k].source);
         var re = JSON.parse(JSON.stringify(item.model.Dataset))
-        all_data.push({
+        all_data[inf.edges[k].targetAnchor+1]={
           Dataset: re,
           length: item.model.length,
-          targetAnchor: inf.edges[k].targetAnchor
-        });
+        };
       }
     }
     console.log('all_data:');

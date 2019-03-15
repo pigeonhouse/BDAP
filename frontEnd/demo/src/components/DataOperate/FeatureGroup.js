@@ -1,6 +1,6 @@
 import React, {Component} from 'react'
 import { withPropsAPI } from '@src';
-import { Form, Icon, Button, Input } from 'antd'
+import { Form, Icon, Button, Input, Select } from 'antd'
 import './feature.less'
 
 class FeatureGroup extends Component {
@@ -71,6 +71,9 @@ class FeatureGroup extends Component {
         id: this.state.id-1
       })
     }
+    handleSelect=(value)=>{
+      console.log(value);
+    }
   render() {
     const { getFieldDecorator } = this.props.form;
     const inlineFormItemLayout = {
@@ -103,7 +106,12 @@ class FeatureGroup extends Component {
           <Input value={names[index]?names[index]:''} onBlur={this.handleSubmit} style={{width:'30%'}}/>
         )}
         {getFieldDecorator(`tags[${index}]`)(
-          <Input value={tags[index]?tags[index]:''} onBlur={this.handleSubmit} style={{marginLeft:'5%',width:'65%'}}/>
+          <Select
+          mode="tags"
+          style={{marginLeft:'5%',width:'65%'}}
+          onBlur={this.handleSelect}
+        />
+          // <Input value={tags[index]?tags[index]:''} onBlur={this.handleSubmit} style={{marginLeft:'5%',width:'65%'}}/>
         )}
       </Form.Item>
     ));

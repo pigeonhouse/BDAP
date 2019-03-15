@@ -1,49 +1,58 @@
 import { RandomForestRegression as RFRegression } from 'ml-random-forest';
-export function RandomForestRegression(){
-    var dataset = [
-    [73, 80, 75, 152],
-    [93, 88, 93, 185],
-    [89, 91, 90, 180],
-    [96, 98, 100, 196],
-    [73, 66, 70, 142],
-    [53, 46, 55, 101],
-    [69, 74, 77, 149],
-    [47, 56, 60, 115],
-    [87, 79, 90, 175],
-    [79, 70, 88, 164],
-    [69, 70, 73, 141],
-    [70, 65, 74, 141],
-    [93, 95, 91, 184],
-    [79, 80, 73, 152],
-    [70, 73, 78, 148],
-    [93, 89, 96, 192],
-    [78, 75, 68, 147],
-    [81, 90, 93, 183],
-    [88, 92, 86, 177],
-    [78, 83, 77, 159],
-    [82, 86, 90, 177],
-    [86, 82, 89, 175],
-    [78, 83, 85, 175],
-    [76, 83, 71, 149],
-    [96, 93, 95, 192]
-    ];
 
-    var trainingSet = new Array(dataset.length);
-    var predictions = new Array(dataset.length);
-
-    for (var i = 0; i < dataset.length; ++i) {
-    trainingSet[i] = dataset[i].slice(0, 3);
-    predictions[i] = dataset[i][3];
+function selectData(data, labelArray){
+    let Dataset = [];
+    for(let i in data){
+        if(labelArray.indexOf(data[i][0].label) !== -1){
+            Dataset.push(data[i][0].value)
+        }
     }
+    return transposition(Dataset);
+}
+function selectDataUntransport(data, labelArray){
+    for(let i in data){
+        if(labelArray.indexOf(data[i][0].label) !== -1){
+            return data[i][0].value;
+        }
+    }
+}
+function transposition(Dataset){
+    var Data = [];
+    for(let i in Dataset[0]){
+        let arr = [];
+        for(let j in Dataset){
+            arr[j] = Dataset[j][i];
+        }
+        Data[i] = arr;
+    }
+    return Data;
+}
+function normalize(predict, labelArray, predictObj, PreArray){
+    const pre = transposition(predict);
+    let Dataset = [];
+    for(let i in labelArray){
+        Dataset.push([{label:labelArray[i], value:pre[i]}])
+    }
+    Dataset.push([{label:PreArray[0], value:predictObj}])
+    return {Dataset:Dataset};
+}
+export function RandomForest(all_data){
+    const labelArray = all_data[0].labelArray;
+    const trainData = all_data[1].Dataset;
+    const textData = all_data[2].Dataset;
+    const attr = all_data[0].all_attr;
 
-    var options = {
-    seed: 3,
-    maxFeatures: 2,
-    replacement: false,
-    nEstimators: 200
-    };
-
+    const x = selectData(trainData, labelArray[0]);
+    const y = selectDataUntransport(trainData, labelArray[1]);
+    const predict = selectData(textData, labelArray[2]);
+    const options = {
+        seed: attr.seed,
+        maxFeatures: attr.maxFeatures,
+        replacement: attr.replacement,
+        nEstimators: attr.nEstimators
+    }
     var regression = new RFRegression(options);
-    regression.train(trainingSet, predictions);
-    var result = regression.predict(trainingSet);
+    regression.train(x, y);
+    const predictObj = regression.predict(predict);
+    return normalize(predict, labelArray[2], predictObj, labelArray[1])
 }
