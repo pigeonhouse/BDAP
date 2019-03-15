@@ -14,7 +14,9 @@ import iconfont from '../../theme/iconfont.less';
 import store from '../../store'
 import { withPropsAPI } from '@src';
 import LineMarkerEcharts from './LineMarkerEcharts';
-import  DistributeScatter from './DistributeScatter';
+import download from '../DataOperate/download';
+import Downlowd from '../DataOperate/download';
+
 const Panel = Collapse.Panel;
 
 class FlowContextMenu extends React.Component {
@@ -49,6 +51,7 @@ class FlowContextMenu extends React.Component {
                  })
     }
     this.setState({col:columns})
+    // console.log(currentData);
     var datas = new Array()
     for(let i = 0; i < currentData[0][0].value.length; i++){
       var temp = new Array()
@@ -57,8 +60,75 @@ class FlowContextMenu extends React.Component {
       }
       datas.push(temp)
     }
-    this.setState({data:datas})
+    let s1 = new Array();
+    let s2 = new Array();
+    let s3 = new Array();
+    s1['id']="Average";
+    s2['id']="Max";
+    s3['id']="Min";
+    for(let i = 1; i < currentData.length; i++){
+      let tem_avr = 0;
+      let tem_min;
+      let tem_max;
+      for(let k = 0; k < currentData[i][0].value.length; k++)
+        if(currentData[i][0].value[k] != null){
+          tem_min = currentData[i][0].value[k];
+          tem_max = currentData[i][0].value[k];
+        }
+      for(let k = 0; k < currentData[i][0].value.length; k++){
+        tem_avr += currentData[i][0].value[k];
+        if(currentData[i][0].value[k] > tem_max){
+          tem_max = currentData[i][0].value[k];
+        }
+        if(currentData[i][0].value[k]!=null && currentData[i][0].value[k] < tem_min){
+          tem_min = currentData[i][0].value[k];
+        }
+      }
+      tem_avr = tem_avr/currentData[i][0].value.length;
+      s1[currentData[i][0].label]=tem_avr;
+      s2[currentData[i][0].label]=tem_max;
+      s3[currentData[i][0].label]=tem_min;
+    }
+    datas.push(s1);
+    datas.push(s2);
+    datas.push(s3);
+    var list = "";
+    for(let i = 0; i < columns.length; i++){
+      list+=columns[i].title;
+      if(i+1 != columns.length)  list+=',';
+      else  list+=' \n ';
+    }
+    
+    let N = -1;
+    Object.getOwnPropertyNames(datas[0]).forEach(function(key){
+      N++;
+    })
+    for(let i=0;i < datas.length;i++){
+      let j = 0;
+      Object.getOwnPropertyNames(datas[i]).forEach(function(key){
+        if(key != "length"){
+          j++;
+          list+=datas[i][key];
+          if(j != N)  list+=','; 
+          else  list+=' \n ';
+        }
+      })
+    }
+    // console.log(list);
+    // console.log("datas");
+    // let a = Math.random();
+    // console.log(a);
+    // console.log(datas);
+    this.setState({data:datas,list:list});
   }
+  // makeup = () => {
+  //   let dat = this.state.datas;
+  //   for(let k = 0; k < dat.length;k++){
+  //     if(dat[k].id == 'Average'){
+  //       for(let j = 0;j < ;)
+  //     }
+  //   }
+  // }
   showNModal = () => {
     this.setState({
       Nvisible: true,
@@ -86,6 +156,8 @@ class FlowContextMenu extends React.Component {
       visible: true,
     });
     this.Datum();
+    // console.log(this.state.data);
+    // console.log(this.state.col);
   }
 
   handleOk = (e) => {
@@ -222,8 +294,8 @@ class FlowContextMenu extends React.Component {
         <Modal title="Modal Data" visible={this.state.visible}
           onOk={this.handleOk} onCancel={this.handleCancel} width={900}
         >
+          <Downlowd list={this.state.list} filename={"数据集"}/>
           <Table columns={this.state.col} dataSource={this.state.data} pagination={{ pageSize: 70 }} scroll={{ y: 340 }} bordered size="small" />
-
         </Modal>
 
         <EdgeMenu>
