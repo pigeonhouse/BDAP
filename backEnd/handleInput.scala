@@ -15,10 +15,5 @@ for(name <- colName){
 }
 fin += '}'
 
-
-val s = """""""""+fin+"""""""""
-
-//println(s)
-val e = s
 val result = Http("http://localhost:5000/postTest").postData(fin.toString).header("Content-Type", "application/json").header("Charset", "UTF-8").option(HttpOptions.readTimeout(10000)).asString
 
