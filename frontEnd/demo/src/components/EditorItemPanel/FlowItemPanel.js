@@ -180,8 +180,7 @@ class FlowItemPanel extends React.Component {
               length: 0,
               select_status: 1
             }}
-           
-          /></ItemPanel></Menu.Item>
+           /></ItemPanel></Menu.Item>
 
           <Menu.Item key="9"><ItemPanel><Item
             type="node"
@@ -196,7 +195,8 @@ class FlowItemPanel extends React.Component {
               length: 0,
               select_status: 1
             }}
-          /></ItemPanel></Menu.Item>
+          />
+          </ItemPanel></Menu.Item>
 
             <Menu.Item key="10"><ItemPanel><Item
             type="node"
@@ -256,7 +256,11 @@ class FlowItemPanel extends React.Component {
               shape='two-one'
               model={{
                 label: '单变量多项式回归',
-                attr:{'sourceFile':'people'},
+                attr:{'sourceFile':'people', '多项式最高幂': 0},
+                select_status: 2,
+                Dataset: [],
+                labelArray: [[],[],[]], 
+                length: 0,
                 group:"ml"
               }}
               
@@ -268,7 +272,11 @@ class FlowItemPanel extends React.Component {
               model={{
                 label: '多变量线性回归',
                 attr:{'sourceFile':'people'},
-                group:"ml"
+                group:"ml",
+                select_status: 2,
+                Dataset: [],
+                labelArray: [[],[],[]], 
+                length: 0
               }}
               
             /></ItemPanel></Menu.Item>
@@ -279,6 +287,10 @@ class FlowItemPanel extends React.Component {
               model={{
                 label: '决策树回归',
                 attr:{'sourceFile':'people'},
+                select_status: 2,
+                Dataset: [],
+                labelArray: [[],[],[]], 
+                length: 0,
                 group:"ml"
               }}
               
@@ -289,7 +301,15 @@ class FlowItemPanel extends React.Component {
               shape='two-one'
               model={{
                 label: '随机森林回归',
-                attr:{'sourceFile':'people'},
+                attr:{'sourceFile':'people', 
+                      'seed': 3, 
+                      'maxFeatures': 2,
+                      'replacement': false,
+                      'nEstimators': 200},
+                select_status: 2,
+                Dataset: [],
+                labelArray: [[],[],[]], 
+                length: 0,
                 group:"ml"
               }}
               
@@ -304,6 +324,10 @@ class FlowItemPanel extends React.Component {
             model={{
               label: '朴素贝叶斯',
               attr:{'sourceFile':'people'},
+              select_status: 2,
+              Dataset: [],
+              labelArray: [[],[],[]], 
+              length: 0,
               group:"ml"
             }}
             
