@@ -20,7 +20,7 @@ class Downlowd extends Component{
 
     render(){
         return (
-            <Button onClick={this.downFile}>download</Button>
+            <Button onClick={this.downFile}>点击下载</Button>
         );
     }
 }
