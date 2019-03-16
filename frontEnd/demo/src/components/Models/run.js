@@ -1,81 +1,16 @@
-import {OneVarLinearRegression} from './MachineLearning/Regression/OneVarLinearRegression'
+import { OneVarLinearRegression } from './MachineLearning/Regression/OneVarLinearRegression'
 import { Scaler } from './MachineLearning/DataPreprocessing/Scaler';
 import { FillNa } from './MachineLearning/DataPreprocessing/FillNa'
-import {NaiveBayes} from './MachineLearning/Classification/NaiveBayes'
+import { NaiveBayes } from './MachineLearning/Classification/NaiveBayes'
 import React, { Component } from 'react'
 import { Button,Modal } from 'antd'
 import { withPropsAPI } from '@src';
 import { runMnist } from './MnistTest/mnist';
-import {featureBinary} from './FeatureOperate/featureBinary'
-import {MutiVarLinearRegression} from './MachineLearning/Regression/MutiVarLinearRegression'
-import {OneVarPolynomialRegression} from './MachineLearning/Regression/OneVarPolynomialRegression'
-import {DecisionTreeRegression} from './MachineLearning/Regression/DecisionTree'
-import {RandomForest} from './MachineLearning/Regression/RandomForest'
-// var inf = store.getState().picture;
-
-// function CONVNET(id) {
-//   const action = Conv(id);
-//   store.dispatch(action);
-//   //console.log(store.getState().Dataset);
-// };
-// function DENSENET(id) {
-//   const action = Dens(id);
-//   store.dispatch(action);
-//   //console.log(store.getState().Dataset);
-// }
-
-// function FILLNA(id) {
-//   const action = FillN(id);
-//   store.dispatch(action);
-//   //console.log(store.getState().Dataset);
-// }
-
-// function MAXMINSCALER(id) {
-//   const action = MaxM(id);
-//   store.dispatch(action);
-//   //console.log(store.getState().Dataset);
-// }
-
-// function DELETE() {
-//   const action = Delete();
-//   store.dispatch(action);
-//   //console.log(store.getState().Dataset);
-// }
-
-// function INPUT(_id) {
-//   // const action = Inp(id);
-//   // store.dispatch(action);
-//   // let inff = store.getState().Dataset;
-
-//   // for(let k = 0; k < inff.length; k++){
-//   //   if(inff[k].id === _id)
-//   //     // console.log(inff[k].data);
-//   // }
-//   //对接upload
-// }
-
-// function OUTPUT(_id) {
-//   let temStore = store.getState().Dataset;
-//   let outpStore = [];
-
-//   for(let k = 0; k < inf.edges.length; k++){
-//     if(inf.edges[k].target === _id)
-//       for(let p = 0; p < inf.nodes.length; p++){
-//         if(inf.edges[k].source === inf.nodes[p].id){
-//             let id = inf.nodes[p].id;
-//             for(let m = 0; m < temStore.length; m++){
-//               if(temStore[m].id === id){
-//                 outpStore.push(temStore[m]);
-//               }
-//             }
-//             break;
-//         }
-//       }
-//   }
-//   //outpStore为和对应output模块相连的模块，对应仓库中输出的所有元素集
-//   //对接展示方案的函数
-// }
-
+import { MutiVarLinearRegression } from './MachineLearning/Regression/MutiVarLinearRegression'
+import { OneVarPolynomialRegression } from './MachineLearning/Regression/OneVarPolynomialRegression'
+import { DecisionTreeRegression } from './MachineLearning/Regression/DecisionTree'
+import { RandomForest } from './MachineLearning/Regression/RandomForest'
+import { SVM } from './MachineLearning/Classification/SVM'
 class Run extends Component{
   state = { 
     visible: false,
@@ -85,15 +20,12 @@ class Run extends Component{
       visible: true,
     });
   }
-
-  handleOk = (e) => {
-    console.log(e);
+  handleOk = () => {
     this.setState({
       visible: false,
     });
   }
-  handleCancel = (e) => {
-    console.log(e);
+  handleCancel = () => {
     this.setState({
       visible: false,
     });
@@ -105,11 +37,6 @@ class Run extends Component{
     console.log(propsAPI.save())
 
     const inf = propsAPI.save();
-
-    // const action = UpINF(inf);
-    // // console.log(action);
-    // // console.log(inf);
-    // store.dispatch(action);
 
     var Sourc = 0;
     var tag = 'Input';
@@ -200,66 +127,45 @@ class Run extends Component{
         var outcome = new Array()
         switch (stream[k].label) {
           case '单变量线性回归':
-              outcome.push(OneVarLinearRegression(all_data))
-              this.outputdata(stream[k].id, outcome[0][2], propsAPI);
+              outcome = OneVarLinearRegression(all_data);
+              this.outputdata(stream[k].id, outcome[2], propsAPI);
               break
           case '多变量线性回归':
-              outcome.push(MutiVarLinearRegression(all_data))
-              this.outputdata(stream[k].id, outcome[0], propsAPI);
+              outcome = MutiVarLinearRegression(all_data);
+              this.outputdata(stream[k].id, outcome, propsAPI);
               break
           case '单变量多项式回归':
-              outcome.push(OneVarPolynomialRegression(all_data))
-              this.outputdata(stream[k].id, outcome[0], propsAPI);
+              outcome = OneVarPolynomialRegression(all_data);
+              this.outputdata(stream[k].id, outcome, propsAPI);
               break
           case '决策树回归':
-              outcome.push(DecisionTreeRegression(all_data))
-              this.outputdata(stream[k].id, outcome[0], propsAPI);
+              outcome = DecisionTreeRegression(all_data);
+              this.outputdata(stream[k].id, outcome, propsAPI);
               break
           case '随机森林回归':
-              outcome.push(RandomForest(all_data))
-              this.outputdata(stream[k].id, outcome[0], propsAPI);
+              outcome = RandomForest(all_data);
+              this.outputdata(stream[k].id, outcome, propsAPI);
               break
           case '朴素贝叶斯':
-              outcome.push(NaiveBayes(all_data))
-              this.outputdata(stream[k].id, outcome[0], propsAPI);
+              outcome = NaiveBayes(all_data)
+              this.outputdata(stream[k].id, outcome, propsAPI);
+              break
+          case '支持向量机':
+              outcome = SVM(all_data)
+              this.outputdata(stream[k].id, outcome, propsAPI);
               break
           case '缺失值填充':
-              outcome.push(FillNa(all_data))
-              this.outputdata(stream[k].id, outcome[0][1], propsAPI);
+              outcome = FillNa(all_data);
+              this.outputdata(stream[k].id, outcome[1], propsAPI);
               break
           case '归一化':
-              outcome.push(Scaler(all_data))
-              this.outputdata(stream[k].id, outcome[0][1], propsAPI);
+              outcome = Scaler(all_data);
+              this.outputdata(stream[k].id, outcome[1], propsAPI);
               break
           case '卷积神经网络':
               this.showModal()
               runMnist()
               break
-          case '朴素贝叶斯':
-              NaiveBayes()
-              break
-          case '特征二进制化':
-              outcome.push(featureBinary(all_data));
-              this.outputdata(stream[k].id, outcome[0], propsAPI);
-              break;
-          // case 'Input':
-          //   // INPUT(stream[k].id);
-          //   break;
-          // case 'Output':
-          //   OUTPUT(stream[k].id);
-          //   break;
-          // case 'DenseNet':
-          //   DENSENET(stream[k].id);
-          //   break;
-          // case 'ConvNet':
-          //   CONVNET(stream[k].id);
-          //   break;
-          // case 'FillNa':
-          //   FILLNA(stream[k].id);
-          //   break;
-          // case 'MaxMinScaler':
-          //   MAXMINSCALER(stream[k].id);
-          //   break;
           default:
             break;
         }
@@ -340,23 +246,14 @@ class Run extends Component{
     const currentitem = find(id);
     var all_data = [];
     const inf = propsAPI.save();
-    let labelArray = [];
-    if(currentitem.model.select_status > 1){
-      const modelarray = currentitem.model.labelArray;
-      for(let m in modelarray){
-        let labelarr = [];
-        for(let k in modelarray[m]){
-          if(modelarray[m][k][1] === true)
-            labelarr.push(modelarray[m][k][0])
-        }
-        labelArray.push(labelarr);
-      }
-    }
-    else {
-      const modelarray = currentitem.model.labelArray;
-      for(let m in modelarray){
-        if(modelarray[m][1] === true)
-          labelArray.push(modelarray[m][0])
+    let labelArray = {};
+
+    const label = currentitem.model.labelArray;
+    for(let i in label){
+      labelArray[i] = new Array();
+      for(let j in label[i]){
+        if(label[i][j][1] === true)
+          labelArray[i].push(label[i][j][0]);
       }
     }
     console.log('labelArray:')
@@ -368,7 +265,13 @@ class Run extends Component{
     for (let k in inf.edges){
       if(inf.edges[k].target === id){
         let item = find(inf.edges[k].source);
-        var re = JSON.parse(JSON.stringify(item.model.Dataset))
+        var re;
+        if(item.model.anchor[1] === 2){
+          re = JSON.parse(JSON.stringify(item.model.Dataset[inf.edges[k].sourceAnchor-item.model.anchor[0]]));
+        }
+        else if(item.model.anchor[1] === 1){
+          re = JSON.parse(JSON.stringify(item.model.Dataset));
+        }
         all_data[inf.edges[k].targetAnchor+1]={
           Dataset: re,
           length: item.model.length,

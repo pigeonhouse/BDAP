@@ -4,8 +4,8 @@ export function OneVarLinearRegression(allData){
 
     console.log(allData)
 
-    const trainFeatureName = allData[0].labelArray[0][0];
-    const trainLabelName = allData[0].labelArray[1][0];
+    const trainFeatureName = allData[0].labelArray.train_x[0];
+    const trainLabelName = allData[0].labelArray.train_y[0];
     // const testFeatureName = allData[0].labelArray[2][0];
     // const testLabelName = allData[0].all_attr['预测集列名']
 
@@ -14,11 +14,11 @@ export function OneVarLinearRegression(allData){
     var testFeatureValue = new Array();
 
     for(let i = 0; i < allData[1].Dataset.length; i++){
-        if(allData[1].Dataset[i][0].label==trainFeatureName){
-            trainFeatureValue.push(allData[1].Dataset[i][0].value)
+        if(allData[1].Dataset[i].label==trainFeatureName){
+            trainFeatureValue.push(allData[1].Dataset[i].value)
         }
         else if (allData[1].Dataset[i][0].label==trainLabelName){
-            trainLabelValue.push(allData[1].Dataset[i][0].value)
+            trainLabelValue.push(allData[1].Dataset[i].value)
         }
     }
     // for(let i = 0; i < allData[2].Dataset.length; i++){

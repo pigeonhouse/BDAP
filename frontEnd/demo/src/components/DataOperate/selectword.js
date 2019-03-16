@@ -13,8 +13,6 @@ class Selectword extends Component{
         labelArray: []
     }
     featuresOperate=(label)=>{
-        // console.log('update')
-        // console.log(this.state.labelArray)
         if(label === '特征区间化' 
         || label === '特征分组归类')
         return <Feature
@@ -38,27 +36,52 @@ class Selectword extends Component{
             })
         }
     }
+    isChange=(labelA, labelB)=>{
+        if(!labelA || !labelB || labelA.length != labelB.length) return true;
+        for(let i in labelA){
+            if(labelA[i][0] !== labelB[i][0])
+                return true;
+        }
+        return false;
+    }
+    findSourceLabel=(item)=>{
+        if(item.model.anchor[0] === 1 || !item.model.anchor[0])
+            return item.model.labelArray.public?item.model.labelArray.public:[];
+        else if(item.model.anchor[0] === 2){
+            return [...item.model.labelArray.text_x,...item.model.labelArray.text_y];
+        }
+    }
+    changelabelArray=(labelA, labelB)=>{
+        if(this.isChange(labelA, labelB)){
+            let labelArray = [];
+            for(let i in labelB){
+                labelArray.push([labelB[i][0], false]);
+            }
+            return labelArray?labelArray:[];
+        }
+        else return labelA?labelA:[];
+    }
     displayTransfer = () => {
         const { propsAPI } = this.props;
         const { find, getSelected } = propsAPI;
         var item = getSelected()[0];
+        var sourceitem = find(this.props.sourceid);
         var labelArray = [];
-        if(item.model.select_status > 1 && item.model.labelArray[this.props.index].length !== 0){
-            labelArray = item.model.labelArray[this.props.index];
+        const sourcelabel = this.findSourceLabel(sourceitem);
+        if(item.model.anchor[0] === 1){
+            labelArray = this.changelabelArray(item.model.labelArray.public, sourcelabel)
         }
-        else if(item.model.select_status === 1 && item.model.labelArray.length !== 0){
-            labelArray = item.model.labelArray;
-        }
-        else {
-            item = find(this.props.id);
-            if(item.model.select_status > 1){
-                let tail = item.model.labelArray.length-1;
-                for(var i in item.model.labelArray[tail])
-                    labelArray.push([item.model.labelArray[tail][i][0], false]);
-            }
-            else {
-                for(var i in item.model.labelArray)
-                    labelArray.push([item.model.labelArray[i][0], false]);
+        else if(item.model.anchor[0] === 2){
+            switch(this.props.index){
+                case 0:
+                    labelArray = this.changelabelArray(item.model.labelArray.train_x, sourcelabel)
+                    break;
+                case 1:
+                    labelArray = this.changelabelArray(item.model.labelArray.train_y, sourcelabel)
+                    break;
+                case 2:
+                    labelArray = this.changelabelArray(item.model.labelArray.text_x, sourcelabel)
+                    break;
             }
         }
         let mockdata = [];
@@ -94,13 +117,24 @@ class Selectword extends Component{
             else labelArray.push([mockdata[i].title, false]);
         }
         let labelarray = [];
-        if(item.model.select_status > 1)
+        if(item.model.anchor[0] === 2)
         {
             labelarray = JSON.parse(JSON.stringify(item.model.labelArray))
-            labelarray[this.props.index] = labelArray;
+            switch(this.props.index){
+                case 0:
+                    labelarray.train_x = labelArray;
+                    break;
+                case 1:
+                    labelarray.train_y = labelArray;
+                    break;
+                case 2:
+                    labelarray.text_x = labelArray;
+                    break;
+            }
         }
-        else {
-            labelarray = labelArray;
+        else if(item.model.anchor[0] === 1){
+            labelarray = JSON.parse(JSON.stringify(item.model.labelArray));
+            labelarray.public = labelArray;
         }
         const values = {labelArray:labelarray};
         executeCommand(()=>{
@@ -111,7 +145,7 @@ class Selectword extends Component{
         console.log(propsAPI.save())
         this.setState({
             visible: false,
-            labelArray: labelarray
+            labelArray: labelArray
         });
     }
     
@@ -131,10 +165,9 @@ class Selectword extends Component{
         console.log('search:', dir, value);
     };
     isSelect=()=>{
-        if(this.props.id === 0)
-        return (<div><Button style={{width:'100%'}} disabled>选择字段</Button></div>)
+        if(this.props.sourceid === 0)
+        return (<Button style={{width:'100%'}} disabled>选择字段</Button>)
         else return <Button style={{width:'100%'}} onClick={this.displayTransfer}>选择字段</Button>
-
     }
     render(){
         return (
@@ -145,7 +178,7 @@ class Selectword extends Component{
                     onOk={this.handleOk} onCancel={this.handleCancel}
                     style={{}}
                 >
-                    <div  style={{textAlign: 'center'}}>
+                    <div style={{textAlign:'center'}}>
                         <Transfer
                             dataSource={this.state.mockData}
                             showSearch
