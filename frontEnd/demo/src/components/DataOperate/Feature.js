@@ -1,9 +1,10 @@
-import React, {Component} from 'react'
+import React, {Component, Fragment} from 'react'
 import { withPropsAPI } from '@src';
 import { Divider } from 'antd'
-import FeatureRegion from './FeatureRegion.js'
-import FeatureGroup from './FeatureGroup.js'
-import FeatureBinary from './FeatureBinary.js'
+import FeatureRegion from './Feature/FeatureRegion'
+import FeatureGroup from './Feature/FeatureGroup'
+import FillNa from './Feature/fillNa'
+import Randis from './Feature/Randis'
 
 class Feature extends Component{
     constructor(props){
@@ -13,38 +14,50 @@ class Feature extends Component{
             labelArray:[]
         }
     }
-    shouldComponentUpdate(){
-      if(this.state.labelArray.length === 0)
-      return true;
-      const { propsAPI } = this.props;
-      const { getSelected } = propsAPI;
-      const item = getSelected()[0];
-      for(let i in item.model.labelArray){
-        if(item.model.labelArray[i][1] !== this.state.labelArray[i][1]){
-          return true;
-        }
-      }
-      return false;
+    featureType=(tag, label)=>{
+        switch(label){
+            case '特征区间化':
+                return  <Fragment>
+                            <Divider>{tag}</Divider>
+                            <FeatureRegion 
+                            tag = {tag}/>
+                            <Divider></Divider>
+                        </Fragment>
+            case '特征分组归类':
+                return  <Fragment>
+                            <Divider>{tag}</Divider>
+                            <FeatureGroup
+                            tag = {tag}/>
+                            <Divider></Divider>
+                        </Fragment>
+            case '特征二进制化':
+                return <Divider>{tag}</Divider>
+            }
     }
-    featureType=(tag)=>{
-      const { propsAPI } = this.props;
-      const { getSelected} = propsAPI;
-      const item = getSelected()[0];
-      if(item.model.label === '特征区间化'){
-        return <FeatureRegion 
-              tag = {tag}/>
-      }
-      else if(item.model.label === '特征分组归类')
-      return <FeatureGroup
-              tag = {tag}/>
+    isDynamic = (arr)=>{
+        const { propsAPI } = this.props;
+        const { getSelected} = propsAPI;
+        const item = getSelected()[0];
+        const label = item.model.label;
+        switch(label){
+            case '缺失值填充':
+                return <Fragment>
+                    填充值：<FillNa/>
+                </Fragment>
+            case '数据随机划分':
+                return <Fragment>
+                    划分比例：<Randis/>
+                </Fragment>
+        }
+        return arr.map((item)=>{
+                return  <Fragment>
+                            {this.featureType(item, label)}
+                        </Fragment>
+            })
     }
     render(){
         var arr=[];
-        let labelArray
-        if(this.props.labelArray){
-          labelArray = this.props.labelArray;
-        }
-        else labelArray = this.state.labelArray;
+        let labelArray = this.props.labelArray;
         for(let i in labelArray){
             if(labelArray[i][1]){
                 arr.push(labelArray[i][0]);
@@ -52,13 +65,7 @@ class Feature extends Component{
         }
         return (
             <div>
-                {arr.map((item)=>{
-                    return  <div>
-                            <Divider>{item}</Divider>
-                            {this.featureType(item)}
-                            <Divider></Divider>
-                        </div>
-                })}
+                {this.isDynamic(arr)}
             </div>
         );
     }

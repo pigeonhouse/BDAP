@@ -4,76 +4,76 @@ import { Form, Icon, Button, Input, Select } from 'antd'
 import './feature.less'
 
 class FeatureGroup extends Component {
-    constructor(props){
-        super(props);
-        this.state={
-            id: 1,
-            names: [undefined],
-            tags: [undefined]
-        }
-    }
-    handleSubmit = (e) => {
-      e.preventDefault();
-
-      const { form, propsAPI } = this.props;
-      const { getSelected, executeCommand, update } = propsAPI;
-  
-      form.validateFieldsAndScroll((err, values) => {
-        if (err) {
-          return;
-        }
-        const item = getSelected()[0];
-        if (!item) {
-          return;
-        }
-        const attr = item.model.attr;
-        attr[this.props.tag] = {...values};
-        executeCommand(() => {
-          update(item,{attr:attr});
-        });
-        this.setState({
-          tags: values.tags,
-          names: values.names
-        })
-      });
-    }
-    add=()=>{
-      let names = this.state.names;
-      names.length++;
-      let tags = this.state.tags;
-      tags.length++;
-      this.setState({
-        id: this.state.id+1,
-        names: names,
-        tags: tags
-      })
-    }
-    remove=(index)=>{
-      let names = [];
-      let tags = [];
-      for(let i in this.state.names){
-        if(Number(i) !== index){
-          names.push(this.state.names[i]);
-          tags.push(this.state.tags[i]);
-        }
+  constructor(props){
+      super(props);
+      this.state={
+          id: 1,
+          names: [undefined],
+          tags: [undefined]
       }
-      const { propsAPI } = this.props;
-      const { getSelected, executeCommand, update } = propsAPI;
+  }
+  handleSubmit = (e) => {
+    e.preventDefault();
+
+    const { form, propsAPI } = this.props;
+    const { getSelected, executeCommand, update } = propsAPI;
+
+    form.validateFieldsAndScroll((err, values) => {
+      if (err) {
+        return;
+      }
       const item = getSelected()[0];
+      if (!item) {
+        return;
+      }
       const attr = item.model.attr;
-      attr[this.props.tag] = {names: names, tags: tags};
+      attr[this.props.tag] = {...values};
       executeCommand(() => {
-        update(item,{attr});
+        update(item,{attr:attr});
       });
       this.setState({
-        names: names,
-        tags: tags,
-        id: this.state.id-1
+        tags: values.tags,
+        names: values.names
       })
+    });
+  }
+  add=()=>{
+    let names = this.state.names;
+    names.length++;
+    let tags = this.state.tags;
+    tags.length++;
+    this.setState({
+      id: this.state.id+1,
+      names: names,
+      tags: tags
+    })
+  }
+  remove=(index)=>{
+    let names = [];
+    let tags = [];
+    for(let i in this.state.names){
+      if(Number(i) !== index){
+        names.push(this.state.names[i]);
+        tags.push(this.state.tags[i]);
+      }
     }
-    handleSelect=(value)=>{
-      console.log(value);
-    }
+    const { propsAPI } = this.props;
+    const { getSelected, executeCommand, update } = propsAPI;
+    const item = getSelected()[0];
+    const attr = item.model.attr;
+    attr[this.props.tag] = {names: names, tags: tags};
+    executeCommand(() => {
+      update(item,{attr});
+    });
+    this.setState({
+      names: names,
+      tags: tags,
+      id: this.state.id-1
+    })
+  }
+  handleSelect=(value)=>{
+    console.log(value);
+  }
   render() {
     const { getFieldDecorator } = this.props.form;
     const inlineFormItemLayout = {

@@ -1,4 +1,4 @@
-import React, {Component, Fragment} from 'react'
+import React, { Component } from 'react'
 import { withPropsAPI } from '@src';
 import { Form, Icon, Button, Select, InputNumber, Input } from 'antd'
 import './feature.less'
@@ -9,9 +9,7 @@ class FeatureRegion extends Component {
       super(props);
       this.state={
         groupingType: "normal",
-        id: 0,
-        min:[],
-        max:[]
+        region:[[]]
       }
   }
   handleSubmit1 = (value) => {
@@ -42,118 +40,76 @@ class FeatureRegion extends Component {
       if (!item) {
         return;
       }
-      const attr = item.model.attr;
-      attr[this.props.tag] = ['user-defined', values];
+      let attr = item.model.attr;
+      const tag = this.props.tag;
+      for(let i in values.value){
+        attr[tag][Number(i)+1] = [values.value[i], values.min[i], values.max[i]];
+      }
+      console.log(attr[tag])
       executeCommand(() => {
         update(item,{attr});
       });
       this.setState({
-        min: values.min,
-        max: values.max
+        region: attr[tag].slice(1)
       })
     });
   }
   add=()=>{
-    let min = this.state.min;
-    min.length++;
-    let max = this.state.max;
-    max.length++;
-    this.setState({
-      id: this.state.id+1,
-      min: min,
-      max: max
-    })
-  }
-  remove=(index)=>{
-    let arrmin = [];
-    let arrmax = [];
-    for(let i in this.state.min){
-      if(Number(i) !== index){
-        arrmin.push(this.state.min[i]);
-        arrmax.push(this.state.max[i]);
-      }
-    }
     const { propsAPI } = this.props;
     const { getSelected, executeCommand, update } = propsAPI;
     const item = getSelected()[0];
-    const attr = item.model.attr;
-    attr[this.props.tag][1] = {min: arrmin, max: arrmax};
+    let attr = item.model.attr;
+    const tag = this.props.tag;
+    attr[tag].push([]);
     executeCommand(() => {
-      update(item,{attr});
+      update(item,{attr:attr});
     });
     this.setState({
-      min: arrmin,
-      max: arrmax,
-      id: this.state.id-1
+      region: attr[tag].slice(1)
     })
   }
-  returnitemmin=(min, index)=>{
-    const { getFieldDecorator } = this.props.form;
-    if(min)
-    return <Fragment>
-          {getFieldDecorator(`min[${index}]`)(
-          <Input 
-            defaultValue={min}
-            placeholder={'max'}
-            onChange={this.handleSubmit2}
-            onBlur={this.handleSubmit2}
-            style={{width:'30%'}}/>
-        )}
-    </Fragment>
-    else return <Fragment>
-                {getFieldDecorator(`min[${index}]`)(
-                <Input
-                  placeholder={'min'}
-                  onBlur={this.handleSubmit2}
-                  style={{width:'30%'}}/>
-              )}
-            </Fragment>
-  }
-  returnitemmax=(max, index)=>{
-    const { getFieldDecorator } = this.props.form;
-    if(max){
-      console.log(max)
-        return <Fragment>
-              {getFieldDecorator(`max[${index}]`)(
-                <Input
-                  placeholder={'max'}
-                  defaultValue={max}
-                  onChange={this.handleSubmit2}
-                  onBlur={this.handleSubmit2}
-                  style={{width:'30%'}}/>
-              )}
-            </Fragment>
-    }
-    else return <Fragment>
-              {getFieldDecorator(`max[${index}]`)(
-              <Input 
-                placeholder={'max'}
-                onBlur={this.handleSubmit2}
-                style={{width:'30%'}}/>
-            )}
-          </Fragment>
+  remove=(index)=>{
+    const { propsAPI } = this.props;
+    const { getSelected, executeCommand, update } = propsAPI;
+    const item = getSelected()[0];
+    let attr = JSON.parse(JSON.stringify(item.model.attr));
+    attr[this.props.tag].splice(index+1, 1);
+    executeCommand(() => {
+      update(item,{attr:attr});
+    });
+    this.setState({
+      region:attr[this.props.tag].slice(1)
+    })
   }
   isGroupingType=()=>{
+    const { propsAPI } = this.props;
+    const { getSelected, executeCommand, update } = propsAPI;
+    const item = getSelected()[0];
+    let attr = JSON.parse(JSON.stringify(item.model.attr));
+    const tag = this.props.tag;
     if(this.state.groupingType === 'normal'){
-      const { propsAPI } = this.props;
-      const { getSelected, executeCommand, update } = propsAPI;
-      const item = getSelected()[0];
-      const attr = item.model.attr;
-      attr[this.props.tag] = ['normal', 3];
+      let groupvalue = 3;
+      if(attr[tag] && attr[tag][0] === 'normal'){
+        groupvalue = attr[tag][1];
+      }
+      else {
+        attr[tag] = ['normal', 3];
+      }
       executeCommand(() => {
-        update(item,{attr});
+        update(item,{attr:attr});
       });
       return <div>
         组数：&nbsp;&nbsp;&nbsp;
         <InputNumber 
           min={2} 
           max={10} 
-          defaultValue={3}
+          defaultValue={groupvalue}
           style={{margin:10, width:'65%', marginBottom:0}}
           onChange={this.handleSubmit1} />
       </div>
     }
     else if(this.state.groupingType === 'user-defined'){
+      const { getFieldDecorator } = this.props.form;
       const inlineFormItemLayout = {
           labelCol: {
             sm: { span: 6 },
@@ -162,26 +118,57 @@ class FeatureRegion extends Component {
             sm: { span: 24 },
           },
       };
-      const id = new Array(this.state.id).fill(0);
-      const min = this.state.min;
-      const max = this.state.max;
+      let region;
+      if(attr[tag]){
+        if(attr[tag][0] === 'user-defined'){
+          region = attr[tag].slice(1);
+        }
+        else {
+          attr[tag] = ['user-defined',[]];
+          executeCommand(() => {
+            update(item,{attr:attr});
+          });
+          region = attr[tag].slice(1);
+        }
+      }
+      else {
+        region = this.state.region;
+      }
       return  <Form>
-        {id.map((item, index)=>{
+        {region.map((item, index)=>{
           return <Item 
                   {...inlineFormItemLayout} 
                   style={{marginLeft:0}}
                   required={false}
                   key={index}
                 >
-          {`第${index}组`}：
             <Icon
               className="dynamic-delete-button"
               type="minus-circle-o"
               onClick={() => this.remove(index)}
-              style={{flex:'right'}}
+              style={{width:'10%', cursor:'pointer'}}
             />
-              {this.returnitemmin(min[index], index)}
-              {this.returnitemmax(max[index], index)}
+            {getFieldDecorator(`value[${index}]`)(
+              <Input 
+                placeholder='value'
+                onChange={this.handleSubmit2}
+                onBlur={this.handleSubmit2}
+                style={{width:'30%'}}/>
+            )}
+            {getFieldDecorator(`min[${index}]`)(
+              <Input 
+                placeholder='min'
+                onChange={this.handleSubmit2}
+                onBlur={this.handleSubmit2}
+                style={{width:'30%'}}/>
+            )}
+            {getFieldDecorator(`max[${index}]`)(
+              <Input
+                placeholder='max'
+                onChange={this.handleSubmit2}
+                onBlur={this.handleSubmit2}
+                style={{width:'30%'}}/>
+            )}
           </Item>
         })}
         <Item>
@@ -205,7 +192,7 @@ class FeatureRegion extends Component {
       <div>
         分组方式:&nbsp;&nbsp;&nbsp;
         <Select defaultValue="normal" style={{ width: 140 }} onChange={this.handleChange}>
-          <Option value="normal">正常分组</Option>
+          <Option value="normal">顺序分组</Option>
           <Option value="user-defined">自定义分组</Option>
         </Select>
         {this.isGroupingType()}

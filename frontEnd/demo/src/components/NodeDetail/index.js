@@ -2,10 +2,10 @@ import React from 'react';
 import { Card, Form, Input, Modal, Button } from 'antd';
 import { withPropsAPI } from '@src';
 import Selectword from '../DataOperate/selectword'
-import Show from '../DataOperate/Datashow/index.js'
 import Uploadfile from '../DataOperate/upload'
 import HdfsFile from '../DataOperate/hdfsFile'
 import styles from './index.less';
+import Feature from '../DataOperate/Feature'
 
 const { Item } = Form;
 
@@ -23,6 +23,19 @@ class NodeDetail extends React.Component {
   state = {
     visible: false,
     running : false,
+    labelArray:[]
+  }
+
+  componentWillMount(){
+    const {  propsAPI } = this.props;
+    const { getSelected } = propsAPI;
+    const item = getSelected()[0];
+    const { labelArray } = item.getModel();
+    if(labelArray.public){
+      this.setState({
+        labelArray:labelArray.public
+      })
+    }
   }
 
   handleSubmit = (e) => {
@@ -77,6 +90,18 @@ class NodeDetail extends React.Component {
       <Uploadfile ></Uploadfile>
     )
   }
+  isFeature = (group, label)=>{
+    if(group === 'feature'){
+      return <Feature
+              label={label}
+              labelArray = {this.state.labelArray}/>
+    }
+  }
+  changeLabelArray = (labelArray)=>{
+    this.setState({
+      labelArray
+    })
+  }
   render() {
     const { form, propsAPI } = this.props;
     const { getFieldDecorator } = form;
@@ -127,14 +152,6 @@ class NodeDetail extends React.Component {
               })(<Input onBlur={this.handleSubmit}/>)
             }
           </Item>
-          {targetid.map((value, index)=>{
-            return <Selectword 
-                      sourceid={value}
-                      label={label}
-                      index={index}
-                      style={{margin:0}}
-                    ></Selectword>;
-          })}
           {arr.map((item)=>{
             const itemKey = Object.keys(item)[0];
             var re = /^[0-9]+.?[0-9]*/;
@@ -147,10 +164,20 @@ class NodeDetail extends React.Component {
                           message: '请输入数字'
                         }]:[],
                         initialValue: item[itemKey],
-                      })(<Input style={{width:80}} onBlur={this.handleSubmit} />)
+                      })(<Input style={{width:80}} onBlur={this.handleSubmit}/>)
                     }
                   </Item>;
           })}
+          {targetid.map((value, index)=>{
+            return <Selectword 
+                      sourceid={value}
+                      label={label}
+                      index={index}
+                      style={{margin:0}}
+                      changeLabelArray={this.changeLabelArray}
+                    ></Selectword>;
+          })}
+          {this.isFeature(group, label)}
           {this.isInputOutput(label)}
         </Form>
       </Card>

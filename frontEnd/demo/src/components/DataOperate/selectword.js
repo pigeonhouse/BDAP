@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import { Button, Modal, Transfer } from 'antd'
 import { withPropsAPI } from '@src';
-import Feature from './Feature.js'
+
 class Selectword extends Component{
     constructor(props){
         super(props);
@@ -10,31 +10,6 @@ class Selectword extends Component{
         visible: false,
         mockData: [],
         targetKeys: [],
-        labelArray: []
-    }
-    featuresOperate=(label)=>{
-        if(label === '特征区间化' 
-        || label === '特征分组归类')
-        return <Feature
-                    label={label}
-                    labelArray={this.state.labelArray}
-                ></Feature>
-        else if(label === '特征二进制化'){
-            const { propsAPI } = this.props;
-            const { getSelected, executeCommand, update } = propsAPI;
-            const item = getSelected()[0];
-            let labelArray = [];
-            for(let i in this.state.labelArray){
-                if(this.state.labelArray[i][1]){
-                    labelArray.push(this.state.labelArray[i][0])
-                }
-            }
-            const attr = {attr: labelArray};
-            console.log(attr)
-            executeCommand(()=>{
-                update(item, {...attr})
-            })
-        }
     }
     isChange=(labelA, labelB)=>{
         if(!labelA || !labelB || labelA.length != labelB.length) return true;
@@ -143,9 +118,9 @@ class Selectword extends Component{
             })
         })
         console.log(propsAPI.save())
+        this.props.changeLabelArray(labelArray);
         this.setState({
             visible: false,
-            labelArray: labelArray
         });
     }
     
@@ -173,7 +148,6 @@ class Selectword extends Component{
         return (
             <div>
                 {this.isSelect()}
-                {this.featuresOperate(this.props.label)}
                 <Modal title="选择字段" visible={this.state.visible}
                     onOk={this.handleOk} onCancel={this.handleCancel}
                     style={{}}

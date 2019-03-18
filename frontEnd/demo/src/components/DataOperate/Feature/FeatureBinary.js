@@ -4,9 +4,12 @@ import { Input, Form } from 'antd'
 import './feature.less'
 const { Item } = Form;
 class FeatureBinary extends Component {
-    constructor(props){
-        super(props);
-    }
+  constructor(props){
+      super(props);
+  }
+  componentWillMount(){
+    
+  }
   handleSubmit = (e) => {
     e.preventDefault();
 
