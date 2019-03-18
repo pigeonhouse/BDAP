@@ -7,7 +7,7 @@ export function Randis(allData){
     for(let i = 0; i < Dataset.length ; i++){
         tem = 0;
         for(let j = 0; j < allData.labelArray.public.length; j++){
-            if(Dataset[i][0].label == allData.labelArray.public[j]){
+            if(Dataset[i].label == allData.labelArray.public[j]){
                 tem = 1;
             }
         }
@@ -25,7 +25,7 @@ export function Randis(allData){
     // var labelArray = [["id",true],["age",false],["score",true]];
     var tem1 = new Array(), tem2 = new Array(),tem;
     var flag;
-    for(let j= 0; j < Dataset[0][0].value.length; j++){
+    for(let j= 0; j < Dataset[0].value.length; j++){
         // console.log("pppppppppppppppppppppppppppppppp")
         // console.log(attr.public[0])
         flag = Math.random();
@@ -37,8 +37,8 @@ export function Randis(allData){
                     // console.log("xxxxxxxxxxxxxxxxxxx");
                     // console.log(tem1);
                     for(let l = 0; l < tem1.length;l++){
-                        if(tem1[l].label == Dataset[k][0].label){
-                            tem1[l].value.push(Dataset[k][0].value[j]);
+                        if(tem1[l].label == Dataset[k].label){
+                            tem1[l].value.push(Dataset[k].value[j]);
                             flag = 1;
                             break;
                         }
@@ -46,8 +46,8 @@ export function Randis(allData){
                     if(flag == 0){
                         tem = new Array();
                         tem['value'] = new Array();
-                        tem['label'] = Dataset[k][0].label;
-                        tem['value'].push(Dataset[k][0].value[j]);
+                        tem['label'] = Dataset[k].label;
+                        tem['value'].push(Dataset[k].value[j]);
                         tem1.push(tem);
                     }
 
@@ -61,8 +61,8 @@ export function Randis(allData){
                     // console.log("kkkkkkkkkkkkkkkkkkkkkkkk");
                     // console.log(tem1);
                     for(let l = 0; l < tem2.length;l++){
-                        if(tem2[l].label == Dataset[k][0].label){
-                            tem2[l].value.push(Dataset[k][0].value[j]);
+                        if(tem2[l].label == Dataset[k].label){
+                            tem2[l].value.push(Dataset[k].value[j]);
                             flag = 1;
                             break;
                         }
@@ -70,8 +70,8 @@ export function Randis(allData){
                     if(flag == 0){
                         tem = new Array();
                         tem['value'] = new Array();
-                        tem['label'] = Dataset[k][0].label;
-                        tem['value'].push(Dataset[k][0].value[j]);
+                        tem['label'] = Dataset[k].label;
+                        tem['value'].push(Dataset[k].value[j]);
                         tem2.push(tem);
                     }
 

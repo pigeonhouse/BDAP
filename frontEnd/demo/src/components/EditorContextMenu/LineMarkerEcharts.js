@@ -20,15 +20,15 @@ const LineMarkerEcharts = createReactClass({
     
     getOtion: function(props, index) {
         if(index[0] == undefined){v0 =[]}
-        else{var v0 = props[index[0]][0].value;}
+        else{var v0 = props[index[0]].value;}
         if(index[1] == undefined){v1 = [], l1 = ""}
-        else{var l1 = props[index[1]][0].label; var v1 = props[index[1]][0].value;}
+        else{var l1 = props[index[1]].label; var v1 = props[index[1]].value;}
         if(index[2] == undefined){v2 = [], l2 = ""}
-        else{var l2 = props[index[2]][0].label;  var v2 = props[index[2]][0].value;}
+        else{var l2 = props[index[2]].label;  var v2 = props[index[2]].value;}
         if(index[3] == undefined){v3 = [], l3 = ""}
-        else{var l3 = props[index[3]][0].label;  var v3 = props[index[3]][0].value;}
+        else{var l3 = props[index[3]].label;  var v3 = props[index[3]].value;}
         if(index[4] == undefined){v4 = [], l4 = ""}
-        else{var l4 = props[index[4]][0].label;  var v4 = props[index[4]][0].value;}
+        else{var l4 = props[index[4]].label;  var v4 = props[index[4]].value;}
         // console.log(props);
 
         var pi1 = [];
@@ -36,11 +36,11 @@ const LineMarkerEcharts = createReactClass({
         if(props.hasOwnProperty('length')){
             for(let k = 1; k < ind.length; k++){
                 let s = 0;
-                for(let p = 0; p < props[index[k]][0].value.length; p++){
-                    s+= props[index[k]][0].value[p];
+                for(let p = 0; p < props[index[k]].value.length; p++){
+                    s+= props[index[k]].value[p];
                 }
-                pi1.push({'name':props[index[k]][0].label,'value':s});
-                name1.push(props[index[k]][0].label);
+                pi1.push({'name':props[index[k]].label,'value':s});
+                name1.push(props[index[k]].label);
             }
         }
         var pieData = [pi1,name1];
@@ -170,7 +170,6 @@ const LineMarkerEcharts = createReactClass({
     },
     trans:function() {
         // this.props.trans();
-        console.log("111111111111111111111");
         this.props.trans();
     },
     render: function() {

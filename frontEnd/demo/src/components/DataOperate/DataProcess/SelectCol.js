@@ -7,7 +7,7 @@ export function SelectCol(allData){
     for(let i = 0; i < Dataset.length ; i++){
         tem = 0;
         for(let j = 0; j < allData.labelArray.public.length; j++){
-            if(Dataset[i][0].label == allData.labelArray.public[j]){
+            if(Dataset[i].label == allData.labelArray.public[j]){
                 tem = 1;
             }
         }

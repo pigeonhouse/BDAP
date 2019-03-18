@@ -42,8 +42,8 @@ class Select extends React.Component {
     for(let i in data){
         mockdata.push({
             key: i.toString(),
-            title: data[i][0].label,
-            description: data[i][0].label
+            title: data[i].label,
+            description: data[i].label
         });
     }
     this.setState({

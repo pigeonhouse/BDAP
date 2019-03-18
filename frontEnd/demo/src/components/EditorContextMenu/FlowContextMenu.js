@@ -45,18 +45,18 @@ class FlowContextMenu extends React.Component {
     var columns = new Array()
     for(let i = 0; i < currentData.length; i++){
       columns.push({
-                   title : currentData[i][0].label,
-                   dataIndex: currentData[i][0].label,
+                   title : currentData[i].label,
+                   dataIndex: currentData[i].label,
                    width : 50,
                  })
     }
     this.setState({col:columns})
     // console.log(currentData);
     var datas = new Array()
-    for(let i = 0; i < currentData[0][0].value.length; i++){
+    for(let i = 0; i < currentData[0].value.length; i++){
       var temp = new Array()
       for(let j = 0; j < currentData.length; j++){
-        temp[currentData[j][0].label] = currentData[j][0].value[i]
+        temp[currentData[j].label] = currentData[j].value[i]
       }
       datas.push(temp)
     }
@@ -70,24 +70,24 @@ class FlowContextMenu extends React.Component {
       let tem_avr = 0;
       let tem_min;
       let tem_max;
-      for(let k = 0; k < currentData[i][0].value.length; k++)
-        if(currentData[i][0].value[k] != null){
-          tem_min = currentData[i][0].value[k];
-          tem_max = currentData[i][0].value[k];
+      for(let k = 0; k < currentData[i].value.length; k++)
+        if(currentData[i].value[k] != null){
+          tem_min = currentData[i].value[k];
+          tem_max = currentData[i].value[k];
         }
-      for(let k = 0; k < currentData[i][0].value.length; k++){
-        tem_avr += currentData[i][0].value[k];
-        if(currentData[i][0].value[k] > tem_max){
-          tem_max = currentData[i][0].value[k];
+      for(let k = 0; k < currentData[i].value.length; k++){
+        tem_avr += currentData[i].value[k];
+        if(currentData[i].value[k] > tem_max){
+          tem_max = currentData[i].value[k];
         }
-        if(currentData[i][0].value[k]!=null && currentData[i][0].value[k] < tem_min){
-          tem_min = currentData[i][0].value[k];
+        if(currentData[i].value[k]!=null && currentData[i].value[k] < tem_min){
+          tem_min = currentData[i].value[k];
         }
       }
-      tem_avr = tem_avr/currentData[i][0].value.length;
-      s1[currentData[i][0].label]=tem_avr;
-      s2[currentData[i][0].label]=tem_max;
-      s3[currentData[i][0].label]=tem_min;
+      tem_avr = tem_avr/currentData[i].value.length;
+      s1[currentData[i].label]=tem_avr;
+      s2[currentData[i].label]=tem_max;
+      s3[currentData[i].label]=tem_min;
     }
     datas.push(s1);
     datas.push(s2);

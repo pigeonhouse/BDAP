@@ -6,7 +6,7 @@ export function StrToNum(allData){
     for(let i = 0; i < Dataset.length ; i++){
         tem = 0;
         for(let j = 0; j < allData.labelArray.public.length; j++){
-            if(Dataset[i][0].label == allData.labelArray.public[j]){
+            if(Dataset[i].label == allData.labelArray.public[j]){
                 tem = 1;
             }
         }
@@ -27,13 +27,13 @@ export function StrToNum(allData){
     // console.log(Dataset);
     for(let i = 0; i < labelArray.length;i++){
         if(labelArray[i][1] == true){
-            for(let j = 0; j < Dataset[i][0].value.length; j++){
+            for(let j = 0; j < Dataset[i].value.length; j++){
                 for(let k = 0; k < attr.id.length; k++){
                     for(let l = 1;l < attr.id[k].length;l++ ){
-                        if(Dataset[i][0].value[j] == attr.id[k][l]){
+                        if(Dataset[i].value[j] == attr.id[k][l]){
                             // console.log("111111111111111111111");
                             // console.log(Dataset);
-                            Dataset[i][0].value[j] = attr.id[k][0];
+                            Dataset[i].value[j] = attr.id[k][0];
                         }
                     }
                 }

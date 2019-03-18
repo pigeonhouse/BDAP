@@ -7,7 +7,7 @@ export function fillNa(allData){
     for(let i = 0; i < Dataset.length ; i++){
         tem = 0;
         for(let j = 0; j < allData.labelArray.public.length; j++){
-            if(Dataset[i][0].label == allData.labelArray.public[j]){
+            if(Dataset[i].label == allData.labelArray.public[j]){
                 tem = 1;
             }
         }
@@ -30,24 +30,24 @@ export function fillNa(allData){
     for(let i = 0; i < labelArray.length;i++){
         if(labelArray[i][1] == true){
             if(attr.type == 'average'){
-                for(let j =0; j < Dataset[i][0].value.length;j++)
-                    if(Dataset[i][0].value[j] == null)
-                        Dataset[i][0].value[j] = stat[j].average;
+                for(let j =0; j < Dataset[i].value.length;j++)
+                    if(Dataset[i].value[j] == null)
+                        Dataset[i].value[j] = stat[j].average;
             }
             else if(attr.type == 'max'){
-                for(let j =0; j < Dataset[i][0].value.length;j++)
-                    if(Dataset[i][0].value[j] == null)
-                        Dataset[i][0].value[j] = stat[j].max;
+                for(let j =0; j < Dataset[i].value.length;j++)
+                    if(Dataset[i].value[j] == null)
+                        Dataset[i].value[j] = stat[j].max;
             }
             else if(attr.type == 'min'){
-                for(let j =0; j < Dataset[i][0].value.length;j++)
-                    if(Dataset[i][0].value[j] == null)
-                        Dataset[i][0].value[j] = stat[j].min;
+                for(let j =0; j < Dataset[i].value.length;j++)
+                    if(Dataset[i].value[j] == null)
+                        Dataset[i].value[j] = stat[j].min;
             }
             else if(attr.type == 'media'){
-                for(let j =0; j < Dataset[i][0].value.length;j++)
-                    if(Dataset[i][0].value[j] == null)
-                        Dataset[i][0].value[j] = stat[j].media;
+                for(let j =0; j < Dataset[i].value.length;j++)
+                    if(Dataset[i].value[j] == null)
+                        Dataset[i].value[j] = stat[j].media;
             }
         }
     }
