@@ -23,7 +23,7 @@ class NodeDetail extends React.Component {
   state = {
     visible: false,
     running : false,
-    labelArray:[]
+    labelArray:[],
   }
 
   componentWillMount(){
@@ -90,16 +90,17 @@ class NodeDetail extends React.Component {
       <Uploadfile ></Uploadfile>
     )
   }
-  isFeature = (group, label)=>{
+  isFeature = (group, label, sourceID)=>{
     if(group === 'feature'){
       return <Feature
               label={label}
+              sourceID = {sourceID}
               labelArray = {this.state.labelArray}/>
     }
   }
   changeLabelArray = (labelArray)=>{
     this.setState({
-      labelArray
+      labelArray,
     })
   }
   render() {
@@ -177,7 +178,7 @@ class NodeDetail extends React.Component {
                       changeLabelArray={this.changeLabelArray}
                     ></Selectword>;
           })}
-          {this.isFeature(group, label)}
+          {this.isFeature(group, label, targetid[0])}
           {this.isInputOutput(label)}
         </Form>
       </Card>

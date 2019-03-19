@@ -1,18 +1,38 @@
-import React, {Component} from 'react'
+import React, { Component } from 'react'
 import { withPropsAPI } from '@src';
-import { Form, Icon, Button, Input, Select } from 'antd'
+import { Form, Icon, Button, Select, Input } from 'antd'
 import './feature.less'
-
+const { Item } = Form;
+const Option = Select.Option;
 class FeatureGroup extends Component {
   constructor(props){
       super(props);
       this.state={
-          id: 1,
-          names: [undefined],
-          tags: [undefined]
+        group:[[]],
+        stat: [],
+        children:[]
       }
   }
-  handleSubmit = (e) => {
+  componentWillMount(){
+    const { propsAPI } = this.props;
+    const { getSelected } = propsAPI;
+    const item = getSelected()[0];
+    let attr = JSON.parse(JSON.stringify(item.model.attr));
+    const tag = this.props.tag;
+    if(attr[tag]){
+      this.setState({
+        group: attr[tag]
+      })
+    }
+    let children = new Array;
+    this.state.stat.map((value, index)=>{
+      children.push(<Option key={index}>{value.name}</Option>)
+    })
+    this.setState({
+      children
+    })
+  }
+  handleSubmitInput = (e) => {
     e.preventDefault();
 
     const { form, propsAPI } = this.props;
@@ -26,55 +46,71 @@ class FeatureGroup extends Component {
       if (!item) {
         return;
       }
-      const attr = item.model.attr;
-      attr[this.props.tag] = {...values};
+      let attr = JSON.parse(JSON.stringify(item.model.attr));
+      const tag = this.props.tag;
+      var re = /^[0-9]+.?[0-9]*/;
+      for(let i in values.name){
+        let temp = re.test(values.name[i])?Number(values.name[i]):values.name[i];
+        attr[tag][i][0] = temp;
+      }
       executeCommand(() => {
-        update(item,{attr:attr});
+        update(item,{attr});
       });
       this.setState({
-        tags: values.tags,
-        names: values.names
+        group: attr[tag]
       })
     });
   }
-  add=()=>{
-    let names = this.state.names;
-    names.length++;
-    let tags = this.state.tags;
-    tags.length++;
-    this.setState({
-      id: this.state.id+1,
-      names: names,
-      tags: tags
-    })
-  }
-  remove=(index)=>{
-    let names = [];
-    let tags = [];
-    for(let i in this.state.names){
-      if(Number(i) !== index){
-        names.push(this.state.names[i]);
-        tags.push(this.state.tags[i]);
-      }
-    }
+  handleSubmitSelect(index, value){
     const { propsAPI } = this.props;
     const { getSelected, executeCommand, update } = propsAPI;
     const item = getSelected()[0];
-    const attr = item.model.attr;
-    attr[this.props.tag] = {names: names, tags: tags};
+    if (!item) {
+      return;
+    }
+    let attr = JSON.parse(JSON.stringify(item.model.attr));
+    const tag = this.props.tag;
+    attr[tag][index] = attr[tag][index]?[attr[tag][index][0], ...value]:[undefined, ...value];
     executeCommand(() => {
       update(item,{attr});
     });
     this.setState({
-      names: names,
-      tags: tags,
-      id: this.state.id-1
+      group:attr[tag]
     })
   }
-  handleSelect=(value)=>{
-    console.log(value);
+  add=()=>{
+    const { propsAPI } = this.props;
+    const { getSelected, executeCommand, update } = propsAPI;
+    const item = getSelected()[0];
+    let attr = JSON.parse(JSON.stringify(item.model.attr));
+    const tag = this.props.tag;
+    attr[tag].push([]);
+    executeCommand(() => {
+      update(item,{attr});
+    });
+    this.setState({
+      group: attr[tag]
+    })
+  }
+  remove=(index)=>{
+    const { propsAPI } = this.props;
+    const { getSelected, executeCommand, update } = propsAPI;
+    const item = getSelected()[0];
+    let attr = JSON.parse(JSON.stringify(item.model.attr));
+    attr[this.props.tag].splice(index, 1);
+    executeCommand(() => {
+      update(item,{attr:attr});
+    });
+    this.setState({
+      region:attr[this.props.tag]
+    })
   }
   render() {
+    const { propsAPI } = this.props;
+    const { getSelected, update } = propsAPI;
+    const item = getSelected()[0];
+    let attr = JSON.parse(JSON.stringify(item.model.attr));
+    const tag = this.props.tag;
     const { getFieldDecorator } = this.props.form;
     const inlineFormItemLayout = {
         labelCol: {
@@ -84,45 +120,62 @@ class FeatureGroup extends Component {
           sm: { span: 24 },
         },
     };
-    const id = new Array(this.state.id).fill(0);
-    const names = this.state.names;
-    const tags = this.state.tags;
-    const formItems = id.map((item, index) => (
-      <Form.Item
-        style={{marginLeft:0}}
-        {...inlineFormItemLayout}
-        required={false}
-        key={item}
-      >
-        {`${index}组名`}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{`组内:`}
-        <Icon
-            className="dynamic-delete-button"
-            type="minus-circle-o"
-            disabled={id.length === 1}
-            onClick={() => this.remove(index)}
-          />
-        <br/>
-        {getFieldDecorator(`names[${index}]`)(
-          <Input value={names[index]?names[index]:''} onBlur={this.handleSubmit} style={{width:'30%'}}/>
-        )}
-        {getFieldDecorator(`tags[${index}]`)(
-          <Select
-          mode="tags"
-          style={{marginLeft:'5%',width:'65%'}}
-          onBlur={this.handleSelect}
-        />
-          // <Input value={tags[index]?tags[index]:''} onBlur={this.handleSubmit} style={{marginLeft:'5%',width:'65%'}}/>
-        )}
-      </Form.Item>
-    ));
+    let group;
+    if(attr[tag]){
+      group = attr[tag];
+    }
+    else {
+      group = this.state.group;
+      attr[tag] = group;
+      update(item, {attr})
+    }
     return (
-      <Form onSubmit={this.handleSubmit}>
-        {formItems}
-        <Form.Item>
-          <Button type="dashed" onClick={this.add} style={{width:'200px'}}>
-            <Icon type="plus" /> Add group
-          </Button>
-        </Form.Item>
+      <Form>
+        {group.map((item, index)=>{
+          return <Item 
+                  {...inlineFormItemLayout} 
+                  style={{marginLeft:0}}
+                  required={false}
+                  key={index}
+                >
+                <div style={{ width: '100%' }}>
+                  组名：
+                  {getFieldDecorator(`name[${index}]`,item[0]?{
+                    initialValue: item[0]}:{}
+                  })(
+                    <Input 
+                      onChange={this.handleSubmitInput}
+                      onBlur={this.handleSubmitInput}
+                      style={{width:'70%'}}/>
+                  )}
+                  <Icon
+                    className="dynamic-delete-button"
+                    type="minus-circle-o"
+                    onClick={() => this.remove(index)}
+                    style={{width:'10%', cursor:'pointer'}}
+                  />
+                </div>
+                <div>
+                  标签：
+                  {getFieldDecorator(`value[${index}]`, item.slice(1)?{
+                    initialValue: item.slice(1)}:{}
+                  )(
+                    <Select
+                      mode="tags"
+                      style={{ width: '80%' }}
+                      onChange={this.handleSubmitSelect.bind(this, index)}
+                    >
+                      {/* {this.state.children} */}
+                    </Select>,
+                  )}
+                </div>
+            </Item>
+          })}
+          <Item>
+            <Button type="dashed" onClick={this.add} style={{width:'100%'}}>
+                <Icon type="plus" /> Add group
+            </Button>
+          </Item>
       </Form>
     );
   }

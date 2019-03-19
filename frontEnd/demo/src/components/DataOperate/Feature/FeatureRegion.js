@@ -12,6 +12,16 @@ class FeatureRegion extends Component {
         region:[[]]
       }
   }
+  componentWillMount(){
+    const { propsAPI } = this.props;
+    const { getSelected, executeCommand, update } = propsAPI;
+    const item = getSelected()[0];
+    const attr = item.model.attr;
+    if(attr[this.props.tag])
+    this.setState({
+      groupingType:attr[this.props.tag][0]
+    })
+  }
   handleSubmit1 = (value) => {
     const { propsAPI } = this.props;
     const { getSelected, executeCommand, update } = propsAPI;
@@ -43,9 +53,10 @@ class FeatureRegion extends Component {
       let attr = item.model.attr;
       const tag = this.props.tag;
       for(let i in values.value){
-        attr[tag][Number(i)+1] = [values.value[i], values.min[i], values.max[i]];
+        attr[tag][Number(i)+1] = [Number(values.value[i]), 
+                                  Number(values.min[i]), 
+                                  Number(values.max[i])];
       }
-      console.log(attr[tag])
       executeCommand(() => {
         update(item,{attr});
       });
@@ -136,43 +147,83 @@ class FeatureRegion extends Component {
       }
       return  <Form>
         {region.map((item, index)=>{
+          console.log(item)
           return <Item 
                   {...inlineFormItemLayout} 
-                  style={{marginLeft:0}}
+                  style={{margin:0}}
                   required={false}
                   key={index}
                 >
-            <Icon
-              className="dynamic-delete-button"
-              type="minus-circle-o"
-              onClick={() => this.remove(index)}
-              style={{width:'10%', cursor:'pointer'}}
-            />
-            {getFieldDecorator(`value[${index}]`)(
-              <Input 
+            {getFieldDecorator(`value[${index}]`, item[0]?{
+              rules:[{
+                required:false,
+                pattern: new RegExp(/^[1-9]\d*$/, "g"),
+                message: '请输入数字'
+              }],
+              initialValue: item[0]
+            }:{
+              rules:[{
+                required:false,
+                pattern: new RegExp(/^[1-9]\d*$/, "g"),
+                message: '请输入数字'
+              }],
+            })(
+              <Input
                 placeholder='value'
                 onChange={this.handleSubmit2}
                 onBlur={this.handleSubmit2}
                 style={{width:'30%'}}/>
             )}
-            {getFieldDecorator(`min[${index}]`)(
-              <Input 
+            {getFieldDecorator(`min[${index}]`, item[1]?{
+              rules:[{
+                required:false,
+                pattern: new RegExp(/^[1-9]\d*$/, "g"),
+                message: '请输入数字'
+              }],
+              initialValue: item[1]
+            }:{
+              rules:[{
+                required:false,
+                pattern: new RegExp(/^[1-9]\d*$/, "g"),
+                message: '请输入数字'
+              }],
+            })(
+              <Input
                 placeholder='min'
                 onChange={this.handleSubmit2}
                 onBlur={this.handleSubmit2}
                 style={{width:'30%'}}/>
             )}
-            {getFieldDecorator(`max[${index}]`)(
+            {getFieldDecorator(`max[${index}]`, item[2]?{
+              rules:[{
+                required:false,
+                pattern: new RegExp(/^[1-9]\d*$/, "g"),
+                message: '请输入数字'
+              }],
+              initialValue: item[2]
+            }:{
+              rules:[{
+                required:false,
+                pattern: new RegExp(/^[1-9]\d*$/, "g"),
+                message: '请输入数字'
+              }],
+            })(
               <Input
                 placeholder='max'
                 onChange={this.handleSubmit2}
                 onBlur={this.handleSubmit2}
                 style={{width:'30%'}}/>
             )}
+            <Icon
+              className="dynamic-delete-button"
+              type="minus-circle-o"
+              onClick={() => this.remove(index)}
+              style={{width:'10%', cursor:'pointer'}}
+            />
           </Item>
         })}
         <Item>
-          <Button type="dashed" onClick={this.add} style={{width:'200px'}}>
+          <Button type="dashed" onClick={this.add} style={{width:'100%'}}>
               <Icon type="plus" /> Add group
           </Button>
         </Item>
@@ -187,7 +238,6 @@ class FeatureRegion extends Component {
     }
   }
   render() {
-    console.log(this.props.propsAPI.save())
     return (
       <div>
         分组方式:&nbsp;&nbsp;&nbsp;

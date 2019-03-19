@@ -71,6 +71,16 @@ class Run extends Component{
             tag = inf.nodes[indexN].label;
             attribute = inf.nodes[indexN].attr;
             labelarray = inf.nodes[indexN].labelArray;
+            let labelarr = {};
+            for(let i in labelarray){
+              labelarr[i] = new Array();
+              for(let j in labelarray[i]){
+                if(labelarray[i][j][1] === true){
+                  labelarr[i][j].push(labelarray[i][j][0]);
+                }
+              }
+            }
+            labelarray = JSON.parse(JSON.stringify(labelarr));
             stream.push({
                         'id':Sourc,
                         "label":tag,
@@ -169,9 +179,7 @@ class Run extends Component{
           default:
             break;
         }
-        //let outcome = all_data[1];
-
-        
+        //let outcome = all_data[1];  
       }
     }
   

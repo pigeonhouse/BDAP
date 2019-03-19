@@ -11,8 +11,12 @@ class Feature extends Component{
         super(props);
         this.state={
             info: [],
-            labelArray:[]
+            labelArray:[],
+            stat:[]
         }
+    }
+    findStat(sourceID){
+
     }
     featureType=(tag, label)=>{
         switch(label){
@@ -24,10 +28,12 @@ class Feature extends Component{
                             <Divider></Divider>
                         </Fragment>
             case '特征分组归类':
+                this.findStat(this.props.sourceID);
                 return  <Fragment>
                             <Divider>{tag}</Divider>
                             <FeatureGroup
-                            tag = {tag}/>
+                            tag = {tag}
+                            stat= {this.state.stat}/>
                             <Divider></Divider>
                         </Fragment>
             case '特征二进制化':
