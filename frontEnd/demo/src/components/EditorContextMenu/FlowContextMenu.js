@@ -52,45 +52,52 @@ class FlowContextMenu extends React.Component {
     this.setState({col:columns})
     // console.log(currentData);
     var datas = new Array()
-    for(let i = 0; i < currentData[0].value.length; i++){
+    var ln;
+    for(let k = 0; k < currentData.length; k++){
+      if(currentData[i].value.hasOwnProperty('length')){
+        ln = currentData[i].value.length;
+        break;
+      }
+    }
+    for(let i = 0; i < ln; i++){
       var temp = new Array()
       for(let j = 0; j < currentData.length; j++){
         temp[currentData[j].label] = currentData[j].value[i]
       }
       datas.push(temp)
     }
-    let s1 = new Array();
-    let s2 = new Array();
-    let s3 = new Array();
-    s1['id']="Average";
-    s2['id']="Max";
-    s3['id']="Min";
-    for(let i = 1; i < currentData.length; i++){
-      let tem_avr = 0;
-      let tem_min;
-      let tem_max;
-      for(let k = 0; k < currentData[i].value.length; k++)
-        if(currentData[i].value[k] != null){
-          tem_min = currentData[i].value[k];
-          tem_max = currentData[i].value[k];
-        }
-      for(let k = 0; k < currentData[i].value.length; k++){
-        tem_avr += currentData[i].value[k];
-        if(currentData[i].value[k] > tem_max){
-          tem_max = currentData[i].value[k];
-        }
-        if(currentData[i].value[k]!=null && currentData[i].value[k] < tem_min){
-          tem_min = currentData[i].value[k];
-        }
-      }
-      tem_avr = tem_avr/currentData[i].value.length;
-      s1[currentData[i].label]=tem_avr;
-      s2[currentData[i].label]=tem_max;
-      s3[currentData[i].label]=tem_min;
-    }
-    datas.push(s1);
-    datas.push(s2);
-    datas.push(s3);
+    // let s1 = new Array();
+    // let s2 = new Array();
+    // let s3 = new Array();
+    // s1['id']="Average";
+    // s2['id']="Max";
+    // s3['id']="Min";
+    // for(let i = 1; i < currentData.length; i++){
+    //   let tem_avr = 0;
+    //   let tem_min;
+    //   let tem_max;
+    //   for(let k = 0; k < currentData[i].value.length; k++)
+    //     if(currentData[i].value[k] != null){
+    //       tem_min = currentData[i].value[k];
+    //       tem_max = currentData[i].value[k];
+    //     }
+    //   for(let k = 0; k < currentData[i].value.length; k++){
+    //     tem_avr += currentData[i].value[k];
+    //     if(currentData[i].value[k] > tem_max){
+    //       tem_max = currentData[i].value[k];
+    //     }
+    //     if(currentData[i].value[k]!=null && currentData[i].value[k] < tem_min){
+    //       tem_min = currentData[i].value[k];
+    //     }
+    //   }
+    //   tem_avr = tem_avr/currentData[i].value.length;
+    //   s1[currentData[i].label]=tem_avr;
+    //   s2[currentData[i].label]=tem_max;
+    //   s3[currentData[i].label]=tem_min;
+    // }
+    // datas.push(s1);
+    // datas.push(s2);
+    // datas.push(s3);
     var list = "";
     for(let i = 0; i < columns.length; i++){
       list+=columns[i].title;

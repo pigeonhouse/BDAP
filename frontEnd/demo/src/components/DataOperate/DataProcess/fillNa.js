@@ -20,6 +20,8 @@ export function fillNa(allData){
         }
         labelArray.push(temp);
     }
+     console.log("labelarray");
+     console.log(labelArray);
     var stat = allData.Dataset.stat;
     // var Dataset = [[{label:'id',value:[1,,3]}],[{label:'age',value:[1, ,3]}],[{label:'score',value:[,3,5]}]]
     // var labelArray = [["id",true],["age",false],["score",true]];
@@ -54,7 +56,7 @@ export function fillNa(allData){
     // console.log("xxxxxxxxxxxxxxxxxxxx");
     // console.log(labelArray);
     // console.log(Dataset);
-
+    console.log(Dataset);
     allData.Dataset = Dataset;
     // allData.labelArray = labelArray1;
 

@@ -90,6 +90,7 @@ class Uploadfile extends Component{
           console.log("propsAPI")
           console.log(propsAPI.save())
           console.log(STAT);
+          // fillNa()
         }
     }
     setTest = (allData,fieldNameArray,vectorLength) =>{
