@@ -16,31 +16,31 @@ class Uploadfile extends Component{
         }
     }
     
-    makeFile = ()=>{
-      var allData = this.state.dataSet[0]
+    // makeFile = ()=>{
+    //   var allData = this.state.dataSet[0]
   
-      var fieldNameArray = this.state.labelArray[0]
+    //   var fieldNameArray = this.state.labelArray[0]
   
-      var vectorlength = this.state.length[0]
-      
-      var newData = new Array();
+    //   var vectorlength = this.state.length[0]
+
+    //   var newData = new Array();
   
-      for(let indexOfRows = 0;indexOfRows < vectorlength; indexOfRows++){
-        var row = new Array();
-        for(let indexOfCols = 0; indexOfCols < fieldNameArray.length; indexOfCols++ ){
-            row.push(allData[fieldNameArray[indexOfCols]][indexOfRows])
-        }
-        newData.push(row);
-      }
-      var csv = Papa.unparse({
-        "fields": fieldNameArray,
-        "data": newData
-      });
+    //   for(let indexOfRows = 0;indexOfRows < vectorlength; indexOfRows++){
+    //     var row = new Array();
+    //     for(let indexOfCols = 0; indexOfCols < fieldNameArray.length; indexOfCols++ ){
+    //         row.push(allData[fieldNameArray[indexOfCols]][indexOfRows])
+    //     }
+    //     newData.push(row);
+    //   }
+    //   var csv = Papa.unparse({
+    //     "fields": fieldNameArray,
+    //     "data": newData
+    //   });
   
-      this.setState({
-        finalData:csv
-      })
-      }
+    //     this.setState({
+    //       finalData:csv
+    //     })
+    //   }
     readFile = (e)=>{
       var files = e.target.files;
       //var files = e; // FileList object
@@ -72,13 +72,16 @@ class Uploadfile extends Component{
         
         // SeprtbyFeat();
 
-        let stat = Stat(n);
-        console.log(stat);
+        var STAT = new Array();
+        STAT = Stat(n);
+
           let m = fieldNameArray[0].map((item)=>{
             return [item, false];
           })
+
           const values = {
               Dataset:n,
+              stat:STAT,
               labelArray:{public:m}, 
               length:vectorLength
           }
@@ -86,15 +89,17 @@ class Uploadfile extends Component{
           update(item, {...values});
           console.log("propsAPI")
           console.log(propsAPI.save())
+          console.log(STAT);
         }
     }
     setTest = (allData,fieldNameArray,vectorLength) =>{
         this.setState({
           dataSet:allData,
+          stat:STAT,
           labelArray:fieldNameArray,
           length:vectorLength
         })
-      }
+    }
 
     render(){
         return (
