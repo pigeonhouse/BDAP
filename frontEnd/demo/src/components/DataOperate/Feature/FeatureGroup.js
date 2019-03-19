@@ -142,7 +142,7 @@ class FeatureGroup extends Component {
                   组名：
                   {getFieldDecorator(`name[${index}]`,item[0]?{
                     initialValue: item[0]}:{}
-                  })(
+                  )(
                     <Input 
                       onChange={this.handleSubmitInput}
                       onBlur={this.handleSubmitInput}

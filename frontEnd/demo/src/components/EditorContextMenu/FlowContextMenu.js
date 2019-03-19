@@ -41,7 +41,6 @@ class FlowContextMenu extends React.Component {
       }
     }
     currentData = currentData[0]
-
     var columns = new Array()
     for(let i = 0; i < currentData.length; i++){
       columns.push({

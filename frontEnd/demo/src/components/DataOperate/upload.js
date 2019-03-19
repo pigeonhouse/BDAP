@@ -85,7 +85,7 @@ class Uploadfile extends Component{
           }
           if(temp != 1){
             stat[c] = new Array();
-            stat[c]['label'] = fieldNameArray[0][i];
+            stat[c]['label'] = n[i].label;
             stat[c]['value'] = new Array();
             var w;
             for(let j = 0; j < n[i].value.length;j++){
@@ -131,7 +131,7 @@ class Uploadfile extends Component{
           }
           tep = Math.floor(n[i].value.length/2);
           stat[c] = new Array();
-          stat[c]['label'] = fieldNameArray[0][i];
+          stat[c]['label'] = n[i].label;
           stat[c]['max']  = max;
           stat[c]['min'] = min;
           stat[c]['average'] = total/n[i].value.length;
@@ -139,21 +139,17 @@ class Uploadfile extends Component{
           stat[c]['type'] = 'number';
           c++;
         }
-        // console.log(stat)
-          
           let m = fieldNameArray[0].map((item)=>{
             return [item, false];
           })
-          n['stat'] = new Array();
-          n['stat'] = stat;
           const values = {
               Dataset:n,
               labelArray:{public:m}, 
               length:vectorLength
           }
-          console.log(values);
           const item = getSelected()[0];
           update(item, {...values});
+          console.log("propsAPI")
           console.log(propsAPI.save())
         }
     }
