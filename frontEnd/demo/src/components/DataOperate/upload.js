@@ -6,7 +6,6 @@ import store from '../../store';
 import {UpL} from '../../store/actionCreate';
 import styles from './inputStyle.less'
 import { Stat } from './Stat';
-import { StrToNum } from './DataProcess/StrToNum';
 // import { SeprtbyFeat } from './DataProcess/SeprtbyFeat';
 class Uploadfile extends Component{
     constructor(props){
@@ -88,11 +87,11 @@ class Uploadfile extends Component{
           update(item, {...values});
           console.log("propsAPI")
           console.log(propsAPI.save())
-          console.log(STAT);
-          let allData = [{all_attr:{public:[['1','mon','tur','sta'],['0','sun']]},labelArray:{public:["id"]}},
-          {Dataset:[{label:'id',value:['mon','tur','sun','sta']},{label:'score',value:[2,5,,16,5,7,9]}],stat:[{lable:'id',average:5},{lable:'score',average:7}]}];
+          // console.log(STAT);
+          // let allData = [{all_attr:{public:[['1','mon','tur','sta'],['0','sun']]},labelArray:{public:["id"]}},
+          // {Dataset:[{label:'id',value:['mon','tur','sun','sta']},{label:'score',value:[2,5,,16,5,7,9]}],stat:[{lable:'id',average:5},{lable:'score',average:7}]}];
 
-          StrToNum(allData)
+          // StrToNum(allData)
         }
     }
     setTest = (allData,fieldNameArray,vectorLength) =>{
