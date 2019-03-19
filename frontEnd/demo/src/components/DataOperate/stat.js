@@ -1,4 +1,5 @@
-export function fillNa(n,max){
+export function Stat(n){
+    var stat = new Array();
     var temp = null;
         var max,min,media,total,tep;
         var c = 0;
