@@ -1,22 +1,21 @@
 export function SelectCol(allData){
-
-    var Dataset = allData.Dataset;
+    var Dataset = allData[1].Dataset;
     var tem, temp;
     var labelArray = new Array();
     var labelArray1 = new Array();
     for(let i = 0; i < Dataset.length ; i++){
         tem = 0;
-        for(let j = 0; j < allData.labelArray.public.length; j++){
-            if(Dataset[i].label == allData.labelArray.public[j]){
+        for(let j = 0; j < allData[0].labelArray.public.length; j++){
+            if(Dataset[i].label == allData[0].labelArray.public[j]){
                 tem = 1;
             }
         }
         temp = new Array(); 
         if(tem == 1){
-            temp = [allData.labelArray.public[j], true];
+            temp = [allData[0].labelArray.public[i], true];
         }
         else{
-            temp = [allData.labelArray.public[j], false];
+            temp = [allData[0].labelArray.public[i], false];
         }
         labelArray.push(temp);
         labelArray1.push(temp);

@@ -1,22 +1,21 @@
 export function Randis(allData){
-    // var attr = {type:'average'};
     var attr = allData[0].all_attr;
-    var Dataset = allData.Dataset;
+    var Dataset = allData[1].Dataset;
     var tem, temp;
     var labelArray = new Array();
     for(let i = 0; i < Dataset.length ; i++){
         tem = 0;
-        for(let j = 0; j < allData.labelArray.public.length; j++){
-            if(Dataset[i].label == allData.labelArray.public[j]){
+        for(let j = 0; j < allData[0].labelArray.public.length; j++){
+            if(Dataset[i].label == allData[0].labelArray.public[j]){
                 tem = 1;
             }
         }
         temp = new Array(); 
         if(tem == 1){
-            temp = [allData.labelArray.public[j], true];
+            temp = [allData[0].labelArray.public[i], true];
         }
         else{
-            temp = [allData.labelArray.public[j], false];
+            temp = [allData[0].labelArray.public[i], false];
         }
         labelArray.push(temp);
     }
@@ -29,8 +28,7 @@ export function Randis(allData){
         // console.log("pppppppppppppppppppppppppppppppp")
         // console.log(attr.public[0])
         flag = Math.random();
-        console.log(flag)
-        if(flag < attr.public[0]){
+        if(flag < attr.public){
             for(let k = 0; k < labelArray.length;k++){
                 if(labelArray[k][1] == true){
                     flag=0; 
@@ -79,9 +77,9 @@ export function Randis(allData){
             }
         }
     }
-    // tem = new Array();
-    // tem.push(tem1);
-    // tem.push(tem2);
+    tem = new Array();
+    tem.push(tem1);
+    tem.push(tem2);
     // console.log(tem);
     // console.log("xxxxxxxxxxxxxxxxxxxx");
     // console.log(labelArray);
@@ -89,6 +87,7 @@ export function Randis(allData){
 
     // allData.Dataset = Dataset;
     // allData.labelArray = labelArray1;
-
+    console.log("tem")
+    console.log(tem);
     return tem;
 }

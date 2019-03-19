@@ -5,8 +5,8 @@ import { withPropsAPI } from '@src';
 import store from '../../store';
 import {UpL} from '../../store/actionCreate';
 import styles from './inputStyle.less'
-import {fillNa} from './DataProcess/fillNa';
 import { Stat } from './Stat';
+import { StrToNum } from './DataProcess/StrToNum';
 // import { SeprtbyFeat } from './DataProcess/SeprtbyFeat';
 class Uploadfile extends Component{
     constructor(props){
@@ -74,7 +74,6 @@ class Uploadfile extends Component{
 
         var STAT = new Array();
         STAT = Stat(n);
-
           let m = fieldNameArray[0].map((item)=>{
             return [item, false];
           })
@@ -90,7 +89,10 @@ class Uploadfile extends Component{
           console.log("propsAPI")
           console.log(propsAPI.save())
           console.log(STAT);
-          // fillNa()
+          let allData = [{all_attr:{public:[['1','mon','tur','sta'],['0','sun']]},labelArray:{public:["id"]}},
+          {Dataset:[{label:'id',value:['mon','tur','sun','sta']},{label:'score',value:[2,5,,16,5,7,9]}],stat:[{lable:'id',average:5},{lable:'score',average:7}]}];
+
+          StrToNum(allData)
         }
     }
     setTest = (allData,fieldNameArray,vectorLength) =>{

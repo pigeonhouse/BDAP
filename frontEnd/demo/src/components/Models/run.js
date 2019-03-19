@@ -76,7 +76,7 @@ class Run extends Component{
               labelarr[i] = new Array();
               for(let j in labelarray[i]){
                 if(labelarray[i][j][1] === true){
-                  labelarr[i][j].push(labelarray[i][j][0]);
+                  labelarr[i].push(labelarray[i][j][0]);
                 }
               }
             }

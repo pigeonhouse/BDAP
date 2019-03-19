@@ -53,7 +53,7 @@ class FlowContextMenu extends React.Component {
     // console.log(currentData);
     var datas = new Array()
     var ln;
-    for(let k = 0; k < currentData.length; k++){
+    for(let i = 0; i < currentData.length; i++){
       if(currentData[i].value.hasOwnProperty('length')){
         ln = currentData[i].value.length;
         break;
