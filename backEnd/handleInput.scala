@@ -19,4 +19,4 @@ fin += '}'
 
 println(fin)
 
-val result = Http("http://10.122.227.12:5000/postTest").postData(fin.toString).header("Content-Type", "application/json").header("Charset", "UTF-8").option(HttpOptions.readTimeout(10000)).asString
+val result = Http("http://10.122.227.12:5000/InputPost").postData(fin.toString).header("Content-Type", "application/json").header("Charset", "UTF-8").option(HttpOptions.readTimeout(10000)).asString

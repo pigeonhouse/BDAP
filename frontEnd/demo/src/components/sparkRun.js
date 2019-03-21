@@ -79,7 +79,7 @@ class SparkRun extends Component{
         headers: {'Content-Type': 'application/json'},
         }
         fetch(
-          'http://localhost:5000/test',init
+          'http://localhost:5000/run',init
         )
           .then(res => res.json())
           .then(data => {

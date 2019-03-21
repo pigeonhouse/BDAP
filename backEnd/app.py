@@ -67,14 +67,23 @@ class nodes:
 app = Flask(__name__, static_folder="./front_end/static", template_folder="./front_end/")
 CORS(app)
 
-global returnData
+global inputData
+global runningData
 
-@app.route('/postTest', methods=['GET', 'POST'])
-def postTest():
+@app.route('/InputPost', methods=['GET', 'POST'])
+def InputPost():
     print(request.json)
-    global returnData
-    returnData = request.json
+    global inputData
+    inputData = request.json
     return "received"
+
+@app.route('/RunningPost', methods=['GET', 'POST'])
+def RunningPost():
+    print(request.json)
+    global runningData
+    runningData = request.json
+    return "received"
+
 
 
 @app.route('/')
@@ -84,6 +93,20 @@ def hello_world():
 host = 'http://10.105.222.90:8998'
 headers = {'Content-Type': 'application/json'}
 global loss
+
+def convertPost(data):
+    colName = data['colName'].split(",")
+    s = []
+    for name in colName:
+        temp = {}
+        temp['label'] = name
+        temp['value'] = data[name].split(",")
+        s.append(temp)
+    re = [s]
+    re.append([colName])
+    re.append(len(data[name].split(",")))
+    return re
+
 
 @app.route('/handleInput', methods=['GET', 'POST']) 
 def handleInput():
@@ -113,25 +136,13 @@ def handleInput():
 
     pprint.pprint(r.json())
 
-    data = returnData
+    data = convertPost(inputData)
+    print(data)
 
-    colName = data['colName'].split(",")
-    s = []
-    for name in colName:
-        temp = [{}]
-        temp[0]['label'] = name
-        temp[0]['value'] = data[name].split(",")
-        s.append(temp)
-    re = [s]
-    re.append([colName])
-    re.append(len(data[name].split(",")))
+    return json.dumps(data)
 
-    return json.dumps(re)
-
-
-
-@app.route('/test', methods=['GET', 'POST'])
-def test():
+@app.route('/run', methods=['GET', 'POST'])
+def run():
     print(request.json)
     picture = request.json
     node_ = []
@@ -139,33 +150,19 @@ def test():
         node = nodes(picture[i]['id'], picture[i]['label'], picture[i]['sourceId'], picture[i]['attribute'])
         node_.append(node)
 
+    finalData = []
     for node in node_:
         print(node.label)
         node.excuted()
-
+        temp = [node.id,convertPost(runningData)]
+        finalData.append(temp)
+        global runningData
+        runningData = []
     
-    return ("finish")
+    print(finalData)
 
+    return json.dumps(finalData)
 
-    # data_mine = {'code': code }
-
-    # session_url = 'http://localhost:8998/sessions/0'
-    # compute = requests.post(session_url+'/statements', data=json.dumps(data_mine), headers=headers)
-
-    # result_url = host + compute.headers['location']
-
-    # r = requests.get(result_url, headers=headers)
-    # print(r.json())
-
-    # while(True):
-    #     r = requests.get(result_url, headers=headers)
-    #     if r.json()['state'] == 'available':
-    #         print("finish")
-    #         break
-
-    # pprint.pprint(r.json())
-
-    # return "finish"
 
     # data_mine = {'kind': 'spark'}
     # create_session = requests.post(host + '/sessions', data=json.dumps(data_mine), headers=headers)
@@ -179,81 +176,9 @@ def test():
 
     # code above aims for open a new livy session, it is suggested to open it in andvance to avoid wasting time
 
-    # inf = request.json          # information get from the front-end
-    # r = 0
-    # inputName = inf[0]["attribute"]["sourceFile"]
-    # outputName = ""
-
-    # for index in range(1,len(inf)):
-    #     print(inf[index]["label"])
-
-    #     if inf[index]["label"] == "FillNa":
-
-    #         fileobj = open('./DataPreprocessing/FillNa.scala', 'r')     # open scala file where your spark code lies
-    #         fillingNumber = inf[index]["attribute"]["fillingNumber"]
-    #         outputName = inputName + "_afterFillNa"
-
-    #         try:
-    #             code = fileobj.read()
-    #         finally:
-    #             fileobj.close()
-
-    #         data_mine = {'code': code % (inputName+'.json',fillingNumber,outputName+'.json')}
-
-    #         session_url = 'http://localhost:8998/sessions/0'
-    #         compute = requests.post(session_url+'/statements', data=json.dumps(data_mine), headers=headers)
-
-    #         result_url = host + compute.headers['location']
-
-    #         r = requests.get(result_url, headers=headers)
-    #         print(r.json())
-
-    #         while(True):
-    #             r = requests.get(result_url, headers=headers)
-    #             if r.json()['state'] == 'available':
-    #                 print("finish")
-    #                 break
-
-    #         pprint.pprint(r.json())
-
-    #         inputName = outputName
-
-    #     elif inf[index]["label"] == "MaxMinScaler":
-    #         fileobj = open('./DataPreprocessing/MaxMinScaler.scala', 'r')
-    #         outputName = inputName + "_afterMaxMinScaler"
-
-    #         try:
-    #             code = fileobj.read()
-    #         finally:
-    #             fileobj.close()
-
-    #         data_mine = {'code': code % (inputName+'.json',outputName+'.json')}
-
-    #         session_url = 'http://localhost:8998/sessions/0'
-    #         compute = requests.post(session_url+'/statements', data=json.dumps(data_mine), headers=headers)
-
-    #         result_url = host + compute.headers['location']
-
-    #         r = requests.get(result_url, headers=headers)
-    #         print(r.json())
-
-    #         while(True):
-    #             r = requests.get(result_url, headers=headers)
-    #             if r.json()['state'] == 'available':
-    #                 print("finish")
-    #                 break
-
-    #         pprint.pprint(r.json())
-
-    #         inputName = outputName
-
-    #     print(inf[index]["attribute"])
-
     # requests.delete(session_url, headers=headers)
-
     # close the session, if you open the session outside this file, ignore it
 
-    # return r.text
 
 @app.route('/realTime', methods=['GET', 'POST'])  # for transferring data while training
 def realTime():
