@@ -38,20 +38,21 @@ class nodes:
 
     def excuted(self):
         fileobj = open("./Closed/" + self.label + ".scala", "r")
-
+        
         try:
             code = fileobj.read()
         finally:
             fileobj.close()
-
+        
         data_mine = self.matchfunction(code)
-
-        session_url = 'http://localhost:8998/sessions/0'
+        
+        session_url = 'http://10.105.222.90:8998/sessions/0'
         compute = requests.post(session_url+'/statements', data=json.dumps(data_mine), headers=headers)
-
+      
         result_url = host + compute.headers['location']
 
         r = requests.get(result_url, headers=headers)
+     
         print(r.json())
 
         while(True):
@@ -80,7 +81,7 @@ def postTest():
 def hello_world():
     return render_template('index.html')
 
-host = 'http://localhost:8998'
+host = 'http://10.105.222.90:8998'
 headers = {'Content-Type': 'application/json'}
 global loss
 
@@ -96,7 +97,7 @@ def handleInput():
 
     data_mine = {'code':code % request.json}
     headers = {'Content-Type': 'application/json'}
-    session_url = 'http://localhost:8998/sessions/0'
+    session_url = 'http://10.105.222.90:8998/sessions/0'
     compute = requests.post(session_url+'/statements', data=json.dumps(data_mine), headers=headers)
 
     result_url = host + compute.headers['location']

@@ -1,6 +1,8 @@
 import scalaj.http._
   
-val test = spark.read.json("/examples/%s")
+val file_location = "/demoData/%s"
+val file_type = "csv"
+val test = spark.read.format(file_type).option("header","true").option("inferSchema", "true").load(file_location)
 
 val colName = test.columns
 val fin = new StringBuilder;
@@ -15,5 +17,6 @@ for(name <- colName){
 }
 fin += '}'
 
-val result = Http("http://localhost:5000/postTest").postData(fin.toString).header("Content-Type", "application/json").header("Charset", "UTF-8").option(HttpOptions.readTimeout(10000)).asString
+println(fin)
 
+val result = Http("http://10.122.227.12:5000/postTest").postData(fin.toString).header("Content-Type", "application/json").header("Charset", "UTF-8").option(HttpOptions.readTimeout(10000)).asString
