@@ -2,6 +2,9 @@ from flask import Flask, render_template, request
 from flask_cors import CORS
 import json, pprint, requests, textwrap
 
+global inputData
+global runningData
+
 
 def ArraytoString(Array):
     String = ""
@@ -66,9 +69,6 @@ class nodes:
 
 app = Flask(__name__, static_folder="./front_end/static", template_folder="./front_end/")
 CORS(app)
-
-global inputData
-global runningData
 
 @app.route('/InputPost', methods=['GET', 'POST'])
 def InputPost():
@@ -156,7 +156,6 @@ def run():
         node.excuted()
         temp = [node.id,convertPost(runningData)]
         finalData.append(temp)
-        global runningData
         runningData = []
     
     print(finalData)
