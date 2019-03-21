@@ -58,7 +58,7 @@ class HdfsFile extends Component{
             <div>
                 <span>location:</span>
                 <Input type="text" onChange={this.handelChange} value={this.state.inpValu} style={{margin:5}}/>
-
+                
                 <Button onClick={()=>this.submit()}>confirm</Button>
 
             </div>

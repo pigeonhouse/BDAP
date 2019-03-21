@@ -65,33 +65,20 @@ class Uploadfile extends Component{
             }
             n.push({label:colName,value:colValue})
         }
-        // console.log(n)
-        // console.log(fieldNameArray)
-        // console.log(vectorLength)
-        
-        // SeprtbyFeat();
-
         var STAT = new Array();
         STAT = Stat(n);
-          let m = fieldNameArray[0].map((item)=>{
-            return [item, false];
-          })
-
-          const values = {
-              Dataset:n,
-              stat:STAT,
-              labelArray:{public:m}, 
-              length:vectorLength
-          }
-          const item = getSelected()[0];
-          update(item, {...values});
-          console.log("propsAPI")
-          console.log(propsAPI.save())
-          // console.log(STAT);
-          // let allData = [{all_attr:{public:[['1','mon','tur','sta'],['0','sun']]},labelArray:{public:["id"]}},
-          // {Dataset:[{label:'id',value:['mon','tur','sun','sta']},{label:'score',value:[2,5,,16,5,7,9]}],stat:[{lable:'id',average:5},{lable:'score',average:7}]}];
-
-          // StrToNum(allData)
+        let m = fieldNameArray[0].map((item)=>{
+          return [item, false];
+        })
+        const values = {
+            Dataset:STAT,
+            labelArray:{public:m}, 
+            length:vectorLength
+        }
+        const item = getSelected()[0];
+        update(item, {...values});
+        console.log("propsAPI")
+        console.log(propsAPI.save())
         }
     }
     setTest = (allData,fieldNameArray,vectorLength) =>{

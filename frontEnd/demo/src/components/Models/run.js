@@ -55,13 +55,19 @@ class Run extends Component{
         Sourc = inf.edges[indexE].target;
         let targetanchor = inf.edges[indexE].targetAnchor;
         let source = inf.edges[indexE].source;
+        let sourceanchor = inf.edges[indexE].sourceAnchor;
         for (let indexN of inf.nodes.keys()) {
           if (Sourc === inf.nodes[indexN].id) {
             Deg[indexN]++;
-            sourceId[indexN][targetanchor] = source;
+            sourceId[indexN][targetanchor] = {
+              source:source,
+              sourceAnchor:sourceanchor
+            };
           }
         }
       }
+      console.log('sourceId');
+      console.log(sourceId);
       for (var k = 0; k < inf.nodes.length; ) {
         for (let indexN of inf.nodes.keys()){
           if(Deg[indexN] === 0){

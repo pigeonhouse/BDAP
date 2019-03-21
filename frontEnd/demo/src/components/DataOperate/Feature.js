@@ -15,8 +15,35 @@ class Feature extends Component{
             stat:[]
         }
     }
-    findStat(sourceID){
+    findStat(sourceID, tag){
+        const { propsAPI } = this.props;
+        const { find } = propsAPI;
+        const sourceItem = find(sourceID);
+        const { Dataset, anchor } = sourceItem.getModel();
+        if(Dataset){
+            if(anchor[1] === 1){
+                for(let i in Dataset){
+                    if(Dataset[i].label === tag){
+                        this.setState({
+                            stat:Dataset[i].stat.value
+                        })
+                    }
+                }
+            }
+            else {
 
+            }
+        }
+        else {
+            if(anchor[0] === 1){
+                const edges = propsAPI.save().edges;
+                for(let i in edges){
+                    if(edges[i].target === sourceID){
+                        return this.findStat(edges[i].source, tag);
+                    }
+                }
+            }
+        }
     }
     featureType=(tag, label)=>{
         switch(label){
@@ -28,7 +55,7 @@ class Feature extends Component{
                             <Divider></Divider>
                         </Fragment>
             case '特征分组归类':
-                this.findStat(this.props.sourceID);
+                this.findStat(this.props.sourceID, tag);
                 return  <Fragment>
                             <Divider>{tag}</Divider>
                             <FeatureGroup
