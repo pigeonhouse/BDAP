@@ -32,10 +32,14 @@ class SparkRun extends Component{
         Sourc = inf.edges[indexE].target;
         let targetanchor = inf.edges[indexE].targetAnchor;
         let source = inf.edges[indexE].source;
+        let sourceanchor = inf.edges[indexE].sourceAnchor;
         for (let indexN of inf.nodes.keys()) {
           if (Sourc === inf.nodes[indexN].id) {
             Deg[indexN]++;
-            sourceId[indexN][targetanchor] = source;
+            sourceId[indexN][targetanchor] = {
+              source:source,
+              sourceAnchor:sourceanchor
+            };
           }
         }
       }
@@ -45,9 +49,19 @@ class SparkRun extends Component{
             k++;
             Deg[indexN]--;
             Sourc = inf.nodes[indexN].id;
-            tag = inf.nodes[indexN].elabel;
+            tag = inf.nodes[indexN].label;
             attribute = inf.nodes[indexN].attr;
             labelarray = inf.nodes[indexN].labelArray;
+            let labelarr = {};
+            for(let i in labelarray){
+              labelarr[i] = new Array();
+              for(let j in labelarray[i]){
+                if(labelarray[i][j][1] === true){
+                  labelarr[i].push(labelarray[i][j][0]);
+                }
+              }
+            }
+            labelarray = JSON.parse(JSON.stringify(labelarr));
             stream.push({
                         'id':Sourc,
                         "label":tag,
