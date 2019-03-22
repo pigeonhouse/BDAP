@@ -39,7 +39,7 @@ class HdfsFile extends Component{
               })
               const values = {
                   Dataset:data[0],
-                  labelArray:m, 
+                  labelArray:{public:m}, 
                   length:data[2]
               }
               const item = getSelected()[0];
