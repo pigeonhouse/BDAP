@@ -2,19 +2,19 @@ import org.apache.spark.sql.{Row, SaveMode}
 import org.apache.spark.sql.functions._
 import scala.collection.mutable.ArrayBuffer
 
-    val project = "Taitanic1"
-    val id = "2"
-    val previous = "1"
-    val aim = "Age"
-    val Type = "median"
+    val project = "Demo"
+    val id = "%s"
+    val previous = "%s"
+    val aim = "%s"
+    val Type = "%s"
     val specify = 100
     val file = project + "/" + previous
 
-    val df = spark.read.format("json").load(file)
+    val df = spark.read.format("parquet").load(file)
     val aimarray = aim.split(" ")
     var df_ = df
 
-    if(Type == "mean"){
+    if(Type == "average"){
       for(i <- 0 to aimarray.length - 1){
         val temp = Array(aimarray(i))
         val meanval = df.select(mean(aimarray(i))).collect()
@@ -27,7 +27,7 @@ import scala.collection.mutable.ArrayBuffer
         val temp = Array(aimarray(i))
         val df_1 = df.select(aimarray(i)).na.drop().sort(aimarray(i))
         val count = df_1.count()
-        if(count%2 == 0){
+        if(count %% 2 == 0){
           val medianval = df_1.take(count.toInt/2 + 1).drop(count.toInt/2 - 1)
           val medianvalue = medianval.map(A => A.getDouble(0)).reduce(_ + _)/2
           df_ = df_.na.fill(medianvalue, temp)
@@ -61,6 +61,7 @@ import scala.collection.mutable.ArrayBuffer
     else if(Type == "specifynum"){
       df_ = df_.na.fill(specify, aimarray)
     }
-    df_.write.format("json")
+
+    df_.write.format("parquet")
       .mode(SaveMode.Append)
       .save(project + "/" + id)

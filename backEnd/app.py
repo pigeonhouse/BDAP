@@ -19,28 +19,43 @@ def ArraytoString(Array):
 
 class nodes:
 
-    def __init__(self, id, label, sourceID, attribute):
+    def __init__(self, id, label, sourceID, attribute, labelArray):
         self.id = id
         self.label = label
         self.attribute = attribute
         self.sourceID = sourceID
+        self.labelArray = labelArray
+
+    def transform(self):
+        if self.label == "hdfs数据":
+            self.label = "hdfsFile"
+        elif self.label == "缺失值填充":
+            self.label = "Fillna"
+        elif self.label == "归一化":
+            self.label = "MinMaxScaler"
+        elif self.label == "决策树回归":
+            self.label = "DecivionTree"
+        else:
+            self.label = self.label
 
     def matchfunction(self, code):
-        if self.label == "Input":
-            data = {'code': code % (self.attribute['sourceFile'], self.id)}
-        elif self.label == "缺失值填充":
-            data = {'code': code % (self.attribute['type'], self.id, ArraytoString(self.sourceID))}
-        elif self.label == "归一化":
-            data = {'code': code % (self.id, ArraytoString(self.sourceID))}
+        if self.label == "Fillna":
+            data = {'code': code %(self.id, self.sourceID[0]['source'], ArraytoString(self.labelArray['public']), self.attribute['type'])}
+        elif self.label == "MinMaxScaler":
+            data = {'code': code %(self.id, self.sourceID[0]['source'], ArraytoString(self.labelArray['public']))}
         elif self.label =='localFile':
-            data = {'code':code }
+            data = {'code': code }
+        elif self.label == 'hdfsFile':
+            data = {'code': code % self.id}
+        elif self.label == 'LogisticRegression':
+            data = {'code': code % (self.id)}
         else:
             data = None
 
         return data
 
     def excuted(self):
-        fileobj = open("./Closed/" + self.label + ".scala", "r")
+        fileobj = open("./Closed_/" + self.label + ".scala", "r")
         
         try:
             code = fileobj.read()
@@ -49,6 +64,8 @@ class nodes:
         
         data_mine = self.matchfunction(code)
         
+        print(data_mine['code'])
+    '''
         session_url = 'http://10.105.222.90:8998/sessions/0'
         compute = requests.post(session_url+'/statements', data=json.dumps(data_mine), headers=headers)
       
@@ -65,7 +82,7 @@ class nodes:
                 break
 
         pprint.pprint(r.json())
-
+    '''
 
 app = Flask(__name__, static_folder="./front_end/static", template_folder="./front_end/")
 CORS(app)
@@ -147,13 +164,15 @@ def run():
     picture = request.json
     node_ = []
     for i in range(0, len(picture)):
-        node = nodes(picture[i]['id'], picture[i]['label'], picture[i]['sourceId'], picture[i]['attribute'])
+        node = nodes(picture[i]['id'], picture[i]['label'], picture[i]['sourceId'], picture[i]['attribute'], picture[i]['labelArray'])
+        node.transform()
         node_.append(node)
 
     finalData = []
     for node in node_:
         print(node.label)
         node.excuted()
+'''        
         temp = [node.id,convertPost(runningData)]
         finalData.append(temp)
         runningData = []
@@ -161,7 +180,7 @@ def run():
     print(finalData)
 
     return json.dumps(finalData)
-
+'''
 
     # data_mine = {'kind': 'spark'}
     # create_session = requests.post(host + '/sessions', data=json.dumps(data_mine), headers=headers)

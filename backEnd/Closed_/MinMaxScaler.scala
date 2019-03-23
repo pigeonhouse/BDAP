@@ -6,13 +6,13 @@ import org.apache.spark.sql.types.{DoubleType, StructField, StructType}
 
 import spark.implicits._
 
-    val project = "Taitanic1"
-    val id = "5"
-    val previous = "4"
+    val project = "Demo"
+    val id = "%s"
+    val previous = "%s"
     val file = project + "/" + previous
-    val aim = "Pclass Fare Age"
+    val aim = "%s"
 
-    var df = spark.read.format("json").load(file)
+    var df = spark.read.format("parquet").load(file)
     val aimarray = aim.split(" ")
     var df_ = df
 
@@ -28,6 +28,6 @@ import spark.implicits._
       df = df.join(df_1, df("idx") === df_1("idx")).drop("idx")
     }
 
-    df.write.format("json")
+    df.write.format("parquet")
       .mode(SaveMode.Append)
       .save(project + "/" + id)

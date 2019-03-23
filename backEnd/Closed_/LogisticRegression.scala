@@ -4,10 +4,10 @@ import org.apache.spark.sql.DataFrame
 import org.apache.spark.sql.functions.col
 
     val project = "Taitanic1"
-    val id = "6"
-    val train = "MinMaxScaledAge MinMaxScaledPclass Mother SexIndex MinMaxScaledFare"
-    val label = "Survived"
-    val previous = "5"
+    val id = "%s"
+    val train = "%s"
+    val label = "%s"
+    val previous = "%s"
     val file = project + "/" + previous
     val all = train + " " + label
 
