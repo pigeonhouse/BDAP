@@ -14,7 +14,7 @@ import scala.collection.mutable.ArrayBuffer
     val aimarray = aim.split(" ")
     var df_ = df
 
-    if(Type == "mean"){
+    if(Type == "average"){
       for(i <- 0 to aimarray.length - 1){
         val temp = Array(aimarray(i))
         val meanval = df.select(mean(aimarray(i))).collect()

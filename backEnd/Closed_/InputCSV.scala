@@ -1,18 +1,12 @@
 import org.apache.spark.sql.SaveMode
 import org.apache.spark.sql.functions.col
 
-val project = "Taitanic"
-val id = "1"
-val aim = "PassengerId Name Age Sex Parch Pclass"
-val previous = "0"
-val file = "/home/hadoop/BigDL/" + project + "/" + previous
+val file = "/FileStore/tables/train.csv"
+val project = "T1"
+val id = "0"
 
-val df = SQLContext.read.format("json").load(file)
-val aimarray = aim.split(" ")
+val df = spark.read.format("csv").option("header","true").option("multiLine", true).load(file)
 
-var df_ = df
-df_ = df_.select(aimarray.map(A => col(A)): _*)
-
-df_.write.format("json")
-     .mode(SaveMode.Append)
-     .save("/home/hadoop/BigDL/" + project + "/" + id)
+df.write.format("parquet")
+    .mode(SaveMode.Append)
+    .save(project + "/" + id)
