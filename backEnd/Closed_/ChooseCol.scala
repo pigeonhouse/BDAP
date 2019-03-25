@@ -7,7 +7,7 @@ val aim = "PassengerId Name Age Sex Parch Pclass"
 val previous = "0"
 val file = "/home/hadoop/BigDL/" + project + "/" + previous
 
-val df = SQLContext.read.format("json").load(file)
+val df = spark.read.format("json").load(file)
 val aimarray = aim.split(" ")
 
 var df_ = df
