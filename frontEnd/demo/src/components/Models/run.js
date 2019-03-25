@@ -1,6 +1,4 @@
 import { OneVarLinearRegression } from './MachineLearning/Regression/OneVarLinearRegression'
-import { Scaler } from './MachineLearning/DataPreprocessing/Scaler';
-import { FillNa } from './MachineLearning/DataPreprocessing/FillNa'
 import { NaiveBayes } from './MachineLearning/Classification/NaiveBayes'
 import React, { Component } from 'react'
 import { Button,Modal } from 'antd'
@@ -11,6 +9,13 @@ import { OneVarPolynomialRegression } from './MachineLearning/Regression/OneVarP
 import { DecisionTreeRegression } from './MachineLearning/Regression/DecisionTree'
 import { RandomForest } from './MachineLearning/Regression/RandomForest'
 import { SVM } from './MachineLearning/Classification/SVM'
+import { fillNa } from '../DataOperate/DataProcess/fillNa'
+import { Onehot } from '../DataOperate/DataProcess/Onehot'
+import { Randis } from '../DataOperate/DataProcess/Randis'
+import { SelectCol } from '../DataOperate/DataProcess/SelectCol'
+import { SeprtbyFeat } from '../DataOperate/DataProcess/SeprtbyFeat'
+import { StrToNum } from '../DataOperate/DataProcess/StrToNum'
+
 class Run extends Component{
   state = { 
     visible: false,
@@ -74,7 +79,8 @@ class Run extends Component{
             k++;
             Deg[indexN]--;
             Sourc = inf.nodes[indexN].id;
-            tag = inf.nodes[indexN].elabel;
+            etag = inf.nodes[indexN].elabel;
+            tag = inf.nodes[indexN].label;
             attribute = inf.nodes[indexN].attr;
             labelarray = inf.nodes[indexN].labelArray;
             let labelarr = {};
@@ -89,7 +95,8 @@ class Run extends Component{
             labelarray = JSON.parse(JSON.stringify(labelarr));
             stream.push({
                         'id':Sourc,
-                        "label":tag,
+                        "label":etag,
+                        "tag":tag,
                         "attribute":attribute,
                         "labelArray":labelarray,
                         "sourceId":sourceId[indexN]
@@ -138,10 +145,10 @@ class Run extends Component{
   }
   run=(stream, propsAPI)=>{
     for (let k = 0; k < stream.length; k++) {
-      if(stream[k].label!=="本地数据"){
-        const all_data = this.inputdata(stream[k].id, propsAPI);
+      if(stream[k].tag!=="本地数据"){
+        const all_data = this.inputdata(stream[k], propsAPI);
         var outcome = new Array()
-        switch (stream[k].label) {
+        switch (stream[k].tag) {
           case '单变量线性回归':
               outcome = OneVarLinearRegression(all_data);
               this.outputdata(stream[k].id, outcome[2], propsAPI);
@@ -170,8 +177,20 @@ class Run extends Component{
               outcome = SVM(all_data)
               this.outputdata(stream[k].id, outcome, propsAPI);
               break
+          case '特征区间化':
+              outcome = SVM(all_data)
+              this.outputdata(stream[k].id, outcome, propsAPI);
+              break
+          case '数据随机划分':
+              outcome = Randis(all_data)
+              this.outputdata(stream[k].id, outcome, propsAPI);
+              break
+          case '特征二进制化':
+              outcome = Onehot(all_data)
+              this.outputdata(stream[k].id, outcome, propsAPI);
+              break
           case '缺失值填充':
-              outcome = FillNa(all_data);
+              outcome = fillNa(all_data);
               this.outputdata(stream[k].id, outcome[1], propsAPI);
               break
           case '归一化':
@@ -255,41 +274,26 @@ class Run extends Component{
     }
 
   }
-  inputdata=(id, propsAPI)=>{
+  inputdata=(stream, propsAPI)=>{
     const { find } = propsAPI;
-    const currentitem = find(id);
     var all_data = [];
-    const inf = propsAPI.save();
-    let labelArray = {};
 
-    const label = currentitem.model.labelArray;
-    for(let i in label){
-      labelArray[i] = new Array();
-      for(let j in label[i]){
-        if(label[i][j][1] === true)
-          labelArray[i].push(label[i][j][0]);
-      }
-    }
-    console.log('labelArray:')
-    console.log(labelArray);
     all_data.push({
-      labelArray: labelArray,
-      all_attr: currentitem.model.attr
+      labelArray: stream.labelArray,
+      all_attr: stream.attribute
     })
-    for (let k in inf.edges){
-      if(inf.edges[k].target === id){
-        let item = find(inf.edges[k].source);
-        var re;
-        if(item.model.anchor[1] === 2){
-          re = JSON.parse(JSON.stringify(item.model.Dataset[inf.edges[k].sourceAnchor-item.model.anchor[0]]));
-        }
-        else if(item.model.anchor[1] === 1){
-          re = JSON.parse(JSON.stringify(item.model.Dataset));
-        }
-        all_data[inf.edges[k].targetAnchor+1]={
-          Dataset: re,
-          length: item.model.length,
-        };
+    const sourceId = stream.sourceId;
+    for(let i in sourceId){
+      let item = find(sourceId[i].source);
+      if(item.model.anchor[1] === 1){
+        all_data.push({
+          Dataset: JSON.parse(JSON.stringify(item.model.Dataset)),
+        })
+      }
+      else {
+        all_data.push({
+          Dataset: JSON.parse(JSON.stringify(item.model.Dataset[sourceId[i].sourceAnchor-item.model.anchor[0]])),
+        })
       }
     }
     console.log('all_data:');
