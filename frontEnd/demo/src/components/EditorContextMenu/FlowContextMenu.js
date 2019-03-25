@@ -11,11 +11,10 @@ import {
 } from '@src';
 import styles from './index.less';
 import iconfont from '../../theme/iconfont.less';
-import store from '../../store'
 import { withPropsAPI } from '@src';
 import LineMarkerEcharts from './LineMarkerEcharts';
-import download from '../DataOperate/download';
 import Downlowd from '../DataOperate/download';
+import GGEditor, { Flow, RegisterCommand } from '@src';
 
 const Panel = Collapse.Panel;
 
@@ -213,7 +212,20 @@ class FlowContextMenu extends React.Component {
     
     return (
       <ContextMenu className={styles.contextMenu}>
-      
+        <GGEditor style={{width:0, height:0}}>
+          <Flow />
+          <RegisterCommand 
+          name="showpicture" 
+          config={
+            {
+              queue: true,  
+              enable(editor) {
+                return true;
+              }, 
+            }
+          }
+          />
+        </GGEditor>
         <NodeMenu>
           <Command name="copy">
             <div className={styles.item}>
@@ -227,22 +239,25 @@ class FlowContextMenu extends React.Component {
               <span>删除</span>
             </div>
           </Command>
+          <Command name="copy">
+            <div className={styles.item} onClick={this.showModal}>
+              <Icon type="form" />
+              <span>数据预览</span>
+            </div>
+          </Command>
+          <Command name="copy">
+            <div className={styles.item} onClick={this.showNModal}>
+              <Icon type="line-chart" />
+              <span>图形化展示</span>
+            </div>
+          </Command>
 
-          <div className={styles.item} onClick={this.showModal}>
-          <Icon type="form" />
-          <span>数据预览</span>
-          </div>
-
-          <div className={styles.item} onClick={this.showNModal}>
-          <Icon type="line-chart" />
-          <span>图形化展示</span>
-          </div>
-
-          <div className={styles.item} onClick={this.modelEvaluation}>
-          <Icon type="solution" />
-          <span>模型评估</span>
-          </div>
-
+          <Command name="copy">
+            <div className={styles.item} onClick={this.modelEvaluation}>
+              <Icon type="solution" />
+              <span>模型评估</span>
+            </div>
+          </Command>
 
           {/* <div className={styles.item} onClick={this.showSModal}>
           <Icon type="dot-chart" />

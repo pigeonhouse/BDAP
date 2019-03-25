@@ -1,6 +1,5 @@
-
 import React, { Component } from 'react'
-import { Button,Modal } from 'antd'
+import { Button } from 'antd'
 import { withPropsAPI } from '@src';
 
 class SparkRun extends Component{
@@ -170,75 +169,6 @@ class SparkRun extends Component{
       alert('illegal');
     }
 
-  }
- inputdata = (id, propsAPI)=>{
-    const { find } = propsAPI;
-    const currentitem = find(id);
-    var all_data = [];
-    const inf = propsAPI.save();
-    let labelArray = [];
-    if(currentitem.model.select_status > 1){
-      const modelarray = currentitem.model.labelArray;
-      for(let m in modelarray){
-        let labelarr = [];
-        for(let k in modelarray[m]){
-          if(modelarray[m][k][1] === true)
-            labelarr.push(modelarray[m][k][0])
-        }
-        labelArray.push(labelarr);
-      }
-    }
-    else {
-      const modelarray = currentitem.model.labelArray;
-      for(let m in modelarray){
-        if(modelarray[m][1] === true)
-          labelArray.push(modelarray[m][0])
-      }
-    }
-    console.log('labelArray:')
-    console.log(labelArray);
-    all_data.push({
-      labelArray: labelArray,
-      all_attr: currentitem.model.attr
-    })
-    for (let k in inf.edges){
-      if(inf.edges[k].target === id){
-        let item = find(inf.edges[k].source);
-        var re = JSON.parse(JSON.stringify(item.model.Dataset))
-        all_data.push({
-          Dataset: re,
-          length: item.model.length,
-          targetAnchor: inf.edges[k].targetAnchor
-        });
-      }
-    }
-    console.log('all_data:');
-    console.log(all_data);
-    return all_data;
-  }
-  outputdata = (id, outcome, propsAPI)=>{
-    const { find, executeCommand, update } = propsAPI;
-    const item = find(id);
-    executeCommand(()=>{
-      update(item, {
-        ...outcome
-      })
-    })
-  }
-  deletedata=(propsAPI)=>{
-    const inf = propsAPI.save().nodes;
-    const { find, executeCommand, update } = propsAPI;
-    for(let i in inf){
-      if(inf[i].label !== 'Output' && inf[i].label !== 'Input'){
-        const item = find(inf[i].id);
-        const values = {Dataset:{}}
-        executeCommand(()=>{
-          update(item, {
-            ...values
-          })
-        })
-      }
-    }
   }
   
   render(){
