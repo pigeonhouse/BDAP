@@ -27,7 +27,7 @@ class HomePage extends React.Component {
   }
   render() {
     if (this.state.redirect) {
-      return <Redirect to="/flow" />;
+      return <Redirect to="/local" />;
     }
     const {getFieldDecorator} = this.props.form;
     return (
