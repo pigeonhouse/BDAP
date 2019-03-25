@@ -8,7 +8,7 @@ import { FlowItemPanel } from '../../components/EditorItemPanel';
 import { FlowDetailPanel } from '../../components/EditorDetailPanel';
 import styles from './index.less';
 
-class LocalMode extends React.Component {
+class ClusterMode extends React.Component {
   renderFlow() {
     return (
       <Flow className={styles.flow} />
@@ -41,4 +41,4 @@ class LocalMode extends React.Component {
   }
 }
 
-export default LocalMode;
+export default ClusterMode;
