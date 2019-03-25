@@ -63,10 +63,8 @@ class nodes:
             fileobj.close()
         
         data_mine = self.matchfunction(code)
-        
-        print(data_mine['code'])
-    '''
-        session_url = 'http://10.105.222.90:8998/sessions/0'
+
+        session_url = 'http://10.105.222.90:8998/sessions/4'
         compute = requests.post(session_url+'/statements', data=json.dumps(data_mine), headers=headers)
       
         result_url = host + compute.headers['location']
@@ -82,7 +80,7 @@ class nodes:
                 break
 
         pprint.pprint(r.json())
-    '''
+
 
 app = Flask(__name__, static_folder="./front_end/static", template_folder="./front_end/")
 CORS(app)
@@ -137,8 +135,8 @@ def handleInput():
 
     data_mine = {'code':code % request.json}
     headers = {'Content-Type': 'application/json'}
-    session_url = 'http://10.105.222.90:8998/sessions/0'
-    compute = requests.post(session_url+'/statements', data=json.dumps(data_mine), headers=headers)
+    session_url = 'http://10.105.222.90:8998/sessions/4'
+    compute = requests.post(session_url + '/statements', data=json.dumps(data_mine), headers=headers)
 
     result_url = host + compute.headers['location']
 
@@ -172,15 +170,16 @@ def run():
     for node in node_:
         print(node.label)
         node.excuted()
-'''        
-        temp = [node.id,convertPost(runningData)]
-        finalData.append(temp)
-        runningData = []
-    
+    '''
+        if node.label != "hdfsFile":
+            temp = [node.id,convertPost(runningData)]
+            finalData.append(temp)
+            runningData = []
+    '''
     print(finalData)
 
     return json.dumps(finalData)
-'''
+
 
     # data_mine = {'kind': 'spark'}
     # create_session = requests.post(host + '/sessions', data=json.dumps(data_mine), headers=headers)
@@ -213,5 +212,3 @@ def returnLoss():
 
 if __name__ == '__main__':
     app.run(debug=True, host='0.0.0.0')
-
-

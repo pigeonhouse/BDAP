@@ -21,8 +21,7 @@ import scala.collection.mutable.ArrayBuffer
         val meanvalue: Double = meanval(0)(0).toString.toDouble
         df_ = df_.na.fill(meanvalue, temp)
       }
-    }
-    else if(Type == "median"){
+    }else if(Type == "median"){
       for(i <- 0 to aimarray.length - 1){
         val temp = Array(aimarray(i))
         val df_1 = df.select(aimarray(i)).na.drop().sort(aimarray(i))
@@ -31,37 +30,47 @@ import scala.collection.mutable.ArrayBuffer
           val medianval = df_1.take(count.toInt/2 + 1).drop(count.toInt/2 - 1)
           val medianvalue = medianval.map(A => A.getDouble(0)).reduce(_ + _)/2
           df_ = df_.na.fill(medianvalue, temp)
-        }
-        else{
+        }else{
           val medianval = df_1.take(count.toInt/2 + 1).drop(count.toInt/2)
           var medianvalue = medianval.map(A => A.getDouble(0))
           df_ = df_.na.fill(medianvalue(0), temp)
         }
       }
-    }
-    else if(Type == "min"){
+    }else if(Type == "min"){
       for(i <- 0 to aimarray.length - 1){
         val temp = Array(aimarray(i))
         val minval = df.select(min(aimarray(i))).collect()
         val minvalue: Double = minval(0)(0).toString.toDouble
         df_ = df_.na.fill(minvalue, temp)
       }
-    }
-    else if(Type == "max"){
+    }else if(Type == "max"){
       for(i <- 0 to aimarray.length - 1){
         val temp = Array(aimarray(i))
         val maxval = df.select(max(aimarray(i))).collect()
         val maxvalue: Double = maxval(0)(0).toString.toDouble
         df_ = df_.na.fill(maxvalue, temp)
       }
-    }
-    else if(Type == "drop"){
+    }else if(Type == "drop"){
       df_ = df_.na.drop(aimarray)
-    }
-    else if(Type == "specifynum"){
+    }else if(Type == "specifynum"){
       df_ = df_.na.fill(specify, aimarray)
     }
 
-    df_.write.format("parquet")
-      .mode(SaveMode.Append)
-      .save(project + "/" + id)
+    df_.write.format("parquet").mode(SaveMode.Overwrite).save(project + "/" + id)
+
+  val colName = df_.columns
+  val fin = new StringBuilder
+  val start = """{"colName":""""
+  val end = "\""
+  val json = colName.mkString(start,",",end)
+  fin ++= json
+  for(name <- colName){
+    var t = df_.select(name).takeAsList(20).toArray.mkString.stripSuffix("]").stripPrefix("[").split("\\]\\[")
+    var r = ",\"" + name + "\":\"" + t.mkString(",") + "\""
+    fin ++= r
+  }
+  fin += '}'
+
+  println(fin)
+
+  val result = Http("http://10.122.240.131:5000/InputPost").postData(fin.toString).header("Content-Type", "application/json").header("Charset", "UTF-8").option(HttpOptions.readTimeout(10000)).asString

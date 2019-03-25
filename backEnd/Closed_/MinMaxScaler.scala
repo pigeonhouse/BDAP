@@ -28,6 +28,4 @@ import spark.implicits._
       df = df.join(df_1, df("idx") === df_1("idx")).drop("idx")
     }
 
-    df.write.format("parquet")
-      .mode(SaveMode.Append)
-      .save(project + "/" + id)
+    df.write.format("parquet").mode(SaveMode.Overwrite).save(project + "/" + id)
