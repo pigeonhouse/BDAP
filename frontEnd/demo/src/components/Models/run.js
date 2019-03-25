@@ -177,12 +177,16 @@ class Run extends Component{
               outcome = SVM(all_data)
               this.outputdata(stream[k].id, outcome, propsAPI);
               break
-          case '特征区间化':
-              outcome = SVM(all_data)
-              this.outputdata(stream[k].id, outcome, propsAPI);
-              break
           case '数据随机划分':
               outcome = Randis(all_data)
+              this.outputdata(stream[k].id, outcome, propsAPI);
+              break
+          case '特征区间化':
+              outcome = SeprtbyFeat(all_data)
+              this.outputdata(stream[k].id, outcome, propsAPI);
+              break  
+          case '特征分组归类':
+              outcome = StrToNum(all_data)
               this.outputdata(stream[k].id, outcome, propsAPI);
               break
           case '特征二进制化':

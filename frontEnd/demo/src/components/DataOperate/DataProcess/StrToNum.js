@@ -3,6 +3,8 @@ export function StrToNum(allData){
     var Dataset = allData[1].Dataset;
     var tem, temp;
     var labelArray = new Array();
+
+    console.log(allData);
     for(let i = 0; i < Dataset.length ; i++){
         tem = 0;
         for(let j = 0; j < allData[0].labelArray.public.length; j++){
