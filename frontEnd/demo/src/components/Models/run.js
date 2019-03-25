@@ -74,7 +74,7 @@ class Run extends Component{
             k++;
             Deg[indexN]--;
             Sourc = inf.nodes[indexN].id;
-            tag = inf.nodes[indexN].label;
+            tag = inf.nodes[indexN].elabel;
             attribute = inf.nodes[indexN].attr;
             labelarray = inf.nodes[indexN].labelArray;
             let labelarr = {};

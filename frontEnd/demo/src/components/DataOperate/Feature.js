@@ -31,7 +31,7 @@ class Feature extends Component{
                 }
             }
             else {
-
+                
             }
         }
         else {
@@ -55,7 +55,7 @@ class Feature extends Component{
                             <Divider></Divider>
                         </Fragment>
             case '特征分组归类':
-                this.findStat(this.props.sourceID, tag);
+                // this.findStat(this.props.sourceID, tag);
                 return  <Fragment>
                             <Divider>{tag}</Divider>
                             <FeatureGroup

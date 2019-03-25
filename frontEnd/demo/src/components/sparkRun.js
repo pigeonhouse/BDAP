@@ -49,7 +49,7 @@ class SparkRun extends Component{
             k++;
             Deg[indexN]--;
             Sourc = inf.nodes[indexN].id;
-            tag = inf.nodes[indexN].label;
+            tag = inf.nodes[indexN].elabel;
             attribute = inf.nodes[indexN].attr;
             labelarray = inf.nodes[indexN].labelArray;
             let labelarr = {};
@@ -92,13 +92,18 @@ class SparkRun extends Component{
         mode: 'cors',
         headers: {'Content-Type': 'application/json'},
         }
+        // const { propsAPI } = this.props;
+        // const { update, executeCommand, find } = propsAPI;
         fetch(
           'http://localhost:5000/run',init
         )
           .then(res => res.json())
           .then(data => {
             console.log(res)
-            this.setState({users: data})
+            // for(let i in data){
+            //   let item = find(data);
+            //   update(item, {});
+            // }
           })
           .catch(e => console.log('错误:', e))
   }
