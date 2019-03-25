@@ -12,10 +12,10 @@ export function StrToNum(allData){
         }
         temp = new Array(); 
         if(tem == 1){
-            temp = [allData[0].labelArray.public[i], true];
+            temp = [Dataset[i].label, true];
         }
         else{
-            temp = [allData[0].labelArray.public[i], false];
+            temp = [Dataset[i].label, false];
         }
         labelArray.push(temp);
     }
@@ -23,16 +23,13 @@ export function StrToNum(allData){
     // var Dataset = [[{label:'id',value:['mon','tur','sun','sta']}],[{label:'age',value:[1,2,3]}]];
     // var labelArray = [["id",true],["age",false]];
     // var stat = [{average:2,max:3,min:2,media:2},{average:2,max:3,min:2,media:2},{average:2,max:3,min:2,media:2}]
-    // console.log("xxxxxxxxxxxxxxxxxxxx");
-    // console.log(Dataset);
     for(let i = 0; i < labelArray.length;i++){
         if(labelArray[i][1] == true){
             for(let j = 0; j < Dataset[i].value.length; j++){
                 for(let k = 0; k < attr.public.length; k++){
                     for(let l = 1;l < attr.public[k].length;l++ ){
                         if(Dataset[i].value[j] == attr.public[k][l]){
-                            // console.log("111111111111111111111");
-                            // console.log(Dataset);
+
                             Dataset[i].value[j] = attr.public[k][0];
                         }
                     }

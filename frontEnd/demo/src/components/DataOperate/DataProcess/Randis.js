@@ -12,10 +12,10 @@ export function Randis(allData){
         }
         temp = new Array(); 
         if(tem == 1){
-            temp = [allData[0].labelArray.public[i], true];
+            temp = [Dataset[i].label, true];
         }
         else{
-            temp = [allData[0].labelArray.public[i], false];
+            temp = [Dataset[i].label, false];
         }
         labelArray.push(temp);
     }
@@ -42,10 +42,8 @@ export function Randis(allData){
                         }
                     }
                     if(flag == 0){
-                        tem = new Array();
-                        tem['value'] = new Array();
-                        tem['label'] = Dataset[k].label;
-                        tem['value'].push(Dataset[k].value[j]);
+                        tem = {'value':new Array(),'label':Dataset[k].label};
+                        tem.value.push(Dataset[k].value[j]);
                         tem1.push(tem);
                     }
 
@@ -66,10 +64,8 @@ export function Randis(allData){
                         }
                     }
                     if(flag == 0){
-                        tem = new Array();
-                        tem['value'] = new Array();
-                        tem['label'] = Dataset[k].label;
-                        tem['value'].push(Dataset[k].value[j]);
+                        tem = {'value':new Array(),'label':Dataset[k].label};
+                        tem.value.push(Dataset[k].value[j]);
                         tem2.push(tem);
                     }
 

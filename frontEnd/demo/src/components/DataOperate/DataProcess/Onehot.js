@@ -11,30 +11,32 @@ export function Onehot(allData){
         }
         temp = new Array(); 
         if(tem == 1){
-            temp = [allData[0].labelArray.public[i], true];
+            temp = [Dataset[i].label, true];
         }
         else{
-            temp = [allData[0].labelArray.public[i], false];
+            temp = [Dataset[i].label, false];
         }
         labelArray.push(temp);
     }
     // var Dataset = [[{label:'id',value:['mon','tur','sun','sta']}]];
     // var labelArray = [["id",true]];
     // var stat = [{average:2,max:3,min:2,media:2},{average:2,max:3,min:2,media:2},{average:2,max:3,min:2,media:2}]
+
+    console.log(labelArray)
     var tep,tp;
     for(let i = 0; i < labelArray.length;i++){
         if(labelArray[i][1] == true){
             for(let j = 0; j < Dataset[i].value.length; j++){
-                    tep = new Array();
                     tp = new Array();
-                    tep['label'] = labelArray[i][0];
+                    tep = { 'label': labelArray[i][0],'stat' : new Array(),'value' : new Array()};
                 for(let k = 0; k < Dataset[i].value.length; k++){
                     if(k == j){
                         tp[k] = 1;
                     }
                     else    tp[k] = 0;
                 }
-                tep['value'] = tp;
+                tep.value = tp;
+                tep.stat = Dataset[i].stat;
                 Dataset.push(tep);
             }
         }

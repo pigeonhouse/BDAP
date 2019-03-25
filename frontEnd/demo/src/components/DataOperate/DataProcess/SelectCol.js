@@ -12,13 +12,12 @@ export function SelectCol(allData){
         }
         temp = new Array(); 
         if(tem == 1){
-            temp = [allData[0].labelArray.public[i], true];
+            temp = [Dataset[i].label, true];
         }
         else{
-            temp = [allData[0].labelArray.public[i], false];
+            temp = [Dataset[i].label, false];
         }
         labelArray.push(temp);
-        labelArray1.push(temp);
     }
     // var Dataset = [[{label:'id',value:1}],[{label:'age',value:1}],[{label:'score',value:1}]]
     // var labelArray = [["id",true],["age",false],["score",true]];
@@ -32,21 +31,11 @@ export function SelectCol(allData){
         if(labelArray[i][1] == false){
             Dataset.splice(c, 1);
             labelArray1.splice(c, 1);
-            // allData.labelArray.splice(c,1);
         }
         else c++;
-        // console.log("111111");
-        // console.log(labelArray);
-        // console.log(Dataset);
-        // console.log(labelArray.length);
-        // console.log(i);
     }
-    // console.log("xxxxxxxxxxxxxxxxxxxx");
-    // console.log(labelArray1);
-    // console.log(Dataset);
-
-    allData.Dataset = Dataset;
-    allData.labelArray = labelArray1;
+    
+    allData[1].Dataset = Dataset;
 
     return allData;
 }
