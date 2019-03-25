@@ -14,7 +14,7 @@ class FlowItemPanel extends React.Component {
       className={styles.scrollapp}
       style={{maxHeight:676}}
     >
-      <GGEditor style={{height:0}}>
+      <GGEditor style={{height:0, width:0}}>
           <Flow />
           <RegisterNode 
             name = {'two-one'}
@@ -172,9 +172,9 @@ class FlowItemPanel extends React.Component {
               labelArray: {}, 
               length: 0,
               group: 'feature'
-            }}
-           
-          /></ItemPanel></Menu.Item>
+            }}      
+      /></ItemPanel></Menu.Item>
+
       <Menu.Item key="8"><ItemPanel><Item
             type="node"
             size="200*40"
@@ -246,6 +246,21 @@ class FlowItemPanel extends React.Component {
               labelArray: {}, 
               length: 0,
               anchor: [1, 2],
+              group: 'feature'
+            }}           
+          /></ItemPanel></Menu.Item>
+
+          <Menu.Item key="21"><ItemPanel><Item
+            type="node"
+            size="200*40"
+            shape="one-one"
+            model={{
+              label: '数据类型转换',
+              attr:{},
+              Dataset: [],
+              labelArray: {}, 
+              length: 0,
+              anchor: [1, 1],
               group: 'feature'
             }}           
           /></ItemPanel></Menu.Item>

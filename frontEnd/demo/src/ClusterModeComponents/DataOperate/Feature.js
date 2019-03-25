@@ -5,6 +5,7 @@ import FeatureRegion from './Feature/FeatureRegion'
 import FeatureGroup from './Feature/FeatureGroup'
 import FillNa from './Feature/fillNa'
 import Randis from './Feature/Randis'
+import TypeChange from './Feature/TypeChange'
 
 class Feature extends Component{
     constructor(props){
@@ -61,6 +62,13 @@ class Feature extends Component{
                             <FeatureGroup
                             tag = {tag}
                             stat= {this.state.stat}/>
+                            <Divider></Divider>
+                        </Fragment>
+            case '数据类型转换':
+                return  <Fragment>
+                            <Divider>{tag}</Divider>
+                            <TypeChange 
+                            tag = {tag}/>
                             <Divider></Divider>
                         </Fragment>
             case '特征二进制化':

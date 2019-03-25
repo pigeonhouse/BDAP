@@ -1,11 +1,11 @@
 import React from 'react';
 import { Row, Col } from 'antd';
 import GGEditor, { Flow,RegisterNode } from '@src';
-import EditorMinimap from '../../components/EditorMinimap';
-import { FlowContextMenu } from '../../components/EditorContextMenu';
-import { FlowToolbar } from '../../components/EditorToolbar';
-import { FlowItemPanel } from '../../components/EditorItemPanel';
-import { FlowDetailPanel } from '../../components/EditorDetailPanel';
+import EditorMinimap from '../../LocalModeComponents/EditorMinimap';
+import { FlowContextMenu } from '../../LocalModeComponents/EditorContextMenu';
+import { FlowToolbar } from '../../LocalModeComponents/EditorToolbar';
+import { FlowItemPanel } from '../../LocalModeComponents/EditorItemPanel';
+import { FlowDetailPanel } from '../../LocalModeComponents/EditorDetailPanel';
 import styles from './index.less';
 
 class LocalMode extends React.Component {

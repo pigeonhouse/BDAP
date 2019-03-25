@@ -1,11 +1,11 @@
 import React from 'react';
 import { Row, Col } from 'antd';
 import GGEditor, { Flow,RegisterNode } from '@src';
-import EditorMinimap from '../../components/EditorMinimap';
-import { FlowContextMenu } from '../../components/EditorContextMenu';
-import { FlowToolbar } from '../../components/EditorToolbar';
-import { FlowItemPanel } from '../../components/EditorItemPanel';
-import { FlowDetailPanel } from '../../components/EditorDetailPanel';
+import EditorMinimap from '../../ClusterModeComponents/EditorMinimap';
+import { FlowContextMenu } from '../../ClusterModeComponents/EditorContextMenu';
+import { FlowToolbar } from '../../ClusterModeComponents/EditorToolbar';
+import { FlowItemPanel } from '../../ClusterModeComponents/EditorItemPanel';
+import { FlowDetailPanel } from '../../ClusterModeComponents/EditorDetailPanel';
 import styles from './index.less';
 
 class ClusterMode extends React.Component {
