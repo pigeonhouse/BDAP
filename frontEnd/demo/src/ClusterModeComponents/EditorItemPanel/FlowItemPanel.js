@@ -217,6 +217,7 @@ class FlowItemPanel extends React.Component {
             shape="one-one"
             model={{
               label: '数据类型转换',
+              elabel:'TransformType',
               attr:{},
               Dataset: [],
               labelArray: {}, 
@@ -242,7 +243,7 @@ class FlowItemPanel extends React.Component {
             }}    
           /></ItemPanel></Menu.Item> */}
 
-          <Menu.Item key="11"><ItemPanel><Item
+          {/* <Menu.Item key="11"><ItemPanel><Item
             type="node"
             size="200*40"
             shape="one-one"
@@ -269,7 +270,7 @@ class FlowItemPanel extends React.Component {
               anchor: [1, 2],
               group: 'feature'
             }}           
-          /></ItemPanel></Menu.Item>
+          /></ItemPanel></Menu.Item> */}
 
          
       </SubMenu>
