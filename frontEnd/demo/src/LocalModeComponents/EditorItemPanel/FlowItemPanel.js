@@ -257,6 +257,7 @@ class FlowItemPanel extends React.Component {
             shape="one-one"
             model={{
               label: '数据类型转换',
+              elabel:'TransformType',
               attr:{},
               Dataset: [],
               labelArray: {}, 
