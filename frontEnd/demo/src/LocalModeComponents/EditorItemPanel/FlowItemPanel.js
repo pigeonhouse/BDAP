@@ -13,6 +13,7 @@ class FlowItemPanel extends React.Component {
       mode="inline"
       className={styles.scrollapp}
       style={{maxHeight:676}}
+      selectable={false}
     >
       <GGEditor style={{height:0, width:0}}>
           <Flow />
