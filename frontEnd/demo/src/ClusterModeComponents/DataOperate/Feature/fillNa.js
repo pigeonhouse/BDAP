@@ -11,7 +11,7 @@ class FillNa extends Component {
   }
   componentWillMount(){
     const { propsAPI } = this.props;
-    const { getSelected } = propsAPI;
+    const { getSelected, update } = propsAPI;
     const item = getSelected()[0];
     if (!item) {
     return;
