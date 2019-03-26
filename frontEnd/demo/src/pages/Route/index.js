@@ -1,6 +1,7 @@
 import React from 'react';
 import { Button } from 'antd';
 import { Redirect } from 'react-router-dom';
+import { Row, Col } from 'antd';
 
 class RouteMode extends React.Component {
   state={
@@ -25,8 +26,20 @@ class RouteMode extends React.Component {
     }
     else return (
       <div>
-        <Button onClick={this.insertLocal}>lOCAL</Button>
-        <Button onClick={this.insertCluster}>CLUSTER</Button>
+
+        <Row>
+        <Col span={12}>
+    
+        <Button style={{height:200,width:400,margin:150,fontSize:25}} onClick={this.insertLocal}>LOCAL MODE</Button>
+        
+        </Col>
+
+        <Col span={12}>
+        
+        <Button style={{height:200,width:400,margin:150,fontSize:25}} onClick={this.insertCluster}>CLUSTER MODE</Button>
+        
+        </Col>
+        </Row>
       </div>
     );
   }

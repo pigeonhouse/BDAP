@@ -174,7 +174,7 @@ class FlowToolbar extends React.Component {
           </Tooltip>
         </Command>
         
-        <Run></Run>
+  
         <SparkRun></SparkRun>
        {/* <Button onClick={()=>this.livyTest()}>spark-test</Button> */}
        {/* <Button onClick={()=>this.returnLoss()}>return-loss</Button> */}

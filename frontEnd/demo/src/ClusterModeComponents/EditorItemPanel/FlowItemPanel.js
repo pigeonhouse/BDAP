@@ -96,70 +96,9 @@ class FlowItemPanel extends React.Component {
               anchor: [0, 1]
             }}         
           /></ItemPanel></Menu.Item>
-          {/* <Menu.Item key="2"><ItemPanel><Item
-            type="node"
-            size="200*40"
-            shape="one-zero"
-            model={{
-              // color: '#FA8C16',
-              label: 'Output',
-              attr:{'targetFile':'new_people'}
-              anchor: [1, 0]
-            }}           
-          /></ItemPanel></Menu.Item>        */}
-       </SubMenu>
-         {/* <SubMenu key="g2" title="Model">      
-          <Menu.Item key="3"><ItemPanel><Item
-            type="node"
-            size="200*40"
-            shape="flow-rect"
-            model={{
-              label: 'ConvNet',
-              attr:{'learningRate':0.1, poolSize: 2, strides: 2}
-            }}         
-          /></ItemPanel></Menu.Item>
-          <Menu.Item key="4"><ItemPanel><Item
-            type="node"
-            size="200*40"
-            shape="two-one"
-            model={{
-              label: 'DenseNet',
-              attr: {'learningRate':0.1},
-              Dataset: [],
-              labelArray: [], 
-              length: 0,
-              select_status: 3
-            }}          
-          /></ItemPanel></Menu.Item>
-          <Menu.Item key="5"><ItemPanel><Item
-            type="node"
-            size="200*40"
-            shape="flow-rect"
-            model={{
-              // color: '#722ED1',
-              label: 'FillNa',
-              attr:{'range':'unknown','originNumber':null,'fillingNumber':100}
-            }}
-           
-          /></ItemPanel></Menu.Item>
-
-          <Menu.Item key="6"><ItemPanel><Item
-            type="node"
-            size="200*40"
-            shape="flow-rect"
-            model={{
-              // color: '#722ED1',
-              label: 'MaxMinScaler',
-              attr:{'rows':'unknown'}
-              
-            }}
-           
-          /></ItemPanel></Menu.Item>
-           
-        </SubMenu> */}
-        
+       </SubMenu>    
       <SubMenu key="sub2" title={<span><Icon type="mail" /><span>数据预处理</span></span>}>
-      <Menu.Item key="7"><ItemPanel><Item
+      <Menu.Item key="1"><ItemPanel><Item
             type="node"
             size="200*40"
             shape="one-one"
@@ -167,7 +106,7 @@ class FlowItemPanel extends React.Component {
               label: '缺失值填充',
               elabel:'Fillna',
               anchor: [1, 1],
-              attr:{type:'average'},
+              attr:{},
               Dataset: [],
               labelArray: {}, 
               length: 0,
@@ -175,7 +114,7 @@ class FlowItemPanel extends React.Component {
             }}      
       /></ItemPanel></Menu.Item>
 
-      <Menu.Item key="8"><ItemPanel><Item
+      <Menu.Item key="2"><ItemPanel><Item
             type="node"
             size="200*40"
             shape="one-one"
@@ -191,12 +130,13 @@ class FlowItemPanel extends React.Component {
             }}
            /></ItemPanel></Menu.Item>
 
-          <Menu.Item key="9"><ItemPanel><Item
+<Menu.Item key="3"><ItemPanel><Item
             type="node"
             size="200*40"
             shape="one-one"
             model={{
-              label: '特征区间化',
+              label: '标准化',
+              elabel:'StandardScaler',
               attr:{},
               Dataset: [],
               labelArray: {}, 
@@ -204,9 +144,90 @@ class FlowItemPanel extends React.Component {
               anchor: [1, 1],
               group: 'feature'
             }}
+           /></ItemPanel></Menu.Item>
+
+<Menu.Item key="4"><ItemPanel><Item
+            type="node"
+            size="200*40"
+            shape="one-one"
+            model={{
+              label: 'one-hot编码',
+              elabel:'OneHotEncoding',
+              attr:{},
+              Dataset: [],
+              labelArray: {}, 
+              length: 0,
+              anchor: [1, 1],
+              group: 'feature'
+            }}
+           /></ItemPanel></Menu.Item>
+
+        <Menu.Item key="5"><ItemPanel><Item
+            type="node"
+            size="200*40"
+            shape="one-one"
+            model={{
+              label: '列排序',
+              elabel:'SortBy',
+              attr:{},
+              Dataset: [],
+              labelArray: {}, 
+              length: 0,
+              anchor: [1, 1],
+              group: 'feature'
+            }}
+           /></ItemPanel></Menu.Item>
+
+        <Menu.Item key="6"><ItemPanel><Item
+            type="node"
+            size="200*40"
+            shape="one-one"
+            model={{
+              label: 'StringIndexer',
+              elabel:'Stringindex',
+              attr:{},
+              Dataset: [],
+              labelArray: {}, 
+              length: 0,
+              anchor: [1, 1],
+              group: 'feature'
+            }}
+           /></ItemPanel></Menu.Item>
+
+          <Menu.Item key="7"><ItemPanel><Item
+            type="node"
+            size="200*40"
+            shape="one-one"
+            model={{
+              label: '特征分组归类',
+              elabel:'QuantileDiscretizer',
+              attr:{'新生成列名':'','类别数':''},
+              Dataset: [],
+              labelArray: {}, 
+              length: 0,
+              anchor: [1, 1],
+              //group: 'feature'
+            }}
           /></ItemPanel></Menu.Item>
 
-          <Menu.Item key="10"><ItemPanel><Item
+
+          <Menu.Item key="8"><ItemPanel><Item
+            type="node"
+            size="200*40"
+            shape="one-one"
+            model={{
+              label: '数据类型转换',
+              attr:{},
+              Dataset: [],
+              labelArray: {}, 
+              length: 0,
+              anchor: [1, 1],
+              group: 'feature'
+            }}           
+          /></ItemPanel></Menu.Item>
+
+
+          {/* <Menu.Item key="10"><ItemPanel><Item
             type="node"
             size="200*40"
             shape="one-one"
@@ -219,7 +240,7 @@ class FlowItemPanel extends React.Component {
               anchor: [1, 1],
               group: 'feature'
             }}    
-          /></ItemPanel></Menu.Item>
+          /></ItemPanel></Menu.Item> */}
 
           <Menu.Item key="11"><ItemPanel><Item
             type="node"
@@ -250,20 +271,7 @@ class FlowItemPanel extends React.Component {
             }}           
           /></ItemPanel></Menu.Item>
 
-          <Menu.Item key="21"><ItemPanel><Item
-            type="node"
-            size="200*40"
-            shape="one-one"
-            model={{
-              label: '数据类型转换',
-              attr:{},
-              Dataset: [],
-              labelArray: {}, 
-              length: 0,
-              anchor: [1, 1],
-              group: 'feature'
-            }}           
-          /></ItemPanel></Menu.Item>
+         
       </SubMenu>
 
       <SubMenu key="sub3" title={<span><Icon type="appstore" /><span>机器学习</span></span>}>
