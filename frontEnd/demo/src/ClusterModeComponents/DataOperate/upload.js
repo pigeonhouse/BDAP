@@ -10,8 +10,7 @@ import { Stat } from './stat';
 class Uploadfile extends Component{
     constructor(props){
         super(props);
-        this.state={
-            
+        this.state={   
         }
     }
     

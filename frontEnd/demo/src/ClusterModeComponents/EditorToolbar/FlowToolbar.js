@@ -5,13 +5,10 @@ import styles from './index.less';
 import iconfont from '../../theme/iconfont.less';
 import {AppendingLineChart} from "../linechart/linechart.ts";
 import d3 from "d3"
-import Run from "../Models/run.js"
 import SparkRun from "../sparkRun"
 import { withPropsAPI } from '@src';
 import store from '../../store';
-import { getStopLineAction, getShowLineAction, UpINF } from '../../store/actionCreate';
-import {OneVarLinearRegression} from '../Models/MachineLearning/Regression/OneVarLinearRegression.js'
-import {OneVarPolynomialRegression} from '../Models/MachineLearning/Regression/OneVarPolynomialRegression'
+
 class FlowToolbar extends React.Component {
 
   state = {
