@@ -1,6 +1,6 @@
 import React from 'react';
 import { Row, Col } from 'antd';
-import GGEditor, { Flow,RegisterNode } from '@src';
+import GGEditor, { Flow } from '@src';
 import EditorMinimap from '../../LocalModeComponents/EditorMinimap';
 import { FlowContextMenu } from '../../LocalModeComponents/EditorContextMenu';
 import { FlowToolbar } from '../../LocalModeComponents/EditorToolbar';

@@ -2,7 +2,6 @@ import React, {Component} from 'react';
 import { Button, Input ,Upload,Icon} from 'antd'
 import Papa from 'papaparse'
 import { withPropsAPI } from '@src';
-import store from '../../store';
 import { UpL } from '../../store/actionCreate';
 import styles from './inputStyle.less'
 import { Stat } from './stat';
