@@ -34,13 +34,15 @@ class nodes:
             data = {'code': code % (self.id, ArraytoString(self.sourceID))}
         elif self.label =='localFile':
             data = {'code':code }
+        elif self.label =='Fillna':
+            data = {'code':code }
         else:
             data = None
 
         return data
 
     def excuted(self):
-        fileobj = open("./Closed/" + self.label + ".scala", "r")
+        fileobj = open("./Closed_/" + self.label + ".scala", "r")
         
         try:
             code = fileobj.read()
@@ -156,7 +158,7 @@ def run():
         node.excuted()
         temp = [node.id,convertPost(runningData)]
         finalData.append(temp)
-        runningData = []
+
     
     print(finalData)
 
