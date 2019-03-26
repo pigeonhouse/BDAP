@@ -22,6 +22,10 @@ class FillNa extends Component {
             typeValue:attr.type
         })
     }
+    else{
+      attr.type = 'average';
+      update(item, {attr});
+    }
   }
   handleChange = (value) => {
     const { propsAPI } = this.props;
