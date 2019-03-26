@@ -1,6 +1,6 @@
 import React from 'react';
 import { Row, Col } from 'antd';
-import GGEditor, { Flow,RegisterNode } from '@src';
+import GGEditor, { Flow } from '@src';
 import EditorMinimap from '../../ClusterModeComponents/EditorMinimap';
 import { FlowContextMenu } from '../../ClusterModeComponents/EditorContextMenu';
 import { FlowToolbar } from '../../ClusterModeComponents/EditorToolbar';
