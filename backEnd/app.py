@@ -35,6 +35,8 @@ class nodes:
             self.label = "MinMaxScaler"
         elif self.label == "决策树回归":
             self.label = "DecivionTree"
+        elif self.label == "数据类型转换":
+            self.label = "TransformType"
         else:
             self.label = self.label
 
@@ -49,6 +51,8 @@ class nodes:
             data = {'code': code % self.id}
         elif self.label == 'LogisticRegression':
             data = {'code': code % (self.id)}
+        elif self.label == "TransformType":
+            data = {'code': code % (self.id, ArraytoString(self.labelArray['public']), self.sourceID[0]['source'], "Doubletype")}
         else:
             data = None
 
@@ -64,7 +68,7 @@ class nodes:
         
         data_mine = self.matchfunction(code)
 
-        session_url = 'http://10.105.222.90:8998/sessions/4'
+        session_url = 'http://10.105.222.90:8998/sessions/0'
         compute = requests.post(session_url+'/statements', data=json.dumps(data_mine), headers=headers)
       
         result_url = host + compute.headers['location']
@@ -135,7 +139,7 @@ def handleInput():
 
     data_mine = {'code':code % request.json}
     headers = {'Content-Type': 'application/json'}
-    session_url = 'http://10.105.222.90:8998/sessions/4'
+    session_url = 'http://10.105.222.90:8998/sessions/0'
     compute = requests.post(session_url + '/statements', data=json.dumps(data_mine), headers=headers)
 
     result_url = host + compute.headers['location']
@@ -170,12 +174,11 @@ def run():
     for node in node_:
         print(node.label)
         node.excuted()
-    '''
         if node.label != "hdfsFile":
             temp = [node.id,convertPost(runningData)]
             finalData.append(temp)
             runningData = []
-    '''
+    
     print(finalData)
 
     return json.dumps(finalData)

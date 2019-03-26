@@ -5,14 +5,14 @@ import org.apache.spark.sql.functions.monotonically_increasing_id
 import org.apache.spark.sql.types._
 
 
-val project = "Taitanic1"
-val id = "1"
-val aim = "Fare Pclass Survived PassengerId Age"
-val previous = "0"
-val targetType = "Doubletype"
+val project = "Demo"
+val id = "%s"
+val aim = "%s"
+val previous = "%s"
+val targetType = "%s"
 val file = project + "/" + previous
 
-val df = spark.read.format("json").load(file)
+val df = spark.read.format("parquet").load(file)
 var df_ = df
 
     if(targetType == "Doubletype"){
@@ -36,6 +36,4 @@ var df_ = df
 
     val result = dfbeta.join(df_, dfbeta("idx") === df_("idx")).drop("idx")
 
-    result.write.format("json")
-      .mode(SaveMode.Append)
-      .save(project + "/" + id)
+    result.write.format("parquet").mode(SaveMode.Overwrite).save(project + "/" + id)
