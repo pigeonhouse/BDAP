@@ -11,7 +11,7 @@ class FillNa extends Component {
   }
   componentWillMount(){
     const { propsAPI } = this.props;
-    const { getSelected } = propsAPI;
+    const { getSelected, update } = propsAPI;
     const item = getSelected()[0];
     if (!item) {
     return;
@@ -21,6 +21,10 @@ class FillNa extends Component {
         this.setState({
             typeValue:attr.type
         })
+    }
+    else{
+      attr.type = 'average';
+      update(item, {attr});
     }
   }
   handleChange = (value) => {
