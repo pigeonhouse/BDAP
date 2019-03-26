@@ -48,8 +48,8 @@ class SparkRun extends Component{
             k++;
             Deg[indexN]--;
             Sourc = inf.nodes[indexN].id;
-            etag = inf.nodes[indexN].elabel;
-            tag = inf.nodes[indexN].label;
+            tag = inf.nodes[indexN].elabel;
+            //tag = inf.nodes[indexN].label;
             attribute = inf.nodes[indexN].attr;
             labelarray = inf.nodes[indexN].labelArray;
             let labelarr = {};
@@ -64,8 +64,8 @@ class SparkRun extends Component{
             labelarray = JSON.parse(JSON.stringify(labelarr));
             stream.push({
                         'id':Sourc,
-                        "label":etag,
-                        "tag":tag,
+                        //"label":etag,
+                        "label":tag,
                         "attribute":attribute,
                         "labelArray":labelarray,
                         "sourceId":sourceId[indexN]

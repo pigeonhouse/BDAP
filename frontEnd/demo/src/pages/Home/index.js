@@ -27,7 +27,7 @@ class HomePage extends React.Component {
   }
   render() {
     if (this.state.redirect) {
-      return <Redirect to="/local" />;
+      return <Redirect to="/cluster" />;
     }
     const {getFieldDecorator} = this.props.form;
     return (
