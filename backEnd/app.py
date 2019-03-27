@@ -2,8 +2,9 @@ from flask import Flask, render_template, request
 from flask_cors import CORS
 import json, pprint, requests, textwrap
 
-global inputData
-global runningData
+inputData = []
+runningData = []
+jobCompleted = 0
 
 
 def ArraytoString(Array):
@@ -87,6 +88,12 @@ def RunningPost():
     return "received"
 
 
+@app.route('/JobRequest', methods=['GET', 'POST'])
+def JobRequest():
+    global jobCompleted
+    jobCompleted += 3
+    return json.dumps(jobCompleted)
+
 
 @app.route('/')
 def hello_world():
@@ -158,6 +165,8 @@ def run():
         node.excuted()
         temp = [node.id,convertPost(runningData)]
         finalData.append(temp)
+        global jobCompleted
+        jobCompleted += 1
 
     
     print(finalData)
