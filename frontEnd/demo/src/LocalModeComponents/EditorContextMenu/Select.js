@@ -1,4 +1,4 @@
-import { Button, Modal, Transfer } from 'antd'
+import { Button, Modal, Transfer, notification } from 'antd'
 import React, {Component} from 'react';
 import { withPropsAPI } from '@src';
 
@@ -65,7 +65,12 @@ class Select extends React.Component {
   handleSearch = (dir, value) => {
     console.log('search:', dir, value);
   };
-
+  componentWillMount(){
+    notification['info']({
+        message: '选择提示',
+        description: '将需要展示数据的字段从左方框移到右方框，移过去的第一个字段作x轴，余下的字段作y轴',
+      });
+  }
   render() {
     return (
         <div>
