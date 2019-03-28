@@ -66,5 +66,5 @@ export function SeprtbyFeat(allData){
     console.log('outcome')
     console.log(Dataset);
     allData[1].Dataset = Dataset;
-    return allData;
+    return allData[1];
 }

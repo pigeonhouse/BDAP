@@ -238,7 +238,7 @@ class FlowItemPanel extends React.Component {
               length: 0,
               group: 'feature',
               keyConfig:{
-                state_icon_url: 'https://gw.alipayobjects.com/zos/rmsportal/czNEJAmyDpclFaSucYWB.svg',
+                state_icon_url: 'https://gw.alipayobjects.com/zos/rmsportal/uZVdwjJGqDooqKLKtvGA.svg',
               }
             }}      
       /></ItemPanel></Menu.Item>
@@ -257,7 +257,7 @@ class FlowItemPanel extends React.Component {
               anchor: [1, 1],
               group: 'feature',
               keyConfig:{
-                state_icon_url: 'https://loading.io/s/icon/28avj5.png',
+                state_icon_url: 'https://gw.alipayobjects.com/zos/rmsportal/uZVdwjJGqDooqKLKtvGA.svg',
               }
             }}
            /></ItemPanel></Menu.Item>
@@ -273,7 +273,10 @@ class FlowItemPanel extends React.Component {
               labelArray: {}, 
               length: 0,
               anchor: [1, 1],
-              group: 'feature'
+              group: 'feature',
+              keyConfig:{
+                state_icon_url: 'https://gw.alipayobjects.com/zos/rmsportal/uZVdwjJGqDooqKLKtvGA.svg',
+              }
             }}
           /></ItemPanel></Menu.Item>
 

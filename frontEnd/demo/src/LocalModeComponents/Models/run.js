@@ -15,8 +15,6 @@ import { Randis } from '../DataOperate/DataProcess/Randis'
 import { SelectCol } from '../DataOperate/DataProcess/SelectCol'
 import { SeprtbyFeat } from '../DataOperate/DataProcess/SeprtbyFeat'
 import { StrToNum } from '../DataOperate/DataProcess/StrToNum';
-var temp = '';
-var cur = '';
 class Run extends Component{
   state = { 
     visible: false,
@@ -148,24 +146,6 @@ class Run extends Component{
     for(var t = Date.now();Date.now() - t <= d;);
   }
   run=(stream, propsAPI)=>{
-    //this.intervalRequest();
-    // setInterval(()=>{
-    //   if(1){
-    //     const { propsAPI } = this.props;
-    //     const { find, update, executeCommand } = propsAPI;
-    //     const currentitem = find(temp);
-    //     executeCommand(() => {
-    //       update(currentitem, {
-    //         keyConfig:{
-    //           state_icon_url: 'https://loading.io/s/icon/28avj5.png'
-    //         }
-    //       });
-    //     });
-    //     cur = temp;
-    //     console.log(currentitem);
-    //   }
-    // },1000);
-
     for (let k = 0; k < stream.length; k++) {
       if(stream[k].tag!=="本地数据"){
         const all_data = this.inputdata(stream[k], propsAPI);
@@ -231,7 +211,6 @@ class Run extends Component{
             break;
         }
         this.sleep(2000);
-        this.intervaltest(stream[k].id);
       }
     }
   
@@ -240,55 +219,23 @@ class Run extends Component{
     console.log("-------------------------------")
     //this.deletedata(propsAPI);
   }
-  intervaltest = (stream)=>{   
-    setInterval(()=>{
-      cur++
-      console.log("T1:"+cur)
-    },1000)
-    this.intervalRequest(stream)
-  }
-
-  intervalRequest = (stream)=>{  
-    if(cur<30){
-      setTimeout(()=>{
-        //this.transmit()
-        if(cur%5==0){
+  intervalRequest = ()=>{  
+      setInterval(()=>{
+        if(current!== temp){
           const { propsAPI } = this.props;
           const { find, update, executeCommand } = propsAPI;
-          const currentitem = find(stream);
+          const currentitem = find(current);
           executeCommand(() => {
             update(currentitem, {
               keyConfig:{
-                state_icon_url: 'https://loading.io/s/icon/28avj5.png'
+                state_icon_url: 'https://gw.alipayobjects.com/zos/rmsportal/MXXetJAxlqrbisIuZxDO.svg'
               }
             });
           });
+          temp = current;
         }
-        this.intervalRequest(stream)
-
       },1000)
-    }
   }
-  // intervalRequest = ()=>{  
-  //     setTimeout(()=>{
-  //       if(cur !== temp){
-  //         const { propsAPI } = this.props;
-  //         const { find, update, executeCommand } = propsAPI;
-  //         const currentitem = find(temp);
-  //         executeCommand(() => {
-  //           update(currentitem, {
-  //             keyConfig:{
-  //               state_icon_url: 'https://loading.io/s/icon/28avj5.png'
-  //             }
-  //           });
-  //         });
-  //         cur = temp;
-  //         console.log(currentitem);
-  //       }
-  //       this.intervalRequest();
-  //     },1000);
-  // }
-
  handleLegal = ()=> {
     const { propsAPI } = this.props;
     var isLegal = 0;
@@ -401,6 +348,11 @@ class Run extends Component{
     }
   }
   render(){
+    if(status){
+      if(current === stream.length-1){
+        
+      }
+    }
     return (
       <div>
         <Button onClick={()=>this.showDetail()}>run</Button>

@@ -203,7 +203,7 @@ class SparkRun extends Component{
           executeCommand(() => {
             update(currentitem, {
               keyConfig:{
-                state_icon_url: 'https://loading.io/s/icon/28avj5.png'
+                state_icon_url: 'https://gw.alipayobjects.com/zos/rmsportal/MXXetJAxlqrbisIuZxDO.svg'
               }
             });
           });
