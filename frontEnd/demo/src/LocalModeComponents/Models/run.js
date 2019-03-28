@@ -147,79 +147,77 @@ class Run extends Component{
       setTimeout(()=>{
         if(current !== stream.length){
           let k = current;
-          if(stream[k].tag!=="本地数据"){
-            const all_data = this.inputdata(stream[k], propsAPI);
-            var outcome = new Array()
-            switch (stream[k].tag) {
-              case '单变量线性回归':
-                  outcome = OneVarLinearRegression(all_data);
-                  this.outputdata(stream[k].id, outcome[2], propsAPI);
-                  break
-              case '多变量线性回归':
-                  outcome = MutiVarLinearRegression(all_data);
-                  this.outputdata(stream[k].id, outcome, propsAPI);
-                  break
-              case '单变量多项式回归':
-                  outcome = OneVarPolynomialRegression(all_data);
-                  this.outputdata(stream[k].id, outcome, propsAPI);
-                  break
-              case '决策树回归':
-                  outcome = DecisionTreeRegression(all_data);
-                  this.outputdata(stream[k].id, outcome, propsAPI);
-                  break
-              case '随机森林回归':
-                  outcome = RandomForest(all_data);
-                  this.outputdata(stream[k].id, outcome, propsAPI);
-                  break
-              case '朴素贝叶斯':
-                  outcome = NaiveBayes(all_data)
-                  this.outputdata(stream[k].id, outcome, propsAPI);
-                  break
-              case '支持向量机':
-                  outcome = SVM(all_data)
-                  this.outputdata(stream[k].id, outcome, propsAPI);
-                  break
-              case '数据随机划分':
-                  outcome = Randis(all_data)
-                  this.outputdata(stream[k].id, outcome, propsAPI);
-                  break
-              case '特征区间化':
-                  outcome = SeprtbyFeat(all_data)
-                  this.outputdata(stream[k].id, outcome, propsAPI);
-                  break  
-              case '特征分组归类':
-                  outcome = StrToNum(all_data)
-                  this.outputdata(stream[k].id, outcome, propsAPI);
-                  break
-              case '特征二进制化':
-                  outcome = Onehot(all_data)
-                  this.outputdata(stream[k].id, outcome, propsAPI);
-                  break
-              case '缺失值填充':
-                  outcome = fillNa(all_data);
-                  this.outputdata(stream[k].id, outcome, propsAPI);
-                  break
-              case '归一化':
-                  outcome = Scaler(all_data);
-                  this.outputdata(stream[k].id, outcome[1], propsAPI);
-                  break
-              case '卷积神经网络':
-                  this.showModal()
-                  runMnist()
-                  break
-              default:
-                break;
-            }
-            const { find, update, executeCommand } = propsAPI;
-            const currentitem = find(stream[k].id);
-            executeCommand(() => {
-              update(currentitem, {
-                keyConfig:{
-                  state_icon_url: 'https://gw.alipayobjects.com/zos/rmsportal/MXXetJAxlqrbisIuZxDO.svg'
-                }
-              });
-            });
+          const all_data = this.inputdata(stream[k], propsAPI);
+          var outcome = new Array()
+          switch (stream[k].tag) {
+            case '单变量线性回归':
+                outcome = OneVarLinearRegression(all_data);
+                this.outputdata(stream[k].id, outcome[2], propsAPI);
+                break
+            case '多变量线性回归':
+                outcome = MutiVarLinearRegression(all_data);
+                this.outputdata(stream[k].id, outcome, propsAPI);
+                break
+            case '单变量多项式回归':
+                outcome = OneVarPolynomialRegression(all_data);
+                this.outputdata(stream[k].id, outcome, propsAPI);
+                break
+            case '决策树回归':
+                outcome = DecisionTreeRegression(all_data);
+                this.outputdata(stream[k].id, outcome, propsAPI);
+                break
+            case '随机森林回归':
+                outcome = RandomForest(all_data);
+                this.outputdata(stream[k].id, outcome, propsAPI);
+                break
+            case '朴素贝叶斯':
+                outcome = NaiveBayes(all_data)
+                this.outputdata(stream[k].id, outcome, propsAPI);
+                break
+            case '支持向量机':
+                outcome = SVM(all_data)
+                this.outputdata(stream[k].id, outcome, propsAPI);
+                break
+            case '数据随机划分':
+                outcome = Randis(all_data)
+                this.outputdata(stream[k].id, outcome, propsAPI);
+                break
+            case '特征区间化':
+                outcome = SeprtbyFeat(all_data)
+                this.outputdata(stream[k].id, outcome, propsAPI);
+                break  
+            case '特征分组归类':
+                outcome = StrToNum(all_data)
+                this.outputdata(stream[k].id, outcome, propsAPI);
+                break
+            case '特征二进制化':
+                outcome = Onehot(all_data)
+                this.outputdata(stream[k].id, outcome, propsAPI);
+                break
+            case '缺失值填充':
+                outcome = fillNa(all_data);
+                this.outputdata(stream[k].id, outcome, propsAPI);
+                break
+            case '归一化':
+                outcome = Scaler(all_data);
+                this.outputdata(stream[k].id, outcome[1], propsAPI);
+                break
+            case '卷积神经网络':
+                this.showModal()
+                runMnist()
+                break
+            default:
+              break;
           }
+          const { find, update, executeCommand } = propsAPI;
+          const currentitem = find(stream[k].id);
+          executeCommand(() => {
+            update(currentitem, {
+              keyConfig:{
+                state_icon_url: 'https://gw.alipayobjects.com/zos/rmsportal/MXXetJAxlqrbisIuZxDO.svg'
+              }
+            });
+          });
           current++;
           this.run(stream, propsAPI);
         }
