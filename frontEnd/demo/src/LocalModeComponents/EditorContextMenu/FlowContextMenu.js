@@ -1,5 +1,5 @@
 import React from 'react'
-import { Modal, Table , Icon,Collapse} from 'antd';
+import { Modal, Table , Icon,Collapse,Row,Col,Button} from 'antd';
 import {
   Command,
   NodeMenu,
@@ -17,6 +17,7 @@ import Downlowd from '../DataOperate/download';
 import GGEditor, { Flow, RegisterCommand } from '@src';
 
 const Panel = Collapse.Panel;
+var echarts = require('echarts');
 
 class FlowContextMenu extends React.Component {
   state = { 
@@ -26,6 +27,25 @@ class FlowContextMenu extends React.Component {
     Svisible:false,
     MlEvaluteVisible:false,
     evalution:[[]]
+  }
+
+  
+  barChart = ()=>{
+    // 基于准备好的dom，初始化echarts实例
+    var myChart = echarts.init(document.getElementById('main'));
+    // 绘制图表
+    myChart.setOption({
+        tooltip: {},
+        xAxis: {
+            data: ["衬衫", "羊毛衫", "雪纺衫", "裤子", "高跟鞋", "袜子"]
+        },
+        yAxis: {},
+        series: [{
+            name: '销量',
+            type: 'bar',
+            data: [5, 20, 36, 10, 10, 20]
+        }]
+    });
   }
 
   Datum = () => {
@@ -46,10 +66,17 @@ class FlowContextMenu extends React.Component {
                    title : currentData[i].label,
                    dataIndex: currentData[i].label,
                    width : 50,
+                   filterDropdown: (
+                    <div>
+                      <Button onClick={()=>{this.barChart()}}>柱状图</Button>
+                      <br></br>
+                      <Button onClick={()=>{this.barChart()}}>饼图</Button>
+                    </div>
+                    )
                  })
     }
     this.setState({col:columns})
-    // console.log(currentData);
+    console.log(columns)
     var datas = new Array()
     var ln;
     for(let i = 0; i < currentData.length; i++){
@@ -65,38 +92,7 @@ class FlowContextMenu extends React.Component {
       }
       datas.push(temp)
     }
-    // let s1 = new Array();
-    // let s2 = new Array();
-    // let s3 = new Array();
-    // s1['id']="Average";
-    // s2['id']="Max";
-    // s3['id']="Min";
-    // for(let i = 1; i < currentData.length; i++){
-    //   let tem_avr = 0;
-    //   let tem_min;
-    //   let tem_max;
-    //   for(let k = 0; k < currentData[i].value.length; k++)
-    //     if(currentData[i].value[k] != null){
-    //       tem_min = currentData[i].value[k];
-    //       tem_max = currentData[i].value[k];
-    //     }
-    //   for(let k = 0; k < currentData[i].value.length; k++){
-    //     tem_avr += currentData[i].value[k];
-    //     if(currentData[i].value[k] > tem_max){
-    //       tem_max = currentData[i].value[k];
-    //     }
-    //     if(currentData[i].value[k]!=null && currentData[i].value[k] < tem_min){
-    //       tem_min = currentData[i].value[k];
-    //     }
-    //   }
-    //   tem_avr = tem_avr/currentData[i].value.length;
-    //   s1[currentData[i].label]=tem_avr;
-    //   s2[currentData[i].label]=tem_max;
-    //   s3[currentData[i].label]=tem_min;
-    // }
-    // datas.push(s1);
-    // datas.push(s2);
-    // datas.push(s3);
+
     var list = "";
     for(let i = 0; i < columns.length; i++){
       list+=columns[i].title;
@@ -119,21 +115,10 @@ class FlowContextMenu extends React.Component {
         }
       })
     }
-    // console.log(list);
-    // console.log("datas");
-    // let a = Math.random();
-    // console.log(a);
-    // console.log(datas);
+
     this.setState({data:datas,list:list});
   }
-  // makeup = () => {
-  //   let dat = this.state.datas;
-  //   for(let k = 0; k < dat.length;k++){
-  //     if(dat[k].id == 'Average'){
-  //       for(let j = 0;j < ;)
-  //     }
-  //   }
-  // }
+
   showNModal = () => {
     this.setState({
       Nvisible: true,
@@ -161,8 +146,7 @@ class FlowContextMenu extends React.Component {
       visible: true,
     });
     this.Datum();
-    // console.log(this.state.data);
-    // console.log(this.state.col);
+
   }
 
   handleOk = (e) => {
@@ -209,7 +193,7 @@ class FlowContextMenu extends React.Component {
     },100)
   }
   render() {
-    
+   
     return (
       <ContextMenu className={styles.contextMenu}>
         <GGEditor style={{width:0, height:0}}>
@@ -274,7 +258,9 @@ class FlowContextMenu extends React.Component {
             return (<Panel header={pair[0]+" : "+pair[1]}  key={index} style={{fontSize:25,marginBottom: 24,border: 0}}>
                         <p style={{fontSize:15,lineHeight:2}}>{pair[2]}</p>
                       </Panel>)
-          })}
+          }
+
+          )}
             {/* <Panel header={this.state.title}  key="1" style={{fontSize:30,marginBottom: 24,border: 0}}>
               <p style={{fontSize:20}}>{text}</p>
             </Panel>
@@ -284,7 +270,7 @@ class FlowContextMenu extends React.Component {
             <Panel header="This is panel header 3" key="3" style={{fontSize:30,marginBottom: 24,border: 0}}>
               <p style={{fontSize:20}}>{text}</p>
           </Panel> */}
-          </Collapse>
+        </Collapse>
         </Modal>
 
 
@@ -299,22 +285,28 @@ class FlowContextMenu extends React.Component {
           
           <LineMarkerEcharts trans={()=>this.trans()}/>
         </Modal>
-        {/* <Modal
-            title="Modal"
-            visible={this.state.Svisible}
-            onOk={this.handleSOk}
-            onCancel={this.handleSCancel}
-            bodyStyle={{height: '450px'}}
-            width={800}
-          >
-            <DistributeScatter />
-        </Modal> */}
 
-        <Modal title="Modal Data" visible={this.state.visible}
+
+        {/* <Modal title="Modal Data" visible={this.state.visible}
           onOk={this.handleOk} onCancel={this.handleCancel} width={900}
         >
           <Downlowd list={this.state.list} filename={"数据集"}/>
           <Table columns={this.state.col} dataSource={this.state.data} pagination={{ pageSize: 70 }} scroll={{ y: 340 }} bordered size="small" />
+        </Modal> */}
+
+        <Modal title="Basic Modal" visible={this.state.visible} width={1200} 
+          onOk={this.handleOk} onCancel={this.handleCancel}
+        >
+
+        <Row>
+        <Col span={15}>
+          <Table columns={this.state.col} dataSource={this.state.data} pagination={{ pageSize: 70 }} scroll={{ x:500, y: 200 }} height={800}  size="small" />
+          </Col>
+            
+          <Col span={9}>
+            <div id="main" style={{ width: 400, height: 400 }}></div>
+          </Col>
+          </Row>
         </Modal>
 
         <EdgeMenu>
