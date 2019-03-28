@@ -396,7 +396,7 @@ class FlowItemPanel extends React.Component {
                 labelArray: {}, 
                 length: 0,
                 group:"ml",
-                evaluate:[],
+                evaluation:[],
                 keyConfig:{
                   color_type: '#1890FF',
                   state_icon_url: 'https://gw.alipayobjects.com/zos/rmsportal/uZVdwjJGqDooqKLKtvGA.svg',

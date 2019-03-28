@@ -152,7 +152,7 @@ class Run extends Component{
           switch (stream[k].tag) {
             case '单变量线性回归':
                 outcome = OneVarLinearRegression(all_data);
-                this.outputdata(stream[k].id, outcome[2], propsAPI);
+                this.outputdata(stream[k].id, outcome, propsAPI);
                 break
             case '多变量线性回归':
                 outcome = MutiVarLinearRegression(all_data);
@@ -209,6 +209,7 @@ class Run extends Component{
             default:
               break;
           }
+          console.log(outcome)
           const { find, update, executeCommand } = propsAPI;
           const currentitem = find(stream[k].id);
           executeCommand(() => {

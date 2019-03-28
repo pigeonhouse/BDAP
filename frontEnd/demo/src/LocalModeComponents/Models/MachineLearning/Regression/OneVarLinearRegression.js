@@ -59,7 +59,7 @@ export function OneVarLinearRegression(allData){
         }]
     }
 
-    resultData["evaluate"]=
+    resultData["evaluation"]=
     [["MSE",mse,"MSE(Mean Squared Error)均方误差: 参数估计值与参数真值之差平方的期望值,MSE可以评价数据的变化程度，MSE的值越小，说明预测模型描述实验数据具有更好的精确度。"],
     ["RMSE",rmse,"RMSE(Root Mean Squared Error)均方根误差: 均方根误差是均方误差的算术平方根"],
     ["r",r,"皮尔森相关系数(Pearson correlation coefficient): 用来反映两个变量线性相关程度,r介于-1~1之间，该值为正表示两个变量之间是正相关，值为零表示两个变量之间无相关性，值为负表示两个变量之间是负相关。"],
