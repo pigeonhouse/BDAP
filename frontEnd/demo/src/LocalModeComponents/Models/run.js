@@ -14,8 +14,9 @@ import { Onehot } from '../DataOperate/DataProcess/Onehot'
 import { Randis } from '../DataOperate/DataProcess/Randis'
 import { SelectCol } from '../DataOperate/DataProcess/SelectCol'
 import { SeprtbyFeat } from '../DataOperate/DataProcess/SeprtbyFeat'
-import { StrToNum } from '../DataOperate/DataProcess/StrToNum'
-
+import { StrToNum } from '../DataOperate/DataProcess/StrToNum';
+var temp = '';
+var cur = '';
 class Run extends Component{
   state = { 
     visible: false,
@@ -143,7 +144,28 @@ class Run extends Component{
     console.log(stream);
     this.run(stream, propsAPI);
   }
+  sleep(d){
+    for(var t = Date.now();Date.now() - t <= d;);
+  }
   run=(stream, propsAPI)=>{
+    //this.intervalRequest();
+    // setInterval(()=>{
+    //   if(1){
+    //     const { propsAPI } = this.props;
+    //     const { find, update, executeCommand } = propsAPI;
+    //     const currentitem = find(temp);
+    //     executeCommand(() => {
+    //       update(currentitem, {
+    //         keyConfig:{
+    //           state_icon_url: 'https://loading.io/s/icon/28avj5.png'
+    //         }
+    //       });
+    //     });
+    //     cur = temp;
+    //     console.log(currentitem);
+    //   }
+    // },1000);
+
     for (let k = 0; k < stream.length; k++) {
       if(stream[k].tag!=="本地数据"){
         const all_data = this.inputdata(stream[k], propsAPI);
@@ -208,7 +230,8 @@ class Run extends Component{
           default:
             break;
         }
-        //let outcome = all_data[1];  
+        this.sleep(2000);
+        this.intervaltest(stream[k].id);
       }
     }
   
@@ -217,6 +240,55 @@ class Run extends Component{
     console.log("-------------------------------")
     //this.deletedata(propsAPI);
   }
+  intervaltest = (stream)=>{   
+    setInterval(()=>{
+      cur++
+      console.log("T1:"+cur)
+    },1000)
+    this.intervalRequest(stream)
+  }
+
+  intervalRequest = (stream)=>{  
+    if(cur<30){
+      setTimeout(()=>{
+        //this.transmit()
+        if(cur%5==0){
+          const { propsAPI } = this.props;
+          const { find, update, executeCommand } = propsAPI;
+          const currentitem = find(stream);
+          executeCommand(() => {
+            update(currentitem, {
+              keyConfig:{
+                state_icon_url: 'https://loading.io/s/icon/28avj5.png'
+              }
+            });
+          });
+        }
+        this.intervalRequest(stream)
+
+      },1000)
+    }
+  }
+  // intervalRequest = ()=>{  
+  //     setTimeout(()=>{
+  //       if(cur !== temp){
+  //         const { propsAPI } = this.props;
+  //         const { find, update, executeCommand } = propsAPI;
+  //         const currentitem = find(temp);
+  //         executeCommand(() => {
+  //           update(currentitem, {
+  //             keyConfig:{
+  //               state_icon_url: 'https://loading.io/s/icon/28avj5.png'
+  //             }
+  //           });
+  //         });
+  //         cur = temp;
+  //         console.log(currentitem);
+  //       }
+  //       this.intervalRequest();
+  //     },1000);
+  // }
+
  handleLegal = ()=> {
     const { propsAPI } = this.props;
     var isLegal = 0;
@@ -328,25 +400,23 @@ class Run extends Component{
       }
     }
   }
-  
   render(){
     return (
       <div>
-      <Button onClick={()=>this.showDetail()}>run</Button>
-
-      <Modal title="Modal Data" visible={this.state.visible}
-          onOk={this.handleOk} onCancel={this.handleCancel} width={900}
-        >
-          <p>iter:
-            <div id="iter-number"></div>
-          </p>
-          <p>train-loss:
-            <div id="loss-train"></div>
-          </p>
-          <div id="linechart"></div>
-        
-      </Modal>
-        </div>
+        <Button onClick={()=>this.showDetail()}>run</Button>
+        <Modal title="Modal Data" visible={this.state.visible}
+            onOk={this.handleOk} onCancel={this.handleCancel} width={900}
+          >
+            <p>iter:
+              <div id="iter-number"></div>
+            </p>
+            <p>train-loss:
+              <div id="loss-train"></div>
+            </p>
+            <div id="linechart"></div>
+          
+        </Modal>
+      </div>
     );
   }
 }
