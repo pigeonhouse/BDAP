@@ -11,7 +11,7 @@ inputData = []
 runningData = []
 jobCompleted = 0
 
-app = Flask(__name__, static_folder="./front_end/static", template_folder="./front_end/")
+app = Flask(__name__)
 
 CORS(app)
 
@@ -66,13 +66,12 @@ def RunningPost():
     runningData = request.json
     return "received"
 
-
+##任务完成进度测试
 # @app.route('/JobRequest', methods=['GET', 'POST'])
 # def JobRequest():
 #     global jobCompleted
 #     jobCompleted += 3
 #     return json.dumps(jobCompleted)
-
 
 
 #处理前端传来的图信息并按步执行
@@ -110,10 +109,10 @@ def run():
     #         print("started")
     #         break
 
-    # code above aims for open a new livy session, it is suggested to open it in andvance to avoid wasting time
+    ## 创建session
 
     # requests.delete(session_url, headers=headers)
-    # close the session, if you open the session outside this file, ignore it
+    ##关闭session 
 
 
 if __name__ == '__main__':

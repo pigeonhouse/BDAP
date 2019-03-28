@@ -111,15 +111,28 @@ class SparkRun extends Component{
           .catch(e => console.log('错误:', e))
   }
   
+  intervaltest = ()=>{   
+    setInterval(()=>{
+      cur++
+      console.log("T1:"+cur)
+    },1000)
+    this.intervalRequest()
+  }
+
   intervalRequest = ()=>{  
-    if(cur<20){
+    if(cur<30){
       setTimeout(()=>{
-        this.transmit()
+        //this.transmit()
+        if(cur%5==0){
+          console.log("!!!!!!!:"+cur)
+        }
         this.intervalRequest()
-        console.log(cur)
+
       },1000)
     }
   }
+
+
 
   transmit = ()=>{
     const init={
@@ -204,7 +217,7 @@ class SparkRun extends Component{
     return (
       <div>
       <Button onClick={()=>this.showDetail()}>SparkRun</Button>
-      <Button onClick={()=>this.intervalRequest()}>intervalTest</Button>
+      <Button onClick={()=>this.intervaltest()}>intervalTest</Button>
       </div>
     );
   }
