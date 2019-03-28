@@ -274,9 +274,7 @@ class FlowContextMenu extends React.Component {
             return (<Panel header={pair[0]+" : "+pair[1]}  key={index} style={{fontSize:25,marginBottom: 24,border: 0}}>
                         <p style={{fontSize:15,lineHeight:2}}>{pair[2]}</p>
                       </Panel>)
-          }
-
-          )}
+          })}
             {/* <Panel header={this.state.title}  key="1" style={{fontSize:30,marginBottom: 24,border: 0}}>
               <p style={{fontSize:20}}>{text}</p>
             </Panel>
@@ -286,7 +284,7 @@ class FlowContextMenu extends React.Component {
             <Panel header="This is panel header 3" key="3" style={{fontSize:30,marginBottom: 24,border: 0}}>
               <p style={{fontSize:20}}>{text}</p>
           </Panel> */}
-        </Collapse>
+          </Collapse>
         </Modal>
 
 

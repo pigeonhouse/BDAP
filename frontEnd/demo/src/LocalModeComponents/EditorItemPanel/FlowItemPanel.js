@@ -18,29 +18,7 @@ class FlowItemPanel extends React.Component {
       <GGEditor style={{height:0, width:0}}>
           <Flow />
           <RegisterNode 
-            name = {'two-one'}
-            config =  {{
-              anchor: [
-                [ 0.33, 0],
-                [ 0.66, 0],
-                [ 0.5, 1]
-              ]
-            }}
-            extend = {'flow-rect'}
-          />
-          <RegisterNode 
-            name = {'one-two'}
-            config =  {{
-              anchor: [
-                [ 0.5, 0],
-                [ 0.33, 1],
-                [ 0.66, 1]
-              ]
-            }}
-            extend = {'flow-rect'}
-          />
-          <RegisterNode 
-            name = {'one-one'}
+            name = {'model-all'}
             config =  {{
               draw(item) {
                 const group = item.getGraphicGroup();
@@ -71,7 +49,7 @@ class FlowItemPanel extends React.Component {
                       [ 'L', x + borderRadius, y ],
                       [ 'A', borderRadius, borderRadius, 0, 0, 0, x, y + borderRadius ]
                     ],
-                    fill: this.color_type
+                    fill: model.keyConfig.color_type
                   }
                 });
                 // 类型 logo
@@ -108,10 +86,45 @@ class FlowItemPanel extends React.Component {
                 });
                 return keyShape;
               },
-              color_type: '#1890FF',
+              anchor: [
+                [ 0.5, 0],
+                [ 0.5, 1],
+              ],
               type_icon_url: 'https://gw.alipayobjects.com/zos/rmsportal/czNEJAmyDpclFaSucYWB.svg',
             }}
             extend = {'flow-rect'}
+          />
+          <RegisterNode 
+            name = {'two-one'}
+            config =  {{
+              anchor: [
+                [ 0.33, 0],
+                [ 0.66, 0],
+                [ 0.5, 1]
+              ]
+            }}
+            extend = {'model-all'}
+          />
+          <RegisterNode 
+            name = {'one-one'}
+            config =  {{
+              anchor: [
+                [ 0.5, 0],
+                [ 0.5, 1]
+              ]
+            }}
+            extend = {'model-all'}
+          />
+          <RegisterNode 
+            name = {'one-two'}
+            config =  {{
+              anchor: [
+                [ 0.5, 0],
+                [ 0.33, 1],
+                [ 0.66, 1]
+              ]
+            }}
+            extend = {'model-all'}
           />
           <RegisterNode 
             name = {'zero-one'}
@@ -120,7 +133,7 @@ class FlowItemPanel extends React.Component {
                 [ 0.5, 1]
               ]
             }}
-            extend = {'flow-rect'}
+            extend = {'model-all'}
           />
           <RegisterNode 
             name = {'one-zero'}
@@ -129,7 +142,7 @@ class FlowItemPanel extends React.Component {
                 [ 0.5, 0]
               ]
             }}
-            extend = {'flow-rect'}
+            extend = {'model-all'}
           />
         </GGEditor>
       <SubMenu key="sub1" title={<span><Icon type="mail" /><span>数据源</span></span>}>
@@ -144,7 +157,11 @@ class FlowItemPanel extends React.Component {
               Dataset: [],
               labelArray: {}, 
               length: 0,
-              anchor: [0, 1]
+              anchor: [0, 1],
+              keyConfig:{
+                color_type: '#1890FF',
+                state_icon_url: 'https://gw.alipayobjects.com/zos/rmsportal/uZVdwjJGqDooqKLKtvGA.svg',
+              }
             }}         
           /></ItemPanel></Menu.Item>
           <Menu.Item key="2" > <ItemPanel><Item
@@ -158,7 +175,11 @@ class FlowItemPanel extends React.Component {
               Dataset: [],
               labelArray: {}, 
               length: 0,
-              anchor: [0, 1]
+              anchor: [0, 1],
+              keyConfig:{
+                color_type: '#1890FF',
+                state_icon_url: 'https://gw.alipayobjects.com/zos/rmsportal/uZVdwjJGqDooqKLKtvGA.svg',
+              }
             }}         
           /></ItemPanel></Menu.Item>
           {/* <Menu.Item key="2"><ItemPanel><Item
@@ -238,6 +259,7 @@ class FlowItemPanel extends React.Component {
               length: 0,
               group: 'feature',
               keyConfig:{
+                color_type: '#1890FF',
                 state_icon_url: 'https://gw.alipayobjects.com/zos/rmsportal/uZVdwjJGqDooqKLKtvGA.svg',
               }
             }}      
@@ -257,6 +279,7 @@ class FlowItemPanel extends React.Component {
               anchor: [1, 1],
               group: 'feature',
               keyConfig:{
+                color_type: '#1890FF',
                 state_icon_url: 'https://gw.alipayobjects.com/zos/rmsportal/uZVdwjJGqDooqKLKtvGA.svg',
               }
             }}
@@ -275,6 +298,7 @@ class FlowItemPanel extends React.Component {
               anchor: [1, 1],
               group: 'feature',
               keyConfig:{
+                color_type: '#1890FF',
                 state_icon_url: 'https://gw.alipayobjects.com/zos/rmsportal/uZVdwjJGqDooqKLKtvGA.svg',
               }
             }}
@@ -291,7 +315,11 @@ class FlowItemPanel extends React.Component {
               labelArray: {}, 
               length: 0,
               anchor: [1, 1],
-              group: 'feature'
+              group: 'feature',
+              keyConfig:{
+                color_type: '#1890FF',
+                state_icon_url: 'https://gw.alipayobjects.com/zos/rmsportal/uZVdwjJGqDooqKLKtvGA.svg',
+              }
             }}    
           /></ItemPanel></Menu.Item>
 
@@ -306,7 +334,11 @@ class FlowItemPanel extends React.Component {
               labelArray: {}, 
               length: 0,
               anchor: [1, 1],
-              group: 'feature'
+              group: 'feature',
+              keyConfig:{
+                color_type: '#1890FF',
+                state_icon_url: 'https://gw.alipayobjects.com/zos/rmsportal/uZVdwjJGqDooqKLKtvGA.svg',
+              }
             }}           
           /></ItemPanel></Menu.Item>
           <Menu.Item key="12"><ItemPanel><Item
@@ -320,7 +352,11 @@ class FlowItemPanel extends React.Component {
               labelArray: {}, 
               length: 0,
               anchor: [1, 2],
-              group: 'feature'
+              group: 'feature',
+              keyConfig:{
+                color_type: '#1890FF',
+                state_icon_url: 'https://gw.alipayobjects.com/zos/rmsportal/uZVdwjJGqDooqKLKtvGA.svg',
+              }
             }}           
           /></ItemPanel></Menu.Item>
 
@@ -336,7 +372,11 @@ class FlowItemPanel extends React.Component {
               labelArray: {}, 
               length: 0,
               anchor: [1, 1],
-              group: 'feature'
+              group: 'feature',
+              keyConfig:{
+                color_type: '#1890FF',
+                state_icon_url: 'https://gw.alipayobjects.com/zos/rmsportal/uZVdwjJGqDooqKLKtvGA.svg',
+              }
             }}           
           /></ItemPanel></Menu.Item>
       </SubMenu>
@@ -355,7 +395,11 @@ class FlowItemPanel extends React.Component {
                 Dataset: [],
                 labelArray: {}, 
                 length: 0,
-                group:"ml"     
+                group:"ml",
+                keyConfig:{
+                  color_type: '#1890FF',
+                  state_icon_url: 'https://gw.alipayobjects.com/zos/rmsportal/uZVdwjJGqDooqKLKtvGA.svg',
+                }
               }}
               
             /></ItemPanel></Menu.Item>
@@ -370,7 +414,11 @@ class FlowItemPanel extends React.Component {
                 Dataset: [],
                 labelArray: {},
                 length: 0,
-                group:"ml"
+                group:"ml",
+                keyConfig:{
+                  color_type: '#1890FF',
+                  state_icon_url: 'https://gw.alipayobjects.com/zos/rmsportal/uZVdwjJGqDooqKLKtvGA.svg',
+                }
               }}            
             /></ItemPanel></Menu.Item>
 
@@ -385,7 +433,11 @@ class FlowItemPanel extends React.Component {
                 anchor: [2, 1],
                 Dataset: [],
                 labelArray: {}, 
-                length: 0
+                length: 0,
+                keyConfig:{
+                  color_type: '#1890FF',
+                  state_icon_url: 'https://gw.alipayobjects.com/zos/rmsportal/uZVdwjJGqDooqKLKtvGA.svg',
+                }
               }}           
             /></ItemPanel></Menu.Item>
 
@@ -400,7 +452,11 @@ class FlowItemPanel extends React.Component {
                 Dataset: [],
                 labelArray: {}, 
                 length: 0,
-                group:"ml"
+                group:"ml",
+                keyConfig:{
+                  color_type: '#1890FF',
+                  state_icon_url: 'https://gw.alipayobjects.com/zos/rmsportal/uZVdwjJGqDooqKLKtvGA.svg',
+                }
               }}              
             /></ItemPanel></Menu.Item>
             <Menu.Item key="17"><ItemPanel><Item
@@ -419,7 +475,11 @@ class FlowItemPanel extends React.Component {
                 Dataset: [],
                 labelArray: {}, 
                 length: 0,
-                group:"ml"
+                group:"ml",
+                keyConfig:{
+                  color_type: '#1890FF',
+                  state_icon_url: 'https://gw.alipayobjects.com/zos/rmsportal/uZVdwjJGqDooqKLKtvGA.svg',
+                }
               }}           
             /></ItemPanel></Menu.Item>         
         </SubMenu>
@@ -436,7 +496,11 @@ class FlowItemPanel extends React.Component {
               Dataset: [],
               labelArray: {}, 
               length: 0,
-              group:"ml"
+              group:"ml",
+              keyConfig:{
+                color_type: '#1890FF',
+                state_icon_url: 'https://gw.alipayobjects.com/zos/rmsportal/uZVdwjJGqDooqKLKtvGA.svg',
+              }
             }}   
           /></ItemPanel></Menu.Item>
 
@@ -458,7 +522,11 @@ class FlowItemPanel extends React.Component {
               Dataset: [],
               labelArray: {}, 
               length: 0,
-              group:"ml"
+              group:"ml",
+              keyConfig:{
+                color_type: '#1890FF',
+                state_icon_url: 'https://gw.alipayobjects.com/zos/rmsportal/uZVdwjJGqDooqKLKtvGA.svg',
+              }
             }}    
           /></ItemPanel></Menu.Item>
         </SubMenu>
@@ -475,6 +543,10 @@ class FlowItemPanel extends React.Component {
               Dataset: [],
               labelArray: {}, 
               length: 0,
+              keyConfig:{
+                color_type: '#1890FF',
+                state_icon_url: 'https://gw.alipayobjects.com/zos/rmsportal/uZVdwjJGqDooqKLKtvGA.svg',
+              }
             }}
           /></ItemPanel></Menu.Item>
       </SubMenu>

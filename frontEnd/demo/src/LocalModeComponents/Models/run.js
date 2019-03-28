@@ -15,6 +15,7 @@ import { Randis } from '../DataOperate/DataProcess/Randis'
 import { SelectCol } from '../DataOperate/DataProcess/SelectCol'
 import { SeprtbyFeat } from '../DataOperate/DataProcess/SeprtbyFeat'
 import { StrToNum } from '../DataOperate/DataProcess/StrToNum';
+var current = 0;
 class Run extends Component{
   state = { 
     visible: false,
@@ -142,101 +143,96 @@ class Run extends Component{
     console.log(stream);
     this.run(stream, propsAPI);
   }
-  sleep(d){
-    for(var t = Date.now();Date.now() - t <= d;);
-  }
-  run=(stream, propsAPI)=>{
-    for (let k = 0; k < stream.length; k++) {
-      if(stream[k].tag!=="本地数据"){
-        const all_data = this.inputdata(stream[k], propsAPI);
-        var outcome = new Array()
-        switch (stream[k].tag) {
-          case '单变量线性回归':
-              outcome = OneVarLinearRegression(all_data);
-              this.outputdata(stream[k].id, outcome[2], propsAPI);
-              break
-          case '多变量线性回归':
-              outcome = MutiVarLinearRegression(all_data);
-              this.outputdata(stream[k].id, outcome, propsAPI);
-              break
-          case '单变量多项式回归':
-              outcome = OneVarPolynomialRegression(all_data);
-              this.outputdata(stream[k].id, outcome, propsAPI);
-              break
-          case '决策树回归':
-              outcome = DecisionTreeRegression(all_data);
-              this.outputdata(stream[k].id, outcome, propsAPI);
-              break
-          case '随机森林回归':
-              outcome = RandomForest(all_data);
-              this.outputdata(stream[k].id, outcome, propsAPI);
-              break
-          case '朴素贝叶斯':
-              outcome = NaiveBayes(all_data)
-              this.outputdata(stream[k].id, outcome, propsAPI);
-              break
-          case '支持向量机':
-              outcome = SVM(all_data)
-              this.outputdata(stream[k].id, outcome, propsAPI);
-              break
-          case '数据随机划分':
-              outcome = Randis(all_data)
-              this.outputdata(stream[k].id, outcome, propsAPI);
-              break
-          case '特征区间化':
-              outcome = SeprtbyFeat(all_data)
-              this.outputdata(stream[k].id, outcome, propsAPI);
-              break  
-          case '特征分组归类':
-              outcome = StrToNum(all_data)
-              this.outputdata(stream[k].id, outcome, propsAPI);
-              break
-          case '特征二进制化':
-              outcome = Onehot(all_data)
-              this.outputdata(stream[k].id, outcome, propsAPI);
-              break
-          case '缺失值填充':
-              outcome = fillNa(all_data);
-              this.outputdata(stream[k].id, outcome, propsAPI);
-              break
-          case '归一化':
-              outcome = Scaler(all_data);
-              this.outputdata(stream[k].id, outcome[1], propsAPI);
-              break
-          case '卷积神经网络':
-              this.showModal()
-              runMnist()
-              break
-          default:
-            break;
-        }
-        this.sleep(2000);
-      }
-    }
-  
-    console.log("最终图信息")
-    console.log(propsAPI.save())
-    console.log("-------------------------------")
-    //this.deletedata(propsAPI);
-  }
-  intervalRequest = ()=>{  
-      setInterval(()=>{
-        if(current!== temp){
-          const { propsAPI } = this.props;
-          const { find, update, executeCommand } = propsAPI;
-          const currentitem = find(current);
-          executeCommand(() => {
-            update(currentitem, {
-              keyConfig:{
-                state_icon_url: 'https://gw.alipayobjects.com/zos/rmsportal/MXXetJAxlqrbisIuZxDO.svg'
-              }
+  run = (stream, propsAPI)=>{  
+      setTimeout(()=>{
+        if(current !== stream.length){
+          let k = current;
+          if(stream[k].tag!=="本地数据"){
+            const all_data = this.inputdata(stream[k], propsAPI);
+            var outcome = new Array()
+            switch (stream[k].tag) {
+              case '单变量线性回归':
+                  outcome = OneVarLinearRegression(all_data);
+                  this.outputdata(stream[k].id, outcome[2], propsAPI);
+                  break
+              case '多变量线性回归':
+                  outcome = MutiVarLinearRegression(all_data);
+                  this.outputdata(stream[k].id, outcome, propsAPI);
+                  break
+              case '单变量多项式回归':
+                  outcome = OneVarPolynomialRegression(all_data);
+                  this.outputdata(stream[k].id, outcome, propsAPI);
+                  break
+              case '决策树回归':
+                  outcome = DecisionTreeRegression(all_data);
+                  this.outputdata(stream[k].id, outcome, propsAPI);
+                  break
+              case '随机森林回归':
+                  outcome = RandomForest(all_data);
+                  this.outputdata(stream[k].id, outcome, propsAPI);
+                  break
+              case '朴素贝叶斯':
+                  outcome = NaiveBayes(all_data)
+                  this.outputdata(stream[k].id, outcome, propsAPI);
+                  break
+              case '支持向量机':
+                  outcome = SVM(all_data)
+                  this.outputdata(stream[k].id, outcome, propsAPI);
+                  break
+              case '数据随机划分':
+                  outcome = Randis(all_data)
+                  this.outputdata(stream[k].id, outcome, propsAPI);
+                  break
+              case '特征区间化':
+                  outcome = SeprtbyFeat(all_data)
+                  this.outputdata(stream[k].id, outcome, propsAPI);
+                  break  
+              case '特征分组归类':
+                  outcome = StrToNum(all_data)
+                  this.outputdata(stream[k].id, outcome, propsAPI);
+                  break
+              case '特征二进制化':
+                  outcome = Onehot(all_data)
+                  this.outputdata(stream[k].id, outcome, propsAPI);
+                  break
+              case '缺失值填充':
+                  outcome = fillNa(all_data);
+                  this.outputdata(stream[k].id, outcome, propsAPI);
+                  break
+              case '归一化':
+                  outcome = Scaler(all_data);
+                  this.outputdata(stream[k].id, outcome[1], propsAPI);
+                  break
+              case '卷积神经网络':
+                  this.showModal()
+                  runMnist()
+                  break
+              default:
+                break;
+            }
+            const { find, update, executeCommand } = propsAPI;
+            const currentitem = find(stream[k].id);
+            executeCommand(() => {
+              update(currentitem, {
+                keyConfig:{
+                  state_icon_url: 'https://gw.alipayobjects.com/zos/rmsportal/MXXetJAxlqrbisIuZxDO.svg'
+                }
+              });
             });
-          });
-          temp = current;
+          }
+          current++;
+          this.run(stream, propsAPI);
+        }
+        else {
+          current = 0;
+          console.log("最终图信息")
+          console.log(propsAPI.save())
+          console.log("-------------------------------")
+          //this.deletedata(propsAPI);
         }
       },1000)
   }
- handleLegal = ()=> {
+  handleLegal = ()=> {
     const { propsAPI } = this.props;
     var isLegal = 0;
     var noneed = 1;
