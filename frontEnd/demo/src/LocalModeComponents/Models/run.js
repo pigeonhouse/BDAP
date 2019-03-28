@@ -197,7 +197,7 @@ class Run extends Component{
               break
           case '缺失值填充':
               outcome = fillNa(all_data);
-              this.outputdata(stream[k].id, outcome[1], propsAPI);
+              this.outputdata(stream[k].id, outcome, propsAPI);
               break
           case '归一化':
               outcome = Scaler(all_data);
