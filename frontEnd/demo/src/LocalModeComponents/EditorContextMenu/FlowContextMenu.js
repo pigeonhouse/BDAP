@@ -19,6 +19,7 @@ import GGEditor, { Flow, RegisterCommand } from '@src';
 const Panel = Collapse.Panel;
 var echarts = require('echarts');
 
+
 class FlowContextMenu extends React.Component {
   state = { 
     loading:false,
@@ -26,16 +27,19 @@ class FlowContextMenu extends React.Component {
     Nvisible: false,
     Svisible:false,
     MlEvaluteVisible:false,
-    evalution:[[]]
+    evalution:[[]],
+    // filterDropdownVisible:false
   }
 
   
-  barChart = ()=>{
-    // 基于准备好的dom，初始化echarts实例
+  barChart = (indexOfFeature,data,showType)=>{
+
+    
+    console.log(data)
     var myChart = echarts.init(document.getElementById('main'));
-    // 绘制图表
-    myChart.setOption({
-        tooltip: {},
+
+    if(showType === 'bar'){
+      myChart.setOption({
         xAxis: {
             data: ["衬衫", "羊毛衫", "雪纺衫", "裤子", "高跟鞋", "袜子"]
         },
@@ -46,6 +50,19 @@ class FlowContextMenu extends React.Component {
             data: [5, 20, 36, 10, 10, 20]
         }]
     });
+    }
+    else if(showType === 'pie'){
+      myChart.setOption({
+          series: [{
+              type: 'pie',
+              data: [ {value:335, name:'直接访问'},
+              {value:310, name:'邮件营销'},
+              {value:234, name:'联盟广告'},
+              {value:135, name:'视频广告'},
+              {value:1548, name:'搜索引擎'}]
+          }]
+      });
+    }
   }
 
   Datum = () => {
@@ -53,6 +70,9 @@ class FlowContextMenu extends React.Component {
     var currentId = propsAPI.getSelected()[0].id
     var saveData = propsAPI.save().nodes
     var currentData = new Array()
+
+    console.log("saveData:-----------")
+    console.log(saveData)
   
     for(let i = 0; i < saveData.length; i++){
       if(currentId == saveData[i].id){       
@@ -68,11 +88,13 @@ class FlowContextMenu extends React.Component {
                    width : 50,
                    filterDropdown: (
                     <div>
-                      <Button onClick={()=>{this.barChart()}}>柱状图</Button>
+                      <Button onClick={()=>{this.barChart(i,saveData[0].Dataset[i].value,"bar")}}>柱状图</Button>
                       <br></br>
-                      <Button onClick={()=>{this.barChart()}}>饼图</Button>
+                      <Button onClick={()=>{this.barChart(i,saveData[0].Dataset[i].value,"pie")}}>饼图</Button>
                     </div>
-                    )
+                    ),
+                  // filterDropdownVisible: this.state.filterDropdownVisible,
+                  // onFilterDropdownVisibleChange: ()=> this.setState({ filterDropdownVisible: true }),
                  })
     }
     this.setState({col:columns})
@@ -167,14 +189,18 @@ class FlowContextMenu extends React.Component {
   }
   modelEvaluation = ()=>{
     const { propsAPI } = this.props;
-    const { getSelected } = propsAPI;
-    const item = getSelected()[0];
-
-    const model = item.getModel();
-    
-    if (model.group == "ml"){
-        var ev = model.evaluation;
-        console.log(ev)
+    var currentId = propsAPI.getSelected()[0].id
+    var saveData = propsAPI.save().nodes
+    var currentNode = new Array()
+  
+    for(let i = 0; i < saveData.length; i++){
+      if(currentId == saveData[i].id){       
+          currentNode.push(saveData[i])
+      }
+    }
+    currentNode = currentNode[0]
+    if (currentNode.group == "ml"){
+        var ev = currentNode.attr.evaluateResult
         this.setState({evalution:ev})
         this.setState({MlEvaluteVisible:true})
     }
@@ -188,6 +214,7 @@ class FlowContextMenu extends React.Component {
       this.setState({loading:false});
     },100)
   }
+
   render() {
    
     return (
@@ -239,10 +266,6 @@ class FlowContextMenu extends React.Component {
             </div>
           </Command>
 
-          {/* <div className={styles.item} onClick={this.showSModal}>
-          <Icon type="dot-chart" />
-          <span>图形化展示-散点图</span>
-          </div> */}
         </NodeMenu>
       
 
@@ -251,27 +274,16 @@ class FlowContextMenu extends React.Component {
         >
           <Collapse bordered={false} >
           {this.state.evalution.map((pair,index)=>{
-            return (
-            <Panel 
-              header={pair[0]+" : "+pair[1]}  
-              key={index}
-              style={{fontSize:25,marginBottom: 24,border: 0}}>
-              <p style={{fontSize:15,lineHeight:2}}>{pair[2]}</p>
-            </Panel>)
+            return (<Panel header={pair[0]+" : "+pair[1]}  key={index} style={{fontSize:25,marginBottom: 24,border: 0}}>
+                        <p style={{fontSize:15,lineHeight:2}}>{pair[2]}</p>
+                      </Panel>)
           }
 
           )}
-            {/* <Panel header={this.state.title}  key="1" style={{fontSize:30,marginBottom: 24,border: 0}}>
-              <p style={{fontSize:20}}>{text}</p>
-            </Panel>
-            <Panel header="This is panel header 2" key="2" style={{fontSize:30,marginBottom: 24,border: 0}}>
-              <p style={{fontSize:20}}>{text}</p>
-            </Panel>
-            <Panel header="This is panel header 3" key="3" style={{fontSize:30,marginBottom: 24,border: 0}}>
-              <p style={{fontSize:20}}>{text}</p>
-          </Panel> */}
+
         </Collapse>
         </Modal>
+
 
 
         <Modal
@@ -282,25 +294,18 @@ class FlowContextMenu extends React.Component {
             bodyStyle={{height: '450px'}}
             width={1100}
           >
-          
           <LineMarkerEcharts trans={()=>this.trans()}/>
         </Modal>
 
 
-        {/* <Modal title="Modal Data" visible={this.state.visible}
-          onOk={this.handleOk} onCancel={this.handleCancel} width={900}
-        >
-          <Downlowd list={this.state.list} filename={"数据集"}/>
-          <Table columns={this.state.col} dataSource={this.state.data} pagination={{ pageSize: 70 }} scroll={{ y: 340 }} bordered size="small" />
-        </Modal> */}
+
 
         <Modal title="Basic Modal" visible={this.state.visible} width={1200} 
           onOk={this.handleOk} onCancel={this.handleCancel}
         >
-
         <Row>
         <Col span={15}>
-          <Table columns={this.state.col} dataSource={this.state.data} pagination={{ pageSize: 70 }} scroll={{ x:500, y: 200 }} height={800}  size="small" />
+          <Table columns={this.state.col} dataSource={this.state.data} pagination={{ pageSize: 70 }} scroll={{ x:500, y: 300 }} height={800}  size="small" />
           </Col>
             
           <Col span={9}>
@@ -308,6 +313,8 @@ class FlowContextMenu extends React.Component {
           </Col>
           </Row>
         </Modal>
+
+
 
         <EdgeMenu>
           <Command name="delete">

@@ -14,9 +14,6 @@ class SparkRun extends Component{
   }
 
 
-
-
-
   showDetail = ()=>{
     // this.handleLegal()
     const { propsAPI } = this.props;
@@ -244,85 +241,9 @@ class SparkRun extends Component{
   
   render(){
 
-
-    const columns = [
-      { title: 'Age', width:100, dataIndex: 'age', key: '0',filterDropdown: (
-        <div>
-          <Button onClick={()=>this.barChart()}>柱状图</Button>
-          <br></br>
-          <Button>饼图</Button>
-        </div>
-        )},
-      { title: 'Column 1',width:100, dataIndex: 'address', key: '1' },
-      { title: 'Column 2',width:100, dataIndex: 'address', key: '2' },
-      { title: 'Column 3',width:100, dataIndex: 'address', key: '3' },
-      { title: 'Column 4',width:100, dataIndex: 'address', key: '4' },
-      { title: 'Column 5',width:100, dataIndex: 'address', key: '5' },
-      { title: 'Column 6',width:100, dataIndex: 'address', key: '6' },
-      { title: 'Column 7',width:100, dataIndex: 'address', key: '7' },
-      { title: 'Column 8',width:100, dataIndex: 'address', key: '8' },
-    ];
-    
-    const data = [];
-    for (let i = 0; i < 100; i++) {
-      data.push({
-        key: i,
-        age: i,
-        address: `London no. ${i}`,
-      });
-    }
-
-    // const columns = [{
-    //   title: 'Name',
-    //   dataIndex: 'name',
-    //   filterDropdown: (
-    //   <div>
-    //     <Button onClick={()=>this.barChart()}>柱状图</Button>
-    //     <br></br>
-    //     <Button>饼图</Button>
-    //   </div>
-    //   ),
-    // }, {
-    //   title: 'Age',
-    //   dataIndex: 'age',
-    // }, {
-    //   title: 'Address',
-    //   dataIndex: 'address',
-    // }];
-    // const data = [{
-    //   key: '1',
-    //   name: 'John Brown',
-    //   age: 32,
-    //   address: 'New York No. 1 Lake Park',
-    // }, {
-    //   key: '2',
-    //   name: 'Jim Green',
-    //   age: 42,
-    //   address: 'London No. 1 Lake Park',
-    // }, {
-    //   key: '3',
-    //   name: 'Joe Black',
-    //   age: 32,
-    //   address: 'Sidney No. 1 Lake Park',
-    // }];
-
     return (
       <div>
-        <Button type="primary" onClick={this.showModal}>Open a modal dialog</Button>
-        <Modal title="Basic Modal" visible={this.state.visible} width={1200} height={800}
-          onOk={this.handleOk} onCancel={this.handleCancel}
-        >
-
-        <Row>
-        <Col span={15}>
-          <Table columns={columns} dataSource={data} scroll={{ x:1500, y: 200 }}  size="middle" />
-          </Col>
-            
-          <Col span={9}>
-            <div id="main" style={{ width: 200, height: 200 }}></div>
-          </Col>
-          </Row>
-        </Modal>
+        
       </div>
     );
   }
