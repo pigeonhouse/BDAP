@@ -23,36 +23,47 @@ export function SeprtbyFeat(allData){
         }
         labelArray.push(temp);
     }
-    var temp;
-    var outcome = new Array();
+
     for(let i = 0; i < labelArray.length;i++){
         if(labelArray[i][1] == true){
-            Object.keys(attr).forEach(function(key){
+            if(Dataset[i].stat.type == 'string'){
+                let tp = new Array();
+                for(let k = 0; k < Dataset[i].stat.value.length; k++){
+                    tp.push([Dataset[i].stat.value[k].name, Dataset[i].stat.value[k].name, Dataset[i].stat.value[k].count]);
+                }
+                let name = Dataset[i].label+"_group";
+                Dataset[i][name] = tp;
+            }
+            else Object.keys(attr).forEach(function(key){
                 if(key == labelArray[i][0]){
                     if(attr[key][0] == 'normal'){
-                        let interval = parseInt(Dataset[i].value.length/attr[key][1]);
-                        let k = 0,m;
-                        for(let j = 0; j < attr[key][1]-1;j++){
-                            for(let l = 0; l < interval; l++){
-                                k++
-                                Dataset[i].value[j*interval+l] = j+1;
-                            }
-                            m = j;
+                        let interval = (Dataset[i].stat.max - Dataset[i].stat.min) / attr[key][1];
+                        let temp = new Array();
+
+                        for(let j = 0; j < Dataset[i].value.length; j++){
+                            let k = Math.ceil((Dataset[i].value[j] - Dataset[i].stat.min) / interval);
+                            if(k == 0)  k = 1;
+                            temp[j] = k;
                         }
-                        while(k < Dataset[i].value.length){  
-                            Dataset[i].value[k] = m+2;
-                            k++;
-                        }
+                        Dataset.push({'lable':Dataset[i].label+"_Gaped", 'value':temp});
+                        // for(let j = 0; j < attr[key][1]-1;j++){
+                        //     for(let l = 0; l < interval; l++){
+                        //         k++
+                        //         Dataset[i].value[j*interval+l] = j+1;
+                        //     }
+                        //     m = j;
+                        // }
+                        // while(k < Dataset[i].value.length){  
+                        //     Dataset[i].value[k] = m+2;
+                        //     k++;
+                        // }
                     }
                     else if(attr[key][0] == 'user-defined'){
                         let Tol = attr[key].length;
                         for(let j = 1; j < Tol;j++){
                             for(let l = 0; l < Dataset[i].value.length; l++){
                                 if((Dataset[i].value[l] >= attr[key][j][1]) && (Dataset[i].value[l] <= attr[key][j][2])){
-                                    console.log(Dataset[i].value[l],attr[key][j][1],attr[key][j][2],attr[key][j][0])
-                                    
                                     Dataset[i].value[l] = attr[key][j][0];
-                                    console.log(Dataset[i].value[l])
                                 }
                             }
                         }
@@ -62,9 +73,6 @@ export function SeprtbyFeat(allData){
         }
     }
 
-
-    console.log('outcome')
-    console.log(Dataset);
     allData[1].Dataset = Dataset;
     return allData[1];
 }

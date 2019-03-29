@@ -55,13 +55,19 @@ class LocalMode extends React.Component {
   }
   render() {
     return (
+      
       <GGEditor className={styles.editor}>
-        <Row type="flex" data-step="1" data-position="right" data-intro="这是主要展示系统一些统计数据">
+        {/* <Row >
+          <Col span={24} >
+          这是主要展示系统一些统计数据
+          </Col>
+        </Row> */}
+        <Row type="flex">
           <Col span={24} className={styles.editorHd}> 
           {/* <li data-step="1" data-position="right" data-intro="这是主要展示系统一些统计数据">
-         </li>
+         </li>data-step="1" data-position="right" data-intro="这是主要展示系统一些统计数据"> 
          <li data-step="2" data-position="right" data-intro="这是系统功能"> 
-         </li>            
+         </li>            style={{position:'absolute'}}
          <li data-step="3" data-position="right" data-intro="这是镜像功能">
          </li> */}
             <FlowToolbar/>
@@ -73,6 +79,7 @@ class LocalMode extends React.Component {
           </Col>
           <Col span={16} className={styles.editorContent}>
             {this.renderFlow()}
+            <div data-step="1" data-intro="这是主要展示系统一些统计数据"></div>
           </Col>
           <Col span={4} className={styles.editorSidebar} >
             <FlowDetailPanel />
