@@ -58,7 +58,7 @@ class LocalMode extends React.Component {
       
       <GGEditor className={styles.editor}>
         {/* <Row >
-          <Col span={24} >
+          <Col span={24} data-position="right" data-intro="这是主要展示系统一些统计数据">
           这是主要展示系统一些统计数据
           </Col>
         </Row> */}
@@ -73,13 +73,12 @@ class LocalMode extends React.Component {
             <FlowToolbar/>
           </Col>
         </Row>
-        <Row type="flex" >
-          <Col span={4} className={styles.editorSidebar} className={styles.editorBd} >
+        <Row type="flex" className={styles.editorBd}>
+          <Col span={4} className={styles.editorSidebar} >
             <FlowItemPanel />
           </Col>
           <Col span={16} className={styles.editorContent}>
             {this.renderFlow()}
-            <div data-step="1" data-intro="这是主要展示系统一些统计数据"></div>
           </Col>
           <Col span={4} className={styles.editorSidebar} >
             <FlowDetailPanel />
