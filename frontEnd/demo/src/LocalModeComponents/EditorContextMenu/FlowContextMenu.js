@@ -35,10 +35,14 @@ class FlowContextMenu extends React.Component {
   barChart = (indexOfFeature,data,showType)=>{
     console.log(data)
     var myChart = echarts.init(document.getElementById('main'));
-    const chartData = SeprtbyFeat([
-      [{all_attr:{labelArray:{public:['normal', 5]}}}],
-      [{Dataset:[data]}]
-    ]).group;
+    var chartData = [
+      {all_attr:{},
+        labelArray:{public:[data.label]}
+      },
+      {Dataset:[data]}
+    ];
+    chartData[0].all_attr[`${data.label}`] = ['normal', 3];
+    chartData = SeprtbyFeat(chartData)['Dataset'][0].group;
     if(showType === 'bar'){
       var xAxisGroup = new Array();
       var seriesGroup = [{
@@ -47,7 +51,7 @@ class FlowContextMenu extends React.Component {
         data: new Array()
       }];
       for(let i in chartData){
-        xAxisGroup.push(chartData[i][0]);
+        xAxisGroup.push(`${parseInt(chartData[i][0])}`+'~'+`${parseInt(chartData[i][1])}`);
         seriesGroup[0].data.push(chartData[i][2]);
       }
       myChart.setOption({
@@ -70,20 +74,15 @@ class FlowContextMenu extends React.Component {
         });
       }
       myChart.setOption({
-          series: [{
-              type: 'pie',
-              data: seriesGroup
-          }]
+          series: seriesGroup
       });
     }
   }
 
   Datum = () => {
     const { propsAPI } = this.props;
-    const { find } = propsAPI;
-    var currentId = propsAPI.getSelected()[0];
-  
-    const currentData = find(currentId).getModel().Dataset;
+    var item = propsAPI.getSelected()[0];
+    const currentData = item.getModel().Dataset;
     var columns = new Array()
     for(let i = 0; i < currentData.length; i++){
       columns.push({

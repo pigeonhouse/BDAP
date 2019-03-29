@@ -47,9 +47,13 @@ export function SeprtbyFeat(allData){
                         Dataset[i]['group'] = new Array();
                         for(let k = Dataset[i].stat.min; k < Dataset[i].stat.max; k += interval){
                             let tp = new Array();
-                            let j = Math.ceil((k - Dataset[i].stat.min) / interval);
+                            let count = 0;
 
-                            tp = [k, k+interval, j+1];
+                            for(let j = 0; j < Dataset[i].value.length; j++){
+                                if(k == Dataset[i].stat.min && k == Dataset[i].value[j])    count++;
+                                if(Dataset[i].value[j]>k && Dataset[i].value[j]<=(k+interval))  count++;
+                            }
+                            tp = [k, k+interval, count];
                             Dataset[i]['group'].push(tp);
                         }
                         Dataset.push({'lable':Dataset[i].label+"_Gaped", 'value':temp});
