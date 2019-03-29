@@ -31,19 +31,26 @@ export function SeprtbyFeat(allData){
                 for(let k = 0; k < Dataset[i].stat.value.length; k++){
                     tp.push([Dataset[i].stat.value[k].name, Dataset[i].stat.value[k].name, Dataset[i].stat.value[k].count]);
                 }
-                let name = Dataset[i].label+"_group";
-                Dataset[i][name] = tp;
+                Dataset[i]['group'] = tp;
             }
             else Object.keys(attr).forEach(function(key){
                 if(key == labelArray[i][0]){
                     if(attr[key][0] == 'normal'){
                         let interval = (Dataset[i].stat.max - Dataset[i].stat.min) / attr[key][1];
                         let temp = new Array();
-
+                        
                         for(let j = 0; j < Dataset[i].value.length; j++){
                             let k = Math.ceil((Dataset[i].value[j] - Dataset[i].stat.min) / interval);
-                            if(k == 0)  k = 1;
+                            if(k == 0)  k = 1;                           
                             temp[j] = k;
+                        }
+                        Dataset[i]['group'] = new Array();
+                        for(let k = Dataset[i].stat.min; k < Dataset[i].stat.max; k += interval){
+                            let tp = new Array();
+                            let j = Math.ceil((k - Dataset[i].stat.min) / interval);
+
+                            tp = [k, k+interval, j+1];
+                            Dataset[i]['group'].push(tp);
                         }
                         Dataset.push({'lable':Dataset[i].label+"_Gaped", 'value':temp});
                         // for(let j = 0; j < attr[key][1]-1;j++){
