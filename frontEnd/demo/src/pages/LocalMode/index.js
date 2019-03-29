@@ -49,8 +49,7 @@ class LocalMode extends React.Component {
       },
       duration: 3,
       btn,
-      key,
-      onClose: close,
+      key
     });
   }
   render() {
