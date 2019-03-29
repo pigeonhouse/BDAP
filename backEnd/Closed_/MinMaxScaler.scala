@@ -1,6 +1,7 @@
 import org.apache.spark.ml.feature.{MinMaxScaler, StandardScaler, VectorAssembler}
 import org.apache.spark.ml.linalg.Vector
 import org.apache.spark.sql.{Row, SaveMode}
+import scalaj.http._
 import org.apache.spark.sql.functions.{col, monotonically_increasing_id}
 import org.apache.spark.sql.types.{DoubleType, StructField, StructType}
 
@@ -30,19 +31,6 @@ import spark.implicits._
 
     df.write.format("parquet").mode(SaveMode.Overwrite).save(project + "/" + id)
 
-  val colName = df.columns
-  val fin = new StringBuilder
-  val start = """{"colName":""""
-  val end = "\""
-  val json = colName.mkString(start,",",end)
-  fin ++= json
-  for(name <- colName){
-    var t = df.select(name).takeAsList(20).toArray.mkString.stripSuffix("]").stripPrefix("[").split("\\]\\[")
-    var r = ",\"" + name + "\":\"" + t.mkString(",") + "\""
-    fin ++= r
-  }
-  fin += '}'
+  val fin = df.limit(20).toJSON.collectAsList.toString
 
-  println(fin)
-
-  val result = Http("http://10.122.240.131:5000/InputPost").postData(fin.toString).header("Content-Type", "application/json").header("Charset", "UTF-8").option(HttpOptions.readTimeout(10000)).asString
+  val result = Http("http://10.122.240.131:5000/RunningPost").postData(fin.toString).header("Content-Type", "application/json").header("Charset", "UTF-8").option(HttpOptions.readTimeout(10000)).asString

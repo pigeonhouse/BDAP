@@ -3,7 +3,7 @@ import org.apache.spark.ml.feature.VectorAssembler
 import org.apache.spark.sql.DataFrame
 import org.apache.spark.sql.functions.col
 
-    val project = "Taitanic1"
+    val project = "Demo"
     val id = "%s"
     val train = "%s"
     val label = "%s"

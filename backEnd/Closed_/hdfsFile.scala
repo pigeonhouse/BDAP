@@ -6,6 +6,6 @@ val project = "Demo"
 val id = "%s"
 val file = "/demoData/train_demo.csv"
 
-val df = spark.read.format("csv").option("header", "true").option("multiLine", true).load(file)
+val df = spark.read.format("csv").option("header", "true").option("inferSchema", "true").load(file)
 
 df.write.format("parquet").mode(SaveMode.Overwrite).save(project + "/" + id)

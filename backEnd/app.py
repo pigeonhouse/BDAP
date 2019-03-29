@@ -26,20 +26,6 @@ class nodes:
         self.sourceID = sourceID
         self.labelArray = labelArray
 
-    def transform(self):
-        if self.label == "hdfs数据":
-            self.label = "hdfsFile"
-        elif self.label == "缺失值填充":
-            self.label = "Fillna"
-        elif self.label == "归一化":
-            self.label = "MinMaxScaler"
-        elif self.label == "决策树回归":
-            self.label = "DecivionTree"
-        elif self.label == "数据类型转换":
-            self.label = "TransformType"
-        else:
-            self.label = self.label
-
     def matchfunction(self, code):
         if self.label == "Fillna":
             data = {'code': code %(self.id, self.sourceID[0]['source'], ArraytoString(self.labelArray['public']), self.attribute['type'])}
@@ -52,7 +38,19 @@ class nodes:
         elif self.label == 'LogisticRegression':
             data = {'code': code % (self.id)}
         elif self.label == "TransformType":
-            data = {'code': code % (self.id, ArraytoString(self.labelArray['public']), self.sourceID[0]['source'], "Doubletype")}
+            data = {'code': code % (self.id, ArraytoString(self.labelArray['public']), self.sourceID[0]['source'], "number")}
+        elif self.label == "Stringindex":
+            data = {'code': code % (self.id, ArraytoString(self.labelArray['public']), self.sourceID[0]['source'])}
+        elif self.label == "SortBy":
+            data = {'code': code % (self.id, self.sourceID[0]['source'], ArraytoString(self.labelArray['public']))}
+        elif self.label == "StandardScaler":
+            data = {'code': code % (self.id, ArraytoString(self.labelArray['public']), self.sourceID[0]['source'])}
+        elif self.label == "QuantileDiscretizer":
+            data = {'code': code % (self.id, ArraytoString(self.labelArray['public']), self.attribute['新生成列名'], self.sourceID[0]['source'], self.attribute['类别数'])}
+        elif self.label == "OneHotEncoding":
+            data = {'code': code % (self.id, ArraytoString(self.labelArray['public']), self.sourceID[0]['source'])}
+        elif self.label == "LinearRegression":
+            data = {'code': code % ()}
         else:
             data = None
 
@@ -74,11 +72,9 @@ class nodes:
         result_url = host + compute.headers['location']
 
         r = requests.get(result_url, headers=headers)
-     
-        print(r.json())
 
         while(True):
-            r = requests.get(result_url, headers=headers)
+            r = req=ests.get(result_url, headers=headers)
             if r.json()['state'] == 'available':
                 print("finish")
                 break
@@ -113,6 +109,7 @@ host = 'http://10.105.222.90:8998'
 headers = {'Content-Type': 'application/json'}
 global loss
 
+
 def convertPost(data):
     colName = data['colName'].split(",")
     s = []
@@ -126,7 +123,6 @@ def convertPost(data):
     re.append(len(data[name].split(",")))
     return re
 
-
 @app.route('/handleInput', methods=['GET', 'POST']) 
 def handleInput():
     print(request.json)
@@ -138,6 +134,9 @@ def handleInput():
         fileobj.close()
 
     data_mine = {'code':code % request.json}
+
+    print(data['code'])
+
     headers = {'Content-Type': 'application/json'}
     session_url = 'http://10.105.222.90:8998/sessions/2'
     compute = requests.post(session_url + '/statements', data=json.dumps(data_mine), headers=headers)
@@ -167,17 +166,17 @@ def run():
     node_ = []
     for i in range(0, len(picture)):
         node = nodes(picture[i]['id'], picture[i]['label'], picture[i]['sourceId'], picture[i]['attribute'], picture[i]['labelArray'])
-        node.transform()
         node_.append(node)
 
     finalData = []
     for node in node_:
         print(node.label)
         node.excuted()
+       
         if node.label != "hdfsFile":
-            temp = [node.id,convertPost(runningData)]
+            temp = [node.id, runningData]
             finalData.append(temp)
-            runningData = []
+
     
     print(finalData)
 

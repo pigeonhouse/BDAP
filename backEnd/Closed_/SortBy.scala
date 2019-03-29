@@ -1,32 +1,17 @@
-package com.intel.analytics.bigdl.Closed
-
-import com.intel.analytics.bigdl.utils.Engine
-import org.apache.spark.SparkContext
 import org.apache.spark.sql.{SQLContext, SaveMode}
+import scalaj.http._
 
-object SortBy{
-  def main(args: Array[String]): Unit = {
-    val conf = Engine.createSparkConf()
-      .setAppName("SortBy")
-      .set("spark.task.maxFailures", "1")
-    val sc = new SparkContext(conf)
-    val SQLContext = new SQLContext(sc)
-    Engine.init
+    val project = "Demo"
+    val id = "%s"
+    val previous = "%s"
+    val aim = "%s"
+    val file = project + "/" + previous
 
-    val project = "Taitanic"
-    val id = "6"
-    val previous = "5"
-    val aim = "PassengerId"
-    val file = "/home/hadoop/BigDL/" + project + "/" + previous
-
-    val df = SQLContext.read.format("json").load(file)
+    val df = spark.read.format("parquet").load(file)
     val df_ = df.sort(aim)
 
-    df_.write.format("json")
-      .mode(SaveMode.Append)
-      .save("/home/hadoop/BigDL/" + project + "/" + id)
+    df_.write.format("parquet").mode(SaveMode.Overwrite).save(project + "/" + id)
 
-    sc.stop()
+  val fin = df_.limit(20).toJSON.collectAsList.toString
 
-  }
-}
+  val result = Http("http://10.122.240.131:5000/RunningPost").postData(fin.toString).header("Content-Type", "application/json").header("Charset", "UTF-8").option(HttpOptions.readTimeout(10000)).asString

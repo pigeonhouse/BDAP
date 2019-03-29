@@ -2,14 +2,15 @@ import org.apache.spark.ml.feature.{StandardScaler, VectorAssembler}
 import org.apache.spark.ml.linalg.Vector
 import org.apache.spark.sql.{Row, SaveMode}
 import org.apache.spark.sql.functions.monotonically_increasing_id
+import scalaj.http._
 
-    val project = "Taitanic1"
-    val id = "5"
-    val aim = "Fare Age"
-    val previous = "4"
+    val project = "Demo"
+    val id = "%s"
+    val aim = "%s"
+    val previous = "%s"
     val file = project + "/" + previous
 
-    var df = spark.read.format("json").load(file).withColumn("idx", monotonically_increasing_id())
+    var df = spark.read.format("parquet").load(file)
     val aimarray = aim.split(" ")
 
     var df_ = df
@@ -21,12 +22,13 @@ import org.apache.spark.sql.functions.monotonically_increasing_id
       val scaler = new StandardScaler().setInputCol(aimarray(i)).setOutputCol("scaled" + aimarray(i))
       val scalerModel = scaler.fit(df_)
       df_ = scalerModel.transform(df_).drop(aimarray(i))
-      df_ = df_.map{case Row(v: Vector) => v(0)}.toDF("StandardScaled" + aimarray(i)).withColumn(s"idx${i}", monotonically_increasing_id())
-      df = df.join(df_, df("idx") === df_(s"idx${i}")).drop(s"idx${i}")
+      val df_1 = df_.map{case Row(v: Vector) => v(0)}.toDF("StandardScaled" + aimarray(i)).withColumn("idx", monotonically_increasing_id())
+      df = df.withColumn("idx", monotonically_increasing_id())
+      df = df.join(df_1, df("idx") === df_1("idx")).drop("idx")
     }
-    df = df.drop("idx")
 
+    df.write.format("parquet").mode(SaveMode.Overwrite).save(project + "/" + id)
 
-    df.write.format("json")
-      .mode(SaveMode.Append)
-      .save(project + "/" + id)
+  val fin = df_.limit(20).toJSON.collectAsList.toString
+
+  val result = Http("http://10.122.240.131:5000/RunningPost").postData(fin.toString).header("Content-Type", "application/json").header("Charset", "UTF-8").option(HttpOptions.readTimeout(10000)).asString

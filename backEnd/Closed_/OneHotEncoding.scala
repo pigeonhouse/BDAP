@@ -5,13 +5,13 @@ import org.apache.spark.sql.types.{ArrayType, DoubleType, StructField, StructTyp
 import org.apache.spark.sql.Row
 import org.apache.spark.sql.functions.col
 
-    val project = "Taitanic1"
-    val id = "1"
-    val aim = "Pclass Sex"
-    val previous = "0"
+    val project = "Demo"
+    val id = "%s"
+    val aim = "%s"
+    val previous = "%s"
     val file = project + "/" + previous
 
-    val df = spark.read.format("json").load(file)
+    val df = spark.read.format("parquet").load(file)
     var df_ = df
     val aimarray = aim.split(" ")
 
@@ -28,10 +28,9 @@ import org.apache.spark.sql.functions.col
     for(i <- 0 to aimarray.length - 1){
       df_ = df_.drop(aimarray(i) + "Index")
     }
-
-    df_.show(false)
-
-    df_.write.format("json")
-        .mode(SaveMode.Append)
-        .save(project + "/" + id)
   
+    df_.write.format("parquet").mode(SaveMode.Overwrite).save(project + "/" + id)
+
+val fin = df_.limit(20).toJSON.collectAsList.toString
+
+val result = Http("http://10.122.240.131:5000/RunningPost").postData(fin.toString).header("Content-Type", "application/json").header("Charset", "UTF-8").option(HttpOptions.readTimeout(10000)).asString
