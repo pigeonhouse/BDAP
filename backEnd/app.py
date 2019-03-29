@@ -87,22 +87,6 @@ app = Flask(__name__)
 
 CORS(app)
 
-@app.route('/InputPost', methods=['GET', 'POST'])
-def InputPost():
-    print(request.json)
-    global inputData
-    inputData = request.json
-    return "received"
-
-@app.route('/RunningPost', methods=['GET', 'POST'])
-def RunningPost():
-    print(request.json)
-    global runningData
-    runningData = request.json
-    return "received"
-
-
-
 @app.route('/')
 def hello_world():
     return render_template('index.html')
@@ -110,7 +94,6 @@ def hello_world():
 host = 'http://10.105.222.90:8998'
 headers = {'Content-Type': 'application/json'}
 global loss
-
 
 def convertPost(data):
     colName = data['colName'].split(",")
