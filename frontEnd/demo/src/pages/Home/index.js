@@ -1,7 +1,6 @@
 import React from 'react';
-import { Row, Col, Card, Form, Input, Button, message, Icon, Checkbox} from 'antd';
+import { Row, Col, Card, Form, Input, Button, message, Icon, Checkbox, notification} from 'antd';
 import { Redirect } from 'react-router-dom';
-
 import style from './index.less';
 
 const FormItem = Form.Item;
@@ -27,6 +26,11 @@ class HomePage extends React.Component {
   }
   render() {
     if (this.state.redirect) {
+      notification['success']({
+        message: '进入模式选择页面',
+        description: '在这里选择使用的模式',
+        duration: 1
+      });
       return <Redirect to="/route" />;
     }
     const {getFieldDecorator} = this.props.form;

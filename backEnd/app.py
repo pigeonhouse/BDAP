@@ -1,6 +1,8 @@
 from flask import Flask, render_template, request
 from flask_cors import CORS
 import json, pprint, requests, textwrap
+from convertPost import convertPost
+import nodeCreate
 
 global inputData
 global runningData
@@ -81,8 +83,8 @@ class nodes:
 
         pprint.pprint(r.json())
 
+app = Flask(__name__)
 
-app = Flask(__name__, static_folder="./front_end/static", template_folder="./front_end/")
 CORS(app)
 
 @app.route('/InputPost', methods=['GET', 'POST'])
@@ -141,7 +143,7 @@ def handleInput():
     session_url = 'http://10.105.222.90:8998/sessions/2'
     compute = requests.post(session_url + '/statements', data=json.dumps(data_mine), headers=headers)
 
-    result_url = host + compute.headers['location']
+    result_url = 'http://10.105.222.90:8998' + compute.headers['location']
 
     r = requests.get(result_url, headers=headers)
     print(r.json())
@@ -159,6 +161,32 @@ def handleInput():
 
     return json.dumps(data)
 
+#处理第一次读取文件时scala传来的post请求
+@app.route('/InputPost', methods=['GET', 'POST'])
+def InputPost():
+    print(request.json)
+    global inputData
+    inputData = request.json
+    return "received"
+
+
+#处理scala运行时的post请求
+@app.route('/RunningPost', methods=['GET', 'POST'])
+def RunningPost():
+    print(request.json)
+    global runningData
+    runningData = request.json
+    return "received"
+
+##任务完成进度测试
+# @app.route('/JobRequest', methods=['GET', 'POST'])
+# def JobRequest():
+#     global jobCompleted
+#     jobCompleted += 3
+#     return json.dumps(jobCompleted)
+
+
+#处理前端传来的图信息并按步执行
 @app.route('/run', methods=['GET', 'POST'])
 def run():
     print(request.json)
@@ -184,8 +212,8 @@ def run():
 
 
     # data_mine = {'kind': 'spark'}
-    # create_session = requests.post(host + '/sessions', data=json.dumps(data_mine), headers=headers)
-    # session_url = host + create_session.headers['location']
+    # create_session = requests.post('http://10.105.222.90:8998' + '/sessions', data=json.dumps(data_mine), headers=headers)
+    # session_url = 'http://10.105.222.90:8998' + create_session.headers['location']
 
     # while(True):
     #     r = requests.get(session_url, headers=headers)
@@ -193,23 +221,10 @@ def run():
     #         print("started")
     #         break
 
-    # code above aims for open a new livy session, it is suggested to open it in andvance to avoid wasting time
+    ## 创建session
 
     # requests.delete(session_url, headers=headers)
-    # close the session, if you open the session outside this file, ignore it
-
-
-@app.route('/realTime', methods=['GET', 'POST'])  # for transferring data while training
-def realTime():
-    global loss
-    loss = float(request.args.get("loss"))
-    return "realTime test received"
-
-
-@app.route('/returnLoss', methods=['GET', 'POST'])  # for returning data to front-end
-def returnLoss():
-    print(loss)
-    return json.dumps({"loss": "%f" % loss})
+    ##关闭session 
 
 
 if __name__ == '__main__':

@@ -2,6 +2,8 @@ import React, { Component } from 'react'
 import { Button } from 'antd'
 import { withPropsAPI } from '@src';
 
+var cur = 0
+
 class SparkRun extends Component{
   state = { 
     visible: false,
@@ -109,6 +111,46 @@ class SparkRun extends Component{
           .catch(e => console.log('错误:', e))
   }
   
+  intervaltest = ()=>{   
+    setInterval(()=>{
+      cur++
+      console.log("T1:"+cur)
+    },1000)
+    this.intervalRequest()
+  }
+
+  intervalRequest = ()=>{  
+    if(cur<30){
+      setTimeout(()=>{
+        //this.transmit()
+        if(cur%5==0){
+          console.log("!!!!!!!:"+cur)
+        }
+        this.intervalRequest()
+
+      },1000)
+    }
+  }
+
+
+
+  transmit = ()=>{
+    const init={
+      method: 'GET', 
+      mode: 'cors',
+      headers: {'Content-Type': 'application/json'},
+      }
+      fetch(
+        'http://localhost:5000/JobRequest',init
+      )
+        .then(res => res.json())
+        .then(data => {
+          cur = data
+        })
+        .catch(e => console.log('错误:', e))
+  }
+
+
  handleLegal = ()=> {
     const { propsAPI } = this.props;
     var isLegal = 0;
@@ -175,6 +217,7 @@ class SparkRun extends Component{
     return (
       <div>
       <Button onClick={()=>this.showDetail()}>SparkRun</Button>
+      <Button onClick={()=>this.intervaltest()}>intervalTest</Button>
       </div>
     );
   }

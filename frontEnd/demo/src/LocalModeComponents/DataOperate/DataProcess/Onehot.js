@@ -45,5 +45,5 @@ export function Onehot(allData){
     allData[1].Dataset = Dataset;
     // allData.labelArray = labelArray1;
 
-    return allData;
+    return allData[1];
 }

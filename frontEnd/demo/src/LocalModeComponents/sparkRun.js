@@ -1,11 +1,18 @@
 import React, { Component } from 'react'
-import { Button } from 'antd'
+import { Button ,Modal ,Table, Row ,Col} from 'antd'
 import { withPropsAPI } from '@src';
+
+var cur = 0
+var echarts = require('echarts');
+
+
+
 
 class SparkRun extends Component{
   state = { 
     visible: false,
   }
+
 
   showDetail = ()=>{
     // this.handleLegal()
@@ -48,8 +55,8 @@ class SparkRun extends Component{
             k++;
             Deg[indexN]--;
             Sourc = inf.nodes[indexN].id;
-            etag = inf.nodes[indexN].elabel;
-            tag = inf.nodes[indexN].label;
+            tag = inf.nodes[indexN].elabel;
+            //tag = inf.nodes[indexN].label;
             attribute = inf.nodes[indexN].attr;
             labelarray = inf.nodes[indexN].labelArray;
             let labelarr = {};
@@ -64,8 +71,8 @@ class SparkRun extends Component{
             labelarray = JSON.parse(JSON.stringify(labelarr));
             stream.push({
                         'id':Sourc,
-                        "label":etag,
-                        "tag":tag,
+                        //"label":etag,
+                        "label":tag,
                         "attribute":attribute,
                         "labelArray":labelarray,
                         "sourceId":sourceId[indexN]
@@ -171,10 +178,72 @@ class SparkRun extends Component{
 
   }
   
+  testFor = ()=>{
+    //setInterval(()=>{console.log("sleepingggggggg")},1000)
+    for(let i = 0; i<10; i++){
+      setTimeout(()=>{console.log("aaaaaaaaaaaa"+i)},1000)
+    }
+    this.intervaltest()
+  }
+
+
+  intervaltest = ()=>{   
+    setInterval(()=>{
+      cur++
+      console.log("T1:"+cur)
+    },1000)
+    this.intervalRequest()
+  }
+
+  intervalRequest = ()=>{  
+    if(cur<30){
+      setTimeout(()=>{
+        //this.transmit()
+        if(cur%3==0){
+          console.log("!!!!!!!:"+cur)
+          const { propsAPI } = this.props;
+          const { find, update, executeCommand } = propsAPI;
+          const currentitem = find(propsAPI.save().nodes[cur/3].id);
+          console.log(propsAPI.save().nodes[cur/3].id)
+          executeCommand(() => {
+            update(currentitem, {
+              keyConfig:{
+                state_icon_url: 'https://loading.io/s/icon/28avj5.png'
+              }
+            });
+          });
+        }
+        this.intervalRequest()
+
+      },1000)
+    }
+  }
+
+
+  showModal = () => {
+    this.setState({
+      visible: true,
+    });
+  }
+  handleOk = (e) => {
+    console.log(e);
+    this.setState({
+      visible: false,
+    });
+  }
+  handleCancel = (e) => {
+    console.log(e);
+    this.setState({
+      visible: false,
+    });
+  }
+
+  
   render(){
+
     return (
       <div>
-      <Button onClick={()=>this.showDetail()}>SparkRun</Button>
+        
       </div>
     );
   }

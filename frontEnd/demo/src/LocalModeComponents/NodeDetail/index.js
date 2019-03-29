@@ -43,7 +43,7 @@ class NodeDetail extends React.Component {
 
     const { form, propsAPI } = this.props;
     const { getSelected, executeCommand, update } = propsAPI;
-
+  
     form.validateFieldsAndScroll((err, values) => {
       if (err) {
         return;
@@ -114,10 +114,7 @@ class NodeDetail extends React.Component {
       return null;
     }
 
-    const { label } = item.getModel();
-    const { attr } = item.getModel();
-    const { anchor } = item.getModel();
-    const { group } = item.getModel();
+    const { label, attr, anchor, group } = item.getModel();
 
     var targetid = new Array(anchor[0]).fill(0);
     const inf = propsAPI.save().edges;

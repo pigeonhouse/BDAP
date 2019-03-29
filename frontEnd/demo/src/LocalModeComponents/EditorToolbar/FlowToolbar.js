@@ -10,8 +10,6 @@ import SparkRun from "../sparkRun"
 import { withPropsAPI } from '@src';
 import store from '../../store';
 import { getStopLineAction, getShowLineAction, UpINF } from '../../store/actionCreate';
-import {OneVarLinearRegression} from '../Models/MachineLearning/Regression/OneVarLinearRegression.js'
-import {OneVarPolynomialRegression} from '../Models/MachineLearning/Regression/OneVarPolynomialRegression'
 class FlowToolbar extends React.Component {
 
   state = {
@@ -50,8 +48,6 @@ class FlowToolbar extends React.Component {
     //     this.setState({users: data})
     //   })
     //   .catch(e => console.log('错误:', e))
-
-
   }
 
 
@@ -176,6 +172,7 @@ class FlowToolbar extends React.Component {
         
         <Run></Run>
         <SparkRun></SparkRun>
+       
        {/* <Button onClick={()=>this.livyTest()}>spark-test</Button> */}
        {/* <Button onClick={()=>this.returnLoss()}>return-loss</Button> */}
 {/* 

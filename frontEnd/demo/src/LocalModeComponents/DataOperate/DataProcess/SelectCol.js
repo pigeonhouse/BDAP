@@ -37,5 +37,5 @@ export function SelectCol(allData){
     
     allData[1].Dataset = Dataset;
 
-    return allData;
+    return allData[1];
 }
