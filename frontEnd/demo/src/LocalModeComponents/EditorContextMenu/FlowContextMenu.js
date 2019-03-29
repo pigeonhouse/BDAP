@@ -15,6 +15,7 @@ import { withPropsAPI } from '@src';
 import LineMarkerEcharts from './LineMarkerEcharts';
 import Downlowd from '../DataOperate/download';
 import GGEditor, { Flow, RegisterCommand } from '@src';
+import { SeprtbyFeat } from '../DataOperate/DataProcess/SeprtbyFeat'
 
 const Panel = Collapse.Panel;
 var echarts = require('echarts');
@@ -31,35 +32,47 @@ class FlowContextMenu extends React.Component {
     // filterDropdownVisible:false
   }
 
-  
   barChart = (indexOfFeature,data,showType)=>{
-
-    
     console.log(data)
     var myChart = echarts.init(document.getElementById('main'));
-
+    const chartData = SeprtbyFeat([
+      [{all_attr:{labelArray:{public:['normal', 5]}}}],
+      [{Dataset:[data]}]
+    ]).group;
     if(showType === 'bar'){
+      var xAxisGroup = new Array();
+      var seriesGroup = [{
+        name: '频数',
+        type: 'bar',
+        data: new Array()
+      }];
+      for(let i in chartData){
+        xAxisGroup.push(chartData[i][0]);
+        seriesGroup[0].data.push(chartData[i][2]);
+      }
       myChart.setOption({
         xAxis: {
-            data: ["衬衫", "羊毛衫", "雪纺衫", "裤子", "高跟鞋", "袜子"]
+            data: xAxisGroup
         },
         yAxis: {},
-        series: [{
-            name: '销量',
-            type: 'bar',
-            data: [5, 20, 36, 10, 10, 20]
-        }]
+        series: seriesGroup
     });
     }
     else if(showType === 'pie'){
+      var seriesGroup = [{
+        type: 'pie',
+        data: new Array()
+      }];
+      for(let i in chartData){
+        seriesGroup[0].data.push({
+          value:chartData[i][2],
+          name:chartData[i][0]
+        });
+      }
       myChart.setOption({
           series: [{
               type: 'pie',
-              data: [ {value:335, name:'直接访问'},
-              {value:310, name:'邮件营销'},
-              {value:234, name:'联盟广告'},
-              {value:135, name:'视频广告'},
-              {value:1548, name:'搜索引擎'}]
+              data: seriesGroup
           }]
       });
     }
@@ -67,19 +80,10 @@ class FlowContextMenu extends React.Component {
 
   Datum = () => {
     const { propsAPI } = this.props;
-    var currentId = propsAPI.getSelected()[0].id
-    var saveData = propsAPI.save().nodes
-    var currentData = new Array()
-
-    console.log("saveData:-----------")
-    console.log(saveData)
+    const { find } = propsAPI;
+    var currentId = propsAPI.getSelected()[0];
   
-    for(let i = 0; i < saveData.length; i++){
-      if(currentId == saveData[i].id){       
-          currentData.push(saveData[i].Dataset)
-      }
-    }
-    currentData = currentData[0]
+    const currentData = find(currentId).getModel().Dataset;
     var columns = new Array()
     for(let i = 0; i < currentData.length; i++){
       columns.push({
@@ -88,9 +92,9 @@ class FlowContextMenu extends React.Component {
                    width : 50,
                    filterDropdown: (
                     <div>
-                      <Button onClick={()=>{this.barChart(i,saveData[0].Dataset[i].value,"bar")}}>柱状图</Button>
+                      <Button onClick={()=>{this.barChart(i,currentData[i],"bar")}}>柱状图</Button>
                       <br></br>
-                      <Button onClick={()=>{this.barChart(i,saveData[0].Dataset[i].value,"pie")}}>饼图</Button>
+                      <Button onClick={()=>{this.barChart(i,currentData[i],"pie")}}>饼图</Button>
                     </div>
                     ),
                   // filterDropdownVisible: this.state.filterDropdownVisible,
@@ -274,17 +278,15 @@ class FlowContextMenu extends React.Component {
         >
           <Collapse bordered={false} >
           {this.state.evalution.map((pair,index)=>{
-            return (<Panel header={pair[0]+" : "+pair[1]}  key={index} style={{fontSize:25,marginBottom: 24,border: 0}}>
-                        <p style={{fontSize:15,lineHeight:2}}>{pair[2]}</p>
-                      </Panel>)
-          }
-
-          )}
-
-        </Collapse>
+            return (<Panel 
+                      header={pair[0]+" : "+pair[1]}  
+                      key={index} 
+                      style={{fontSize:25,marginBottom: 24,border: 0}}>
+                      <p style={{fontSize:15,lineHeight:2}}>{pair[2]}</p>
+                    </Panel>)
+          })}
+          </Collapse>
         </Modal>
-
-
 
         <Modal
             title="Modal"
@@ -297,9 +299,6 @@ class FlowContextMenu extends React.Component {
           <LineMarkerEcharts trans={()=>this.trans()}/>
         </Modal>
 
-
-
-
         <Modal title="Basic Modal" visible={this.state.visible} width={1200} 
           onOk={this.handleOk} onCancel={this.handleCancel}
         >
@@ -310,6 +309,7 @@ class FlowContextMenu extends React.Component {
             
           <Col span={9}>
             <div id="main" style={{ width: 400, height: 400 }}></div>
+            
           </Col>
           </Row>
         </Modal>
