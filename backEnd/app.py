@@ -76,7 +76,7 @@ class nodes:
         r = requests.get(result_url, headers=headers)
 
         while(True):
-            r = req=ests.get(result_url, headers=headers)
+            r = requests.get(result_url, headers=headers)
             if r.json()['state'] == 'available':
                 print("finish")
                 break
@@ -94,19 +94,6 @@ def hello_world():
 host = 'http://10.105.222.90:8998'
 headers = {'Content-Type': 'application/json'}
 global loss
-
-def convertPost(data):
-    colName = data['colName'].split(",")
-    s = []
-    for name in colName:
-        temp = {}
-        temp['label'] = name
-        temp['value'] = data[name].split(",")
-        s.append(temp)
-    re = [s]
-    re.append([colName])
-    re.append(len(data[name].split(",")))
-    return re
 
 @app.route('/handleInput', methods=['GET', 'POST']) 
 def handleInput():
