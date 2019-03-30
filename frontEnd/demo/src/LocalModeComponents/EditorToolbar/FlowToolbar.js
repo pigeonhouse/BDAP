@@ -89,11 +89,11 @@ class FlowToolbar extends React.Component {
 
   render() {
     return (
-      <div>
-      <div span={4} style={{float:"left", maxHeight:5}}>
-          <Input placeholder='Search' style={{maxWidth:180,marginLeft:10}}></Input>
-          <Button shape="circle" style={{marginLeft:20, marginRight:20}} icon="search" />
-      </div>
+      // <div>
+      // <div span={4} style={{float:"left", maxHeight:5}}>
+      //     <Input placeholder='Search' style={{maxWidth:180,marginLeft:10}}></Input>
+      //     <Button shape="circle" style={{marginLeft:20, marginRight:20}} icon="search" />
+      // </div>
       <Toolbar className={styles.toolbar}>
         <Command name="undo">
           <Tooltip title="撤销" placement="bottom" overlayClassName={styles.tooltip}>
@@ -213,7 +213,7 @@ class FlowToolbar extends React.Component {
               <Route exact={true}path='/' component={Home}></Route> */}
 
       </Toolbar>
-      </div>
+      // </div>
     );
   }
 }

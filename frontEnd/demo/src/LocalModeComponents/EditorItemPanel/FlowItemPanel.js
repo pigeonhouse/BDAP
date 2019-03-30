@@ -9,12 +9,12 @@ class FlowItemPanel extends React.Component {
   render() {
     return (
       <Menu
-      defaultOpenKeys={['sub1','sub2','sub3']}
-      mode="inline"
-      className={styles.scrollapp}
-      style={{maxHeight:676}}
-      selectable={false}
-    >
+        defaultOpenKeys={['sub1','sub2','sub3']}
+        mode="inline"
+        className={styles.scrollapp}
+        style={{maxHeight:'calc(100vh - 34px)'}}
+        selectable={false}
+      >
       <GGEditor style={{height:0, width:0}}>
           <Flow />
           <RegisterNode 
