@@ -34,7 +34,7 @@ class FlowContextMenu extends React.Component {
     // filterDropdownVisible:false
   }
 
-  barChart = (indexOfFeature,data,showType)=>{
+  Chart = (indexOfFeature,data,showType)=>{
     this.setState({
       currentIndex:indexOfFeature,
       compareVisible:true
@@ -57,7 +57,7 @@ class FlowContextMenu extends React.Component {
         data: new Array()
       }];
       for(let i in chartData){
-        xAxisGroup.push(`${parseInt(chartData[i][0])}`+'~'+`${parseInt(chartData[i][1])}`);
+        xAxisGroup.push(`${parseInt(chartData[i][0])}`+'-'+`${parseInt(chartData[i][1])}`);
         seriesGroup[0].data.push(chartData[i][2]);
       }
       myChart.setOption({
@@ -87,6 +87,17 @@ class FlowContextMenu extends React.Component {
           series: seriesGroup
       });
     }
+    else if(showType === 'box'){
+      document.getElementById('main').removeAttribute("_echarts_instance_")
+      var myChart = echarts.init(document.getElementById('main'));
+      let Data = echarts.dataTool.prepareBoxplotData(this.state.currentData[indexOfFeature].value)
+      myChart.setOption({
+        series:[{
+          data:Data.outliers
+        }]
+      })
+
+    }
   }
 
   Datum = () => {
@@ -94,16 +105,25 @@ class FlowContextMenu extends React.Component {
     var item = propsAPI.getSelected()[0];
     const currentData = item.getModel().Dataset;
     var columns = new Array()
+    console.log("------------------")
+    console.log(currentData)
     for(let i = 0; i < currentData.length; i++){
+      let first = currentData[i].value[0]
+      // let len = 50
+      // if(first!=null){
+      //   len = first.length>10?50:500
+      // }
       columns.push({
                    title : currentData[i].label,
                    dataIndex: currentData[i].label,
-                   width : 50,
+                   width : 1000 ,
                    filterDropdown: (
                     <div>
-                      <Button onClick={()=>{this.barChart(i,currentData[i],"bar")}}>柱状图</Button>
+                      <Button onClick={()=>{this.Chart(i,currentData[i],"bar")}}>柱状图</Button>
                       <br></br>
-                      <Button onClick={()=>{this.barChart(i,currentData[i],"pie")}}>饼图</Button>
+                      <Button onClick={()=>{this.Chart(i,currentData[i],"pie")}}>饼图</Button>
+                      <br></br>
+                      <Button onClick={()=>{this.Chart(i,currentData[i],"box")}}>箱线图</Button>
                     </div>
                     ),
                   // filterDropdownVisible: this.state.filterDropdownVisible,
@@ -258,7 +278,7 @@ class FlowContextMenu extends React.Component {
             xAxis: {name:xName},
             yAxis: {name:yName},
             series: [{
-                symbolSize: 7,
+                symbolSize: 6,
                 data: linChartData,
                 type: 'scatter'
             }]
@@ -338,8 +358,30 @@ class FlowContextMenu extends React.Component {
             </div>
           )
       }else if (statics.type == "string"){
+        let data = this.state.currentData
+        var statics = data[this.state.currentIndex].stat
+        let numOfNull = 0
+        for(let i = 0; i<statics.value.length; i ++){
+          if(statics.value[i].name==null){
+              numOfNull = statics.value[i].count
+          }
+        }
+
+        let uniqueValue = statics.value.length
           return(
-            <div></div>
+            <div>
+              <Row style={{marginBottom:10}}>
+                  <span>缺失值个数：</span>
+                  <span>{numOfNull}</span>
+                  </Row>
+
+                  <Row style={{marginBottom:10}}>
+                  <span>不同值个数：</span>
+                  <span>{uniqueValue}</span>
+                  </Row>
+            
+              
+            </div>
           )
       }
 
