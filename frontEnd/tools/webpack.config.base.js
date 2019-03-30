@@ -12,7 +12,7 @@ const rules = [{
   {
     test:/.(jpg|png)$/,
     use:['url-loader']
-  }
+  },
 {
   test:/\.tsx?$/,
   exclude: [
