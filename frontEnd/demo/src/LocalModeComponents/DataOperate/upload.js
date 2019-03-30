@@ -67,7 +67,7 @@ class Uploadfile extends Component{
         }
         const item = getSelected()[0];
         values['keyConfig'] = JSON.parse(JSON.stringify(item.model.keyConfig));
-        values.state_icon_url = 'https://gw.alipayobjects.com/zos/rmsportal/MXXetJAxlqrbisIuZxDO.svg';
+        values.keyConfig.state_icon_url = 'https://gw.alipayobjects.com/zos/rmsportal/MXXetJAxlqrbisIuZxDO.svg';
         update(item, {...values});
         console.log("propsAPI")
         console.log(propsAPI.save())

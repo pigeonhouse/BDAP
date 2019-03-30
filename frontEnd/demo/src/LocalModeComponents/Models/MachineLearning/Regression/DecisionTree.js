@@ -1,9 +1,10 @@
 import { DecisionTreeRegression as DTRegression } from 'ml-cart';
 import {selectDataUntransport} from '../normalFunction'
-function normalize(pre, preArray, Obj, objArray){
-    let Dataset = [];
-    Dataset.push({label:preArray[0], value:pre})
-    Dataset.push({label:objArray[0], value:Obj})
+import { Stat } from '../../../DataOperate/stat'
+
+function normalize(pre, Obj, objArray){
+    let Dataset = [...pre];
+    Dataset.push(Stat([{label:objArray[0], value:Obj}])[0]);
     return {Dataset:Dataset};
 }
 export function DecisionTreeRegression(all_data){
@@ -18,5 +19,7 @@ export function DecisionTreeRegression(all_data){
     const regression = new DTRegression();
     regression.train(x, y);
     const predictObj = regression.predict(predict);
-    return normalize(predict, labelArray.text_x, predictObj, labelArray.text_y)
+
+    var resultData = normalize(textData, predictObj, ['test']);
+    return resultData;
 }

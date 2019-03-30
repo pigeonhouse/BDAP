@@ -21,7 +21,6 @@ const Panel = Collapse.Panel;
 var echarts = require('echarts');
 
 
-
 class FlowContextMenu extends React.Component {
   state = { 
     loading:false,
@@ -232,7 +231,7 @@ class FlowContextMenu extends React.Component {
     const currentNode = item.getModel();
     if (currentNode.group == "ml"){
         var ev = currentNode.evaluation;
-        this.setState({evalution:ev})
+        this.setState({evaluation:ev})
         this.setState({MlEvaluteVisible:true})
     }
     else alert("NOT A ML MODEL")

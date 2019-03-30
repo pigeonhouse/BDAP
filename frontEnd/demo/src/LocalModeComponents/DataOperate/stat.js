@@ -44,17 +44,22 @@ export function Stat(n){
         continue;
       }
 
-      const Max = max(n[i].value);
-      const Median = median(n[i].value);
-      const Variance = variance(n[i].value);
-      const StandardDeviation = standardDeviation(n[i].value);
       total = 0;
       count = 0;
+      let value = new Array();
+      let c = 0;
       for(let j = 0; j < n[i].value.length;j++){
-        if(n[i].value[j] == null ) count++;
+        if(n[i].value[j] == null ){ count++; }
+        else{ value[c++] = n[i].value[j]; };
         if(n[i].value[j] != null && n[i].value[j] < Min) Min = n[i].value[j];
         total+=n[i].value[j];
       }
+      // console.log("value");
+      // console.log(value);
+      const Max = max(value);
+      const Median = median(value);
+      const Variance = variance(value);
+      const StandardDeviation = standardDeviation(value);
       // let med = new Array;
       // for(let j = 0; j < n[i].value.length;j++){
       //   med[j] = n[i].value[j];
