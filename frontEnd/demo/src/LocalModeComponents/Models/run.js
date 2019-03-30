@@ -83,6 +83,13 @@ class Run extends Component{
             tag = inf.nodes[indexN].label;
             attribute = inf.nodes[indexN].attr;
             labelarray = inf.nodes[indexN].labelArray;
+            if(inf.nodes[indexN].group === 'ml'){
+              const { find, update } = propsAPI;
+              const item = find(Sourc);
+              let temp = JSON.parse(JSON.stringify(labelarray));
+              temp['public'] = [...temp.text_x, ['test', false]];
+              update(item,{labelArray:temp});
+            }
             let labelarr = {};
             for(let i in labelarray){
               labelarr[i] = new Array();
@@ -199,7 +206,7 @@ class Run extends Component{
               break;
           }
           console.log(outcome)
-          this.outputdata(stream[k].id, outcome[1], propsAPI);
+          this.outputdata(stream[k].id, outcome, propsAPI);
 
           const { find, update, executeCommand } = propsAPI;
           const currentitem = find(stream[k].id);
