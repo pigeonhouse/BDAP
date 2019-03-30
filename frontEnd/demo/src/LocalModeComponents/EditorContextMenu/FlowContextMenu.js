@@ -1,5 +1,5 @@
 import React from 'react'
-import { Modal, Table , Icon,Collapse,Row,Col,Button} from 'antd';
+import { Modal, Table , Icon,Collapse,Row,Col,Button,Cascader} from 'antd';
 import {
   Command,
   NodeMenu,
@@ -21,6 +21,7 @@ const Panel = Collapse.Panel;
 var echarts = require('echarts');
 
 
+
 class FlowContextMenu extends React.Component {
   state = { 
     loading:false,
@@ -29,11 +30,16 @@ class FlowContextMenu extends React.Component {
     Svisible:false,
     MlEvaluteVisible:false,
     evalution:[[]],
+    compareVisible:false,
     // filterDropdownVisible:false
   }
 
   barChart = (indexOfFeature,data,showType)=>{
-    console.log(data)
+    this.setState({
+      currentIndex:indexOfFeature,
+      compareVisible:true
+    })
+    document.getElementById('main').removeAttribute("_echarts_instance_")
     var myChart = echarts.init(document.getElementById('main'));
     var chartData = [
       {all_attr:{},
@@ -63,6 +69,10 @@ class FlowContextMenu extends React.Component {
     });
     }
     else if(showType === 'pie'){
+
+      document.getElementById('main').removeAttribute("_echarts_instance_")
+      var myChart = echarts.init(document.getElementById('main'));
+
       var seriesGroup = [{
         type: 'pie',
         data: new Array()
@@ -100,8 +110,13 @@ class FlowContextMenu extends React.Component {
                   // onFilterDropdownVisibleChange: ()=> this.setState({ filterDropdownVisible: true }),
                  })
     }
+    this.setState({currentData:currentData})
     this.setState({col:columns})
-    console.log(columns)
+
+    let la = item.getModel().labelArray.public
+    la = la.map(a=>a[0])
+    this.setState({labelArray:la})
+
     var datas = new Array()
     var ln;
     for(let i = 0; i < currentData.length; i++){
@@ -218,8 +233,80 @@ class FlowContextMenu extends React.Component {
     },100)
   }
 
-  render() {
-   
+  onChange=(chosenName)=> {
+
+    let data = this.state.currentData
+    
+    if(chosenName[0] != "None"){
+
+        console.log(data)
+        var xName = data[this.state.currentIndex].label
+        var xData = data[this.state.currentIndex].value
+        var yData = []
+        var yName = []
+        for(let i = 0;i<data.length; i++){
+          if(data[i].label == chosenName[0]){
+            yData.push(data[i].value)
+            yName.push(data[i].label)
+          }
+        }
+        yData = yData[0]
+        yName = yName[0]
+
+        var linChartData = []
+        for(let i = 0; i < xData.length; i++){
+            linChartData.push([xData[i],yData[i]])
+        }
+
+        document.getElementById('main').removeAttribute("_echarts_instance_")
+        var myChart =echarts.init(document.getElementById('main'));
+        
+        myChart.setOption({
+            xAxis: {name:xName},
+            yAxis: {name:yName},
+            series: [{
+                symbolSize: 7,
+                data: linChartData,
+                type: 'scatter'
+            }]
+          })
+        }
+
+  }
+
+  compare=()=>{
+    if(this.state.compareVisible){
+
+      var options = [{value:"None",label:"None"}]
+
+      let labelarray = this.state.labelArray
+      for(let i = 0; i<labelarray.length; i++){
+          options.push({value:labelarray[i],label:labelarray[i]})
+      }
+      return(
+        <div>
+          <span>compare to  </span>
+          <Cascader defaultValue={["None"]} options={options} onChange={this.onChange} size="small" />
+        </div>
+      )
+    }
+  }
+
+  staticInformation=()=>{
+    if(this.state.compareVisible){
+      // let data = this.state.currentData
+      // var static = data[this.state.currentIndex].stat
+      // if(static.type == "number"){
+
+      // }else if (static.type == "string"){
+
+      // }
+
+      
+    }
+  }
+
+  render() {        
     return (
       <ContextMenu className={styles.contextMenu}>
         <GGEditor style={{width:0, height:0}}>
@@ -298,18 +385,29 @@ class FlowContextMenu extends React.Component {
           <LineMarkerEcharts trans={()=>this.trans()}/>
         </Modal>
 
-        <Modal title="Basic Modal" visible={this.state.visible} width={1200} 
+        <Modal title="Basic Modal" visible={this.state.visible} style={{ top: 50 }}  width={1200} 
           onOk={this.handleOk} onCancel={this.handleCancel}
         >
         <Row>
         <Col span={15}>
-          <Table columns={this.state.col} dataSource={this.state.data} pagination={{ pageSize: 70 }} scroll={{ x:500, y: 300 }} height={800}  size="small" />
+          <Table columns={this.state.col} dataSource={this.state.data} pagination={{ pageSize: 70 }}  scroll={{ x:500, y: 400 }}   size="small" />
+        </Col>
+
+         <Col span={1}></Col>   
+
+          <Col span={8}>
+            <Collapse bordered={false} defaultActiveKey={['1','2']} >
+              <Panel header="统计信息" key="1">
+                <div>{this.staticInformation}</div>
+              </Panel>
+
+              <Panel header="可视化" key="2">
+                <div>{this.compare()}</div>           
+                <div id="main" style={{ width: 350, height: 350 }}></div>
+              </Panel>
+            </Collapse>
           </Col>
-            
-          <Col span={9}>
-            <div id="main" style={{ width: 400, height: 400 }}></div>
-            
-          </Col>
+
           </Row>
         </Modal>
 

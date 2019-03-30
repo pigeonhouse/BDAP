@@ -48,7 +48,7 @@ class FillNa extends Component {
           <Option value="average">平均值</Option>
           <Option value="max">最大值</Option>
           <Option value="min">最小值</Option>
-          <Option value="media">中位数</Option>
+          <Option value="median">中位数</Option>
         </Select>
     );
   }
