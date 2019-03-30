@@ -8,7 +8,11 @@ const rules = [{
   use: {
     loader: 'babel-loader',
   },
-}, 
+},
+  {
+    test:/.(jpg|png)$/,
+    use:['url-loader']
+  },
 {
   test:/\.tsx?$/,
   exclude: [

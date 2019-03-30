@@ -43,10 +43,10 @@ export function fillNa(allData){
                     if(Dataset[i].value[j] == null)
                         Dataset[i].value[j] = Dataset[i].stat.min;
             }
-            else if(attr.type == 'media'){
+            else if(attr.type == 'median'){
                 for(let j =0; j < Dataset[i].value.length;j++)
                     if(Dataset[i].value[j] == null)
-                        Dataset[i].value[j] = Dataset[i].stat.media;
+                        Dataset[i].value[j] = Dataset[i].stat.median;
             }
         }
     }
