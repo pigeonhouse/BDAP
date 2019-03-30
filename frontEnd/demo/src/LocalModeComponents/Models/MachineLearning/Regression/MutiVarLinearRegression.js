@@ -1,5 +1,6 @@
 import MLR from 'ml-regression-multivariate-linear';
 import {selectData, transposition} from '../normalFunction'
+import { Stat } from '../../../DataOperate/stat'
 
 function normalize(predict, labelArray, predictObj, PreArray){
     const pre = transposition(predict);
