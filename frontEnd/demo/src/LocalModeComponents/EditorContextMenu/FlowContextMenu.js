@@ -29,7 +29,7 @@ class FlowContextMenu extends React.Component {
     Nvisible: false,
     Svisible:false,
     MlEvaluteVisible:false,
-    evalution:[[]],
+    evaluation:[[]],
     compareVisible:false,
     // filterDropdownVisible:false
   }
@@ -207,18 +207,11 @@ class FlowContextMenu extends React.Component {
   }
   modelEvaluation = ()=>{
     const { propsAPI } = this.props;
-    var currentId = propsAPI.getSelected()[0].id
-    var saveData = propsAPI.save().nodes
-    var currentNode = new Array()
-  
-    for(let i = 0; i < saveData.length; i++){
-      if(currentId == saveData[i].id){       
-          currentNode.push(saveData[i])
-      }
-    }
-    currentNode = currentNode[0]
+    const { getSelected } = propsAPI;
+    const item = getSelected()[0];
+    const currentNode = item.getModel();
     if (currentNode.group == "ml"){
-        var ev = currentNode.attr.evaluateResult
+        var ev = currentNode.evaluation;
         this.setState({evalution:ev})
         this.setState({MlEvaluteVisible:true})
     }
@@ -363,7 +356,7 @@ class FlowContextMenu extends React.Component {
           onOk={this.handleOk} onCancel={this.handleCancel} width={500}
         >
           <Collapse bordered={false} >
-          {this.state.evalution.map((pair,index)=>{
+          {this.state.evaluation.map((pair,index)=>{
             return (<Panel 
                       header={pair[0]+" : "+pair[1]}  
                       key={index} 
