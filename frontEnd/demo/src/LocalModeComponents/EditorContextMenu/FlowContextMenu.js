@@ -229,7 +229,7 @@ class FlowContextMenu extends React.Component {
   onChange=(chosenName)=> {
 
     let data = this.state.currentData
-    
+
     if(chosenName[0] != "None"){
 
         console.log(data)
@@ -287,13 +287,63 @@ class FlowContextMenu extends React.Component {
 
   staticInformation=()=>{
     if(this.state.compareVisible){
-      // let data = this.state.currentData
-      // var static = data[this.state.currentIndex].stat
-      // if(static.type == "number"){
+      console.log("--------------")
+      console.log(this.state.currentData)
 
-      // }else if (static.type == "string"){
+      let data = this.state.currentData
+      var statics = data[this.state.currentIndex].stat
+      if(statics.type == "number"){
+          return(
+            <div>
+                <Col span={10}>
 
-      // }
+                  <Row style={{marginBottom:10}}>
+                    <span>平均值：</span>
+                    <span>{statics.average}</span>
+                  </Row>
+
+                  <Row style={{marginBottom:10}}>
+                  <span>最大值：</span>
+                  <span>{statics.max}</span>
+                  </Row>
+
+                  <Row style={{marginBottom:10}}>
+                  <span>方差：</span>
+                  <span>{statics.variance}</span>
+                  </Row>
+
+                  <Row style={{marginBottom:10}}>
+                  <span>缺失值个数：</span>
+                  <span>{statics.numOfNull}</span>
+                  </Row>
+
+                  
+                </Col>
+                <Col span={12}>
+                  <Row style={{marginBottom:10}}>
+                  <span>中位数：</span>
+                  <span>{statics.median}</span>
+                  </Row>
+                  <Row style={{marginBottom:10}}>
+                  <span>最小值：</span>
+                  <span>{statics.min}</span>
+                  </Row>
+                  <Row style={{marginBottom:10}}>
+                  <span>标准差：</span>
+                  <span>{statics.standardDeviation}</span>
+                  </Row>
+                  
+                </Col>
+                
+            </div>
+          )
+      }else if (statics.type == "string"){
+          return(
+            <div></div>
+          )
+      }
+
+      return (<div></div>)
 
       
     }
@@ -378,12 +428,12 @@ class FlowContextMenu extends React.Component {
           <LineMarkerEcharts trans={()=>this.trans()}/>
         </Modal>
 
-        <Modal title="Basic Modal" visible={this.state.visible} style={{ top: 50 }}  width={1200} 
+        <Modal  title="Basic Modal" visible={this.state.visible} style={{ top: 30 }}  width={1200} 
           onOk={this.handleOk} onCancel={this.handleCancel}
         >
         <Row>
         <Col span={15}>
-          <Table columns={this.state.col} dataSource={this.state.data} pagination={{ pageSize: 70 }}  scroll={{ x:500, y: 400 }}   size="small" />
+          <Table columns={this.state.col} dataSource={this.state.data} pagination={{ pageSize: 70 }}  scroll={{ x:500, y: 480 }}   size="small" />
         </Col>
 
          <Col span={1}></Col>   
@@ -391,12 +441,12 @@ class FlowContextMenu extends React.Component {
           <Col span={8}>
             <Collapse bordered={false} defaultActiveKey={['1','2']} >
               <Panel header="统计信息" key="1">
-                <div>{this.staticInformation}</div>
+                <div>{this.staticInformation()}</div>
               </Panel>
 
               <Panel header="可视化" key="2">
                 <div>{this.compare()}</div>           
-                <div id="main" style={{ width: 350, height: 350 }}></div>
+                <div id="main" style={{ width: 300, height: 300 }}></div>
               </Panel>
             </Collapse>
           </Col>
