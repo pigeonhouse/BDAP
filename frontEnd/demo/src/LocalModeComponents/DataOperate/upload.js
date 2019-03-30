@@ -33,7 +33,6 @@ class Uploadfile extends Component{
     //   }
     readFile = (e)=>{
       var files = e.target.files;
-      //var files = e; // FileList object
       console.log(files)
       var reader = new FileReader();
       const { propsAPI } = this.props;
@@ -76,8 +75,7 @@ class Uploadfile extends Component{
     }
     render(){
         return (
-          <Button href="javascript:void(0)" 
-            // style={{position:"absolute", opacity:1, cursor:'pointer', width:100}} >
+          <Button href="javascript:void(0)"
             style={{
               textAlign: 'center',
               position: 'relative',

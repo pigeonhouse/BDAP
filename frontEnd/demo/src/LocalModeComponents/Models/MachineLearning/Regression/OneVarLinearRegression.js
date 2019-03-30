@@ -1,7 +1,7 @@
 import SimpleLinearRegression from 'ml-regression-simple-linear';
+import { Stat } from '../../../DataOperate/stat'
 
 export function OneVarLinearRegression(allData){
-
     console.log(allData)
 
     const trainFeatureName = allData[0].labelArray.train_x[0];
@@ -33,13 +33,7 @@ export function OneVarLinearRegression(allData){
 
     console.log(regression.score(trainFeatureValue, trainLabelValue));
 
-    // console.log("单变量线性回归结果")
-    // console.log(regression.slope,regression.intercept)
     const testLabelValue = regression.predict(testFeatureValue)
-    // console.log(predictArray)
-    // allData[2].Dataset.push([{label:testLabelName,value:predictArray}])
-    // console.log(allData)
-    // console.log("----------------------")
 
     var result = regression.score(trainFeatureValue, trainLabelValue)
     const mse = result.rmsd*result.rmsd
@@ -57,7 +51,7 @@ export function OneVarLinearRegression(allData){
             value:testLabelValue
         }]
     }
-
+    resultData.Dataset = Stat(resultData.Dataset);
     resultData["evaluation"]=
     [["MSE",mse,"MSE(Mean Squared Error)均方误差: 参数估计值与参数真值之差平方的期望值,MSE可以评价数据的变化程度，MSE的值越小，说明预测模型描述实验数据具有更好的精确度。"],
     ["RMSE",rmse,"RMSE(Root Mean Squared Error)均方根误差: 均方根误差是均方误差的算术平方根"],
