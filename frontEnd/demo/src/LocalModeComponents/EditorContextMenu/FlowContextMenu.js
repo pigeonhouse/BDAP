@@ -1,5 +1,5 @@
 import React from 'react'
-import { Modal, Table , Icon,Collapse,Row,Col,Button,Cascader} from 'antd';
+import { Modal, Table , Icon,Collapse,Row,Col,Button,Cascader,Card} from 'antd';
 import {
   Command,
   NodeMenu,
@@ -19,6 +19,7 @@ import { SeprtbyFeat } from '../DataOperate/DataProcess/SeprtbyFeat'
 
 const Panel = Collapse.Panel;
 var echarts = require('echarts');
+var IntroJs = require('intro.js')
 
 
 class FlowContextMenu extends React.Component {
@@ -223,6 +224,7 @@ class FlowContextMenu extends React.Component {
     this.setState({
       visible: true,
     });
+    //this.startIntro();
     this.Datum();
 
   }
@@ -409,6 +411,20 @@ class FlowContextMenu extends React.Component {
     }
   }
 
+  startIntro = () => {
+    // 获取包含引导元素的父容器, 并组成IntroJs
+    console.log("intro.js-------------")
+    var intro1 = IntroJs(document.getElementById('root'))
+    console.log(intro1)
+    intro1.setOptions({
+        prevLabel: "上一步",
+        nextLabel: "下一步",
+        skipLabel: "跳过",
+        doneLabel: "结束",
+    }).start();
+    console.log(intro1)
+}
+
   render() {        
     return (
       <ContextMenu className={styles.contextMenu}>
@@ -501,22 +517,29 @@ class FlowContextMenu extends React.Component {
             size="small" />
         </Col>
 
-         <Col span={1}></Col>   
+         <Col span={1}>
+          
+          </Col>   
 
           <Col span={8}>
-            <Collapse bordered={false} defaultActiveKey={['1','2']} >
-              <Panel header="统计信息" key="1">
+            <Collapse bordered={false} defaultActiveKey={['1','2']}>
+              <Panel header="统计信息" key="1" >
                 <div>{this.staticInformation()}</div>
               </Panel>
 
               <Panel header="可视化" key="2">
                 <div>{this.compare()}</div>           
-                <div id="main" style={{ width: 300, height: 300 }}></div>
+                <div id="main" style={{ width: 300, height: 300 }}> </div>
               </Panel>
             </Collapse>
           </Col>
 
           </Row>
+          <div id='root' data-step="1" data-intro='?'  data-position="right" showStepNumbers="false">
+              <Card bordered={true} style={{ width: '100%' }} >
+                  <Button onClick={() => this.startIntro()}>开始引导</Button>
+              </Card>
+          </div>
         </Modal>
 
 
