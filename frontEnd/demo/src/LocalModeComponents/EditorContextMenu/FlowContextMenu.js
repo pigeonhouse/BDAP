@@ -30,6 +30,8 @@ class FlowContextMenu extends React.Component {
     MlEvaluteVisible:false,
     evaluation:[[]],
     compareVisible:false,
+    col:[],
+    sum:1000
     // filterDropdownVisible:false
   }
 
@@ -106,16 +108,16 @@ class FlowContextMenu extends React.Component {
     var columns = new Array()
     console.log("------------------")
     console.log(currentData)
+    var sum = 0;
     for(let i = 0; i < currentData.length; i++){
       let first = currentData[i].value[0]
-      // let len = 50
-      // if(first!=null){
-      //   len = first.length>10?50:500
-      // }
+      let len = 50;
+      len = String(first).length>currentData[i].label.length?(String(first).length+2)*15:(currentData[i].label.length+2)*15;
+      sum = sum+len
       columns.push({
                    title : currentData[i].label,
                    dataIndex: currentData[i].label,
-                   width : 1000 ,
+                   width : len,
                    filterDropdown: (
                     <div>
                       <Button onClick={()=>{this.Chart(i,currentData[i],"bar")}}>柱状图</Button>
@@ -129,7 +131,24 @@ class FlowContextMenu extends React.Component {
                   // onFilterDropdownVisibleChange: ()=> this.setState({ filterDropdownVisible: true }),
                  })
     }
-    this.setState({currentData:currentData})
+    // const i = currentData.length-1
+    // columns.push({
+    //   title : currentData[i].label,
+    //   dataIndex: currentData[i].label,
+    //   filterDropdown: (
+    //    <div>
+    //      <Button onClick={()=>{this.Chart(i,currentData[i],"bar")}}>柱状图</Button>
+    //      <br></br>
+    //      <Button onClick={()=>{this.Chart(i,currentData[i],"pie")}}>饼图</Button>
+    //      <br></br>
+    //      <Button onClick={()=>{this.Chart(i,currentData[i],"box")}}>箱线图</Button>
+    //    </div>
+    //    ),
+    //  // filterDropdownVisible: this.state.filterDropdownVisible,
+    //  // onFilterDropdownVisibleChange: ()=> this.setState({ filterDropdownVisible: true }),
+    // })
+    console.log(sum)
+    this.setState({currentData:currentData, sum})
     this.setState({col:columns})
 
     let la = item.getModel().labelArray.public
@@ -474,7 +493,12 @@ class FlowContextMenu extends React.Component {
         >
         <Row>
         <Col span={15}>
-          <Table columns={this.state.col} dataSource={this.state.data} pagination={{ pageSize: 70 }}  scroll={{ x:500, y: 480 }}   size="small" />
+          <Table 
+            columns={this.state.col} 
+            dataSource={this.state.data} 
+            pagination={{ pageSize: 70 }}  
+            scroll={{x:`${this.state.sum}px`, y: 480 }}   
+            size="small" />
         </Col>
 
          <Col span={1}></Col>   
