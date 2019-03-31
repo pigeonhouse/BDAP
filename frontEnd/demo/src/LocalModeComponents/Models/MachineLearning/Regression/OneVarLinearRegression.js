@@ -42,16 +42,12 @@ export function OneVarLinearRegression(allData){
     const r2 = result.r2
 
     var resultData = {
-        Dataset:[{
-            label:testFeatureName,
-            value:testFeatureValue
-        },
-        {
+        Dataset:[...allData[2].Dataset,
+        Stat([{
             label:testLabelName,
             value:testLabelValue
-        }]
+        }])[0]]
     }
-    resultData.Dataset = Stat(resultData.Dataset);
     resultData["evaluation"]=
     [["MSE",mse,"MSE(Mean Squared Error)均方误差: 参数估计值与参数真值之差平方的期望值,MSE可以评价数据的变化程度，MSE的值越小，说明预测模型描述实验数据具有更好的精确度。"],
     ["RMSE",rmse,"RMSE(Root Mean Squared Error)均方根误差: 均方根误差是均方误差的算术平方根"],

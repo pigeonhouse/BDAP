@@ -1,13 +1,10 @@
 import { RandomForestRegression as RFRegression } from 'ml-random-forest';
-import {selectData, selectDataUntransport, transposition} from '../normalFunction'
+import {selectData, selectDataUntransport} from '../normalFunction'
+import { Stat } from '../../../DataOperate/stat'
 
-function normalize(predict, labelArray, predictObj, PreArray){
-    const pre = transposition(predict);
-    let Dataset = [];
-    for(let i in labelArray){
-        Dataset.push({label:labelArray[i], value:pre[i]})
-    }
-    Dataset.push({label:PreArray[0], value:predictObj})
+function normalize(pre, predictObj, PreArray){
+    let Dataset = [...pre];
+    Dataset.push(Stat([{label:PreArray[0], value:predictObj}])[0]);
     return {Dataset:Dataset};
 }
 export function RandomForest(all_data){
@@ -28,5 +25,5 @@ export function RandomForest(all_data){
     var regression = new RFRegression(options);
     regression.train(x, y);
     const predictObj = regression.predict(predict);
-    return normalize(predict, labelArray.text_x, predictObj, labelArray.text_y)
+    return normalize(textData, predictObj, ['test'])
 }

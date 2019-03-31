@@ -102,6 +102,7 @@ class LocalMode extends React.Component {
               visible={this.state.visible}
               cancelText={this.state.canceltxt}
               bodyStyle={{height: '450px'}}
+              onCancel={this.hideModal}
               width={1100}
               footer={[
                 // <Button key="back" onClick={this.hideModal}>算了,不用了</Button>
