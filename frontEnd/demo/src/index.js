@@ -4,7 +4,7 @@ import { HashRouter as Router, Route } from 'react-router-dom';
 import HomePage from './pages/Home';
 import RouteMode from './pages/Route';
 import LocalModePage from './pages/LocalMode';
-import ClusterModePage from './pages/ClusterMode'
+import ClusterModePage from './pages/ClusterMode';
 
 ReactDOM.render(
   <Router>
