@@ -20,7 +20,7 @@ import { SeprtbyFeat } from '../DataOperate/DataProcess/SeprtbyFeat'
 const Panel = Collapse.Panel;
 var echarts = require('echarts');
 var IntroJs = require('intro.js')
-
+var dataTool = require("echarts/dist/extension/dataTool");
 
 class FlowContextMenu extends React.Component {
   state = { 
@@ -95,11 +95,48 @@ class FlowContextMenu extends React.Component {
     else if(showType === 'box'){
       document.getElementById('main').removeAttribute("_echarts_instance_")
       var myChart = echarts.init(document.getElementById('main'));
-      let Data = echarts.dataTool.prepareBoxplotData(this.state.currentData[indexOfFeature].value)
+      let Data = dataTool.prepareBoxplotData([this.state.currentData[indexOfFeature].value]);
+      
       myChart.setOption({
-        series:[{
-          data:Data.outliers
-        }]
+        xAxis: {
+          type: 'category',
+          data: Data.axisData,
+          boundaryGap: true,
+          nameGap: 30,
+          splitArea: {
+              show: false
+          },
+          axisLabel: {
+              formatter: this.state.currentData[indexOfFeature].label
+          },
+          splitLine: {
+              show: false
+          }
+        },
+        yAxis: {
+            type: 'value',
+            splitArea: {
+                show: true
+            }
+        },
+        tooltip: {
+          trigger: 'item',
+          axisPointer: {
+              type: 'shadow'
+          }
+        },
+        series:[
+          {
+            name: 'boxplot',
+            type: 'boxplot',
+            data: Data.boxData,
+          },
+          {
+              name: 'outlier',
+              type: 'scatter',
+              data: Data.outliers
+          }
+        ]
       })
     }
   }
