@@ -11,10 +11,10 @@ const { Item } = Form;
 
 const inlineFormItemLayout = {
   labelCol: {
-    sm: { span: 6 },
+    sm: { span: 8 },
   },
   wrapperCol: {
-    sm: { span: 18 },
+    sm: { span: 16 },
   },
 };
 
@@ -103,6 +103,48 @@ class NodeDetail extends React.Component {
       labelArray,
     })
   }
+  handleSubmitTest = (e) => {
+    e.preventDefault();
+
+    const { form, propsAPI } = this.props;
+    const { getSelected, executeCommand, update } = propsAPI;
+  
+    form.validateFieldsAndScroll((err, values) => {
+      if (err) {
+        return;
+      }
+      const item = getSelected()[0];
+      if (!item) {
+        return;
+      }
+      let labelArray = JSON.parse(JSON.stringify(item.model.labelArray));
+      labelArray['predict_y'] = [[values['预测集名称'], true]];
+      executeCommand(() => {
+        update(item, {
+          labelArray:labelArray
+        });
+      });
+    });
+  }
+  testLabelInput=(group, getFieldDecorator)=>{
+    if(group === 'ml'){
+      const { propsAPI } = this.props;
+      const { getSelected, update } = propsAPI;
+      const item = getSelected()[0];
+      let labelArray = JSON.parse(JSON.stringify(item.model.labelArray));
+      labelArray['predict_y'] = [['predict', true]];
+      update(item, {
+        labelArray:labelArray
+      });
+      return <Item style={{margin:0}} label="预测集名称" {...inlineFormItemLayout}>
+              {
+                getFieldDecorator('预测集名称', {
+                  initialValue: 'predict',
+                })(<Input onBlur={this.handleSubmitTest}/>)
+              }
+            </Item>
+    }
+  }
   render() {
     const { form, propsAPI } = this.props;
     const { getFieldDecorator } = form;
@@ -143,7 +185,7 @@ class NodeDetail extends React.Component {
         className={styles.scrollapp}
       >
         <Form onSubmit={this.handleSubmit}>
-          <Item label="label" {...inlineFormItemLayout}>
+          <Item style={{margin:0}} label="label" {...inlineFormItemLayout}>
             {
               getFieldDecorator('label', {
                 initialValue: label,
@@ -153,7 +195,7 @@ class NodeDetail extends React.Component {
           {arr.map((item)=>{
             const itemKey = Object.keys(item)[0];
             var re = /^[0-9]+.?[0-9]*/;
-            return <Item style={{width:310}} label={itemKey} {...inlineFormItemLayout}>
+            return <Item style={{margin:0}} label={itemKey} {...inlineFormItemLayout}>
                     {
                       getFieldDecorator(`attr.${itemKey}` , {
                         rules:re.test(item[itemKey])?[{
@@ -162,7 +204,7 @@ class NodeDetail extends React.Component {
                           message: '请输入数字'
                         }]:[],
                         initialValue: item[itemKey],
-                      })(<Input style={{width:80}} onBlur={this.handleSubmit}/>)
+                      })(<Input style={{margin:0}} onBlur={this.handleSubmit}/>)
                     }
                   </Item>;
           })}
@@ -175,6 +217,7 @@ class NodeDetail extends React.Component {
                       changeLabelArray={this.changeLabelArray}
                     ></Selectword>;
           })}
+          {this.testLabelInput(group, getFieldDecorator)}
           {this.isFeature(group, label, targetid[0])}
           {this.isInputOutput(label)}
         </Form>

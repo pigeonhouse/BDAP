@@ -23,7 +23,7 @@ class Selectword extends Component{
         if(item.model.anchor[0] === 1 || !item.model.anchor[0])
             return item.model.labelArray.public?item.model.labelArray.public:[];
         else if(item.model.anchor[0] === 2){
-            return [...item.model.labelArray.text_x,...item.model.labelArray.text_y];
+            return [...item.model.labelArray.predict_x, ...item.model.labelArray.predict_y];
         }
     }
     changelabelArray=(labelA, labelB)=>{
@@ -55,7 +55,7 @@ class Selectword extends Component{
                     labelArray = this.changelabelArray(item.model.labelArray.train_y, sourcelabel)
                     break;
                 case 2:
-                    labelArray = this.changelabelArray(item.model.labelArray.text_x, sourcelabel)
+                    labelArray = this.changelabelArray(item.model.labelArray.predict_x, sourcelabel)
                     break;
             }
         }
@@ -103,7 +103,7 @@ class Selectword extends Component{
                     labelarray.train_y = labelArray;
                     break;
                 case 2:
-                    labelarray.text_x = labelArray;
+                    labelarray.predict_x = labelArray;
                     break;
             }
         }
@@ -141,7 +141,9 @@ class Selectword extends Component{
     };
     isSelect=()=>{
         if(this.props.sourceid === 0)
-        return (<Button style={{width:'100%'}} disabled>选择字段</Button>)
+        return (
+                <Button style={{width:'100%'}} disabled>选择字段</Button>
+        );
         else return <Button style={{width:'100%'}} onClick={this.displayTransfer}>选择字段</Button>
     }
     render(){

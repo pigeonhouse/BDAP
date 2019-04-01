@@ -17,9 +17,9 @@ export function MutiVarLinearRegression(all_data){
 
     const x = selectData(trainData, labelArray.train_x);
     const y = selectData(trainData, labelArray.train_y);
-    const predict = selectData(textData, labelArray.text_x);
+    const predict = selectData(textData, labelArray.predict_x);
 
     const mlr = new MLR(x, y);
     const predictObj = mlr.predict(predict);
-    return normalize(trainData, predictObj, labelArray.text_y);
+    return normalize(trainData, predictObj, labelArray.predict_y);
 }

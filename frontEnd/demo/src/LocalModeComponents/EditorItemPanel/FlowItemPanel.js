@@ -158,6 +158,7 @@ class FlowItemPanel extends React.Component {
               labelArray: {}, 
               length: 0,
               anchor: [0, 1],
+              group:'input',
               keyConfig:{
                 color_type: '#1890FF',
                 state_icon_url: 'https://gw.alipayobjects.com/zos/rmsportal/uZVdwjJGqDooqKLKtvGA.svg',
@@ -176,6 +177,7 @@ class FlowItemPanel extends React.Component {
               labelArray: {}, 
               length: 0,
               anchor: [0, 1],
+              group:'input',
               keyConfig:{
                 color_type: '#1890FF',
                 state_icon_url: 'https://gw.alipayobjects.com/zos/rmsportal/uZVdwjJGqDooqKLKtvGA.svg',

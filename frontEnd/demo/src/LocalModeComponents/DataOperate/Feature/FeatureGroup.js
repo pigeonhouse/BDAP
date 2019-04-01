@@ -164,6 +164,7 @@ class FeatureGroup extends Component {
                       mode="tags"
                       style={{ width: '80%' }}
                       onChange={this.handleSubmitSelect.bind(this, index)}
+                      showArrow
                     >
                       {/* {this.state.children} */}
                     </Select>,

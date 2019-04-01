@@ -6,10 +6,8 @@ export function OneVarLinearRegression(allData){
 
     const trainFeatureName = allData[0].labelArray.train_x[0];
     const trainLabelName = allData[0].labelArray.train_y[0];
-    const testFeatureName = allData[0].labelArray.text_x[0];
-    // const testLabelName = allData[0].labelArray.text_y[0];
-    const testLabelName = 'test';
-
+    const testFeatureName = allData[0].labelArray.predict_x[0];
+    const testLabelName = allData[0].labelArray.predict_y[0];
 
     var trainFeatureValue = new Array();
     var trainLabelValue = new Array();

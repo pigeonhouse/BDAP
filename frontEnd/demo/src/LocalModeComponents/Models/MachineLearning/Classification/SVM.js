@@ -15,7 +15,7 @@ export function SVM(all_data){
 
     const features = selectData(trainData, labelArray.train_x);
     const labels = selectDataUntransport(trainData, labelArray.train_y);
-    const predict = selectData(textData, labelArray.text_x);
+    const predict = selectData(textData, labelArray.predict_x);
 
     var options = {
         C: attr.C,
@@ -38,7 +38,7 @@ export function SVM(all_data){
     // console.log(predict)
     // console.log(predictObj)
 
-    return normalize(trainData, predictObj, ['test'])
+    return normalize(trainData, predictObj, labelArray.predict_y)
 
     // Let's see how narrow the margin is
     // var margins = svm.margin(features);

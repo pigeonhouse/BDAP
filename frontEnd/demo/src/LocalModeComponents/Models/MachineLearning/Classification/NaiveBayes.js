@@ -13,7 +13,7 @@ export function NaiveBayes(all_data){
 
     const x = selectData(trainData, labelArray.train_x);
     const y = selectDataUntransport(trainData, labelArray.train_y);
-    const predict = selectData(textData, labelArray.text_x);
+    const predict = selectData(textData, labelArray.predict_x);
 
 
     var model = new GaussianNB();
@@ -33,7 +33,7 @@ export function NaiveBayes(all_data){
     // console.log(confusionMatrix)
     // console.log("准确率：")
     // console.log(accuracy*100+"%")
-    return normalize(trainData, predictObj, ['test'])
+    return normalize(trainData, predictObj, labelArray.predict_y)
 }  
     //model.train(Xtrain, Ytrain);
 
