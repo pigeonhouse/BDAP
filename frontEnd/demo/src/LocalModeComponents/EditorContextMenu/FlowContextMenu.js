@@ -441,8 +441,9 @@ class FlowContextMenu extends React.Component {
         showStepNumbers:false,
         keyboardNavigation:true,
         overlayOpacity: 0,
+        showBullets:false
         // overlayOpacity:100
-    }).goToStepNumber(6).start();
+    }).goToStepNumber(3).start();
 }
 
   render() {        
@@ -535,7 +536,7 @@ class FlowContextMenu extends React.Component {
         >
         <Row>
         <Col span={15} >
-          <div data-step="6" data-intro='在这里显示数据'>
+          <div data-step="4" data-intro='在这里显示数据'>
           <Table 
             columns={this.state.col} 
             dataSource={this.state.data} 
@@ -551,15 +552,15 @@ class FlowContextMenu extends React.Component {
 
           <Col span={8} >
             <Collapse bordered={false} defaultActiveKey={['1','2']}>
-              <Panel header="统计信息" key="1" data-step="7" data-intro='在这里显示数据的详细统计信息'>
-                <div data-step="7" data-intro='在这里显示数据的详细统计信息'>
+              <Panel header="统计信息" key="1" data-step="5" data-intro='在这里显示数据的详细统计信息'>
+                <div data-step="5" data-intro='在这里显示数据的详细统计信息'>
                 {this.staticInformation()}
                 </div>
               </Panel>
               
 
               <Panel header="可视化" key="2"  >
-                <div data-step="8" data-intro='在这里看到图形化的数据情况'>
+                <div data-step="6" data-intro='在这里看到图形化的数据情况'>
                 <div>{this.compare()}</div>           
                 <div id="main" style={{ width: 300, height: 300 }}> </div>
                 </div>
