@@ -3,7 +3,7 @@ import {selectData, selectDataUntransport} from '../normalFunction'
 import { Stat } from '../../../DataOperate/stat'
 
 function normalize(pre, predictObj, PreArray){
-    let Dataset = [...pre];
+    let Dataset = pre;
     Dataset.push(Stat([{label:PreArray[0], value:predictObj}])[0]);
     return {Dataset:Dataset};
 }

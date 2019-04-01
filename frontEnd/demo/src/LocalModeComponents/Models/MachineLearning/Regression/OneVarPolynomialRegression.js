@@ -2,7 +2,7 @@ import PolynomialRegression from 'ml-regression-polynomial';
 import {selectDataUntransport} from '../normalFunction'
 import { Stat } from '../../../DataOperate/stat'
 function normalize(pre, Obj, objArray){
-    let Dataset = [...pre];
+    let Dataset = pre;
     
     Dataset.push(Stat([{label:objArray[0], value:Obj}])[0]);
     return {Dataset:Dataset};

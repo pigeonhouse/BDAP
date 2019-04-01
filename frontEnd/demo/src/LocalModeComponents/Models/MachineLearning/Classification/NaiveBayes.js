@@ -1,13 +1,9 @@
 import { GaussianNB } from 'ml-naivebayes';
-import {selectData, selectDataUntransport, transposition} from '../normalFunction'
-
-function normalize(predict, labelArray, predictObj, PreArray){
-    const pre = transposition(predict);
-    let Dataset = [];
-    for(let i in labelArray){
-        Dataset.push({label:labelArray[i], value:pre[i]})
-    }
-    Dataset.push({label:PreArray[0], value:predictObj})
+import { selectData, selectDataUntransport } from '../normalFunction'
+import { Stat } from '../../../DataOperate/stat'
+function normalize(pre, predictObj, PreArray){
+    let Dataset = pre;
+    Dataset.push(Stat([{label:PreArray[0], value:predictObj}])[0]);
     return {Dataset:Dataset};
 }
 export function NaiveBayes(all_data){
@@ -37,7 +33,7 @@ export function NaiveBayes(all_data){
     // console.log(confusionMatrix)
     // console.log("准确率：")
     // console.log(accuracy*100+"%")
-    return normalize(predict, labelArray.text_x, predictObj, labelArray.text_y)
+    return normalize(trainData, predictObj, ['test'])
 }  
     //model.train(Xtrain, Ytrain);
 

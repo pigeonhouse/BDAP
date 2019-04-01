@@ -1,12 +1,8 @@
-import {selectData, selectDataUntransport, transposition} from '../normalFunction'
-
-function normalize(predict, labelArray, predictObj, PreArray){
-    const pre = transposition(predict);
-    let Dataset = [];
-    for(let i in labelArray){
-        Dataset.push({label:labelArray[i], value:pre[i]})
-    }
-    Dataset.push({label:PreArray[0], value:predictObj})
+import {selectData, selectDataUntransport} from '../normalFunction'
+import { Stat } from '../../../DataOperate/stat'
+function normalize(pre, predictObj, PreArray){
+    let Dataset = pre;
+    Dataset.push(Stat([{label:PreArray[0], value:predictObj}])[0]);
     return {Dataset:Dataset};
 }
 export function SVM(all_data){
@@ -42,7 +38,7 @@ export function SVM(all_data){
     // console.log(predict)
     // console.log(predictObj)
 
-    return normalize(predict, labelArray.text_x, predictObj, labelArray.text_y)
+    return normalize(trainData, predictObj, ['test'])
 
     // Let's see how narrow the margin is
     // var margins = svm.margin(features);

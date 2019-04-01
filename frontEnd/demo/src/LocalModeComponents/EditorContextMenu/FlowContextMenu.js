@@ -32,7 +32,11 @@ class FlowContextMenu extends React.Component {
     evaluation:[[]],
     compareVisible:false,
     col:[],
-    sum:1000
+    sum:1000,
+    currentIndex:[],
+    data:[],
+    list:[],
+    newRandomkey:0
     // filterDropdownVisible:false
   }
 
@@ -71,7 +75,6 @@ class FlowContextMenu extends React.Component {
     });
     }
     else if(showType === 'pie'){
-
       document.getElementById('main').removeAttribute("_echarts_instance_")
       var myChart = echarts.init(document.getElementById('main'));
 
@@ -98,7 +101,6 @@ class FlowContextMenu extends React.Component {
           data:Data.outliers
         }]
       })
-
     }
   }
 
@@ -107,8 +109,6 @@ class FlowContextMenu extends React.Component {
     var item = propsAPI.getSelected()[0];
     const currentData = item.getModel().Dataset;
     var columns = new Array()
-    console.log("------------------")
-    console.log(currentData)
     var sum = 0;
     for(let i = 0; i < currentData.length; i++){
       let first = currentData[i].value[0]
@@ -116,41 +116,24 @@ class FlowContextMenu extends React.Component {
       len = String(first).length>currentData[i].label.length?(String(first).length+2)*15:(currentData[i].label.length+2)*15;
       sum = sum+len
       columns.push({
-                   title : currentData[i].label,
-                   dataIndex: currentData[i].label,
-                   width : len,
-                   filterDropdown: (
-                    <div>
-                      <Button onClick={()=>{this.Chart(i,currentData[i],"bar")}}>柱状图</Button>
-                      <br></br>
-                      <Button onClick={()=>{this.Chart(i,currentData[i],"pie")}}>饼图</Button>
-                      <br></br>
-                      <Button onClick={()=>{this.Chart(i,currentData[i],"box")}}>箱线图</Button>
-                    </div>
-                    ),
-                  // filterDropdownVisible: this.state.filterDropdownVisible,
-                  // onFilterDropdownVisibleChange: ()=> this.setState({ filterDropdownVisible: true }),
-                 })
+                  title : currentData[i].label,
+                  dataIndex: currentData[i].label,
+                  width : len,
+                  filterDropdown: (
+                  <div>
+                    <Button onClick={()=>{this.Chart(i,currentData[i],"bar")}}>柱状图</Button>
+                    <br></br>
+                    <Button onClick={()=>{this.Chart(i,currentData[i],"pie")}}>饼图</Button>
+                    <br></br>
+                    <Button onClick={()=>{this.Chart(i,currentData[i],"box")}}>箱线图</Button>
+                  </div>
+                  ),
+                // filterDropdownVisible: this.state.filterDropdownVisible,
+                // onFilterDropdownVisibleChange: ()=> this.setState({ filterDropdownVisible: true }),
+                })
     }
-    // const i = currentData.length-1
-    // columns.push({
-    //   title : currentData[i].label,
-    //   dataIndex: currentData[i].label,
-    //   filterDropdown: (
-    //    <div>
-    //      <Button onClick={()=>{this.Chart(i,currentData[i],"bar")}}>柱状图</Button>
-    //      <br></br>
-    //      <Button onClick={()=>{this.Chart(i,currentData[i],"pie")}}>饼图</Button>
-    //      <br></br>
-    //      <Button onClick={()=>{this.Chart(i,currentData[i],"box")}}>箱线图</Button>
-    //    </div>
-    //    ),
-    //  // filterDropdownVisible: this.state.filterDropdownVisible,
-    //  // onFilterDropdownVisibleChange: ()=> this.setState({ filterDropdownVisible: true }),
-    // })
-    console.log(sum)
     this.setState({currentData:currentData, sum})
-    this.setState({col:columns})
+    this.setState({col:columns, currentIndex:[], compareVisible:false})
 
     let la = item.getModel().labelArray.public
     la = la.map(a=>a[0])
@@ -223,10 +206,10 @@ class FlowContextMenu extends React.Component {
   showModal = () => {
     this.setState({
       visible: true,
+      newRandomkey:(this.state.newRandomkey+1)%10
     });
     //this.startIntro();
     this.Datum();
-
   }
 
   handleOk = (e) => {
@@ -504,8 +487,14 @@ class FlowContextMenu extends React.Component {
           <LineMarkerEcharts trans={()=>this.trans()}/>
         </Modal>
 
-        <Modal  title="Basic Modal" visible={this.state.visible} style={{ top: 30 }}  width={1200} 
-          onOk={this.handleOk} onCancel={this.handleCancel}
+        <Modal
+          key={this.state.newRandomkey}
+          title="Basic Modal" 
+          visible={this.state.visible} 
+          style={{ top: 30 }}  
+          width={1200} 
+          onOk={this.handleOk} 
+          onCancel={this.handleCancel}
         >
         <Row>
         <Col span={15}>
