@@ -1,5 +1,5 @@
 import React from 'react';
-import { Button,Card, Tooltip } from 'antd';
+import { Button,Card,icon, Tooltip } from 'antd';
 import { Redirect } from 'react-router-dom';
 import { Row, Col } from 'antd';
 
@@ -22,13 +22,19 @@ class RouteMode extends React.Component {
   }
 
   startIntro = () => {
-    // 获取包含引导元素的父容器, 并组成IntroJs
-    var intro1 = IntroJs(document.getElementById('root'))
-    intro1.setOptions({
-        prevLabel: "上一步",
-        nextLabel: "下一步",
-        skipLabel: "跳过",
-        doneLabel: "结束",
+    IntroJs().setOptions({
+      prevLabel: "上一步",
+      nextLabel: "下一步",
+      skipLabel: "跳过",
+      doneLabel: "结束",
+      showProgress:true,
+      exitOnEsc:true,
+      showButtons:true,
+      showStepNumbers:true,
+      keyboardNavigation:true,
+      showBullets: false,
+    }).oncomplete(function () {
+    }).onexit(function () {
     }).start();
 }
   render() {
@@ -43,9 +49,9 @@ class RouteMode extends React.Component {
         <Row>
         <div id='root' data-step="1" data-intro='开始引导!'>
             <Card bordered={true} style={{ width: '100%' }} >
-                <Button onClick={() => this.startIntro()}>开始引导</Button>
+                <Button icon="question" shape='circle' onClick={() => this.startIntro()}></Button>
             </Card>
-          </div>
+        </div>
         <Col span={12}>
         
         <div data-step="2" data-intro='单机模式'>

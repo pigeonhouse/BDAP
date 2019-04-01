@@ -424,25 +424,25 @@ class FlowContextMenu extends React.Component {
             </div>
           )
       }
-
       return (<div></div>)
-
-      
+      // return (<div data-step="7" data-intro=''></div>)
     }
   }
 
-  startIntro = () => {
-    // 获取包含引导元素的父容器, 并组成IntroJs
-    console.log("intro.js-------------")
-    var intro1 = IntroJs(document.getElementById('root'))
-    console.log(intro1)
-    intro1.setOptions({
+  Intro1 = () => {
+    IntroJs().setOptions({
         prevLabel: "上一步",
         nextLabel: "下一步",
         skipLabel: "跳过",
         doneLabel: "结束",
-    }).start();
-    console.log(intro1)
+        showProgress:false,
+        exitOnEsc:true,
+        showButtons:true,
+        showStepNumbers:false,
+        keyboardNavigation:true,
+        overlayOpacity: 0,
+        // overlayOpacity:100
+    }).goToStepNumber(6).start();
 }
 
   render() {        
@@ -534,36 +534,44 @@ class FlowContextMenu extends React.Component {
           onCancel={this.handleCancel}
         >
         <Row>
-        <Col span={15}>
+        <Col span={15} >
+          <div data-step="6" data-intro='在这里显示数据'>
           <Table 
             columns={this.state.col} 
             dataSource={this.state.data} 
             pagination={{ pageSize: 70 }}  
             scroll={{x:`${this.state.sum}px`, y: 480 }}   
             size="small" />
+          </div>
         </Col>
 
-         <Col span={1}>
+         <Col span={1} >
           
           </Col>   
 
-          <Col span={8}>
+          <Col span={8} >
             <Collapse bordered={false} defaultActiveKey={['1','2']}>
-              <Panel header="统计信息" key="1" >
-                <div>{this.staticInformation()}</div>
+              <Panel header="统计信息" key="1" data-step="7" data-intro='在这里显示数据的详细统计信息'>
+                <div data-step="7" data-intro='在这里显示数据的详细统计信息'>
+                {this.staticInformation()}
+                </div>
               </Panel>
+              
 
-              <Panel header="可视化" key="2">
+              <Panel header="可视化" key="2"  >
+                <div data-step="8" data-intro='在这里看到图形化的数据情况'>
                 <div>{this.compare()}</div>           
                 <div id="main" style={{ width: 300, height: 300 }}> </div>
+                </div>
               </Panel>
             </Collapse>
           </Col>
 
           </Row>
-          <div id='root' data-step="1" data-intro='?'  data-position="right" showStepNumbers="false">
+          <div id='root' >
               <Card bordered={true} style={{ width: '100%' }} >
-                  <Button onClick={() => this.startIntro()}>开始引导</Button>
+                  <Button type="primary" shape='circle' icon='question' onClick={() => this.Intro1()}></Button>
+                  <span>需要帮助吗？在这里点击按钮开始引导</span>
               </Card>
           </div>
         </Modal>
