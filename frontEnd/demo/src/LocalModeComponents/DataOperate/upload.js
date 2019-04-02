@@ -43,6 +43,7 @@ class Uploadfile extends Component{
         let vectorLength;
 
         var results = Papa.parse(e.target.result,{header:true,dynamicTyping: true});
+        console.log(results)
         fieldNameArray.push(results.meta.fields);
         vectorLength = results.data.length - 1
         var n = new Array();
@@ -55,8 +56,13 @@ class Uploadfile extends Component{
             }
             n.push({label:colName,value:colValue})
         }
+        console.log("n")
+        console.log(n)
         var STAT = new Array();
         STAT = Stat(n);
+
+        console.log("fieldNameArray")
+        console.log(fieldNameArray)
         let m = fieldNameArray[0].map((item)=>{
           return [item, false];
         })

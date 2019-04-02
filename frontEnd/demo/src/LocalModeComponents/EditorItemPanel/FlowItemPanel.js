@@ -186,6 +186,48 @@ class FlowItemPanel extends React.Component {
               }
             }}         
           /></ItemPanel></div></Tooltip></Menu.Item>
+          <Menu.Item key="3" > 
+          <Tooltip title="左击拖拽至右面">
+          <div><ItemPanel><Item
+            type="node"
+            size="200*40"
+            shape='zero-one'
+            model={{
+              label: 'Titanic测试',
+              elabel:'TitanicTestFile',
+              attr:{},
+              Dataset: [],
+              labelArray: {}, 
+              length: 0,
+              anchor: [0, 1],
+              group:'input',
+              keyConfig:{
+                color_type: '#1890FF',
+                state_icon_url: 'https://gw.alipayobjects.com/zos/rmsportal/uZVdwjJGqDooqKLKtvGA.svg',
+              }
+            }}         
+          /></ItemPanel></div></Tooltip></Menu.Item>
+          <Menu.Item key="4" > 
+          <Tooltip title="左击拖拽至右面">
+          <div><ItemPanel><Item
+            type="node"
+            size="200*40"
+            shape='zero-one'
+            model={{
+              label: 'Titanic训练',
+              elabel:'TitanicTrainFile',
+              attr:{},
+              Dataset: [],
+              labelArray: {}, 
+              length: 0,
+              anchor: [0, 1],
+              group:'input',
+              keyConfig:{
+                color_type: '#1890FF',
+                state_icon_url: 'https://gw.alipayobjects.com/zos/rmsportal/uZVdwjJGqDooqKLKtvGA.svg',
+              }
+            }}         
+          /></ItemPanel></div></Tooltip></Menu.Item>
           {/* <Menu.Item key="2"><ItemPanel><Item
             type="node"
             size="200*40"

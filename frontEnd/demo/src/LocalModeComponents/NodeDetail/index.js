@@ -3,6 +3,8 @@ import { Card, Form, Input, Modal, Button } from 'antd';
 import { withPropsAPI } from '@src';
 import Selectword from '../DataOperate/selectword'
 import Uploadfile from '../DataOperate/upload'
+import LocalTestData from '../DataOperate/LocalTestData'
+import LocalTrainData from '../DataOperate/LocalTrainData'
 import HdfsFile from '../DataOperate/hdfsFile'
 import styles from './index.less';
 import Feature from '../DataOperate/Feature'
@@ -89,6 +91,16 @@ class NodeDetail extends React.Component {
     return (
       <Uploadfile ></Uploadfile>
     )
+    else if(label === 'Titanic测试'){
+    return(
+      <LocalTestData ></LocalTestData>
+    )
+    }
+    else if(label === 'Titanic训练'){
+    return(
+      <LocalTrainData ></LocalTrainData>
+    )
+    }
   }
   isFeature = (group, label, sourceID)=>{
     if(group === 'feature'){
