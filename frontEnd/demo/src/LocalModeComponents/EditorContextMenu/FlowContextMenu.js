@@ -441,7 +441,7 @@ class FlowContextMenu extends React.Component {
         showStepNumbers:false,
         keyboardNavigation:true,
         overlayOpacity: 0,
-        showBullets:false
+        showBullets:false,
         // overlayOpacity:100
     }).goToStepNumber(3).start();
 }
