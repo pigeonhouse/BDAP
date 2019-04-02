@@ -33,7 +33,6 @@ class Uploadfile extends Component{
     //   }
     readFile = (e)=>{
       var files = e.target.files;
-      console.log(files)
       var reader = new FileReader();
       const { propsAPI } = this.props;
       const { getSelected, update } = propsAPI;
@@ -56,13 +55,8 @@ class Uploadfile extends Component{
             }
             n.push({label:colName,value:colValue})
         }
-        console.log("n")
-        console.log(n)
         var STAT = new Array();
         STAT = Stat(n);
-
-        console.log("fieldNameArray")
-        console.log(fieldNameArray)
         let m = fieldNameArray[0].map((item)=>{
           return [item, false];
         })
