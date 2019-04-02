@@ -8,19 +8,59 @@ const FormItem = Form.Item;
 class HomePage extends React.Component {
   state={
     resirect:false,
+    username: '',
+    password: '',
+    rememberPassword: false,
   }
+  loadAccountInfo=()=>{
+    let arr,reg=new RegExp("(^| )"+'accountInfo'+"=([^;]*)(;|$)");
+    let accountInfo =''
+    if(arr=document.cookie.match(reg)){
+        accountInfo = unescape(arr[2]);
+    }
+    else{
+        accountInfo = null;
+    }
+    if(Boolean(accountInfo) == false){
+        return false;
+    }else{
+        let userName = "";
+        let passWord = "";
+ 
+        let i=new Array()
+        i = accountInfo.split("&");
+        userName = i[0],
+        passWord = i[1],
+ 
+        this.setState({
+            username: userName,
+            password: passWord,
+        })
+      }
+  }
+  componentWillMount() {
+    this.loadAccountInfo();
+  }
+
   handleSubmit = (e) => {
     e.preventDefault();
     let userInfo = this.props.form.getFieldsValue();
     this.props.form.validateFields((err,values)=>{
       if(!err){
-        if(values.userName==='demo' && values.passWord==='123456'){
+        if(values.username==='demo' && values.password==='123456'){
+          if(values.remember){
+            let accountInfo = values.username+ '&' +values.password;
+            let Days = 3;
+            let exp = new Date();
+            exp.setTime(exp.getTime() + Days*24*60*60*1000);
+            document.cookie = 'accountInfo' + "="+ escape(accountInfo) + ";expires=" + exp.toGMTString()
+          }
           this.setState({redirect: true});
-          message.success(`${userInfo.userName}, welcome`);
+          message.success(`${userInfo.username}, welcome`);
         }
         else {
           alert('Password error');
-         }
+        }
       }
      })
   }
@@ -42,8 +82,8 @@ class HomePage extends React.Component {
             <Form onSubmit={this.handleSubmit} className="login-form">
                 <FormItem>
                     {
-                      getFieldDecorator('userName',{
-                        // initialValue:'demo',
+                      getFieldDecorator('username',{
+                        initialValue: this.state.username,
                         rules:[
                           {
                             required:true,
@@ -68,8 +108,8 @@ class HomePage extends React.Component {
                 </FormItem>
                 <FormItem>
                     {
-                      getFieldDecorator('passWord',{
-                        // initialValue:'123456',
+                      getFieldDecorator('password',{
+                        initialValue:this.state.password,
                         rules:[
                           {
                             required:true,
@@ -79,7 +119,7 @@ class HomePage extends React.Component {
                       })(
                         <Input 
                           prefix={<Icon type='lock' style={{ color: 'rgba(0,0,0,.25)'}}/>} 
-                          placeholder='passWord:123456' type='password'
+                          placeholder='password:123456' type='password'
                         ></Input>
                       )
                     }
