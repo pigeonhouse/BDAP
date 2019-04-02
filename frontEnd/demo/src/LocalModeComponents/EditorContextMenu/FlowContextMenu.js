@@ -20,7 +20,7 @@ import { SeprtbyFeat } from '../DataOperate/DataProcess/SeprtbyFeat'
 const Panel = Collapse.Panel;
 var echarts = require('echarts');
 var IntroJs = require('intro.js')
-
+var dataTool = require("echarts/dist/extension/dataTool");
 
 class FlowContextMenu extends React.Component {
   state = { 
@@ -32,7 +32,11 @@ class FlowContextMenu extends React.Component {
     evaluation:[[]],
     compareVisible:false,
     col:[],
-    sum:1000
+    sum:1000,
+    currentIndex:[],
+    data:[],
+    list:[],
+    newRandomkey:0
     // filterDropdownVisible:false
   }
 
@@ -71,7 +75,6 @@ class FlowContextMenu extends React.Component {
     });
     }
     else if(showType === 'pie'){
-
       document.getElementById('main').removeAttribute("_echarts_instance_")
       var myChart = echarts.init(document.getElementById('main'));
 
@@ -92,13 +95,49 @@ class FlowContextMenu extends React.Component {
     else if(showType === 'box'){
       document.getElementById('main').removeAttribute("_echarts_instance_")
       var myChart = echarts.init(document.getElementById('main'));
-      let Data = echarts.dataTool.prepareBoxplotData(this.state.currentData[indexOfFeature].value)
+      let Data = dataTool.prepareBoxplotData([this.state.currentData[indexOfFeature].value]);
+      
       myChart.setOption({
-        series:[{
-          data:Data.outliers
-        }]
+        xAxis: {
+          type: 'category',
+          data: Data.axisData,
+          boundaryGap: true,
+          nameGap: 30,
+          splitArea: {
+              show: false
+          },
+          axisLabel: {
+              formatter: this.state.currentData[indexOfFeature].label
+          },
+          splitLine: {
+              show: false
+          }
+        },
+        yAxis: {
+            type: 'value',
+            splitArea: {
+                show: true
+            }
+        },
+        tooltip: {
+          trigger: 'item',
+          axisPointer: {
+              type: 'shadow'
+          }
+        },
+        series:[
+          {
+            name: 'boxplot',
+            type: 'boxplot',
+            data: Data.boxData,
+          },
+          {
+              name: 'outlier',
+              type: 'scatter',
+              data: Data.outliers
+          }
+        ]
       })
-
     }
   }
 
@@ -107,8 +146,6 @@ class FlowContextMenu extends React.Component {
     var item = propsAPI.getSelected()[0];
     const currentData = item.getModel().Dataset;
     var columns = new Array()
-    console.log("------------------")
-    console.log(currentData)
     var sum = 0;
     for(let i = 0; i < currentData.length; i++){
       let first = currentData[i].value[0]
@@ -116,41 +153,24 @@ class FlowContextMenu extends React.Component {
       len = String(first).length>currentData[i].label.length?(String(first).length+2)*15:(currentData[i].label.length+2)*15;
       sum = sum+len
       columns.push({
-                   title : currentData[i].label,
-                   dataIndex: currentData[i].label,
-                   width : len,
-                   filterDropdown: (
-                    <div>
-                      <Button onClick={()=>{this.Chart(i,currentData[i],"bar")}}>柱状图</Button>
-                      <br></br>
-                      <Button onClick={()=>{this.Chart(i,currentData[i],"pie")}}>饼图</Button>
-                      <br></br>
-                      <Button onClick={()=>{this.Chart(i,currentData[i],"box")}}>箱线图</Button>
-                    </div>
-                    ),
-                  // filterDropdownVisible: this.state.filterDropdownVisible,
-                  // onFilterDropdownVisibleChange: ()=> this.setState({ filterDropdownVisible: true }),
-                 })
+                  title : currentData[i].label,
+                  dataIndex: currentData[i].label,
+                  width : len,
+                  filterDropdown: (
+                  <div>
+                    <Button onClick={()=>{this.Chart(i,currentData[i],"bar")}}>柱状图</Button>
+                    <br></br>
+                    <Button onClick={()=>{this.Chart(i,currentData[i],"pie")}}>饼图</Button>
+                    <br></br>
+                    <Button onClick={()=>{this.Chart(i,currentData[i],"box")}}>箱线图</Button>
+                  </div>
+                  ),
+                // filterDropdownVisible: this.state.filterDropdownVisible,
+                // onFilterDropdownVisibleChange: ()=> this.setState({ filterDropdownVisible: true }),
+                })
     }
-    // const i = currentData.length-1
-    // columns.push({
-    //   title : currentData[i].label,
-    //   dataIndex: currentData[i].label,
-    //   filterDropdown: (
-    //    <div>
-    //      <Button onClick={()=>{this.Chart(i,currentData[i],"bar")}}>柱状图</Button>
-    //      <br></br>
-    //      <Button onClick={()=>{this.Chart(i,currentData[i],"pie")}}>饼图</Button>
-    //      <br></br>
-    //      <Button onClick={()=>{this.Chart(i,currentData[i],"box")}}>箱线图</Button>
-    //    </div>
-    //    ),
-    //  // filterDropdownVisible: this.state.filterDropdownVisible,
-    //  // onFilterDropdownVisibleChange: ()=> this.setState({ filterDropdownVisible: true }),
-    // })
-    console.log(sum)
     this.setState({currentData:currentData, sum})
-    this.setState({col:columns})
+    this.setState({col:columns, currentIndex:[], compareVisible:false})
 
     let la = item.getModel().labelArray.public
     la = la.map(a=>a[0])
@@ -223,10 +243,10 @@ class FlowContextMenu extends React.Component {
   showModal = () => {
     this.setState({
       visible: true,
+      newRandomkey:(this.state.newRandomkey+1)%10
     });
     //this.startIntro();
     this.Datum();
-
   }
 
   handleOk = (e) => {
@@ -404,25 +424,26 @@ class FlowContextMenu extends React.Component {
             </div>
           )
       }
-
       return (<div></div>)
-
-      
+      // return (<div data-step="7" data-intro=''></div>)
     }
   }
 
-  startIntro = () => {
-    // 获取包含引导元素的父容器, 并组成IntroJs
-    console.log("intro.js-------------")
-    var intro1 = IntroJs(document.getElementById('root'))
-    console.log(intro1)
-    intro1.setOptions({
+  Intro1 = () => {
+    IntroJs().setOptions({
         prevLabel: "上一步",
         nextLabel: "下一步",
         skipLabel: "跳过",
         doneLabel: "结束",
-    }).start();
-    console.log(intro1)
+        showProgress:false,
+        exitOnEsc:true,
+        showButtons:true,
+        showStepNumbers:false,
+        keyboardNavigation:true,
+        overlayOpacity: 0,
+        showBullets:false,
+        // overlayOpacity:100
+    }).goToStepNumber(3).start();
 }
 
   render() {        
@@ -504,40 +525,54 @@ class FlowContextMenu extends React.Component {
           <LineMarkerEcharts trans={()=>this.trans()}/>
         </Modal>
 
-        <Modal  title="Basic Modal" visible={this.state.visible} style={{ top: 30 }}  width={1200} 
-          onOk={this.handleOk} onCancel={this.handleCancel}
+        <Modal
+          key={this.state.newRandomkey}
+          title="Basic Modal" 
+          visible={this.state.visible} 
+          style={{ top: 30 }}  
+          width={1200} 
+          onOk={this.handleOk} 
+          onCancel={this.handleCancel}
         >
         <Row>
-        <Col span={15}>
+        <Col span={15} >
+          <div data-step="4" data-intro='在这里显示数据'>
           <Table 
             columns={this.state.col} 
             dataSource={this.state.data} 
             pagination={{ pageSize: 70 }}  
             scroll={{x:`${this.state.sum}px`, y: 480 }}   
             size="small" />
+          </div>
         </Col>
 
-         <Col span={1}>
+         <Col span={1} >
           
           </Col>   
 
-          <Col span={8}>
+          <Col span={8} >
             <Collapse bordered={false} defaultActiveKey={['1','2']}>
-              <Panel header="统计信息" key="1" >
-                <div>{this.staticInformation()}</div>
+              <Panel header="统计信息" key="1" data-step="5" data-intro='在这里显示数据的详细统计信息'>
+                <div data-step="5" data-intro='在这里显示数据的详细统计信息'>
+                {this.staticInformation()}
+                </div>
               </Panel>
+              
 
-              <Panel header="可视化" key="2">
+              <Panel header="可视化" key="2"  >
+                <div data-step="6" data-intro='在这里看到图形化的数据情况'>
                 <div>{this.compare()}</div>           
                 <div id="main" style={{ width: 300, height: 300 }}> </div>
+                </div>
               </Panel>
             </Collapse>
           </Col>
 
           </Row>
-          <div id='root' data-step="1" data-intro='?'  data-position="right" showStepNumbers="false">
+          <div id='root' >
               <Card bordered={true} style={{ width: '100%' }} >
-                  <Button onClick={() => this.startIntro()}>开始引导</Button>
+                  <Button type="primary" shape='circle' icon='question' onClick={() => this.Intro1()}></Button>
+                  <span>需要帮助吗？在这里点击按钮开始引导</span>
               </Card>
           </div>
         </Modal>

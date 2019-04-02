@@ -1,10 +1,8 @@
 import React, {Component} from 'react';
-import { Button, Input ,Upload,Icon} from 'antd'
+import { Button, Icon} from 'antd'
 import Papa from 'papaparse'
 import { withPropsAPI } from '@src';
-import store from '../../store';
-import { UpL } from '../../store/actionCreate';
-import styles from './inputStyle.less'
+
 import { Stat } from './stat';
 // import { SeprtbyFeat } from './DataProcess/SeprtbyFeat';
 class Uploadfile extends Component{
@@ -91,23 +89,32 @@ class Uploadfile extends Component{
 
     render(){
         return (
-            <div>
-                
-                <input type="file" style={{position:"absolute" ,opacity:0}} onChange={(e)=>this.readFile(e)}></input>
-                {/* <Button>本地文件</Button> */}
-               
-                  <Icon type="upload"/> 上传本地文件
-                
-                {/* <button className="btn btn-primary" style={{width:"150px",height:"30px"}}></button> */}
-                
-                {/* <label for="file">Choose a file</label> */}
-                {/* <Button type="primary" onClick={()=>this.makeFile()}>makeFile</Button> */}
-                 {/* <Upload onChange={(e)=>this.readFile(e)} >
-                <Button>
-                  <Icon type="upload" /> 上传本地数据
-                </Button>
-                </Upload> */}
-            </div>
+          <Button href="javascript:void(0)"
+          style={{
+            textAlign: 'center',
+            position: 'relative',
+            cursor: 'pointer',
+            borderRadius: '4px',
+            overflow: 'hidden',
+            display: 'inline-block',
+            '*display': 'inline',
+            '*zoom': 1,
+          }}
+          >
+            <input 
+              type="file" 
+              style={{
+                position: 'absolute',
+                right: 0,
+                top: 0,
+                opacity: 0,
+                filter: 'alpha(opacity=0)',
+                cursor: 'pointer',
+              }}
+              onChange={(e)=>this.readFile(e)}
+            ></input>
+            <Icon style={{cursor:'pointer'}} type="upload"/> 上传本地文件
+          </Button>
         );
     }
 }

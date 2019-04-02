@@ -33,7 +33,6 @@ class Uploadfile extends Component{
     //   }
     readFile = (e)=>{
       var files = e.target.files;
-      console.log(files)
       var reader = new FileReader();
       const { propsAPI } = this.props;
       const { getSelected, update } = propsAPI;
@@ -43,6 +42,7 @@ class Uploadfile extends Component{
         let vectorLength;
 
         var results = Papa.parse(e.target.result,{header:true,dynamicTyping: true});
+        console.log(results)
         fieldNameArray.push(results.meta.fields);
         vectorLength = results.data.length - 1
         var n = new Array();

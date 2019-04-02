@@ -3,7 +3,7 @@ import {selectData, selectDataUntransport} from '../normalFunction'
 import { Stat } from '../../../DataOperate/stat'
 
 function normalize(pre, predictObj, PreArray){
-    let Dataset = [...pre];
+    let Dataset = pre;
     Dataset.push(Stat([{label:PreArray[0], value:predictObj}])[0]);
     return {Dataset:Dataset};
 }
@@ -15,7 +15,7 @@ export function RandomForest(all_data){
 
     const x = selectData(trainData, labelArray.train_x);
     const y = selectDataUntransport(trainData, labelArray.train_y);
-    const predict = selectData(textData, labelArray.text_x);
+    const predict = selectData(textData, labelArray.predict_x);
     const options = {
         seed: attr.seed,
         maxFeatures: attr.maxFeatures,
@@ -25,5 +25,5 @@ export function RandomForest(all_data){
     var regression = new RFRegression(options);
     regression.train(x, y);
     const predictObj = regression.predict(predict);
-    return normalize(textData, predictObj, ['test'])
+    return normalize(textData, predictObj, labelArray.predict_y)
 }

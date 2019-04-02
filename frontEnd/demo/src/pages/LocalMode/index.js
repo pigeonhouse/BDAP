@@ -7,58 +7,27 @@ import { FlowToolbar } from '../../LocalModeComponents/EditorToolbar';
 import { FlowItemPanel } from '../../LocalModeComponents/EditorItemPanel';
 import { FlowDetailPanel } from '../../LocalModeComponents/EditorDetailPanel';
 import styles from './index.less';
-// var introJs = require('intro.js');
-
-const Step = Steps.Step;
-
-  const steps = [{
-  title: '左侧部件',
-  content: '左侧部件主要是功能部件，拖拽相应的框进来',
-  }, {
-  title: '上侧部件',
-  content: '运行的必须的部件',
-  }, {
-  title: '右上侧扩展部件',
-  content: '对特定的功能框进行详细设置的部件',
-  },{
-    title: '右下缩略图',
-    content: '在这里看到全貌',
-  }];
+import IntroJs from 'intro.js';
 
 class LocalMode extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      current: 0,
-      visible: false,
-    };
-  }
-
-  showModal = (key) => {
-    notification.close(key);
-    this.setState({
-      visible: true,
-    });
-  }
-
-  hideModal = () => {
-    this.setState({
-      visible: false,
-    });
-    message.success('恭喜你已经初步毕业了!')
-  }
-
-  next = () => {
-    const Current = this.state.current + 1;
-    this.setState({ 
-      current:Current
-    });
-  }
-
-  prev = () => {
-    const Current = this.state.current - 1;
-    this.setState({ current:Current });
-  }
+  Intro = (key) => {
+    notification.close(key)
+    IntroJs().setOptions({
+        prevLabel: "上一步",
+        nextLabel: "下一步",
+        skipLabel: "跳过",
+        doneLabel: "结束",
+        showProgress:true,
+        exitOnEsc:true,
+        showButtons:true,
+        showStepNumbers:true,
+        keyboardNavigation:true,
+        showBullets: false,
+    }).oncomplete(function () {
+      message.success('恭喜你已经初步毕业了!')
+    }).onexit(function () {
+    }).start();
+}
   renderFlow() {
     return (
       <Flow className={styles.flow} />
@@ -67,7 +36,7 @@ class LocalMode extends React.Component {
   componentDidMount(){
     const key = `open${Date.now()}`;
     const btn = (
-      <Button type="primary" onClick={() => this.showModal(key)}>
+      <Button type="primary" onClick={() => this.Intro(key)}>
         我需要
       </Button>
     );
@@ -84,61 +53,27 @@ class LocalMode extends React.Component {
     });
   }
   render() {
-    const { current } = this.state;
     return (
       <GGEditor className={styles.editor}>
         <Row type="flex">
-          <Col span={24} className={styles.editorHd}> 
+          <Col span={24} className={styles.editorHd} data-step="4" data-intro='这里是各种功能部件，点击‘run’，运行你的程序'> 
             <FlowToolbar/>
           </Col>
         </Row>
-        <Row type="flex" className={styles.editorBd}>
-          <Col span={4} className={styles.editorSidebar} > 
+        <Row type="flex" className={styles.editorBd} >
+          <Col span={4} className={styles.editorSidebar} data-step="1" data-intro='在这里是各种组件，挑选你需要的组件'> 
             <FlowItemPanel />
           </Col>
-          <Col span={16} className={styles.editorContent}>
-              <Modal
-              title="介绍"
-              visible={this.state.visible}
-              cancelText={this.state.canceltxt}
-              bodyStyle={{height: '450px'}}
-              onCancel={this.hideModal}
-              width={1100}
-              footer={[
-                // <Button key="back" onClick={this.hideModal}>算了,不用了</Button>
-              ]}
-              >
-              <div>
-                <Steps current={current}>
-                  {steps.map(item => <Step key={item.title} title={item.title} />)}
-                </Steps>
-                <div className="steps-content">{steps[current].content}</div>
-                <div className="steps-action">
-                {/* <img src={require('../img/Selet.jpg')} /> */}
-                  {
-                    current < steps.length - 1
-                    && <Button type="primary" onClick={() => this.next()}>下一步</Button>
-                  }
-                  {
-                    current === steps.length - 1
-                    && <Button type="primary" onClick={() => this.hideModal()}>完成</Button>
-                  }
-                  {
-                    current > 0
-                    && (
-                    <Button style={{ marginLeft: 8 }} onClick={() => this.prev()}>
-                      上一步
-                    </Button>
-                    )
-                  }
-                </div>
-              </div>
-            </Modal>
+          <Col span={16} className={styles.editorContent} data-step="2" data-intro='这里用于放置你挑选的组件位置'>
             {this.renderFlow()}
           </Col>
           <Col span={4} className={styles.editorSidebar} >
+            <div className={styles.detailPanel} data-step="3" data-intro='在这里对你的组件进行上传数据，或者设定参数'>
             <FlowDetailPanel />
+            </div>
+            <div data-step="5" data-intro='在这里看到你所挑选部件的全貌'>
             <EditorMinimap />
+            </div>
           </Col>
         </Row>
         <FlowContextMenu />

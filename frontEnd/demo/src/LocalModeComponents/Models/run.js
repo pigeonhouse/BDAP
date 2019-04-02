@@ -87,7 +87,7 @@ class Run extends Component{
               const { find, update } = propsAPI;
               const item = find(Sourc);
               let temp = JSON.parse(JSON.stringify(labelarray));
-              temp['public'] = [...temp.text_x, ['test', false]];
+              temp['public'] = [...temp.predict_x, ...temp.predict_y];
               update(item,{labelArray:temp});
             }
             let labelarr = {};
