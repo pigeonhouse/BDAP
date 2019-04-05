@@ -9,6 +9,11 @@ export function OneVarLinearRegression(allData){
     const testFeatureName = allData[0].labelArray.predict_x[0];
     const testLabelName = allData[0].labelArray.predict_y[0];
 
+    console.log(trainFeatureName)
+    console.log(trainLabelName)
+    console.log(testFeatureName)
+    console.log(testLabelName)
+
     var trainFeatureValue = new Array();
     var trainLabelValue = new Array();
     var testFeatureValue = new Array();
@@ -26,6 +31,9 @@ export function OneVarLinearRegression(allData){
             testFeatureValue = allData[2].Dataset[i].value;
         }
     }
+    console.log(trainFeatureValue)
+    console.log(trainLabelValue)
+    console.log(testFeatureValue)
 
     const regression = new SimpleLinearRegression(trainFeatureValue,trainLabelValue);
 

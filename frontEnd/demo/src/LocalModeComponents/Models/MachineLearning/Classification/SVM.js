@@ -1,5 +1,8 @@
 import {selectData, selectDataUntransport} from '../normalFunction'
 import { Stat } from '../../../DataOperate/stat'
+import { Randis } from '../../../DataOperate/DataProcess/Randis'
+import ConfusionMatrix from 'ml-confusion-matrix';
+
 function normalize(pre, predictObj, PreArray){
     let Dataset = pre;
     Dataset.push(Stat([{label:PreArray[0], value:predictObj}])[0]);
@@ -8,8 +11,13 @@ function normalize(pre, predictObj, PreArray){
 export function SVM(all_data){
     var SVM = require('ml-svm');
     
+    var data = JSON.parse(JSON.stringify(all_data));
+    data[0]["all_attr"] = {};
+    data[0].all_attr.public = 0.7;
+    const Dataset = Randis(data).Dataset;
+
     const labelArray = all_data[0].labelArray;
-    const trainData = all_data[1].Dataset;
+    const trainData = Dataset[0];
     const textData = all_data[2].Dataset;
     const attr = all_data[0].all_attr;
 
@@ -29,27 +37,23 @@ export function SVM(all_data){
     };
 
     var svm = new SVM(options);
-    // console.log(features)
-    // console.log(labels)
-    // console.log(options)
-
     svm.train(features, labels);
+    console.log('attr')
+    console.log(features)
+    console.log(labels)
+    console.log(options)
+
+    const testx = selectData(Dataset[1], labelArray.train_x);
+    const testy = selectDataUntransport(Dataset[1], labelArray.train_y);
+
+    var pre = svm.predict(testx)
+    console.log('pre')
+
+    console.log(pre)
+    const CM2 = ConfusionMatrix.fromLabels(testy, pre);
     var predictObj = svm.predict(predict);
-    // console.log(predict)
-    // console.log(predictObj)
 
-    return normalize(trainData, predictObj, labelArray.predict_y)
-
-    // Let's see how narrow the margin is
-    // var margins = svm.margin(features);
-
-    // I want to see what my support vectors are
-    // var supportVectors = svm.supportVectors();
-    
-    // Now we want to save the model for later use
-    // var model = svm.toJSON();
-
-    /// ... later, you can make predictions without retraining the model
-    // var importedSvm = SVM.load(model);
-    // importedSvm.predict(features); // [1, -1, 1, -1] 
+    var resultData = normalize(textData, predictObj, labelArray.predict_y);
+    resultData["evaluation"]=[["Precision",CM2.getAccuracy(),"正确率"]];
+    return resultData;
 }

@@ -58,7 +58,6 @@ class FlowContextMenu extends React.Component {
     if(showType === 'bar'){
       var xAxisGroup = new Array();
       var seriesGroup = [{
-        name: '频数',
         type: 'bar',
         data: new Array()
       }];
@@ -68,9 +67,16 @@ class FlowContextMenu extends React.Component {
       }
       myChart.setOption({
         xAxis: {
-            data: xAxisGroup
+            data: xAxisGroup,
+            name: '数值'
         },
-        yAxis: {},
+        yAxis: {
+          name: '频数'
+        },
+        grid: {
+          right: '15%',
+          containLabel: true
+        },
         series: seriesGroup
     });
     }
@@ -115,6 +121,7 @@ class FlowContextMenu extends React.Component {
         },
         yAxis: {
             type: 'value',
+            name: '数值',
             splitArea: {
                 show: true
             }
@@ -607,8 +614,8 @@ class FlowContextMenu extends React.Component {
 
               <Panel header="可视化" key="2"  >
                 <div >
-                <div>{this.compare()}{this.groupDivide()}</div>         
-                <div id="main" style={{ width: 300, height: 280 }}> </div>
+                  <div>{this.compare()}{this.groupDivide()}</div>         
+                  <div id="main" style={{ maxWidth: 350, height: 280 }}> </div>
                 </div>
               </Panel>
             </Collapse>
