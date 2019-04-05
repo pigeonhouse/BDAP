@@ -66,13 +66,13 @@ class LocalMode extends React.Component {
               <Icon type="bars" style={{fontSize:20}} />
           </Button>
           <Button style={{border:0,backgroundColor:'#343941',color:"#ddd",fontSize:18,marginBottom:15,fontFamily:'consolas'}}>BigDataPlayground Local-Mode</Button>
-          <Button style={{border:0,backgroundColor:'#343941',color:"#ddd",fontSize:25,marginTop:10}}>
+          {/* <Button style={{border:0,backgroundColor:'#343941',color:"#ddd",fontSize:25,marginTop:10}}>
               <Icon type="user" />
-          </Button>
+          </Button> */}
           <a href="https://github.com/pigeonhouse/BigDataPlayground" className={styles.githubCorner} aria-label="View source on GitHub">
           <svg 
-            width="70" 
-            height="70" 
+            width="61" 
+            height="61" 
             viewBox="0 0 250 250" 
             style={{
               fill:'#fff', 
