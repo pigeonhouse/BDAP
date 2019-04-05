@@ -84,22 +84,22 @@ class NodeDetail extends React.Component {
   }
   isInputOutput(label){
     if(label === 'hdfs数据')
-    return(
-      <HdfsFile ></HdfsFile>
-    )
+      return(
+        <HdfsFile ></HdfsFile>
+      )
     else if(label === '本地数据')
-    return (
-      <Uploadfile ></Uploadfile>
-    )
+      return (
+        <Uploadfile ></Uploadfile>
+      )
     else if(label === 'Titanic测试'){
-    return(
-      <LocalTestData ></LocalTestData>
-    )
+      return(
+        <LocalTestData ></LocalTestData>
+      )
     }
     else if(label === 'Titanic训练'){
-    return(
-      <LocalTrainData ></LocalTrainData>
-    )
+      return(
+        <LocalTrainData ></LocalTrainData>
+      )
     }
   }
   isFeature = (group, label, sourceID)=>{
