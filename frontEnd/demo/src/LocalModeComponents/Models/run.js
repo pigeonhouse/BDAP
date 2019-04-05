@@ -1,7 +1,7 @@
 import { OneVarLinearRegression } from './MachineLearning/Regression/OneVarLinearRegression'
 import { NaiveBayes } from './MachineLearning/Classification/NaiveBayes'
 import React, { Component } from 'react'
-import { Button,Modal } from 'antd'
+import { Button,Modal,Icon } from 'antd'
 import { withPropsAPI } from '@src';
 import { runMnist } from './MnistTest/mnist';
 import { MutiVarLinearRegression } from './MachineLearning/Regression/MutiVarLinearRegression'
@@ -351,7 +351,10 @@ class Run extends Component{
   render(){
     return (
       <div>
-        <Button onClick={()=>this.showDetail()}>run</Button>
+        
+        <Button onClick={()=>this.showDetail()} style={{border:0}}>
+            <Icon type="play-circle"/>运行
+        </Button>
         <Modal title="Modal Data" visible={this.state.visible}
             onOk={this.handleOk} onCancel={this.handleCancel} width={900}
           >

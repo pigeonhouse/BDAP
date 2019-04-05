@@ -1,5 +1,5 @@
 import React from 'react';
-import { Row, Col, Button, notification,Steps, message, Modal } from 'antd';
+import { Row, Col, Button, notification,Steps, message, Modal,Layout,Menu,Icon } from 'antd';
 import GGEditor, { Flow } from '@src';
 import EditorMinimap from '../../LocalModeComponents/EditorMinimap';
 import { FlowContextMenu } from '../../LocalModeComponents/EditorContextMenu';
@@ -54,19 +54,42 @@ class LocalMode extends React.Component {
   }
   render() {
     return (
+      
       <GGEditor className={styles.editor}>
-        <Row type="flex">
-          <Col span={24} className={styles.editorHd} data-step="4" data-intro='这里是各种功能部件，点击‘run’，运行你的程序'> 
-            <FlowToolbar/>
-          </Col>
-        </Row>
+
+      
+      <Menu
+        mode="horizontal"
+        style={{ lineHeight: '40px', backgroundColor:'#323232',color:"white" }}
+      >
+      <Button style={{border:0,backgroundColor:'#323232',color:"#ddd",marginTop:10}} size="large">
+          <Icon type="bars" style={{fontSize:20}} />
+      </Button>
+        <Button style={{border:0,backgroundColor:'#323232',color:"#ddd",fontSize:18,marginBottom:15,fontFamily:'consolas'}}>BigDataPlayground Local-Mode</Button>
+        <Button style={{border:0,backgroundColor:'#323232',color:"#ddd",fontSize:25,marginTop:10}}>
+            <Icon type="user" />
+        </Button>
+       
+      </Menu>
+     
+
         <Row type="flex" className={styles.editorBd} >
+        
           <Col span={4} className={styles.editorSidebar} data-step="1" data-intro='在这里是各种组件，挑选你需要的组件'> 
             <FlowItemPanel />
           </Col>
-          <Col span={16} className={styles.editorContent} data-step="2" data-intro='这里用于放置你挑选的组件位置'>
-            {this.renderFlow()}
-          </Col>
+  
+            
+          <Col span={16} className={styles.editorContent}>
+            <Col className={styles.editorHd} data-step="4" data-intro='这里是各种功能部件，点击‘run’，运行你的程序'> 
+              <FlowToolbar/>
+            </Col>
+                    
+            <Flow className={styles.flow} />
+            </Col>
+            
+
+  
           <Col span={4} className={styles.editorSidebar} >
             <div className={styles.detailPanel} data-step="3" data-intro='在这里对你的组件进行上传数据，或者设定参数'>
             <FlowDetailPanel />
@@ -75,9 +98,15 @@ class LocalMode extends React.Component {
             <EditorMinimap />
             </div>
           </Col>
+          
         </Row>
+
         <FlowContextMenu />
+        <div>test</div>
       </GGEditor>
+      
+ 
+     
     );
   }
 }
