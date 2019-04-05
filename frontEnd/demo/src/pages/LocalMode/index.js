@@ -59,20 +59,35 @@ class LocalMode extends React.Component {
       <GGEditor className={styles.editor}>
 
       
-        <div
+        <Row
           style={{ lineHeight: '40px', backgroundColor:'#343941',color:"white" }}
         >
-          <Button style={{border:0,backgroundColor:'#343941',color:"#ddd",marginTop:10}} size="large">
+
+        <Col span={1}>
+          <Button style={{border:0,backgroundColor:'#343941',color:"#ddd"}} size="large">
               <Icon type="bars" style={{fontSize:20}} />
           </Button>
-          <Button style={{border:0,backgroundColor:'#343941',color:"#ddd",fontSize:18,marginBottom:15,fontFamily:'consolas'}}>BigDataPlayground Local-Mode</Button>
-          {/* <Button style={{border:0,backgroundColor:'#343941',color:"#ddd",fontSize:25,marginTop:10}}>
-              <Icon type="user" />
-          </Button> */}
+        </Col>
+
+        <Col span={21}>
+          <Button style={{border:0,backgroundColor:'#343941',color:"#ddd",fontSize:18,fontFamily:'consolas'}}>BigDataPlayground Local-Mode</Button>
+        </Col>
+
+        
+        <Col span={2}>
+          <a href="https://www.yuque.com/ddrid/tx7z84">
+            <Button style={{border:0,backgroundColor:'#343941',color:"#ddd",fontSize:25}} >
+              <Icon type="question-circle" data-step="5" data-intro="如果想要进一步了解详细的使用教程及组件介绍，请点击此处查看文档。"/>
+            </Button>
+          </a>
+        </Col>
+        
+        
+
           <a href="https://github.com/pigeonhouse/BigDataPlayground" className={styles.githubCorner} aria-label="View source on GitHub">
           <svg 
-            width="61" 
-            height="61" 
+            width="45" 
+            height="45" 
             viewBox="0 0 250 250" 
             style={{
               fill:'#fff', 
@@ -89,7 +104,7 @@ class LocalMode extends React.Component {
           </a>
 
         
-        </div>
+        </Row>
      
 
         <Row type="flex" className={styles.editorBd} >
@@ -113,13 +128,13 @@ class LocalMode extends React.Component {
               
           </Col>
 
-          <Col span={4} className={styles.editorSidebar} data-step="1" data-intro='在组件栏可以挑选想要的模块，左键单击拖拽添加至右侧画布内。'> 
+          <Col span={4} className={styles.editorSidebar} data-step="1" data-intro='在组件栏可以挑选想要的模块，左键单击拖拽添加至右侧画布内。' data-position='right'> 
             <FlowItemPanel />
           </Col>
 
             
           <Col span={15} className={styles.editorContent}>
-            <Col className={styles.editorHd} data-step="2" data-intro='在工具栏可以进行撤销，复制，删除，成组等操作。'> 
+            <Col className={styles.editorHd} data-step="2" data-intro='在工具栏可以进行撤销，复制，删除，成组等操作。' > 
               <FlowToolbar/>
             </Col>
                     
@@ -129,7 +144,7 @@ class LocalMode extends React.Component {
 
 
           <Col span={4} className={styles.editorSidebar} >
-            <div className={styles.detailPanel} data-step="3" data-intro='在参数栏对你的组件进行参数配置。'>
+            <div className={styles.detailPanel} data-step="3" data-intro='在参数栏对你的组件进行参数配置。' data-position='left'>
             <FlowDetailPanel />
             </div>
             <EditorMinimap /> 
@@ -140,7 +155,7 @@ class LocalMode extends React.Component {
         
         <Row type="flex" >
           <Col span={24} style={{position:'absolute',bottom:0,lineHeight: '65px', backgroundColor:'#343941' }}>
-            <Row data-step="4" data-intro="所有配置完成后，点击'运行'按钮开始运行整个工作流。">
+            <Row data-step="4" data-intro="所有配置完成后，点击'运行'按钮开始运行整个工作流。" data-position='top'>
               <Col span={11}></Col>
               <Col span={2}>
                   <Run></Run>
