@@ -1,5 +1,5 @@
 import React from 'react'
-import { Modal, Table , Icon,Collapse,Row,Col,Button,Cascader,Card} from 'antd';
+import { Modal, Table , Icon,Collapse,Row,Col,Button,Cascader,Card, Form, Input} from 'antd';
 import {
   Command,
   NodeMenu,
@@ -40,7 +40,7 @@ class FlowContextMenu extends React.Component {
     // filterDropdownVisible:false
   }
 
-  Chart = (indexOfFeature,data,showType)=>{
+  Chart = (indexOfFeature,data,showType,groupDivide)=>{
     this.setState({
       currentIndex:indexOfFeature,
       compareVisible:true
@@ -53,7 +53,7 @@ class FlowContextMenu extends React.Component {
       },
       {Dataset:[data]}
     ];
-    chartData[0].all_attr[`${data.label}`] = ['normal', 3];
+    chartData[0].all_attr[`${data.label}`] = ['normal', groupDivide];
     chartData = SeprtbyFeat(chartData)['Dataset'][0].group;
     if(showType === 'bar'){
       var xAxisGroup = new Array();
@@ -95,7 +95,7 @@ class FlowContextMenu extends React.Component {
     else if(showType === 'box'){
       document.getElementById('main').removeAttribute("_echarts_instance_")
       var myChart = echarts.init(document.getElementById('main'));
-      let Data = dataTool.prepareBoxplotData([this.state.currentData[indexOfFeature].value]);
+      let Data = dataTool.prepareBoxplotData([data.value]);
       
       myChart.setOption({
         xAxis: {
@@ -107,7 +107,7 @@ class FlowContextMenu extends React.Component {
               show: false
           },
           axisLabel: {
-              formatter: this.state.currentData[indexOfFeature].label
+              formatter: data.label
           },
           splitLine: {
               show: false
@@ -150,21 +150,23 @@ class FlowContextMenu extends React.Component {
     for(let i = 0; i < currentData.length; i++){
       let first = currentData[i].value[0]
       let len = 50;
-      len = String(first).length>currentData[i].label.length?(String(first).length+2)*15:(currentData[i].label.length+2)*15;
+      len = String(first).length>currentData[i].label.length?(String(first).length+2)*13:(currentData[i].label.length+2)*13;
       sum = sum+len
       columns.push({
                   title : currentData[i].label,
                   dataIndex: currentData[i].label,
                   width : len,
+                  align: 'center',
                   filterDropdown: (
                   <div>
-                    <Button onClick={()=>{this.Chart(i,currentData[i],"bar")}}>柱状图</Button>
+                    <Button onClick={()=>{this.Chart(i,currentData[i],"bar", 3)}}>柱状图</Button>
                     <br></br>
-                    <Button onClick={()=>{this.Chart(i,currentData[i],"pie")}}>饼图</Button>
+                    <Button onClick={()=>{this.Chart(i,currentData[i],"pie", 3)}}>饼图</Button>
                     <br></br>
-                    <Button onClick={()=>{this.Chart(i,currentData[i],"box")}}>箱线图</Button>
+                    <Button onClick={()=>{this.Chart(i,currentData[i],"box", 3)}}>箱线图</Button>
                   </div>
                   ),
+                 
                 // filterDropdownVisible: this.state.filterDropdownVisible,
                 // onFilterDropdownVisibleChange: ()=> this.setState({ filterDropdownVisible: true }),
                 })
@@ -341,6 +343,56 @@ class FlowContextMenu extends React.Component {
           <span>compare to  </span>
           <Cascader defaultValue={["None"]} options={options} onChange={this.onChange} size="small" />
         </div>
+      )
+    }
+  }
+  
+  handleGroupDivide=(e)=>{
+    e.preventDefault();
+    const { form } = this.props;
+    form.validateFieldsAndScroll((err, values) => {
+      if (err) {
+        return;
+      }
+      const { propsAPI } = this.props;
+      var item = propsAPI.getSelected()[0];
+      const currentData = item.getModel().Dataset;
+      this.Chart(this.state.currentIndex, currentData[this.state.currentIndex], 'bar', values.groups)
+    });
+  }
+
+  groupDivide=()=>{
+    if(this.state.compareVisible){
+      const { getFieldDecorator } = this.props.form;
+      const { Item } = Form;
+      const inlineFormItemLayout = {
+        labelCol: {
+          sm: { span: 4 },
+        },
+        wrapperCol: {
+          sm: { span: 10 },
+        },
+      };
+      return(
+          <Form>  
+            <Item style={{margin:0}} label="groups" {...inlineFormItemLayout}>
+                {
+                  getFieldDecorator("groups" , {
+                    rules:[{
+                      required:false,
+                      pattern: new RegExp(/^[1-9]\d*$/, "g"),
+                      message: '请输入数字'
+                    }],
+                    initialValue: 3,
+                  })(<Input 
+                      style={{margin:0}} 
+                      onBlur={this.handleGroupDivide} 
+                      size="small" 
+                      onPressEnter={this.handleGroupDivide}
+                    />)
+                }
+            </Item>
+          </Form>
       )
     }
   }
@@ -555,7 +607,7 @@ class FlowContextMenu extends React.Component {
 
               <Panel header="可视化" key="2"  >
                 <div >
-                <div>{this.compare()}</div>           
+                <div>{this.compare()}{this.groupDivide()}</div>         
                 <div id="main" style={{ width: 300, height: 280 }}> </div>
                 </div>
               </Panel>
@@ -651,4 +703,4 @@ class FlowContextMenu extends React.Component {
   }
 }
 
-export default withPropsAPI(FlowContextMenu);
+export default Form.create()(withPropsAPI(FlowContextMenu));
