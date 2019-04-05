@@ -352,9 +352,10 @@ class Run extends Component{
     return (
       <div>
         
-        <Button onClick={()=>this.showDetail()} style={{border:0}}>
-            <Icon type="play-circle"/>运行
+        <Button onClick={()=>this.showDetail()} style={{border:0,backgroundColor:'#343941',color:"#ddd",fontSize:25}}>
+            <Icon type="play-circle" style={{fontSize:25}}/>运行
         </Button>
+
         <Modal title="Modal Data" visible={this.state.visible}
             onOk={this.handleOk} onCancel={this.handleCancel} width={900}
           >

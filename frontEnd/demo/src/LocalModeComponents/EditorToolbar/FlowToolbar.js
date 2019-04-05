@@ -116,7 +116,7 @@ class FlowToolbar extends React.Component {
           </Tooltip>
         </Command>
         
-        <Run></Run>
+        
         <SparkRun></SparkRun>
        
       </Toolbar>

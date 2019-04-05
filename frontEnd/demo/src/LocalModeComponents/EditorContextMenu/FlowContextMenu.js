@@ -482,12 +482,6 @@ class FlowContextMenu extends React.Component {
               <span>数据预览</span>
             </div>
           </Command>
-          <Command name="copy">
-            <div className={styles.item} onClick={this.showNModal}>
-              <Icon type="line-chart" />
-              <span>图形化展示</span>
-            </div>
-          </Command>
 
           <Command name="copy">
             <div className={styles.item} onClick={this.modelEvaluation}>
@@ -527,7 +521,7 @@ class FlowContextMenu extends React.Component {
 
         <Modal
           key={this.state.newRandomkey}
-          title="Basic Modal" 
+          title="数据展示" 
           visible={this.state.visible} 
           style={{ top: 30 }}  
           width={1200} 
@@ -536,12 +530,12 @@ class FlowContextMenu extends React.Component {
         >
         <Row>
         <Col span={15} >
-          <div data-step="4" data-intro='在这里显示数据'>
+          <div >
           <Table 
             columns={this.state.col} 
             dataSource={this.state.data} 
             pagination={{ pageSize: 70 }}  
-            scroll={{x:`${this.state.sum}px`, y: 480 }}   
+            scroll={{x:`${this.state.sum}px`, y: 460 }}   
             size="small" />
           </div>
         </Col>
@@ -552,29 +546,24 @@ class FlowContextMenu extends React.Component {
 
           <Col span={8} >
             <Collapse bordered={false} defaultActiveKey={['1','2']}>
-              <Panel header="统计信息" key="1" data-step="5" data-intro='在这里显示数据的详细统计信息'>
-                <div data-step="5" data-intro='在这里显示数据的详细统计信息'>
+              <Panel header="统计信息" key="1">
+                <div data-step="5">
                 {this.staticInformation()}
                 </div>
               </Panel>
               
 
               <Panel header="可视化" key="2"  >
-                <div data-step="6" data-intro='在这里看到图形化的数据情况'>
+                <div >
                 <div>{this.compare()}</div>           
-                <div id="main" style={{ width: 300, height: 300 }}> </div>
+                <div id="main" style={{ width: 300, height: 280 }}> </div>
                 </div>
               </Panel>
             </Collapse>
           </Col>
 
           </Row>
-          <div id='root' >
-              <Card bordered={true} style={{ width: '100%' }} >
-                  <Button type="primary" shape='circle' icon='question' onClick={() => this.Intro1()}></Button>
-                  <span>需要帮助吗？在这里点击按钮开始引导</span>
-              </Card>
-          </div>
+         
         </Modal>
 
 

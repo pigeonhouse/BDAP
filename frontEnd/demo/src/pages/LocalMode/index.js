@@ -8,6 +8,7 @@ import { FlowItemPanel } from '../../LocalModeComponents/EditorItemPanel';
 import { FlowDetailPanel } from '../../LocalModeComponents/EditorDetailPanel';
 import styles from './index.less';
 import IntroJs from 'intro.js';
+import Run from "../../LocalModeComponents/Models/run"
 
 class LocalMode extends React.Component {
   Intro = (key) => {
@@ -60,13 +61,13 @@ class LocalMode extends React.Component {
       
         <Menu
           mode="horizontal"
-          style={{ lineHeight: '40px', backgroundColor:'#323232',color:"white" }}
+          style={{ lineHeight: '40px', backgroundColor:'#343941',color:"white" }}
         >
-          <Button style={{border:0,backgroundColor:'#323232',color:"#ddd",marginTop:10}} size="large">
+          <Button style={{border:0,backgroundColor:'#343941',color:"#ddd",marginTop:10}} size="large">
               <Icon type="bars" style={{fontSize:20}} />
           </Button>
-          <Button style={{border:0,backgroundColor:'#323232',color:"#ddd",fontSize:18,marginBottom:15,fontFamily:'consolas'}}>BigDataPlayground Local-Mode</Button>
-          <Button style={{border:0,backgroundColor:'#323232',color:"#ddd",fontSize:25,marginTop:10}}>
+          <Button style={{border:0,backgroundColor:'#343941',color:"#ddd",fontSize:18,marginBottom:15,fontFamily:'consolas'}}>BigDataPlayground Local-Mode</Button>
+          <Button style={{border:0,backgroundColor:'#343941',color:"#ddd",fontSize:25,marginTop:10}}>
               <Icon type="user" />
           </Button>
         
@@ -100,11 +101,19 @@ class LocalMode extends React.Component {
           </Col>
         
         </Row>
-        <Row type="flex">
-          <Col span={24} className={styles.editorHd} data-step="4" data-intro='这里是各种功能部件，点击‘run’，运行你的程序'> 
-            <FlowToolbar/>
+
+        <Row type="flex" >
+          <Col span={24} style={{position:'absolute',bottom:0,lineHeight: '65px', backgroundColor:'#343941' }}>
+            <Row>
+              <Col span={11}></Col>
+              <Col span={2}>
+                  <Run></Run>
+              </Col>
+            <Col span={11}></Col>
+            </Row> 
           </Col>
         </Row>
+
         <FlowContextMenu />
       </GGEditor>
      
