@@ -1,5 +1,5 @@
 import React from 'react';
-import { Row, Col, Button, notification,Steps, message, Modal,Layout,Menu,Icon } from 'antd';
+import { Row, Col, Button, notification,Steps, message, Modal,Layout,Menu,Icon} from 'antd';
 import GGEditor, { Flow } from '@src';
 import EditorMinimap from '../../LocalModeComponents/EditorMinimap';
 import { FlowContextMenu } from '../../LocalModeComponents/EditorContextMenu';
@@ -9,6 +9,7 @@ import { FlowDetailPanel } from '../../LocalModeComponents/EditorDetailPanel';
 import styles from './index.less';
 import IntroJs from 'intro.js';
 import Run from "../../LocalModeComponents/Models/run"
+
 
 class LocalMode extends React.Component {
   Intro = (key) => {
@@ -94,12 +95,31 @@ class LocalMode extends React.Component {
 
         <Row type="flex" className={styles.editorBd} >
       
+      
+          <Col span={1} style={{backgroundColor:'#71b0d1'}}>
+              
+                <Button style={{backgroundColor:'#71b0d1',color:"#eee",border:0,marginTop:25}}>
+                <Icon type="database" style={{fontSize:30}} />
+                </Button>
+              
+                <Button style={{backgroundColor:'#71b0d1',color:"#eee",border:0,marginTop:25}}>
+                <Icon type="api" style={{fontSize:30}} /> 
+              </Button>
+
+              <Button style={{backgroundColor:'#71b0d1',color:"#eee",border:0,marginTop:25}}>
+                <Icon type="setting" style={{fontSize:30}} /> 
+              </Button>
+              
+
+              
+          </Col>
+
           <Col span={4} className={styles.editorSidebar} data-step="1" data-intro='在这里是各种组件，挑选你需要的组件'> 
             <FlowItemPanel />
           </Col>
 
             
-          <Col span={16} className={styles.editorContent}>
+          <Col span={15} className={styles.editorContent}>
             <Col className={styles.editorHd} data-step="4" data-intro='这里是各种功能部件，点击‘run’，运行你的程序'> 
               <FlowToolbar/>
             </Col>
