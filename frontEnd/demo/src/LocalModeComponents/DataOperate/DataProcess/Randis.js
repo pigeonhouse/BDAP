@@ -85,5 +85,5 @@ export function Randis(allData){
     // allData.labelArray = labelArray1;
     console.log("tem")
     console.log(tem);
-    return tem;
+    return {Dataset:tem};
 }
