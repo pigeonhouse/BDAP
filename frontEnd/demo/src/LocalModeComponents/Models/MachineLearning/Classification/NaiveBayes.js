@@ -14,27 +14,16 @@ export function NaiveBayes(all_data){
     const x = selectData(trainData, labelArray.train_x);
     const y = selectDataUntransport(trainData, labelArray.train_y);
     const predict = selectData(textData, labelArray.predict_x);
-
+    console.log(x)
+    console.log(y)
 
     var model = new GaussianNB();
-    model.train(x, y);
+    model.train(x, y)
+    
+    const crossValidation = require('ml-cross-validation');
+    const confusionMatrix = crossValidation.leaveOneOut(model, x, y);
     var predictObj = model.predict(predict);
-    // console.log(x);
-    // console.log(y);
-    // console.log(predictObj);
-    // const confusionMatrix = 
-    //     crossValidation.leaveOneOut(
-    //         dataset, 
-    //         labels, 
-    //         function(trainFeatures, trainLabels, testFeatures) {
-    //             return model.predict(testFeatures);
-    // });
-    // const accuracy = confusionMatrix.getAccuracy();
-    // console.log(confusionMatrix)
-    // console.log("准确率：")
-    // console.log(accuracy*100+"%")
+    const accuracy = confusionMatrix.getAccuracy();
+    console.log(accuracy)
     return normalize(trainData, predictObj, labelArray.predict_y)
 }  
-    //model.train(Xtrain, Ytrain);
-
-    //var predictions = model.predict(Xtest);
