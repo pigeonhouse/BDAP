@@ -12,7 +12,7 @@ class FlowItemPanel extends React.Component {
         defaultOpenKeys={['sub1','sub2','sub3']}
         mode="inline"
         className={styles.scrollapp}
-        style={{maxHeight:'calc(100vh - 34px)'}}
+        style={{maxHeight:'calc(100vh - 99px)'}}
         selectable={false}
       >
       <GGEditor style={{height:0, width:0}}>
