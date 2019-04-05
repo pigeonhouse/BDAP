@@ -59,8 +59,7 @@ class LocalMode extends React.Component {
       <GGEditor className={styles.editor}>
 
       
-        <Menu
-          mode="horizontal"
+        <div
           style={{ lineHeight: '40px', backgroundColor:'#343941',color:"white" }}
         >
           <Button style={{border:0,backgroundColor:'#343941',color:"#ddd",marginTop:10}} size="large">
@@ -70,8 +69,10 @@ class LocalMode extends React.Component {
           <Button style={{border:0,backgroundColor:'#343941',color:"#ddd",fontSize:25,marginTop:10}}>
               <Icon type="user" />
           </Button>
+
+
         
-        </Menu>
+        </div>
      
 
         <Row type="flex" className={styles.editorBd} >
