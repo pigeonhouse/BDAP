@@ -1,5 +1,5 @@
 import React from 'react';
-import { Row, Col, Button,Steps, message, Radio,notification,Icon} from 'antd';
+import { Row, Col, Button,Steps, message, Radio,notification,Icon,Upload} from 'antd';
 import GGEditor, { Flow } from '@src';
 import EditorMinimap from '../../LocalModeComponents/EditorMinimap';
 import { FlowContextMenu } from '../../LocalModeComponents/EditorContextMenu';
@@ -10,6 +10,7 @@ import styles from './index.less';
 import IntroJs from 'intro.js';
 import Run from "../../LocalModeComponents/Models/run"
 import { FlowDataPanel } from '../../LocalModeComponents/EditorDataPanel'
+import Papa from 'papaparse'
 
 const RadioGroup = Radio.Group;
 const RadioButton = Radio.Button;
@@ -70,7 +71,50 @@ class LocalMode extends React.Component {
     return ;
     this.setState({itemPanel:value})
   }
+  
+  askForFile = ()=>{
+    const init={
+      method: 'POST', 
+      body:"fileName=train_demo.csv",
+      mode: 'cors',
+      headers: {
+        "Content-Type": "application/x-www-form-urlencoded;charset=utf-8"
+    　　  },
+      }
+      fetch(
+        'http://10.105.222.92:3000/showData',init
+      )
+      .then((response) => {
+        return response.json()
+      })
+      .then(data=>{
+        let len = data.length
+        var s = data[0]
+        for(let i = 1; i<len; i++){
+            s = s + "\n" + data[i]
+        }
+        console.log(s)
+        console.log(Papa.parse(s,{header:true,dynamicTyping: true}))
+      })
+      .catch(e => console.log('错误:', e))
+  }
+
+
   render() {
+    const props = {
+      name: 'file',
+      action: 'http://10.105.222.92:3000/handleFile',
+      onChange(info) {
+        if (info.file.status === 'done') {
+          message.success(`${info.file.name} file uploaded successfully`);
+          console.log("-----response------")
+          console.log(info.file.response)
+        } else if (info.file.status === 'error') {
+          message.error(`${info.file.name} file upload failed.`);
+        }
+      },
+    };
+
     const radioStyle = {
       display: 'block',
       width: '64px',
@@ -88,7 +132,22 @@ class LocalMode extends React.Component {
             </Button>
           </Col>
           <Col span={21}>
+            
             <Button style={{border:0,backgroundColor:'#343941',color:"#ddd",fontSize:18,fontFamily:'consolas'}}>BigDataPlayground Local-Mode</Button>
+          
+            <Button onClick={()=>this.askForFile()}>
+              request
+          </Button>
+          
+            <Upload {...props}>
+            <Button>
+              <Icon type="upload" /> Click to Upload
+            </Button>
+          </Upload>
+
+          
+
+
           </Col>      
           <Col span={2}>
             <a href="https://www.yuque.com/ddrid/tx7z84">
@@ -96,6 +155,7 @@ class LocalMode extends React.Component {
                 <Icon type="question-circle" data-step="5" data-intro="如果想要进一步了解详细的使用教程及组件介绍，请点击此处查看文档。"/>
               </Button>
             </a>
+
           </Col>      
           <a href="https://github.com/pigeonhouse/BigDataPlayground" className={styles.githubCorner} aria-label="View source on GitHub">
           <svg 

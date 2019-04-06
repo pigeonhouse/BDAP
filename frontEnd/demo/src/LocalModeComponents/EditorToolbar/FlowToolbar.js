@@ -1,12 +1,10 @@
 import React from 'react';
-import { Tooltip, Divider, Modal, Button, Input, Link, HashRouter, Route  } from 'antd';
+import { Tooltip, Divider, Modal, Button, Input, Link, HashRouter, Route,Upload,Icon } from 'antd';
 import { Toolbar, Command } from '@src';
 import styles from './index.less';
 import iconfont from '../../theme/iconfont.less';
 import {AppendingLineChart} from "../linechart/linechart.ts";
-import d3 from "d3"
-import Run from "../Models/run.js"
-import SparkRun from "../sparkRun"
+
 import { withPropsAPI } from '@src';
 import store from '../../store';
 import { getStopLineAction, getShowLineAction, UpINF } from '../../store/actionCreate';
@@ -38,7 +36,10 @@ class FlowToolbar extends React.Component {
 
 
   render() {
+    
+
     return (
+      
 
       <Toolbar className={styles.toolbar}>
         <Command name="undo">
@@ -117,8 +118,7 @@ class FlowToolbar extends React.Component {
         </Command>
         
         
-        <SparkRun></SparkRun>
-       
+
       </Toolbar>
       // </div>
     );
