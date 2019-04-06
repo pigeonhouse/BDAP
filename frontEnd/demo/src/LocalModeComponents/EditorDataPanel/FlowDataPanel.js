@@ -6,6 +6,41 @@ const SubMenu = Menu.SubMenu;
 const MenuItemGroup = Menu.ItemGroup;
 import GGEditor,{ Flow, RegisterNode } from '@src';
 class FlowDataPanel extends React.Component {
+  state={
+    children:[]
+  }
+  componentWillMount(){
+    var children = new Array();
+    const dataTable = ['data.txt','data.txt','data.txt','data.txt']
+    for(let i in dataTable){
+      children.push(
+        <Menu.Item key={i+4} > 
+          <Tooltip title="左键单击拖拽至右面" placement="rightTop">
+            <div><ItemPanel><Item
+              type="node"
+              size="200*40"
+              shape='zero-one'
+              model={{
+                label: dataTable[i],
+                elabel: dataTable[i],
+                attr:{},
+                Dataset: [],
+                labelArray: {}, 
+                length: 0,
+                anchor: [0, 1],
+                group:'input',
+                keyConfig:{
+                  color_type: '#1890FF',
+                  state_icon_url: 'https://gw.alipayobjects.com/zos/rmsportal/uZVdwjJGqDooqKLKtvGA.svg',
+                }
+              }}         
+            /></ItemPanel></div>
+          </Tooltip>
+        </Menu.Item>
+      )
+    }
+    this.setState({children})
+  }
   render() {
     return (
       <Menu
@@ -193,6 +228,7 @@ class FlowDataPanel extends React.Component {
               }
             }}         
           /></ItemPanel></div></Tooltip></Menu.Item>
+          {this.state.children}
       </SubMenu>
     </Menu>
     );

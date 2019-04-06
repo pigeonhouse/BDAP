@@ -165,7 +165,7 @@ class FlowContextMenu extends React.Component {
     var item = propsAPI.getSelected()[0];
     const currentData = item.getModel().Dataset;
     if(currentData.length === 0) return ;
-
+    if(item.getModel().anchor[1] > 1) return ;
     var columns = new Array()
     var sum = 0;
     for(let i = 0; i < currentData.length; i++){
