@@ -87,8 +87,12 @@ class FlowItemPanel extends React.Component {
                 return keyShape;
               },
               anchor: [
-                [ 0.5, 0],
-                [ 0.5, 1],
+                [ 0.5, 0, {
+                  type: 'input'
+                }],
+                [ 0.5, 1, {
+                  type: 'output'
+                }],
               ],
               type_icon_url: 'https://gw.alipayobjects.com/zos/rmsportal/czNEJAmyDpclFaSucYWB.svg',
             }}
@@ -98,9 +102,15 @@ class FlowItemPanel extends React.Component {
             name = {'two-one'}
             config =  {{
               anchor: [
-                [ 0.33, 0],
-                [ 0.66, 0],
-                [ 0.5, 1]
+                [ 0.33, 0, {
+                  type: 'input'
+                }],
+                [ 0.66, 0, {
+                  type: 'input'
+                }],
+                [ 0.5, 1, {
+                  type: 'output'
+                }]
               ]
             }}
             extend = {'model-all'}
@@ -109,8 +119,12 @@ class FlowItemPanel extends React.Component {
             name = {'one-one'}
             config =  {{
               anchor: [
-                [ 0.5, 0],
-                [ 0.5, 1]
+                [ 0.5, 0, {
+                  type: 'input'
+                }],
+                [ 0.5, 1, {
+                  type: 'output'
+                }]
               ]
             }}
             extend = {'model-all'}
@@ -119,9 +133,15 @@ class FlowItemPanel extends React.Component {
             name = {'one-two'}
             config =  {{
               anchor: [
-                [ 0.5, 0],
-                [ 0.33, 1],
-                [ 0.66, 1]
+                [ 0.5, 0, {
+                  type: 'input'
+                }],
+                [ 0.33, 1, {
+                  type: 'output'
+                }],
+                [ 0.66, 1, {
+                  type: 'output'
+                }]
               ]
             }}
             extend = {'model-all'}
@@ -130,7 +150,9 @@ class FlowItemPanel extends React.Component {
             name = {'zero-one'}
             config =  {{
               anchor: [
-                [ 0.5, 1]
+                [ 0.5, 1, {
+                  type: 'output'
+                }]
               ]
             }}
             extend = {'model-all'}
@@ -139,7 +161,9 @@ class FlowItemPanel extends React.Component {
             name = {'one-zero'}
             config =  {{
               anchor: [
-                [ 0.5, 0]
+                [ 0.5, 0, {
+                  type: 'input'
+                }]
               ]
             }}
             extend = {'model-all'}

@@ -51,6 +51,7 @@ class GGEditor extends React.Component {
 
   init() {
     this.editor = new Editor();
+    console.log(this.editor)
     this.ggEditor = {
       editor: this.editor,
       onBeforeAddPage: this.handleBeforeAddPage,
