@@ -1,5 +1,5 @@
 import React from 'react';
-import { Row, Col, Button,Steps, message, Modal,Layout,notification,Icon} from 'antd';
+import { Row, Col, Button,Steps, message, Radio,notification,Icon} from 'antd';
 import GGEditor, { Flow } from '@src';
 import EditorMinimap from '../../LocalModeComponents/EditorMinimap';
 import { FlowContextMenu } from '../../LocalModeComponents/EditorContextMenu';
@@ -9,8 +9,10 @@ import { FlowDetailPanel } from '../../LocalModeComponents/EditorDetailPanel';
 import styles from './index.less';
 import IntroJs from 'intro.js';
 import Run from "../../LocalModeComponents/Models/run"
+import { FlowDataPanel } from '../../LocalModeComponents/EditorDataPanel'
 
-
+const RadioGroup = Radio.Group;
+const RadioButton = Radio.Button;
 class LocalMode extends React.Component {
   Intro = (key) => {
     notification.close(key)
@@ -30,6 +32,7 @@ class LocalMode extends React.Component {
     }).onexit(function () {
     }).start();
 }
+  state = {itemPanel:'FlowDataPanel'}
   renderFlow() {
     return (
       <Flow className={styles.flow} />
@@ -53,35 +56,47 @@ class LocalMode extends React.Component {
       // key
     });
   }
+  currentItemPanel=()=>{
+    if(this.state.itemPanel === 'FlowItemPanel'){
+      return <FlowItemPanel />;
+    }
+    else if(this.state.itemPanel === 'FlowDataPanel'){
+      return <FlowDataPanel></FlowDataPanel>
+    }
+  }
+  onChangePanel=(e)=>{
+    const value = e.target.value;
+    if(value === 'FlowPanel')
+    return ;
+    this.setState({itemPanel:value})
+  }
   render() {
+    const radioStyle = {
+      display: 'block',
+      width: '64px',
+      // lineHeight: '30px',
+    };
     return (
       
-      <GGEditor className={styles.editor}>
-
-      
+      <GGEditor className={styles.editor}>   
         <Row
           style={{ lineHeight: '40px',height: '40px', backgroundColor:'#343941',color:"white" }}
         >
-
           <Col span={1}>
             <Button style={{border:0,backgroundColor:'#343941',color:"#ddd"}} size="large">
                 <Icon type="bars" style={{fontSize:20}} />
             </Button>
           </Col>
-
           <Col span={21}>
             <Button style={{border:0,backgroundColor:'#343941',color:"#ddd",fontSize:18,fontFamily:'consolas'}}>BigDataPlayground Local-Mode</Button>
-          </Col>
-
-          
+          </Col>      
           <Col span={2}>
             <a href="https://www.yuque.com/ddrid/tx7z84">
               <Button style={{border:0,backgroundColor:'#343941',color:"#ddd",fontSize:25}} >
                 <Icon type="question-circle" data-step="5" data-intro="如果想要进一步了解详细的使用教程及组件介绍，请点击此处查看文档。"/>
               </Button>
             </a>
-          </Col>
-        
+          </Col>      
           <a href="https://github.com/pigeonhouse/BigDataPlayground" className={styles.githubCorner} aria-label="View source on GitHub">
           <svg 
             width="45" 
@@ -102,31 +117,44 @@ class LocalMode extends React.Component {
           </a>      
         </Row>
      
-
         <Row type="flex" style={{height:'calc(100vh - 105px)'}}>
   
           <Col span={1} style={{backgroundColor:'#71b0d1', height:'calc(100vh - 105px)'}}>
-              
-            <Button className={styles.leftMenu}>
+            {/* <Button className={styles.leftMenuInit} onClick={this.handleFlowDataPanel} size="large">
               <Icon type="database" style={{fontSize:40}} />
-            </Button>
-              
-            <Button className={styles.leftMenu}>
+            </Button>            
+            <Button className={styles.leftMenu} onClick={this.handleFlowItemPanel} size="large">
               <Icon type="api" style={{fontSize:40}} /> 
             </Button>
-
-            <Button className={styles.leftMenu}>
+            <Button className={styles.leftMenu} size="large">
               <Icon type="setting" style={{fontSize:40}} /> 
-            </Button>
-              
+            </Button>              */}
+            <RadioGroup styke={{width: '4%'}} onChange={this.onChangePanel} value={this.state.itemPanel} size="large">
+              <RadioButton 
+                style={radioStyle} 
+                className={this.state.itemPanel==='FlowDataPanel'?styles.leftMenuSelect:styles.leftMenu} 
+                value='FlowDataPanel'>
+                <Icon type="database" style={{fontSize:40}} />
+              </RadioButton>
+              <RadioButton 
+                style={radioStyle} 
+                className={this.state.itemPanel==='FlowItemPanel'?styles.leftMenuSelect:styles.leftMenu}
+                value='FlowItemPanel'>
+                <Icon type="api" style={{fontSize:40}} /> 
+              </RadioButton>
+              <RadioButton 
+                style={radioStyle} 
+                className={this.state.itemPanel==='FlowPanel'?styles.leftMenuSelect:styles.leftMenu}
+                value='FlowPanel'>
+                <Icon type="setting" style={{fontSize:40}} /> 
+              </RadioButton>
+            </RadioGroup>
           </Col>
-
           <Col style={{height:'calc(100vh - 105px)'}} span={4} className={styles.editorSidebar}
             data-step="1" data-intro='在组件栏可以挑选想要的模块，左键单击拖拽添加至右侧画布内。' data-position='right'> 
-            <FlowItemPanel />
+            {this.currentItemPanel()}
           </Col>
-
-            
+           
           <Col span={15} className={styles.editorContent} style={{height:'calc(100vh - 105px)'}}>
             <div className={styles.editorHd} data-step="2" data-intro='在工具栏可以进行撤销，复制，删除，成组等操作。' > 
               <FlowToolbar/>
