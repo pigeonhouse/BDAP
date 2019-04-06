@@ -1,5 +1,5 @@
 import React from 'react';
-import { Row, Col, Button,Steps, message, Radio,notification,Icon,Upload} from 'antd';
+import { Row, Col, Button,Steps, message, Radio,notification,Icon,Tabs,Upload} from 'antd';
 import GGEditor, { Flow } from '@src';
 import EditorMinimap from '../../LocalModeComponents/EditorMinimap';
 import { FlowContextMenu } from '../../LocalModeComponents/EditorContextMenu';
@@ -9,8 +9,10 @@ import { FlowDetailPanel } from '../../LocalModeComponents/EditorDetailPanel';
 import styles from './index.less';
 import IntroJs from 'intro.js';
 import Run from "../../LocalModeComponents/Models/run"
-import { FlowDataPanel } from '../../LocalModeComponents/EditorDataPanel'
+import { FlowDataPanel } from '../../LocalModeComponents/EditorDataPanel';
 import Papa from 'papaparse'
+
+const TabPane = Tabs.TabPane;
 
 const RadioGroup = Radio.Group;
 const RadioButton = Radio.Button;
@@ -34,11 +36,6 @@ class LocalMode extends React.Component {
     }).start();
 }
   state = {itemPanel:'FlowDataPanel'}
-  renderFlow() {
-    return (
-      <Flow className={styles.flow} />
-    );
-  }
   componentDidMount(){
     const key = `open${Date.now()}`;
     const btn = (
@@ -71,11 +68,11 @@ class LocalMode extends React.Component {
     return ;
     this.setState({itemPanel:value})
   }
-  
+    
   askForFile = ()=>{
     const init={
       method: 'POST', 
-      body:"fileName=train_demo.csv",
+      body:"fileName=测试集.csv",
       mode: 'cors',
       headers: {
         "Content-Type": "application/x-www-form-urlencoded;charset=utf-8"
@@ -114,12 +111,11 @@ class LocalMode extends React.Component {
         }
       },
     };
-
-    const radioStyle = {
-      display: 'block',
-      width: '64px',
-      // lineHeight: '30px',
-    };
+    // const radioStyle = {
+    //   display: 'block',
+    //   width: '64px',
+    //   // lineHeight: '30px',
+    // };
     return (
       
       <GGEditor className={styles.editor}>   
@@ -132,30 +128,24 @@ class LocalMode extends React.Component {
             </Button>
           </Col>
           <Col span={21}>
-            
             <Button style={{border:0,backgroundColor:'#343941',color:"#ddd",fontSize:18,fontFamily:'consolas'}}>BigDataPlayground Local-Mode</Button>
-          
             <Button onClick={()=>this.askForFile()}>
-              request
-          </Button>
-          
+                  request
+              </Button>
+            
             <Upload {...props}>
-            <Button>
-              <Icon type="upload" /> Click to Upload
-            </Button>
-          </Upload>
-
-          
-
-
+              <Button>
+                <Icon type="upload" /> Click to Upload
+              </Button>
+            </Upload>
           </Col>      
           <Col span={2}>
             <a href="https://www.yuque.com/ddrid/tx7z84">
               <Button style={{border:0,backgroundColor:'#343941',color:"#ddd",fontSize:25}} >
                 <Icon type="question-circle" data-step="5" data-intro="如果想要进一步了解详细的使用教程及组件介绍，请点击此处查看文档。"/>
               </Button>
+                        
             </a>
-
           </Col>      
           <a href="https://github.com/pigeonhouse/BigDataPlayground" className={styles.githubCorner} aria-label="View source on GitHub">
           <svg 
@@ -189,7 +179,16 @@ class LocalMode extends React.Component {
             <Button className={styles.leftMenu} size="large">
               <Icon type="setting" style={{fontSize:40}} /> 
             </Button>              */}
-            <RadioGroup styke={{width: '4%'}} onChange={this.onChangePanel} value={this.state.itemPanel} size="large">
+            <Tabs
+              defaultActiveKey="1"
+              tabPosition='left'
+              className={styles.leftMenuTab}
+            >
+              <TabPane className={styles.leftMenu}tab={<Icon type="database" className={styles.iconStyle}/>} key="1">Content of tab 1</TabPane>
+              <TabPane className={styles.leftMenu}tab={<Icon type="api" className={styles.iconStyle}/> } key="2">Content of tab 2</TabPane>
+              <TabPane className={styles.leftMenu}tab={<Icon type="setting" className={styles.iconStyle}/> } key="3">Content of tab 3</TabPane>
+            </Tabs>
+            {/* <RadioGroup styke={{width: '4%'}} onChange={this.onChangePanel} value={this.state.itemPanel} size="large">
               <RadioButton 
                 style={radioStyle} 
                 className={this.state.itemPanel==='FlowDataPanel'?styles.leftMenuSelect:styles.leftMenu} 
@@ -208,7 +207,7 @@ class LocalMode extends React.Component {
                 value='FlowPanel'>
                 <Icon type="setting" style={{fontSize:40}} /> 
               </RadioButton>
-            </RadioGroup>
+            </RadioGroup> */}
           </Col>
           <Col style={{height:'calc(100vh - 105px)'}} span={4} className={styles.editorSidebar}
             data-step="1" data-intro='在组件栏可以挑选想要的模块，左键单击拖拽添加至右侧画布内。' data-position='right'> 
@@ -219,7 +218,9 @@ class LocalMode extends React.Component {
             <div className={styles.editorHd} data-step="2" data-intro='在工具栏可以进行撤销，复制，删除，成组等操作。' > 
               <FlowToolbar/>
             </div>
-            <Flow  style={{height:'calc(100vh - 142px)'}}/>
+            <Flow 
+              style={{height:'calc(100vh - 142px)'}}
+             />
           </Col>
 
           <Col span={4} className={styles.editorSidebar} style={{height:'calc(100vh - 105px)'}}>

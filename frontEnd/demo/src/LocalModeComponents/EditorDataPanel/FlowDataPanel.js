@@ -5,13 +5,47 @@ import { Menu, Icon ,Tooltip} from 'antd';
 const SubMenu = Menu.SubMenu;
 const MenuItemGroup = Menu.ItemGroup;
 import GGEditor,{ Flow, RegisterNode } from '@src';
+var children = [];
 class FlowDataPanel extends React.Component {
-  state={
-    children:[]
-  }
+
+  
   componentWillMount(){
-    var children = new Array();
-    const dataTable = ['data.txt','data.txt','data.txt','data.txt']
+    // var children = new Array();
+    var dataTable = [];
+    // var _this=this;
+    // fetch(
+    //   'http://10.105.222.92:3000/FileList'
+    // )
+    // .then((response) => {
+    //   return response.json()
+    // })
+    // .then(a=>{   
+    //   console.log(a)
+    //   _this.dataTable = a;
+    // })
+    
+    // while(dataTable.length == 0){
+    //   setTimeout(1000);
+    // }
+    // const init={
+    //   method: 'POST', 
+    //   //body:"fileName=测试集.csv",
+    //   mode: 'cors',
+    //   headers: {
+    //     "Content-Type": "application/x-www-form-urlencoded;charset=utf-8"
+    // 　　  },
+    //   }
+    fetch(
+      'http://10.105.222.92:3000/FileList'
+    )
+    .then((response) => {
+      return response.json()
+    })
+    .then(a=>{  
+      children = a
+      console.log(a)
+    })
+    var dataTable = children;
     for(let i in dataTable){
       children.push(
         <Menu.Item key={i+4} > 
@@ -39,7 +73,6 @@ class FlowDataPanel extends React.Component {
         </Menu.Item>
       )
     }
-    this.setState({children})
   }
   render() {
     return (
@@ -228,7 +261,7 @@ class FlowDataPanel extends React.Component {
               }
             }}         
           /></ItemPanel></div></Tooltip></Menu.Item>
-          {this.state.children}
+          {children}
       </SubMenu>
     </Menu>
     );
