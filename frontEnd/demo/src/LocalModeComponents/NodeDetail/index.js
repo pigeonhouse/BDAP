@@ -8,6 +8,7 @@ import LocalTrainData from '../DataOperate/LocalTrainData'
 import HdfsFile from '../DataOperate/hdfsFile'
 import styles from './index.less';
 import Feature from '../DataOperate/Feature'
+import Papa from 'papaparse'
 
 const { Item } = Form;
 
@@ -26,6 +27,7 @@ class NodeDetail extends React.Component {
     visible: false,
     running : false,
     labelArray:[],
+    dataTable:[]
   }
 
   componentWillMount(){
@@ -82,7 +84,7 @@ class NodeDetail extends React.Component {
       visible: false,
     });
   }
-  isInputOutput(label){
+  isInputOutput(label, group, Dataset){
     if(label === 'hdfs数据')
       return(
         <HdfsFile ></HdfsFile>
@@ -100,6 +102,40 @@ class NodeDetail extends React.Component {
       return(
         <LocalTrainData ></LocalTrainData>
       )
+    }
+    else if(group === 'input' && Dataset.length === 0){
+      const { propsAPI } = this.props;
+      const { getSelected } = propsAPI;
+      const item = getSelected()[0];
+      const model = item.getModel();
+      const init={
+        method: 'POST', 
+        body:"fileName=" + model.label,
+        mode: 'cors',
+        headers: {
+          "Content-Type": "application/x-www-form-urlencoded;charset=utf-8"
+      　　  },
+        }
+        fetch(
+          'http://10.105.222.92:3000/showData',init
+        )
+        .then((response) => {
+          if(response.status===200){
+            response.json().then((respData)=>{
+            let len = respData.length
+            var s = respData[0]
+            for(let i = 1; i<len; i++){
+                s = s + "\n" + respData[i]
+            }
+            console.log('update')
+            console.log('update')
+            this.setState({
+              dataTable:Papa.parse(s,{header:true,dynamicTyping: true}),
+            });
+            })
+          }
+        })
+        .catch(e => console.log('错误:', e))
     }
   }
   isFeature = (group, label, sourceID)=>{
@@ -160,15 +196,17 @@ class NodeDetail extends React.Component {
   render() {
     const { form, propsAPI } = this.props;
     const { getFieldDecorator } = form;
-    const { getSelected } = propsAPI;
+    const { getSelected, update } = propsAPI;
 
     const item = getSelected()[0];
     
     if (!item) {
       return null;
     }
-
-    const { label, attr, anchor, group } = item.getModel();
+    if(this.state.dataTable.length !== 0){
+      console.log(this.state.dataTable)
+    }
+    const { label, attr, anchor, group, Dataset } = item.getModel();
 
     if(label === '数据随机划分'){
       var targetid = new Array();
@@ -236,7 +274,7 @@ class NodeDetail extends React.Component {
           })}
           {this.testLabelInput(group, getFieldDecorator)}
           {this.isFeature(group, label, targetid[0])}
-          {this.isInputOutput(label)}
+          {this.isInputOutput(label, group, Dataset)}
         </Form>
       </Card>
     );

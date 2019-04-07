@@ -7,74 +7,55 @@ const MenuItemGroup = Menu.ItemGroup;
 import GGEditor,{ Flow, RegisterNode } from '@src';
 var children = [];
 class FlowDataPanel extends React.Component {
-
+  state={
+    dataTable: []
+  }
   
   componentWillMount(){
-    // var children = new Array();
-    var dataTable = [];
-    // var _this=this;
-    // fetch(
-    //   'http://10.105.222.92:3000/FileList'
-    // )
-    // .then((response) => {
-    //   return response.json()
-    // })
-    // .then(a=>{   
-    //   console.log(a)
-    //   _this.dataTable = a;
-    // })
-    
-    // while(dataTable.length == 0){
-    //   setTimeout(1000);
-    // }
-    // const init={
-    //   method: 'POST', 
-    //   //body:"fileName=测试集.csv",
-    //   mode: 'cors',
-    //   headers: {
-    //     "Content-Type": "application/x-www-form-urlencoded;charset=utf-8"
-    // 　　  },
-    //   }
     fetch(
       'http://10.105.222.92:3000/FileList'
     )
     .then((response) => {
-      return response.json()
+      if(response.status===200){
+        response.json().then((respData)=>{
+        this.setState({
+          dataTable:respData,
+        });
+        })
+      }
     })
-    .then(a=>{  
-      children = a
-      console.log(a)
-    })
-    var dataTable = children;
-    for(let i in dataTable){
-      children.push(
-        <Menu.Item key={i+4} > 
-          <Tooltip title="左键单击拖拽至右面" placement="rightTop">
-            <div><ItemPanel><Item
-              type="node"
-              size="200*40"
-              shape='zero-one'
-              model={{
-                label: dataTable[i],
-                elabel: dataTable[i],
-                attr:{},
-                Dataset: [],
-                labelArray: {}, 
-                length: 0,
-                anchor: [0, 1],
-                group:'input',
-                keyConfig:{
-                  color_type: '#1890FF',
-                  state_icon_url: 'https://gw.alipayobjects.com/zos/rmsportal/uZVdwjJGqDooqKLKtvGA.svg',
-                }
-              }}         
-            /></ItemPanel></div>
-          </Tooltip>
-        </Menu.Item>
-      )
-    }
   }
   render() {
+    if(this.state.dataTable.length !== 0){
+      var dataTable = this.state.dataTable;
+      for(let i in dataTable){
+        children.push(
+          <Menu.Item key={i+3} > 
+            <Tooltip title="左键单击拖拽至右面" placement="rightTop">
+              <div><ItemPanel><Item
+                type="node"
+                size="200*40"
+                shape='zero-one'
+                model={{
+                  label: dataTable[i],
+                  elabel: dataTable[i],
+                  attr:{},
+                  Dataset: [],
+                  labelArray: {}, 
+                  length: 0,
+                  anchor: [0, 1],
+                  group:'input',
+                  keyConfig:{
+                    color_type: '#1890FF',
+                    state_icon_url: 'https://gw.alipayobjects.com/zos/rmsportal/uZVdwjJGqDooqKLKtvGA.svg',
+                  }
+                }}         
+              /></ItemPanel></div>
+            </Tooltip>
+          </Menu.Item>
+        )
+      }
+    }
     return (
       <Menu
         defaultOpenKeys={['sub1','sub2','sub3']}
@@ -205,27 +186,6 @@ class FlowDataPanel extends React.Component {
             size="200*40"
             shape='zero-one'
             model={{
-              label: 'hdfs数据',
-              elabel:'hdfsFile',
-              attr:{},
-              Dataset: [],
-              labelArray: {}, 
-              length: 0,
-              anchor: [0, 1],
-              group:'input',
-              keyConfig:{
-                color_type: '#1890FF',
-                state_icon_url: 'https://gw.alipayobjects.com/zos/rmsportal/uZVdwjJGqDooqKLKtvGA.svg',
-              }
-            }}         
-          /></ItemPanel></div></Tooltip></Menu.Item>
-          <Menu.Item key="3" > 
-          <Tooltip title="左键单击拖拽至右面" placement="rightTop">
-          <div><ItemPanel><Item
-            type="node"
-            size="200*40"
-            shape='zero-one'
-            model={{
               label: 'Titanic测试',
               elabel:'TitanicTestFile',
               attr:{},
@@ -240,7 +200,7 @@ class FlowDataPanel extends React.Component {
               }
             }}         
           /></ItemPanel></div></Tooltip></Menu.Item>
-          <Menu.Item key="4" > 
+          <Menu.Item key="3" > 
           <Tooltip title="左键单击拖拽至右面" placement="rightTop">
           <div><ItemPanel><Item
             type="node"

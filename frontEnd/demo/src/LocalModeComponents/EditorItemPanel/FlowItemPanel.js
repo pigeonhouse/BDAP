@@ -196,27 +196,6 @@ class FlowItemPanel extends React.Component {
             size="200*40"
             shape='zero-one'
             model={{
-              label: 'hdfs数据',
-              elabel:'hdfsFile',
-              attr:{},
-              Dataset: [],
-              labelArray: {}, 
-              length: 0,
-              anchor: [0, 1],
-              group:'input',
-              keyConfig:{
-                color_type: '#1890FF',
-                state_icon_url: 'https://gw.alipayobjects.com/zos/rmsportal/uZVdwjJGqDooqKLKtvGA.svg',
-              }
-            }}         
-          /></ItemPanel></div></Tooltip></Menu.Item>
-          <Menu.Item key="3" > 
-          <Tooltip title="左键单击拖拽至右面" placement="rightTop">
-          <div><ItemPanel><Item
-            type="node"
-            size="200*40"
-            shape='zero-one'
-            model={{
               label: 'Titanic测试',
               elabel:'TitanicTestFile',
               attr:{},
@@ -231,7 +210,7 @@ class FlowItemPanel extends React.Component {
               }
             }}         
           /></ItemPanel></div></Tooltip></Menu.Item>
-          <Menu.Item key="4" > 
+          <Menu.Item key="3" > 
           <Tooltip title="左键单击拖拽至右面" placement="rightTop">
           <div><ItemPanel><Item
             type="node"
