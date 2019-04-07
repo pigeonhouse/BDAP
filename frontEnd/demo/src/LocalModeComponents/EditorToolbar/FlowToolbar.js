@@ -1,12 +1,10 @@
 import React from 'react';
-import { Tooltip, Divider, Modal, Button, Input, Link, HashRouter, Route  } from 'antd';
+import { Tooltip, Divider, Modal, Button, Input, Link, HashRouter, Route,Upload,Icon } from 'antd';
 import { Toolbar, Command } from '@src';
 import styles from './index.less';
 import iconfont from '../../theme/iconfont.less';
 import {AppendingLineChart} from "../linechart/linechart.ts";
-import d3 from "d3"
-import Run from "../Models/run.js"
-import SparkRun from "../sparkRun"
+
 import { withPropsAPI } from '@src';
 import store from '../../store';
 import { getStopLineAction, getShowLineAction, UpINF } from '../../store/actionCreate';
@@ -14,40 +12,6 @@ class FlowToolbar extends React.Component {
 
   state = {
     visible: false,
-  }
-
-  livyTest = () =>{
-  console.log(this.state.data)
-  const init={
-    method: 'POST', 
-    body:JSON.stringify(this.state.data),
-    mode: 'cors',
-    headers: {'Content-Type': 'application/json'},
-    }
-    fetch(
-      'http://localhost:5000/test',init
-    )
-      //.then(res => res.json())
-      .then(data => {
-        console.log(res)
-        this.setState({users: data})
-      })
-      .catch(e => console.log('错误:', e))
-  }
-
-  returnLoss = () =>{
-    // const init={
-    //   method: 'GET', 
-    // }
-    // fetch(
-    //   'http://localhost:5000/returnLoss',init
-    // )
-    //   .then(res => res.json())
-    //   .then(data => {
-    //     console.log(data)
-    //     this.setState({users: data})
-    //   })
-    //   .catch(e => console.log('错误:', e))
   }
 
 
@@ -69,31 +33,14 @@ class FlowToolbar extends React.Component {
     store.dispatch(action);
     console.log(store.getState().running);
   }
-  showLine = () =>{
-    // const action = getShowLineAction();
-    // store.dispatch(action);
-    // console.log(store.getState().running);
-    
-    //OneVarLinearRegression();
-    // console.log(this.state.stream)
-    // var step = this.state.stream
-    // console.log(step[0]["label"])
-    // console.log(step[0]["attribute"])
-    // for(let index = 1; index < step.length; index++){
-    //   console.log(step[index]["label"])
-    //   console.log(step[index]["attribute"])
-    // }
-
-  }
 
 
   render() {
+    
+
     return (
-      // <div>
-      // <div span={4} style={{float:"left", maxHeight:5}}>
-      //     <Input placeholder='Search' style={{maxWidth:180,marginLeft:10}}></Input>
-      //     <Button shape="circle" style={{marginLeft:20, marginRight:20}} icon="search" />
-      // </div>
+      
+
       <Toolbar className={styles.toolbar}>
         <Command name="undo">
           <Tooltip title="撤销" placement="bottom" overlayClassName={styles.tooltip}>
@@ -170,47 +117,7 @@ class FlowToolbar extends React.Component {
           </Tooltip>
         </Command>
         
-        <Run></Run>
-        <SparkRun></SparkRun>
-       
-       {/* <Button onClick={()=>this.livyTest()}>spark-test</Button> */}
-       {/* <Button onClick={()=>this.returnLoss()}>return-loss</Button> */}
-{/* 
-        <Selectword></Selectword> */}
-
-        {/* <Modal title="Basic Modal" visible={this.state.visible}
-          onOk={this.handleOk} onCancel={this.handleCancel}
-        >
-          <p>iter:
-            <div id="iter-number"></div>
-          </p>
-          <p>train-loss:
-            <div id="loss-train"></div>
-          </p>
-          
-          <div id="linechart"></div>
-          
-          <div id="images">  </div>
-          
-          <Button type="primary" onClick={()=>this.showLine()}>start</Button>
-          <span> </span>
-          <Button type="primary" onClick={()=>this.stopLine()}>stop</Button>
-
-          {/* <input type="file" id="files" name="files[]" onChange={(e)=>this.readFile(e)} multiple />
-	        <output id="list"></output> */}
-          {/* <Button type="primary" onClick={()=>this.makeFile()}>makeFile</Button>
-          <Download 
-          list = {this.state.finalData}
-          filename = {'test'}
-        />
-
-        </Modal> */} 
-
-
-        {/* <Button className={styles.buttonRight1} href='#'>用户</Button>
-        <Button className={styles.buttonRight2} href='#'>退出</Button> */}
-        {/* <Link to='/' className={styles.buttonRight2}>退出</Link>
-              <Route exact={true}path='/' component={Home}></Route> */}
+        
 
       </Toolbar>
       // </div>

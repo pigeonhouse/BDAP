@@ -1,40 +1,38 @@
-import { GaussianNB } from 'ml-naivebayes';
 import { selectData, selectDataUntransport } from '../normalFunction'
 import { Stat } from '../../../DataOperate/stat'
+import { Randis } from '../../../DataOperate/DataProcess/Randis'
+import { GaussianNB } from "ml-naivebayes";
+import ConfusionMatrix from 'ml-confusion-matrix';
 function normalize(pre, predictObj, PreArray){
     let Dataset = pre;
     Dataset.push(Stat([{label:PreArray[0], value:predictObj}])[0]);
     return {Dataset:Dataset};
 }
 export function NaiveBayes(all_data){
+    var data = JSON.parse(JSON.stringify(all_data));
+    data[0]["all_attr"] = {};
+    data[0].all_attr.public = 0.7;
+    const Dataset = Randis(data).Dataset;
     const labelArray = all_data[0].labelArray;
-    const trainData = all_data[1].Dataset;
+    const trainData = Dataset[0];
     const textData = all_data[2].Dataset;
 
     const x = selectData(trainData, labelArray.train_x);
     const y = selectDataUntransport(trainData, labelArray.train_y);
     const predict = selectData(textData, labelArray.predict_x);
 
+    const testx = selectData(Dataset[1], labelArray.train_x);
+    const testy = selectDataUntransport(Dataset[1], labelArray.train_y);
 
-    var model = new GaussianNB();
+    const model = new GaussianNB();
     model.train(x, y);
-    var predictObj = model.predict(predict);
-    // console.log(x);
-    // console.log(y);
-    // console.log(predictObj);
-    // const confusionMatrix = 
-    //     crossValidation.leaveOneOut(
-    //         dataset, 
-    //         labels, 
-    //         function(trainFeatures, trainLabels, testFeatures) {
-    //             return model.predict(testFeatures);
-    // });
-    // const accuracy = confusionMatrix.getAccuracy();
-    // console.log(confusionMatrix)
-    // console.log("准确率：")
-    // console.log(accuracy*100+"%")
-    return normalize(trainData, predictObj, labelArray.predict_y)
-}  
-    //model.train(Xtrain, Ytrain);
+    var pre = model.predict(testx)
+    
+    const CM2 = ConfusionMatrix.fromLabels(testy, pre);
 
-    //var predictions = model.predict(Xtest);
+    var predictObj = model.predict(predict);
+
+    var resultData = normalize(textData, predictObj, labelArray.predict_y);
+    resultData["evaluation"]=[["Precision",CM2.getAccuracy(),"正确率"]];
+    return resultData;
+}  

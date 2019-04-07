@@ -1,5 +1,5 @@
 import React from 'react'
-import { Modal, Table , Icon,Collapse,Row,Col,Button,Cascader,Card} from 'antd';
+import { Modal, Table , Icon,Collapse,Row,Col,Button,Cascader,Card, Form, Input} from 'antd';
 import {
   Command,
   NodeMenu,
@@ -36,11 +36,12 @@ class FlowContextMenu extends React.Component {
     currentIndex:[],
     data:[],
     list:[],
-    newRandomkey:0
+    newRandomkey:0,
+    groupNumbers:3
     // filterDropdownVisible:false
   }
 
-  Chart = (indexOfFeature,data,showType)=>{
+  Chart = (indexOfFeature,data,showType,groupDivide)=>{
     this.setState({
       currentIndex:indexOfFeature,
       compareVisible:true
@@ -53,24 +54,41 @@ class FlowContextMenu extends React.Component {
       },
       {Dataset:[data]}
     ];
-    chartData[0].all_attr[`${data.label}`] = ['normal', 3];
+    chartData[0].all_attr[`${data.label}`] = ['normal', groupDivide];
     chartData = SeprtbyFeat(chartData)['Dataset'][0].group;
     if(showType === 'bar'){
       var xAxisGroup = new Array();
       var seriesGroup = [{
-        name: '频数',
         type: 'bar',
         data: new Array()
       }];
-      for(let i in chartData){
+      console.log(chartData)
+      if(data.stat.type === 'string'){
+        for(let i in chartData){
+          xAxisGroup.push(chartData[i][0]);
+          seriesGroup[0].data.push(chartData[i][2]);
+        }
+      }
+      else for(let i in chartData){
         xAxisGroup.push(`${parseInt(chartData[i][0])}`+'-'+`${parseInt(chartData[i][1])}`);
         seriesGroup[0].data.push(chartData[i][2]);
       }
       myChart.setOption({
         xAxis: {
-            data: xAxisGroup
+            data: xAxisGroup,
+            name: '数值',
+            axisLabel: {  
+              interval:0,  
+              rotate:40  
+            }
         },
-        yAxis: {},
+        yAxis: {
+          name: '频数'
+        },
+        grid: {
+          right: '15%',
+          containLabel: true
+        },
         series: seriesGroup
     });
     }
@@ -95,7 +113,7 @@ class FlowContextMenu extends React.Component {
     else if(showType === 'box'){
       document.getElementById('main').removeAttribute("_echarts_instance_")
       var myChart = echarts.init(document.getElementById('main'));
-      let Data = dataTool.prepareBoxplotData([this.state.currentData[indexOfFeature].value]);
+      let Data = dataTool.prepareBoxplotData([data.value]);
       
       myChart.setOption({
         xAxis: {
@@ -107,7 +125,7 @@ class FlowContextMenu extends React.Component {
               show: false
           },
           axisLabel: {
-              formatter: this.state.currentData[indexOfFeature].label
+              formatter: data.label
           },
           splitLine: {
               show: false
@@ -115,6 +133,7 @@ class FlowContextMenu extends React.Component {
         },
         yAxis: {
             type: 'value',
+            name: '数值',
             splitArea: {
                 show: true
             }
@@ -145,26 +164,30 @@ class FlowContextMenu extends React.Component {
     const { propsAPI } = this.props;
     var item = propsAPI.getSelected()[0];
     const currentData = item.getModel().Dataset;
+    if(currentData.length === 0) return ;
+    if(item.getModel().anchor[1] > 1) return ;
     var columns = new Array()
     var sum = 0;
     for(let i = 0; i < currentData.length; i++){
       let first = currentData[i].value[0]
       let len = 50;
-      len = String(first).length>currentData[i].label.length?(String(first).length+2)*15:(currentData[i].label.length+2)*15;
+      len = String(first).length>currentData[i].label.length?(String(first).length+2)*13:(currentData[i].label.length+2)*13;
       sum = sum+len
       columns.push({
                   title : currentData[i].label,
                   dataIndex: currentData[i].label,
                   width : len,
+                  align: 'center',
                   filterDropdown: (
                   <div>
-                    <Button onClick={()=>{this.Chart(i,currentData[i],"bar")}}>柱状图</Button>
+                    <Button onClick={()=>{this.Chart(i,currentData[i],"bar", this.state.groupNumbers)}}>柱状图</Button>
                     <br></br>
-                    <Button onClick={()=>{this.Chart(i,currentData[i],"pie")}}>饼图</Button>
+                    <Button onClick={()=>{this.Chart(i,currentData[i],"pie", this.state.groupNumbers)}}>饼图</Button>
                     <br></br>
-                    <Button onClick={()=>{this.Chart(i,currentData[i],"box")}}>箱线图</Button>
+                    <Button onClick={()=>{this.Chart(i,currentData[i],"box", this.state.groupNumbers)}}>箱线图</Button>
                   </div>
                   ),
+                
                 // filterDropdownVisible: this.state.filterDropdownVisible,
                 // onFilterDropdownVisibleChange: ()=> this.setState({ filterDropdownVisible: true }),
                 })
@@ -270,7 +293,7 @@ class FlowContextMenu extends React.Component {
     const { getSelected } = propsAPI;
     const item = getSelected()[0];
     const currentNode = item.getModel();
-    if (currentNode.group == "ml"){
+    if (currentNode.group == "ml" && currentNode.evaluation){
         var ev = currentNode.evaluation;
         this.setState({evaluation:ev})
         this.setState({MlEvaluteVisible:true})
@@ -292,7 +315,6 @@ class FlowContextMenu extends React.Component {
 
     if(chosenName[0] != "None"){
 
-        console.log(data)
         var xName = data[this.state.currentIndex].label
         var xData = data[this.state.currentIndex].value
         var yData = []
@@ -341,6 +363,57 @@ class FlowContextMenu extends React.Component {
           <span>compare to  </span>
           <Cascader defaultValue={["None"]} options={options} onChange={this.onChange} size="small" />
         </div>
+      )
+    }
+  }
+  
+  handleGroupDivide=(e)=>{
+    e.preventDefault();
+    const { form } = this.props;
+    form.validateFieldsAndScroll((err, values) => {
+      if (err) {
+        return;
+      }
+      this.setState({groupNumbers: values.groups})
+      const { propsAPI } = this.props;
+      var item = propsAPI.getSelected()[0];
+      const currentData = item.getModel().Dataset;
+      this.Chart(this.state.currentIndex, currentData[this.state.currentIndex], 'bar', values.groups)
+    });
+  }
+
+  groupDivide=()=>{
+    if(this.state.compareVisible){
+      const { getFieldDecorator } = this.props.form;
+      const { Item } = Form;
+      const inlineFormItemLayout = {
+        labelCol: {
+          sm: { span: 4 },
+        },
+        wrapperCol: {
+          sm: { span: 10 },
+        },
+      };
+      return(
+          <Form>  
+            <Item style={{margin:0}} label="groups" {...inlineFormItemLayout}>
+                {
+                  getFieldDecorator("groups" , {
+                    rules:[{
+                      required:false,
+                      pattern: new RegExp(/^[1-9]\d*$/, "g"),
+                      message: '请输入数字'
+                    }],
+                    initialValue: this.state.groupNumbers,
+                  })(<Input 
+                      style={{margin:0}} 
+                      onBlur={this.handleGroupDivide} 
+                      size="small" 
+                      onPressEnter={this.handleGroupDivide}
+                    />)
+                }
+            </Item>
+          </Form>
       )
     }
   }
@@ -483,22 +556,12 @@ class FlowContextMenu extends React.Component {
             </div>
           </Command>
           <Command name="copy">
-            <div className={styles.item} onClick={this.showNModal}>
-              <Icon type="line-chart" />
-              <span>图形化展示</span>
-            </div>
-          </Command>
-
-          <Command name="copy">
             <div className={styles.item} onClick={this.modelEvaluation}>
               <Icon type="solution" />
               <span>模型评估</span>
             </div>
           </Command>
-
         </NodeMenu>
-      
-
         <Modal title="模型评估" visible={this.state.MlEvaluteVisible}
           onOk={this.handleOk} onCancel={this.handleCancel} width={500}
         >
@@ -527,54 +590,44 @@ class FlowContextMenu extends React.Component {
 
         <Modal
           key={this.state.newRandomkey}
-          title="Basic Modal" 
+          title="数据展示" 
           visible={this.state.visible} 
           style={{ top: 30 }}  
           width={1200} 
           onOk={this.handleOk} 
           onCancel={this.handleCancel}
         >
-        <Row>
-        <Col span={15} >
-          <div data-step="4" data-intro='在这里显示数据'>
-          <Table 
-            columns={this.state.col} 
-            dataSource={this.state.data} 
-            pagination={{ pageSize: 70 }}  
-            scroll={{x:`${this.state.sum}px`, y: 480 }}   
-            size="small" />
-          </div>
-        </Col>
-
-         <Col span={1} >
-          
-          </Col>   
-
-          <Col span={8} >
-            <Collapse bordered={false} defaultActiveKey={['1','2']}>
-              <Panel header="统计信息" key="1" data-step="5" data-intro='在这里显示数据的详细统计信息'>
-                <div data-step="5" data-intro='在这里显示数据的详细统计信息'>
-                {this.staticInformation()}
-                </div>
-              </Panel>
+          <Row>
+            <Col span={15} >
+              <div >
+              <Table 
+                columns={this.state.col} 
+                dataSource={this.state.data} 
+                pagination={{ pageSize: 70 }}  
+                scroll={{x:`${this.state.sum}px`, y: 460 }}   
+                size="small" />
+              </div>
+            </Col>
+            <Col span={1} >        
+            </Col>   
+            <Col span={8} >
+              <Collapse bordered={false} defaultActiveKey={['1','2']}>
+                <Panel header="统计信息" key="1">
+                  <div data-step="5">
+                  {this.staticInformation()}
+                  </div>
+                </Panel>
               
-
-              <Panel header="可视化" key="2"  >
-                <div data-step="6" data-intro='在这里看到图形化的数据情况'>
-                <div>{this.compare()}</div>           
-                <div id="main" style={{ width: 300, height: 300 }}> </div>
-                </div>
-              </Panel>
-            </Collapse>
-          </Col>
-
+                <Panel header="可视化" key="2"  >
+                  <div >
+                    <div>{this.compare()}{this.groupDivide()}</div>         
+                    <div id="main" style={{ maxWidth: 350, height: 280 }}> </div>
+                  </div>
+                </Panel>
+              </Collapse>
+            </Col>
           </Row>
-          <div id='root' >
-              <Card bordered={true} style={{ width: '100%' }} >
-                  <Button type="primary" shape='circle' icon='question' onClick={() => this.Intro1()}></Button>
-                  <span>需要帮助吗？在这里点击按钮开始引导</span>
-              </Card>
-          </div>
+         
         </Modal>
 
 
@@ -662,4 +715,4 @@ class FlowContextMenu extends React.Component {
   }
 }
 
-export default withPropsAPI(FlowContextMenu);
+export default Form.create()(withPropsAPI(FlowContextMenu));

@@ -12,7 +12,7 @@ class FlowItemPanel extends React.Component {
         defaultOpenKeys={['sub1','sub2','sub3']}
         mode="inline"
         className={styles.scrollapp}
-        style={{maxHeight:'calc(100vh - 34px)'}}
+        style={{maxHeight:'calc(100vh - 105px)'}}
         selectable={false}
       >
       <GGEditor style={{height:0, width:0}}>
@@ -87,8 +87,12 @@ class FlowItemPanel extends React.Component {
                 return keyShape;
               },
               anchor: [
-                [ 0.5, 0],
-                [ 0.5, 1],
+                [ 0.5, 0, {
+                  type: 'input'
+                }],
+                [ 0.5, 1, {
+                  type: 'output'
+                }],
               ],
               type_icon_url: 'https://gw.alipayobjects.com/zos/rmsportal/czNEJAmyDpclFaSucYWB.svg',
             }}
@@ -98,9 +102,15 @@ class FlowItemPanel extends React.Component {
             name = {'two-one'}
             config =  {{
               anchor: [
-                [ 0.33, 0],
-                [ 0.66, 0],
-                [ 0.5, 1]
+                [ 0.33, 0, {
+                  type: 'input'
+                }],
+                [ 0.66, 0, {
+                  type: 'input'
+                }],
+                [ 0.5, 1, {
+                  type: 'output'
+                }]
               ]
             }}
             extend = {'model-all'}
@@ -109,8 +119,12 @@ class FlowItemPanel extends React.Component {
             name = {'one-one'}
             config =  {{
               anchor: [
-                [ 0.5, 0],
-                [ 0.5, 1]
+                [ 0.5, 0, {
+                  type: 'input'
+                }],
+                [ 0.5, 1, {
+                  type: 'output'
+                }]
               ]
             }}
             extend = {'model-all'}
@@ -119,9 +133,15 @@ class FlowItemPanel extends React.Component {
             name = {'one-two'}
             config =  {{
               anchor: [
-                [ 0.5, 0],
-                [ 0.33, 1],
-                [ 0.66, 1]
+                [ 0.5, 0, {
+                  type: 'input'
+                }],
+                [ 0.33, 1, {
+                  type: 'output'
+                }],
+                [ 0.66, 1, {
+                  type: 'output'
+                }]
               ]
             }}
             extend = {'model-all'}
@@ -130,7 +150,9 @@ class FlowItemPanel extends React.Component {
             name = {'zero-one'}
             config =  {{
               anchor: [
-                [ 0.5, 1]
+                [ 0.5, 1, {
+                  type: 'output'
+                }]
               ]
             }}
             extend = {'model-all'}
@@ -139,14 +161,16 @@ class FlowItemPanel extends React.Component {
             name = {'one-zero'}
             config =  {{
               anchor: [
-                [ 0.5, 0]
+                [ 0.5, 0, {
+                  type: 'input'
+                }]
               ]
             }}
             extend = {'model-all'}
           />
         </GGEditor>
       <SubMenu key="sub1" title={<span><Icon type="mail" /><span>数据源</span></span>}>
-          <Menu.Item key="1" ><Tooltip title="左击拖拽至右面"><div> <ItemPanel><Item
+          <Menu.Item key="1" ><Tooltip title="左键单击拖拽至右面" placement="rightTop" ><div> <ItemPanel><Item
             type="node"
             size="200*40"
             shape='zero-one'
@@ -166,28 +190,7 @@ class FlowItemPanel extends React.Component {
             }}         
           /></ItemPanel></div></Tooltip></Menu.Item>
           <Menu.Item key="2" > 
-          <Tooltip title="左击拖拽至右面">
-          <div><ItemPanel><Item
-            type="node"
-            size="200*40"
-            shape='zero-one'
-            model={{
-              label: 'hdfs数据',
-              elabel:'hdfsFile',
-              attr:{},
-              Dataset: [],
-              labelArray: {}, 
-              length: 0,
-              anchor: [0, 1],
-              group:'input',
-              keyConfig:{
-                color_type: '#1890FF',
-                state_icon_url: 'https://gw.alipayobjects.com/zos/rmsportal/uZVdwjJGqDooqKLKtvGA.svg',
-              }
-            }}         
-          /></ItemPanel></div></Tooltip></Menu.Item>
-          <Menu.Item key="3" > 
-          <Tooltip title="左击拖拽至右面">
+          <Tooltip title="左键单击拖拽至右面" placement="rightTop">
           <div><ItemPanel><Item
             type="node"
             size="200*40"
@@ -207,8 +210,8 @@ class FlowItemPanel extends React.Component {
               }
             }}         
           /></ItemPanel></div></Tooltip></Menu.Item>
-          <Menu.Item key="4" > 
-          <Tooltip title="左击拖拽至右面">
+          <Menu.Item key="3" > 
+          <Tooltip title="左键单击拖拽至右面" placement="rightTop">
           <div><ItemPanel><Item
             type="node"
             size="200*40"
@@ -291,7 +294,7 @@ class FlowItemPanel extends React.Component {
         </SubMenu> */}
         
       <SubMenu key="sub2" title={<span><Icon type="mail" /><span>数据预处理</span></span>}>
-      <Menu.Item key="7"><Tooltip title="左击拖拽至右面">
+      <Menu.Item key="7"><Tooltip title="左键单击拖拽至右面" placement="rightTop">
           <div><ItemPanel><Item
             type="node"
             size="200*40"
@@ -312,7 +315,7 @@ class FlowItemPanel extends React.Component {
             }}      
       /></ItemPanel></div></Tooltip></Menu.Item>
 
-      <Menu.Item key="8"><Tooltip title="左击拖拽至右面">
+      <Menu.Item key="8"><Tooltip title="左键单击拖拽至右面" placement="rightTop">
           <div><ItemPanel><Item
             type="node"
             size="200*40"
@@ -333,7 +336,7 @@ class FlowItemPanel extends React.Component {
             }}
            /></ItemPanel></div></Tooltip></Menu.Item>
 
-          <Menu.Item key="9"><Tooltip title="左击拖拽至右面">
+          <Menu.Item key="9"><Tooltip title="左键单击拖拽至右面" placement="rightTop">
           <div><ItemPanel><Item
             type="node"
             size="200*40"
@@ -353,7 +356,7 @@ class FlowItemPanel extends React.Component {
             }}
           /></ItemPanel></div></Tooltip></Menu.Item>
 
-          <Menu.Item key="10"><Tooltip title="左击拖拽至右面">
+          <Menu.Item key="10"><Tooltip title="左键单击拖拽至右面" placement="rightTop">
           <div><ItemPanel><Item
             type="node"
             size="200*40"
@@ -373,7 +376,7 @@ class FlowItemPanel extends React.Component {
             }}    
           /></ItemPanel></div></Tooltip></Menu.Item>
 
-          <Menu.Item key="11"><Tooltip title="左击拖拽至右面">
+          <Menu.Item key="11"><Tooltip title="左键单击拖拽至右面" placement="rightTop">
           <div><ItemPanel><Item
             type="node"
             size="200*40"
@@ -392,7 +395,7 @@ class FlowItemPanel extends React.Component {
               }
             }}           
           /></ItemPanel></div></Tooltip></Menu.Item>
-          <Menu.Item key="12"><Tooltip title="左击拖拽至右面">
+          <Menu.Item key="12"><Tooltip title="左键单击拖拽至右面" placement="rightTop">
           <div><ItemPanel><Item
             type="node"
             size="200*40"
@@ -412,7 +415,7 @@ class FlowItemPanel extends React.Component {
             }}           
           /></ItemPanel></div></Tooltip></Menu.Item>
 
-          <Menu.Item key="21"><Tooltip title="左击拖拽至右面">
+          <Menu.Item key="21"><Tooltip title="左键单击拖拽至右面" placement="rightTop">
           <div><ItemPanel><Item
             type="node"
             size="200*40"
@@ -437,7 +440,7 @@ class FlowItemPanel extends React.Component {
       <SubMenu key="sub3" title={<span><Icon type="appstore" /><span>机器学习</span></span>}>
         <SubMenu key="g3" title="回归">
         
-          <Menu.Item key="13"><Tooltip title="左击拖拽至右面">
+          <Menu.Item key="13"><Tooltip title="左键单击拖拽至右面" placement="rightTop">
           <div><ItemPanel><Item
               type="node"
               size="200*40"
@@ -458,7 +461,7 @@ class FlowItemPanel extends React.Component {
               }}
               
             /></ItemPanel></div></Tooltip></Menu.Item>
-          <Menu.Item key="14"><Tooltip title="左击拖拽至右面">
+          <Menu.Item key="14"><Tooltip title="左键单击拖拽至右面" placement="rightTop">
           <div><ItemPanel><Item
               type="node"
               size="200*40"
@@ -478,7 +481,7 @@ class FlowItemPanel extends React.Component {
               }}            
             /></ItemPanel></div></Tooltip></Menu.Item>
 
-            <Menu.Item key="15"><Tooltip title="左击拖拽至右面">
+            <Menu.Item key="15"><Tooltip title="左键单击拖拽至右面" placement="rightTop">
           <div><ItemPanel><Item
               type="node"
               size="200*40"
@@ -498,7 +501,7 @@ class FlowItemPanel extends React.Component {
               }}           
             /></ItemPanel></div></Tooltip></Menu.Item>
 
-            <Menu.Item key="16"><Tooltip title="左击拖拽至右面">
+            <Menu.Item key="16"><Tooltip title="左键单击拖拽至右面" placement="rightTop">
           <div><ItemPanel><Item
               type="node"
               size="200*40"
@@ -517,7 +520,7 @@ class FlowItemPanel extends React.Component {
                 }
               }}              
             /></ItemPanel></div></Tooltip></Menu.Item>
-            <Menu.Item key="17"><Tooltip title="左击拖拽至右面">
+            <Menu.Item key="17"><Tooltip title="左键单击拖拽至右面" placement="rightTop">
           <div><ItemPanel><Item
               type="node"
               size="200*40"
@@ -544,7 +547,7 @@ class FlowItemPanel extends React.Component {
         </SubMenu>
 
         <SubMenu key="g4" title="分类">
-          <Menu.Item key="18"><Tooltip title="左击拖拽至右面">
+          <Menu.Item key="18"><Tooltip title="左键单击拖拽至右面" placement="rightTop">
           <div><ItemPanel><Item
             type="node"
             size="200*40"
@@ -564,7 +567,7 @@ class FlowItemPanel extends React.Component {
             }}   
           /></ItemPanel></div></Tooltip></Menu.Item>
 
-          <Menu.Item key="19"><Tooltip title="左击拖拽至右面">
+          <Menu.Item key="19"><Tooltip title="左键单击拖拽至右面" placement="rightTop">
           <div><ItemPanel><Item
             type="node"
             size="200*40"
@@ -593,7 +596,7 @@ class FlowItemPanel extends React.Component {
         </SubMenu>
       </SubMenu>
       <SubMenu key="sub4" title={<span><Icon type="setting" /><span>深度学习</span></span>}>
-      <Menu.Item key="20"><Tooltip title="左击拖拽至右面">
+      <Menu.Item key="20"><Tooltip title="左键单击拖拽至右面" placement="rightTop">
           <div><ItemPanel><Item
             type="node"
             size="200*40"
