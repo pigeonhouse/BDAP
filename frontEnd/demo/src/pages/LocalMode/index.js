@@ -35,7 +35,7 @@ class LocalMode extends React.Component {
     }).onexit(function () {
     }).start();
 }
-  state = {itemPanel:'FlowDataPanel'}
+  state = {itemPanel:'FlowItemPanel'}
   componentDidMount(){
     const key = `open${Date.now()}`;
     const btn = (
