@@ -9,6 +9,7 @@ import HdfsFile from '../DataOperate/hdfsFile'
 import styles from './index.less';
 import Feature from '../DataOperate/Feature'
 import Papa from 'papaparse'
+import { Stat } from '../DataOperate/stat'
 
 const { Item } = Form;
 
@@ -27,7 +28,6 @@ class NodeDetail extends React.Component {
     visible: false,
     running : false,
     labelArray:[],
-    dataTable:[]
   }
 
   componentWillMount(){
@@ -127,11 +127,39 @@ class NodeDetail extends React.Component {
             for(let i = 1; i<len; i++){
                 s = s + "\n" + respData[i]
             }
-            console.log('update')
-            console.log('update')
-            this.setState({
-              dataTable:Papa.parse(s,{header:true,dynamicTyping: true}),
-            });
+            var fieldNameArray = [];
+            let vectorLength;
+            const { propsAPI } = this.props;
+            const { getSelected, update } = propsAPI;
+            var results = Papa.parse(s,{header:true,dynamicTyping: true});
+            fieldNameArray.push(results.meta.fields);
+            vectorLength = results.data.length - 1
+            var n = new Array();
+
+            for(let indexOfCols = 0; indexOfCols < fieldNameArray[0].length; indexOfCols++){
+              var colName = fieldNameArray[0][indexOfCols];
+              var colValue = new Array();
+              for (let indexOfRows = 0; indexOfRows < results.data.length - 1; indexOfRows++){
+              colValue.push(results.data[indexOfRows][colName])
+              }
+              n.push({label:colName,value:colValue})
+              }
+              var STAT = new Array();
+              STAT = Stat(n);
+              let m = fieldNameArray[0].map((item)=>{
+                return [item, false];
+              })
+              var values = {
+                  Dataset:STAT,
+                  labelArray:{public:m}, 
+                  length:vectorLength
+              }
+              const item = getSelected()[0];
+              values['keyConfig'] = JSON.parse(JSON.stringify(item.model.keyConfig));
+              values.keyConfig.state_icon_url = 'https://gw.alipayobjects.com/zos/rmsportal/MXXetJAxlqrbisIuZxDO.svg';
+              update(item, {...values});
+              console.log("propsAPI")
+              console.log(propsAPI.save())
             })
           }
         })
@@ -196,15 +224,12 @@ class NodeDetail extends React.Component {
   render() {
     const { form, propsAPI } = this.props;
     const { getFieldDecorator } = form;
-    const { getSelected, update } = propsAPI;
+    const { getSelected } = propsAPI;
 
     const item = getSelected()[0];
     
     if (!item) {
       return null;
-    }
-    if(this.state.dataTable.length !== 0){
-      console.log(this.state.dataTable)
     }
     const { label, attr, anchor, group, Dataset } = item.getModel();
 
