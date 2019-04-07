@@ -40,7 +40,7 @@ class LocalMode extends React.Component {
     const key = `open${Date.now()}`;
     const btn = (
       <Button type="primary" onClick={() => this.Intro(key)}>
-        我需要
+        需要
       </Button>
     );
     notification.open({
