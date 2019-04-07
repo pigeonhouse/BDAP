@@ -1,4 +1,4 @@
-export function fillNa(allData){
+export function Nomalize(allData){
     var Dataset = allData[1].Dataset;
     var tem, temp;
     var labelArray = new Array();
@@ -15,8 +15,13 @@ export function fillNa(allData){
     for(let i = 0; i < labelArray.length;i++){
         if(labelArray[i][1] == true && Dataset[i].stat.type == "number"){
             for(let j = 0; j < Dataset[i].value.length; j++){
-                let x = 1/(1+Math.exp(Dataset[i].value[j]));
-                Dataset[i].value[j] = x;
+                if(Dataset[i].value[j]!=null && typeof(Dataset[i].value[j])=="number"){
+                    let x = (Dataset[i].value[j]-Dataset[i].stat.min)/(Dataset[i].stat.max-Dataset[i].stat.min);
+                    Dataset[i].value[j] = x;
+                }
+                else{
+                    //process string and null
+                }
             }      
         }
     }
