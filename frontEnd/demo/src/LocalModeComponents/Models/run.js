@@ -15,6 +15,7 @@ import { Randis } from '../DataOperate/DataProcess/Randis'
 import { SelectCol } from '../DataOperate/DataProcess/SelectCol'
 import { SeprtbyFeat } from '../DataOperate/DataProcess/SeprtbyFeat'
 import { StrToNum } from '../DataOperate/DataProcess/StrToNum';
+import { Nomalize } from '../DataOperate/DataProcess/Nomalize';
 var current = 0;
 class Run extends Component{
   state = { 
@@ -196,7 +197,7 @@ class Run extends Component{
                 outcome = fillNa(all_data);
                 break
             case '归一化':
-                outcome = Scaler(all_data);
+                outcome = Nomalize(all_data);
                 break
             case '卷积神经网络':
                 this.showModal()

@@ -73,18 +73,20 @@ export function Stat(n){
       //     }
       //   }
       // }
-
+      let tem_avr = parseFloat((total/n[i].value.length));
       stat = {};
       stat.max = Max;
       stat.min = Min;
       stat.numOfNull = count;
-      stat.average = (total/n[i].value.length).toFixed(2);
+      stat.average = Math.floor(tem_avr*100)/100;
       stat.median = Median;
-      stat.variance = Variance.toFixed(2);
-      stat.standardDeviation = StandardDeviation.toFixed(2);
+      stat.variance = Math.floor(Variance*100)/100;
+      stat.standardDeviation = Math.floor(StandardDeviation*100)/100;
       stat.type = 'number';
       temp = 0;
       n[i].stat = stat;
     }
+    console.log("stat")
+    console.log(n);
     return n;
 }
