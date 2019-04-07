@@ -1,3 +1,4 @@
+import { Stat } from "../stat";
 export function Randis(allData){
     var attr = allData[0].all_attr;
     var Dataset = allData[1].Dataset;
@@ -78,6 +79,8 @@ export function Randis(allData){
             }
         }
     }
+    Stat(tem1);
+    Stat(tem2);
     tem = new Array();
     tem.push(tem1);
     tem.push(tem2);
