@@ -39,6 +39,7 @@ class LocalMode extends React.Component {
     remind:'false',
   }
   noRemind=(key)=>{
+    notification.close(key)
     let accountInfo = this.state.username+ '&' +this.state.password+'&false';
     let Days = 3;
     let exp = new Date();
@@ -96,7 +97,7 @@ class LocalMode extends React.Component {
         },
         duration: 2,
         btn,
-        // key
+        key
       });
     }
   }
