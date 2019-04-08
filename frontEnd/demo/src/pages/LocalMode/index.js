@@ -31,32 +31,74 @@ class LocalMode extends React.Component {
     }).onexit(function () {
     }).start();
 }
-  state = {currentTab:'1', dataTable:[]}
+  state = {
+    currentTab:'1', 
+    dataTable:[], 
+    username:'',
+    password:'',
+    remind:'false',
+  }
   noRemind=(key)=>{
-
+    let accountInfo = this.state.username+ '&' +this.state.password+'&false';
+    let Days = 3;
+    let exp = new Date();
+    exp.setTime(exp.getTime() + Days*24*60*60*1000);
+    document.cookie = 'accountInfo' + "="+ escape(accountInfo) + ";expires=" + exp.toGMTString()
+  }
+  componentWillMount(){
+    let arr,reg=new RegExp("(^| )"+'accountInfo'+"=([^;]*)(;|$)");
+    let accountInfo =''
+    
+    if(arr=document.cookie.match(reg)){
+        accountInfo = unescape(arr[2]);
+    }
+    else{
+        accountInfo = null;
+    }
+    if(Boolean(accountInfo) == false){
+        return false;
+    }else{
+        let userName = "";
+        let passWord = "";
+        let Remind = "";
+ 
+        let i=new Array()
+        i = accountInfo.split("&");
+        userName = i[0],
+        passWord = i[1],
+        Remind = i[2],
+        this.setState({
+            username: userName,
+            password: passWord,
+            remind: Remind
+        })
+      }
   }
   componentDidMount(){
-    const key = `open${Date.now()}`;
-    const btn = (
-      <div>
-        <Button type="primary" onClick={() => this.Intro(key)} style={{marginRight:'10px'}}>
-          需要
-        </Button>
-        <Button type="primary" onClick={() => this.noRemind(key)}>
-          不再提醒
-        </Button>
-      </div>
-    );
-    notification.open({
-      message: '是否需要帮助？',
-      description: '点击下方的"需要"按钮，可以帮助您进行简单的引导。',
-      style: {
-        width: 400,
-      },
-      duration: 2,
-      btn,
-      // key
-    });
+    console.log(this.state.remind)
+    if(this.state.remind === 'true'){
+      const key = `open${Date.now()}`;
+      const btn = (
+        <div>
+          <Button type="primary" onClick={() => this.Intro(key)} style={{marginRight:'10px'}}>
+            需要
+          </Button>
+          <Button type="primary" onClick={() => this.noRemind(key)}>
+            不再提醒
+          </Button>
+        </div>
+      );
+      notification.open({
+        message: '是否需要帮助？',
+        description: '点击下方的"需要"按钮，可以帮助您进行简单的引导。',
+        style: {
+          width: 400,
+        },
+        duration: 2,
+        btn,
+        // key
+      });
+    }
   }
   tabChange=(value)=>{
     this.setState({currentTab:value})

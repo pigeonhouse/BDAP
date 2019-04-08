@@ -10,6 +10,7 @@ class HomePage extends React.Component {
     resirect:false,
     username: '',
     password: '',
+    remind:'',
     rememberPassword: false,
   }
   loadAccountInfo=()=>{
@@ -26,15 +27,17 @@ class HomePage extends React.Component {
     }else{
         let userName = "";
         let passWord = "";
+        let Remind = "";
  
         let i=new Array()
         i = accountInfo.split("&");
         userName = i[0],
         passWord = i[1],
- 
+        Remind = i[2],
         this.setState({
             username: userName,
             password: passWord,
+            remind: Remind
         })
       }
   }
@@ -49,7 +52,11 @@ class HomePage extends React.Component {
       if(!err){
         if(values.username==='demo' && values.password==='123456'){
           if(values.remember){
-            let accountInfo = values.username+ '&' +values.password;
+            let accountInfo = '';
+            if(this.state.remind === '')
+              accountInfo = values.username+ '&' +values.password + '&' + 'true';
+            else accountInfo = values.username+ '&' +values.password + '&' + this.state.remind;
+            console.log(accountInfo)
             let Days = 3;
             let exp = new Date();
             exp.setTime(exp.getTime() + Days*24*60*60*1000);
