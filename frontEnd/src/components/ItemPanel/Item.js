@@ -9,6 +9,7 @@ class Item extends React.Component {
   constructor(props) {
     super(props);
     this.bindEvent();
+
     this.state={
       isMouseEnter:'no'
     }
@@ -33,14 +34,18 @@ class Item extends React.Component {
       this.page = page;
     });
   }
-  iconClose=(group)=>{
-    if(group === 'input' && this.state.isMouseEnter === 'yes'){
+  iconClose=(group, label)=>{
+    if(group === 'input' && this.state.isMouseEnter === 'yes'
+      && label !== '本地数据' && label !== 'Titanic测试' && label !== 'Titanic训练'){
       return (
         <Col span={4}>
-          <Icon type="close" className={styles.iconCloseStyle} />
+          <Icon type="close" className={styles.iconCloseStyle} onClick={this.handleClickClose.bind(this, label)}/>
         </Col>
       )
     }
+  }
+  handleClickClose=(label)=>{
+    this.props.deleteDataName(label);
   }
   handleMouseEnter=()=>{
     this.setState({isMouseEnter:'yes'})
@@ -62,7 +67,7 @@ class Item extends React.Component {
             <Icon type='bars'/>
             <span>{model.label}</span>
           </Col> 
-          {this.iconClose(model.group)}       
+          {this.iconClose(model.group, model.label)}       
         </Row>
       </div>
     );

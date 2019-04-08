@@ -28,6 +28,31 @@ class FlowDataPanel extends React.Component {
       this.setState({dataTable:nextProps.dataTable})
     }
   }
+  deleteFile = (dataName)=>{
+    const init={
+      method: 'POST', 
+      body:"fileName="+dataName,
+      mode: 'cors',
+      headers: {
+        "Content-Type": "application/x-www-form-urlencoded;charset=utf-8"
+    　　 },
+      }
+      fetch(
+        'http://10.105.222.92:3000/DeleteFile',init
+      )
+      .then((response) => {
+        return response.json()
+      })
+      .then(a=>console.log(a))
+      .catch(e => console.log('错误:', e))
+  }
+  deleteDataName=(dataName)=>{
+    var dataTable = this.state.dataTable;
+    const index = dataTable.indexOf(dataName);
+    dataTable.splice(index, 1);
+    this.setState({dataTable})
+    this.deleteFile(dataName);
+  }
   render() {
     var children = [];
     if(this.state.dataTable.length !== 0){
@@ -55,7 +80,8 @@ class FlowDataPanel extends React.Component {
                         color_type: '#1890FF',
                         state_icon_url: 'https://gw.alipayobjects.com/zos/rmsportal/uZVdwjJGqDooqKLKtvGA.svg',
                       }
-                    }}         
+                    }}
+                    deleteDataName={this.deleteDataName}    
                   />
                 </ItemPanel>
               </div>

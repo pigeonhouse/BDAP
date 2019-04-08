@@ -53,24 +53,6 @@ class LocalMode extends React.Component {
   tabChange=(value)=>{
     this.setState({currentTab:value})
   }
-  deleteFile = ()=>{
-    const init={
-      method: 'POST', 
-      body:"fileName=支持向量机.csv",
-      mode: 'cors',
-      headers: {
-        "Content-Type": "application/x-www-form-urlencoded;charset=utf-8"
-    　　 },
-      }
-      fetch(
-        'http://10.105.222.92:3000/DeleteFile',init
-      )
-      .then((response) => {
-        return response.json()
-      })
-      .then(a=>console.log(a))
-      .catch(e => console.log('错误:', e))
-  }
   handleChange=(info)=>{
     if (info.file.status === 'done') {
       message.success(`${info.file.name} file uploaded successfully`);
@@ -97,9 +79,6 @@ class LocalMode extends React.Component {
           </Col>
           <Col span={21}>
             <Button style={{border:0,backgroundColor:'#343941',color:"#ddd",fontSize:18,fontFamily:'consolas'}}>BigDataPlayground Local-Mode</Button>
-             <Button onClick={()=>this.deleteFile()}>
-              delete
-            </Button> 
           </Col>      
           <Col span={2}>
             <a href="https://www.yuque.com/ddrid/tx7z84">
