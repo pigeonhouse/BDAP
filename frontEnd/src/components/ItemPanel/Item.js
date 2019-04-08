@@ -1,7 +1,7 @@
 import React from 'react';
 import withGGEditorContext from '@common/context/GGEditorContext/withGGEditorContext';
-
-import { Menu, Icon } from 'antd';
+import styles from './index.less'
+import { Menu, Icon, Row,Col } from 'antd';
 const SubMenu = Menu.SubMenu;
 const MenuItemGroup = Menu.ItemGroup;
 
@@ -30,15 +30,31 @@ class Item extends React.Component {
       this.page = page;
     });
   }
-
+  iconClose=(group)=>{
+    if(group === 'input'){
+      return (
+        <Col span={4}>
+          <Icon type="close" style={{ cursor:"pointer"}} />
+        </Col>
+      )
+    }
+  }
   render() {
     const { model } = this.props;
     return (
       <div 
-        style={{ cursor: 'pointer' }} 
+        style={{ cursor: 'pointer', verticalAlign: 'middle'}} 
         onMouseDown={this.handleMouseDown}
       >
-        <div style={{paddingLeft:5,fontSize:13, cursor:'move'}}><Icon type='bars'/><span>{model.label}</span></div>
+        <Row style={{paddingLeft:5,fontSize:13, cursor:'move'}}>
+        <Col span={20}>
+          <Icon type='bars'/>
+            <span>{model.label}</span>
+            </Col>
+            
+          {this.iconClose(model.group)}
+         
+        </Row>
       </div>
     );
   }

@@ -3,9 +3,7 @@ import { ItemPanel, Item } from '@src';
 import styles from './index.less';
 import { Menu, Icon ,Tooltip} from 'antd';
 const SubMenu = Menu.SubMenu;
-const MenuItemGroup = Menu.ItemGroup;
 import GGEditor,{ Flow, RegisterNode } from '@src';
-var children = [];
 class FlowDataPanel extends React.Component {
   state={
     dataTable: []
@@ -25,32 +23,42 @@ class FlowDataPanel extends React.Component {
       }
     })
   }
+  componentWillReceiveProps(nextProps){
+    if(nextProps.dataTable.length !== 0){
+      this.setState({dataTable:nextProps.dataTable})
+    }
+  }
   render() {
+    var children = [];
     if(this.state.dataTable.length !== 0){
       var dataTable = this.state.dataTable;
       for(let i in dataTable){
         children.push(
           <Menu.Item key={i+3} > 
             <Tooltip title="左键单击拖拽至右面" placement="rightTop">
-              <div><ItemPanel><Item
-                type="node"
-                size="200*40"
-                shape='zero-one'
-                model={{
-                  label: dataTable[i],
-                  elabel: dataTable[i],
-                  attr:{},
-                  Dataset: [],
-                  labelArray: {}, 
-                  length: 0,
-                  anchor: [0, 1],
-                  group:'input',
-                  keyConfig:{
-                    color_type: '#1890FF',
-                    state_icon_url: 'https://gw.alipayobjects.com/zos/rmsportal/uZVdwjJGqDooqKLKtvGA.svg',
-                  }
-                }}         
-              /></ItemPanel></div>
+              <div>
+                <ItemPanel>
+                  <Item
+                    type="node"
+                    size="200*40"
+                    shape='zero-one'
+                    model={{
+                      label: dataTable[i],
+                      elabel: dataTable[i],
+                      attr:{},
+                      Dataset: [],
+                      labelArray: {}, 
+                      length: 0,
+                      anchor: [0, 1],
+                      group:'input',
+                      keyConfig:{
+                        color_type: '#1890FF',
+                        state_icon_url: 'https://gw.alipayobjects.com/zos/rmsportal/uZVdwjJGqDooqKLKtvGA.svg',
+                      }
+                    }}         
+                  />
+                </ItemPanel>
+              </div>
             </Tooltip>
           </Menu.Item>
         )
@@ -160,67 +168,87 @@ class FlowDataPanel extends React.Component {
           />
         </GGEditor>
       <SubMenu key="sub1" title={<span><Icon type="mail" /><span>数据源</span></span>}>
-          <Menu.Item key="1" ><Tooltip title="左键单击拖拽至右面" placement="rightTop" ><div> <ItemPanel><Item
-            type="node"
-            size="200*40"
-            shape='zero-one'
-            model={{
-              label: '本地数据',
-              elabel:'localFile',
-              attr:{},
-              Dataset: [],
-              labelArray: {}, 
-              length: 0,
-              anchor: [0, 1],
-              group:'input',
-              keyConfig:{
-                color_type: '#1890FF',
-                state_icon_url: 'https://gw.alipayobjects.com/zos/rmsportal/uZVdwjJGqDooqKLKtvGA.svg',
-              }
-            }}         
-          /></ItemPanel></div></Tooltip></Menu.Item>
-          <Menu.Item key="2" > 
+        <Menu.Item key="1" >
+          <Tooltip title="左键单击拖拽至右面" placement="rightTop" >
+            <div>
+              <ItemPanel>
+                <Item
+                  type="node"
+                  size="200*40"
+                  shape='zero-one'
+                  model={{
+                    label: '本地数据',
+                    elabel:'localFile',
+                    attr:{},
+                    Dataset: [],
+                    labelArray: {}, 
+                    length: 0,
+                    anchor: [0, 1],
+                    group:'input',
+                    keyConfig:{
+                      color_type: '#1890FF',
+                      state_icon_url: 'https://gw.alipayobjects.com/zos/rmsportal/uZVdwjJGqDooqKLKtvGA.svg',
+                    }
+                  }}         
+                />
+              </ItemPanel>
+            </div>
+          </Tooltip>
+        </Menu.Item>
+        <Menu.Item key="2" > 
           <Tooltip title="左键单击拖拽至右面" placement="rightTop">
-          <div><ItemPanel><Item
-            type="node"
-            size="200*40"
-            shape='zero-one'
-            model={{
-              label: 'Titanic测试',
-              elabel:'TitanicTestFile',
-              attr:{},
-              Dataset: [],
-              labelArray: {}, 
-              length: 0,
-              anchor: [0, 1],
-              group:'input',
-              keyConfig:{
-                color_type: '#1890FF',
-                state_icon_url: 'https://gw.alipayobjects.com/zos/rmsportal/uZVdwjJGqDooqKLKtvGA.svg',
-              }
-            }}         
-          /></ItemPanel></div></Tooltip></Menu.Item>
-          <Menu.Item key="3" > 
+            <div>
+              <ItemPanel>
+                <Item
+                  type="node"
+                  size="200*40"
+                  shape='zero-one'
+                  model={{
+                    label: 'Titanic测试',
+                    elabel:'TitanicTestFile',
+                    attr:{},
+                    Dataset: [],
+                    labelArray: {}, 
+                    length: 0,
+                    anchor: [0, 1],
+                    group:'input',
+                    keyConfig:{
+                      color_type: '#1890FF',
+                      state_icon_url: 'https://gw.alipayobjects.com/zos/rmsportal/uZVdwjJGqDooqKLKtvGA.svg',
+                    }
+                  }}         
+                />
+              </ItemPanel>
+            </div>
+          </Tooltip>
+        </Menu.Item>
+        <Menu.Item key="3" > 
           <Tooltip title="左键单击拖拽至右面" placement="rightTop">
-          <div><ItemPanel><Item
-            type="node"
-            size="200*40"
-            shape='zero-one'
-            model={{
-              label: 'Titanic训练',
-              elabel:'TitanicTrainFile',
-              attr:{},
-              Dataset: [],
-              labelArray: {}, 
-              length: 0,
-              anchor: [0, 1],
-              group:'input',
-              keyConfig:{
-                color_type: '#1890FF',
-                state_icon_url: 'https://gw.alipayobjects.com/zos/rmsportal/uZVdwjJGqDooqKLKtvGA.svg',
-              }
-            }}         
-          /></ItemPanel></div></Tooltip></Menu.Item>
+            <div>
+              <ItemPanel>
+                <Item
+                  type="node"
+                  size="200*40"
+                  shape='zero-one'
+                  model={{
+                    label: 'Titanic训练',
+                    elabel:'TitanicTrainFile',
+                    attr:{},
+                    Dataset: [],
+                    labelArray: {}, 
+                    length: 0,
+                    anchor: [0, 1],
+                    group:'input',
+                    keyConfig:{
+                      color_type: '#1890FF',
+                      state_icon_url: 'https://gw.alipayobjects.com/zos/rmsportal/uZVdwjJGqDooqKLKtvGA.svg',
+                    }
+                  }}         
+                />
+              </ItemPanel>
+            </div>
+          </Tooltip>
+        </Menu.Item>
           {children}
       </SubMenu>
     </Menu>

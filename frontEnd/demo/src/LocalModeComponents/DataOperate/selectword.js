@@ -55,7 +55,19 @@ class Selectword extends Component{
         return false;
     }
     findSourceLabel=(item)=>{
-        if(item.model.anchor[0] === 1 || !item.model.anchor[0])
+        if(item.model.label === '数据随机划分'){
+            const { propsAPI } = this.props;
+            const { save, find } = propsAPI;
+            const inf = save();
+            const edge = inf.edges;
+            for(let i in edge){
+                if(edge[i].target === item.model.id){
+                    const currentItem = find(edge[i].source);
+                    return this.findSourceLabel(currentItem);
+                }
+            }
+        }
+        else if(item.model.anchor[0] === 1 || !item.model.anchor[0])
             return item.model.labelArray.public?item.model.labelArray.public:[];
         else if(item.model.anchor[0] === 2){
             return [...item.model.labelArray.predict_x, ...item.model.labelArray.predict_y];

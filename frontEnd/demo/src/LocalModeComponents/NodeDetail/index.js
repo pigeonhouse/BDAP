@@ -1,5 +1,5 @@
 import React from 'react';
-import { Card, Form, Input, Modal, Button } from 'antd';
+import { Card, Form, Input, Button } from 'antd';
 import { withPropsAPI } from '@src';
 import Selectword from '../DataOperate/selectword'
 import Uploadfile from '../DataOperate/upload'
@@ -93,12 +93,12 @@ class NodeDetail extends React.Component {
       return (
         <Uploadfile ></Uploadfile>
       )
-    else if(label === 'Titanic测试'){
+    else if(label === 'Titanic测试' && Dataset.length === 0){
       return(
         <LocalTestData ></LocalTestData>
       )
     }
-    else if(label === 'Titanic训练'){
+    else if(label === 'Titanic训练' && Dataset.length === 0){
       return(
         <LocalTrainData ></LocalTrainData>
       )

@@ -76,7 +76,7 @@ class FlowContextMenu extends React.Component {
       myChart.setOption({
         xAxis: {
             data: xAxisGroup,
-            name: '数值',
+            name: data.label,
             axisLabel: {  
               interval:0,  
               rotate:40  

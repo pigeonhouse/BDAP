@@ -1,5 +1,5 @@
 import React from 'react';
-import { Row, Col, Button,Steps, message, Radio,notification,Icon,Tabs,Upload} from 'antd';
+import { Row, Col, Button,Steps, message, notification,Icon,Tabs,Upload} from 'antd';
 import GGEditor, { Flow } from '@src';
 import EditorMinimap from '../../LocalModeComponents/EditorMinimap';
 import { FlowContextMenu } from '../../LocalModeComponents/EditorContextMenu';
@@ -10,12 +10,8 @@ import styles from './index.less';
 import IntroJs from 'intro.js';
 import Run from "../../LocalModeComponents/Models/run"
 import { FlowDataPanel } from '../../LocalModeComponents/EditorDataPanel';
-import Papa from 'papaparse'
 
 const TabPane = Tabs.TabPane;
-
-const RadioGroup = Radio.Group;
-const RadioButton = Radio.Button;
 class LocalMode extends React.Component {
   Intro = (key) => {
     notification.close(key)
@@ -35,7 +31,7 @@ class LocalMode extends React.Component {
     }).onexit(function () {
     }).start();
 }
-  state = {itemPanel:'FlowItemPanel'}
+  state = {currentTab:'1', dataTable:[]}
   componentDidMount(){
     const key = `open${Date.now()}`;
     const btn = (
@@ -54,65 +50,42 @@ class LocalMode extends React.Component {
       // key
     });
   }
-  currentItemPanel=()=>{
-    if(this.state.itemPanel === 'FlowItemPanel'){
-      return <FlowItemPanel />;
-    }
-    else if(this.state.itemPanel === 'FlowDataPanel'){
-      return <FlowDataPanel></FlowDataPanel>
-    }
+  tabChange=(value)=>{
+    this.setState({currentTab:value})
   }
-  onChangePanel=(e)=>{
-    const value = e.target.value;
-    if(value === 'FlowPanel')
-    return ;
-    this.setState({itemPanel:value})
-  }
-    
-  askForFile = ()=>{
+  deleteFile = ()=>{
     const init={
       method: 'POST', 
-      body:"fileName=测试集.csv",
+      body:"fileName=支持向量机.csv",
       mode: 'cors',
       headers: {
         "Content-Type": "application/x-www-form-urlencoded;charset=utf-8"
-    　　  },
+    　　 },
       }
       fetch(
-        'http://10.105.222.92:3000/showData',init
+        'http://10.105.222.92:3000/DeleteFile',init
       )
       .then((response) => {
         return response.json()
       })
-      .then(data=>{
-        let len = data.length
-        var s = data[0]
-        for(let i = 1; i<len; i++){
-            s = s + "\n" + data[i]
-        }
-        console.log(s)
-        console.log(Papa.parse(s,{header:true,dynamicTyping: true}))
-      })
+      .then(a=>console.log(a))
       .catch(e => console.log('错误:', e))
   }
-
+  handleChange=(info)=>{
+    if (info.file.status === 'done') {
+      message.success(`${info.file.name} file uploaded successfully`);
+      this.setState({dataTable:info.file.response})
+    } else if (info.file.status === 'error') {
+      message.error(`${info.file.name} file upload failed.`);
+    }
+  }
 
   render() {
     const props = {
       name: 'file',
       action: 'http://10.105.222.92:3000/handleFile',
-      onChange(info) {
-        if (info.file.status === 'done') {
-          message.success(`${info.file.name} file uploaded successfully`);
-          console.log("-----response------")
-          console.log(info.file.response)
-        } else if (info.file.status === 'error') {
-          message.error(`${info.file.name} file upload failed.`);
-        }
-      },
     };
-    return (
-      
+    return (   
       <GGEditor className={styles.editor}>   
         <Row
           style={{ lineHeight: '40px',height: '40px', backgroundColor:'#343941',color:"white" }}
@@ -124,15 +97,9 @@ class LocalMode extends React.Component {
           </Col>
           <Col span={21}>
             <Button style={{border:0,backgroundColor:'#343941',color:"#ddd",fontSize:18,fontFamily:'consolas'}}>BigDataPlayground Local-Mode</Button>
-            <Button onClick={()=>this.askForFile()}>
-              request
-            </Button>
-            
-            <Upload {...props}>
-              <Button>
-                <Icon type="upload" /> Click to Upload
-              </Button>
-            </Upload>
+             <Button onClick={()=>this.deleteFile()}>
+              delete
+            </Button> 
           </Col>      
           <Col span={2}>
             <a href="https://www.yuque.com/ddrid/tx7z84">
@@ -164,50 +131,44 @@ class LocalMode extends React.Component {
      
         <Row type="flex" style={{height:'calc(100vh - 105px)'}}>
   
-          <Col span={1} style={{backgroundColor:'#71b0d1', height:'calc(100vh - 105px)'}}>
-            {/* <Button className={styles.leftMenuInit} onClick={this.handleFlowDataPanel} size="large">
-              <Icon type="database" style={{fontSize:40}} />
-            </Button>            
-            <Button className={styles.leftMenu} onClick={this.handleFlowItemPanel} size="large">
-              <Icon type="api" style={{fontSize:40}} /> 
-            </Button>
-            <Button className={styles.leftMenu} size="large">
-              <Icon type="setting" style={{fontSize:40}} /> 
-            </Button>              */}
+          <Col span={5} style={{backgroundColor:'#71b0d1', height:'calc(100vh - 105px)'}}>
             <Tabs
-              defaultActiveKey="1"
               tabPosition='left'
-              activeKey='2'
+              activeKey={this.state.currentTab}
               className={styles.leftMenuTab}
+              onChange={this.tabChange}
             >
-              <TabPane className={styles.leftMenu}tab={<Icon type="database" className={styles.iconStyle}/>} key="1">Content of tab 1</TabPane>
-              <TabPane className={styles.leftMenu}tab={<Icon type="api" className={styles.iconStyle}/> } key="2">Content of tab 2</TabPane>
-              <TabPane className={styles.leftMenu}tab={<Icon type="setting" className={styles.iconStyle}/> } key="3">Content of tab 3</TabPane>
+              <TabPane 
+                className={styles.leftMenu}
+                tab={<Icon type="database" className={styles.iconStyle}/>} 
+                key="1"
+              >
+                <div style={{height:'calc(100vh - 105px)'}} span={4} className={styles.editorSidebar}
+                  data-step="1" data-intro='在组件栏可以挑选想要的模块，左键单击拖拽添加至右侧画布内。' data-position='right'> 
+                  <FlowDataPanel dataTable={this.state.dataTable}/>
+                </div>
+              </TabPane>
+              <TabPane 
+                className={styles.leftMenu}
+                tab={<Icon type="api" className={styles.iconStyle}/>} 
+                key="2"
+              >
+                <div style={{height:'calc(100vh - 105px)'}} span={4} className={styles.editorSidebar}
+                  data-step="1" data-intro='在组件栏可以挑选想要的模块，左键单击拖拽添加至右侧画布内。' data-position='right'> 
+                  <FlowItemPanel />
+                </div>
+              </TabPane>
+              <TabPane 
+                className={styles.leftMenu}
+                tab={<Icon type="setting" className={styles.iconStyle}/>} 
+                key="3"
+              >
+                <div style={{height:'calc(100vh - 105px)'}} span={4} className={styles.editorSidebar}
+                  data-step="1" data-intro='在组件栏可以挑选想要的模块，左键单击拖拽添加至右侧画布内。' data-position='right'> 
+                  <FlowItemPanel />
+                </div>
+              </TabPane>
             </Tabs>
-            {/* <RadioGroup styke={{width: '4%'}} onChange={this.onChangePanel} value={this.state.itemPanel} size="large">
-              <RadioButton 
-                style={radioStyle} 
-                className={this.state.itemPanel==='FlowDataPanel'?styles.leftMenuSelect:styles.leftMenu} 
-                value='FlowDataPanel'>
-                <Icon type="database" style={{fontSize:40}} />
-              </RadioButton>
-              <RadioButton 
-                style={radioStyle} 
-                className={this.state.itemPanel==='FlowItemPanel'?styles.leftMenuSelect:styles.leftMenu}
-                value='FlowItemPanel'>
-                <Icon type="api" style={{fontSize:40}} /> 
-              </RadioButton>
-              <RadioButton 
-                style={radioStyle} 
-                className={this.state.itemPanel==='FlowPanel'?styles.leftMenuSelect:styles.leftMenu}
-                value='FlowPanel'>
-                <Icon type="setting" style={{fontSize:40}} /> 
-              </RadioButton>
-            </RadioGroup> */}
-          </Col>
-          <Col style={{height:'calc(100vh - 105px)'}} span={4} className={styles.editorSidebar}
-            data-step="1" data-intro='在组件栏可以挑选想要的模块，左键单击拖拽添加至右侧画布内。' data-position='right'> 
-            {this.currentItemPanel()}
           </Col>
            
           <Col span={15} className={styles.editorContent} style={{height:'calc(100vh - 105px)'}}>
@@ -232,13 +193,20 @@ class LocalMode extends React.Component {
         <Row type="flex" style={{bottom:0, height: '65px',lineHeight:'65px', backgroundColor:'#343941' }}
         data-step="4" data-intro="所有配置完成后，点击'运行'按钮开始运行整个工作流。" data-position='top'
         >
-          <Col span={11}></Col>
+          <Col span={2}>
+            <Upload {...props} onChange={this.handleChange}>
+              <Button style={{border:0,backgroundColor:'#343941',color:"#ddd",fontSize:20}}>
+                <Icon type="plus" />上传
+              </Button>
+            </Upload>
+          </Col>
+          <Col span={9}></Col>
           <Col span={2}>
               <Run></Run>
           </Col>
           <Col span={11}></Col>
         </Row>
-      
+ 
         <FlowContextMenu />
       </GGEditor>
      

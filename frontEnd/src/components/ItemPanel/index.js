@@ -4,7 +4,6 @@ import withGGEditorContext from '@common/context/GGEditorContext/withGGEditorCon
 import Item from './Item';
 import styles from './index.less'
 
-
 class ItemPanel extends React.Component {
   page = null;
 
