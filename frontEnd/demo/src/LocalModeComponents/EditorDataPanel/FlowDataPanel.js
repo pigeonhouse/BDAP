@@ -43,7 +43,7 @@ class FlowDataPanel extends React.Component {
       .then((response) => {
         return response.json()
       })
-      .then(a=>console.log(a))
+      .then(a=>{console.log(a)})
       .catch(e => console.log('错误:', e))
   }
   deleteDataName=(dataName)=>{

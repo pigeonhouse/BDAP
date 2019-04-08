@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
 import { Button, Modal, Transfer, Tooltip, Divider } from 'antd'
 import { withPropsAPI } from '@src';
+import styles from './inputStyle.less'
 
 class Selectword extends Component{
     constructor(props){
@@ -194,21 +195,24 @@ class Selectword extends Component{
         return (
             <Button style={{width:'100%'}} disabled>选择字段</Button>
         );
+        else if(this.state.toolTipsArray.length === 0){
+            return  <Button style={{width:'100%'}} onClick={this.displayTransfer}>选择字段</Button>
+        }
         else return (
             <Tooltip arrowPointAtCenter 
                 placement="bottom" 
-                title={() => {   
+                title={() => {
                     return (
                         <div>
                             已选择
                             {this.state.toolTipsArray.map((item)=>{
-                                return <Divider style={{color:'#fff'}}>{item}</Divider>
-                            })
-                            }
+                                return <Divider style={{color:'#fff', margin:'8px 0'}}>{item}</Divider>
+                            })}
                         </div>
                     );
-                }} 
-                mouseLeaveDelay="0.01"
+                }}
+                overlayClassName={styles.divider}
+                mouseLeaveDelay="0.1"
             >
                 <Button style={{width:'100%'}} onClick={this.displayTransfer}>选择字段</Button>
             </Tooltip>

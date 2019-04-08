@@ -1,7 +1,7 @@
 import React from 'react';
 import withGGEditorContext from '@common/context/GGEditorContext/withGGEditorContext';
 import styles from './index.less'
-import { Menu, Icon, Row, Col } from 'antd';
+import { Menu, Icon, Row, Col, Tooltip } from 'antd';
 const SubMenu = Menu.SubMenu;
 const MenuItemGroup = Menu.ItemGroup;
 
@@ -11,7 +11,8 @@ class Item extends React.Component {
     this.bindEvent();
 
     this.state={
-      isMouseEnter:'no'
+      isMouseEnter:'no',
+      Tooltipvisible:false
     }
   }
 
@@ -34,12 +35,26 @@ class Item extends React.Component {
       this.page = page;
     });
   }
+  handleMouseEnterClose=()=>{
+    this.setState({Tooltipvisible:true})
+  }
+  handleMouseLeaveClose=()=>{
+    this.setState({Tooltipvisible:false})  
+  }
   iconClose=(group, label)=>{
     if(group === 'input' && this.state.isMouseEnter === 'yes'
       && label !== '本地数据' && label !== 'Titanic测试' && label !== 'Titanic训练'){
       return (
         <Col span={4}>
-          <Icon type="close" className={styles.iconCloseStyle} onClick={this.handleClickClose.bind(this, label)}/>
+          <Tooltip title='点击可删除上传的文件' visible={this.state.Tooltipvisible} placement='top'>
+            <Icon 
+              type="close" 
+              className={styles.iconCloseStyle} 
+              onClick={this.handleClickClose.bind(this, label)}
+              onMouseEnter={this.handleMouseEnterClose}
+              onMouseLeave={this.handleMouseLeaveClose}
+            />
+          </Tooltip>
         </Col>
       )
     }
