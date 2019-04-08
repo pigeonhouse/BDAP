@@ -32,7 +32,11 @@ class Item extends React.Component {
   }
   iconClose=(group)=>{
     if(group === 'input'){
-      return <Icon type="close" className={styles.iconCloseStyle} />
+      return (
+        <Col span={4}>
+          <Icon type="close" style={{ cursor:"pointer"}} />
+        </Col>
+      )
     }
   }
   render() {
@@ -42,14 +46,14 @@ class Item extends React.Component {
         style={{ cursor: 'pointer', verticalAlign: 'middle'}} 
         onMouseDown={this.handleMouseDown}
       >
-        <Row style={{paddingLeft:5,fontSize:13, cursor:'move', verticalAlign: 'middle'}}>
-        <Col>
+        <Row style={{paddingLeft:5,fontSize:13, cursor:'move'}}>
+        <Col span={20}>
           <Icon type='bars'/>
             <span>{model.label}</span>
             </Col>
-            <Col>
+            
           {this.iconClose(model.group)}
-          </Col>
+         
         </Row>
       </div>
     );
