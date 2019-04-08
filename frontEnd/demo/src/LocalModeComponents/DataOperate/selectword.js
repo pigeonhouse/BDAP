@@ -94,6 +94,12 @@ class Selectword extends Component{
                     break;
             }
         }
+        if(this.props.label === '数据随机划分'){
+            const { update } = propsAPI;
+            update(item, {labelArray:{public:labelArray}});
+            console.log(propsAPI.save());
+            return ;
+        }
         let mockdata = [];
         let targetkeys = [];
         for(var i in labelArray){
@@ -178,7 +184,10 @@ class Selectword extends Component{
         console.log('search:', dir, value);
     };
     isSelect=()=>{
-        if(this.props.sourceid === 0)
+        if(this.props.label === '数据随机划分' && this.props.sourceid !== 0){
+            this.displayTransfer()
+        }
+        else if(this.props.sourceid === 0)
         return (
             <Button style={{width:'100%'}} disabled>选择字段</Button>
         );

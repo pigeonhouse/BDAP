@@ -112,12 +112,6 @@ class LocalMode extends React.Component {
             <Button onClick={()=>this.askForFile()}>
               request
             </Button>
-            
-            <Upload {...props}>
-              <Button>
-                <Icon type="upload" /> Click to Upload
-              </Button>
-            </Upload>
           </Col>      
           <Col span={2}>
             <a href="https://www.yuque.com/ddrid/tx7z84">
@@ -211,7 +205,14 @@ class LocalMode extends React.Component {
         <Row type="flex" style={{bottom:0, height: '65px',lineHeight:'65px', backgroundColor:'#343941' }}
         data-step="4" data-intro="所有配置完成后，点击'运行'按钮开始运行整个工作流。" data-position='top'
         >
-          <Col span={11}></Col>
+          <Col span={2}>
+            <Upload {...props}>
+              <Button style={{border:0,backgroundColor:'#343941',color:"#ddd",fontSize:25}}>
+                <Icon type="plus" />上传
+              </Button>
+            </Upload>
+          </Col>
+          <Col span={9}></Col>
           <Col span={2}>
               <Run></Run>
           </Col>

@@ -3,9 +3,7 @@ import { ItemPanel, Item } from '@src';
 import styles from './index.less';
 import { Menu, Icon ,Tooltip} from 'antd';
 const SubMenu = Menu.SubMenu;
-const MenuItemGroup = Menu.ItemGroup;
 import GGEditor,{ Flow, RegisterNode } from '@src';
-var children = [];
 class FlowDataPanel extends React.Component {
   state={
     dataTable: []
@@ -18,6 +16,7 @@ class FlowDataPanel extends React.Component {
     .then((response) => {
       if(response.status===200){
         response.json().then((respData)=>{
+          console.log(respData)
           this.setState({
             dataTable:respData,
           });
@@ -26,6 +25,7 @@ class FlowDataPanel extends React.Component {
     })
   }
   render() {
+    var children = [];
     if(this.state.dataTable.length !== 0){
       var dataTable = this.state.dataTable;
       for(let i in dataTable){
