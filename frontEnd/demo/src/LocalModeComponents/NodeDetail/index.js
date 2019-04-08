@@ -93,12 +93,12 @@ class NodeDetail extends React.Component {
       return (
         <Uploadfile ></Uploadfile>
       )
-    else if(label === 'Titanic测试'){
+    else if(label === 'Titanic测试' && Dataset.length === 0){
       return(
         <LocalTestData ></LocalTestData>
       )
     }
-    else if(label === 'Titanic训练'){
+    else if(label === 'Titanic训练' && Dataset.length === 0){
       return(
         <LocalTrainData ></LocalTrainData>
       )

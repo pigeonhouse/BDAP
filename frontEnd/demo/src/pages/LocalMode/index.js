@@ -35,7 +35,7 @@ class LocalMode extends React.Component {
     }).onexit(function () {
     }).start();
 }
-  state = {itemPanel:'FlowItemPanel'}
+  state = {itemPanel:'FlowItemPanel', currentTab:'1'}
   componentDidMount(){
     const key = `open${Date.now()}`;
     const btn = (
@@ -62,13 +62,9 @@ class LocalMode extends React.Component {
       return <FlowDataPanel></FlowDataPanel>
     }
   }
-  onChangePanel=(e)=>{
-    const value = e.target.value;
-    if(value === 'FlowPanel')
-    return ;
-    this.setState({itemPanel:value})
+  tabChange=(value)=>{
+    this.setState({currentTab:value})
   }
-    
   askForFile = ()=>{
     const init={
       method: 'POST', 
@@ -164,50 +160,38 @@ class LocalMode extends React.Component {
      
         <Row type="flex" style={{height:'calc(100vh - 105px)'}}>
   
-          <Col span={1} style={{backgroundColor:'#71b0d1', height:'calc(100vh - 105px)'}}>
-            {/* <Button className={styles.leftMenuInit} onClick={this.handleFlowDataPanel} size="large">
-              <Icon type="database" style={{fontSize:40}} />
-            </Button>            
-            <Button className={styles.leftMenu} onClick={this.handleFlowItemPanel} size="large">
-              <Icon type="api" style={{fontSize:40}} /> 
-            </Button>
-            <Button className={styles.leftMenu} size="large">
-              <Icon type="setting" style={{fontSize:40}} /> 
-            </Button>              */}
+          <Col span={5} style={{backgroundColor:'#71b0d1', height:'calc(100vh - 105px)'}}>
             <Tabs
-              defaultActiveKey="1"
               tabPosition='left'
-              activeKey='2'
+              activeKey={this.state.currentTab}
               className={styles.leftMenuTab}
+              onChange={this.tabChange}
             >
-              <TabPane className={styles.leftMenu}tab={<Icon type="database" className={styles.iconStyle}/>} key="1">Content of tab 1</TabPane>
-              <TabPane className={styles.leftMenu}tab={<Icon type="api" className={styles.iconStyle}/> } key="2">Content of tab 2</TabPane>
-              <TabPane className={styles.leftMenu}tab={<Icon type="setting" className={styles.iconStyle}/> } key="3">Content of tab 3</TabPane>
+              <TabPane 
+                className={styles.leftMenu}
+                tab={<Icon type="database" className={styles.iconStyle}/>} 
+                key="1"
+              >
+                <div style={{height:'calc(100vh - 105px)'}} span={4} className={styles.editorSidebar}
+                  data-step="1" data-intro='在组件栏可以挑选想要的模块，左键单击拖拽添加至右侧画布内。' data-position='right'> 
+                  <FlowItemPanel />
+                </div>
+              </TabPane>
+              <TabPane 
+                className={styles.leftMenu}
+                tab={<Icon type="api" className={styles.iconStyle}/> } 
+                key="2"
+              >
+                Content of tab 2
+              </TabPane>
+              <TabPane 
+                className={styles.leftMenu}
+                tab={<Icon type="setting" className={styles.iconStyle}/> } 
+                key="3"
+              >
+                Content of tab 3
+              </TabPane>
             </Tabs>
-            {/* <RadioGroup styke={{width: '4%'}} onChange={this.onChangePanel} value={this.state.itemPanel} size="large">
-              <RadioButton 
-                style={radioStyle} 
-                className={this.state.itemPanel==='FlowDataPanel'?styles.leftMenuSelect:styles.leftMenu} 
-                value='FlowDataPanel'>
-                <Icon type="database" style={{fontSize:40}} />
-              </RadioButton>
-              <RadioButton 
-                style={radioStyle} 
-                className={this.state.itemPanel==='FlowItemPanel'?styles.leftMenuSelect:styles.leftMenu}
-                value='FlowItemPanel'>
-                <Icon type="api" style={{fontSize:40}} /> 
-              </RadioButton>
-              <RadioButton 
-                style={radioStyle} 
-                className={this.state.itemPanel==='FlowPanel'?styles.leftMenuSelect:styles.leftMenu}
-                value='FlowPanel'>
-                <Icon type="setting" style={{fontSize:40}} /> 
-              </RadioButton>
-            </RadioGroup> */}
-          </Col>
-          <Col style={{height:'calc(100vh - 105px)'}} span={4} className={styles.editorSidebar}
-            data-step="1" data-intro='在组件栏可以挑选想要的模块，左键单击拖拽添加至右侧画布内。' data-position='right'> 
-            {this.currentItemPanel()}
           </Col>
            
           <Col span={15} className={styles.editorContent} style={{height:'calc(100vh - 105px)'}}>
