@@ -86,7 +86,7 @@ export function Stat(n){
       temp = 0;
       n[i].stat = stat;
     }
-    console.log("stat")
-    console.log(n);
+    // console.log("stat")
+    // console.log(n);
     return n;
 }

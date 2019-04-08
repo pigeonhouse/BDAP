@@ -1,7 +1,7 @@
 import React from 'react';
 import { ItemPanel, Item } from '@src';
 import styles from './index.less';
-import { Menu, Icon ,Tooltip} from 'antd';
+import { Menu, Icon ,Tooltip, message } from 'antd';
 const SubMenu = Menu.SubMenu;
 import GGEditor,{ Flow, RegisterNode } from '@src';
 class FlowDataPanel extends React.Component {
@@ -27,6 +27,31 @@ class FlowDataPanel extends React.Component {
     if(nextProps.dataTable.length !== 0){
       this.setState({dataTable:nextProps.dataTable})
     }
+  }
+  deleteFile = (dataName)=>{
+    const init={
+      method: 'POST', 
+      body:"fileName="+dataName,
+      mode: 'cors',
+      headers: {
+        "Content-Type": "application/x-www-form-urlencoded;charset=utf-8"
+    　　 },
+      }
+      fetch(
+        'http://10.105.222.92:3000/DeleteFile',init
+      )
+      .then((response) => {
+        return response.json()
+      })
+      .then(a=>{message.success(`${dataName}file deleted successfully`)})
+      .catch(e => console.log('错误:', e))
+  }
+  deleteDataName=(dataName)=>{
+    var dataTable = this.state.dataTable;
+    const index = dataTable.indexOf(dataName);
+    dataTable.splice(index, 1);
+    this.setState({dataTable})
+    this.deleteFile(dataName);
   }
   render() {
     var children = [];
@@ -55,7 +80,8 @@ class FlowDataPanel extends React.Component {
                         color_type: '#1890FF',
                         state_icon_url: 'https://gw.alipayobjects.com/zos/rmsportal/uZVdwjJGqDooqKLKtvGA.svg',
                       }
-                    }}         
+                    }}
+                    deleteDataName={this.deleteDataName}    
                   />
                 </ItemPanel>
               </div>

@@ -31,45 +31,77 @@ class LocalMode extends React.Component {
     }).onexit(function () {
     }).start();
 }
-  state = {currentTab:'1', dataTable:[]}
+  state = {
+    currentTab:'1', 
+    dataTable:[], 
+    username:'',
+    password:'',
+    remind:'false',
+  }
+  noRemind=(key)=>{
+    let accountInfo = this.state.username+ '&' +this.state.password+'&false';
+    let Days = 3;
+    let exp = new Date();
+    exp.setTime(exp.getTime() + Days*24*60*60*1000);
+    document.cookie = 'accountInfo' + "="+ escape(accountInfo) + ";expires=" + exp.toGMTString()
+  }
+  componentWillMount(){
+    let arr,reg=new RegExp("(^| )"+'accountInfo'+"=([^;]*)(;|$)");
+    let accountInfo =''
+    
+    if(arr=document.cookie.match(reg)){
+        accountInfo = unescape(arr[2]);
+    }
+    else{
+        accountInfo = null;
+    }
+    if(Boolean(accountInfo) == false){
+        return false;
+    }else{
+        let userName = "";
+        let passWord = "";
+        let Remind = "";
+ 
+        let i=new Array()
+        i = accountInfo.split("&");
+        userName = i[0],
+        passWord = i[1],
+        Remind = i[2],
+        this.setState({
+            username: userName,
+            password: passWord,
+            remind: Remind
+        })
+      }
+  }
   componentDidMount(){
-    const key = `open${Date.now()}`;
-    const btn = (
-      <Button type="primary" onClick={() => this.Intro(key)}>
-        需要
-      </Button>
-    );
-    notification.open({
-      message: '是否需要帮助？',
-      description: '点击下方的"需要"按钮，可以帮助您进行简单的引导。',
-      style: {
-        width: 400,
-      },
-      duration: 2,
-      btn,
-      // key
-    });
+    console.log(this.state.remind)
+    if(this.state.remind === 'true'){
+      const key = `open${Date.now()}`;
+      const btn = (
+        <div>
+          <Button type="primary" onClick={() => this.Intro(key)} style={{marginRight:'10px'}}>
+            需要
+          </Button>
+          <Button type="primary" onClick={() => this.noRemind(key)}>
+            不再提醒
+          </Button>
+        </div>
+      );
+      notification.open({
+        message: '是否需要帮助？',
+        description: '点击下方的"需要"按钮，可以帮助您进行简单的引导。',
+        style: {
+          width: 400,
+        },
+        duration: 2,
+        btn,
+        // key
+      });
+    }
   }
   tabChange=(value)=>{
     this.setState({currentTab:value})
-  }
-  deleteFile = ()=>{
-    const init={
-      method: 'POST', 
-      body:"fileName=支持向量机.csv",
-      mode: 'cors',
-      headers: {
-        "Content-Type": "application/x-www-form-urlencoded;charset=utf-8"
-    　　 },
-      }
-      fetch(
-        'http://10.105.222.92:3000/DeleteFile',init
-      )
-      .then((response) => {
-        return response.json()
-      })
-      .then(a=>console.log(a))
-      .catch(e => console.log('错误:', e))
   }
   handleChange=(info)=>{
     if (info.file.status === 'done') {
@@ -97,16 +129,12 @@ class LocalMode extends React.Component {
           </Col>
           <Col span={21}>
             <Button style={{border:0,backgroundColor:'#343941',color:"#ddd",fontSize:18,fontFamily:'consolas'}}>BigDataPlayground Local-Mode</Button>
-             <Button onClick={()=>this.deleteFile()}>
-              delete
-            </Button> 
           </Col>      
           <Col span={2}>
             <a href="https://www.yuque.com/ddrid/tx7z84">
               <Button style={{border:0,backgroundColor:'#343941',color:"#ddd",fontSize:25}} >
                 <Icon type="question-circle" data-step="5" data-intro="如果想要进一步了解详细的使用教程及组件介绍，请点击此处查看文档。"/>
-              </Button>
-                        
+              </Button>                  
             </a>
           </Col>      
           <a href="https://github.com/pigeonhouse/BigDataPlayground" className={styles.githubCorner} aria-label="View source on GitHub">
@@ -195,8 +223,8 @@ class LocalMode extends React.Component {
         >
           <Col span={2}>
             <Upload {...props} onChange={this.handleChange}>
-              <Button style={{border:0,backgroundColor:'#343941',color:"#ddd",fontSize:20}}>
-                <Icon type="plus" />上传
+              <Button style={{border:0,backgroundColor:'#343941',color:"#ddd",fontSize:25}}>
+                <Icon type="plus" style={{fontSize:25}}/>上传
               </Button>
             </Upload>
           </Col>

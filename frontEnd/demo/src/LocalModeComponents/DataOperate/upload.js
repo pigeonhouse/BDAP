@@ -40,11 +40,7 @@ class Uploadfile extends Component{
       reader.onload = function(e) {
         var fieldNameArray = [];
         let vectorLength;
-        console.log("-----originData-----")
-        console.log(e.target.result)
         var results = Papa.parse(e.target.result,{header:true,dynamicTyping: true});
-        console.log("------rawData-----")
-        console.log(results)
         fieldNameArray.push(results.meta.fields);
         vectorLength = results.data.length - 1
         var n = new Array();

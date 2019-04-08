@@ -1,7 +1,7 @@
 import { OneVarLinearRegression } from './MachineLearning/Regression/OneVarLinearRegression'
 import { NaiveBayes } from './MachineLearning/Classification/NaiveBayes'
 import React, { Component } from 'react'
-import { Button,Modal,Icon } from 'antd'
+import { Button,Modal,Icon,message} from 'antd'
 import { withPropsAPI } from '@src';
 import { runMnist } from './MnistTest/mnist';
 import { MutiVarLinearRegression } from './MachineLearning/Regression/MutiVarLinearRegression'
@@ -37,13 +37,74 @@ class Run extends Component{
     });
   }
 
+  handleError = () =>{
+    const { propsAPI } = this.props;
+    console.log(propsAPI.save())
+    const inf = propsAPI.save();
+
+    var Sourc;
+    var p = 0;
+    var str = new Array(inf.nodes.length).fill(0);
+    if(inf.hasOwnProperty('edges')){
+      let Deg = new Array(inf.nodes.length).fill(0);
+      let Varif = new Array(inf.nodes.length).fill(0);
+      for (let indexE of inf.edges.keys()){
+        Sourc = inf.edges[indexE].target;
+        for (let indexN of inf.nodes.keys()){
+          if (Sourc === inf.nodes[indexN].id){
+            Deg[indexN]++;
+            Varif[indexN] = 1;
+          }
+        }
+        Sourc = inf.edges[indexE].source;
+        for (let indexN of inf.nodes.keys())
+          if (Sourc === inf.nodes[indexN].id)  Varif[indexN] = 1;
+      }
+      for(let count = 0; count < inf.nodes.length; count++){
+        for(let i = 0; i < Deg.length; i++){
+          if(Deg[i] === 0){
+            str[i] = 1;
+            p++;
+            for(let j = 0; j < inf.edges.length; j++)
+              if(inf.nodes[i].id == inf.edges[j].source)  Deg[j]--;
+          }
+        }
+      }
+      //in str >0
+      if(p <= inf.nodes.length) return 2; //loop
+      for(let i = 0; i < Varif.length; i++){
+        if(Varif[i] === 0)  return 3; // alone      in Varif =0
+      }
+    }else return 1; //nothing
+    return 0; 
+  }
+
   showDetail = ()=>{
     // this.handleLegal()
     const { propsAPI } = this.props;
     console.log(propsAPI.save())
-
     const inf = propsAPI.save();
-
+    // let err = this.handleError();
+    // console.log(err);
+    // if( err !== 0){
+    //   switch(err){
+    //     case 1: 
+    //       message.error('there is nothing yet!');
+    //       break;
+    //     case 2:
+    //       message.error('there is a loop!');
+    //       break;
+    //     case 3:
+    //       message.error('there is nothing yet!');
+    //       break;
+    //     case 4:
+    //       message.error('there is nothing yet!');
+    //       break;
+    //     default:
+    //       break;
+    //   }
+    //   return 0;
+    // }
     var Sourc = 0;
     var tag = 'Input';
     var stream = new Array();
@@ -159,6 +220,12 @@ class Run extends Component{
         var outcome = new Array()
         if(stream[k].tag !== '本地数据')
         {
+          if(stream[k].tag !== '数据随机划分'){
+            if(!all_data[0].labelArray.hasOwnProperty('public')){
+              message.error("have chooesed words")
+              return 0;
+            } 
+          }
           switch (stream[k].tag) {
             case '单变量线性回归':
                 outcome = OneVarLinearRegression(all_data);
