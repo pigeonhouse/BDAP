@@ -1,3 +1,5 @@
+import json, pprint, requests, textwrap
+
 def ArraytoString(Array):
     String = ""
 
@@ -43,6 +45,8 @@ class nodes:
             data = {'code': code % (self.id, ArraytoString(self.labelArray['public']), self.sourceID[0]['source'])}
         elif self.label == "LinearRegression":
             data = {'code': code % ()}
+        elif self.label == "Lenet5_train":
+            data = {'code': code % ()}
         else:
             data = None
 
@@ -58,7 +62,10 @@ class nodes:
         
         data_mine = self.matchfunction(code)
         
-        session_url = 'http://10.105.222.90:8998/sessions/0'
+        headers = {'Content-Type': 'application/json'}
+
+        session_url = 'http://10.105.222.90:8998/sessions/1'
+
         compute = requests.post(session_url+'/statements', data=json.dumps(data_mine), headers=headers)
       
         result_url = 'http://10.105.222.90:8998' + compute.headers['location']
