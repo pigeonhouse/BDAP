@@ -1,5 +1,5 @@
 import React from 'react';
-import { Card, Form, Input, Modal, Button } from 'antd';
+import { Card, Form, Input, Button } from 'antd';
 import { withPropsAPI } from '@src';
 import Selectword from '../DataOperate/selectword'
 import Uploadfile from '../DataOperate/upload'
@@ -233,15 +233,20 @@ class NodeDetail extends React.Component {
     }
     const { label, attr, anchor, group, Dataset } = item.getModel();
 
-    var targetid = new Array(anchor[0]).fill(0);
-    const inf = propsAPI.save().edges;
-    for(let i in inf){
-        if(inf[i].target === item.id && inf[i].targetAnchor < anchor[0]){
-          targetid[inf[i].targetAnchor] = inf[i].source;
-        }
+    if(label === '数据随机划分'){
+      var targetid = new Array();
     }
-    if(anchor[0] === 2){
-      targetid=[targetid[0], ...targetid];
+    else {
+      var targetid = new Array(anchor[0]).fill(0);
+      const inf = propsAPI.save().edges;
+      for(let i in inf){
+          if(inf[i].target === item.id && inf[i].targetAnchor < anchor[0]){
+            targetid[inf[i].targetAnchor] = inf[i].source;
+          }
+      }
+      if(anchor[0] === 2){
+        targetid=[targetid[0], ...targetid];
+      }
     }
     var arr = []
     if(group !== 'feature'){

@@ -55,7 +55,19 @@ class Selectword extends Component{
         return false;
     }
     findSourceLabel=(item)=>{
-        if(item.model.anchor[0] === 1 || !item.model.anchor[0])
+        if(item.model.label === '数据随机划分'){
+            const { propsAPI } = this.props;
+            const { save, find } = propsAPI;
+            const inf = save();
+            const edge = inf.edges;
+            for(let i in edge){
+                if(edge[i].target === item.model.id){
+                    const currentItem = find(edge[i].source);
+                    return this.findSourceLabel(currentItem);
+                }
+            }
+        }
+        else if(item.model.anchor[0] === 1 || !item.model.anchor[0])
             return item.model.labelArray.public?item.model.labelArray.public:[];
         else if(item.model.anchor[0] === 2){
             return [...item.model.labelArray.predict_x, ...item.model.labelArray.predict_y];
@@ -93,12 +105,6 @@ class Selectword extends Component{
                     labelArray = this.changelabelArray(item.model.labelArray.predict_x, sourcelabel)
                     break;
             }
-        }
-        if(this.props.label === '数据随机划分'){
-            const { update } = propsAPI;
-            update(item, {labelArray:{public:labelArray}});
-            console.log(propsAPI.save());
-            return ;
         }
         let mockdata = [];
         let targetkeys = [];
@@ -184,10 +190,7 @@ class Selectword extends Component{
         console.log('search:', dir, value);
     };
     isSelect=()=>{
-        if(this.props.label === '数据随机划分' && this.props.sourceid !== 0){
-            this.displayTransfer()
-        }
-        else if(this.props.sourceid === 0)
+        if(this.props.sourceid === 0)
         return (
             <Button style={{width:'100%'}} disabled>选择字段</Button>
         );

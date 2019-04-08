@@ -16,13 +16,17 @@ class FlowDataPanel extends React.Component {
     .then((response) => {
       if(response.status===200){
         response.json().then((respData)=>{
-          console.log(respData)
           this.setState({
             dataTable:respData,
           });
         })
       }
     })
+  }
+  componentWillReceiveProps(nextProps){
+    if(nextProps.dataTable.length !== 0){
+      this.setState({dataTable:nextProps.dataTable})
+    }
   }
   render() {
     var children = [];

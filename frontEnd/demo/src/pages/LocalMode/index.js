@@ -10,7 +10,6 @@ import styles from './index.less';
 import IntroJs from 'intro.js';
 import Run from "../../LocalModeComponents/Models/run"
 import { FlowDataPanel } from '../../LocalModeComponents/EditorDataPanel';
-import Papa from 'papaparse'
 
 const TabPane = Tabs.TabPane;
 class LocalMode extends React.Component {
@@ -32,7 +31,7 @@ class LocalMode extends React.Component {
     }).onexit(function () {
     }).start();
 }
-  state = {currentTab:'1'}
+  state = {currentTab:'1', dataTable:[]}
   componentDidMount(){
     const key = `open${Date.now()}`;
     const btn = (
@@ -54,40 +53,14 @@ class LocalMode extends React.Component {
   tabChange=(value)=>{
     this.setState({currentTab:value})
   }
-  askForFile = ()=>{
-    const init={
-      method: 'POST', 
-      body:"fileName=测试集.csv",
-      mode: 'cors',
-      headers: {
-        "Content-Type": "application/x-www-form-urlencoded;charset=utf-8"
-    　　  },
-      }
-      fetch(
-        'http://10.105.222.92:3000/showData',init
-      )
-      .then((response) => {
-        return response.json()
-      })
-      .then(data=>{
-        let len = data.length
-        var s = data[0]
-        for(let i = 1; i<len; i++){
-            s = s + "\n" + data[i]
-        }
-        console.log(s)
-        console.log(Papa.parse(s,{header:true,dynamicTyping: true}))
-      })
-      .catch(e => console.log('错误:', e))
-  }
   deleteFile = ()=>{
     const init={
       method: 'POST', 
-      body:"fileName=train_demo.csv",
+      body:"fileName=支持向量机.csv",
       mode: 'cors',
       headers: {
         "Content-Type": "application/x-www-form-urlencoded;charset=utf-8"
-    　　  },
+    　　 },
       }
       fetch(
         'http://10.105.222.92:3000/DeleteFile',init
@@ -98,24 +71,21 @@ class LocalMode extends React.Component {
       .then(a=>console.log(a))
       .catch(e => console.log('错误:', e))
   }
-
+  handleChange=(info)=>{
+    if (info.file.status === 'done') {
+      message.success(`${info.file.name} file uploaded successfully`);
+      this.setState({dataTable:info.file.response})
+    } else if (info.file.status === 'error') {
+      message.error(`${info.file.name} file upload failed.`);
+    }
+  }
 
   render() {
     const props = {
       name: 'file',
       action: 'http://10.105.222.92:3000/handleFile',
-      onChange(info) {
-        if (info.file.status === 'done') {
-          message.success(`${info.file.name} file uploaded successfully`);
-          console.log("-----response------")
-          console.log(info.file.response)
-        } else if (info.file.status === 'error') {
-          message.error(`${info.file.name} file upload failed.`);
-        }
-      },
     };
-    return (
-      
+    return (   
       <GGEditor className={styles.editor}>   
         <Row
           style={{ lineHeight: '40px',height: '40px', backgroundColor:'#343941',color:"white" }}
@@ -175,12 +145,12 @@ class LocalMode extends React.Component {
               >
                 <div style={{height:'calc(100vh - 105px)'}} span={4} className={styles.editorSidebar}
                   data-step="1" data-intro='在组件栏可以挑选想要的模块，左键单击拖拽添加至右侧画布内。' data-position='right'> 
-                  <FlowDataPanel />
+                  <FlowDataPanel dataTable={this.state.dataTable}/>
                 </div>
               </TabPane>
               <TabPane 
                 className={styles.leftMenu}
-                tab={<Icon type="api" className={styles.iconStyle}/> } 
+                tab={<Icon type="api" className={styles.iconStyle}/>} 
                 key="2"
               >
                 <div style={{height:'calc(100vh - 105px)'}} span={4} className={styles.editorSidebar}
@@ -190,7 +160,7 @@ class LocalMode extends React.Component {
               </TabPane>
               <TabPane 
                 className={styles.leftMenu}
-                tab={<Icon type="setting" className={styles.iconStyle}/> } 
+                tab={<Icon type="setting" className={styles.iconStyle}/>} 
                 key="3"
               >
                 <div style={{height:'calc(100vh - 105px)'}} span={4} className={styles.editorSidebar}
@@ -224,7 +194,7 @@ class LocalMode extends React.Component {
         data-step="4" data-intro="所有配置完成后，点击'运行'按钮开始运行整个工作流。" data-position='top'
         >
           <Col span={2}>
-            <Upload {...props}>
+            <Upload {...props} onChange={this.handleChange}>
               <Button style={{border:0,backgroundColor:'#343941',color:"#ddd",fontSize:20}}>
                 <Icon type="plus" />上传
               </Button>
@@ -236,7 +206,7 @@ class LocalMode extends React.Component {
           </Col>
           <Col span={11}></Col>
         </Row>
-      
+ 
         <FlowContextMenu />
       </GGEditor>
      
