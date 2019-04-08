@@ -1,8 +1,7 @@
 from flask import Flask, render_template, request
 from flask_cors import CORS
 import json, pprint, requests, textwrap
-from convertPost import convertPost
-import nodeCreate
+from nodeCreate import nodes
 
 global inputData
 global runningData
@@ -31,15 +30,16 @@ def handleInput():
 
     data_mine = {'code':code % request.json}
 
-    print(data['code'])
-
     headers = {'Content-Type': 'application/json'}
-    session_url = 'http://10.105.222.90:8998/sessions/0'
+
+    session_url = 'http://10.105.222.90:8998/sessions/1'
+
     compute = requests.post(session_url + '/statements', data=json.dumps(data_mine), headers=headers)
 
     result_url = 'http://10.105.222.90:8998' + compute.headers['location']
 
     r = requests.get(result_url, headers=headers)
+    
     print(r.json())
 
     while(True):
@@ -50,7 +50,7 @@ def handleInput():
 
     pprint.pprint(r.json())
 
-    data = convertPost(inputData)
+    data = inputData
     print(data)
 
     return json.dumps(data)
