@@ -1,5 +1,5 @@
 import React from 'react';
-import { Row, Col, Button,Steps, message, Radio,notification,Icon,Tabs,Upload} from 'antd';
+import { Row, Col, Button,Steps, message, notification,Icon,Tabs,Upload} from 'antd';
 import GGEditor, { Flow } from '@src';
 import EditorMinimap from '../../LocalModeComponents/EditorMinimap';
 import { FlowContextMenu } from '../../LocalModeComponents/EditorContextMenu';
@@ -13,9 +13,6 @@ import { FlowDataPanel } from '../../LocalModeComponents/EditorDataPanel';
 import Papa from 'papaparse'
 
 const TabPane = Tabs.TabPane;
-
-const RadioGroup = Radio.Group;
-const RadioButton = Radio.Button;
 class LocalMode extends React.Component {
   Intro = (key) => {
     notification.close(key)
@@ -35,7 +32,7 @@ class LocalMode extends React.Component {
     }).onexit(function () {
     }).start();
 }
-  state = {itemPanel:'FlowItemPanel', currentTab:'1'}
+  state = {currentTab:'1'}
   componentDidMount(){
     const key = `open${Date.now()}`;
     const btn = (
@@ -53,14 +50,6 @@ class LocalMode extends React.Component {
       btn,
       // key
     });
-  }
-  currentItemPanel=()=>{
-    if(this.state.itemPanel === 'FlowItemPanel'){
-      return <FlowItemPanel />;
-    }
-    else if(this.state.itemPanel === 'FlowDataPanel'){
-      return <FlowDataPanel></FlowDataPanel>
-    }
   }
   tabChange=(value)=>{
     this.setState({currentTab:value})
@@ -174,7 +163,7 @@ class LocalMode extends React.Component {
               >
                 <div style={{height:'calc(100vh - 105px)'}} span={4} className={styles.editorSidebar}
                   data-step="1" data-intro='在组件栏可以挑选想要的模块，左键单击拖拽添加至右侧画布内。' data-position='right'> 
-                  <FlowItemPanel />
+                  <FlowDataPanel />
                 </div>
               </TabPane>
               <TabPane 
@@ -182,14 +171,20 @@ class LocalMode extends React.Component {
                 tab={<Icon type="api" className={styles.iconStyle}/> } 
                 key="2"
               >
-                Content of tab 2
+                <div style={{height:'calc(100vh - 105px)'}} span={4} className={styles.editorSidebar}
+                  data-step="1" data-intro='在组件栏可以挑选想要的模块，左键单击拖拽添加至右侧画布内。' data-position='right'> 
+                  <FlowItemPanel />
+                </div>
               </TabPane>
               <TabPane 
                 className={styles.leftMenu}
                 tab={<Icon type="setting" className={styles.iconStyle}/> } 
                 key="3"
               >
-                Content of tab 3
+                <div style={{height:'calc(100vh - 105px)'}} span={4} className={styles.editorSidebar}
+                  data-step="1" data-intro='在组件栏可以挑选想要的模块，左键单击拖拽添加至右侧画布内。' data-position='right'> 
+                  <FlowItemPanel />
+                </div>
               </TabPane>
             </Tabs>
           </Col>
