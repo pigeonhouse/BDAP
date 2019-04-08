@@ -60,6 +60,13 @@ class Run extends Component{
         for (let indexN of inf.nodes.keys())
           if (Sourc === inf.nodes[indexN].id)  Varif[indexN] = 1;
       }
+      for(let i = 0; i < Deg.length; i++){
+        if(Deg[i] === 0){
+          if(inf.nodes[indexN].lable !== "本地数据"){
+            return 4;  //开头连错，不是数据模块
+          }
+        }
+      }
       for(let count = 0; count < inf.nodes.length; count++){
         for(let i = 0; i < Deg.length; i++){
           if(Deg[i] === 0){
@@ -222,7 +229,7 @@ class Run extends Component{
         {
           if(stream[k].tag !== '数据随机划分'){
             if(!all_data[0].labelArray.hasOwnProperty('public')){
-              message.error("have chooesed words")
+              message.error("还没有选择字段，请在右边参数栏点击选择字段")
               return 0;
             } 
           }

@@ -1,6 +1,7 @@
 import React from 'react';
 import { Row, Col, Button,Steps, message, notification,Icon,Tabs,Upload} from 'antd';
 import GGEditor, { Flow } from '@src';
+import { withPropsAPI } from '@src';
 import EditorMinimap from '../../LocalModeComponents/EditorMinimap';
 import { FlowContextMenu } from '../../LocalModeComponents/EditorContextMenu';
 import { FlowToolbar } from '../../LocalModeComponents/EditorToolbar';
@@ -10,7 +11,7 @@ import styles from './index.less';
 import IntroJs from 'intro.js';
 import Run from "../../LocalModeComponents/Models/run"
 import { FlowDataPanel } from '../../LocalModeComponents/EditorDataPanel';
-
+import FlowConnect from '../../LocalModeComponents/EditorConnect';
 const TabPane = Tabs.TabPane;
 class LocalMode extends React.Component {
   Intro = (key) => {
@@ -37,6 +38,7 @@ class LocalMode extends React.Component {
     username:'',
     password:'',
     remind:'false',
+    connectCtrl:false,
   }
   noRemind=(key)=>{
     notification.close(key)
@@ -46,6 +48,66 @@ class LocalMode extends React.Component {
     exp.setTime(exp.getTime() + Days*24*60*60*1000);
     document.cookie = 'accountInfo' + "="+ escape(accountInfo) + ";expires=" + exp.toGMTString()
   }
+
+  handleError = () =>{
+    const { propsAPI } = this.props;
+    const { save, find } = propsAPI;
+    console.log(save)
+    console.log(find)
+    console.log(propsAPI)
+    if(propsAPI['edges'] === undefined)
+    return 0;
+    const inf = propsAPI.save();
+
+    var Sourc;
+    var p = 0;
+    var str = new Array(inf.nodes.length).fill(0);
+    if(inf.hasOwnProperty('edges')){
+      let Deg = new Array(inf.nodes.length).fill(0);
+      let Varif = new Array(inf.nodes.length).fill(0);
+      for (let indexE of inf.edges.keys()){
+        Sourc = inf.edges[indexE].target;
+        for (let indexN of inf.nodes.keys()){
+          if (Sourc === inf.nodes[indexN].id){
+            Deg[indexN]++;
+            Varif[indexN] = 1;
+          }
+        }
+        Sourc = inf.edges[indexE].source;
+        for (let indexN of inf.nodes.keys())
+          if (Sourc === inf.nodes[indexN].id)  Varif[indexN] = 1;
+      }
+        for(let i = 0; i < Deg.length; i++){
+          if(Deg[i] === 0){
+            const name = inf.nodes[indexN].lable;
+            if(name == "本地数据" || name == "Titanic训练" || name == "Titanic测试"){
+              //可以哒；
+            }
+            else return 4;  //开头连错，不是数据模块
+          }
+      }
+      for(let count = 0; count < inf.nodes.length; count++){
+        for(let i = 0; i < Deg.length; i++){
+          if(Deg[i] === 0){
+            str[i] = 1;
+            p++;
+            for(let j = 0; j < inf.edges.length; j++)
+              if(inf.nodes[i].id == inf.edges[j].source)  Deg[j]--;
+          }
+        }
+      }
+      console.log("xxxxxxxxxxx");
+      console.log(str);
+      console.log(Varif);
+      //in str >0
+      if(p <= inf.nodes.length) return 2; //loop
+      for(let i = 0; i < Varif.length; i++){
+        if(Varif[i] === 0)  return 3; // alone      in Varif =0
+        }
+      }
+      return 0; 
+  }
+
   componentWillMount(){
     let arr,reg=new RegExp("(^| )"+'accountInfo'+"=([^;]*)(;|$)");
     let accountInfo =''
@@ -205,6 +267,35 @@ class LocalMode extends React.Component {
               <FlowToolbar/>
             </div>
             <Flow 
+              onDragEnd={()=>{
+                console.log('updatexxxxxxxxxxxxxxxxx');
+                if(this.state.connectCtrl){
+                  this.setState({connectCtrl:false})
+                }
+                else {
+                  this.setState({connectCtrl:true})
+                }
+                //  let err = this.handleError();
+                // if( err !== 0){
+                //   switch(err){
+                //     case 1: 
+                //       message.error('there is nothing yet!');
+                //       break;
+                //     case 2:
+                //       message.error('there is a loop!');
+                //       break;
+                //     case 3:
+                //       message.error('有单独的模块');
+                //       break;
+                //     case 4:
+                //       message.error('开头不是数据模块!');
+                //       break;
+                //     default:
+                //       break; 
+                //   }
+                //   return 0;
+                // }
+              }}
               style={{height:'calc(100vh - 142px)'}}
              />
           </Col>
@@ -233,14 +324,17 @@ class LocalMode extends React.Component {
           <Col span={2}>
               <Run></Run>
           </Col>
-          <Col span={11}></Col>
+          <Col span={11}>
+            <FlowConnect style={{width:0, height:0}} connectCtrl={this.state.connectCtrl}/>
+          </Col>
         </Row>
- 
+        
         <FlowContextMenu />
+        
       </GGEditor>
      
     );
   }
 }
 
-export default LocalMode;
+export default withPropsAPI(LocalMode);
