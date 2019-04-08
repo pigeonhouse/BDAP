@@ -85,7 +85,7 @@ export function Randis(allData){
     tem.push(tem1);
     tem.push(tem2);
 
-    console.log("tem")
-    console.log(tem);
+    // console.log("tem")
+    // console.log(tem);
     return {Dataset:tem};
 }
