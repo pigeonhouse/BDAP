@@ -1,7 +1,7 @@
 import React from 'react';
 import { ItemPanel, Item } from '@src';
 import styles from './index.less';
-import { Menu, Icon ,Tooltip} from 'antd';
+import { Menu, Icon ,Tooltip, message } from 'antd';
 const SubMenu = Menu.SubMenu;
 import GGEditor,{ Flow, RegisterNode } from '@src';
 class FlowDataPanel extends React.Component {
@@ -43,7 +43,7 @@ class FlowDataPanel extends React.Component {
       .then((response) => {
         return response.json()
       })
-      .then(a=>{console.log(a)})
+      .then(a=>{message.success(`${dataName}file deleted successfully`)})
       .catch(e => console.log('错误:', e))
   }
   deleteDataName=(dataName)=>{

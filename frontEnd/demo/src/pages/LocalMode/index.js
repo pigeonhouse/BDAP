@@ -32,12 +32,20 @@ class LocalMode extends React.Component {
     }).start();
 }
   state = {currentTab:'1', dataTable:[]}
+  noRemind=(key)=>{
+
+  }
   componentDidMount(){
     const key = `open${Date.now()}`;
     const btn = (
-      <Button type="primary" onClick={() => this.Intro(key)}>
-        需要
-      </Button>
+      <div>
+        <Button type="primary" onClick={() => this.Intro(key)} style={{marginRight:'10px'}}>
+          需要
+        </Button>
+        <Button type="primary" onClick={() => this.noRemind(key)}>
+          不再提醒
+        </Button>
+      </div>
     );
     notification.open({
       message: '是否需要帮助？',
@@ -84,8 +92,7 @@ class LocalMode extends React.Component {
             <a href="https://www.yuque.com/ddrid/tx7z84">
               <Button style={{border:0,backgroundColor:'#343941',color:"#ddd",fontSize:25}} >
                 <Icon type="question-circle" data-step="5" data-intro="如果想要进一步了解详细的使用教程及组件介绍，请点击此处查看文档。"/>
-              </Button>
-                        
+              </Button>                  
             </a>
           </Col>      
           <a href="https://github.com/pigeonhouse/BigDataPlayground" className={styles.githubCorner} aria-label="View source on GitHub">
@@ -174,8 +181,8 @@ class LocalMode extends React.Component {
         >
           <Col span={2}>
             <Upload {...props} onChange={this.handleChange}>
-              <Button style={{border:0,backgroundColor:'#343941',color:"#ddd",fontSize:20}}>
-                <Icon type="plus" />上传
+              <Button style={{border:0,backgroundColor:'#343941',color:"#ddd",fontSize:25}}>
+                <Icon type="plus" style={{fontSize:25}}/>上传
               </Button>
             </Upload>
           </Col>

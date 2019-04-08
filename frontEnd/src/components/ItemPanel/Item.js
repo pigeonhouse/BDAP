@@ -1,7 +1,7 @@
 import React from 'react';
 import withGGEditorContext from '@common/context/GGEditorContext/withGGEditorContext';
 import styles from './index.less'
-import { Menu, Icon, Row, Col, Tooltip } from 'antd';
+import { Menu, Icon, Row, Col, Tooltip, Popconfirm } from 'antd';
 const SubMenu = Menu.SubMenu;
 const MenuItemGroup = Menu.ItemGroup;
 
@@ -46,15 +46,16 @@ class Item extends React.Component {
       && label !== '本地数据' && label !== 'Titanic测试' && label !== 'Titanic训练'){
       return (
         <Col span={4}>
-          <Tooltip title='点击可删除上传的文件' visible={this.state.Tooltipvisible} placement='top'>
-            <Icon 
-              type="close" 
-              className={styles.iconCloseStyle} 
-              onClick={this.handleClickClose.bind(this, label)}
-              onMouseEnter={this.handleMouseEnterClose}
-              onMouseLeave={this.handleMouseLeaveClose}
-            />
-          </Tooltip>
+          <Popconfirm placement="rightTop" title="是否删除此文件" onConfirm={this.handleClickClose.bind(this, label)} okText="是" cancelText="否">
+            <Tooltip title='点击可删除上传的文件' visible={this.state.Tooltipvisible} placement='top'>
+              <Icon 
+                type="close" 
+                className={styles.iconCloseStyle}
+                onMouseEnter={this.handleMouseEnterClose}
+                onMouseLeave={this.handleMouseLeaveClose}
+              />
+            </Tooltip>
+          </Popconfirm>
         </Col>
       )
     }
