@@ -15,26 +15,38 @@ val file = project + "/" + previous
 val df = spark.read.format("parquet").load(file)
 var df_ = df
 
-    if(targetType == "number"){
-      df_ = df.select(aim.split(" ").map(name => col(name).cast(DoubleType)): _*).toDF(aim.split(" "):_*)
-    }else if(targetType == "Stringtype"){
+val source = df.columns
+
+val arrayaim = aim.split(" ")
+val arraytarget = targetType.split(" ")
+
+var dfbeta = df.withColumn("idx", monotonically_increasing_id())
+
+for(i <- 0 to arrayaim.length - 1){
+      dfbeta = dfbeta.drop(arrayaim(i))
+}
+
+for(i <- 0 to arrayaim.length - 1){
+  
+    dfbeta = dfbeta.withColumn("idx", monotonically_increasing_id())
+
+    if(arraytarget(i) == "number"){
+      df_ = df.select(col(arrayaim(i)).cast(DoubleType)).toDF(arrayaim(i))
+    }else if(arraytarget(i) == "Stringtype"){
       df_ = df.select(aim.split(" ").map(name => col(name).cast(StringType)): _*).toDF(aim.split(" "):_*)
-    }else if(targetType == "Integertype"){
+    }else if(arraytarget(i) == "Integertype"){
       df_ = df.select(aim.split(" ").map(name => col(name).cast(IntegerType)): _*).toDF(aim.split(" "):_*)
     }
-
-    var dfbeta = df
-    val aimarray = aim.split(" ")
-    for(i <- 0 to aimarray.length - 1){
-      dfbeta = dfbeta.drop(aimarray(i))
-    }
-
-    dfbeta = dfbeta.withColumn("idx", monotonically_increasing_id())
     df_ = df_.withColumn("idx", monotonically_increasing_id())
+    
+    dfbeta = dfbeta.join(df_, dfbeta("idx") === df_("idx")).drop("idx")
+}
 
-    val result_ = dfbeta.join(df_, dfbeta("idx") === df_("idx")).drop("idx")
+  var result_ = dfbeta
+    
+  result_ = result_.select(source.map(A => col(A)): _*)
 
-    result_.write.format("parquet").mode(SaveMode.Overwrite).save(project + "/" + id)
+  result_.write.format("parquet").mode(SaveMode.Overwrite).save(project + "/" + id)
 
   val fin = result_.limit(20).toJSON.collectAsList.toString
 
