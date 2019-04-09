@@ -187,17 +187,14 @@ class FlowContextMenu extends React.Component {
                   dataIndex: currentData[i].label,
                   width : len,
                   align: 'center',
-                  // filterDropdown: (
-                  // ),
-                
-                // filterDropdownVisible: this.state.filterDropdownVisible,
-                // onFilterDropdownVisibleChange: ()=> this.setState({ filterDropdownVisible: true }),
                 })
     }
     this.setState({currentData:currentData, sum})
     this.setState({col:columns, currentIndex:[], compareVisible:false})
-
-    let la = item.getModel().labelArray.public
+    let la = new Array();
+    for(let i in currentData){
+      la.push([currentData[i].label, 'false'])
+    }
     la = la.map(a=>a[0])
     this.setState({labelArray:la})
 

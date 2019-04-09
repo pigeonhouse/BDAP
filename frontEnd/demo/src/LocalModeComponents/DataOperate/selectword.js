@@ -55,6 +55,20 @@ class Selectword extends Component{
         }
         return false;
     }
+    changeSourceLabel=(label, labelArray)=>{
+        return labelArray;
+
+        switch(label){
+            case '缺失值填充':
+            case '归一化':
+            case '特征区间化':
+            case '特征分组归类':
+            case '特征二进制化':
+            case '数据随机划分':
+            case '数据类型转换':
+            return labelArray;
+        }
+    }
     findSourceLabel=(item)=>{
         if(item.model.label === '数据随机划分'){
             const { propsAPI } = this.props;
@@ -68,8 +82,11 @@ class Selectword extends Component{
                 }
             }
         }
-        else if(item.model.anchor[0] === 1 || !item.model.anchor[0])
-            return item.model.labelArray.public?item.model.labelArray.public:[];
+        else if(item.model.anchor[0] === 1 || !item.model.anchor[0]){
+            if(item.model.labelArray.public)
+            return this.changeSourceLabel(item.label, item.model.labelArray.public);
+            else return [];
+        }
         else if(item.model.anchor[0] === 2){
             return [...item.model.labelArray.predict_x, ...item.model.labelArray.predict_y];
         }

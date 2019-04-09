@@ -55,21 +55,27 @@ class Selectword extends Component{
         }
         return false;
     }
-    findSourceLabel=(item)=>{
-        if(item.model.label === '数据随机划分'){
-            const { propsAPI } = this.props;
-            const { save, find } = propsAPI;
-            const inf = save();
-            const edge = inf.edges;
-            for(let i in edge){
-                if(edge[i].target === item.model.id){
-                    const currentItem = find(edge[i].source);
-                    return this.findSourceLabel(currentItem);
-                }
-            }
+    changeSourceLabel=(label, labelArray)=>{
+        return labelArray;
+        switch(label){
+            case 'hdfs数据':
+            case '缺失值填充':
+            case '归一化':
+            case '标准化':
+            case 'one-hot编码':
+            case '列排序':
+            case 'StringIndexer':
+            case '特征分组归类':
+            case '数据类型转换':
+            return labelArray;
         }
-        else if(item.model.anchor[0] === 1 || !item.model.anchor[0])
-            return item.model.labelArray.public?item.model.labelArray.public:[];
+    }
+    findSourceLabel=(item)=>{
+        if(item.model.anchor[0] === 1 || !item.model.anchor[0]){
+            if(item.model.labelArray.public)
+            return this.changeSourceLabel(item.label, item.model.labelArray.public);
+            else return [];
+        }
         else if(item.model.anchor[0] === 2){
             return [...item.model.labelArray.predict_x, ...item.model.labelArray.predict_y];
         }
