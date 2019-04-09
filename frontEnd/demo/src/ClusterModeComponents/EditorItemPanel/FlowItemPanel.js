@@ -170,24 +170,6 @@ class FlowItemPanel extends React.Component {
           />
         </GGEditor>
       <SubMenu key="sub1" title={<span><Icon type="mail" /><span>数据源</span></span>}>
-          <Menu.Item key="1" > <ItemPanel><Item
-            type="node"
-            size="200*40"
-            shape='zero-one'
-            model={{
-              label: '本地数据',
-              elabel:'localFile',
-              attr:{},
-              Dataset: [],
-              labelArray: {}, 
-              length: 0,
-              anchor: [0, 1],
-              keyConfig:{
-                color_type: '#1890FF',
-                state_icon_url: 'https://gw.alipayobjects.com/zos/rmsportal/uZVdwjJGqDooqKLKtvGA.svg',
-              }
-            }}         
-          /></ItemPanel></Menu.Item>
           <Menu.Item key="2" > <ItemPanel><Item
             type="node"
             size="200*40"
