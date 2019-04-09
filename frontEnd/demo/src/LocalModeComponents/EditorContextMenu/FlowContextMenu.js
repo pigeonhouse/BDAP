@@ -35,7 +35,7 @@ class FlowContextMenu extends React.Component {
     compareVisible:false,
     col:[],
     sum:1000,
-    currentIndex:[],
+    currentIndex:-1,
     data:[],
     list:[],
     newRandomkey:0,
@@ -180,7 +180,10 @@ class FlowContextMenu extends React.Component {
       len = String(first).length>currentData[i].label.length?(String(first).length+2)*13:(currentData[i].label.length+2)*13;
       sum = sum+len
       columns.push({
-                  title : <Button onClick={()=>{this.visibleChart(i,currentData[i], this.state.groupNumbers)}}>{currentData[i].label}</Button>,
+                  title : <Button 
+                            onClick={()=>{this.visibleChart(i,currentData[i], this.state.groupNumbers)}}
+                          >{currentData[i].label}
+                          </Button>,
                   dataIndex: currentData[i].label,
                   width : len,
                   align: 'center',
