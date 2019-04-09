@@ -1,5 +1,5 @@
 import React from 'react'
-import { Modal, Table , Icon,Collapse,Row,Col,Button,Cascader,Card, Form, Input} from 'antd';
+import { Modal, Table , Icon,Collapse,Row,Col,Button,Cascader,Radio, Form, Input} from 'antd';
 import {
   Command,
   NodeMenu,
@@ -21,6 +21,8 @@ const Panel = Collapse.Panel;
 var echarts = require('echarts');
 var IntroJs = require('intro.js')
 var dataTool = require("echarts/dist/extension/dataTool");
+const RadioButton = Radio.Button;
+const RadioGroup = Radio.Group;
 
 class FlowContextMenu extends React.Component {
   state = { 
@@ -37,13 +39,17 @@ class FlowContextMenu extends React.Component {
     data:[],
     list:[],
     newRandomkey:0,
-    groupNumbers:3
+    groupNumbers:3,
+    visibleChartRadio:false,
+    currentdata:[],
+    currentChartType:'bar'
     // filterDropdownVisible:false
   }
 
   Chart = (indexOfFeature,data,showType,groupDivide)=>{
     this.setState({
       currentIndex:indexOfFeature,
+      currentdata:data,
       compareVisible:true
     })
     document.getElementById('main').removeAttribute("_echarts_instance_")
@@ -174,19 +180,12 @@ class FlowContextMenu extends React.Component {
       len = String(first).length>currentData[i].label.length?(String(first).length+2)*13:(currentData[i].label.length+2)*13;
       sum = sum+len
       columns.push({
-                  title : currentData[i].label,
+                  title : <Button onClick={()=>{this.visibleChart(i,currentData[i], this.state.groupNumbers)}}>{currentData[i].label}</Button>,
                   dataIndex: currentData[i].label,
                   width : len,
                   align: 'center',
-                  filterDropdown: (
-                  <div>
-                    <Button onClick={()=>{this.Chart(i,currentData[i],"bar", this.state.groupNumbers)}}>柱状图</Button>
-                    <br></br>
-                    <Button onClick={()=>{this.Chart(i,currentData[i],"pie", this.state.groupNumbers)}}>饼图</Button>
-                    <br></br>
-                    <Button onClick={()=>{this.Chart(i,currentData[i],"box", this.state.groupNumbers)}}>箱线图</Button>
-                  </div>
-                  ),
+                  // filterDropdown: (
+                  // ),
                 
                 // filterDropdownVisible: this.state.filterDropdownVisible,
                 // onFilterDropdownVisibleChange: ()=> this.setState({ filterDropdownVisible: true }),
@@ -240,7 +239,23 @@ class FlowContextMenu extends React.Component {
 
     this.setState({data:datas,list:list});
   }
-
+  visibleChart=(indexOfFeature,data,groupDivide)=>{
+    this.Chart(indexOfFeature,data,'bar',groupDivide);
+    this.setState({visibleChartRadio:true, currentChartType:'bar'})
+  }
+  changeChart=(e)=>{
+    const value = e.target.value;
+    this.Chart(this.state.currentIndex, this.state.currentdata, value, this.state.groupNumbers)
+    this.setState({currentChartType:value})
+  }
+  chartRadio=()=>{
+    if(this.state.visibleChartRadio)
+    return <RadioGroup onChange={this.changeChart} value={this.state.currentChartType}>
+            <RadioButton value="bar">柱状图</RadioButton>
+            <RadioButton value="pie">饼图</RadioButton>
+            <RadioButton value="box">箱线图</RadioButton>
+          </RadioGroup>
+  }
   showNModal = () => {
     this.setState({
       Nvisible: true,
@@ -378,7 +393,7 @@ class FlowContextMenu extends React.Component {
       const { propsAPI } = this.props;
       var item = propsAPI.getSelected()[0];
       const currentData = item.getModel().Dataset;
-      this.Chart(this.state.currentIndex, currentData[this.state.currentIndex], 'bar', values.groups)
+      this.Chart(this.state.currentIndex, currentData[this.state.currentIndex], this.state.currentChartType, values.groups)
     });
   }
 
@@ -620,6 +635,7 @@ class FlowContextMenu extends React.Component {
               
                 <Panel header="可视化" key="2"  >
                   <div >
+                    {this.chartRadio()}
                     <div>{this.compare()}{this.groupDivide()}</div>         
                     <div id="main" style={{ maxWidth: 350, height: 280 }}> </div>
                   </div>
