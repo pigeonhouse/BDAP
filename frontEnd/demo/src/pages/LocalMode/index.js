@@ -1,7 +1,6 @@
 import React from 'react';
 import { Row, Col, Button,Steps, message, notification,Icon,Tabs,Upload} from 'antd';
 import GGEditor, { Flow } from '@src';
-import { withPropsAPI } from '@src';
 import EditorMinimap from '../../LocalModeComponents/EditorMinimap';
 import { FlowContextMenu } from '../../LocalModeComponents/EditorContextMenu';
 import { FlowToolbar } from '../../LocalModeComponents/EditorToolbar';
@@ -268,7 +267,6 @@ class LocalMode extends React.Component {
             </div>
             <Flow 
               onDragEnd={()=>{
-                console.log('updatexxxxxxxxxxxxxxxxx');
                 if(this.state.connectCtrl){
                   this.setState({connectCtrl:false})
                 }
@@ -337,4 +335,4 @@ class LocalMode extends React.Component {
   }
 }
 
-export default withPropsAPI(LocalMode);
+export default LocalMode;

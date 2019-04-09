@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
-import { Button, Modal, Transfer } from 'antd'
+import { Button, Modal, Transfer, Tooltip, Divider } from 'antd'
 import { withPropsAPI } from '@src';
+import styles from './inputStyle.less'
 
 class Selectword extends Component{
     constructor(props){
@@ -10,6 +11,41 @@ class Selectword extends Component{
         visible: false,
         mockData: [],
         targetKeys: [],
+        toolTipsArray:[]
+    }
+    componentWillMount(){
+        const { propsAPI } = this.props;
+        const { getSelected } = propsAPI;
+        const item = getSelected()[0];
+        const model = item.getModel();
+        let labelArray;
+        if(model.group === 'ml')
+        {
+            let labelarray = JSON.parse(JSON.stringify(model.labelArray))
+            switch(this.props.index){
+                case 0:
+                    labelArray = labelarray.train_x;
+                    break;
+                case 1:
+                    labelArray = labelarray.train_y;
+                    break;
+                case 2:
+                    labelArray = labelarray.predict_x;
+                    break;
+            }
+        }
+        else{
+            let labelarray = JSON.parse(JSON.stringify(model.labelArray));
+            labelArray = labelarray.public;
+        }
+        labelArray = labelArray || [];
+        let toolTipsArray = [];
+        for(let i in labelArray){
+            if(labelArray[i][1] === true){
+                toolTipsArray.push(labelArray[i][0]);
+            }
+        }
+        this.setState({toolTipsArray})
     }
     isChange=(labelA, labelB)=>{
         if(!labelA || !labelB || labelA.length != labelB.length) return true;
@@ -20,10 +56,22 @@ class Selectword extends Component{
         return false;
     }
     findSourceLabel=(item)=>{
-        if(item.model.anchor[0] === 1 || !item.model.anchor[0])
+        if(item.model.label === '数据随机划分'){
+            const { propsAPI } = this.props;
+            const { save, find } = propsAPI;
+            const inf = save();
+            const edge = inf.edges;
+            for(let i in edge){
+                if(edge[i].target === item.model.id){
+                    const currentItem = find(edge[i].source);
+                    return this.findSourceLabel(currentItem);
+                }
+            }
+        }
+        else if(item.model.anchor[0] === 1 || !item.model.anchor[0])
             return item.model.labelArray.public?item.model.labelArray.public:[];
         else if(item.model.anchor[0] === 2){
-            return [...item.model.labelArray.text_x,...item.model.labelArray.text_y];
+            return [...item.model.labelArray.predict_x, ...item.model.labelArray.predict_y];
         }
     }
     changelabelArray=(labelA, labelB)=>{
@@ -55,7 +103,7 @@ class Selectword extends Component{
                     labelArray = this.changelabelArray(item.model.labelArray.train_y, sourcelabel)
                     break;
                 case 2:
-                    labelArray = this.changelabelArray(item.model.labelArray.text_x, sourcelabel)
+                    labelArray = this.changelabelArray(item.model.labelArray.predict_x, sourcelabel)
                     break;
             }
         }
@@ -85,9 +133,11 @@ class Selectword extends Component{
         let labelArray = [];
         const mockdata = this.state.mockData;
         const targetKeys = this.state.targetKeys;
+        let toolTipsArray = [];
         for(let i in mockdata){
             if(targetKeys.indexOf(mockdata[i].key) !== -1){
                 labelArray.push([mockdata[i].title, true]);
+                toolTipsArray.push(mockdata[i].title)
             }
             else labelArray.push([mockdata[i].title, false]);
         }
@@ -103,7 +153,7 @@ class Selectword extends Component{
                     labelarray.train_y = labelArray;
                     break;
                 case 2:
-                    labelarray.text_x = labelArray;
+                    labelarray.predict_x = labelArray;
                     break;
             }
         }
@@ -121,6 +171,7 @@ class Selectword extends Component{
         this.props.changeLabelArray(labelArray);
         this.setState({
             visible: false,
+            toolTipsArray
         });
     }
     
@@ -141,8 +192,31 @@ class Selectword extends Component{
     };
     isSelect=()=>{
         if(this.props.sourceid === 0)
-        return (<Button style={{width:'100%'}} disabled>选择字段</Button>)
-        else return <Button style={{width:'100%'}} onClick={this.displayTransfer}>选择字段</Button>
+        return (
+            <Button style={{width:'100%'}} disabled>选择字段</Button>
+        );
+        else if(this.state.toolTipsArray.length === 0){
+            return  <Button style={{width:'100%'}} onClick={this.displayTransfer}>选择字段</Button>
+        }
+        else return (
+            <Tooltip arrowPointAtCenter 
+                placement="bottom" 
+                title={() => {
+                    return (
+                        <div>
+                            已选择
+                            {this.state.toolTipsArray.map((item)=>{
+                                return <Divider style={{color:'#fff', margin:'8px 0'}}>{item}</Divider>
+                            })}
+                        </div>
+                    );
+                }}
+                overlayClassName={styles.divider}
+                mouseLeaveDelay="0.1"
+            >
+                <Button style={{width:'100%'}} onClick={this.displayTransfer}>选择字段</Button>
+            </Tooltip>
+        )
     }
     render(){
         return (

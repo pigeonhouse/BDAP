@@ -216,8 +216,8 @@ class SparkRun extends Component{
   render(){
     return (
       <div>
-      <Button onClick={()=>this.showDetail()}>SparkRun</Button>
-      <Button onClick={()=>this.intervaltest()}>intervalTest</Button>
+        <Button onClick={()=>this.showDetail()}>SparkRun</Button>
+        <Button onClick={()=>this.intervaltest()}>intervalTest</Button>
       </div>
     );
   }

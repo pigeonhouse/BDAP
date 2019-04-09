@@ -1,11 +1,13 @@
 import React from 'react';
-import { Card, Form, Input, Modal, Button } from 'antd';
+import { Card, Form, Input, Button } from 'antd';
 import { withPropsAPI } from '@src';
 import Selectword from '../DataOperate/selectword'
 import Uploadfile from '../DataOperate/upload'
 import HdfsFile from '../DataOperate/hdfsFile'
 import styles from './index.less';
 import Feature from '../DataOperate/Feature'
+import Papa from 'papaparse'
+import { Stat } from '../DataOperate/stat'
 
 const { Item } = Form;
 
@@ -43,7 +45,9 @@ class NodeDetail extends React.Component {
 
     const { form, propsAPI } = this.props;
     const { getSelected, executeCommand, update } = propsAPI;
-  
+    console.log(getSelected)
+    console.log(update)
+    console.log(propsAPI)
     form.validateFieldsAndScroll((err, values) => {
       if (err) {
         return;
@@ -80,15 +84,77 @@ class NodeDetail extends React.Component {
       visible: false,
     });
   }
-  isInputOutput(label){
+  isInputOutput(label, group, Dataset){
     if(label === 'hdfs数据')
-    return(
-      <HdfsFile ></HdfsFile>
-    )
+      return(
+        <HdfsFile ></HdfsFile>
+      )
     else if(label === '本地数据')
-    return (
-      <Uploadfile ></Uploadfile>
-    )
+      return (
+        <Uploadfile ></Uploadfile>
+      )
+    else if(group === 'input' && Dataset.length === 0){
+      const { propsAPI } = this.props;
+      const { getSelected } = propsAPI;
+      const item = getSelected()[0];
+      const model = item.getModel();
+      const init={
+        method: 'POST', 
+        body:"fileName=" + model.label,
+        mode: 'cors',
+        headers: {
+          "Content-Type": "application/x-www-form-urlencoded;charset=utf-8"
+      　　  },
+        }
+        fetch(
+          'http://10.105.222.92:3000/showData',init
+        )
+        .then((response) => {
+          if(response.status===200){
+            response.json().then((respData)=>{
+            let len = respData.length
+            var s = respData[0]
+            for(let i = 1; i<len; i++){
+                s = s + "\n" + respData[i]
+            }
+            var fieldNameArray = [];
+            let vectorLength;
+            const { propsAPI } = this.props;
+            const { getSelected, update } = propsAPI;
+            var results = Papa.parse(s,{header:true,dynamicTyping: true});
+            fieldNameArray.push(results.meta.fields);
+            vectorLength = results.data.length - 1
+            var n = new Array();
+
+            for(let indexOfCols = 0; indexOfCols < fieldNameArray[0].length; indexOfCols++){
+              var colName = fieldNameArray[0][indexOfCols];
+              var colValue = new Array();
+              for (let indexOfRows = 0; indexOfRows < results.data.length - 1; indexOfRows++){
+              colValue.push(results.data[indexOfRows][colName])
+              }
+              n.push({label:colName,value:colValue})
+              }
+              var STAT = new Array();
+              STAT = Stat(n);
+              let m = fieldNameArray[0].map((item)=>{
+                return [item, false];
+              })
+              var values = {
+                  Dataset:STAT,
+                  labelArray:{public:m}, 
+                  length:vectorLength
+              }
+              const item = getSelected()[0];
+              values['keyConfig'] = JSON.parse(JSON.stringify(item.model.keyConfig));
+              values.keyConfig.state_icon_url = 'https://gw.alipayobjects.com/zos/rmsportal/MXXetJAxlqrbisIuZxDO.svg';
+              update(item, {...values});
+              console.log("propsAPI")
+              console.log(propsAPI.save())
+            })
+          }
+        })
+        .catch(e => console.log('错误:', e))
+    }
   }
   isFeature = (group, label, sourceID)=>{
     if(group === 'feature'){
@@ -155,18 +221,22 @@ class NodeDetail extends React.Component {
     if (!item) {
       return null;
     }
+    const { label, attr, anchor, group, Dataset } = item.getModel();
 
-    const { label, attr, anchor, group } = item.getModel();
-
-    var targetid = new Array(anchor[0]).fill(0);
-    const inf = propsAPI.save().edges;
-    for(let i in inf){
-        if(inf[i].target === item.id && inf[i].targetAnchor < anchor[0]){
-          targetid[inf[i].targetAnchor] = inf[i].source;
-        }
+    if(label === '数据随机划分'){
+      var targetid = new Array();
     }
-    if(anchor[0] === 2){
-      targetid=[targetid[0], ...targetid];
+    else {
+      var targetid = new Array(anchor[0]).fill(0);
+      const inf = propsAPI.save().edges;
+      for(let i in inf){
+          if(inf[i].target === item.id && inf[i].targetAnchor < anchor[0]){
+            targetid[inf[i].targetAnchor] = inf[i].source;
+          }
+      }
+      if(anchor[0] === 2){
+        targetid=[targetid[0], ...targetid];
+      }
     }
     var arr = []
     if(group !== 'feature'){
@@ -219,7 +289,7 @@ class NodeDetail extends React.Component {
           })}
           {this.testLabelInput(group, getFieldDecorator)}
           {this.isFeature(group, label, targetid[0])}
-          {this.isInputOutput(label)}
+          {this.isInputOutput(label, group, Dataset)}
         </Form>
       </Card>
     );
