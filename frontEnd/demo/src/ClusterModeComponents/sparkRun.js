@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import { Button } from 'antd'
 import { withPropsAPI } from '@src';
-
+import { Stat } from './DataOperate/stat'
 var cur = 0
 
 class SparkRun extends Component{
@@ -88,25 +88,54 @@ class SparkRun extends Component{
 
     console.log('stream:')
     console.log(stream);
-
+    const { update, executeCommand, find } = propsAPI;
     const init={
         method: 'POST', 
         body:JSON.stringify(stream),
         mode: 'cors',
         headers: {'Content-Type': 'application/json'},
         }
-        // const { propsAPI } = this.props;
-        // const { update, executeCommand, find } = propsAPI;
         fetch(
           'http://localhost:5000/run',init
         )
-          .then(res => res.json())
-          .then(data => {
-            console.log(res)
-            // for(let i in data){
-            //   let item = find(data);
-            //   update(item, {});
-            // }
+          .then(res => {
+            if(res.status === 200){
+              res.json().then(res=>{
+                for(let k in res){
+                  const item = find(res[k][0]);
+                  const respData = res[k][1][0];
+                  let label = respData[0].colName.split(', ');
+                  let data = respData.slice(1);
+                  var Dataset = new Array();
+                  for(let i in label){
+                      var oneData = {};
+                      oneData['label'] = label[i];
+                      oneData['value'] = new Array();
+                      for(let j in data){
+                          if(data[j][label[i]]){
+                              oneData.value.push(data[j][label[i]])
+                          }
+                          else oneData.value.push(null)
+                      }
+                      Dataset.push(oneData);
+                  }
+                  var length = data.length;
+                  var labelArray = new Array();
+                  for(let i in label){
+                      labelArray.push([label[i], false]);
+                  }
+                  var values = {
+                      Dataset:Stat(Dataset),
+                      length,
+                      labelArray:{public:labelArray},
+
+                  }
+                  values['keyConfig'] = JSON.parse(JSON.stringify(item.model.keyConfig));
+                  values.keyConfig.state_icon_url = 'https://gw.alipayobjects.com/zos/rmsportal/MXXetJAxlqrbisIuZxDO.svg';
+                  update(item, {...values});
+                }
+              })
+            }
           })
           .catch(e => console.log('错误:', e))
   }
