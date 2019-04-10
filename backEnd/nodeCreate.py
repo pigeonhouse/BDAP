@@ -19,6 +19,7 @@ class nodes:
         self.attribute = attribute
         self.sourceID = sourceID
         self.labelArray = labelArray
+        self.file = ""
 
     def matchfunction(self, code):
         if self.label == "Fillna":
@@ -28,7 +29,7 @@ class nodes:
         elif self.label =='localFile':
             data = {'code': code }
         elif self.label == 'hdfsFile':
-            data = {'code': code % self.id}
+            data = {'code': code % (self.id, self.file)}
         elif self.label == 'LogisticRegression':
             data = {'code': code % (self.id)}
         elif self.label == "TransformType":
@@ -64,7 +65,7 @@ class nodes:
         
         headers = {'Content-Type': 'application/json'}
 
-        session_url = 'http://10.105.222.90:8998/sessions/1'
+        session_url = 'http://10.105.222.90:8998/sessions/0'
 
         compute = requests.post(session_url+'/statements', data=json.dumps(data_mine), headers=headers)
       

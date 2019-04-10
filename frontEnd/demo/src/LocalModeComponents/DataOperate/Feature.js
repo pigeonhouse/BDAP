@@ -72,7 +72,7 @@ class Feature extends Component{
                             <Divider></Divider>
                         </Fragment>
             case '特征二进制化':
-                return <Divider>{tag}</Divider>
+                return;
             }
     }
     isDynamic = (arr)=>{

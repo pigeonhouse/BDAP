@@ -64,8 +64,8 @@ class HdfsFile extends Component{
                         }
                         console.log('values')
                         console.log(values)
-                        // values['keyConfig'] = JSON.parse(JSON.stringify(item.model.keyConfig));
-                        // values.keyConfig.state_icon_url = 'https://gw.alipayobjects.com/zos/rmsportal/MXXetJAxlqrbisIuZxDO.svg';
+                        values['keyConfig'] = JSON.parse(JSON.stringify(item.model.keyConfig));
+                        values.keyConfig.state_icon_url = 'https://gw.alipayobjects.com/zos/rmsportal/MXXetJAxlqrbisIuZxDO.svg';
                         update(item, {...values});
                     })
                   }

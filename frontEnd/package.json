@@ -30,10 +30,7 @@
     "type": "git",
     "url": "git+https://github.com/gaoli/GGEditor.git"
   },
-  "author": {
-    "name": "高力",
-    "email": "3071730@qq.com"
-  },
+  "author": "高力 <3071730@qq.com>",
   "license": "MIT",
   "bugs": {
     "url": "https://github.com/gaoli/GGEditor/issues"

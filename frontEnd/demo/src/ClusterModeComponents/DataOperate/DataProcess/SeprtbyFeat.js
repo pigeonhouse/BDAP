@@ -56,7 +56,7 @@ export function SeprtbyFeat(allData){
                             tp = [k, k+interval, count];
                             Dataset[i]['group'].push(tp);
                         }
-                        Dataset.push({'label':Dataset[i].label+"_Gaped", 'value':temp});
+                        Dataset.push({'lable':Dataset[i].label+"_Gaped", 'value':temp});
                         // for(let j = 0; j < attr[key][1]-1;j++){
                         //     for(let l = 0; l < interval; l++){
                         //         k++

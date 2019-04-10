@@ -5,6 +5,7 @@ from nodeCreate import nodes
 
 global inputData
 global runningData
+global inputfile
 
 app = Flask(__name__)
 
@@ -20,6 +21,7 @@ global loss
 
 @app.route('/handleInput', methods=['GET', 'POST']) 
 def handleInput():
+    global inputfile
     print(request.json)
     fileobj = open("./handleInput.scala", "r")
 
@@ -27,6 +29,8 @@ def handleInput():
         code = fileobj.read()
     finally:
         fileobj.close()
+
+    inputfile = request.json
 
     data_mine = {'code':code % request.json}
 
@@ -87,6 +91,7 @@ def RunningPost():
 #处理前端传来的图信息并按步执行
 @app.route('/run', methods=['GET', 'POST'])
 def run():
+    global inputfile
     print(request.json)
     picture = request.json
     node_ = []
@@ -97,6 +102,7 @@ def run():
     finalData = []
     for node in node_:
         print(node.label)
+        node.file = inputfile
         node.excuted()
        
         if node.label != "hdfsFile":
