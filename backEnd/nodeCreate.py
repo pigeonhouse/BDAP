@@ -19,6 +19,7 @@ class nodes:
         self.attribute = attribute
         self.sourceID = sourceID
         self.labelArray = labelArray
+        self.file = ""
 
     def matchfunction(self, code):
         if self.label == "Fillna":
@@ -28,7 +29,7 @@ class nodes:
         elif self.label =='localFile':
             data = {'code': code }
         elif self.label == 'hdfsFile':
-            data = {'code': code % self.id}
+            data = {'code': code % (self.id, self.file)}
         elif self.label == 'LogisticRegression':
             data = {'code': code % (self.id)}
         elif self.label == "TransformType":
