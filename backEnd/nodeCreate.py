@@ -65,7 +65,7 @@ class nodes:
         
         headers = {'Content-Type': 'application/json'}
 
-        session_url = 'http://10.105.222.90:8998/sessions/1'
+        session_url = 'http://10.105.222.90:8998/sessions/0'
 
         compute = requests.post(session_url+'/statements', data=json.dumps(data_mine), headers=headers)
       
