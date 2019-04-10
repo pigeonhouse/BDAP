@@ -14,13 +14,23 @@ class FeatureRegion extends Component {
   }
   componentWillMount(){
     const { propsAPI } = this.props;
-    const { getSelected, executeCommand, update } = propsAPI;
+    const { getSelected } = propsAPI;
     const item = getSelected()[0];
     const attr = item.model.attr;
-    if(attr[this.props.tag])
-    this.setState({
-      groupingType:attr[this.props.tag][0]
-    })
+    if(attr[this.props.tag]){
+      this.setState({
+        groupingType:attr[this.props.tag][0]
+      })
+    }
+  }
+  componentDidMount(){
+    const { propsAPI } = this.props;
+    const { getSelected } = propsAPI;
+    const item = getSelected()[0];
+    const attr = item.model.attr;
+    if(attr[this.props.tag] && attr[this.props.tag][0] === 'user-defined'){
+        this.setState({region:attr[this.props.tag].slice(1)})
+    }
   }
   handleSubmit1 = (value) => {
     const { propsAPI } = this.props;
@@ -53,9 +63,10 @@ class FeatureRegion extends Component {
       let attr = item.model.attr;
       const tag = this.props.tag;
       for(let i in values.value){
-        attr[tag][Number(i)+1] = [Number(values.value[i]), 
-                                  Number(values.min[i]), 
-                                  Number(values.max[i])];
+        attr[tag][Number(i)+1] = [
+          values.value[i]?Number(values.value[i]):null,
+          values.min[i]?Number(values.min[i]):null,
+          values.max[i]?Number(values.max[i]):null];
       }
       executeCommand(() => {
         update(item,{attr});
@@ -80,7 +91,7 @@ class FeatureRegion extends Component {
     })
   }
   remove=(index)=>{
-    const { propsAPI } = this.props;
+    const { propsAPI, form } = this.props;
     const { getSelected, executeCommand, update } = propsAPI;
     const item = getSelected()[0];
     let attr = JSON.parse(JSON.stringify(item.model.attr));
@@ -88,9 +99,22 @@ class FeatureRegion extends Component {
     executeCommand(() => {
       update(item,{attr:attr});
     });
-    this.setState({
-      region:attr[this.props.tag].slice(1)
-    })
+    this.setState((prevState)=>({
+      region:prevState.region.splice(index, 1)
+    }))
+    const region = this.state.region;
+    for(let i in region){
+      let value = `value[${i}]`;
+      let max = `max[${i}]`;
+      let min = `min[${i}]`;
+      let values = {};
+      values[value] = region[i][0];
+      values[min] = region[i][1];
+      values[max] = region[i][2];
+      form.setFieldsValue({
+        ...values
+      })
+    }
   }
   isGroupingType=()=>{
     const { propsAPI } = this.props;
@@ -147,7 +171,6 @@ class FeatureRegion extends Component {
       }
       return  <Form>
         {region.map((item, index)=>{
-          console.log(item)
           return <Item 
                   {...inlineFormItemLayout} 
                   style={{margin:0}}
@@ -241,7 +264,7 @@ class FeatureRegion extends Component {
     return (
       <div>
         分组方式:&nbsp;&nbsp;&nbsp;
-        <Select defaultValue="normal" style={{ width: 140 }} onChange={this.handleChange}>
+        <Select value={this.state.groupingType} style={{ width: 140 }} onChange={this.handleChange}>
           <Option value="normal">顺序分组</Option>
           <Option value="user-defined">自定义分组</Option>
         </Select>

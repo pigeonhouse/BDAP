@@ -103,7 +103,7 @@ class SparkRun extends Component{
               res.json().then(res=>{
                 for(let k in res){
                   const item = find(res[k][0]);
-                  const respData = res[k][1][0];
+                  const respData = res[k][1];
                   let label = respData[0].colName.split(', ');
                   let data = respData.slice(1);
                   var Dataset = new Array();
