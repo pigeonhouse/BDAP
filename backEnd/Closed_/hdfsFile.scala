@@ -4,7 +4,7 @@ import org.apache.spark.sql.functions.col
 
 val project = "Demo"
 val id = "%s"
-val file = "/demoData/train_demo.csv"
+val file = "/demoData/%s"
 
 val df = spark.read.format("csv").option("header", "true").option("inferSchema", "true").load(file)
 
