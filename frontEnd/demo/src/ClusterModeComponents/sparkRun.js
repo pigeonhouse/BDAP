@@ -120,15 +120,9 @@ class SparkRun extends Component{
                       Dataset.push(oneData);
                   }
                   var length = data.length;
-                  var labelArray = new Array();
-                  for(let i in label){
-                      labelArray.push([label[i], false]);
-                  }
                   var values = {
                       Dataset:Stat(Dataset),
                       length,
-                      labelArray:{public:labelArray},
-
                   }
                   values['keyConfig'] = JSON.parse(JSON.stringify(item.model.keyConfig));
                   values.keyConfig.state_icon_url = 'https://gw.alipayobjects.com/zos/rmsportal/MXXetJAxlqrbisIuZxDO.svg';
