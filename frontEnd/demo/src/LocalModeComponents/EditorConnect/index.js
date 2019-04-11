@@ -1,10 +1,11 @@
 import React from 'react';
 import { withPropsAPI } from '@src'
 class FlowConnect extends React.Component {
-
-  handleError = () =>{
+  componentWillUpdate(){
+    console.log('----------------')
     const { propsAPI } = this.props;
-    const { save, find } = propsAPI;
+    const { save } = propsAPI;
+    console.log(propsAPI.save())
     if(propsAPI['edges'] === undefined)
       return 0;
     console.log(propsAPI['edges'])
@@ -91,14 +92,17 @@ class FlowConnect extends React.Component {
       }
       console.log("qqqqqqqqqqqqqqqqqqqqqqqqqqqq")
       return 0; 
-    }
-  exam(){
-    this.handleError()
   }
+  handleError=()=>{
+    const { propsAPI } = this.props;
+    const { save, find } = propsAPI;
+    console.log(propsAPI.save())
+    
+    }
   render() {
     return (
         <div>
-            {this.exam()}
+          {this.handleError()}
         </div>
     );
   }
