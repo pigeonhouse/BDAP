@@ -1,6 +1,6 @@
 export function Onehot(allData){
     var Dataset = allData[1].Dataset;
-    var tem, temp;
+    var tem, temp, col, nop;
     var labelArray = new Array();
     for(let i = 0; i < Dataset.length ; i++){
         tem = 0;
@@ -18,32 +18,39 @@ export function Onehot(allData){
         }
         labelArray.push(temp);
     }
-    // var Dataset = [[{label:'id',value:['mon','tur','sun','sta']}]];
-    // var labelArray = [["id",true]];
-    // var stat = [{average:2,max:3,min:2,media:2},{average:2,max:3,min:2,media:2},{average:2,max:3,min:2,media:2}]
-
-    console.log(labelArray)
     var tep,tp;
     for(let i = 0; i < labelArray.length;i++){
         if(labelArray[i][1] == true){
-            for(let j = 0; j < Dataset[i].value.length; j++){
-                    tp = new Array();
-                    tep = { 'label': labelArray[i][0],'stat' : new Array(),'value' : new Array()};
+                col = new Array();
                 for(let k = 0; k < Dataset[i].value.length; k++){
-                    if(k == j){
-                        tp[k] = 1;
+                    nop = 0;
+                    var p = 0;
+                    if(col.hasOwnProperty('length'))
+                        for(;p < col.length;p++){
+                            if(Dataset[i].value[k] == col[p]){
+                                nop = 1;
+                                break;
+                            }
+                        }
+                    if(!nop){
+                        col.push(Dataset[i].value[k]);
                     }
-                    else    tp[k] = 0;
                 }
-                tep.value = tp;
-                tep.stat = Dataset[i].stat;
-                Dataset.push(tep);
-            }
+                for(let k = 0; k < col.length ; k++){
+                    tp = new Array();
+                    tep = { 'label': labelArray[i][0],'stat': new Array(),'value' : new Array()};
+                    for(let n = 0;n < Dataset[i].value.length; n++){
+                        if(Dataset[i].value[n] == col[k])   tp[n] = 1;
+                        else tp[n] = 0;
+                    }
+                    tep.value = tp;
+                    tep.stat = Dataset[i].stat;
+                    Dataset.push(tep);
+                } 
         }
     }
     console.log(Dataset);
     allData[1].Dataset = Dataset;
-    // allData.labelArray = labelArray1;
 
     return allData[1];
 }

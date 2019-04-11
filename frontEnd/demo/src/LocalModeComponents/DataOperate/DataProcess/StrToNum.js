@@ -31,7 +31,6 @@ export function StrToNum(allData){
                 for(let k = 0; k < attr.public.length; k++){
                     for(let l = 1;l < attr.public[k].length;l++ ){
                         if(Dataset[i].value[j] == attr.public[k][l]){
-
                             Dataset[i].value[j] = attr.public[k][0];
                         }
                     }
