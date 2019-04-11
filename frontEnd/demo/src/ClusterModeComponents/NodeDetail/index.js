@@ -45,9 +45,6 @@ class NodeDetail extends React.Component {
 
     const { form, propsAPI } = this.props;
     const { getSelected, executeCommand, update } = propsAPI;
-    console.log(getSelected)
-    console.log(update)
-    console.log(propsAPI)
     form.validateFieldsAndScroll((err, values) => {
       if (err) {
         return;
@@ -239,7 +236,7 @@ class NodeDetail extends React.Component {
       }
     }
     var arr = []
-    if(group !== 'feature'){
+    if(group !== 'feature' && label !== 'hdfs数据'){
       for (let i in attr) {
         let o = {};
         o[i] = attr[i];

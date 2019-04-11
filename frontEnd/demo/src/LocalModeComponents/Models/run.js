@@ -36,82 +36,10 @@ class Run extends Component{
       visible: false,
     });
   }
-
-  handleError = () =>{
-    const { propsAPI } = this.props;
-    console.log(propsAPI.save())
-    const inf = propsAPI.save();
-
-    var Sourc;
-    var p = 0;
-    var str = new Array(inf.nodes.length).fill(0);
-    if(inf.hasOwnProperty('edges')){
-      let Deg = new Array(inf.nodes.length).fill(0);
-      let Varif = new Array(inf.nodes.length).fill(0);
-      for (let indexE of inf.edges.keys()){
-        Sourc = inf.edges[indexE].target;
-        for (let indexN of inf.nodes.keys()){
-          if (Sourc === inf.nodes[indexN].id){
-            Deg[indexN]++;
-            Varif[indexN] = 1;
-          }
-        }
-        Sourc = inf.edges[indexE].source;
-        for (let indexN of inf.nodes.keys())
-          if (Sourc === inf.nodes[indexN].id)  Varif[indexN] = 1;
-      }
-      for(let i = 0; i < Deg.length; i++){
-        if(Deg[i] === 0){
-          if(inf.nodes[indexN].lable !== "本地数据"){
-            return 4;  //开头连错，不是数据模块
-          }
-        }
-      }
-      for(let count = 0; count < inf.nodes.length; count++){
-        for(let i = 0; i < Deg.length; i++){
-          if(Deg[i] === 0){
-            str[i] = 1;
-            p++;
-            for(let j = 0; j < inf.edges.length; j++)
-              if(inf.nodes[i].id == inf.edges[j].source)  Deg[j]--;
-          }
-        }
-      }
-      //in str >0
-      if(p <= inf.nodes.length) return 2; //loop
-      for(let i = 0; i < Varif.length; i++){
-        if(Varif[i] === 0)  return 3; // alone      in Varif =0
-      }
-    }else return 1; //nothing
-    return 0; 
-  }
-
   showDetail = ()=>{
-    // this.handleLegal()
     const { propsAPI } = this.props;
     console.log(propsAPI.save())
     const inf = propsAPI.save();
-    // let err = this.handleError();
-    // console.log(err);
-    // if( err !== 0){
-    //   switch(err){
-    //     case 1: 
-    //       message.error('there is nothing yet!');
-    //       break;
-    //     case 2:
-    //       message.error('there is a loop!');
-    //       break;
-    //     case 3:
-    //       message.error('there is nothing yet!');
-    //       break;
-    //     case 4:
-    //       message.error('there is nothing yet!');
-    //       break;
-    //     default:
-    //       break;
-    //   }
-    //   return 0;
-    // }
     var Sourc = 0;
     var tag = 'Input';
     var stream = new Array();
@@ -190,31 +118,6 @@ class Run extends Component{
         }
       }
     }
-    // if(inf.hasOwnProperty('edges')){
-    // for (let indexN of inf.nodes.keys()) {
-    //   if ('Input' === inf.nodes[indexN].label) {
-    //     Sourc = inf.nodes[indexN].id;
-    //     attribute = inf.nodes[indexN].attr
-    //     stream.push({"label":tag,"attribute":attribute});
-    //     break;
-    //   }
-    // }
-    // for (var k = 0; k < inf.nodes.length; k++) {
-    //   for (let indexE of inf.edges.keys()) {
-    //     if (Sourc === inf.edges[indexE].source) {
-    //       Sourc = inf.edges[indexE].target;
-    //       for (let indexN of inf.nodes.keys()) {
-    //         if (Sourc === inf.nodes[indexN].id) {
-    //           tag = inf.nodes[indexN].label;
-    //           attribute = inf.nodes[indexN].attr
-    //           stream.push({"label":tag,"attribute":attribute})
-    //           break;
-    //         }
-    //       }
-    //       break;
-    //     }
-    //   }
-    // }
     console.log('stream:')
     console.log(stream);
     this.run(stream, propsAPI);
@@ -229,7 +132,16 @@ class Run extends Component{
         {
           if(stream[k].tag !== '数据随机划分'){
             if(!all_data[0].labelArray.hasOwnProperty('public')){
-              message.error("还没有选择字段，请在右边参数栏点击选择字段")
+              message.error("还没有选择字段，请在右边参数栏点击选择字段");
+
+              const { find, update, executeCommand } = propsAPI;
+              const nextitem = find(stream[k].id);
+              var value = JSON.parse(JSON.stringify(nextitem.model.keyConfig));
+              value.state_icon_url = 'https://gw.alipayobjects.com/zos/rmsportal/MXXetJAxlqrbisIuZxDO.svg';
+              executeCommand(() => {
+                update(nextitem, {keyConfig:{...value}});
+              });
+
               return 0;
             } 
           }
@@ -266,6 +178,9 @@ class Run extends Component{
                 break
             case '特征二进制化':
                 outcome = Onehot(all_data)
+                break
+            case '数据类型转化':
+                
                 break
             case '缺失值填充':
                 outcome = fillNa(all_data);
