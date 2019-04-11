@@ -1,6 +1,6 @@
 export function Onehot(allData){
     var Dataset = allData[1].Dataset;
-    var tem, temp, col, nop;
+    var tem, temp, col, nop, count;
     var labelArray = new Array();
     for(let i = 0; i < Dataset.length ; i++){
         tem = 0;
@@ -36,9 +36,11 @@ export function Onehot(allData){
                         col.push(Dataset[i].value[k]);
                     }
                 }
+                count = 1;
                 for(let k = 0; k < col.length ; k++){
                     tp = new Array();
-                    tep = { 'label': labelArray[i][0],'stat': new Array(),'value' : new Array()};
+                    tep = { 'label': labelArray[i][0]+count,'stat': new Array(),'value' : new Array()};
+                    count++;
                     for(let n = 0;n < Dataset[i].value.length; n++){
                         if(Dataset[i].value[n] == col[k])   tp[n] = 1;
                         else tp[n] = 0;
