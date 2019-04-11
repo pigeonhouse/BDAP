@@ -12,7 +12,7 @@ val file = project + "/" + previous
 var df = spark.read.format("parquet").load(file)
 var df_ = df
 
-val discretizer = new QuantileDiscretizer().setInputCol(aim).setOutputCol(newcol).setNumBuckets(5)
+val discretizer = new QuantileDiscretizer().setInputCol(aim).setOutputCol(newcol).setNumBuckets(NumBuckets)
 
 val result = discretizer.fit(df_).transform(df_)
 
