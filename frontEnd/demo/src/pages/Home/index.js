@@ -56,7 +56,6 @@ class HomePage extends React.Component {
             if(this.state.remind === '')
               accountInfo = values.username+ '&' +values.password + '&' + 'true';
             else accountInfo = values.username+ '&' +values.password + '&' + this.state.remind;
-            console.log(accountInfo)
             let Days = 3;
             let exp = new Date();
             exp.setTime(exp.getTime() + Days*24*60*60*1000);
@@ -78,6 +77,7 @@ class HomePage extends React.Component {
         description: '在这里选择使用的模式',
         duration: 1
       });
+      this.setState({redirect:false})
       return <Redirect to="/route" />;
     }
     const {getFieldDecorator} = this.props.form;

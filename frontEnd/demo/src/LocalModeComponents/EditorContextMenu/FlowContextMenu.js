@@ -266,6 +266,7 @@ class FlowContextMenu extends React.Component {
     console.log(e);
     this.setState({
       loading: true,
+
     });
     setTimeout(()=>{
       this.setState({loading:false, Nvisible:false});
@@ -291,6 +292,7 @@ class FlowContextMenu extends React.Component {
     this.setState({
       visible: false,
       MlEvaluteVisible: false,
+      visibleChartRadio:false,
       col:[],
       data:[]
     });
@@ -299,6 +301,7 @@ class FlowContextMenu extends React.Component {
     this.setState({
       visible: false,
       MlEvaluteVisible: false,
+      visibleChartRadio:false,
       col:[],
       data:[]
     });
