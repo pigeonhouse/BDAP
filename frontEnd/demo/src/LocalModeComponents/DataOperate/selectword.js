@@ -11,7 +11,8 @@ class Selectword extends Component{
         visible: false,
         mockData: [],
         targetKeys: [],
-        toolTipsArray:[]
+        toolTipsArray:[],
+        Tooltipvisible:false,
     }
     componentWillMount(){
         const { propsAPI } = this.props;
@@ -218,33 +219,72 @@ class Selectword extends Component{
     handleSearch = (dir, value) => {
         console.log('search:', dir, value);
     };
+    tooltipWord=()=>{
+        switch(this.props.label){
+            case'缺失值填充': return <div>进行缺失值填充的字段:</div>
+            case'归一化': return <div>进行归一化的字段:</div>
+            case'特征区间化': return <div>进行特征区间化的字段:</div>
+            case'特征二进制化': return <div>进行特征二进制化的字段:</div>
+            case'数据类型转换': return <div>进行数据类型转换的字段:</div>
+        }
+        const {propsAPI} = this.props;
+        const { getSelected } = propsAPI;
+        const item = getSelected()[0];
+        if(item.model.group === 'ml'){
+            switch(this.props.index){
+                case 0: return <div>训练集特征列字段：</div>
+                case 1: return <div>训练集目标列字段：</div>
+                case 2: return <div>预测集特征列字段：</div>
+            }
+        }
+    }
     isSelect=()=>{
         if(this.props.sourceid === 0)
         return (
-            <Button style={{width:'100%'}} disabled>选择字段</Button>
+            <div>
+                {this.tooltipWord()}
+                <Button style={{width:'100%', marginBottom:'10px'}} disabled>选择字段</Button>
+            </div>       
         );
         else if(this.state.toolTipsArray.length === 0){
-            return  <Button style={{width:'100%'}} onClick={this.displayTransfer}>选择字段</Button>
+            return (
+                <div>
+                    {this.tooltipWord()}
+                    <Button style={{width:'100%', marginBottom:'10px'}} onClick={this.displayTransfer}>选择字段</Button>
+                </div>       
+            ); 
         }
         else return (
-            <Tooltip arrowPointAtCenter 
-                placement="bottom" 
-                title={() => {
-                    return (
-                        <div>
-                            已选择
-                            {this.state.toolTipsArray.map((item)=>{
-                                return <Divider style={{color:'#fff', margin:'8px 0'}}>{item}</Divider>
-                            })}
-                        </div>
-                    );
-                }}
-                overlayClassName={styles.divider}
-                mouseLeaveDelay="0.1"
-            >
-                <Button style={{width:'100%'}} onClick={this.displayTransfer}>选择字段</Button>
-            </Tooltip>
+            <div>
+                {this.tooltipWord()}
+                <Tooltip arrowPointAtCenter 
+                    visible={this.state.Tooltipvisible}
+                    placement="bottom" 
+                    title={() => {
+                        return (
+                            <div>
+                                已选择
+                                {this.state.toolTipsArray.map((item)=>{
+                                    return <Divider style={{color:'#fff', margin:'8px 0'}}>{item}</Divider>
+                                })}
+                            </div>
+                        );
+                    }}
+                    overlayClassName={styles.divider}
+                    mouseLeaveDelay="0.1"
+                >
+                    <Button style={{width:'100%', marginBottom:'10px'}} onClick={this.displayTransfer}
+                    onMouseEnter={this.handleMouseEnterClose}
+                    onMouseLeave={this.handleMouseLeaveClose}>选择字段</Button>
+                </Tooltip>
+            </div>
         )
+    }
+    handleMouseEnterClose=()=>{
+        this.setState({Tooltipvisible:true})
+    }
+    handleMouseLeaveClose=()=>{
+        this.setState({Tooltipvisible:false})  
     }
     render(){
         return (
