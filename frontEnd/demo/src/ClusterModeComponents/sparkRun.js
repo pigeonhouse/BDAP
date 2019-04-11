@@ -112,7 +112,7 @@ class SparkRun extends Component{
                       oneData['label'] = label[i];
                       oneData['value'] = new Array();
                       for(let j in data){
-                          if(data[j][label[i]]){
+                          if(data[j].hasOwnProperty(label[i])){
                               oneData.value.push(data[j][label[i]])
                           }
                           else oneData.value.push(null)
