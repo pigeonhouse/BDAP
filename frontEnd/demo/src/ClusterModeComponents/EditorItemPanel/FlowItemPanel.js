@@ -499,7 +499,25 @@ class FlowItemPanel extends React.Component {
                   state_icon_url: 'https://gw.alipayobjects.com/zos/rmsportal/uZVdwjJGqDooqKLKtvGA.svg',
                 }
               }}           
-            /></ItemPanel></Menu.Item>         
+            /></ItemPanel></Menu.Item>
+            <Menu.Item key="17"><ItemPanel><Item
+              type="node"
+              size="200*40"
+              shape='two-one'
+              model={{
+                label: '逻辑回归',
+                attr:{},
+                anchor: [2, 1],
+                Dataset: [],
+                labelArray: {}, 
+                length: 0,
+                group:"ml",
+                keyConfig:{
+                  color_type: '#1890FF',
+                  state_icon_url: 'https://gw.alipayobjects.com/zos/rmsportal/uZVdwjJGqDooqKLKtvGA.svg',
+                }
+              }}           
+            /></ItemPanel></Menu.Item>           
         </SubMenu>
 
         <SubMenu key="g4" title="分类">
