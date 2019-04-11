@@ -96,8 +96,6 @@ class FlowConnect extends React.Component {
   handleError=()=>{
     const { propsAPI } = this.props;
     const { save, find } = propsAPI;
-    console.log(propsAPI.save())
-    
     }
   render() {
     return (
