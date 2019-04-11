@@ -448,7 +448,7 @@ class FlowItemPanel extends React.Component {
               model={{
                 label: '单变量线性回归',
                 anchor: [2, 1],
-                attr:{'预测集列名':'label'},
+                attr:{},
                 Dataset: [],
                 labelArray: {}, 
                 length: 0,

@@ -500,24 +500,7 @@ class FlowItemPanel extends React.Component {
                 }
               }}           
             /></ItemPanel></Menu.Item>
-            <Menu.Item key="17"><ItemPanel><Item
-              type="node"
-              size="200*40"
-              shape='two-one'
-              model={{
-                label: '逻辑回归',
-                attr:{},
-                anchor: [2, 1],
-                Dataset: [],
-                labelArray: {}, 
-                length: 0,
-                group:"ml",
-                keyConfig:{
-                  color_type: '#1890FF',
-                  state_icon_url: 'https://gw.alipayobjects.com/zos/rmsportal/uZVdwjJGqDooqKLKtvGA.svg',
-                }
-              }}           
-            /></ItemPanel></Menu.Item>           
+                      
         </SubMenu>
 
         <SubMenu key="g4" title="分类">
@@ -565,6 +548,24 @@ class FlowItemPanel extends React.Component {
               }
             }}    
           /></ItemPanel></Menu.Item>
+          <Menu.Item key='23'><ItemPanel><Item
+              type="node"
+              size="200*40"
+              shape='two-one'
+              model={{
+                label: '逻辑回归',
+                attr:{},
+                anchor: [2, 1],
+                Dataset: [],
+                labelArray: {}, 
+                length: 0,
+                group:"ml",
+                keyConfig:{
+                  color_type: '#1890FF',
+                  state_icon_url: 'https://gw.alipayobjects.com/zos/rmsportal/uZVdwjJGqDooqKLKtvGA.svg',
+                }
+              }}           
+            /></ItemPanel></Menu.Item> 
         </SubMenu>
       </SubMenu>
       <SubMenu key="sub4" title={<span><Icon type="setting" /><span>深度学习</span></span>}>
