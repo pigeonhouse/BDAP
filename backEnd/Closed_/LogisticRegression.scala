@@ -5,8 +5,8 @@ import org.apache.spark.sql.functions.col
 
     val project = "Demo"
     val id = "%s"
-    val train = "%s"
-    val label = "%s"
+    val train = "MinMaxScaledAge MinMaxScaledPclass SexIndex MinMaxScaledFare"//
+    val label = "Survived"//
     val previous = "%s"
     val file = project + "/" + previous
     val all = train + " " + label
@@ -25,7 +25,7 @@ import org.apache.spark.sql.functions.col
     var df_1 = df_Predict
 
     df_ = df_.select(aimarray.map(A => col(A)): _*)
-    df_1 = df_1.select(trainArray.map(A => col(A):_*)
+    df_1 = df_1.select(trainArray.map(A => col(A)):_*)
 
     val assembler = new VectorAssembler().setInputCols(trainArray).setOutputCol("features")
     df_ = assembler.transform(df_)
@@ -38,8 +38,8 @@ import org.apache.spark.sql.functions.col
     lrModel.extractParamMap()
     println(s"Coefficients: ${lrModel.coefficients} Intercept: ${lrModel.intercept}")
 
-    val predictions = lrModel.transform(df_)
-    val predict_result = predictions.selectExpr("features", "Survived", "round(prediction,1) as prediction")
+    val predictions = lrModel.transform(df_1)
+    val predict_result = predictions.selectExpr("features", "round(prediction,1) as prediction")
 
     var fin = predict_result.limit(20).toJSON.collectAsList.toString
 

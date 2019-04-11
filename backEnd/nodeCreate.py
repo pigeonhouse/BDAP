@@ -25,12 +25,10 @@ class nodes:
             data = {'code': code %(self.id, self.sourceID[0]['source'], ArraytoString(self.labelArray['public']), self.attribute['type'])}
         elif self.label == "MinMaxScaler":
             data = {'code': code %(self.id, self.sourceID[0]['source'], ArraytoString(self.labelArray['public']))}
-        elif self.label =='localFile':
-            data = {'code': code }
         elif self.label == 'hdfsFile':
             data = {'code': code % (self.id, self.attribute['fileName'])}
         elif self.label == 'LogisticRegression':
-            data = {'code': code % (self.id)}
+            data = {'code': code % (self.id, self.sourceID[0]['source'] +' ' + self.sourceID[1]['source'])}
         elif self.label == "TransformType":
             data = {'code': code % (self.id, ArraytoString(self.labelArray['public']), self.sourceID[0]['source'], "number")}
         elif self.label == "Stringindex":
