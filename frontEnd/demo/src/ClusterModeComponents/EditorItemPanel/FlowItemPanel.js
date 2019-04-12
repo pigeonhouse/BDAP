@@ -576,6 +576,7 @@ class FlowItemPanel extends React.Component {
             shape='one-one'
             model={{
               label: '卷积神经网络',
+              elabel:'Lenet5_train',
               attr:{'激活函数':'relu','卷积步长':2,'优化器':'rmsprop','batchSize':50,'遍历次数':1},
               anchor: [1, 1],
               Dataset: [],

@@ -28,4 +28,4 @@ val json = colname.mkString(start,", ",end) + "}, "
 
 fin = "[" + json ++ fin_ + "]"
 
-  val result = Http("http://10.122.224.119:5000/RunningPost").postData(fin.toString).header("Content-Type", "application/json").header("Charset", "UTF-8").option(HttpOptions.readTimeout(10000)).asString
+  val result = Http("http://10.128.237.90:5000/RunningPost").postData(fin.toString).header("Content-Type", "application/json").header("Charset", "UTF-8").option(HttpOptions.readTimeout(10000)).asString
