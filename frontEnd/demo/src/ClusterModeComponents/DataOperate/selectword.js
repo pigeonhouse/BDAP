@@ -55,7 +55,8 @@ class Selectword extends Component{
         }
         return false;
     }
-    changeSourceLabel=(label, labelArray)=>{
+    changeSourceLabel=(item, labelArray)=>{
+        const label = item.model.label;
         let labelarr = new Array();
         switch(label){
             case '归一化':    
@@ -80,7 +81,7 @@ class Selectword extends Component{
                 }
                 return [...labelArray, ...labelarr];
             case '特征分组归类':
-            case '数据类型转换':
+                return [...labelArray, [item.model.attr['新生成列名'], false]];
             default:
             return labelArray;
         }
@@ -88,7 +89,7 @@ class Selectword extends Component{
     findSourceLabel=(item)=>{
         if(item.model.anchor[0] === 1 || !item.model.anchor[0]){
             if(item.model.labelArray.public)
-            return this.changeSourceLabel(item.model.label, item.model.labelArray.public);
+            return this.changeSourceLabel(item, item.model.labelArray.public);
             else return [];
         }
         else if(item.model.anchor[0] === 2){
