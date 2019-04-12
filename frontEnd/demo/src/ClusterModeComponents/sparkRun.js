@@ -112,7 +112,7 @@ class SparkRun extends Component{
                       oneData['label'] = label[i];
                       oneData['value'] = new Array();
                       for(let j in data){
-                          if(data[j][label[i]]){
+                          if(data[j].hasOwnProperty(label[i])){
                               oneData.value.push(data[j][label[i]])
                           }
                           else oneData.value.push(null)
@@ -120,15 +120,9 @@ class SparkRun extends Component{
                       Dataset.push(oneData);
                   }
                   var length = data.length;
-                  var labelArray = new Array();
-                  for(let i in label){
-                      labelArray.push([label[i], false]);
-                  }
                   var values = {
                       Dataset:Stat(Dataset),
                       length,
-                      labelArray:{public:labelArray},
-
                   }
                   values['keyConfig'] = JSON.parse(JSON.stringify(item.model.keyConfig));
                   values.keyConfig.state_icon_url = 'https://gw.alipayobjects.com/zos/rmsportal/MXXetJAxlqrbisIuZxDO.svg';

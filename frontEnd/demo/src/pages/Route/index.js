@@ -7,7 +7,7 @@ var IntroJs = require('intro.js')
 
 class RouteMode extends React.Component {
   state={
-    resirect: 'route',
+    redirect: 'route',
   }
 
   insertLocal=()=>{
@@ -39,9 +39,11 @@ class RouteMode extends React.Component {
 }
   render() {
     if (this.state.redirect === 'local') {
+      this.setState({redirect:'route'})
       return <Redirect to="/local" />;
     }
     else if(this.state.redirect === 'cluster'){
+      this.setState({redirect:'route'})
       return <Redirect to="/cluster" />;
     }
     else return (

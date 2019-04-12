@@ -131,19 +131,19 @@ class Run extends Component{
         if(stream[k].tag !== '本地数据')
         {
           if(stream[k].tag !== '数据随机划分'){
-            if(!all_data[0].labelArray.hasOwnProperty('public')){
-              message.error("还没有选择字段，请在右边参数栏点击选择字段");
+            // if(!all_data[0].labelArray.hasOwnProperty('public')){
+            //   message.error("还没有选择字段，请在右边参数栏点击选择字段");
 
-              const { find, update, executeCommand } = propsAPI;
-              const nextitem = find(stream[k].id);
-              var value = JSON.parse(JSON.stringify(nextitem.model.keyConfig));
-              value.state_icon_url = 'https://gw.alipayobjects.com/zos/rmsportal/MXXetJAxlqrbisIuZxDO.svg';
-              executeCommand(() => {
-                update(nextitem, {keyConfig:{...value}});
-              });
+            //   const { find, update, executeCommand } = propsAPI;
+            //   const nextitem = find(stream[k].id);
+            //   var value = JSON.parse(JSON.stringify(nextitem.model.keyConfig));
+            //   value.state_icon_url = 'https://gw.alipayobjects.com/zos/rmsportal/MXXetJAxlqrbisIuZxDO.svg';
+            //   executeCommand(() => {
+            //     update(nextitem, {keyConfig:{...value}});
+            //   });
 
-              return 0;
-            } 
+            //   return 0;
+            // } 
           }
           switch (stream[k].tag) {
             case '单变量线性回归':
