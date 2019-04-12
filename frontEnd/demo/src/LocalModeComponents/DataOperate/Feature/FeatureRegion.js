@@ -99,10 +99,7 @@ class FeatureRegion extends Component {
     executeCommand(() => {
       update(item,{attr:attr});
     });
-    this.setState((prevState)=>({
-      region:prevState.region.splice(index, 1)
-    }))
-    const region = this.state.region;
+    const region = attr[this.props.tag].slice(1);
     for(let i in region){
       let value = `value[${i}]`;
       let max = `max[${i}]`;
@@ -113,8 +110,11 @@ class FeatureRegion extends Component {
       values[max] = region[i][2];
       form.setFieldsValue({
         ...values
-      })
+      })  
     }
+    this.setState((prevState)=>({
+      region:prevState.region.splice(index, 1)
+    }))
   }
   isGroupingType=()=>{
     const { propsAPI } = this.props;

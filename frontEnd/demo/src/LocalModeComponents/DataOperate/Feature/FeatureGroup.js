@@ -25,9 +25,14 @@ class FeatureGroup extends Component {
       })
     }
     let children = new Array;
-    this.state.stat.map((value, index)=>{
+    this.props.stat.map((value, index)=>{
       children.push(<Option key={index}>{value.name}</Option>)
     })
+    console.log('--------------')
+    console.log(this.props.stat);
+    if(children.length === 0){
+      children.push(<Option key='1'>test</Option>)
+    }
     this.setState({
       children
     })
