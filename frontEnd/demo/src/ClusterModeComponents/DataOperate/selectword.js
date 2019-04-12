@@ -162,7 +162,6 @@ class Selectword extends Component{
             }
             else labelArray.push([mockdata[i].title, false]);
         }
-        console.log(toolTipsArray)
         let labelarray = [];
         if(item.model.anchor[0] === 2)
         {
