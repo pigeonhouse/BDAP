@@ -155,6 +155,7 @@ class NodeDetail extends React.Component {
   }
   isFeature = (group, label, sourceID)=>{
     if(group === 'feature'){
+      console.log(this.state.labelArray)
       return <Feature
               label={label}
               sourceID = {sourceID}

@@ -16,37 +16,8 @@ class Feature extends Component{
             stat:[]
         }
     }
-    findStat(sourceID, tag){
-        const { propsAPI } = this.props;
-        const { find } = propsAPI;
-        const sourceItem = find(sourceID);
-        const { Dataset, anchor } = sourceItem.getModel();
-        if(Dataset){
-            if(anchor[1] === 1){
-                for(let i in Dataset){
-                    if(Dataset[i].label === tag){
-                        this.setState({
-                            stat:Dataset[i].stat.value
-                        })
-                    }
-                }
-            }
-            else {
-                
-            }
-        }
-        else {
-            if(anchor[0] === 1){
-                const edges = propsAPI.save().edges;
-                for(let i in edges){
-                    if(edges[i].target === sourceID){
-                        return this.findStat(edges[i].source, tag);
-                    }
-                }
-            }
-        }
-    }
     featureType=(tag, label)=>{
+        console.log(label)
         switch(label){
             case '特征区间化':
                 return  <Fragment>
@@ -56,7 +27,6 @@ class Feature extends Component{
                             <Divider></Divider>
                         </Fragment>
             case '特征分组归类':
-                // this.findStat(this.props.sourceID, tag);
                 return  <Fragment>
                             <Divider>{tag}</Divider>
                             <FeatureGroup
@@ -76,6 +46,7 @@ class Feature extends Component{
             }
     }
     isDynamic = (arr)=>{
+        console.log(arr);
         const { propsAPI } = this.props;
         const { getSelected} = propsAPI;
         const item = getSelected()[0];
@@ -89,12 +60,14 @@ class Feature extends Component{
                 return <Fragment>
                     划分比例：<Randis/>
                 </Fragment>
-        }
-        return arr.map((item)=>{
+            default:
+            return arr.map((item)=>{
                 return  <Fragment>
                             {this.featureType(item, label)}
                         </Fragment>
             })
+        }
+        
     }
     render(){
         var arr=[];

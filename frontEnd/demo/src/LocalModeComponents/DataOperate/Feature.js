@@ -16,23 +16,27 @@ class Feature extends Component{
             stat:[]
         }
     }
-    findStat(sourceID, tag){
+    findStat(sourceID, tag, sourceAnchor){
         const { propsAPI } = this.props;
         const { find } = propsAPI;
         const sourceItem = find(sourceID);
         const { Dataset, anchor } = sourceItem.getModel();
         if(Dataset){
-            if(anchor[1] === 1){
-                for(let i in Dataset){
-                    if(Dataset[i].label === tag){
-                        this.setState({
-                            stat:Dataset[i].stat.value
-                        })
-                    }
+            if(anchor[1] !== 1){
+                if(sourceAnchor === 1){
+                    Dataset = Dataset[0];
+                }
+                else {
+                    Dataset = Dataset[1];
                 }
             }
-            else {
-                
+            for(let i in Dataset){
+                if(Dataset[i].label === tag){
+                    this.setState({
+                        stat:Dataset[i].stat.value
+                    })
+                    return ;
+                }
             }
         }
         else {
@@ -40,7 +44,49 @@ class Feature extends Component{
                 const edges = propsAPI.save().edges;
                 for(let i in edges){
                     if(edges[i].target === sourceID){
-                        return this.findStat(edges[i].source, tag);
+                        return this.findStat(edges[i].source, tag, edges[i].sourceAnchor);
+                    }
+                }
+            }
+        }
+    }
+    findStatFirst=(sourceID, tag)=>{
+        const { propsAPI } = this.props;
+        const { find, getSelected } = propsAPI;
+        const sourceItem = find(sourceID);
+        const { Dataset, anchor } = sourceItem.getModel();
+        const item = getSelected()[0];
+        if(Dataset.length !== 0){
+            if(anchor[1] !== 1){
+                const edges = propsAPI.save().edges;
+                for(let i in edges){
+                    if(edges[i].source === sourceID && edges[i].target === item.id){
+                        if(edges[i].sourceAnchor === 1){
+                            Dataset = Dataset[0];
+                        }
+                        else {
+                            Dataset = Dataset[1];
+                        }
+                    }
+                }
+            }
+            for(let i in Dataset){
+                if(Dataset[i].label === tag){
+                    console.log('dataset-------')
+                    console.log(Dataset[i].stat.value)
+                    this.setState({
+                        stat:Dataset[i].stat.value
+                    })
+                    return ;
+                }
+            }
+        }
+        else {
+            if(sourceItem.model.group === 'input' || sourceItem.model.group === 'feature'){
+                const edges = propsAPI.save().edges;
+                for(let i in edges){
+                    if(edges[i].target === sourceID){
+                        return this.findStat(edges[i].source, tag, edges[i].sourceAnchor);
                     }
                 }
             }
@@ -56,7 +102,7 @@ class Feature extends Component{
                             <Divider></Divider>
                         </Fragment>
             case '特征分组归类':
-                // this.findStat(this.props.sourceID, tag);
+                this.findStatFirst(this.props.sourceID, tag);
                 return  <Fragment>
                             <Divider>{tag}</Divider>
                             <FeatureGroup

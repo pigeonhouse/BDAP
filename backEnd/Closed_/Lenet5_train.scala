@@ -7,6 +7,7 @@ import com.intel.analytics.bigdl.models.lenet.LeNet5.apply
 import com.intel.analytics.bigdl.nn._
 import com.intel.analytics.bigdl.optim._
 import com.intel.analytics.bigdl.utils.{Engine, File}
+import org.apache.spark.sql.SparkSession
 import org.apache.spark.SparkContext
 
 def load(featureFile: String, labelFile: String): Array[ByteRecord] = {
@@ -50,10 +51,15 @@ def load(featureFile: String, labelFile: String): Array[ByteRecord] = {
   }
   result
 }
-
+/*
 val conf = Engine.createSparkConf().setMaster("spark://10.105.222.90:7077").set("spark.driver.allowMultipleContexts", "true").set("spark.cores.max", "4");
 val ssc = new SparkContext(conf)
+*/
+
+//val ss = SparkSession.builder().config(Engine.createSparkConf()).config("spark.default.parallelism", 96).config("spark.task.cpus", 4).master("spark://10.105.222.90:7077").appName("sf").getOrCreate()
 Engine.init
+
+//val spark = SparkSession.builder.master("spark://10.105.222.90:7077").appName("dfea").getOrCreate()
 
 val classNum = 10
 val learningRate = 0.005
@@ -75,7 +81,7 @@ val validationLabel = folder + "/t10k-labels.idx1-ubyte"
 
 val model = apply(classNum)
 
-val trainSet = DataSet.array(load(trainData, trainLabel), ssc) -> BytesToGreyImg(28, 28) -> GreyImgNormalizer(trainMean, trainStd) -> GreyImgToBatch(
+val trainSet = DataSet.array(load(trainData, trainLabel)) -> BytesToGreyImg(28, 28) -> GreyImgNormalizer(trainMean, trainStd) -> GreyImgToBatch(
   batchSize)
 
 
@@ -94,7 +100,7 @@ if (checkpoint.isDefined) {
 }
 */
 
-val validationSet = DataSet.array(load(validationData, validationLabel), ssc) -> BytesToGreyImg(28, 28) -> GreyImgNormalizer(testMean, testStd) -> GreyImgToBatch(
+val validationSet = DataSet.array(load(validationData, validationLabel)) -> BytesToGreyImg(28, 28) -> GreyImgNormalizer(testMean, testStd) -> GreyImgToBatch(
   batchSize)
 
 optimizer.setValidation(

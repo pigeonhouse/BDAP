@@ -7,7 +7,7 @@ const FormItem = Form.Item;
 
 class HomePage extends React.Component {
   state={
-    resirect:false,
+    redirect:false,
     username: '',
     password: '',
     remind:'',
