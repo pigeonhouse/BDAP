@@ -17,6 +17,8 @@ import spark.implicits._
     val aimarray = aim.split(" ")
     var df_ = df
 
+  df.show(100)
+
     for(i <- 0 to aimarray.length - 1){
       df_ = df.select(aimarray(i))
       val assembler = new VectorAssembler().setInputCols(Array(aimarray(i))).setOutputCol("scaled")
@@ -27,9 +29,12 @@ import spark.implicits._
       val df_1 = df_.map{case Row(v: Vector) => v(0)}.toDF("MinMaxScaled" + aimarray(i)).withColumn("idx", monotonically_increasing_id())
       df = df.withColumn("idx", monotonically_increasing_id())
       df = df.join(df_1, df("idx") === df_1("idx")).drop("idx")
+      df = df.limit(df.count().toInt)
     }
 
-    df.write.format("parquet").mode(SaveMode.Overwrite).save(project + "/" + id)
+  df.show(100)
+  
+  df.write.format("parquet").mode(SaveMode.Overwrite).save(project + "/" + id)
 
   var fin = df.limit(20).toJSON.collectAsList.toString
 
@@ -41,4 +46,4 @@ val json = colname.mkString(start,", ",end) + "}, "
 
 fin = "[" + json ++ fin_ + "]"
 
-  val result = Http("http://10.128.237.90:5000/RunningPost").postData(fin.toString).header("Content-Type", "application/json").header("Charset", "UTF-8").option(HttpOptions.readTimeout(10000)).asString
+  val result = Http("http://10.122.224.119:5000/RunningPost").postData(fin.toString).header("Content-Type", "application/json").header("Charset", "UTF-8").option(HttpOptions.readTimeout(10000)).asString

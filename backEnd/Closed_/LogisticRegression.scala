@@ -5,7 +5,7 @@ import org.apache.spark.sql.functions.col
 
     val project = "Demo"
     val id = "%s"
-    val train = "MinMaxScaledAge MinMaxScaledPclass SexIndex MinMaxScaledFare"//
+    val train = "MinMaxScaledAge MinMaxScaledPclass IndexAge MinMaxScaledFare SexIndex"//
     val label = "Survived"//
     val previous = "%s"
     val file = project + "/" + previous
@@ -41,7 +41,11 @@ import org.apache.spark.sql.functions.col
     val predictions = lrModel.transform(df_1)
     val predict_result = predictions.selectExpr("features", "round(prediction,1) as prediction")
 
+    predict_result.write.format("parquet").mode(SaveMode.Overwrite).save(project + "/" + id)
+    
     var fin = predict_result.limit(20).toJSON.collectAsList.toString
+
+    predict_result.show(100)
 
     val colname = predict_result.columns
     val fin_ = fin.substring(1, fin.length - 1)
@@ -51,7 +55,7 @@ import org.apache.spark.sql.functions.col
 
     fin = "[" + json ++ fin_ + "]"
 
-    val result = Http("http://10.128.237.90:5000/RunningPost").postData(fin.toString).header("Content-Type", "application/json").header("Charset", "UTF-8").option(HttpOptions.readTimeout(10000)).asString
+    val result = Http("http://10.122.224.119:5000/RunningPost").postData(fin.toString).header("Content-Type", "application/json").header("Charset", "UTF-8").option(HttpOptions.readTimeout(10000)).asString
 
 
 

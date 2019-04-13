@@ -84,7 +84,9 @@ def RunningPost():
 @app.route('/run', methods=['GET', 'POST'])
 def run():
     print(request.json)
+
     picture = request.json
+    
     node_ = []
     for i in range(0, len(picture)):
         node = nodes(picture[i]['id'], picture[i]['label'], picture[i]['sourceId'], picture[i]['attribute'], picture[i]['labelArray'])
