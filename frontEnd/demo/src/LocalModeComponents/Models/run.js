@@ -16,6 +16,7 @@ import { SelectCol } from '../DataOperate/DataProcess/SelectCol'
 import { SeprtbyFeat } from '../DataOperate/DataProcess/SeprtbyFeat'
 import { StrToNum } from '../DataOperate/DataProcess/StrToNum';
 import { Nomalize } from '../DataOperate/DataProcess/Nomalize';
+var echarts = require('echarts');
 var current = 0;
 class Run extends Component{
   state = { 
@@ -25,6 +26,30 @@ class Run extends Component{
     this.setState({
       visible: true,
     });
+  }
+  showLineChart=(iterationTimes, accuracy)=>{
+    setTimeout(()=>{
+      iterationTimes.push(iterationTimes[iterationTimes.length-1]+1);
+      accuracy.push(iterationTimes[iterationTimes.length-1]*100);
+      // console.log(iterationTimes)
+      // console.log(accuracy);
+      document.getElementById('dlChart').removeAttribute("_echarts_instance_")
+      var myChart = echarts.init(document.getElementById('dlChart'));
+      myChart.setOption({
+        xAxis: {
+          type: 'category',
+          data: iterationTimes
+        },
+        yAxis: {
+            type: 'value'
+        },
+        series: [{
+            data: accuracy,
+            type: 'line'
+        }]
+      })
+      this.showLineChart(iterationTimes, accuracy)
+    }, 1000);
   }
   handleOk = () => {
     this.setState({
@@ -130,7 +155,7 @@ class Run extends Component{
         var outcome = new Array()
         if(stream[k].tag !== '本地数据')
         {
-          if(stream[k].tag !== '数据随机划分'){
+          // if(stream[k].tag !== '数据随机划分'){
             // if(!all_data[0].labelArray.hasOwnProperty('public')){
             //   message.error("还没有选择字段，请在右边参数栏点击选择字段");
 
@@ -144,7 +169,7 @@ class Run extends Component{
 
             //   return 0;
             // } 
-          }
+          // }
           switch (stream[k].tag) {
             case '单变量线性回归':
                 outcome = OneVarLinearRegression(all_data);
@@ -189,8 +214,9 @@ class Run extends Component{
                 outcome = Nomalize(all_data);
                 break
             case '卷积神经网络':
-                this.showModal()
-                runMnist()
+                this.showModal();
+                // runMnist()
+                this.showLineChart([0], [0]);
                 break
             default:
               break;
@@ -346,16 +372,17 @@ class Run extends Component{
             <Icon type="play-circle" style={{fontSize:25}}/>运行
         </Button>
 
-        <Modal title="Modal Data" visible={this.state.visible}
+        <Modal title="Deep Learning" visible={this.state.visible}
             onOk={this.handleOk} onCancel={this.handleCancel} width={900}
           >
-            <p>iter:
+            {/* <p>iter:
               <div id="iter-number"></div>
             </p>
             <p>train-loss:
               <div id="loss-train"></div>
             </p>
-            <div id="linechart"></div>     
+            <div id="linechart"></div>  */}
+            <div id="dlChart" style={{ maxWidth: 350, height: 280 }}> </div>
         </Modal>
       </div>
     );
