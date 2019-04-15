@@ -28,7 +28,7 @@ class nodes:
         elif self.label == 'hdfsFile':
             data = {'code': code % (self.id, self.attribute['fileName'])}
         elif self.label == 'LogisticRegression':
-            data = {'code': code % (self.id, self.sourceID[0]['source'] + ' ' + self.sourceID[1]['source'])}
+            data = {'code': code % (self.id, ArraytoString(self.labelArray['train_x']), ArraytoString(self.labelArray['train_y']), self.sourceID[0]['source'] + ' ' + self.sourceID[1]['source'])}
         elif self.label == "TransformType":
             data = {'code': code % (self.id, ArraytoString(self.labelArray['public']), self.sourceID[0]['source'], "number")}
         elif self.label == "Stringindex":

@@ -5,8 +5,8 @@ import org.apache.spark.sql.functions.col
 
     val project = "Demo"
     val id = "%s"
-    val train = "MinMaxScaledAge MinMaxScaledPclass IndexAge MinMaxScaledFare SexIndex"//
-    val label = "Survived"//
+    val train = "%s"
+    val label = "%s"
     val previous = "%s"
     val file = project + "/" + previous
     val all = train + " " + label
@@ -36,7 +36,6 @@ import org.apache.spark.sql.functions.col
 
     val lrModel = lr.fit(df_)
     lrModel.extractParamMap()
-    println(s"Coefficients: ${lrModel.coefficients} Intercept: ${lrModel.intercept}")
 
     val predictions = lrModel.transform(df_1)
     val predict_result = predictions.selectExpr("features", "round(prediction,1) as prediction")
