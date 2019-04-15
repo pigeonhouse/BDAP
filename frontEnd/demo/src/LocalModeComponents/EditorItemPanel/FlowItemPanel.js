@@ -607,6 +607,7 @@ class FlowItemPanel extends React.Component {
               anchor: [1, 1],
               Dataset: [],
               labelArray: {}, 
+              feature:'dl',
               length: 0,
               keyConfig:{
                 color_type: '#1890FF',

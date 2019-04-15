@@ -135,7 +135,7 @@ class LocalMode extends React.Component {
           <Col span={2}>
             <a href="https://www.yuque.com/ddrid/tx7z84">
               <Button style={{border:0,backgroundColor:'#343941',color:"#ddd",fontSize:25}} >
-                <Icon type="question-circle" data-step="5" data-intro="如果想要进一步了解详细的使用教程及组件介绍，请点击此处查看文档。"/>
+                  <Icon type="question-circle" data-step="5" data-intro="如果想要进一步了解详细的使用教程及组件介绍，请点击此处查看文档。"/>
               </Button>                  
             </a>
           </Col>      
