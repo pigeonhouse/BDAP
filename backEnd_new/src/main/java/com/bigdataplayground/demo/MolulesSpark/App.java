@@ -34,7 +34,7 @@ public class App {
 
     @RequestMapping(path={"/"}, method = {RequestMethod.POST,RequestMethod.GET})
     String home() {
-        return "Hello World again!";
+        return "yo!";
     }
 
     @CrossOrigin(origins = "*") //跨域请求
