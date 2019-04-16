@@ -18,13 +18,6 @@ import java.util.Map;
  */
 public class LivyContact {
     private static ObjectMapper objectMapper = new ObjectMapper();
-    /**
-     * 提交.scala至livy
-     * @param livyAddr
-     * @param code
-     * @return
-     * @throws IOException
-     */
 
     public static void postCode (String livyAddr, String code) throws IOException {
 
@@ -104,6 +97,14 @@ public class LivyContact {
 
         return availableSession;
     }
+
+    /**
+     * 提交.scala至livy
+     * @param livyAddr
+     * @param code
+     * @return
+     * @throws IOException
+     */
 
 
     /**
