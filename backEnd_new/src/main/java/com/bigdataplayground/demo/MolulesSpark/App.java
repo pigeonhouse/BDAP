@@ -2,7 +2,6 @@ package com.bigdataplayground.demo.MolulesSpark;
 
 import com.bigdataplayground.demo.MolulesSpark.util.LivyContact;
 import com.bigdataplayground.demo.MolulesSpark.util.ToolSet;
-import com.bigdataplayground.demo.ModulesPython.executorPython;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.boot.*;
@@ -65,33 +64,35 @@ public class App {
 
     @CrossOrigin(origins = "*")
     @RequestMapping(path = {"/run"}, method = {RequestMethod.POST})
-    public Object run(@RequestBody String body) throws IOException {
+    public String run(@RequestBody String body) throws IOException {
+
+        SparkExecutor sparkExecutor = new SparkExecutor(livyAddr,appAddr);
 
         System.out.println(body);
         //此处要用TypeReference，用list.class会出错
         List<Node> nodeList= objectMapper.readValue(body,new TypeReference<List<Node>>(){});
         System.out.println(nodeList);
 
-        List<Object>finalData = new ArrayList<>();
-        List<Object> tmp = new ArrayList<>();
+        List<List<Object>>finalData = new ArrayList<>();
+
         for(Node node : nodeList){
             System.out.println(node.getLabel());
             //设置地址并执行
-            node.excuteNode(appAddr,livyAddr);
+            sparkExecutor.executeNode(node);
 
             if(!node.getLabel().equals("hdfsFile")){
-                tmp.add(node.getId());
+                List<Object> tmp = new ArrayList<>();
+                //不加双引号前端会识别不了。。。。略玄学
+                tmp.add("\""+node.getId()+"\"");
                 tmp.add(runningData);
                 System.out.println(tmp);
                 finalData.add(tmp);
             }
         }
 
-        System.out.println(finalData);
-        String result = objectMapper.writeValueAsString(finalData);
-        System.out.println(result);
+        System.out.println(finalData.toString());
 
-        return finalData;
+        return finalData.toString();
     }
 
 
