@@ -70,6 +70,7 @@ class Run extends Component{
     var stream = new Array();
     var attribute = new Array();
     var labelarray = new Array();
+    var group = '...';
 
 
     if(inf.hasOwnProperty('edges')){
@@ -95,6 +96,7 @@ class Run extends Component{
       }
       console.log('sourceId');
       console.log(sourceId);
+      console.log(inf);
       for (var k = 0; k < inf.nodes.length; ) {
         for (let indexN of inf.nodes.keys()){
           if(Deg[indexN] === 0){
@@ -105,10 +107,16 @@ class Run extends Component{
             tag = inf.nodes[indexN].label;
             attribute = inf.nodes[indexN].attr;
             labelarray = inf.nodes[indexN].labelArray;
+            group = inf.nodes[indexN].group;
             if(inf.nodes[indexN].group === 'ml'){
               const { find, update } = propsAPI;
               const item = find(Sourc);
-              let temp = JSON.parse(JSON.stringify(labelarray));
+              var temp = new Object();
+              //error
+              if(!labelarray.hasOwnProperty("predict_x")) labelarray['predict_x']=[];
+              if(!labelarray.hasOwnProperty("train_x")) labelarray['train_x']=[];
+              if(!labelarray.hasOwnProperty("train_y")) labelarray['train_y']=[];
+              temp = JSON.parse(JSON.stringify(labelarray));
               temp['public'] = [...temp.predict_x, ...temp.predict_y];
               update(item,{labelArray:temp});
             }
@@ -128,6 +136,7 @@ class Run extends Component{
                         "tag":tag,
                         "attribute":attribute,
                         "labelArray":labelarray,
+                        "group":group,
                         "sourceId":sourceId[indexN]
                       });
             for (var i = 0; i < inf.edges.length; i++){
@@ -148,28 +157,43 @@ class Run extends Component{
     this.run(stream, propsAPI);
   }
   run = (stream, propsAPI)=>{  
+    console.log("Stream---------");
+    console.log(stream)
     setTimeout(()=>{
       if(current !== stream.length){
         let k = current;
         const all_data = this.inputdata(stream[k], propsAPI);
         var outcome = new Array()
-        if(stream[k].tag !== '本地数据')
-        {
-          // if(stream[k].tag !== '数据随机划分'){
-            // if(!all_data[0].labelArray.hasOwnProperty('public')){
-            //   message.error("还没有选择字段，请在右边参数栏点击选择字段");
-
-            //   const { find, update, executeCommand } = propsAPI;
-            //   const nextitem = find(stream[k].id);
-            //   var value = JSON.parse(JSON.stringify(nextitem.model.keyConfig));
-            //   value.state_icon_url = 'https://gw.alipayobjects.com/zos/rmsportal/MXXetJAxlqrbisIuZxDO.svg';
-            //   executeCommand(() => {
-            //     update(nextitem, {keyConfig:{...value}});
-            //   });
-
-            //   return 0;
-            // } 
-          // }
+        if(stream[k].tag !== '本地数据'){
+          if(stream[k].group == "feature"){
+            if(stream[k].tag !== '数据随机划分'){
+              if(!all_data[0].labelArray.hasOwnProperty('public')){
+                message.error("还没有选择字段，请在右边参数栏点击选择字段");
+                const { find, update, executeCommand } = propsAPI;
+                const nextitem = find(stream[k].id);
+                var value = JSON.parse(JSON.stringify(nextitem.model.keyConfig));
+                value.state_icon_url = 'https://gw.alipayobjects.com/zos/rmsportal/MXXetJAxlqrbisIuZxDO.svg';
+                executeCommand(() => {
+                  update(nextitem, {keyConfig:{...value}});
+                });
+                return 0;
+              } 
+            }
+          }
+          else if(stream[k].group == 'ml'){
+            if(all_data[0].labelArray.train_x.length == 0 || all_data[0].labelArray.train_y.length == 0
+            || all_data[0].labelArray.predict_x.length == 0){
+              message.error("还没有选择完字段，请在右边参数栏点击选择字段");
+                const { find, update, executeCommand } = propsAPI;
+                const nextitem = find(stream[k].id);
+                var value = JSON.parse(JSON.stringify(nextitem.model.keyConfig));
+                value.state_icon_url = 'https://gw.alipayobjects.com/zos/rmsportal/MXXetJAxlqrbisIuZxDO.svg';
+                executeCommand(() => {
+                  update(nextitem, {keyConfig:{...value}});
+                });
+                return 0;
+            }
+          }
           switch (stream[k].tag) {
             case '单变量线性回归':
                 outcome = OneVarLinearRegression(all_data);
@@ -223,7 +247,6 @@ class Run extends Component{
           }
           console.log(outcome)
           this.outputdata(stream[k].id, outcome, propsAPI);
-
           const { find, update, executeCommand } = propsAPI;
           const currentitem = find(stream[k].id);
           var value = JSON.parse(JSON.stringify(currentitem.model.keyConfig));
