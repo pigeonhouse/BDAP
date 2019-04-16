@@ -45,6 +45,10 @@ class nodes:
             data = {'code': code % ()}
         elif self.label == "Lenet5_train":
             data = {'code': code % ()}
+        elif self.label == "Reshape":
+            data = {'code': code % (self.id, self.attribute['图片x像素'], self.attribute['图片y像素'])}
+        elif self.label == "Convolution":
+            data = {'code': code % (self.id, self.sourceID[0]['source'], self.attribute['x'], self.attribute['y'], self.attribute['z'], self.attribute['activation'])}
         else:
             data = None
 

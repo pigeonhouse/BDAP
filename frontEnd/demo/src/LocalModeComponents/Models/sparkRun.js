@@ -93,11 +93,24 @@ class SparkRun extends Component{
         body:JSON.stringify(stream),
         mode: 'cors',
         headers: {'Content-Type': 'application/json'},
-        }
-        fetch(
-          'http://localhost:3000/run',init
-        )
-          .catch(e => console.log('错误:', e))
+    }
+    fetch(
+      'http://localhost:5000/run',init
+    ).catch(e => console.log('错误:', e))
+
+    this.askForAcc()
+  }
+
+  askForAcc = ()=>{
+    fetch(
+      'http://localhost:5000/trainingAccuracy'
+    ).then(response=>{
+      if(response.status===200){
+        console.log(response.json());
+        this.askForAcc()
+      }
+    })
+    .catch(e => console.log('错误:', e))
   }
   
   intervaltest = ()=>{   
