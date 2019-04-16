@@ -33,4 +33,4 @@ import org.apache.spark.sql.functions.col
 
 val fin = df_.limit(20).toJSON.collectAsList.toString
 
-val result = Http("http://10.122.240.131:5000/RunningPost").postData(fin.toString).header("Content-Type", "application/json").header("Charset", "UTF-8").option(HttpOptions.readTimeout(10000)).asString
+val result = Http("%s").postData(fin.toString).header("Content-Type", "application/json").header("Charset", "UTF-8").option(HttpOptions.readTimeout(10000)).asString
