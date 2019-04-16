@@ -37,8 +37,7 @@ public class LivySessionDescription implements Serializable{
     }
 }
 
-
-class LivySessionAppInfo implements Serializable{
+class LivySessionAppInfo implements Serializable {
 
     private String driverLogUrl;
 
@@ -60,3 +59,4 @@ class LivySessionAppInfo implements Serializable{
         this.sparkUiUrl = sparkUiUrl;
     }
 }
+

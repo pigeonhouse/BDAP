@@ -11,6 +11,7 @@ import java.util.concurrent.Future;
 public class ToolSet {
     /**
      * 异步的文件读写模板，利用了Channel和future，直接调用还是相当于阻塞（就是还没啥用）
+     * 文件最大为10240字节
      * @param path
      * @return
      * @throws IOException
@@ -20,11 +21,9 @@ public class ToolSet {
         AsynchronousFileChannel channel = null;
 
         channel = AsynchronousFileChannel.open(path);
-        ByteBuffer byteBuffer = ByteBuffer.allocate(1024);//声明1024个字节的buff
+        ByteBuffer byteBuffer = ByteBuffer.allocate(10240);//声明10240个字节的buffer
         Future future = channel.read(byteBuffer, 0);
-        /**
-         * 这里不会阻塞
-         */
+        //这里不会阻塞
         System.out.println("文件读取中...");
         while (!future.isDone()) {
             System.out.print('.');
@@ -34,7 +33,6 @@ public class ToolSet {
         //打印bytebuff中的内容
         String codeString = Charset.forName("utf-8").decode(byteBuffer).toString();
 
-        //     System.out.println(RequestBody);
         channel.close();
 
         return codeString;

@@ -102,6 +102,7 @@ class SparkRun extends Component{
             if(res.status === 200){
               res.json().then(res=>{
                 for(let k in res){
+                  console.log(res);
                   const item = find(res[k][0]);
                   const respData = res[k][1];
                   let label = respData[0].colName.split(', ');

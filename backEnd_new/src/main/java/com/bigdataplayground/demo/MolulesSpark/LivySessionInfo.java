@@ -3,7 +3,7 @@ package com.bigdataplayground.demo.MolulesSpark;
 import java.io.Serializable;
 import java.util.List;
 
-public class LivySessionInfo implements Serializable {
+public class LivySessionInfo implements Serializable{
 
     private int id;
 
