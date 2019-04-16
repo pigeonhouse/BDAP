@@ -1,5 +1,6 @@
 package com.bigdataplayground.demo.MolulesSpark;
 
+import com.bigdataplayground.demo.ModulesPython.executorPython;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.boot.*;
@@ -42,12 +43,10 @@ public class App {
     String handleInput(@RequestHeader ("host") String hostName,
                        @RequestBody String body) throws IOException {
 
-        System.out.println("entered");
 
         Path path = Paths.get("src/main/scala/handleFile.scala");
 
         String code = openFile(path);
-        System.out.println(code);
 
         String data = String.format(code, body.replace("\"",""),//应该是要去除双引号的
                 "http://"+appAddr+"/inputPost");//App.java所在主机地址
@@ -139,9 +138,8 @@ public class App {
         System.out.println(body);
         List<Node> nodeList= objectMapper.readValue(body,new TypeReference<List<Node>>(){});
         System.out.println(nodeList);
-        for(Node node : nodeList){
-            System.out.println(node.getLabel());
-        }
+        executorPython executor = new executorPython();
+        executor.execute(nodeList);
         return null;
     }
 
