@@ -9,6 +9,7 @@ import { FlowDetailPanel } from '../../LocalModeComponents/EditorDetailPanel';
 import styles from './index.less';
 import IntroJs from 'intro.js';
 import Run from "../../LocalModeComponents/Models/run"
+import SparkRun from "../../LocalModeComponents/Models/sparkRun"
 import { FlowDataPanel } from '../../LocalModeComponents/EditorDataPanel';
 import FlowConnect from '../../LocalModeComponents/EditorConnect';
 const TabPane = Tabs.TabPane;

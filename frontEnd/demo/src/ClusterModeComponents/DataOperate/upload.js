@@ -40,6 +40,7 @@ class Uploadfile extends Component{
     readFile = (e)=>{
       var files = e.target.files;
       //var files = e; // FileList object
+      console.log("*************files")
       console.log(files)
       var reader = new FileReader();
       const { propsAPI } = this.props;
