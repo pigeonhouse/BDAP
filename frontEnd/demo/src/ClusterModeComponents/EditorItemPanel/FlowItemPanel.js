@@ -588,6 +588,96 @@ class FlowItemPanel extends React.Component {
               }
             }}
           /></ItemPanel></Menu.Item>
+      <Menu.Item key="24"><ItemPanel><Item
+            type="node"
+            size="200*40"
+            shape='one-one'
+            model={{
+              label: 'Reshape',
+              elabel:'Reshape',
+              attr:{'图片x像素': 28,'图片y像素': 28, 'inputShape' : 28},
+              anchor: [1, 1],
+              Dataset: [],
+              labelArray: {}, 
+              length: 0,
+              keyConfig:{
+                color_type: '#1890FF',
+                state_icon_url: 'https://gw.alipayobjects.com/zos/rmsportal/uZVdwjJGqDooqKLKtvGA.svg',
+              }
+            }}
+          /></ItemPanel></Menu.Item>
+      <Menu.Item key="25"><ItemPanel><Item
+            type="node"
+            size="200*40"
+            shape='one-one'
+            model={{
+              label: 'Convolution',
+              elabel:'Convolution',
+              attr:{'x': 28,'y': 28, 'z': 28, 'activation': "tanh"},
+              anchor: [1, 1],
+              Dataset: [],
+              labelArray: {}, 
+              length: 0,
+              keyConfig:{
+                color_type: '#1890FF',
+                state_icon_url: 'https://gw.alipayobjects.com/zos/rmsportal/uZVdwjJGqDooqKLKtvGA.svg',
+              }
+            }}
+          /></ItemPanel></Menu.Item>
+      <Menu.Item key="26"><ItemPanel><Item
+            type="node"
+            size="200*40"
+            shape='one-one'
+            model={{
+              label: 'MaxPooling',
+              elabel:'MaxPooling',
+              attr:{},
+              anchor: [1, 1],
+              Dataset: [],
+              labelArray: {}, 
+              length: 0,
+              keyConfig:{
+                color_type: '#1890FF',
+                state_icon_url: 'https://gw.alipayobjects.com/zos/rmsportal/uZVdwjJGqDooqKLKtvGA.svg',
+              }
+            }}
+          /></ItemPanel></Menu.Item>
+      <Menu.Item key="27"><ItemPanel><Item
+            type="node"
+            size="200*40"
+            shape='one-one'
+            model={{
+              label: 'Flatten',
+              elabel:'Flatten',
+              attr:{},
+              anchor: [1, 1],
+              Dataset: [],
+              labelArray: {}, 
+              length: 0,
+              keyConfig:{
+                color_type: '#1890FF',
+                state_icon_url: 'https://gw.alipayobjects.com/zos/rmsportal/uZVdwjJGqDooqKLKtvGA.svg',
+              }
+            }}
+          /></ItemPanel></Menu.Item>
+      <Menu.Item key="28"><ItemPanel><Item
+            type="node"
+            size="200*40"
+            shape='one-one'
+            model={{
+              label: 'Dense',
+              elabel: 'Dense',
+              attr:{'输出维度': 28, 'activation': 'tanh'},
+              anchor: [1, 1],
+              Dataset: [],
+              labelArray: {}, 
+              length: 0,
+              keyConfig:{
+                color_type: '#1890FF',
+                state_icon_url: 'https://gw.alipayobjects.com/zos/rmsportal/uZVdwjJGqDooqKLKtvGA.svg',
+              }
+            }}
+          /></ItemPanel></Menu.Item>
       </SubMenu>
     </Menu>
     );
