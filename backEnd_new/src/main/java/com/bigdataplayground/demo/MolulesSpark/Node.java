@@ -4,15 +4,13 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import java.io.IOException;
-import java.nio.ByteBuffer;
-import java.nio.channels.AsynchronousFileChannel;
-import java.nio.charset.Charset;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.Future;
+
+import com.bigdataplayground.demo.MolulesSpark.util.*;
 
 public class Node {
     private String id;
@@ -29,7 +27,7 @@ public class Node {
         switch (label){
             case "Fillna": data = String.format(
                     code,id, sourceId.get(0).getSource(),
-                    listToString(labelArray.get("public")),
+                    ToolSet.listToString(labelArray.get("public")),
                     attribute.get("type")
             ); break;
             default: break;
@@ -38,7 +36,7 @@ public class Node {
     }
     public void excuteNode() throws IOException {
         Path path = Paths.get("src/main/scala/Closed_/" + label + ".scala");
-        String code = openFile(path);
+        String code = ToolSet.openFile(path);
         String data = matchFunction(code);
 
         Map<String,String> map = new HashMap<>();
@@ -49,39 +47,8 @@ public class Node {
         return ;
     }
 
-    public String listToString(List<String> list){
-        String string = new String();
-        for(int i = 0 ;i<list.size();i++){
-            if(i ==list.size()-1){
-                string = string + list.get(i);
-            }else{
-                string = string + " ";
-            }
-        }
-        return string;
-    }
 
-    public String openFile(Path path) throws IOException {
 
-        AsynchronousFileChannel channel = null;
-
-        channel = AsynchronousFileChannel.open(path);
-        ByteBuffer byteBuffer = ByteBuffer.allocate(1024);//声明1024个字节的buff
-        Future future = channel.read(byteBuffer, 0);
-        System.out.println("文件读取中...");
-        while (!future.isDone()) {
-            System.out.print('.');
-        }
-        System.out.println("文件读取完成");
-        byteBuffer.flip();
-        //打印bytebuff中的内容
-        String codeString = Charset.forName("utf-8").decode(byteBuffer).toString();
-
-        //     System.out.println(RequestBody);
-        channel.close();
-
-        return codeString;
-    }
 
     public String getId() {
         return id;
@@ -123,6 +90,7 @@ public class Node {
         this.labelArray = labelArray;
     }
 }
+
 class NodeSourceId{
     private String source;
     private int sourceAnchor;

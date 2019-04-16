@@ -1,7 +1,7 @@
-package com.ex.demo.util;
+package com.bigdataplayground.demo.MolulesSpark.util;
 
-import com.ex.demo.LivySessionDescription;
-import com.ex.demo.LivySessionInfo;
+import com.bigdataplayground.demo.MolulesSpark.LivySessionDescription;
+import com.bigdataplayground.demo.MolulesSpark.LivySessionInfo;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.http.*;
 import org.springframework.web.client.RestTemplate;
@@ -22,8 +22,6 @@ public class LivyContact {
 
         RestTemplate restTemplate=new RestTemplate();
 
-        System.out.println(sessionUrl);
-
         String res = restTemplate.getForObject(sessionUrl,String.class);
 
         return objectMapper.readValue(res,LivySessionInfo.class);
@@ -36,14 +34,9 @@ public class LivyContact {
 
         RestTemplate restTemplate=new RestTemplate();
 
-        System.out.println(sessionUrl);
-
         String res = restTemplate.getForObject(sessionUrl,String.class);
 
-        System.out.println(res);
-
-        LivySessionDescription livySessionDescription = objectMapper.readValue(res,LivySessionDescription.class);
-        return livySessionDescription;
+        return objectMapper.readValue(res,LivySessionDescription.class);
 
     }
 

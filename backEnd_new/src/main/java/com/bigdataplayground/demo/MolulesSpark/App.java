@@ -1,5 +1,7 @@
 package com.bigdataplayground.demo.MolulesSpark;
 
+import com.bigdataplayground.demo.MolulesSpark.util.LivyContact;
+import com.bigdataplayground.demo.MolulesSpark.util.ToolSet;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.boot.*;
@@ -11,20 +13,16 @@ import org.springframework.web.client.RestTemplate;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.nio.ByteBuffer;
-import java.nio.channels.AsynchronousFileChannel;
-import java.nio.charset.Charset;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.*;
-import java.util.concurrent.Future;
 
 
 @RestController
 @EnableAutoConfiguration
 public class App {
-    private String livyAddr = "10.105.222.90:8998";
-    private String appAddr = "localhost:5000";
+    private String livyAddr = "10.105.222.90:8998"; //livy 服务器+端口
+    private String appAddr = "10.122.217.207:5000"; //后端所在地址+端口号 配置在application.properties
     private HttpServletRequest request;
     private HttpServletResponse response;
     private ObjectMapper objectMapper = new ObjectMapper();
@@ -42,12 +40,9 @@ public class App {
     String handleInput(@RequestHeader ("host") String hostName,
                        @RequestBody String body) throws IOException {
 
-        System.out.println("entered");
+        Path path = Paths.get("src/main/scala/handleInput.scala");
 
-        Path path = Paths.get("src/main/scala/handleFile.scala");
-
-        String code = openFile(path);
-        System.out.println(code);
+        String code = ToolSet.openFile(path);
 
         String data = String.format(code, body.replace("\"",""),//应该是要去除双引号的
                 "http://"+appAddr+"/inputPost");//App.java所在主机地址
@@ -57,18 +52,14 @@ public class App {
         map.put("kind","spark");
         String jsonData = objectMapper.writeValueAsString(map);
 
-        LivySessionDescription livySessionDescription = objectMapper.readValue(
-                getLivySession(-1),
-                LivySessionDescription.class
-        );
-
-        availableSession = selectIdle(livySessionDescription);
+        LivySessionDescription livySessionDescription = LivyContact.getSession(livyAddr);
+        availableSession = LivyContact.selectIdleSession(livySessionDescription);
 
         if(livySessionDescription.getTotal()==0 || availableSession==null){
-            availableSession = createLivySession();
-            System.out.print("Waiting...");
-            while(!objectMapper.readValue(getLivySession(availableSession.getId()),
-                    LivySessionInfo.class).getState().equals("idle")){
+            availableSession = LivyContact.createSession();
+            System.out.print("Wait");
+            while(!LivyContact.getSession(livyAddr,availableSession.getId()).getState().equals("idle")){
+                System.out.print(".");
             }
             System.out.println("Create A New Session"+"Session ID = :"+availableSession.getId());
         }
@@ -106,6 +97,7 @@ public class App {
                  break;
              }
         }
+
         return inputData;
     }
 
@@ -116,107 +108,35 @@ public class App {
         return "received";
     }
 
-    @RequestMapping(path = {"/InputPost"}, method = {RequestMethod.POST})
+    @RequestMapping(path = {"/inputPost"}, method = {RequestMethod.POST})
     public String inputPost(@RequestBody String body){
         inputData = body;
         System.out.println(body);
         return "received";
     }
 
-    public LivySessionInfo selectIdle(LivySessionDescription livySessionDescription){
-        for(LivySessionInfo sessionInfo:livySessionDescription.getSessions()){
-            if(sessionInfo.getState().equals("idle")){
-                return sessionInfo;
-            }
-        }
-        return null;
-    }
+
 
     @CrossOrigin(origins = "*")
     @RequestMapping(path = {"/run"}, method = {RequestMethod.POST})
     public String run(@RequestBody String body) throws IOException {
-        String finalData;
+        String finalData = new String();
         System.out.println(body);
+        /**
+         * @Jackson 此处要用TypeReference，用list.class会出错
+         */
         List<Node> nodeList= objectMapper.readValue(body,new TypeReference<List<Node>>(){});
         System.out.println(nodeList);
         for(Node node : nodeList){
             System.out.println(node.getLabel());
         }
-        return null;
-    }
-
-    public String openFile(Path path) throws IOException{
-
-        AsynchronousFileChannel channel = null;
-
-        channel = AsynchronousFileChannel.open(path);
-        ByteBuffer byteBuffer = ByteBuffer.allocate(1024);//声明1024个字节的buff
-        Future future = channel.read(byteBuffer, 0);
-        System.out.println("文件读取中...");
-        while (!future.isDone()) {
-            System.out.print('.');
-        }
-        System.out.println("文件读取完成");
-        byteBuffer.flip();
-        //打印bytebuff中的内容
-        String codeString = Charset.forName("utf-8").decode(byteBuffer).toString();
-
-        //     System.out.println(RequestBody);
-        channel.close();
-
-        return codeString;
-    }
-
-    /**
-     *
-     * @param id id = -1 get all ; id>=0 get one
-     * @return String id = -1 return LivySessionDescription(jsonString) ; id>=0 return LivySessionInfo(jsonString)
-     * @throws IOException
-     */
-  //  @RequestMapping(path={"/get"}, method = {RequestMethod.POST,RequestMethod.GET})
-    public String getLivySession(int id) throws IOException {
-        String sessionUrl = new String();
-        if(id!=-1)
-            sessionUrl = "http://"+ livyAddr +"/sessions/"+id;
-        else
-            sessionUrl = "http://"+ livyAddr +"/sessions";
-
-
-        RestTemplate restTemplate=new RestTemplate();
-
-        String res = restTemplate.getForObject(sessionUrl,String.class);
-
-        return res;
-
+        return finalData;
     }
 
 
-    public LivySessionInfo createLivySession() throws IOException {
-        Map<String, Object> hashMap = new HashMap<>();
-
-        String session_url = "http://10.105.222.90:8998/sessions";
-        //header
-        HttpHeaders headers = new HttpHeaders();
-        headers.setContentType(MediaType.APPLICATION_JSON);
-        //body map2json
-        hashMap.put("kind","spark");
-        List<String>jarsList = Arrays.asList("hdfs:///livy_jars/scalaj-http_2.10-2.0.0.jar");
-        hashMap.put("jars",jarsList);
-        ObjectMapper objectMapper = new ObjectMapper();
-        String bodyJson = null;
-
-        bodyJson = objectMapper.writeValueAsString(hashMap);
-
-        //restTemplate
-        RestTemplate restTemplate=new RestTemplate();
-        HttpEntity<String> httpEntity=new HttpEntity<>(bodyJson,headers);
-        ResponseEntity<String> res = restTemplate.exchange(session_url,HttpMethod.POST,httpEntity,String.class);
-
-        LivySessionInfo livySessionInfo = objectMapper.readValue(res.getBody(),LivySessionInfo.class);
 
 
-        return livySessionInfo;
-    }
+
 
     public static void main(String[] args) {
         SpringApplication.run(App.class, args);
