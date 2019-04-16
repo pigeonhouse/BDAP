@@ -11,7 +11,7 @@ class FlowDataPanel extends React.Component {
   
   componentWillMount(){
     fetch(
-      'http://10.105.222.92:3000/FileList'
+      'http://localhost:3000/FileList'
     )
     .then((response) => {
       if(response.status===200){
@@ -38,7 +38,7 @@ class FlowDataPanel extends React.Component {
     　　 },
       }
       fetch(
-        'http://10.105.222.92:3000/DeleteFile',init
+        'http://localhost:3000/DeleteFile',init
       )
       .then((response) => {
         return response.json()

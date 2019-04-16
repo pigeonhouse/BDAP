@@ -33,14 +33,22 @@ class Uploadfile extends Component{
     //   }
     readFile = (e)=>{
       var files = e.target.files;
+      console.log('*****file');
+      console.log(files);
+      
       var reader = new FileReader();
       const { propsAPI } = this.props;
       const { getSelected, update } = propsAPI;
       reader.readAsText(files[0],'gbk');
       reader.onload = function(e) {
+        console.log('**********reader');
+        console.log(reader);
+        
         var fieldNameArray = [];
         let vectorLength;
         var results = Papa.parse(e.target.result,{header:true,dynamicTyping: true});
+        console.log('*********result');
+        console.log(results);
         fieldNameArray.push(results.meta.fields);
         vectorLength = results.data.length - 1
         var n = new Array();

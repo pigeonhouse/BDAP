@@ -1,4 +1,4 @@
-package com.ex.demo;
+package com.bigdataplayground.demo;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
