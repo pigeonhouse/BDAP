@@ -22,13 +22,32 @@ class Run extends Component{
   state = { 
     visible: false,
   }
-  showModal = () => {
+  showModal = (stream) => {
     this.setState({
       visible: true,
     });
+    const init={
+      method: 'POST', 
+      body:JSON.stringify(stream),
+      mode: 'cors',
+      headers: {'Content-Type': 'application/json'},
+    }
+    fetch("http://localhost:5000/run",init)
+    .then(res=>{
+      console.log('---')
+      console.log(res)
+    })
   }
   showLineChart=(iterationTimes, accuracy)=>{
     setTimeout(()=>{
+      fetch("http://localhost:5000/trainingAccuracy")
+      .then(res => {
+        if(res.status === 200){
+          res.json().then(res=>{
+            console.log(res)
+          })
+        }
+      })
       iterationTimes.push(iterationTimes[iterationTimes.length-1]+1);
       accuracy.push(iterationTimes[iterationTimes.length-1]*100);
       // console.log(iterationTimes)
@@ -132,11 +151,12 @@ class Run extends Component{
             labelarray = JSON.parse(JSON.stringify(labelarr));
             stream.push({
                         'id':Sourc,
-                        "label":etag,
-                        "tag":tag,
+                        // "label":etag,
+                        // "tag":tag,
+                        "label":tag,
+                        // "tag":tag,
                         "attribute":attribute,
                         "labelArray":labelarray,
-                        "group":group,
                         "sourceId":sourceId[indexN]
                       });
             for (var i = 0; i < inf.edges.length; i++){
@@ -164,9 +184,9 @@ class Run extends Component{
         let k = current;
         const all_data = this.inputdata(stream[k], propsAPI);
         var outcome = new Array()
-        if(stream[k].tag !== '本地数据'){
+        if(stream[k].label !== '本地数据'){
           if(stream[k].group == "feature"){
-            if(stream[k].tag !== '数据随机划分'){
+            if(stream[k].label !== '数据随机划分'){
               if(!all_data[0].labelArray.hasOwnProperty('public')){
                 message.error("还没有选择字段，请在右边参数栏点击选择字段");
                 const { find, update, executeCommand } = propsAPI;
@@ -194,7 +214,7 @@ class Run extends Component{
                 return 0;
             }
           }
-          switch (stream[k].tag) {
+          switch (stream[k].label) {
             case '单变量线性回归':
                 outcome = OneVarLinearRegression(all_data);
                 break
@@ -238,7 +258,7 @@ class Run extends Component{
                 outcome = Nomalize(all_data);
                 break
             case '卷积神经网络':
-                this.showModal();
+                this.showModal(stream);
                 // runMnist()
                 this.showLineChart([0], [0]);
                 break
@@ -255,7 +275,7 @@ class Run extends Component{
             update(currentitem, {keyConfig:{...value}});
           });
         }
-        if(k < stream.length-1 && stream[k+1].tag !== '本地数据'){
+        if(k < stream.length-1 && stream[k+1].label !== '本地数据'){
           const { find, update, executeCommand } = propsAPI;
           const nextitem = find(stream[k+1].id);
           var value = JSON.parse(JSON.stringify(nextitem.model.keyConfig));
