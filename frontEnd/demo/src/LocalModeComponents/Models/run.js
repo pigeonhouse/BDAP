@@ -37,35 +37,60 @@ class Run extends Component{
       console.log('---')
       console.log(res)
     })
-  }
-  showLineChart=(iterationTimes, accuracy)=>{
-    setTimeout(()=>{
-      fetch("http://localhost:5000/trainingAccuracy")
-      .then(res => {
-        if(res.status === 200){
-          res.json().then(res=>{
-            console.log(res)
-          })
-        }
-      })
-      iterationTimes.push(iterationTimes[iterationTimes.length-1]+1);
-      accuracy.push(iterationTimes[iterationTimes.length-1]*100);
-      document.getElementById('dlChart').removeAttribute("_echarts_instance_")
-      var myChart = echarts.init(document.getElementById('dlChart'));
-      myChart.setOption({
-        xAxis: {
+    document.getElementById('dlChart').removeAttribute("_echarts_instance_")
+    var myChart = echarts.init(document.getElementById('dlChart'));
+    myChart.setOption({
+      title: {
+        text: '准确率'
+      },
+      tooltip: {
+          trigger: 'axis',
+          formatter: function (params) {
+              params = params[0];
+              return params.value[0]+'/'+params.value[1];
+          },
+          axisPointer: {
+              animation: false
+          }
+      },
+      xAxis: {
           type: 'category',
-          data: iterationTimes
-        },
-        yAxis: {
-            type: 'value'
-        },
+          boundaryGap: false,
+      },
+      yAxis: {
+          type: 'value',
+          boundaryGap: [0, '100%'],
+      },
+      series: [{
+          type: 'line',
+          showSymbol: false,
+          hoverAnimation: false,
+          data: []
+      }]
+    })
+    this.showLineChart([{
+      value: [
+        0, 0
+      ]
+    }], myChart);
+  }
+  showLineChart=(data, myChart)=>{
+    setTimeout(()=>{
+      // fetch("http://localhost:5000/trainingAccuracy")
+      // .then(res => {
+      //   if(res.status === 200){
+      //     res.json().then(res=>{
+      //       console.log(res)
+      //     })
+      //   }
+      // })
+      data.push({value:[data[data.length-1].value[0]+1, data[data.length-1].value[1]+1]})
+      myChart.setOption({
         series: [{
-            data: accuracy,
-            type: 'line'
+          data: data
         }]
       })
-      this.showLineChart(iterationTimes, accuracy)
+      this.showLineChart(data, myChart)
     }, 1000);
   }
   handleOk = () => {
@@ -118,7 +143,6 @@ class Run extends Component{
             tag = inf.nodes[indexN].label;
             attribute = inf.nodes[indexN].attr;
             labelarray = inf.nodes[indexN].labelArray;
-            group = inf.nodes[indexN].group;
             if(inf.nodes[indexN].group === 'ml'){
               const { find, update } = propsAPI;
               const item = find(Sourc);
@@ -250,7 +274,7 @@ class Run extends Component{
             case '卷积神经网络':
                 this.showModal(stream);
                 // runMnist()
-                this.showLineChart([0], [0]);
+                
                 break
             default:
               break;
