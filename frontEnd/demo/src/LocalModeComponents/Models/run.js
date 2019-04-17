@@ -311,6 +311,7 @@ class Run extends Component{
           console.log("最终图信息")
           console.log(propsAPI.save())
           console.log("-------------------------------")
+          message.success("成功执行完毕!")
           //this.deletedata(propsAPI);
         }
         else this.run(stream, propsAPI);
@@ -336,24 +337,24 @@ class Run extends Component{
     var Sourc;
     var count_avali = 0, ind;
     let Deg = new Array(inf.nodes.length).fill(0);
-    // let Varif = new Array(inf.nodes.length).fill(0);
-    // for(let indexE of inf.edges.keys()){
-    //   Sourc = inf.edges[indexE].target;
-    //   for (let indexN of inf.nodes.keys()){
-    //     if (Sourc === inf.nodes[indexN].id){
-    //       Deg[indexN]++;
-    //       Varif[indexN] = 1;
-    //       break;
-    //     }
-    //   }
-    //   // Sourc = inf.edges[indexE].source;
-    //   // for (let indexN of inf.nodes.keys()){
-    //   //   if (Sourc === inf.nodes[indexN].id){
-    //   //     Varif[indexN] = 1;
-    //   //     break;
-    //   //   }
-    //   // }
-    // }
+    let Varif = new Array(inf.nodes.length).fill(0);
+    for(let indexE of inf.edges.keys()){
+      Sourc = inf.edges[indexE].target;
+      for (let indexN of inf.nodes.keys()){
+        if (Sourc === inf.nodes[indexN].id){
+          Deg[indexN]++;
+          Varif[indexN] = 1;
+          break;
+        }
+      }
+      // Sourc = inf.edges[indexE].source;
+      // for (let indexN of inf.nodes.keys()){
+      //   if (Sourc === inf.nodes[indexN].id){
+      //     Varif[indexN] = 1;
+      //     break;
+      //   }
+      // }
+    }
     // Varif = Deg;
     // for(let c = 0; c < inf.nodes.length; c++){
     //   for(let i = 0; i < Deg.length; i++){
@@ -388,7 +389,7 @@ class Run extends Component{
     //     return 3; //loop
     //   }
     // }
-    Deg = Varif;
+    // Deg = Varif;
     //开头是数据输入；且手动输入input必须有上传
     for(let i = 0; i < Deg.length; i++){
         if(Deg[i] === 0){
