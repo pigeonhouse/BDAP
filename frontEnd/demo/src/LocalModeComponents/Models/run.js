@@ -18,6 +18,7 @@ import { StrToNum } from '../DataOperate/DataProcess/StrToNum';
 import { Nomalize } from '../DataOperate/DataProcess/Nomalize';
 var echarts = require('echarts');
 var current = 0;
+var NeedDetection = 1;
 class Run extends Component{
   state = { 
     visible: false,
@@ -105,7 +106,6 @@ class Run extends Component{
   }
   showDetail = ()=>{
     const { propsAPI } = this.props;
-    console.log(propsAPI.save())
     const inf = propsAPI.save();
     var Sourc = 0;
     var tag = 'Input';
@@ -190,6 +190,11 @@ class Run extends Component{
     this.run(stream, propsAPI);
   }
   run = (stream, propsAPI)=>{  
+    if(NeedDetection){
+      console.log("------Detected---------")
+      if(this.handleLegal())  return ;
+      else NeedDetection = 0;
+    }
     setTimeout(()=>{
       if(current !== stream.length){
         let k = current;
@@ -206,11 +211,12 @@ class Run extends Component{
                 const { find, update, executeCommand } = propsAPI;
                 const nextitem = find(stream[k].id);
                 var value = JSON.parse(JSON.stringify(nextitem.model.keyConfig));
-                value.state_icon_url = 'https://gw.alipayobjects.com/zos/rmsportal/MXXetJAxlqrbisIuZxDO.svg';
+                value.state_icon_url = 'https://gw.alipayobjects.com/zos/rmsportal/czNEJAmyDpclFaSucYWB.svg';
                 executeCommand(() => {
                   update(nextitem, {keyConfig:{...value}});
                 });
-                return 0;
+                NeedDetection = 1;
+                return ;
               } 
             }
           }
@@ -221,10 +227,11 @@ class Run extends Component{
                 const { find, update, executeCommand } = propsAPI;
                 const nextitem = find(stream[k].id);
                 var value = JSON.parse(JSON.stringify(nextitem.model.keyConfig));
-                value.state_icon_url = 'https://gw.alipayobjects.com/zos/rmsportal/MXXetJAxlqrbisIuZxDO.svg';
+                value.state_icon_url = 'https://gw.alipayobjects.com/zos/rmsportal/czNEJAmyDpclFaSucYWB.svg';
                 executeCommand(() => {
                   update(nextitem, {keyConfig:{...value}});
                 });
+                NeedDetection = 1;
                 return 0;
             }
           }
@@ -299,6 +306,7 @@ class Run extends Component{
         }
         current++;
         if(current === stream.length){
+          NeedDetection = 1;
           current = 0;
           console.log("最终图信息")
           console.log(propsAPI.save())
@@ -308,67 +316,137 @@ class Run extends Component{
         else this.run(stream, propsAPI);
       }
     },1000)
+
   }
   handleLegal = ()=> {
+    NeedDetection = 1;
     const { propsAPI } = this.props;
-    var isLegal = 0;
-    var noneed = 1;
     const inf = propsAPI.save();
-
-    if(inf.hasOwnProperty('edges')){
-      if (inf.nodes.length > 1) {
-        var Sourc;
-        const lenE = inf.edges.length;
-        const LenE =lenE;
-        let path = new Array(inf.nodes.length).fill(0);
-
-        for (let indexN of inf.nodes.keys()) {
-          if ('Input' === inf.nodes[indexN].label) {
-            Sourc = inf.nodes[indexN].id;
-            path[indexN] = 1;
-            noneed = 0;
-            break;
+    console.log("--------LegalTest---------")
+    console.log(inf);
+    if(!inf.hasOwnProperty("nodes")){
+      message.error("先从左边拖来一些部件框吧")
+      return 1;
+    }
+    if(!inf.hasOwnProperty("edges")){
+      message.error("一个边都还没有连呢！")
+      return 1;
+    }
+    
+    var Sourc;
+    var count_avali = 0, ind;
+    let Deg = new Array(inf.nodes.length).fill(0);
+    // let Varif = new Array(inf.nodes.length).fill(0);
+    // for(let indexE of inf.edges.keys()){
+    //   Sourc = inf.edges[indexE].target;
+    //   for (let indexN of inf.nodes.keys()){
+    //     if (Sourc === inf.nodes[indexN].id){
+    //       Deg[indexN]++;
+    //       Varif[indexN] = 1;
+    //       break;
+    //     }
+    //   }
+    //   // Sourc = inf.edges[indexE].source;
+    //   // for (let indexN of inf.nodes.keys()){
+    //   //   if (Sourc === inf.nodes[indexN].id){
+    //   //     Varif[indexN] = 1;
+    //   //     break;
+    //   //   }
+    //   // }
+    // }
+    // Varif = Deg;
+    // for(let c = 0; c < inf.nodes.length; c++){
+    //   for(let i = 0; i < Deg.length; i++){
+    //     if(Deg[i] === 0){
+    //       Deg[i] = -1;
+    //       count_avali++;
+    //       for(let j = 0; j < inf.edges.length; j++)
+    //         if(inf.nodes[i].id == inf.edges[j].source)
+    //           for(let k = 0; k < inf.nodes.length; k++)
+    //             if(inf.nodes[k].id == inf.edges[j].target)
+    //               Deg[k]--;
+    //       break;
+    //     }
+    //   }
+    // }
+    // if(count_avali < Deg.length){
+    //   ind = 0;
+    //   for(let k = 0; k < Deg.length; k++){
+    //     if(Deg[k] != -1){
+    //       ind = 1;
+    //       const { find, update, executeCommand } = propsAPI;
+    //       const nextitem = find(inf.nodes[k].id);
+    //       var value = JSON.parse(JSON.stringify(nextitem.model.keyConfig));
+    //       value.state_icon_url = 'https://gw.alipayobjects.com/zos/rmsportal/czNEJAmyDpclFaSucYWB.svg';
+    //       executeCommand(() => {
+    //         update(nextitem, {keyConfig:{...value}});
+    //       });
+    //     }
+    //   }
+    //   if(ind){
+    //     message.error("注意:不能有回路!")
+    //     return 3; //loop
+    //   }
+    // }
+    Deg = Varif;
+    //开头是数据输入；且手动输入input必须有上传
+    for(let i = 0; i < Deg.length; i++){
+        if(Deg[i] === 0){
+          const name = inf.nodes[i].group;
+          if(name == "input"){
+            if(inf.nodes[i].label == "本地数据" && inf.nodes[i].Dataset.length == 0){
+              message.error("还没有上传文件给本地数据模块，请点击本地数据后，在右边参数栏点击'上传本地文件'!(或者您的文件是空的)");
+              return 5; //本地数据没有上传
+            }
+          }
+          else{
+            const { find, update, executeCommand } = propsAPI;
+            const nextitem = find(inf.nodes[i].id);
+            var value = JSON.parse(JSON.stringify(nextitem.model.keyConfig));
+            value.state_icon_url = 'https://gw.alipayobjects.com/zos/rmsportal/czNEJAmyDpclFaSucYWB.svg';
+            executeCommand(() => {
+              update(nextitem, {keyConfig:{...value}});
+            });
+            message.error("连线开头必须是数据模块哦!")
+            return 4;  //开头连错，不是数据模块
           }
         }
-        if(noneed === 0) {
-          for (var k = 0; k < lenE; k++) {
+    }
 
-            for (let indexE of inf.edges.keys()) {
-              if (Sourc === inf.edges[indexE].source) {
-                Sourc = inf.edges[indexE].target;
-
-                for (let indexN of inf.nodes.keys()) {
-                  if (inf.nodes[indexN].id === Sourc) {
-                    if (path[indexN] === 0) {
-                      if (k === LenE - 1 && inf.nodes[indexN].label === 'Output') {
-                        isLegal = 1;
-                        break;
-                      } else {
-                        path[indexN] = 1;
-                        break;
-                      }
-                    } else {
-                      noneed = 1;
-                      break;
-                    }
-                  }
+    for(let c = 0; c < inf.nodes.length; c++){
+      for(let i = 0; i < Deg.length; i++){
+        if(Deg[i] === 0){
+          Deg[i] = -1;
+          count_avali++;
+          for(let j = 0; j < inf.edges.length; j++){
+            if(inf.nodes[i].id == inf.edges[j].source){
+              for(let k = 0; k < inf.nodes.length; k++){
+                if(inf.nodes[k].id == inf.edges[j].target){
+                  Deg[k]--;
                 }
-                break;
               }
             }
-            if (noneed === 1) {
-              break;
-            }
           }
+          break;
         }
       }
     }
-    if(isLegal === 1) {
-      alert('legal');
-    }else{
-      alert('illegal');
+    if(count_avali < inf.nodes.length){ 
+      for(let k = 0; k < Deg.length; k++){
+        if(Deg[k] != -1){
+          const { find, update, executeCommand } = propsAPI;
+          const nextitem = find(inf.nodes[k].id);
+          var value = JSON.parse(JSON.stringify(nextitem.model.keyConfig));
+          value.state_icon_url = 'https://gw.alipayobjects.com/zos/rmsportal/czNEJAmyDpclFaSucYWB.svg';
+          executeCommand(() => {
+            update(nextitem, {keyConfig:{...value}});
+          });
+        }
+      }
+      message.error("您有未连入的模块哦！给您用叉号标示出来了")
+      return 2; //有未连入的
     }
-
+    return 0; 
   }
   inputdata=(stream, propsAPI)=>{
     const { find } = propsAPI;

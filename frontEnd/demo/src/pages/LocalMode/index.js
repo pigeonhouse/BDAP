@@ -207,15 +207,7 @@ class LocalMode extends React.Component {
               <FlowToolbar/>
             </div>
             <Flow 
-              onDragEnd={()=>{
-                if(this.state.connectCtrl){
-                  this.setState({connectCtrl:false})
-                }
-                else {
-                  this.setState({connectCtrl:true})
-                }
-                
-              }}
+              
               style={{height:'calc(100vh - 142px)'}}
              />
           </Col>
@@ -245,7 +237,7 @@ class LocalMode extends React.Component {
               <Run></Run>
           </Col>
           <Col span={11}>
-            <FlowConnect style={{width:0, height:0}} connectCtrl={this.state.connectCtrl}/>
+            {/* <FlowConnect style={{width:0, height:0}} connectCtrl={this.state.connectCtrl}/> */}
           </Col>
         </Row>
         
