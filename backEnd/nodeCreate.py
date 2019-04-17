@@ -57,6 +57,10 @@ class nodes:
             data = {'code': code % self.id}
         elif self.label == "InputPicture":
             data = {'code': code % (self.id, self.attribute['训练集数据'], self.attribute['训练集标签'], self.attribute['验证集数据'], self.attribute['验证集标签'])}
+        elif self.label == "Train":
+            data = {'code': code % (self.id)}
+        elif self.label == "Evaluation":
+            data = {'code': code % (self.id, self.sourceID[0]['source'])}
         else:
             data = None
 

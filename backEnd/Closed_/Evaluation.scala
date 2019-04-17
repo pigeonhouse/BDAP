@@ -1,34 +1,24 @@
-import org.apache.spark.ml.classification.LogisticRegressionModel
-import org.apache.spark.ml.feature.VectorAssembler
-import org.apache.spark.sql.functions.col
+import com.intel.analytics.bigdl.dataset.{DataSet, SampleToBatch}
+import com.intel.analytics.bigdl.dataset.image.{BytesToGreyImg, GreyImgNormalizer, GreyImgToSample}
+import com.intel.analytics.bigdl.nn.Module
+import com.intel.analytics.bigdl.optim.{Top1Accuracy, ValidationMethod}
+import com.intel.analytics.bigdl.utils.Engine
+import org.apache.log4j.{Level, Logger}
 
-val project = "Taitanic1"
-val id = "7"
-val previous = "6 5"
-val train = "MinMaxScaledAge MinMaxScaledPclass Mother SexIndex MinMaxScaledFare"
-val label = "Survived"
-val all = train + " " + label
+val id = "%s"
+val previous = "%s"
+val file = "Model/" + previous + "/model"
 
-val PreviousArray = previous.split(" ")
-val aimarray = all.split(" ")
-val trainArray = train.split(" ")
+//val partitionNum = Engine.nodeNumber() * Engine.coreNumber()
 
-val Modelfile = "Model/" + project + "/" + PreviousArray(0)
-val Predictfile= project + "/" + PreviousArray(1)
 
-val df = spark.read.format("json").load(Predictfile)
-val Model = LogisticRegressionModel.load(Modelfile)
+val rddData = sc.parallelize(load(validationData, validationLabel))
+val transformer = BytesToGreyImg(28, 28) -> GreyImgNormalizer(testMean, testStd) -> GreyImgToSample()
+val evaluationSet = transformer(rddData)
 
-var df_ = df
-df_ = df_.select(aimarray.map(A => col(A)): _*)
+//val model = Module.load[Float](file)
 
-val assembler = new VectorAssembler().setInputCols(trainArray).setOutputCol("features")
-df_ = assembler.transform(df_)
+val result = model.evaluate(evaluationSet,
+        Array(new Top1Accuracy[Float].asInstanceOf[ValidationMethod[Float]]), Some(batchSize))
 
-val predictions = Model.transform(df_)
-
-val predict_result =predictions.selectExpr("features","Survived", "round(prediction,1) as prediction")
-
-predict_result.write.format("json")
-        .mode(SaveMode.Append)
-        .save(project + "/" + id)
+result.foreach(r => println(s"${r._2} is ${r._1}"))

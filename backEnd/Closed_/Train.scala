@@ -2,12 +2,12 @@ import com.intel.analytics.bigdl.optim._
 import com.intel.analytics.bigdl.nn._
 import com.intel.analytics.bigdl.numeric.NumericFloat
 
-val id = "dfadsf"
+val id = "%s"
 val learningRate = 0.005
 val learningRateDecay = 0.0
 val batchSize = 256
 val maxEpoch = 1
-val Losses = ClassNLLCriterion[Float]()
+//val Losses = ClassNLLCriterion[Float]()
 
 val optimMethod = new SGD[Float](learningRate = learningRate,
   learningRateDecay = learningRateDecay)
@@ -15,8 +15,9 @@ val optimMethod = new SGD[Float](learningRate = learningRate,
 val optimizer = Optimizer(
   model = model,
   dataset = trainSet,
-  criterion = Losses
-  batchSize = batchSize).setValidation(
+  criterion = ClassNLLCriterion[Float]())
+  
+optimizer.setValidation(
   trigger = Trigger.everyEpoch,
   dataset = validationSet,
   vMethods = Array(new Top1Accuracy, new Loss[Float])

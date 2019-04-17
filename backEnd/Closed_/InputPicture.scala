@@ -5,6 +5,7 @@ import com.intel.analytics.bigdl.dataset.image.{BytesToGreyImg, GreyImgNormalize
 import com.intel.analytics.bigdl.utils.{Engine, File}
 import com.intel.analytics.bigdl.models.lenet.Utils._
 import org.apache.spark.SparkContext
+import org.apache.spark.sql.SparkSession
 
 def load(featureFile: String, labelFile: String): Array[ByteRecord] = {
   val featureBuffer = if (featureFile.startsWith("hdfs:")) {
@@ -50,8 +51,9 @@ def load(featureFile: String, labelFile: String): Array[ByteRecord] = {
 val id = "%s"
 val folder = "hdfs:///demoData/"
 
-val conf = Engine.createSparkConf().setMaster("spark://10.105.222.90:7077").set("spark.driver.allowMultipleContexts", "true");
-val ssc = new SparkContext(conf)
+//val conf = Engine.createSparkConf().setMaster("spark://10.105.222.90:7077").set("spark.driver.allowMultipleContexts", "true").set("spark.cores.max", "4");
+//val ssc = new SparkContext(conf)
+//val ss = SparkSession.builder().config(Engine.createSparkConf()).config("spark.shuffle.reduceLocality.enabled", true).config("spark.default.parallelism", 96).config("spark.task.cpus", 4).master("spark://10.105.222.90:7077").appName("sf").getOrCreate()
 Engine.init
 
 val trainData = folder + "%s"
@@ -60,8 +62,8 @@ val validationData = folder + "%s"
 val validationLabel = folder + "%s"
 val batchSize = 256
 
-val trainSet = DataSet.array(load(trainData, trainLabel), ssc) -> BytesToGreyImg(28, 28) -> GreyImgNormalizer(trainMean, trainStd) -> GreyImgToBatch(
+val trainSet = DataSet.array(load(trainData, trainLabel), sc) -> BytesToGreyImg(28, 28) -> GreyImgNormalizer(trainMean, trainStd) -> GreyImgToBatch(
   batchSize)
 
-val validationSet = DataSet.array(load(validationData, validationLabel), ssc) -> BytesToGreyImg(28, 28) -> GreyImgNormalizer(testMean, testStd) -> GreyImgToBatch(
+val validationSet = DataSet.array(load(validationData, validationLabel), sc) -> BytesToGreyImg(28, 28) -> GreyImgNormalizer(testMean, testStd) -> GreyImgToBatch(
   batchSize)

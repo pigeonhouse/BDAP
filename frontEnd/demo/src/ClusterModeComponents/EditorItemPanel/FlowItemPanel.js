@@ -732,6 +732,42 @@ class FlowItemPanel extends React.Component {
               }
             }}
           /></ItemPanel></Menu.Item>
+      <Menu.Item key="32"><ItemPanel><Item
+            type="node"
+            size="200*40"
+            shape='one-one'
+            model={{
+              label: '评估',
+              elabel:'Evaluation',
+              attr:{},
+              anchor: [1, 1],
+              Dataset: [],
+              labelArray: {}, 
+              length: 0,
+              keyConfig:{
+                color_type: '#1890FF',
+                state_icon_url: 'https://gw.alipayobjects.com/zos/rmsportal/uZVdwjJGqDooqKLKtvGA.svg',
+              }
+            }}
+          /></ItemPanel></Menu.Item>
+      <Menu.Item key="33"><ItemPanel><Item
+            type="node"
+            size="200*40"
+            shape='one-one'
+            model={{
+              label: '预测',
+              elabel: 'Predict',
+              attr:{'预测数据集': "adfe"},
+              anchor: [1, 1],
+              Dataset: [],
+              labelArray: {}, 
+              length: 0,
+              keyConfig:{
+                color_type: '#1890FF',
+                state_icon_url: 'https://gw.alipayobjects.com/zos/rmsportal/uZVdwjJGqDooqKLKtvGA.svg',
+              }
+            }}
+          /></ItemPanel></Menu.Item>
       </SubMenu>
     </Menu>
     );
