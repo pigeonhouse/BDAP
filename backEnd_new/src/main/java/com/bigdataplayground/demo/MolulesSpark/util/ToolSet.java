@@ -24,7 +24,7 @@ public class ToolSet {
         ByteBuffer byteBuffer = ByteBuffer.allocate(10240);//声明10240个字节的buffer
         Future future = channel.read(byteBuffer, 0);
         //这里不会阻塞
-        System.out.println("文件读取中...");
+        System.out.print("文件读取中...");
         while (!future.isDone()) {
             System.out.print('.');
         }

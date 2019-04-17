@@ -18,7 +18,7 @@ public class SparkExecutor {
         this.livyAddr = livyAddr;
     }
     /**
-     * 填写代码中的占位符，原本写入地址的位置现在替换为了livyaddr和appAddr，
+     * 填写代码中的占位符，原本写入地址的位置现在替换为了appAddr
      * @param code
      * @return
      */
@@ -75,6 +75,12 @@ public class SparkExecutor {
                     node.getSourceId().get(0).getSource(),
                     "http://"+appAddr+"/RunningPost"
             ); break;
+            /*
+            case "NewModule" : data = String.format(code,
+                    node.getId(),
+                    "http://"+appAddr+"/RunningPost"
+            ); break;
+             */
 
             default: break;
         }
@@ -86,6 +92,7 @@ public class SparkExecutor {
         Path path = Paths.get("src/main/scala/Closed_/" + node.getLabel() + ".scala");
         String code = matchFunction(node,ToolSet.openFile(path));
 
+        System.out.println("#Code to run:#");
         System.out.println(code);
 
         LivyContact.postCode(livyAddr,code);

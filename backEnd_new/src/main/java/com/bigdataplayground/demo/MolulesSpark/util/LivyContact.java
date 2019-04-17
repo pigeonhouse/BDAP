@@ -40,13 +40,9 @@ public class LivyContact {
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
 
-        System.out.println(jsonData);
-
         HttpEntity<String> httpEntity = new HttpEntity<>(jsonData, headers);
 
         RestTemplate restTemplate = new RestTemplate();
-
-        System.out.println(availableSessionUrl + "/statements");
 
         ResponseEntity<String> compute = restTemplate.exchange(
                 availableSessionUrl + "/statements",
@@ -54,6 +50,8 @@ public class LivyContact {
         );
 
         String resultUrl = "http://"+livyAddr+ compute.getHeaders().get("location").get(0);
+
+        System.out.println("#resultUrl#");
         System.out.println(resultUrl);
 
         while(true){
@@ -61,7 +59,7 @@ public class LivyContact {
                     restTemplate.getForObject(resultUrl,String.class),Map.class)
                     .get("state").equals("available")
             ){
-                System.out.println("finish");
+                System.out.println("#post finished#");
                 break;
             }
         }
