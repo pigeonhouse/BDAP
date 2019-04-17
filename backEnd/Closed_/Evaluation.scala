@@ -7,16 +7,14 @@ import org.apache.log4j.{Level, Logger}
 
 val id = "%s"
 val previous = "%s"
-val file = "Model/" + previous + "/model"
-
-//val partitionNum = Engine.nodeNumber() * Engine.coreNumber()
-
+val file_model = "Model/" + previous + "/model"
+val file_model_weight = "Model/" + previous + "/weight"
 
 val rddData = sc.parallelize(load(validationData, validationLabel))
 val transformer = BytesToGreyImg(28, 28) -> GreyImgNormalizer(testMean, testStd) -> GreyImgToSample()
 val evaluationSet = transformer(rddData)
 
-//val model = Module.load[Float](file)
+val model = Module.loadModule(file_model, file_model_weight)
 
 val result = model.evaluate(evaluationSet,
         Array(new Top1Accuracy[Float].asInstanceOf[ValidationMethod[Float]]), Some(batchSize))

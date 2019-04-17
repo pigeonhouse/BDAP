@@ -721,7 +721,7 @@ class FlowItemPanel extends React.Component {
             model={{
               label: '训练',
               elabel:'Train',
-              attr:{},
+              attr:{'学习率': 0.005, '训练次数': 1, 'batchSize': 256},
               anchor: [1, 1],
               Dataset: [],
               labelArray: {}, 

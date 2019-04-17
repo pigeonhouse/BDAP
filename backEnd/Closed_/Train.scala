@@ -3,10 +3,10 @@ import com.intel.analytics.bigdl.nn._
 import com.intel.analytics.bigdl.numeric.NumericFloat
 
 val id = "%s"
-val learningRate = 0.005
+val learningRate = %f
 val learningRateDecay = 0.0
-val batchSize = 256
-val maxEpoch = 1
+val batchSize = %d
+val maxEpoch = %d
 //val Losses = ClassNLLCriterion[Float]()
 
 val optimMethod = new SGD[Float](learningRate = learningRate,
