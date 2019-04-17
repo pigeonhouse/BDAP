@@ -70,7 +70,10 @@ public class App {
      * 暂时用来处理hdfs的相关操作
      * 目前的功能是返回HDFS目录结构
      * 返回一个jsonlist，json里面包含了文件或者目录信息，如果是目录的话，subDirectory里面是子目录的jsonList
-     * 因为直接输出太丑了， 因此System.out里面用了格式输出，并且每个文件单独输出一个json
+     * 直接输出太丑了，因此每个文件单独输出一个json
+     * 目前json有点问题（引号，反斜杠输出有点不受控），先暂时手动replace一下。
+     *
+     * 由于上面的问题，文件名中不能含有 反斜杠(\)、引号("")、花括号({})
      * @return
      * @throws URISyntaxException
      * @throws IOException
@@ -84,12 +87,14 @@ public class App {
         //List<String> fileList = hdfsClient.getFileList("/");
         List<String> fileList = hdfsClient.getAllFilePath(new org.apache.hadoop.fs.Path("/"));
 
-        //jackson会不断在里面加入\。。。。只好手动删掉了，不然太难看了
-        String fileL = fileList.toString();
-        while (fileL.contains("\\\\")){
-            fileL = fileL.replace("\\\\","\\");
-        }
-        return fileL;
+        //jackson会不断在里面加入反斜杠，为自己的反斜杠加入反斜杠，子子孙孙无穷尽
+        String jsonFileList = fileList.toString();
+        jsonFileList = jsonFileList.replace("\\","")
+                .replace("\"{","{")
+                .replace("}\"","}");
+        //这不符合JSON标准，如果含有非法字符可能会报错，不过目前是可用的
+
+        return jsonFileList;
     }
 
 
