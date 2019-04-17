@@ -50,8 +50,6 @@ class Run extends Component{
       })
       iterationTimes.push(iterationTimes[iterationTimes.length-1]+1);
       accuracy.push(iterationTimes[iterationTimes.length-1]*100);
-      // console.log(iterationTimes)
-      // console.log(accuracy);
       document.getElementById('dlChart').removeAttribute("_echarts_instance_")
       var myChart = echarts.init(document.getElementById('dlChart'));
       myChart.setOption({
@@ -89,8 +87,6 @@ class Run extends Component{
     var stream = new Array();
     var attribute = new Array();
     var labelarray = new Array();
-    var group = '...';
-
 
     if(inf.hasOwnProperty('edges')){
       let Deg = new Array(inf.nodes.length).fill(0);
@@ -113,16 +109,12 @@ class Run extends Component{
           }
         }
       }
-      console.log('sourceId');
-      console.log(sourceId);
-      console.log(inf);
       for (var k = 0; k < inf.nodes.length; ) {
         for (let indexN of inf.nodes.keys()){
           if(Deg[indexN] === 0){
             k++;
             Deg[indexN]--;
             Sourc = inf.nodes[indexN].id;
-            let etag = inf.nodes[indexN].elabel;
             tag = inf.nodes[indexN].label;
             attribute = inf.nodes[indexN].attr;
             labelarray = inf.nodes[indexN].labelArray;
@@ -151,10 +143,7 @@ class Run extends Component{
             labelarray = JSON.parse(JSON.stringify(labelarr));
             stream.push({
                         'id':Sourc,
-                        // "label":etag,
-                        // "tag":tag,
                         "label":tag,
-                        // "tag":tag,
                         "attribute":attribute,
                         "labelArray":labelarray,
                         "sourceId":sourceId[indexN]
@@ -177,15 +166,16 @@ class Run extends Component{
     this.run(stream, propsAPI);
   }
   run = (stream, propsAPI)=>{  
-    console.log("Stream---------");
-    console.log(stream)
     setTimeout(()=>{
       if(current !== stream.length){
         let k = current;
         const all_data = this.inputdata(stream[k], propsAPI);
         var outcome = new Array()
         if(stream[k].label !== '本地数据'){
-          if(stream[k].group == "feature"){
+          const { find } = propsAPI;
+          const item = find(stream[k].id);
+          const group = item.model.group;
+          if(group == "feature"){
             if(stream[k].label !== '数据随机划分'){
               if(!all_data[0].labelArray.hasOwnProperty('public')){
                 message.error("还没有选择字段，请在右边参数栏点击选择字段");
@@ -200,7 +190,7 @@ class Run extends Component{
               } 
             }
           }
-          else if(stream[k].group == 'ml'){
+          else if(group == 'ml'){
             if(all_data[0].labelArray.train_x.length == 0 || all_data[0].labelArray.train_y.length == 0
             || all_data[0].labelArray.predict_x.length == 0){
               message.error("还没有选择完字段，请在右边参数栏点击选择字段");
@@ -265,9 +255,8 @@ class Run extends Component{
             default:
               break;
           }
-          console.log(outcome)
           this.outputdata(stream[k].id, outcome, propsAPI);
-          const { find, update, executeCommand } = propsAPI;
+          const { update, executeCommand } = propsAPI;
           const currentitem = find(stream[k].id);
           var value = JSON.parse(JSON.stringify(currentitem.model.keyConfig));
           value.state_icon_url = 'https://gw.alipayobjects.com/zos/rmsportal/MXXetJAxlqrbisIuZxDO.svg';
