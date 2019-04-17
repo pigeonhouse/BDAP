@@ -575,9 +575,9 @@ class FlowItemPanel extends React.Component {
             size="200*40"
             shape='one-one'
             model={{
-              label: '卷积神经网络',
-              elabel:'Lenet5_train',
-              attr:{'激活函数':'relu','卷积步长':2,'优化器':'rmsprop','batchSize':50,'遍历次数':1},
+              label: '新建神经网络',
+              elabel:'NewNetwork',
+              attr:{},
               anchor: [1, 1],
               Dataset: [],
               labelArray: {}, 
@@ -595,7 +595,7 @@ class FlowItemPanel extends React.Component {
             model={{
               label: 'Reshape',
               elabel:'Reshape',
-              attr:{'图片x像素': 28,'图片y像素': 28, 'inputShape' : 28},
+              attr:{'维度': 3, '图片x像素': 28,'图片y像素': 28, '图片z像素': 1},
               anchor: [1, 1],
               Dataset: [],
               labelArray: {}, 
@@ -613,7 +613,7 @@ class FlowItemPanel extends React.Component {
             model={{
               label: 'Convolution',
               elabel:'Convolution',
-              attr:{'x': 28,'y': 28, 'z': 28, 'activation': "tanh"},
+              attr:{'x': 28,'y': 28, '输入平面数量': 6, '输出平面数量': 1, 'activation': "Tanh"},
               anchor: [1, 1],
               Dataset: [],
               labelArray: {}, 
@@ -631,7 +631,7 @@ class FlowItemPanel extends React.Component {
             model={{
               label: 'MaxPooling',
               elabel:'MaxPooling',
-              attr:{},
+              attr:{'过滤器横向大小': 2, '过滤器纵向大小': 2, '横向步长': 2, '纵向步长': 2},
               anchor: [1, 1],
               Dataset: [],
               labelArray: {}, 
@@ -667,7 +667,25 @@ class FlowItemPanel extends React.Component {
             model={{
               label: 'Dense',
               elabel: 'Dense',
-              attr:{'输出维度': 28, 'activation': 'tanh'},
+              attr:{'输出维度': 28, 'activation': 'Tanh'},
+              anchor: [1, 1],
+              Dataset: [],
+              labelArray: {}, 
+              length: 0,
+              keyConfig:{
+                color_type: '#1890FF',
+                state_icon_url: 'https://gw.alipayobjects.com/zos/rmsportal/uZVdwjJGqDooqKLKtvGA.svg',
+              }
+            }}
+          /></ItemPanel></Menu.Item>
+      <Menu.Item key="29"><ItemPanel><Item
+            type="node"
+            size="200*40"
+            shape='one-one'
+            model={{
+              label: 'Linear',
+              elabel: 'Linear',
+              attr:{'输入维度': 192, '输出维度': 100, 'activation': 'Tanh'},
               anchor: [1, 1],
               Dataset: [],
               labelArray: {}, 

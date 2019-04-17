@@ -30,10 +30,6 @@ def handleInput():
 
     data_mine = {'code':code % request.json}
 
-<<<<<<< HEAD
-
-=======
->>>>>>> 7bf78c604579d0d2920b9726d01e01d37bbbd967
     headers = {'Content-Type': 'application/json'}
 
     session_url = 'http://10.105.222.90:8998/sessions/0'

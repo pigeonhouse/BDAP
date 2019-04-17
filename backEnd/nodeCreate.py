@@ -46,9 +46,15 @@ class nodes:
         elif self.label == "Lenet5_train":
             data = {'code': code % ()}
         elif self.label == "Reshape":
-            data = {'code': code % (self.id, self.attribute['图片x像素'], self.attribute['图片y像素'])}
+            data = {'code': code % (self.id, self.attribute['维度'], self.attribute['图片x像素'], self.attribute['图片y像素'], self.attribute['图片z像素'])}
         elif self.label == "Convolution":
-            data = {'code': code % (self.id, self.sourceID[0]['source'], self.attribute['x'], self.attribute['y'], self.attribute['z'], self.attribute['activation'])}
+            data = {'code': code % (self.id, self.sourceID[0]['source'], self.attribute['x'], self.attribute['y'], self.attribute['输出平面数量'] ,self.attribute['输入平面数量'], self.attribute['activation'])}
+        elif self.label == "MaxPooling":
+            data = {'code': code % (self.attribute['过滤器横向大小'], self.attribute['过滤器纵向大小'], self.attribute['横向步长'], self.attribute['纵向步长'])}
+        elif self.label == "Linear":
+            data = {'code': code % (self.attribute['输入维度'], self.attribute['输出维度'], self.attribute['activation'])}
+        elif self.label == "NewNetwork":
+            data = {'code': code % self.id}
         else:
             data = None
 

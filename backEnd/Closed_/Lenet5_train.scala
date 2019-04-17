@@ -57,7 +57,7 @@ val ssc = new SparkContext(conf)
 */
 
 //val ss = SparkSession.builder().config(Engine.createSparkConf()).config("spark.default.parallelism", 96).config("spark.task.cpus", 4).master("spark://10.105.222.90:7077").appName("sf").getOrCreate()
-Engine.init
+//Engine.init
 
 //val spark = SparkSession.builder.master("spark://10.105.222.90:7077").appName("dfea").getOrCreate()
 
