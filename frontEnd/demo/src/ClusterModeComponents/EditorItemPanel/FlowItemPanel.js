@@ -570,6 +570,24 @@ class FlowItemPanel extends React.Component {
         </SubMenu>
       </SubMenu>
       <SubMenu key="sub4" title={<span><Icon type="setting" /><span>深度学习</span></span>}>
+      <Menu.Item key="31"><ItemPanel><Item
+            type="node"
+            size="200*40"
+            shape='one-one'
+            model={{
+              label: '二进制图片集',
+              elabel:'InputPicture',
+              attr:{'训练集数据': "train-images.idx3-ubyte", '训练集标签': "train-labels.idx1-ubyte", '验证集数据': "t10k-images.idx3-ubyte", '验证集标签': "t10k-labels.idx1-ubyte"},
+              anchor: [1, 1],
+              Dataset: [],
+              labelArray: {}, 
+              length: 0,
+              keyConfig:{
+                color_type: '#1890FF',
+                state_icon_url: 'https://gw.alipayobjects.com/zos/rmsportal/uZVdwjJGqDooqKLKtvGA.svg',
+              }
+            }}
+          /></ItemPanel></Menu.Item>
       <Menu.Item key="20"><ItemPanel><Item
             type="node"
             size="200*40"
@@ -686,6 +704,24 @@ class FlowItemPanel extends React.Component {
               label: 'Linear',
               elabel: 'Linear',
               attr:{'输入维度': 192, '输出维度': 100, 'activation': 'Tanh'},
+              anchor: [1, 1],
+              Dataset: [],
+              labelArray: {}, 
+              length: 0,
+              keyConfig:{
+                color_type: '#1890FF',
+                state_icon_url: 'https://gw.alipayobjects.com/zos/rmsportal/uZVdwjJGqDooqKLKtvGA.svg',
+              }
+            }}
+          /></ItemPanel></Menu.Item>
+      <Menu.Item key="30"><ItemPanel><Item
+            type="node"
+            size="200*40"
+            shape='one-one'
+            model={{
+              label: '训练',
+              elabel:'Train',
+              attr:{},
               anchor: [1, 1],
               Dataset: [],
               labelArray: {}, 

@@ -55,6 +55,8 @@ class nodes:
             data = {'code': code % (self.attribute['输入维度'], self.attribute['输出维度'], self.attribute['activation'])}
         elif self.label == "NewNetwork":
             data = {'code': code % self.id}
+        elif self.label == "InputPicture":
+            data = {'code': code % (self.id, self.attribute['训练集数据'], self.attribute['训练集标签'], self.attribute['验证集数据'], self.attribute['验证集标签'])}
         else:
             data = None
 
