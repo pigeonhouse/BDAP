@@ -13,7 +13,6 @@ class Feature extends Component{
         this.state={
             info: [],
             labelArray:[],
-            stat:[]
         }
     }
     findStat(sourceID, tag, sourceAnchor){
@@ -32,10 +31,9 @@ class Feature extends Component{
             }
             for(let i in Dataset){
                 if(Dataset[i].label === tag){
-                    this.setState({
-                        stat:Dataset[i].stat.value
-                    })
-                    return ;
+                    if(Dataset[i].stat.type === 'string')
+                    return Dataset[i].stat.value;
+                    else return [];
                 }
             }
         }
@@ -47,6 +45,7 @@ class Feature extends Component{
                         return this.findStat(edges[i].source, tag, edges[i].sourceAnchor);
                     }
                 }
+                return [];
             }
         }
     }
@@ -67,17 +66,15 @@ class Feature extends Component{
                         else {
                             Dataset = Dataset[1];
                         }
+                        break;
                     }
                 }
             }
             for(let i in Dataset){
                 if(Dataset[i].label === tag){
-                    console.log('dataset-------')
-                    console.log(Dataset[i].stat.value)
-                    this.setState({
-                        stat:Dataset[i].stat.value
-                    })
-                    return ;
+                    if(Dataset[i].stat.type === 'string')
+                    return Dataset[i].stat.value;
+                    else return [];
                 }
             }
         }
@@ -89,6 +86,7 @@ class Feature extends Component{
                         return this.findStat(edges[i].source, tag, edges[i].sourceAnchor);
                     }
                 }
+                return [];
             }
         }
     }
@@ -102,12 +100,12 @@ class Feature extends Component{
                             <Divider></Divider>
                         </Fragment>
             case '特征分组归类':
-                this.findStatFirst(this.props.sourceID, tag);
+                let Stat = this.findStatFirst(this.props.sourceID, tag);
                 return  <Fragment>
                             <Divider>{tag}</Divider>
                             <FeatureGroup
                             tag = {tag}
-                            stat= {this.state.stat}/>
+                            stat = {Stat}/>
                             <Divider></Divider>
                         </Fragment>
             case '数据类型转换':

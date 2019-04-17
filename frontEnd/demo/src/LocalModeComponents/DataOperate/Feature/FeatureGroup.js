@@ -28,8 +28,8 @@ class FeatureGroup extends Component {
     this.props.stat.map((value, index)=>{
       children.push(<Option key={index}>{value.name}</Option>)
     })
-    console.log('--------------')
-    console.log(this.props.stat);
+    // console.log('--------------')
+    // console.log(this.props.stat);
     if(children.length === 0){
       children.push(<Option key='1'>test</Option>)
     }
@@ -98,7 +98,7 @@ class FeatureGroup extends Component {
     })
   }
   remove=(index)=>{
-    const { propsAPI } = this.props;
+    const { propsAPI, form } = this.props;
     const { getSelected, executeCommand, update } = propsAPI;
     const item = getSelected()[0];
     let attr = JSON.parse(JSON.stringify(item.model.attr));
@@ -106,8 +106,19 @@ class FeatureGroup extends Component {
     executeCommand(() => {
       update(item,{attr:attr});
     });
+    let group = attr[this.props.tag];
+    for(let i in group){
+      let name = `name[${i}]`;
+      let value = `value[${i}]`;
+      let values = {};
+      values[name] = group[i][0];
+      values[value] = group[i].slice(1);
+      form.setFieldsValue({
+        ...values
+      })  
+    }
     this.setState({
-      region:attr[this.props.tag]
+      group:attr[this.props.tag]
     })
   }
   render() {
@@ -171,7 +182,7 @@ class FeatureGroup extends Component {
                       onChange={this.handleSubmitSelect.bind(this, index)}
                       showArrow
                     >
-                      {/* {this.state.children} */}
+                      {this.state.children}
                     </Select>,
                   )}
                 </div>

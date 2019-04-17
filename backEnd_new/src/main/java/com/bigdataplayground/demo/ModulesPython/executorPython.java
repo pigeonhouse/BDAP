@@ -26,7 +26,8 @@ public class executorPython {
     public void execute(List<Node> nodeList){
         int len = nodeList.size();
         for (int i = 0; i < len; i++) {
-            String[] arguments = new String[]{"python","src/main/python/Fillna.py"};
+            String[] arguments = new String[]{"python","src/main/python/mnist.py"
+            };
 
               runCode(arguments);
 //            System.out.println(nodeList[i].id);
