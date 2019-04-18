@@ -47,9 +47,6 @@ class NodeDetail extends React.Component {
 
     const { form, propsAPI } = this.props;
     const { getSelected, executeCommand, update } = propsAPI;
-    console.log(getSelected)
-    console.log(update)
-    console.log(propsAPI)
     form.validateFieldsAndScroll((err, values) => {
       if (err) {
         return;
@@ -282,7 +279,7 @@ class NodeDetail extends React.Component {
                       getFieldDecorator(`attr.${itemKey}` , {
                         rules:re.test(item[itemKey])?[{
                           required:false,
-                          pattern: new RegExp(/^[1-9]\d*$/, "g"),
+                          pattern: new RegExp(/^[0-9]+.?[0-9]*/, "g"),
                           message: '请输入数字'
                         }]:[],
                         initialValue: item[itemKey],

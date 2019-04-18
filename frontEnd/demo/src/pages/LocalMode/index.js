@@ -205,9 +205,7 @@ class LocalMode extends React.Component {
             <div className={styles.editorHd} data-step="2" data-intro='在工具栏可以进行撤销，复制，删除，成组等操作。' > 
               <FlowToolbar/>
             </div>
-            <Flow 
-              
-              style={{height:'calc(100vh - 142px)'}}
+            <Flow style={{height:'calc(100vh - 142px)'}}
              />
           </Col>
 

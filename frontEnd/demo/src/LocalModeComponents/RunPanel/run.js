@@ -511,13 +511,6 @@ class Run extends Component{
         <Modal title="Deep Learning" visible={this.state.visible}
             onOk={this.handleOk} onCancel={this.handleCancel} width={900}
           >
-            {/* <p>iter:
-              <div id="iter-number"></div>
-            </p>
-            <p>train-loss:
-              <div id="loss-train"></div>
-            </p>
-            <div id="linechart"></div>  */}
             <div id="dlChart" style={{ maxWidth: 350, height: 280 }}> </div>
         </Modal>
       </div>

@@ -6,6 +6,8 @@ import FeatureGroup from './Feature/FeatureGroup'
 import FillNa from './Feature/fillNa'
 import Randis from './Feature/Randis'
 import TypeChange from './Feature/TypeChange'
+import DataFilter from './Feature/DataFilter/DataFilter'
+import DataFilterA from './Feature/DataFilter/DataFilterA'
 
 class Feature extends Component{
     constructor(props){
@@ -117,6 +119,13 @@ class Feature extends Component{
                         </Fragment>
             case '特征二进制化':
                 return;
+            case '数据筛选':
+                return <Fragment>
+                            <Divider>{tag}</Divider>
+                            {/* <DataFilter 
+                            tag = {tag}/> */}
+                            <Divider></Divider>
+                        </Fragment>
             }
     }
     isDynamic = (arr)=>{
@@ -132,6 +141,18 @@ class Feature extends Component{
             case '数据随机划分':
                 return <Fragment>
                     划分比例：<Randis/>
+                </Fragment>
+            case '数据筛选':
+                if(arr.length)
+                return <Fragment>
+                    列间关系：<DataFilterA/>
+                    {
+                        arr.map((item)=>{
+                            return  <Fragment>
+                                        {this.featureType(item, label)}
+                                    </Fragment>
+                        })
+                    }
                 </Fragment>
         }
         return arr.map((item)=>{
