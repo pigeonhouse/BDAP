@@ -20,6 +20,11 @@ class RouteMode extends React.Component {
       redirect:'cluster'
     })
   }
+  insertPython=()=>{
+    this.setState({
+      redirect:'python'
+    })
+  }
 
   startIntro = () => {
     IntroJs().setOptions({
@@ -46,6 +51,10 @@ class RouteMode extends React.Component {
       this.setState({redirect:'route'})
       return <Redirect to="/cluster" />;
     }
+    else if(this.state.redirect === 'python'){
+      this.setState({redirect:'route'})
+      return <Redirect to="/python" />;
+    }
     else return (
       <div>
         <Row>
@@ -54,18 +63,22 @@ class RouteMode extends React.Component {
                 <Button icon="question" shape='circle' onClick={() => this.startIntro()}></Button>
             </Card>
         </div>
-        <Col span={12}>
-        
-        <div data-step="2" data-intro='单机模式'>
-        <Button style={{height:200,width:400,margin:150,fontSize:25}} onClick={this.insertLocal}>LOCAL MODE</Button>
-        </div>
-
+        <Col span={8}>      
+          <div data-step="2" data-intro='单机模式'>
+            <Button style={{height:200,width:400,margin:150,fontSize:25}} onClick={this.insertLocal}>LOCAL MODE</Button>
+          </div>
+        </Col>
+     
+        <Col span={8}>
+          <div data-step="4" data-intro='本地模式'>
+            <Button style={{height:200,width:400,margin:150,fontSize:25}} onClick={this.insertPython}>PYTHON MODE</Button>
+          </div>
         </Col>
 
-        <Col span={12}>
-        <div data-step="3" data-intro='集群模式'>
-        <Button style={{height:200,width:400,margin:150,fontSize:25}} onClick={this.insertCluster}>CLUSTER MODE</Button>
-        </div>
+        <Col span={8}>
+          <div data-step="4" data-intro='集群模式'>
+            <Button style={{height:200,width:400,margin:150,fontSize:25}} onClick={this.insertCluster}>CLUSTER MODE</Button>
+          </div>
         </Col>
         </Row>
       </div>

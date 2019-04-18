@@ -4,6 +4,7 @@ import { HashRouter as Router, Route } from 'react-router-dom';
 import HomePage from './pages/Home';
 import RouteMode from './pages/Route';
 import LocalModePage from './pages/LocalMode';
+import PythonModePage from './pages/PythonMode';
 import ClusterModePage from './pages/ClusterMode';
 
 ReactDOM.render(
@@ -12,6 +13,7 @@ ReactDOM.render(
       <Route path="/" exact component={HomePage} />
       <Route path="/route" component={RouteMode} />
       <Route path="/local" component={LocalModePage} />
+      <Route path="/python" component={PythonModePage} />
       <Route path="/cluster" component={ClusterModePage} />
 
     </div>
