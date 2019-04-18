@@ -52,9 +52,6 @@ class ClusterMode extends React.Component {
   handleError = () =>{
     const { propsAPI } = this.props;
     const { save, find } = propsAPI;
-    console.log(save)
-    console.log(find)
-    console.log(propsAPI)
     if(propsAPI['edges'] === undefined)
     return 0;
     const inf = propsAPI.save();
@@ -266,37 +263,7 @@ class ClusterMode extends React.Component {
             <div className={styles.editorHd} data-step="2" data-intro='在工具栏可以进行撤销，复制，删除，成组等操作。' > 
               <FlowToolbar/>
             </div>
-            <Flow 
-              onDragEnd={()=>{
-                if(this.state.connectCtrl){
-                  this.setState({connectCtrl:false})
-                }
-                else {
-                  this.setState({connectCtrl:true})
-                }
-                //  let err = this.handleError();
-                // if( err !== 0){
-                //   switch(err){
-                //     case 1: 
-                //       message.error('there is nothing yet!');
-                //       break;
-                //     case 2:
-                //       message.error('there is a loop!');
-                //       break;
-                //     case 3:
-                //       message.error('有单独的模块');
-                //       break;
-                //     case 4:
-                //       message.error('开头不是数据模块!');
-                //       break;
-                //     default:
-                //       break; 
-                //   }
-                //   return 0;
-                // }
-              }}
-              style={{height:'calc(100vh - 142px)'}}
-             />
+            <Flow style={{height:'calc(100vh - 142px)'}}/>
           </Col>
 
           <Col span={4} className={styles.editorSidebar} style={{height:'calc(100vh - 105px)'}}>
