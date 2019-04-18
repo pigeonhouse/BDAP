@@ -361,6 +361,25 @@ class FlowItemPanel extends React.Component {
               }
             }}           
             /></ItemPanel></Menu.Item>
+            <Menu.Item key="9"><ItemPanel><Item
+            type="node"
+            size="200*40"
+            shape="one-one"
+            model={{
+              label: '数据筛选',
+              elabel:'DataFilter',
+              attr:{},
+              Dataset: [],
+              labelArray: {}, 
+              length: 0,
+              anchor: [1, 1],
+              group: 'feature',
+              keyConfig:{
+                color_type: '#1890FF',
+                state_icon_url: 'https://gw.alipayobjects.com/zos/rmsportal/uZVdwjJGqDooqKLKtvGA.svg',
+              }
+            }}           
+            /></ItemPanel></Menu.Item>
           </SubMenu>
 
           <SubMenu key="sub3" title={<span><Icon type="appstore" /><span>机器学习</span></span>}>

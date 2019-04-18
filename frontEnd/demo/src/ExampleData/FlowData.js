@@ -18,4 +18,4 @@ export const data = {
         anchor:[1,1],attr:{type: "median"},elabel: "Fillna",group: "feature",id: "fb529020",index: 1,keyConfig:{color_type: "#1890FF",state_icon_url: "https://gw.alipayobjects.com/zos/rmsportal/uZVdwjJGqDooqKLKtvGA.svg"},
         label: "缺失值填充",labelArray:{public:[["id", false],["time",true],["sex", false]]},
         shape: "one-one",size: "200*40",type: "node",x: 333,y: 214,}]
-    }
+}
