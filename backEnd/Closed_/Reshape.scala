@@ -6,7 +6,7 @@ val y = %d
 val z = %d
 
 if(dim == 1){
-    model.add(Reshape(Array(192)))
+    model.add(Reshape(Array(x)))
 }else if(dim == 2){
     model.add(Reshape(Array(x, y)))
 }else if(dim == 3){
