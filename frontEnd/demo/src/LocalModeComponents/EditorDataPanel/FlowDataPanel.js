@@ -60,7 +60,7 @@ class FlowDataPanel extends React.Component {
       for(let i in dataTable){
         children.push(
           <Menu.Item key={i+3} > 
-            <Tooltip title="左键单击拖拽至右面" placement="rightTop">
+            <Tooltip title="左键单击拖拽至右面">
               <div>
                 <ItemPanel>
                   <Item
@@ -195,7 +195,7 @@ class FlowDataPanel extends React.Component {
         </GGEditor>
       <SubMenu key="sub1" title={<span><Icon type="mail" /><span>数据源</span></span>}>
         <Menu.Item key="1" >
-          <Tooltip title="左键单击拖拽至右面" placement="rightTop" >
+          <Tooltip title="左键单击拖拽至右面">
             <div>
               <ItemPanel>
                 <Item
@@ -222,7 +222,7 @@ class FlowDataPanel extends React.Component {
           </Tooltip>
         </Menu.Item>
         <Menu.Item key="2" > 
-          <Tooltip title="左键单击拖拽至右面" placement="rightTop">
+          <Tooltip title="左键单击拖拽至右面">
             <div>
               <ItemPanel>
                 <Item
@@ -249,7 +249,7 @@ class FlowDataPanel extends React.Component {
           </Tooltip>
         </Menu.Item>
         <Menu.Item key="3" > 
-          <Tooltip title="左键单击拖拽至右面" placement="rightTop">
+          <Tooltip title="左键单击拖拽至右面">
             <div>
               <ItemPanel>
                 <Item

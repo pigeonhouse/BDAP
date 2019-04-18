@@ -8,6 +8,8 @@ import {AppendingLineChart} from "../linechart/linechart.ts";
 import { withPropsAPI } from '@src';
 import store from '../../store';
 import { getStopLineAction, getShowLineAction, UpINF } from '../../store/actionCreate';
+import { data } from '../../ExampleData/FlowData';
+var inf = data;
 class FlowToolbar extends React.Component {
 
   state = {
@@ -33,14 +35,26 @@ class FlowToolbar extends React.Component {
     store.dispatch(action);
     console.log(store.getState().running);
   }
-
+  handleModel = () =>{
+    const { propsAPI } = this.props;
+    const { read } = propsAPI;
+    read(inf);
+    console.log("propsAPI")
+    console.log(inf)
+  }
+  handleSave = () =>{
+    console.log("存储模型显示")
+    const { propsAPI } = this.props;
+    const { save } = propsAPI;
+    inf = save();
+  }
 
   render() {
     
 
     return (
       
-
+      <div>
       <Toolbar className={styles.toolbar}>
         <Command name="undo">
           <Tooltip title="撤销" placement="bottom" overlayClassName={styles.tooltip}>
@@ -120,7 +134,13 @@ class FlowToolbar extends React.Component {
         
 
       </Toolbar>
-      // </div>
+      <Button onClick={()=>this.handleModel()} style={{backgroundColor:'#343941',color:"#ddd"}}>
+        <Icon type="search"/>模型
+      </Button>
+      <Button onClick={()=>this.handleSave()} style={{backgroundColor:'#343941',color:"#ddd"}}>
+        <Icon type="lock"/>存储
+      </Button>
+      </div>
     );
   }
 }
