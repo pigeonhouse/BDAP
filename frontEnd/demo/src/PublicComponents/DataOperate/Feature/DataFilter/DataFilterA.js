@@ -16,7 +16,8 @@ class DataFilterA extends Component {
     }
     else {
       attr.columnsRelation = 'and'
-      update(item, {attr});
+      let a = {attr:attr}
+      update(item, {...a});
     }
   }
   handleChange=(value)=>{
@@ -26,24 +27,26 @@ class DataFilterA extends Component {
     var attr = JSON.parse(JSON.stringify(item.model.attr));
     attr.columnsRelation = value;
     var condition = '';
-    const labelArray = item.model.labelArray;
+    const labelArray = item.model.labelArray.public;
 
     for(let i in labelArray){
       if(labelArray[i][1]){
         const con = attr[labelArray[i][0]];
-        if(condition === ''){
-          condition = '('+ con.join(' ') +')';
-        }
-        else {
-          condition = condition + ' '+ value + ' (' + con.join() + ')';
+        if(con){
+          if(condition === ''){
+            condition = '('+ con.join(' ') +')';
+          }
+          else {
+            condition = condition + ' '+ value + ' (' + con.join(' ') + ')';
+          }
         }
       }
     }
 
     attr.condition = condition;
-    update(item, {attr});
+    let a = {attr:attr};
+    update(item, {...a});
     this.setState({columnsRelation:value});
-    console.log(propsAPI.save())
   }
   render() {
     return (

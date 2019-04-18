@@ -122,8 +122,8 @@ class Feature extends Component{
             case '数据筛选':
                 return <Fragment>
                             <Divider>{tag}</Divider>
-                            {/* <DataFilter 
-                            tag = {tag}/> */}
+                            <DataFilter 
+                            tag = {tag}/>
                             <Divider></Divider>
                         </Fragment>
             }
