@@ -1,21 +1,51 @@
 import React from 'react';
-import { Tooltip, Divider, Modal, Button,Icon } from 'antd';
+import { Tooltip, Divider, Modal,List, Avatar, Button, Icon } from 'antd';
 import { Toolbar, Command } from '@src';
 import styles from './index.less';
 import iconfont from '../../theme/iconfont.less';
-
 import { withPropsAPI } from '@src';
 import store from '../../store';
 import { getStopLineAction, getShowLineAction, UpINF } from '../../store/actionCreate';
 import { data } from '../../ExampleData/FlowData';
 var inf = data;
+const dat = [
+  {
+    title: 'Ant Design Title 1',
+  },
+  {
+    title: 'Ant Design Title 2',
+  },
+  {
+    title: 'Ant Design Title 3',
+  },
+  {
+    title: 'Ant Design Title 4',
+  },
+];
 class FlowToolbar extends React.Component {
 
   state = {
     visible: false,
+    v:false
+  }
+  sModal = () => {
+    this.setState({
+      v: true,
+    });
+  }
+  hOk = (e) => {
+    console.log(e);
+    this.setState({
+      v: false,
+    });
   }
 
-
+  hCancel = (e) => {
+    console.log(e);
+    this.setState({
+      v: false,
+    });
+  }
   handleOk = (e) => {
     console.log(e);
     this.setState({
@@ -52,7 +82,7 @@ class FlowToolbar extends React.Component {
   render() {  
 
     return (
-      
+      <div>
       <div>
       <Toolbar className={styles.toolbar}>
         <Command name="undo">
@@ -129,16 +159,37 @@ class FlowToolbar extends React.Component {
             <i className={`${iconfont.iconfont} ${iconfont.iconUngroup}`} />
           </Tooltip>
         </Command>
-        
-        
-
-      </Toolbar>
-      <Button onClick={()=>this.handleModel()} style={{backgroundColor:'#343941',color:"#ddd"}}>
+      <Button onClick={()=>this.handleModel()} >
         <Icon type="search"/>模型
       </Button>
-      <Button onClick={()=>this.handleSave()} style={{backgroundColor:'#343941',color:"#ddd"}}>
+      <Button onClick={()=>this.handleSave()} >
         <Icon type="lock"/>存储
       </Button>
+      </Toolbar>
+      
+      </div>
+      {/* <div>
+        <Modal
+          title="模型仓库"
+          visible={this.state.v}
+          onOk={this.hOk}
+          onCancel={this.hCancel}
+        >
+          <List
+          itemLayout="horizontal"
+          dataSource={dat}
+          renderItem={item => (
+            <List.Item>
+              <List.Item.Meta
+                avatar={<Avatar src="https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png" />}
+                title={<a href="https://ant.design">{item.title}</a>}
+                description="Ant Design, a design language for background applications, is refined by Ant UED Team"
+              />
+            </List.Item>
+          )}
+        />
+      </Modal>
+      </div> */}
       </div>
     );
   }
