@@ -60,7 +60,7 @@ val trainData = folder + "%s"
 val trainLabel = folder + "%s"
 val validationData = folder + "%s"
 val validationLabel = folder + "%s"
-val batchSize = 256
+val batchSize = %d
 
 val trainSet = DataSet.array(load(trainData, trainLabel), sc) -> BytesToGreyImg(28, 28) -> GreyImgNormalizer(trainMean, trainStd) -> GreyImgToBatch(
   batchSize)

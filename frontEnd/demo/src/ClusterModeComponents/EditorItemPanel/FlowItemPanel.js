@@ -560,7 +560,7 @@ class FlowItemPanel extends React.Component {
               model={{
                 label: '二进制图片集',
                 elabel:'InputPicture',
-                attr:{'训练集数据': "train-images.idx3-ubyte", '训练集标签': "train-labels.idx1-ubyte", '验证集数据': "t10k-images.idx3-ubyte", '验证集标签': "t10k-labels.idx1-ubyte"},
+                attr:{'训练集数据': "train-images.idx3-ubyte", '训练集标签': "train-labels.idx1-ubyte", '验证集数据': "t10k-images.idx3-ubyte", '验证集标签': "t10k-labels.idx1-ubyte", 'batchSize': 256},
                 anchor: [1, 1],
                 Dataset: [],
                 labelArray: {}, 
@@ -704,7 +704,7 @@ class FlowItemPanel extends React.Component {
                 model={{
                   label: '训练',
                   elabel:'Train',
-                  attr:{'学习率': 0.005, '训练次数': 1, 'batchSize': 256},
+                  attr:{'学习率': 0.002, '训练次数': 15},
                   anchor: [1, 1],
                   Dataset: [],
                   labelArray: {}, 
