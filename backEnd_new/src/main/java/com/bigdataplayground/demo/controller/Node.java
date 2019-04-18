@@ -1,4 +1,4 @@
-package com.bigdataplayground.demo.MolulesSpark;
+package com.bigdataplayground.demo.controller;
 
 import java.util.List;
 import java.util.Map;
@@ -49,27 +49,6 @@ public class Node {
 
     public void setLabelArray(Map<String, List<String>> labelArray) {
         this.labelArray = labelArray;
-    }
-}
-
-class NodeSourceId{
-    private String source;
-    private int sourceAnchor;
-
-    public String getSource() {
-        return source;
-    }
-
-    public int getSourceAnchor() {
-        return sourceAnchor;
-    }
-
-    public void setSource(String source) {
-        this.source = source;
-    }
-
-    public void setSourceAnchor(int sourceAnchor) {
-        this.sourceAnchor = sourceAnchor;
     }
 }
 
