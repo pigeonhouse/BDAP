@@ -1,8 +1,6 @@
 import React from 'react';
-import { Button,Card,icon, Tooltip } from 'antd';
+import { Button,Card,icon, Tooltip, Row, Col} from 'antd';
 import { Redirect } from 'react-router-dom';
-import { Row, Col } from 'antd';
-
 var IntroJs = require('intro.js')
 
 class RouteMode extends React.Component {
@@ -56,30 +54,30 @@ class RouteMode extends React.Component {
       return <Redirect to="/python" />;
     }
     else return (
-      <div>
+      <div>     
         <Row>
-        <div id='root' data-step="1" data-intro='开始引导!'>
-            <Card bordered={true} style={{ width: '100%' }} >
-                <Button icon="question" shape='circle' onClick={() => this.startIntro()}></Button>
-            </Card>
-        </div>
-        <Col span={8}>      
-          <div data-step="2" data-intro='单机模式'>
-            <Button style={{height:200,width:400,margin:150,fontSize:25}} onClick={this.insertLocal}>LOCAL MODE</Button>
-          </div>
-        </Col>
-     
-        <Col span={8}>
-          <div data-step="4" data-intro='本地模式'>
-            <Button style={{height:200,width:400,margin:150,fontSize:25}} onClick={this.insertPython}>PYTHON MODE</Button>
-          </div>
-        </Col>
+          <Row id='root' data-step="1" data-intro='开始引导!'>
+              <Card bordered={true} style={{ width: '100%' }} >
+                  <Button icon="question" shape='circle' onClick={() => this.startIntro()}></Button>
+              </Card>
+          </Row>
+          <Col span={8}>      
+            <div data-step="2" data-intro='单机模式'>
+              <Button style={{height:200,width:400,margin:60,fontSize:25}} onClick={this.insertLocal}>LOCAL MODE</Button>
+            </div>
+          </Col>
+      
+          <Col span={8}>
+            <div data-step="3" data-intro='本地模式'>
+              <Button style={{height:200,width:400,margin:60,fontSize:25}} onClick={this.insertPython}>PYTHON MODE</Button>
+            </div>
+          </Col>
 
-        <Col span={8}>
-          <div data-step="4" data-intro='集群模式'>
-            <Button style={{height:200,width:400,margin:150,fontSize:25}} onClick={this.insertCluster}>CLUSTER MODE</Button>
-          </div>
-        </Col>
+          <Col span={8}>
+            <div data-step="4" data-intro='集群模式'>
+              <Button style={{height:200,width:400,margin:60,fontSize:25}} onClick={this.insertCluster}>CLUSTER MODE</Button>
+            </div>
+          </Col>
         </Row>
       </div>
     );
