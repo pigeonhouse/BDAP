@@ -12,6 +12,7 @@ import Run from "../../LocalModeComponents/Models/run"
 import SparkRun from "../../LocalModeComponents/Models/sparkRun"
 import { FlowDataPanel } from '../../LocalModeComponents/EditorDataPanel';
 import FlowConnect from '../../LocalModeComponents/EditorConnect';
+import { data } from '../../ExampleData/FlowData'
 const TabPane = Tabs.TabPane;
 class LocalMode extends React.Component {
   Intro = (key) => {
@@ -114,7 +115,7 @@ class LocalMode extends React.Component {
       message.error(`${info.file.name} file upload failed.`);
     }
   }
-
+  
   render() {
     const props = {
       name: 'file',
@@ -236,8 +237,11 @@ class LocalMode extends React.Component {
           <Col span={2}>
               <Run></Run>
           </Col>
-          <Col span={11}>
-            {/* <FlowConnect style={{width:0, height:0}} connectCtrl={this.state.connectCtrl}/> */}
+          <Col span={9}></Col>
+          <Col span={2}>
+              <Button style={{border:0,backgroundColor:'#343941',color:"#ddd",fontSize:25}} >
+                <Icon type="search" style={{fontSize:25}}/>模型
+              </Button>
           </Col>
         </Row>
         
