@@ -19,6 +19,7 @@
   }
 }
 .scrollapp {
+  background-color: #fff;
   overflow-x: hidden;
   overflow-y: auto;
   :global{
@@ -31,6 +32,12 @@
 .unscrollapp{
   overflow-x: hidden;
   overflow-y: hidden;
+  background-color: #fff;
+  :global{
+    .ant-menu-submenu-inline>.ant-menu-submenu-title .ant-menu-submenu-arrow, .ant-menu-submenu-vertical-left>.ant-menu-submenu-title .ant-menu-submenu-arrow, .ant-menu-submenu-vertical-right>.ant-menu-submenu-title .ant-menu-submenu-arrow, .ant-menu-submenu-vertical>.ant-menu-submenu-title .ant-menu-submenu-arrow{
+      right: 7px;
+    }
+  }
 }
 .scrollapp::-webkit-scrollbar {/*滚动条整体样式*/
   width: 10px;     /*高宽分别对应横竖滚动条的尺寸*/
