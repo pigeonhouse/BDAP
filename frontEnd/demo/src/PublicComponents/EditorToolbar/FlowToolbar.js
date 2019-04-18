@@ -38,14 +38,15 @@ class FlowToolbar extends React.Component {
     const { propsAPI } = this.props;
     const { read } = propsAPI;
     read(inf);
-    console.log("propsAPI")
+    console.log("----propsAPI------")
     console.log(inf)
   }
   handleSave = () =>{
-    console.log("存储模型显示")
+    console.log("----存储模型显示---------")
     const { propsAPI } = this.props;
     const { save } = propsAPI;
     inf = save();
+    console.log(inf)
   }
 
   render() {  
