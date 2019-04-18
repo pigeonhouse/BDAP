@@ -1,6 +1,6 @@
 import { selectData, selectDataUntransport } from '../normalFunction'
-import { Stat } from '../../../DataOperate/stat'
-import { Randis } from '../../../DataOperate/DataProcess/Randis'
+import { Stat } from '../../../../PublicComponents/DataOperate/stat'
+import { Randis } from '../../../../PublicComponents/DataOperate/DataProcess/Randis'
 import { GaussianNB } from "ml-naivebayes";
 import ConfusionMatrix from 'ml-confusion-matrix';
 function normalize(pre, predictObj, PreArray){

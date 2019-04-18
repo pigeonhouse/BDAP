@@ -1,5 +1,5 @@
 import SimpleLinearRegression from 'ml-regression-simple-linear';
-import { Stat } from '../../../DataOperate/stat'
+import { Stat } from '../../../../PublicComponents/DataOperate/stat'
 
 export function OneVarLinearRegression(allData){
     console.log(allData)

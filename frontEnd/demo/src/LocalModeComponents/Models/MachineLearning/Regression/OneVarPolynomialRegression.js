@@ -1,6 +1,6 @@
 import PolynomialRegression from 'ml-regression-polynomial';
 import {selectDataUntransport} from '../normalFunction'
-import { Stat } from '../../../DataOperate/stat'
+import { Stat } from '../../../../PublicComponents/DataOperate/stat'
 function normalize(pre, Obj, objArray){
     let Dataset = pre;
     

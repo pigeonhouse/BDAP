@@ -1,16 +1,17 @@
 import React from 'react';
-import { Row, Col, Button,Steps, message, notification,Icon,Tabs,Upload} from 'antd';
+import { Row, Col, Button, message, notification,Icon,Tabs,Upload} from 'antd';
 import GGEditor, { Flow } from '@src';
-import EditorMinimap from '../../ClusterModeComponents/EditorMinimap';
-import { FlowContextMenu } from '../../ClusterModeComponents/EditorContextMenu';
-import { FlowToolbar } from '../../ClusterModeComponents/EditorToolbar';
-import { FlowItemPanel } from '../../ClusterModeComponents/EditorItemPanel';
-import { FlowDetailPanel } from '../../ClusterModeComponents/EditorDetailPanel';
+import EditorMinimap from '../../PublicComponents/EditorMinimap';
+import { FlowContextMenu } from '../../PublicComponents/EditorContextMenu';
+import { FlowToolbar } from '../../PublicComponents/EditorToolbar';
+import { FlowDetailPanel } from '../../PublicComponents/EditorDetailPanel';
 import styles from './index.less';
-import IntroJs from 'intro.js';
-import SparkRun from "../../ClusterModeComponents/sparkRun"
+import FlowConnect from '../../PublicComponents/EditorConnect';
+
+import { FlowItemPanel } from '../../ClusterModeComponents/EditorItemPanel';
+import SparkRun from "../../ClusterModeComponents/SparkRunPanel/sparkRun"
 import { FlowDataPanel } from '../../ClusterModeComponents/EditorDataPanel';
-import FlowConnect from '../../ClusterModeComponents/EditorConnect';
+
 const TabPane = Tabs.TabPane;
 class ClusterMode extends React.Component {
   Intro = (key) => {

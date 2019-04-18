@@ -1,17 +1,15 @@
 import React from 'react';
-import { Row, Col, Button,Steps, message, notification,Icon,Tabs,Upload} from 'antd';
+import { Row, Col, Button, message, notification,Icon,Tabs,Upload} from 'antd';
 import GGEditor, { Flow } from '@src';
-import EditorMinimap from '../../LocalModeComponents/EditorMinimap';
-import { FlowContextMenu } from '../../LocalModeComponents/EditorContextMenu';
-import { FlowToolbar } from '../../LocalModeComponents/EditorToolbar';
+import EditorMinimap from '../../PublicComponents/EditorMinimap';
+import { FlowContextMenu } from '../../PublicComponents/EditorContextMenu';
+import { FlowToolbar } from '../../PublicComponents/EditorToolbar';
 import { FlowItemPanel } from '../../LocalModeComponents/EditorItemPanel';
-import { FlowDetailPanel } from '../../LocalModeComponents/EditorDetailPanel';
+import { FlowDetailPanel } from '../../PublicComponents/EditorDetailPanel';
 import styles from './index.less';
-import IntroJs from 'intro.js';
-import Run from "../../LocalModeComponents/Models/run"
-import SparkRun from "../../LocalModeComponents/Models/sparkRun"
+import Run from "../../LocalModeComponents/RunPanel/run"
 import { FlowDataPanel } from '../../LocalModeComponents/EditorDataPanel';
-import FlowConnect from '../../LocalModeComponents/EditorConnect';
+import FlowConnect from '../../PublicComponents/EditorConnect';
 import { data } from '../../ExampleData/FlowData'
 const TabPane = Tabs.TabPane;
 class LocalMode extends React.Component {

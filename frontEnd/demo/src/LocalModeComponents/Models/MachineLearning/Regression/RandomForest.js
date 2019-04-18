@@ -1,6 +1,6 @@
 import { RandomForestRegression as RFRegression } from 'ml-random-forest';
 import {selectData, selectDataUntransport} from '../normalFunction'
-import { Stat } from '../../../DataOperate/stat'
+import { Stat } from '../../../../PublicComponents/DataOperate/stat'
 
 function normalize(pre, predictObj, PreArray){
     let Dataset = pre;
