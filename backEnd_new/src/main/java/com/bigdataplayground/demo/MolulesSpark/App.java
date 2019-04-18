@@ -27,7 +27,6 @@ public class App {
     private String livyAddr = "10.105.222.90:8998"; //livy 服务器+端口
     private String hdfsAddr = "10.105.222.90:9000"; //HDFS namenode
 
-    private HttpServletRequest request;
     private HttpServletResponse response;
     private ObjectMapper objectMapper = new ObjectMapper();
     private String runningData;
@@ -80,21 +79,38 @@ public class App {
      * @throws InterruptedException
      */
     @CrossOrigin(origins = "*")
-    @RequestMapping(path = {"/hdfs"},method = {RequestMethod.GET})
-    public String hdfs() throws URISyntaxException, IOException, InterruptedException {
+    @RequestMapping(path={"/hdfs"}, method = {RequestMethod.POST,RequestMethod.GET})
+    public String hdfs(HttpServletRequest request) throws URISyntaxException, IOException, InterruptedException {
+        String optKind = request.getParameter("kind");
+        String objPath = request.getParameter("path");
+        String userName = request.getParameter("user");
+        HdfsClient hdfsClient = new HdfsClient("hdfs://" + hdfsAddr,userName);
+        switch (optKind) {
+            case "tree": {
+                List<String> fileList = hdfsClient.getAllFilePath(new org.apache.hadoop.fs.Path(objPath));
+                //jackson会不断在里面加入反斜杠，为自己的反斜杠加入反斜杠，子子孙孙无穷尽
+                String jsonFileList = fileList.toString();
+                jsonFileList = jsonFileList.replace("\\", "")
+                        .replace("\"{", "{")
+                        .replace("}\"", "}");
+                //这虽然不符合JSON标准，而且如果含有非法字符可能会报错，但目前是可用的
+                return jsonFileList;
+            }
+            case "mkdir":
+                return hdfsClient.makeDirectory(objPath);
 
-        HdfsClient hdfsClient = new HdfsClient("hdfs://"+hdfsAddr);
-        //List<String> fileList = hdfsClient.getFileList("/");
-        List<String> fileList = hdfsClient.getAllFilePath(new org.apache.hadoop.fs.Path("/"));
+            case "rm":
+                return hdfsClient.remove(objPath);
+            case "rmR"://用来递归地删除文件夹，高危操作，必须二次判，为避免误操作，只能用来删除目录，如果是文件就会报错
+                return hdfsClient.removeR(objPath);
 
-        //jackson会不断在里面加入反斜杠，为自己的反斜杠加入反斜杠，子子孙孙无穷尽
-        String jsonFileList = fileList.toString();
-        jsonFileList = jsonFileList.replace("\\","")
-                .replace("\"{","{")
-                .replace("}\"","}");
-        //这不符合JSON标准，如果含有非法字符可能会报错，不过目前是可用的
+            case "upload":
 
-        return jsonFileList;
+            default:
+                break;
+        }
+
+        return "Error Kind";
     }
 
 
@@ -113,12 +129,12 @@ public class App {
 
         for(Node node : nodeList){
             System.out.println(node.getLabel()+" is running");
-            //设置地址并执行
+
             sparkExecutor.executeNode(node);
 
             if(!node.getLabel().equals("hdfsFile")){
                 List<Object> tmp = new ArrayList<>();
-                //不加双引号前端会识别不了。。。。略玄学
+                //不加双引号会识别不了
                 tmp.add("\""+node.getId()+"\"");
                 tmp.add(runningData);
 

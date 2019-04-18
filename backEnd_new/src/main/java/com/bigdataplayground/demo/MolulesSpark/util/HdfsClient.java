@@ -1,14 +1,11 @@
 package com.bigdataplayground.demo.MolulesSpark.util;
 
-import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.fs.*;
 
-import javax.annotation.Nullable;
 import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -22,52 +19,82 @@ public class HdfsClient {
     private FileSystem fileSystem ;
     private ObjectMapper objectMapper = new ObjectMapper();
 
-    public HdfsClient(String hdfsHome) throws URISyntaxException, IOException, InterruptedException {
+    public HdfsClient(String hdfsHome,String userName) throws URISyntaxException, IOException, InterruptedException {
+        if(userName==null) userName = "tseg";
         this.hdfsHome= new URI(hdfsHome);
         conf.set("fs.defaultFS", hdfsHome);
-        fileSystem = FileSystem.get(this.hdfsHome,conf,"tseg");
+        fileSystem = FileSystem.get(this.hdfsHome,conf,userName);
     }
 
     public String makeDirectory(String newDir) throws IOException {
         if(fileSystem.exists(new Path(newDir))){
             return "Already Exists.";
         }else if(fileSystem.mkdirs(new Path(newDir))){
-            return "Success";
+            return newDir+"Successfully Created";
         }else{
-            return "Mkdir Failed";
+            return "mkdir:Failed";
         }
+    }
 
+    public boolean exists(String path) throws IOException {
+
+        return fileSystem.exists(new Path(path));
+    }
+
+    /**
+     * 删除文件、删除空目录
+     * @param filePath
+     * @return
+     * @throws IOException
+     */
+    public String remove(String filePath) throws IOException {
+        if (fileSystem.exists(new Path(filePath))) {
+            if (fileSystem.getFileStatus(new Path(filePath)).isFile()) {
+                if (fileSystem.delete(new Path(filePath), false)) {
+                    return filePath + "Successfully Deleted";
+                } else {
+                    return "rm:Failed";
+                }
+            } else {
+                //判断是否空
+                if(fileSystem.listStatus(new Path(filePath)).length==0) {
+                    if (fileSystem.delete(new Path(filePath), false)) {
+                        return filePath + "Successfully Deleted";
+                    } else {
+                        return "rm:Failed";
+                    }
+                }else{
+                    return "Directory is not empty. Use kind = rmR to remove it anyway.";
+                }
+            }
+        }else {
+            return "Path not exists";
+        }
+    }
+
+    /**
+     * 删除
+     * @param filePath
+     * @return
+     * @throws IOException
+     */
+    public String removeR(String filePath) throws IOException {
+        if (fileSystem.getFileStatus(new Path(filePath)).isFile()) {
+            return "To Avoid incorrect operation, use kind = rm to remove file";
+        }
+        if (fileSystem.exists(new Path(filePath))) {
+            if (fileSystem.delete(new Path(filePath), true)) {
+                return filePath + " Successfully Deleted Recursively";
+            } else {
+                return "rmR:Failed";
+            }
+        }else {
+            return "Path not exists";
+        }
     }
 
     public String fetchFile(){
     return null;
-    }
-
-    /**
-     * 获取当前目录文件
-     * @param srcpath
-     * @return
-     * @throws IOException
-     */
-    @Deprecated
-    public List<String> getFileList(String srcpath) throws IOException {
-
-        FileStatus[] fileStatuses = fileSystem.listStatus(new Path(srcpath));
-        List<String> fileList =new ArrayList<>();
-        for (FileStatus fileStatus : fileStatuses) {
-
-            String isDir = fileStatus.isDirectory() ? "文件夹" : "文件";
-            short replication = fileStatus.getReplication();
-            long len = fileStatus.getLen();
-
-            String path = fileStatus.getPath().toString();
-            System.out.println(path);
-
-            fileList.add(isDir + "\t" + replication + "\t" + len + "\t" + path);
-
-            System.out.println(isDir + "\t" + replication + "\t" + len + "\t" + path);
-        }
-        return fileList;
     }
 
     /**
@@ -78,24 +105,20 @@ public class HdfsClient {
      */
     public List<String> getAllFilePath(Path filePath) throws IOException {
         List<String> fileList = new ArrayList<String>();
-        FileStatus[] fileStatusList = fileSystem.listStatus(filePath);
+        FileStatus[] fileStatusList = fileSystem.listStatus(filePath);//存放当前目录下所有文件或子目录
         for (FileStatus fileStatus : fileStatusList) {
             if (fileStatus.isDirectory()) {
+                //加入子目录
                 fileList.add(fileStatusToString(fileStatus,getAllFilePath(fileStatus.getPath())));
             } else {
-                fileList.add(fileStatusToString(fileStatus,null));
+                //加入文件
+                fileList.add(fileStatusToString(fileStatus,null));//
             }
         }
         return fileList;
     }
 
-    public boolean exists(String path) throws IOException {
-        boolean isExists = false;
-        Path hdfsPath = new Path(path);
 
-        isExists = fileSystem.exists(hdfsPath);
-        return isExists;
-    }
 
     public String fileStatusToString(FileStatus fileStatus, List<String> subDirectory) throws IOException {
         StringBuilder sb = new StringBuilder();
@@ -110,7 +133,7 @@ public class HdfsClient {
             ((ObjectNode) fileNode).put("replication", fileStatus.getReplication());
             ((ObjectNode) fileNode).put("blocksize", fileStatus.getBlockSize());
         }else{
-            ((ObjectNode) fileNode).putPOJO("subDirectory",subDirectory);
+            ((ObjectNode) fileNode).putPOJO("subDirectory",subDirectory);//反斜杠的罪恶之源
         }
         ((ObjectNode) fileNode).put("modification_time", fileStatus.getModificationTime());
         ((ObjectNode) fileNode).put("access_time", fileStatus.getAccessTime());
