@@ -82,9 +82,12 @@ public class App {
 
      * String user 用户名 确定了权限和./的位置（对了，多用户存储的时候需要传入读写权限，现在先不考虑这个。。)
      * String path 目录或文件路径 示例：
-     *              /dst/src.txt    ./dst.txt   得到      ./dst.txt       上传并重命名
-     *              /dst/src.txt    ./          得到      ./src.txt       上传至目录（同名)
-     *              也就是 目标路径path 可以是一个未创建的文件名或者是已创建的目录（不能是未创建的目录)
+     *              /dst/src.txt    ./dst.txt       （无同名文件） ——>./dst.txt       上传并重命名
+     *              /dst/src.txt    ./dst.txt       （有同名文件） ——> 上传失败
+     *              /dst/src.txt    ./              （目录存在）   ——>  ./src.txt     上传至目录（同名文件)
+     *              /dst/src.txt    ./directory     （目录不存在）  ——>  ./directory   误上传（新文件无后缀名）**
+     *              也就是 目标路径path 可以是一个未创建的文件名或者是已创建的目录（不能是未创建的目录，不添加新参数好像解决不了）
+     *              不过真正用的时候都是要先选择路径再传文件，一般只会发生上面第三种情况。
      * String localPath 上传文件的本地路径
      *
      * 文件名中不能含有 反斜杠(\)、引号("")、花括号({})
@@ -132,7 +135,7 @@ public class App {
                 boolean override = (hdfsOptRequest.getPath()!=null && hdfsOptRequest.getParam().equals("O"));
                 return hdfsClient.saveFile(hdfsOptRequest.getPath(),hdfsOptRequest.getContent(),override);
             case "upload":
-                return hdfsClient.uploadFromLocal(hdfsOptRequest.getPath(),hdfsOptRequest.getLocalPath());
+                return hdfsClient.uploadFromLocal(hdfsOptRequest.getLocalPath(),hdfsOptRequest.getPath());
             default:
                 break;
         }

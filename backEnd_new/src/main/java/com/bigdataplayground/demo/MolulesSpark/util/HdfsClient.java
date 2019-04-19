@@ -42,7 +42,7 @@ public class HdfsClient {
         if(fileSystem.exists(new Path(newDir))){
             return "Already Exists.";
         }else if(fileSystem.mkdirs(new Path(newDir))){
-            return newDir+"Successfully Created";
+            return newDir+" is successfully Created";
         }else{
             return "mkdir:Failed";
         }
@@ -154,24 +154,36 @@ public class HdfsClient {
     }
 
     /**
-     * @param dstPath 目标地址 对应 请求中的path
      * @param srcPath 本地地址 对应 请求中的srcPath
+     * @param dstPath 目标地址 对应 请求中的path
      * @return
      */
-    public String uploadFromLocal(String dstPath,String srcPath) throws IOException {
+    public String uploadFromLocal(String srcPath,String dstPath) throws IOException {
         Path dst = new Path(dstPath);
         Path src = new Path(srcPath);
+        String msg ="";
+        FSDataOutputStream out = null;
+        //dst 已经存在，如果为文件就返回存在，如果是目录则修改dst
+        if(fileSystem.exists(dst)) {
+            if (fileSystem.getFileStatus(dst).isFile()) {
+                msg =  dst + " File Exists";
+                System.out.println(msg);
+                return msg;
+            } else if (fileSystem.getFileStatus(dst).isDirectory()) {
+                dst = new Path(dst + "/" + src.getName());
+                out = fileSystem.create(dst);
+                msg = src + ":File is uploaded to Dstpath:"+dst;
+            }
+        }else{ //路径不存在，则直接上传
+            out = fileSystem.create(dst);
+            msg = srcPath+": File is uploaded to Dstpath:"+ dst;
 
-        if(fileSystem.getFileStatus (dst).isFile()) {
-            return "File Exists";
-        }else if(fileSystem.getFileStatus (dst).isDirectory()){
-            FSDataOutputStream out = fileSystem.create(new Path(dst+"/"+src.getName()));
-        }else{
-            FSDataOutputStream out = fileSystem.create(new Path(dstPath));
-            FileInputStream fis = new FileInputStream(srcPath);
-            IOUtils.copyBytes(fis, out, 4096, true);
         }
-        return "Success";
+        FileInputStream fis = new FileInputStream(srcPath);
+        IOUtils.copyBytes(fis, out, 4096, true);
+        msg = msg +" Successfully";
+        System.out.println(msg);
+        return msg;
     }
 
     /**
