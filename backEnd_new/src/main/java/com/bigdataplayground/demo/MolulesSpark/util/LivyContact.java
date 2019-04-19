@@ -84,10 +84,9 @@ public class LivyContact {
             }
             availableSession = null;
         }
-
         if(livySessionDescription.getTotal()==0 || availableSession==null){
+            System.out.print("Not a single idle session is available. Wait to create a new Livy Session");
             LivySessionInfo newSession = LivyContact.createSession();
-            System.out.print("Wait a new Livy Session");
             while(!LivyContact.getSession(livyAddr,newSession.getId()).getState().equals("idle")){
                 System.out.print(".");
                 try {

@@ -11,7 +11,6 @@ import java.util.concurrent.Future;
 public class ToolSet {
     /**
      * 异步的文件读写模板，利用了Channel和future，直接调用还是相当于阻塞（就是还没啥用）
-     * 文件最大为10240字节
      * @param path
      * @return
      * @throws IOException

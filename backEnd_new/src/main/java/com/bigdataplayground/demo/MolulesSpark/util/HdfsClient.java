@@ -28,7 +28,7 @@ public class HdfsClient {
         this.hdfsHome= new URI(hdfsHome);
         conf.set("fs.defaultFS", hdfsHome);
         conf.set("fs.hdfs.impl","org.apache.hadoop.hdfs.DistributedFileSystem");
-        conf.set("dfs.client.use.datanode.hostname", "true");
+        conf.set("dfs.client.use.datanode.hostname", "true"); //需要添加hosts 将集群别名映射到公网地址10.105.222.*
         fileSystem = FileSystem.get(this.hdfsHome,conf,userName);
     }
 
@@ -96,11 +96,11 @@ public class HdfsClient {
      * @throws IOException
      */
     public String removeR(String filePath) throws IOException {
-        if (fileSystem.getFileStatus(new Path(filePath)).isFile()) {
-            System.out.println("To avoid accidentally deletion, DO NOT use param = R to remove file");
-            return "To avoid accidentally deletion, DO NOT use param = R to remove file";
-        }
         if (fileSystem.exists(new Path(filePath))) {
+            if (fileSystem.getFileStatus(new Path(filePath)).isFile()) {
+                System.out.println("To avoid accidentally deletion, DO NOT use param = R to remove file");
+                return "To avoid accidentally deletion, DO NOT use param = R to remove file";
+            }
             if (fileSystem.delete(new Path(filePath), true)) {
                 System.out.println(filePath + " Successfully Deleted Recursively");
                 return filePath + " Successfully Deleted Recursively";
@@ -154,19 +154,28 @@ public class HdfsClient {
     }
 
     /**
-     * @param dstPath 目标地址
-     * @param srcPath 本地地址
+     * @param dstPath 目标地址 对应 请求中的path
+     * @param srcPath 本地地址 对应 请求中的srcPath
      * @return
      */
     public String uploadFromLocal(String dstPath,String srcPath) throws IOException {
-        FSDataOutputStream out =fileSystem.create(new Path(dstPath));
-        FileInputStream fis = new FileInputStream(srcPath);
-        IOUtils.copyBytes(fis,out,4096,true);
+        Path dst = new Path(dstPath);
+        Path src = new Path(srcPath);
+
+        if(fileSystem.getFileStatus (dst).isFile()) {
+            return "File Exists";
+        }else if(fileSystem.getFileStatus (dst).isDirectory()){
+            FSDataOutputStream out = fileSystem.create(new Path(dst+"/"+src.getName()));
+        }else{
+            FSDataOutputStream out = fileSystem.create(new Path(dstPath));
+            FileInputStream fis = new FileInputStream(srcPath);
+            IOUtils.copyBytes(fis, out, 4096, true);
+        }
         return "Success";
     }
 
     /**
-     * 递归地获取所有文件（不包括文件夹）
+     * 获取path目录下文件的信息
      * @param filePath
      * @return
      * @throws IOException
@@ -186,8 +195,13 @@ public class HdfsClient {
         return fileList;
     }
 
-
-
+    /**
+     * 将fileStatus 转为json格式
+     * @param fileStatus
+     * @param subDirectory
+     * @return
+     * @throws IOException
+     */
     public String fileStatusToString(FileStatus fileStatus, List<String> subDirectory) throws IOException {
         StringBuilder sb = new StringBuilder();
 
