@@ -77,13 +77,48 @@ public class SparkExecutor {
                     node.getSourceId().get(0).getSource(),
                     "http://"+appAddr+"/RunningPost"
             ); break;
+            case "Convolution": data = String.format(code,
+                    node.getId(), node.getSourceId().get(0).getSource(),
+                    node.getAttribute().get("x"), node.getAttribute().get("y"),
+                    node.getAttribute().get("输出平面数量"), node.getAttribute().get("输入平面数量"),
+                    node.getAttribute().get("activation")
+            ); break;
+            case "Reshape": data = String.format(code,
+                    node.getId(), node.getAttribute().get("维度"), node.getAttribute().get("图片x像素"),
+                    node.getAttribute().get("图片y像素"), node.getAttribute().get("图片z像素")
+            ); break;
+            case "MaxPooling": data = String.format(code,
+                    node.getAttribute().get("过滤器横向大小"), node.getAttribute().get("过滤器纵向大小"),
+                    node.getAttribute().get("横向步长"), node.getAttribute().get("纵向步长")
+            ); break;
+            case "NewNetwork": data = String.format(code,
+                    node.getId()
+            ); break;
+            case "Linear": data = String.format(code,
+                    node.getAttribute().get("输入维度"), node.getAttribute().get("输出维度"),
+                    node.getAttribute().get("activation")
+            ); break;
+            case "InputPicture": data = String.format(code,
+                    node.getAttribute().get("训练集数据"), node.getAttribute().get("训练集标签"),
+                    node.getAttribute().get("验证集数据"), node.getAttribute().get("验证集标签"),
+                    node.getAttribute().get("batchSize")
+            ); break;
+            case "Train": data = String.format(code,
+                    node.getId(), node.getAttribute().get("学习率"), node.getAttribute().get("学习率衰减"),
+                    node.getAttribute().get("训练次数")
+            );
+            case "Evalution": data = String.format(code,
+                    node.getId(), node.getSourceId().get(0).getSource()
+            ); break;
+            case "Predict": data = String.format(code,
+                    node.getId(), node.getSourceId().get(0).getSource()
+            ); break;
             /*
             case "NewModule" : data = String.format(code,
                     node.getId(),
                     "http://"+appAddr+"/RunningPost"
             ); break;
              */
-
             default: break;
         }
         return data;

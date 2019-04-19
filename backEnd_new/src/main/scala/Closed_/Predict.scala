@@ -1,34 +1,35 @@
-import org.apache.spark.ml.classification.LogisticRegressionModel
-import org.apache.spark.ml.feature.VectorAssembler
-import org.apache.spark.sql.functions.col
+import com.intel.analytics.bigdl.dataset.image.{BytesToGreyImg, GreyImgNormalizer, GreyImgToSample}
+import com.intel.analytics.bigdl.nn.Module
+import com.intel.analytics.bigdl.utils.Engine
+import com.intel.analytics.bigdl.dataset.Sample
+import scala.collection.mutable.ArrayBuffer
 
-val project = "Taitanic1"
-val id = "7"
-val previous = "6 5"
-val train = "MinMaxScaledAge MinMaxScaledPclass Mother SexIndex MinMaxScaledFare"
-val label = "Survived"
-val all = train + " " + label
+val id = "%s"
+val previous = "%s"
+val Predictfile = "fadfaef"
 
-val PreviousArray = previous.split(" ")
-val aimarray = all.split(" ")
-val trainArray = train.split(" ")
+val file_model = "Model/" + previous + "/model"
+val file_model_weight = "Model/" + previous + "/weight"
 
-val Modelfile = "Model/" + project + "/" + PreviousArray(0)
-val Predictfile= project + "/" + PreviousArray(1)
+val rawData = load(validationData, validationLabel)
 
-val df = spark.read.format("json").load(Predictfile)
-val Model = LogisticRegressionModel.load(Modelfile)
+val iter = rawData.iterator
 
-var df_ = df
-df_ = df_.select(aimarray.map(A => col(A)): _*)
+val sampleIter = GreyImgToSample()(
+        GreyImgNormalizer(trainMean, trainStd)(
+        BytesToGreyImg(28, 28)(iter)))
+var samplesBuffer = ArrayBuffer[Sample[Float]]()
 
-val assembler = new VectorAssembler().setInputCols(trainArray).setOutputCol("features")
-df_ = assembler.transform(df_)
+while (sampleIter.hasNext){
+        val elem = sampleIter.next().clone()
+        samplesBuffer += elem
+}
+val samples = samplesBuffer.toArray
 
-val predictions = Model.transform(df_)
+val model = Module.loadModule(file_model, file_model_weight)
 
-val predict_result =predictions.selectExpr("features","Survived", "round(prediction,1) as prediction")
+val PredictSet = sc.parallelize(samples)
+val result = model.predict(PredictSet)
+val result_class = model.predictClass(PredictSet)
 
-predict_result.write.format("json")
-        .mode(SaveMode.Append)
-        .save(project + "/" + id)
+result_class.foreach(r => println(s"${r}"))
