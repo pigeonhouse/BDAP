@@ -21,7 +21,7 @@ public class ToolSet {
         AsynchronousFileChannel channel = null;
 
         channel = AsynchronousFileChannel.open(path);
-        ByteBuffer byteBuffer = ByteBuffer.allocate(10240);//声明10240个字节的buffer
+        ByteBuffer byteBuffer = ByteBuffer.allocate(4096);//声明4096个字节的buffer
         Future future = channel.read(byteBuffer, 0);
         //这里不会阻塞
         System.out.print("文件读取中...");

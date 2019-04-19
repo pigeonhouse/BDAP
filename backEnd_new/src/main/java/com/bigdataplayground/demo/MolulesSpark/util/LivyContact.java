@@ -144,19 +144,32 @@ public class LivyContact {
     }
 
     public static LivySessionInfo createSession() throws IOException {
-        Map<String, Object> hashMap = new HashMap<>();
+
 
         String session_url = "http://10.105.222.90:8998/sessions";
         //header
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
         //body2json
-        hashMap.put("kind","spark");
-        List<String> jarsList = Arrays.asList("hdfs:///livy_jars/scalaj-http_2.10-2.0.0.jar");
-        hashMap.put("jars",jarsList);
+        Map<String, Object> bodyHashMap = new HashMap<>();
+        Map<String, Object> confHashMap = new HashMap<>();
+        bodyHashMap.put("kind","spark");
+        List<String> jarsList = Arrays.asList("hdfs:///livy_jars/scalaj-http_2.10-2.0.0.jar",
+                "hdfs:///livy_jars/bigdl-SPARK_2.3-0.8.0-jar-with-dependencies.jar");
+        bodyHashMap.put("jars",jarsList);
+        bodyHashMap.put("numExecutors",4);
+        bodyHashMap.put("executorCores",4);
+        confHashMap.put("spark.shuffle.reduceLocality.enabled",false);
+        confHashMap.put("spark.shuffle.blockTransferService","nio");
+        confHashMap.put("spark.scheduler.minRegisteredResourcesRatio",1.0);
+        confHashMap.put("spark.speculation",false);
+        bodyHashMap.put("conf",confHashMap);
 
-        String jsonBody = objectMapper.writeValueAsString(hashMap);
+        String jsonBody = objectMapper.writeValueAsString(bodyHashMap);
+
         //restTemplate
+        System.out.println(jsonBody);
+
         RestTemplate restTemplate=new RestTemplate();
         HttpEntity<String> httpEntity=new HttpEntity<>(jsonBody,headers);
         ResponseEntity<String> res = restTemplate.exchange(session_url, HttpMethod.POST,httpEntity,String.class);

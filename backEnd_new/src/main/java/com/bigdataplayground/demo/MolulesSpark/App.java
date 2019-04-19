@@ -10,9 +10,8 @@ import org.springframework.boot.*;
 import org.springframework.boot.autoconfigure.*;
 import org.springframework.web.bind.annotation.*;
 
-
-import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.validation.Valid;
 import java.io.IOException;
 import java.net.URISyntaxException;
 import java.nio.file.Path;
@@ -67,28 +66,45 @@ public class App {
     }
 
     /**
-     * 暂时用来处理hdfs的相关操作
-     * 目前的功能是返回HDFS目录结构
-     * 返回一个jsonlist，json里面包含了文件或者目录信息，如果是目录的话，subDirectory里面是子目录的jsonList
-     * 直接输出太丑了，因此每个文件单独输出一个json
-     * 目前json有点问题（引号，反斜杠输出有点不受控），先暂时手动replace一下。
+     * 处理hdfs的相关操作，因为大部分操作不幂等，所以只接受POST
+     * 目前的功能有：
+     * String param
+     * String kind 功能
      *
-     * 由于上面的问题，文件名中不能含有 反斜杠(\)、引号("")、花括号({})
+     * tree 目录/文件结构，返回一个jsonlist，json里面包含了文件/目录信息，如果是目录的话，subDirectory里面是子目录的jsonList
+     * mkdir 创建目录，返回成功信息
+     * rm 删除文件/目录，param = R时递归地删除目录，param 时可以删除文件和空目录 返回成功信息
+     * read 读文件，返回文件内容
+     * save 写文件，文件内容在content="",不加入content或content=""创建空文件，类似于touch
+     *      param = O (Big O) 时支持覆盖，否则不支持。 返回成功信息
+     *
+     * uploadFromLocal 还没测试
+
+     * String user 用户名 确定了权限和./的位置（对了，多用户存储的时候需要传入读写权限，现在先不考虑这个。。)
+     * String path 目录或文件路径 示例： /demoData/test.txt    ./path/from/home
+     *
+     * 文件名中不能含有 反斜杠(\)、引号("")、花括号({})
      * @return
      * @throws URISyntaxException
      * @throws IOException
      * @throws InterruptedException
      */
     @CrossOrigin(origins = "*")
-    @RequestMapping(path={"/hdfs"}, method = {RequestMethod.POST,RequestMethod.GET})
-    public String hdfs(HttpServletRequest request) throws URISyntaxException, IOException, InterruptedException {
-        String optKind = request.getParameter("kind");
-        String objPath = request.getParameter("path");
-        String userName = request.getParameter("user");
-        HdfsClient hdfsClient = new HdfsClient("hdfs://" + hdfsAddr,userName);
-        switch (optKind) {
+    @PostMapping("/hdfs")
+    @ResponseBody
+    public String hdfs(@RequestBody @Valid HdfsOptRequest hdfsOptRequest)
+            throws URISyntaxException, IOException, InterruptedException {
+
+        if(hdfsOptRequest.getPath()==null) return "Error:path = null!";
+        if(hdfsOptRequest.getUser()==null) return "Error:user = null!";
+        if(hdfsOptRequest.getKind()==null) return "Error:kind = null!";
+
+        HdfsClient hdfsClient = new HdfsClient("hdfs://" + hdfsAddr,hdfsOptRequest.getUser());
+        switch (hdfsOptRequest.getKind()) {
             case "tree": {
-                List<String> fileList = hdfsClient.getAllFilePath(new org.apache.hadoop.fs.Path(objPath));
+                List<String> fileList = hdfsClient.getAllFilePath(
+                        new org.apache.hadoop.fs.Path(hdfsOptRequest.getPath())
+                );
                 //jackson会不断在里面加入反斜杠，为自己的反斜杠加入反斜杠，子子孙孙无穷尽
                 String jsonFileList = fileList.toString();
                 jsonFileList = jsonFileList.replace("\\", "")
@@ -98,22 +114,26 @@ public class App {
                 return jsonFileList;
             }
             case "mkdir":
-                return hdfsClient.makeDirectory(objPath);
-
-            case "rm":
-                return hdfsClient.remove(objPath);
-            case "rmR"://用来递归地删除文件夹，高危操作，必须二次判，为避免误操作，只能用来删除目录，如果是文件就会报错
-                return hdfsClient.removeR(objPath);
-
-            case "upload":
-
+                return hdfsClient.makeDirectory(hdfsOptRequest.getPath());
+            case "rm"://R:递归地删除文件夹，高危操作，要让用户确定一下。为避免误操作，删除文件时不能加参数。
+                if(hdfsOptRequest.getParam().equals("R")) {
+                    return hdfsClient.removeR(hdfsOptRequest.getPath());
+                }else{
+                    return hdfsClient.remove(hdfsOptRequest.getPath());
+                }
+            case "read":
+                return hdfsClient.readFile(hdfsOptRequest.getPath());
+            case "save":
+                if(hdfsOptRequest.getContent()==null) hdfsOptRequest.setContent("");
+                return hdfsClient.saveFile(hdfsOptRequest.getPath(),hdfsOptRequest.getContent(),hdfsOptRequest.getParam().equals("O"));
+//            case "uploadFromLocal":
+//                return hdfsClient.uploadFromLocal(hdfsOptRequest.getPath(),hdfsOptRequest.getLocalPath());
             default:
                 break;
         }
 
         return "Error Kind";
     }
-
 
     @CrossOrigin(origins = "*")
     @RequestMapping(path = {"/run"}, method = {RequestMethod.POST})
@@ -150,7 +170,6 @@ public class App {
 
         return finalData.toString();
     }
-
 
     public static void main(String[] args) {
         SpringApplication.run(App.class, args);
