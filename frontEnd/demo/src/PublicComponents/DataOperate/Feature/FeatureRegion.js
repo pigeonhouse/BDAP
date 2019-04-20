@@ -1,4 +1,4 @@
-import React, { Component, Fragment } from 'react'
+import React, { Component } from 'react'
 import { withPropsAPI } from '@src';
 import { Form, Icon, Button, Select, InputNumber, Input, Row, Col } from 'antd'
 import './feature.less'

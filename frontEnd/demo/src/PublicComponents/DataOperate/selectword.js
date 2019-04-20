@@ -242,13 +242,6 @@ class Selectword extends Component{
         console.log('search:', dir, value);
     };
     tooltipWord=()=>{
-        switch(this.props.label){
-            case'缺失值填充': return <div>进行缺失值填充的字段:</div>
-            case'归一化': return <div>进行归一化的字段:</div>
-            case'特征区间化': return <div>进行特征区间化的字段:</div>
-            case'特征二进制化': return <div>进行特征二进制化的字段:</div>
-            case'数据类型转换': return <div>进行数据类型转换的字段:</div>
-        }
         const {propsAPI} = this.props;
         const { getSelected } = propsAPI;
         const item = getSelected()[0];
@@ -258,6 +251,9 @@ class Selectword extends Component{
                 case 1: return <div>训练集目标列字段：</div>
                 case 2: return <div>预测集特征列字段：</div>
             }
+        }
+        else if(item.model.group === 'feature'){
+            return <div>进行{item.model.label}的字段:</div>
         }
     }
     isSelect=()=>{
