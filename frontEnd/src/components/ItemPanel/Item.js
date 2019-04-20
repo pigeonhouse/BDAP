@@ -11,7 +11,7 @@ class Item extends React.Component {
     this.bindEvent();
 
     this.state={
-      isMouseEnter:'no',
+      isMouseEnter:false,
       Tooltipvisible:false
     }
   }
@@ -42,7 +42,7 @@ class Item extends React.Component {
     this.setState({Tooltipvisible:false})  
   }
   iconClose=(group, label)=>{
-    if(group === 'input' && this.state.isMouseEnter === 'yes'
+    if(group === 'input' && this.state.isMouseEnter
       && label !== '本地数据' && label !== 'Titanic测试' && label !== 'Titanic训练'){
       return (
         <Col span={4}>
@@ -64,28 +64,30 @@ class Item extends React.Component {
     this.props.deleteDataName(label);
   }
   handleMouseEnter=()=>{
-    this.setState({isMouseEnter:'yes'})
+    this.setState({isMouseEnter:true})
   }
   handleMouseLeave=()=>{
-    this.setState({isMouseEnter:'no'})
+    this.setState({isMouseEnter:false})
   }
   render() {
     const { model } = this.props;
     return (
-      <div 
-        style={{ cursor: 'pointer' }} 
-        onMouseDown={this.handleMouseDown}
-        onMouseEnter={this.handleMouseEnter}
-        onMouseLeave={this.handleMouseLeave}
-      >
-        <Row style={{paddingLeft:5,fontSize:13, cursor:'move'}}>
-          <Col span={20}>
-            <Icon type='bars'/>
-            <span>{model.label}</span>
-          </Col> 
-          {this.iconClose(model.group, model.label)}       
-        </Row>
-      </div>
+      <Tooltip title="左键单击拖拽至右面" visible={this.state.isMouseEnter} placement='top'>
+        <div 
+          style={{ cursor: 'pointer' }} 
+          onMouseDown={this.handleMouseDown}
+          onMouseEnter={this.handleMouseEnter}
+          onMouseLeave={this.handleMouseLeave}
+        >
+          <Row style={{paddingLeft:5,fontSize:13, cursor:'move'}}>
+            <Col span={20}>
+              <Icon type='bars'/>
+              <span>{model.label}</span>
+            </Col> 
+            {this.iconClose(model.group, model.label)}       
+          </Row>
+        </div>
+      </Tooltip>
     );
   }
 }

@@ -60,8 +60,6 @@ class FlowDataPanel extends React.Component {
       for(let i in dataTable){
         children.push(
           <Menu.Item key={i+3} > 
-            <Tooltip title="左键单击拖拽至右面" placement="rightTop">
-              <div>
                 <ItemPanel>
                   <Item
                     type="node"
@@ -84,8 +82,6 @@ class FlowDataPanel extends React.Component {
                     deleteDataName={this.deleteDataName}    
                   />
                 </ItemPanel>
-              </div>
-            </Tooltip>
           </Menu.Item>
         )
       }
@@ -272,8 +268,6 @@ class FlowDataPanel extends React.Component {
               }}         
             /></ItemPanel></Menu.Item>
           <Menu.Item key="2" > 
-          <Tooltip title="左键单击拖拽至右面" placement="rightTop">
-            <div>
               <ItemPanel>
                 <Item
                   type="node"
@@ -295,12 +289,8 @@ class FlowDataPanel extends React.Component {
                   }}         
                 />
               </ItemPanel>
-            </div>
-          </Tooltip>
         </Menu.Item>
         <Menu.Item key="3" > 
-          <Tooltip title="左键单击拖拽至右面" placement="rightTop">
-            <div>
               <ItemPanel>
                 <Item
                   type="node"
@@ -322,8 +312,6 @@ class FlowDataPanel extends React.Component {
                   }}         
                 />
               </ItemPanel>
-            </div>
-          </Tooltip>
         </Menu.Item>
           {children}
       </SubMenu>

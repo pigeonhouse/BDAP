@@ -9,7 +9,7 @@ import java.io.File;
 public class FileList {
     @RequestMapping("/FileList")
     public String[] FileList(){
-        String path = "C:\\Users\\Surface\\SavedFile\\";
+        String path = "/home/tseg/TestFile/";
         File f = new File(path);
         return f.list();
     }

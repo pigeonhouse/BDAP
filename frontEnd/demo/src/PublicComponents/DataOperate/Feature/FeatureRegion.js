@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import { withPropsAPI } from '@src';
-import { Form, Icon, Button, Select, InputNumber, Input } from 'antd'
+import { Form, Icon, Button, Select, InputNumber, Input, Row, Col } from 'antd'
 import './feature.less'
 const { Item } = Form;
 const Option = Select.Option;
@@ -44,7 +44,6 @@ class FeatureRegion extends Component {
     executeCommand(() => {
       update(item,{attr});
     });
-    console.log(propsAPI.save())
   }
   handleSubmit2 = (e) => {
     e.preventDefault();
@@ -74,6 +73,7 @@ class FeatureRegion extends Component {
       this.setState({
         region: attr[tag].slice(1)
       })
+      // console.log(propsAPI.save());
     });
   }
   add=()=>{
@@ -145,14 +145,6 @@ class FeatureRegion extends Component {
     }
     else if(this.state.groupingType === 'user-defined'){
       const { getFieldDecorator } = this.props.form;
-      const inlineFormItemLayout = {
-          labelCol: {
-            sm: { span: 6 },
-          },
-          wrapperCol: {
-            sm: { span: 24 },
-          },
-      };
       let region;
       if(attr[tag]){
         if(attr[tag][0] === 'user-defined'){
@@ -171,79 +163,109 @@ class FeatureRegion extends Component {
       }
       return  <Form>
         {region.map((item, index)=>{
-          return <Item 
-                  {...inlineFormItemLayout} 
+          console.log(item)
+          return (
+            <Row>
+              <Col span={7}>
+                <Item 
                   style={{margin:0}}
                   required={false}
-                  key={index}
+                  key={index*4}
                 >
-            {getFieldDecorator(`value[${index}]`, item[0]?{
-              rules:[{
-                required:false,
-                pattern: new RegExp(/^[1-9]\d*$/, "g"),
-                message: '请输入数字'
-              }],
-              initialValue: item[0]
-            }:{
-              rules:[{
-                required:false,
-                pattern: new RegExp(/^[1-9]\d*$/, "g"),
-                message: '请输入数字'
-              }],
-            })(
-              <Input
-                placeholder='value'
-                onChange={this.handleSubmit2}
-                onBlur={this.handleSubmit2}
-                style={{width:'30%'}}/>
-            )}
-            {getFieldDecorator(`min[${index}]`, item[1]?{
-              rules:[{
-                required:false,
-                pattern: new RegExp(/^[1-9]\d*$/, "g"),
-                message: '请输入数字'
-              }],
-              initialValue: item[1]
-            }:{
-              rules:[{
-                required:false,
-                pattern: new RegExp(/^[1-9]\d*$/, "g"),
-                message: '请输入数字'
-              }],
-            })(
-              <Input
-                placeholder='min'
-                onChange={this.handleSubmit2}
-                onBlur={this.handleSubmit2}
-                style={{width:'30%'}}/>
-            )}
-            {getFieldDecorator(`max[${index}]`, item[2]?{
-              rules:[{
-                required:false,
-                pattern: new RegExp(/^[1-9]\d*$/, "g"),
-                message: '请输入数字'
-              }],
-              initialValue: item[2]
-            }:{
-              rules:[{
-                required:false,
-                pattern: new RegExp(/^[1-9]\d*$/, "g"),
-                message: '请输入数字'
-              }],
-            })(
-              <Input
-                placeholder='max'
-                onChange={this.handleSubmit2}
-                onBlur={this.handleSubmit2}
-                style={{width:'30%'}}/>
-            )}
-            <Icon
-              className="dynamic-delete-button"
-              type="minus-circle-o"
-              onClick={() => this.remove(index)}
-              style={{width:'10%', cursor:'pointer'}}
-            />
-          </Item>
+                  {getFieldDecorator(`value[${index}]`, item[0] !== null?{
+                    rules:[{
+                      required:false,
+                      pattern: new RegExp(/^[0-9]+.?[0-9]*/, "g"),
+                      message: '请输入数字'
+                    }],
+                    initialValue: item[0]
+                  }:{
+                    rules:[{
+                      required:false,
+                      pattern: new RegExp(/^[0-9]+.?[0-9]*/, "g"),
+                      message: '请输入数字'
+                    }],
+                  })(
+                    <Input
+                      placeholder='value'
+                      onChange={this.handleSubmit2}
+                      onBlur={this.handleSubmit2}
+                    />
+                  )}
+                </Item>
+              </Col>
+              <Col span={7}>
+                <Item 
+                  style={{margin:0}}
+                  required={false}
+                  key={index*4+1}
+                >
+                  {getFieldDecorator(`min[${index}]`, item[1] !== null?{
+                    rules:[{
+                      required:false,
+                      pattern: new RegExp(/^[0-9]+.?[0-9]*/, "g"),
+                      message: '请输入数字'
+                    }],
+                    initialValue: item[1]
+                  }:{
+                    rules:[{
+                      required:false,
+                      pattern: new RegExp(/^[0-9]+.?[0-9]*/, "g"),
+                      message: '请输入数字'
+                    }],
+                  })(
+                  <Input
+                    placeholder='min'
+                    onChange={this.handleSubmit2}
+                    onBlur={this.handleSubmit2}
+                  />
+                  )}
+                </Item>
+              </Col>
+              <Col span={7}>
+                <Item 
+                  style={{margin:0}}
+                  required={false}
+                  key={index*4+2}
+                >
+                  {getFieldDecorator(`max[${index}]`, item[2] !== null?{
+                    rules:[{
+                      required:false,
+                      pattern: new RegExp(/^[1-9]\d*$/, "g"),
+                      message: '请输入数字'
+                    }],
+                    initialValue: item[2]
+                  }:{
+                    rules:[{
+                      required:false,
+                      pattern: new RegExp(/^[1-9]\d*$/, "g"),
+                      message: '请输入数字'
+                    }],
+                  })(
+                    <Input
+                      placeholder='max'
+                      onChange={this.handleSubmit2}
+                      onBlur={this.handleSubmit2}
+                    />
+                  )}
+                </Item>
+              </Col>
+              <Col span={3}>
+                <Item 
+                  style={{margin:0}}
+                  required={false}
+                  key={index*4+3}
+                >
+                  <Icon
+                    className="dynamic-delete-button"
+                    type="minus-circle-o"
+                    onClick={() => this.remove(index)}
+                    style={{cursor:'pointer'}}
+                  />
+                </Item>
+              </Col>
+            </Row>
+          );
         })}
         <Item>
           <Button type="dashed" onClick={this.add} style={{width:'100%'}}>

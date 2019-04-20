@@ -97,9 +97,9 @@ def run():
         print(node.label)
         node.excuted()
        
-        #if node.label != "hdfsFile":
-            #temp = [node.id, runningData]
-            #finalData.append(temp)
+        if node.label != "hdfsFile":
+            temp = [node.id, runningData]
+            finalData.append(temp)
 
     
     print(finalData)

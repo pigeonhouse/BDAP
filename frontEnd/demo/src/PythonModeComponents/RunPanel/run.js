@@ -34,7 +34,7 @@ class Run extends Component{
       mode: 'cors',
       headers: {'Content-Type': 'application/json'},
     }
-    fetch("http://localhost:5000/run",init)
+    fetch("http://localhost:5000/runPython",init)
     .then(res=>{
       console.log('---')
       console.log(res)
@@ -107,12 +107,15 @@ class Run extends Component{
   }
   showDetail = ()=>{
     const { propsAPI } = this.props;
+    console.log("---save---")
+    console.log(propsAPI.save())
     const inf = propsAPI.save();
     var Sourc = 0;
     var tag = 'Input';
     var stream = new Array();
     var attribute = new Array();
     var labelarray = new Array();
+    var group = "";
 
     if(inf.hasOwnProperty('edges')){
       let Deg = new Array(inf.nodes.length).fill(0);
@@ -144,6 +147,7 @@ class Run extends Component{
             tag = inf.nodes[indexN].label;
             attribute = inf.nodes[indexN].attr;
             labelarray = inf.nodes[indexN].labelArray;
+            group = inf.nodes[indexN].group;
             if(inf.nodes[indexN].group === 'ml'){
               const { find, update } = propsAPI;
               const item = find(Sourc);
@@ -171,7 +175,8 @@ class Run extends Component{
                         "label":tag,
                         "attribute":attribute,
                         "labelArray":labelarray,
-                        "sourceId":sourceId[indexN]
+                        "sourceId":sourceId[indexN],
+                        "group":group
                       });
             for (var i = 0; i < inf.edges.length; i++){
               if(Sourc === inf.edges[i].source){
@@ -279,7 +284,7 @@ class Run extends Component{
             case '归一化':
                 outcome = Nomalize(all_data);
                 break
-            case '卷积神经网络':
+            case 'convolution':
                 this.showModal(stream);
                 // runMnist()
                 

@@ -41,8 +41,8 @@ class Randis extends Component {
   render() {
     return (
         <InputNumber
-            min={0} 
-            max={1} 
+            min={0.1} 
+            max={0.9} 
             step={0.1}
             defaultValue = {this.state.randomValue}
             onChange={this.handleChange} 

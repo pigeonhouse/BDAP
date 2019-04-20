@@ -1,7 +1,6 @@
 import React from 'react';
 import { Row, Col, Button, message, notification,Icon,Tabs,Upload} from 'antd';
 import GGEditor, { Flow } from '@src';
-import EditorMinimap from '../../PublicComponents/EditorMinimap';
 import { FlowContextMenu } from '../../PublicComponents/EditorContextMenu';
 import { FlowToolbar } from '../../PublicComponents/EditorToolbar';
 import { FlowDetailPanel } from '../../PublicComponents/EditorDetailPanel';
@@ -134,13 +133,13 @@ class LocalMode extends React.Component {
             <Button style={{border:0,backgroundColor:'#343941',color:"#ddd",fontSize:18,fontFamily:'consolas'}}>BigDataPlayground Local-Mode</Button>
           </Col>      
           <Col span={2}>
-            <a href="https://www.yuque.com/ddrid/tx7z84">
+            <a href="https://www.yuque.com/ddrid/tx7z84" target="_blank">
               <Button style={{border:0,backgroundColor:'#343941',color:"#ddd",fontSize:25}} >
                   <Icon type="question-circle" data-step="5" data-intro="如果想要进一步了解详细的使用教程及组件介绍，请点击此处查看文档。"/>
               </Button>                  
             </a>
           </Col>      
-          <a href="https://github.com/pigeonhouse/BigDataPlayground" className={styles.githubCorner} aria-label="View source on GitHub">
+          <a href="https://github.com/pigeonhouse/BigDataPlayground" target="_blank" className={styles.githubCorner} aria-label="View source on GitHub">
             <svg 
               width="45" 
               height="45" 
@@ -216,7 +215,6 @@ class LocalMode extends React.Component {
             <div className={styles.detailPanel} data-step="3" style={{maxHeight:'calc(100vh - 105px)'}} data-intro='在参数栏对你的组件进行参数配置。' data-position='left'>
               <FlowDetailPanel />
             </div>
-            <EditorMinimap /> 
           </Col>
         
         </Row>

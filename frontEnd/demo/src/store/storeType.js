@@ -7,3 +7,4 @@ export const MaxMinScaler = 'MaxMinScaler';
 export const DElete = 'Delete';
 export const UPLOAD = 'UpLoad';
 export const INf = 'INF';
+export const MODEL = 'model';

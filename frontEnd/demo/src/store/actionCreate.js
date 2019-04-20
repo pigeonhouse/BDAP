@@ -1,5 +1,8 @@
-import {STOP_LINE_CHANGE, SHOW_LINE_CHANGE, ConvNet, DenseNet, FillNa, MaxMinScaler, DElete, UPLOAD, INf} from './storeType'
+import {STOP_LINE_CHANGE, MODEL, SHOW_LINE_CHANGE, ConvNet, DenseNet, FillNa, MaxMinScaler, DElete, UPLOAD, INf} from './storeType'
 
+export const model = () => ({
+    type: MODEL
+})
 export const getStopLineAction = () => ({
     type: STOP_LINE_CHANGE
 });

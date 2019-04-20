@@ -368,7 +368,7 @@ class FlowItemPanel extends React.Component {
             model={{
               label: '数据筛选',
               elabel:'DataFilter',
-              attr:{},
+              attr:{'新生成列名':''},
               Dataset: [],
               labelArray: {}, 
               length: 0,
