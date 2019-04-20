@@ -255,6 +255,9 @@ class NodeDetail extends React.Component {
         arr.push(o)
       }
     }
+    if(label === '数据筛选'){
+      arr.push({'新生成列名':attr['新生成列名']});
+    }
     return (
       <Card 
         type="inner" 

@@ -84,7 +84,8 @@ class Selectword extends Component{
                 return [...labelArray, ...labelarr];
             case '特征分组归类':
                 return [...labelArray, [item.model.attr['新生成列名'], false]];
-
+            case '数据筛选':
+                return [...labelArray, [item.model.attr['新生成列名'], false]];
             case '缺失值填充':
             case '数据随机划分':
                 return labelArray;
