@@ -142,10 +142,7 @@ class FlowToolbar extends React.Component {
           </Tooltip>
         </Command>
       <Button onClick={()=>this.ShowModal()} >
-        <Icon type="search"/>模型
-      </Button>
-      <Button onClick={()=>this.ShowModal()} >
-        <Icon type="lock"/>存储
+        <Icon type="lock"/>存储模型
       </Button>
       </Toolbar>
       

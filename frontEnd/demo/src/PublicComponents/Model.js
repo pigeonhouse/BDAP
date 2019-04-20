@@ -3,6 +3,15 @@ import { Button,Modal,Icon,message,Avatar, Table, Input, Popconfirm, Form, Divid
 import { withPropsAPI } from '@src';
 import store from "../store"
 import { MODEL } from "../store/storeType"
+import { data } from "../ExampleData/FlowData"
+const dat = data;
+const nwData = {
+  key: 0,
+  Name: "例:泰坦尼克号模型",
+  Date: 2019.4,
+  Description: "我们在这里为你准备了一个初始模型",
+  Model:dat
+};
 const FormItem = Form.Item;
 const EditableContext = React.createContext();
   const EditableRow = ({ form, index, ...props }) => (
@@ -121,19 +130,10 @@ class Model extends Component{
               ) : null
           ),
         }];
-    // this.state = store.getState();
-    // this.handleStoreChange = this.handleStoreChange.bind(this);
     this.state = {
-      dataSource:[],
+      dataSource:[nwData],
       count: 1
-        //   dataSource: [{
-        //     key: '0',
-        //     name: 'Edward King 0',
-        //     age: '32',
-        //     address: 'London, Park Lane no. 0',
-        //   }
       };
-        
     }
 
     state = {
@@ -149,7 +149,7 @@ class Model extends Component{
           Name: sta.name,
           Date: 2019.4,
           Description: sta.info,
-          Model:sta.Dataset    //注意不能有和它重名的
+          Model:sta.Dataset
         };
         this.setState({
           dataSource: [...dataSource, newData],

@@ -3,7 +3,7 @@ import {
     SHOW_LINE_CHANGE, MODEL } from './storeType'
 const defaultState = {
     Dataset: [],
-    did:false,
+    did:true,
     name:"模型",
     info:"这是我的模型",
 }
