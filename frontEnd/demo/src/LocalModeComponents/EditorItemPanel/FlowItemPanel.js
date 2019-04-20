@@ -537,26 +537,6 @@ class FlowItemPanel extends React.Component {
               /></ItemPanel></Menu.Item>
             </SubMenu>
           </SubMenu>
-          <SubMenu key="sub4" title={<span><Icon type="setting" /><span>深度学习</span></span>}>
-          <Menu.Item key="20"><ItemPanel><Item
-                type="node"
-                size="200*40"
-                shape='one-one'
-                model={{
-                  label: '卷积神经网络',
-                  attr:{'激活函数':'relu','卷积步长':2,'优化器':'rmsprop','batchSize':50,'遍历次数':1},
-                  anchor: [1, 1],
-                  Dataset: [],
-                  labelArray: {}, 
-                  feature:'dl',
-                  length: 0,
-                  keyConfig:{
-                    color_type: '#1890FF',
-                    state_icon_url: 'https://gw.alipayobjects.com/zos/rmsportal/uZVdwjJGqDooqKLKtvGA.svg',
-                  }
-                }}
-              /></ItemPanel></Menu.Item>
-          </SubMenu>
         </Menu>
       </div>
       
