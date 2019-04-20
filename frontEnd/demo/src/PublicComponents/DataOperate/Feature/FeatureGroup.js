@@ -28,11 +28,6 @@ class FeatureGroup extends Component {
     this.props.stat.map((value, index)=>{
       children.push(<Option key={index}>{value.name}</Option>)
     })
-    // console.log('--------------')
-    // console.log(this.props.stat);
-    // if(children.length === 0){
-    //   children.push(<Option key='1'>test</Option>)
-    // }
     this.setState({
       children
     })
@@ -160,7 +155,7 @@ class FeatureGroup extends Component {
                   组名：
                 </Col>
                 <Col span = {14}>
-                  {getFieldDecorator(`name[${index}]`,item[0]?{
+                  {getFieldDecorator(`name[${index}]`,typeof(item[0]) != "undefined"?{
                     initialValue: item[0]}:{}
                   )(
                     <Input 

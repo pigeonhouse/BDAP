@@ -145,14 +145,6 @@ class FeatureRegion extends Component {
     }
     else if(this.state.groupingType === 'user-defined'){
       const { getFieldDecorator } = this.props.form;
-      const inlineFormItemLayout = {
-          labelCol: {
-            sm: { span: 6 },
-          },
-          wrapperCol: {
-            sm: { span: 24 },
-          },
-      };
       let region;
       if(attr[tag]){
         if(attr[tag][0] === 'user-defined'){
@@ -171,6 +163,7 @@ class FeatureRegion extends Component {
       }
       return  <Form>
         {region.map((item, index)=>{
+          console.log(item)
           return (
             <Row>
               <Col span={7}>
@@ -179,7 +172,7 @@ class FeatureRegion extends Component {
                   required={false}
                   key={index*4}
                 >
-                  {getFieldDecorator(`value[${index}]`, item[0]?{
+                  {getFieldDecorator(`value[${index}]`, item[0] !== null?{
                     rules:[{
                       required:false,
                       pattern: new RegExp(/^[0-9]+.?[0-9]*/, "g"),
@@ -207,7 +200,7 @@ class FeatureRegion extends Component {
                   required={false}
                   key={index*4+1}
                 >
-                  {getFieldDecorator(`min[${index}]`, item[1]?{
+                  {getFieldDecorator(`min[${index}]`, item[1] !== null?{
                     rules:[{
                       required:false,
                       pattern: new RegExp(/^[0-9]+.?[0-9]*/, "g"),
@@ -235,7 +228,7 @@ class FeatureRegion extends Component {
                   required={false}
                   key={index*4+2}
                 >
-                  {getFieldDecorator(`max[${index}]`, item[2]?{
+                  {getFieldDecorator(`max[${index}]`, item[2] !== null?{
                     rules:[{
                       required:false,
                       pattern: new RegExp(/^[1-9]\d*$/, "g"),
