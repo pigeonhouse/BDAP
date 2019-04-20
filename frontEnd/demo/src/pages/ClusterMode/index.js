@@ -186,7 +186,7 @@ class ClusterMode extends React.Component {
             </Button>
           </Col>
           <Col span={21}>
-            <Button style={{border:0,backgroundColor:'#343941',color:"#ddd",fontSize:18,fontFamily:'consolas'}}>BigDataPlayground Local-Mode</Button>
+            <Button style={{border:0,backgroundColor:'#343941',color:"#ddd",fontSize:18,fontFamily:'consolas'}}>BigDataPlayground Cluster-Mode</Button>
           </Col>      
           <Col span={2}>
             <a href="https://www.yuque.com/ddrid/tx7z84" target="_blank">

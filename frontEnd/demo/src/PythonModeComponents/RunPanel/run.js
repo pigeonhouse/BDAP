@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { Button,Modal,Icon,message} from 'antd'
+import { Button, Modal, Icon, message, Row, Col, List } from 'antd'
 import { withPropsAPI } from '@src';
 
 import { OneVarLinearRegression } from '../Models/MachineLearning/Regression/OneVarLinearRegression'
@@ -20,6 +20,13 @@ import { Nomalize } from '../../PublicComponents/DataOperate/DataProcess/Nomaliz
 var echarts = require('echarts');
 var current = 0;
 var NeedDetection = 1;
+var currentStatus = [
+  {title:`迭代次数:`, value:0},
+  {title:`准确率:`, value:0},
+  {title:`损失函数:`, value:0},
+  {title:`学习率:`, value:0}
+];
+
 class Run extends Component{
   state = { 
     visible: false,
@@ -39,9 +46,13 @@ class Run extends Component{
       console.log('---')
       console.log(res)
     })
-    document.getElementById('dlChart').removeAttribute("_echarts_instance_")
-    var myChart = echarts.init(document.getElementById('dlChart'));
-    myChart.setOption({
+    document.getElementById('accuracyChart').removeAttribute("_echarts_instance_")
+    var accuracyChart = echarts.init(document.getElementById('accuracyChart'));
+    document.getElementById('lessChart').removeAttribute("_echarts_instance_")
+    var lessChart = echarts.init(document.getElementById('lessChart'));
+    document.getElementById('learningRateChart').removeAttribute("_echarts_instance_")
+    var learningRateChart = echarts.init(document.getElementById('learningRateChart'));
+    accuracyChart.setOption({
       title: {
         text: '准确率'
       },
@@ -61,7 +72,7 @@ class Run extends Component{
       },
       yAxis: {
           type: 'value',
-          boundaryGap: [0, '100%'],
+          boundaryGap: false,
       },
       series: [{
           type: 'line',
@@ -70,29 +81,96 @@ class Run extends Component{
           data: []
       }]
     })
-    this.showLineChart([{
-      value: [
-        0, 0
-      ]
-    }], myChart);
+    lessChart.setOption({
+      title: {
+        text: '损失函数'
+      },
+      tooltip: {
+          trigger: 'axis',
+          formatter: function (params) {
+              params = params[0];
+              return params.value[0]+'/'+params.value[1];
+          },
+          axisPointer: {
+              animation: false
+          }
+      },
+      xAxis: {
+          type: 'category',
+          boundaryGap: false,
+      },
+      yAxis: {
+          type: 'value',
+          boundaryGap: false,
+      },
+      series: [{
+          type: 'line',
+          showSymbol: false,
+          hoverAnimation: false,
+          data: []
+      }]
+    })
+    learningRateChart.setOption({
+      title: {
+        text: '学习率'
+      },
+      tooltip: {
+          trigger: 'axis',
+          formatter: function (params) {
+              params = params[0];
+              return params.value[0]+'/'+params.value[1];
+          },
+          axisPointer: {
+              animation: false
+          }
+      },
+      xAxis: {
+          type: 'category',
+          boundaryGap: false,
+      },
+      yAxis: {
+          type: 'value',
+          boundaryGap: false,
+      },
+      series: [{
+          type: 'line',
+          showSymbol: false,
+          hoverAnimation: false,
+          data: []
+      }]
+    })
+    this.showLineChart([{value: [0, 0]}], [{value: [0, 0]}], [{value: [0, 0]}],
+      accuracyChart, lessChart, learningRateChart);
   }
-  showLineChart=(data, myChart)=>{
+  showLineChart=(dataa, datal, datar, accuracyChart, lessChart, learningRateChart)=>{
     setTimeout(()=>{
-      // fetch("http://localhost:5000/trainingAccuracy")
-      // .then(res => {
-      //   if(res.status === 200){
-      //     res.json().then(res=>{
-      //       console.log(res)
-      //     })
-      //   }
-      // })
-      data.push({value:[data[data.length-1].value[0]+1, data[data.length-1].value[1]+1]})
-      myChart.setOption({
+      fetch("http://localhost:5000/trainingAccuracy")
+      .then(res => {
+        if(res.status === 200){
+          res.json().then(res=>{
+            console.log(res)
+          })
+        }
+      })
+      dataa.push({value:[dataa[dataa.length-1].value[0]+1, dataa[dataa.length-1].value[1]+1]})
+      datar.push({value:[datar[datar.length-1].value[0]+1, datar[datar.length-1].value[1]+1]})
+      datal.push({value:[datal[datal.length-1].value[0]+1, datal[datal.length-1].value[1]+1]})
+      accuracyChart.setOption({
         series: [{
-          data: data
+          data: dataa
         }]
       })
-      this.showLineChart(data, myChart)
+      lessChart.setOption({
+        series: [{
+          data: datal
+        }]
+      })
+      learningRateChart.setOption({
+        series: [{
+          data: datar
+        }]
+      })
+      this.showLineChart(dataa, datal, datar, accuracyChart, lessChart, learningRateChart);
     }, 1000);
   }
   handleOk = () => {
@@ -284,10 +362,8 @@ class Run extends Component{
             case '归一化':
                 outcome = Nomalize(all_data);
                 break
-            case 'convolution':
-                this.showModal(stream);
-                // runMnist()
-                
+            case '卷积神经网络':
+                this.showModal(stream);              
                 break
             default:
               break;
@@ -514,16 +590,26 @@ class Run extends Component{
         </Button>
 
         <Modal title="Deep Learning" visible={this.state.visible}
+            centered={true} style={{ top: 10 }}
             onOk={this.handleOk} onCancel={this.handleCancel} width={900}
-          >
-            {/* <p>iter:
-              <div id="iter-number"></div>
-            </p>
-            <p>train-loss:
-              <div id="loss-train"></div>
-            </p>
-            <div id="linechart"></div>  */}
-            <div id="dlChart" style={{ maxWidth: 350, height: 280 }}> </div>
+        >
+          <Row>
+            <Col span={12} id="accuracyChart" style={{ height: 280 }}> </Col>
+            <Col span={12} style={{ height: 280 }}>
+              <List
+                size="small"
+                style={{margin:'50px'}}
+                header={<div>当前状态</div>}
+                bordered
+                dataSource={currentStatus}
+                renderItem={item => (<List.Item><Col span={6}>{item.title}</Col>{item.value}</List.Item>)}
+              />
+            </Col>
+          </Row>
+          <Row>
+            <Col span = {12} id="lessChart" style={{ height: 280 }}> </Col>
+            <Col span = {12} id="learningRateChart" style={{  height: 280 }}> </Col>
+          </Row>
         </Modal>
       </div>
     );

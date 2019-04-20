@@ -75,7 +75,6 @@ class LocalMode extends React.Component {
       }
   }
   componentDidMount(){
-    console.log(this.state.remind)
     if(this.state.remind === 'true'){
       const key = `open${Date.now()}`;
       const btn = (
