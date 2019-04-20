@@ -61,10 +61,33 @@ class Selectword extends Component{
         return labelArray;
 
         switch(label){
+            case '归一化':    
+            for(let i in labelArray){
+                if(labelArray[i][1]){
+                    labelarr.push(['MinMaxScaled'+labelArray[i][0], false])
+                }
+            }
+            return [...labelArray, ...labelarr];
+            case '标准化':
+                for(let i in labelArray){
+                    if(labelArray[i][1]){
+                        labelarr.push(['StandardScaled'+labelArray[i][0], false])
+                    }
+                }
+                return [...labelArray, ...labelarr];
+            case 'StringIndexer':
+                for(let i in labelArray){
+                    if(labelArray[i][1]){
+                        labelarr.push([labelArray[i][0]+'Index', false])
+                    }
+                }
+                return [...labelArray, ...labelarr];
+            case '特征分组归类':
+                return [...labelArray, [item.model.attr['新生成列名'], false]];
+
             case '缺失值填充':
-            case '归一化':
             case '数据随机划分':
-            return labelArray;
+                return labelArray;
 
             case '特征区间化':
                 let labelarr = new Array();
@@ -74,11 +97,10 @@ class Selectword extends Component{
                     }
                 }
                 return [...labelArray, ...labelarr];
-            case '特征分组归类':
-            case '特征二进制化':
-            
+
+            case '特征二进制化':          
             case '数据类型转换':
-            return labelArray;
+                return labelArray;
         }
     }
     findSourceLabel=(item)=>{
@@ -220,13 +242,6 @@ class Selectword extends Component{
         console.log('search:', dir, value);
     };
     tooltipWord=()=>{
-        switch(this.props.label){
-            case'缺失值填充': return <div>进行缺失值填充的字段:</div>
-            case'归一化': return <div>进行归一化的字段:</div>
-            case'特征区间化': return <div>进行特征区间化的字段:</div>
-            case'特征二进制化': return <div>进行特征二进制化的字段:</div>
-            case'数据类型转换': return <div>进行数据类型转换的字段:</div>
-        }
         const {propsAPI} = this.props;
         const { getSelected } = propsAPI;
         const item = getSelected()[0];
@@ -236,6 +251,9 @@ class Selectword extends Component{
                 case 1: return <div>训练集目标列字段：</div>
                 case 2: return <div>预测集特征列字段：</div>
             }
+        }
+        else if(item.model.group === 'feature'){
+            return <div>进行{item.model.label}的字段:</div>
         }
     }
     isSelect=()=>{

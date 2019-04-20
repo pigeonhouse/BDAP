@@ -1,6 +1,6 @@
-import React, { Component } from 'react'
+import React, { Component, Fragment } from 'react'
 import { withPropsAPI } from '@src';
-import { Form, Icon, Button, Select, Input } from 'antd'
+import { Form, Icon, Button, Select, Input, Row, Col } from 'antd'
 import './feature.less'
 const { Item } = Form;
 const Option = Select.Option;
@@ -30,9 +30,9 @@ class FeatureGroup extends Component {
     })
     // console.log('--------------')
     // console.log(this.props.stat);
-    if(children.length === 0){
-      children.push(<Option key='1'>test</Option>)
-    }
+    // if(children.length === 0){
+    //   children.push(<Option key='1'>test</Option>)
+    // }
     this.setState({
       children
     })
@@ -148,45 +148,64 @@ class FeatureGroup extends Component {
     return (
       <Form>
         {group.map((item, index)=>{
-          return <Item 
-                  {...inlineFormItemLayout} 
-                  style={{marginLeft:0}}
-                  required={false}
-                  key={index}
-                >
-                <div style={{ width: '100%' }}>
+          return <Fragment>
+            <Row>
+              <Item 
+                {...inlineFormItemLayout} 
+                style={{margin:0}}
+                required={false}
+                key={index*2}
+              >
+                <Col span = {6}>
                   组名：
+                </Col>
+                <Col span = {14}>
                   {getFieldDecorator(`name[${index}]`,item[0]?{
                     initialValue: item[0]}:{}
                   )(
                     <Input 
                       onChange={this.handleSubmitInput}
                       onBlur={this.handleSubmitInput}
-                      style={{width:'70%'}}/>
+                    />
                   )}
+                </Col>
+                <Col span = {4}>
                   <Icon
                     className="dynamic-delete-button"
                     type="minus-circle-o"
                     onClick={() => this.remove(index)}
-                    style={{width:'10%', cursor:'pointer'}}
+                    style={{cursor:'pointer', marginLeft:'5px'}}
                   />
-                </div>
-                <div>
+                </Col>
+              </Item>
+            </Row>
+
+            <Row>
+              <Item 
+                {...inlineFormItemLayout} 
+                style={{margin:0}}
+                required={false}
+                key={index*2+1}
+              >
+                <Col span = {6}>
                   标签：
+                </Col>
+                <Col span = {18}>
                   {getFieldDecorator(`value[${index}]`, item.slice(1)?{
                     initialValue: item.slice(1)}:{}
                   )(
                     <Select
                       mode="tags"
-                      style={{ width: '80%' }}
                       onChange={this.handleSubmitSelect.bind(this, index)}
                       showArrow
                     >
                       {this.state.children}
-                    </Select>,
+                    </Select>
                   )}
-                </div>
-            </Item>
+                </Col>
+              </Item>
+            </Row>
+          </Fragment>
           })}
           <Item>
             <Button type="dashed" onClick={this.add} style={{width:'100%'}}>

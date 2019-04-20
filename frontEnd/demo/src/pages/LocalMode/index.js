@@ -1,7 +1,6 @@
 import React from 'react';
 import { Row, Col, Button, message, notification,Icon,Tabs,Upload} from 'antd';
 import GGEditor, { Flow } from '@src';
-import EditorMinimap from '../../PublicComponents/EditorMinimap';
 import { FlowContextMenu } from '../../PublicComponents/EditorContextMenu';
 import { FlowToolbar } from '../../PublicComponents/EditorToolbar';
 import { FlowItemPanel } from '../../LocalModeComponents/EditorItemPanel';
@@ -214,7 +213,6 @@ class LocalMode extends React.Component {
             <div className={styles.detailPanel} data-step="3" style={{maxHeight:'calc(100vh - 105px)'}} data-intro='在参数栏对你的组件进行参数配置。' data-position='left'>
               <FlowDetailPanel />
             </div>
-            <EditorMinimap /> 
           </Col>
         
         </Row>

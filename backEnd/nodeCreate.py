@@ -43,8 +43,8 @@ class nodes:
             data = {'code': code % (self.id, ArraytoString(self.labelArray['public']), self.sourceID[0]['source'])}
         elif self.label == "LinearRegression":
             data = {'code': code % ()}
-        elif self.label == "Lenet5_train":
-            data = {'code': code % ()}
+        elif self.label == "DataFilter":
+            data = {'code': code % (self.id, self.sourceID[0]['source'], self.attribute['condition'])}
         elif self.label == "Reshape":
             data = {'code': code % (self.id, self.attribute['维度'], self.attribute['图片x像素'], self.attribute['图片y像素'], self.attribute['图片z像素'])}
         elif self.label == "Convolution":
