@@ -130,17 +130,19 @@ class Model extends Component{
               ) : null
           ),
         }];
-    this.state = {
-      dataSource:[nwData],
-      count: 1
-      };
+        this.handleStoreChange = this.handleStoreChange.bind(this)
+        store.subscribe(this.handleStoreChange)
+        this.state = {
+          dataSource:[nwData],
+          count: 1
+        };
     }
 
     state = {
         visible:false,
         editing: false,
     }
-    ShowModal = () => {
+    handleStoreChange = () => {
       const sta = store.getState();
       if(!sta.did){
         const { count, dataSource } = this.state;
@@ -162,6 +164,8 @@ class Model extends Component{
         }
         store.dispatch(action)
       }
+    }
+    ShowModal = () => {
       this.setState({
         visible: true,
       });

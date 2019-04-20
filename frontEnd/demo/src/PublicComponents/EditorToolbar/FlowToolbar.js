@@ -59,12 +59,12 @@ class FlowToolbar extends React.Component {
     this.setState({inp2:e.target.value});
   }
   componentWillMount(){
-    console.log("xxxxxxxxxxxxxxxx")
-    const sta = store.getState();
-    const count = sta.count;
+    // console.log("xxxxxxxxxxxxxxxx")
+    // const sta = store.getState();
+    // const count = sta.count;
     this.setState({
-      inp1:"模型"+count+"号",
-      inp2:"这是我的第"+count+"个存储模型"
+      inp1:"模型",
+      inp2:"这是我的模型"
     })
   }
   render() { 
