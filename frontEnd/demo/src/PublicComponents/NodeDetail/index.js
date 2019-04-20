@@ -1,5 +1,5 @@
 import React from 'react';
-import { Card, Form, Input, Button } from 'antd';
+import { Card, Form, Input } from 'antd';
 import { withPropsAPI } from '@src';
 import Selectword from '../DataOperate/selectword'
 import Uploadfile from '../DataOperate/upload'
@@ -15,10 +15,10 @@ const { Item } = Form;
 
 const inlineFormItemLayout = {
   labelCol: {
-    sm: { span: 8 },
+    sm: { span: 10 },
   },
   wrapperCol: {
-    sm: { span: 16 },
+    sm: { span: 14 },
   },
 };
 
@@ -265,7 +265,7 @@ class NodeDetail extends React.Component {
         bordered={false} 
         style={{paddingRight:0}}
         className={styles.scrollapp}
-      >
+      > 
         <Form onSubmit={this.handleSubmit}>
           <Item style={{margin:0}} label="label" {...inlineFormItemLayout}>
             {

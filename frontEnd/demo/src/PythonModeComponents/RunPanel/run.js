@@ -20,16 +20,16 @@ import { Nomalize } from '../../PublicComponents/DataOperate/DataProcess/Nomaliz
 var echarts = require('echarts');
 var current = 0;
 var NeedDetection = 1;
-var currentStatus = [
-  {title:`迭代次数:`, value:0},
-  {title:`准确率:`, value:0},
-  {title:`损失函数:`, value:0},
-  {title:`学习率:`, value:0}
-];
-
 class Run extends Component{
   state = { 
     visible: false,
+    currentStatus: [
+      {title:`迭代次数:`, value:0},
+      {title:`准确率:`, value:0},
+      {title:`损失函数:`, value:0},
+      {title:`学习率:`, value:0},
+      {title:`最终准确率:`, value:'未完成'}
+    ]
   }
   showModal = (stream) => {
     this.setState({
@@ -41,10 +41,16 @@ class Run extends Component{
       mode: 'cors',
       headers: {'Content-Type': 'application/json'},
     }
-    fetch("http://localhost:5000/runPython",init)
+    fetch("http://10.105.222.92:5000/runPython",init)
     .then(res=>{
-      console.log('---')
-      console.log(res)
+      if(res.status === 200)
+        res.json().then(res=>{
+          console.log('final')
+          console.log(res)
+          // const currentStatus = this.state.currentStatus;
+          // currentStatus[4].value = res;
+          // this.setState({currentStatus});
+        })
     })
     document.getElementById('accuracyChart').removeAttribute("_echarts_instance_")
     var accuracyChart = echarts.init(document.getElementById('accuracyChart'));
@@ -139,39 +145,51 @@ class Run extends Component{
           data: []
       }]
     })
-    this.showLineChart([{value: [0, 0]}], [{value: [0, 0]}], [{value: [0, 0]}],
+    this.showLineChart([], [], [],
       accuracyChart, lessChart, learningRateChart);
   }
   showLineChart=(dataa, datal, datar, accuracyChart, lessChart, learningRateChart)=>{
     setTimeout(()=>{
-      fetch("http://localhost:5000/trainingAccuracy")
+      fetch("http://10.105.222.92:5000/trainingAccuracy")
       .then(res => {
         if(res.status === 200){
           res.json().then(res=>{
-            console.log(res)
+            if(Number(res.round) === 0 && Number(res.accuracy) === 0 &&
+              Number(res.learning_rate) === 0 && Number(res.loss) === 0 ){
+              if(dataa.length === 0)
+              this.showLineChart(dataa, datal, datar, accuracyChart, lessChart, learningRateChart);
+            }
+            else {
+              dataa.push({value:[res.round, res.accuracy]});
+              datar.push({value:[res.round, res.learning_rate]});
+              datal.push({value:[res.round, res.loss]});
+              var currentStatus = this.state.currentStatus;
+              currentStatus[0].value = res.round;
+              currentStatus[1].value = res.accuracy;
+              currentStatus[2].value = res.loss;
+              currentStatus[3].value = res.learning_rate;
+              this.setState({currentStatus});
+              accuracyChart.setOption({
+                series: [{
+                  data: dataa
+                }]
+              })
+              lessChart.setOption({
+                series: [{
+                  data: datal
+                }]
+              })
+              learningRateChart.setOption({
+                series: [{
+                  data: datar
+                }]
+              })
+              this.showLineChart(dataa, datal, datar, accuracyChart, lessChart, learningRateChart);
+            }
           })
         }
       })
-      dataa.push({value:[dataa[dataa.length-1].value[0]+1, dataa[dataa.length-1].value[1]+1]})
-      datar.push({value:[datar[datar.length-1].value[0]+1, datar[datar.length-1].value[1]+1]})
-      datal.push({value:[datal[datal.length-1].value[0]+1, datal[datal.length-1].value[1]+1]})
-      accuracyChart.setOption({
-        series: [{
-          data: dataa
-        }]
-      })
-      lessChart.setOption({
-        series: [{
-          data: datal
-        }]
-      })
-      learningRateChart.setOption({
-        series: [{
-          data: datar
-        }]
-      })
-      this.showLineChart(dataa, datal, datar, accuracyChart, lessChart, learningRateChart);
-    }, 1000);
+    }, 500);
   }
   handleOk = () => {
     this.setState({
@@ -598,11 +616,11 @@ class Run extends Component{
             <Col span={12} style={{ height: 280 }}>
               <List
                 size="small"
-                style={{margin:'50px'}}
+                style={{margin:'50px', marginTop:0}}
                 header={<div>当前状态</div>}
                 bordered
-                dataSource={currentStatus}
-                renderItem={item => (<List.Item><Col span={6}>{item.title}</Col>{item.value}</List.Item>)}
+                dataSource={this.state.currentStatus}
+                renderItem={item => (<List.Item><Col span={8}>{item.title}</Col>{item.value}</List.Item>)}
               />
             </Col>
           </Row>
