@@ -1,8 +1,8 @@
 package com.bigdataplayground.demo.MolulesSpark.util;
 
-import com.fasterxml.jackson.databind.JsonNode;
+import com.bigdataplayground.demo.MolulesSpark.ApiResult;
+import com.bigdataplayground.demo.MolulesSpark.FileStatusEx;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.node.ObjectNode;
 
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.fs.*;
@@ -28,7 +28,7 @@ public class HdfsClient {
         this.hdfsHome= new URI(hdfsHome);
         conf.set("fs.defaultFS", hdfsHome);
         conf.set("fs.hdfs.impl","org.apache.hadoop.hdfs.DistributedFileSystem");
-        conf.set("dfs.client.use.datanode.hostname", "true"); //需要添加hosts 将集群别名映射到公网地址10.105.222.*
+        conf.set("dfs.client.use.datanode.hostname", "true"); //需要添加hosts 将集群别名映射到公网地址10.105.222.***
         fileSystem = FileSystem.get(this.hdfsHome,conf,userName);
     }
 
@@ -38,18 +38,14 @@ public class HdfsClient {
      * @return
      * @throws IOException
      */
-    public String makeDirectory(String newDir) throws IOException {
+    public ApiResult makeDirectory(String newDir) throws IOException {
         if(fileSystem.exists(new Path(newDir))){
-            return "Already Exists.";
+            return ApiResult.createNgMsg("Already Exists.");
         }else if(fileSystem.mkdirs(new Path(newDir))){
-            return newDir+" is successfully Created";
+            return ApiResult.createOKMsg( newDir+" is successfully Created");
         }else{
-            return "mkdir:Failed";
+            return ApiResult.createNgMsg("mkdir:Failed");
         }
-    }
-
-    public boolean exists(String path) throws IOException {
-        return fileSystem.exists(new Path(path));
     }
 
     /**
@@ -58,34 +54,34 @@ public class HdfsClient {
      * @return
      * @throws IOException
      */
-    public String remove(String filePath) throws IOException {
+    public ApiResult remove(String filePath) throws IOException {
         if (fileSystem.exists(new Path(filePath))) {
             if (fileSystem.getFileStatus(new Path(filePath)).isFile()) {
                 if (fileSystem.delete(new Path(filePath), false)) {
                     System.out.println(filePath + "Successfully Deleted");
-                    return filePath + "Successfully Deleted";
+                    return ApiResult.createOKMsg(filePath + "Successfully Deleted");
                 } else {
                     System.out.println(filePath+" rm:Failed");
-                    return "rm:Failed";
+                    return ApiResult.createNgMsg("rm:Failed");
                 }
             } else {
                 //判断目录是否空
                 if(fileSystem.listStatus(new Path(filePath)).length==0) {
                     if (fileSystem.delete(new Path(filePath), false)) {
                         System.out.println(filePath + "Successfully Deleted");
-                        return filePath + "Successfully Deleted";
+                        return ApiResult.createOKMsg(filePath + "Successfully Deleted");
                     } else {
                         System.out.println("rm:Failed");
-                        return "rm:Failed";
+                        return ApiResult.createNgMsg("rm:Failed");
                     }
                 }else{
                     System.out.println(filePath+" Directory is not empty. Use param = R to remove it recursively");
-                    return "Directory is not empty. Use param = R to remove it recursively";
+                    return ApiResult.createNgMsg("Directory is not empty. Use param = R to remove it recursively");
                 }
             }
         }else {
             System.out.println(filePath+" not exists");
-            return "Path not exists";
+            return ApiResult.createNgMsg("Path not exists");
         }
     }
 
@@ -95,41 +91,45 @@ public class HdfsClient {
      * @return
      * @throws IOException
      */
-    public String removeR(String filePath) throws IOException {
+    public ApiResult removeR(String filePath) throws IOException {
         if (fileSystem.exists(new Path(filePath))) {
             if (fileSystem.getFileStatus(new Path(filePath)).isFile()) {
                 System.out.println("To avoid accidentally deletion, DO NOT use param = R to remove file");
-                return "To avoid accidentally deletion, DO NOT use param = R to remove file";
+                return ApiResult.createNgMsg("To avoid accidentally deletion, DO NOT use param = R to remove file");
             }
             if (fileSystem.delete(new Path(filePath), true)) {
                 System.out.println(filePath + " Successfully Deleted Recursively");
-                return filePath + " Successfully Deleted Recursively";
+                return ApiResult.createOKMsg(filePath + " Successfully Deleted Recursively");
             } else {
                 System.out.println(filePath+" rm -R:Failed");
-                return "rm -R:Failed";
+                return ApiResult.createNgMsg("rm -R:Failed");
             }
         }else {
             System.out.println(filePath+" not exists");
-            return "Path not exists";
+            return ApiResult.createNgMsg("Path not exists");
         }
     }
 
-    public String readFile(String filePath) throws IOException {
+    public ApiResult readFile(String filePath) throws IOException {
 
+        if(!fileSystem.exists(new Path(filePath))) {
+            return ApiResult.createNgMsg(filePath + " File does not exist");
+        }
         FSDataInputStream fsDataInputStream = fileSystem.open(new Path(filePath));
 
         ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
 
-        IOUtils.copyBytes(fsDataInputStream,byteArrayOutputStream,4096,true);
+        IOUtils.copyBytes(fsDataInputStream, byteArrayOutputStream, 4096, true);
 
-        String file = new String(byteArrayOutputStream.toByteArray(),"utf-8");
+        String file = new String(byteArrayOutputStream.toByteArray(), "utf-8");
 
-        System.out.println("-----------"+"File:"+filePath+"----------");
+        System.out.println("-----------" + "File:" + filePath + "----------");
 
         System.out.println(file);
 
-        System.out.println("-----------"+" End "+filePath+"----------");
-        return file;
+        System.out.println("-----------" + " End " + filePath + "----------");
+
+        return ApiResult.createOKData(file);
     }
 
     /**
@@ -139,10 +139,10 @@ public class HdfsClient {
      * @return
      * @throws IOException
      */
-    public String saveFile(String filePath,String content,Boolean override) throws IOException {
+    public ApiResult saveFile(String filePath,String content,Boolean override) throws IOException {
         if (!override && fileSystem.exists(new Path(filePath))) {
             System.out.println(filePath+" exists, set param = O (Big O)to override.");
-            return "File exists, set param = O (Big O)to override.";
+            return ApiResult.createNgMsg("File exists, set param = O (Big O)to override.");
         }
         FSDataOutputStream fsDataOutputStream = fileSystem.create(new Path(filePath),override);
 
@@ -150,7 +150,7 @@ public class HdfsClient {
                 fsDataOutputStream,4096,true);
 
         System.out.println(filePath+" saved");
-        return filePath+" saved";
+        return ApiResult.createOKMsg(filePath+" saved");
     }
 
     /**
@@ -158,7 +158,7 @@ public class HdfsClient {
      * @param dstPath 目标地址 对应 请求中的path
      * @return
      */
-    public String uploadFromLocal(String srcPath,String dstPath) throws IOException {
+    public ApiResult uploadFromLocal(String srcPath,String dstPath) throws IOException {
         Path dst = new Path(dstPath);
         Path src = new Path(srcPath);
         String msg ="";
@@ -168,7 +168,7 @@ public class HdfsClient {
             if (fileSystem.getFileStatus(dst).isFile()) {
                 msg =  dst + " File Exists";
                 System.out.println(msg);
-                return msg;
+                return  ApiResult.createNgMsg(msg);
             } else if (fileSystem.getFileStatus(dst).isDirectory()) {
                 dst = new Path(dst + "/" + src.getName());
                 out = fileSystem.create(dst);
@@ -183,63 +183,35 @@ public class HdfsClient {
         IOUtils.copyBytes(fis, out, 4096, true);
         msg = msg +" Successfully";
         System.out.println(msg);
-        return msg;
+        return ApiResult.createOKMsg(msg);
     }
 
     /**
-     * 获取path目录下文件的信息
-     * @param filePath
+     * 获取path目录下所有文件的信息
+     * @param rootPath
      * @return
      * @throws IOException
      */
-    public List<String> getAllFilePath(Path filePath) throws IOException {
-        List<String> fileList = new ArrayList<String>();
+    public ApiResult tree(String rootPath) throws IOException {
+        List<FileStatusEx> fileTree = getAllFilePath(new Path(rootPath));
+        return ApiResult.createOKData(fileTree);
+    }
+
+    public List<FileStatusEx> getAllFilePath(Path filePath) throws IOException {
+        List<FileStatusEx> fileStatusExList = new ArrayList<>();
         FileStatus[] fileStatusList = fileSystem.listStatus(filePath);//存放当前目录下所有文件或子目录
         for (FileStatus fileStatus : fileStatusList) {
+            //或许可以继承什么的，面向对象没学好= =，先用个笨点的办法
+            FileStatusEx fileStatusEx = new FileStatusEx(fileStatus);
             if (fileStatus.isDirectory()) {
                 //加入子目录
-                fileList.add(fileStatusToString(fileStatus,getAllFilePath(fileStatus.getPath())));
+                fileStatusEx.setSubDirectory(getAllFilePath(fileStatus.getPath()));
+                fileStatusExList.add(fileStatusEx);
             } else {
                 //加入文件
-                fileList.add(fileStatusToString(fileStatus,null));//
+                fileStatusExList.add(fileStatusEx);//
             }
         }
-        return fileList;
+        return fileStatusExList;
     }
-
-    /**
-     * 将fileStatus 转为json格式
-     * @param fileStatus
-     * @param subDirectory
-     * @return
-     * @throws IOException
-     */
-    public String fileStatusToString(FileStatus fileStatus, List<String> subDirectory) throws IOException {
-        StringBuilder sb = new StringBuilder();
-
-        ObjectMapper objectMapper = new ObjectMapper();
-
-        JsonNode fileNode = objectMapper.createObjectNode();
-        ((ObjectNode) fileNode).put("path", String.valueOf(fileStatus.getPath()));
-        ((ObjectNode) fileNode).put("isDirectory", fileStatus.isDirectory());
-        if (!fileStatus.isDirectory()) {
-            ((ObjectNode) fileNode).put("length", fileStatus.getLen());
-            ((ObjectNode) fileNode).put("replication", fileStatus.getReplication());
-            ((ObjectNode) fileNode).put("blocksize", fileStatus.getBlockSize());
-        }else{
-            ((ObjectNode) fileNode).putPOJO("subDirectory",subDirectory);//反斜杠的罪恶之源
-        }
-        ((ObjectNode) fileNode).put("modification_time", fileStatus.getModificationTime());
-        ((ObjectNode) fileNode).put("access_time", fileStatus.getAccessTime());
-        ((ObjectNode) fileNode).put("owner", fileStatus.getOwner());
-        ((ObjectNode) fileNode).put("group", fileStatus.getGroup());
-        ((ObjectNode) fileNode).put("permission", String.valueOf(fileStatus.getPermission()));
-        ((ObjectNode) fileNode).put("isSymlink", fileStatus.isSymlink());
-        if (fileStatus.isSymlink()) {
-            ((ObjectNode) fileNode).put("symlink", String.valueOf(fileStatus.getSymlink()));
-        }
-        System.out.println(objectMapper.writerWithDefaultPrettyPrinter().writeValueAsString(fileNode));
-        return objectMapper.writeValueAsString(fileNode);
-    }
-
 }

@@ -6,6 +6,7 @@ import com.bigdataplayground.demo.MolulesSpark.util.ToolSet;
 import com.bigdataplayground.demo.controller.Node;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.module.SimpleModule;
 import org.springframework.boot.*;
 import org.springframework.boot.autoconfigure.*;
 import org.springframework.web.bind.annotation.*;
@@ -81,14 +82,17 @@ public class App {
      * upload 从本地上传文件 例如从 src/main/scala/handleFile.scala 上传至 ./test/1.scala
 
      * String user 用户名 确定了权限和./的位置（对了，多用户存储的时候需要传入读写权限，现在先不考虑这个。。)
-     * String path 目录或文件路径 示例：
-     *              /dst/src.txt    ./dst.txt       （无同名文件） ——>./dst.txt       上传并重命名
-     *              /dst/src.txt    ./dst.txt       （有同名文件） ——> 上传失败
-     *              /dst/src.txt    ./              （目录存在）   ——>  ./src.txt     上传至目录（同名文件)
-     *              /dst/src.txt    ./directory     （目录不存在）  ——>  ./directory   误上传（新文件无后缀名）**
-     *              也就是 目标路径path 可以是一个未创建的文件名或者是已创建的目录（不能是未创建的目录，不添加新参数好像解决不了）
-     *              不过真正用的时候都是要先选择路径再传文件，一般只会发生上面第三种情况。
+     * String path 目录或文件路径
      * String localPath 上传文件的本地路径
+     * 示例：        localPath       path
+     *              /src.txt    ./dst.txt       （无同名文件） ——>./dst.txt       上传并重命名
+     *              /src.txt    ./dst.txt       （有同名文件） ——> 上传失败
+     *              /src.txt    ./              （目录存在）   ——>  ./src.txt     上传至目录（同名文件)
+     *              /src.txt    ./directory/dst.txt     （目录不存在）  ——>  ./directory/dst.txt   新建目录、上传并重命名
+     *              /src.txt    ./directory     （目录不存在）  ——>  ./directory   误上传（新文件无后缀名）**
+     *              也就是 目标路径path 可以指向一个未创建的文件名或者是已创建的目录，如果中途遇到未创建的目录则会依次创建。
+     *              不过真正用的时候都是要先选择路径再传文件，一般只会发生上面第三种情况。
+     *
      *
      * 文件名中不能含有 反斜杠(\)、引号("")、花括号({})
      * @return
@@ -99,26 +103,17 @@ public class App {
     @CrossOrigin(origins = "*")
     @PostMapping("/hdfs")
     @ResponseBody
-    public String hdfs(@RequestBody @Valid HdfsOptRequest hdfsOptRequest)
+    public ApiResult hdfs(@RequestBody @Valid HdfsOptRequest hdfsOptRequest)
             throws URISyntaxException, IOException, InterruptedException {
 
-        if(hdfsOptRequest.getPath()==null) return "Error:path = null!";
-        if(hdfsOptRequest.getUser()==null) return "Error:user = null!";
-        if(hdfsOptRequest.getKind()==null) return "Error:kind = null!";
+        if(hdfsOptRequest.getPath()==null) return ApiResult.createNgMsg("path = null!");
+        if(hdfsOptRequest.getUser()==null) return ApiResult.createNgMsg("user = null!");
+        if(hdfsOptRequest.getKind()==null) return ApiResult.createNgMsg("kind = null!");
 
         HdfsClient hdfsClient = new HdfsClient("hdfs://" + hdfsAddr,hdfsOptRequest.getUser());
         switch (hdfsOptRequest.getKind()) {
             case "tree": {
-                List<String> fileList = hdfsClient.getAllFilePath(
-                        new org.apache.hadoop.fs.Path(hdfsOptRequest.getPath())
-                );
-                //jackson会不断在里面加入反斜杠，为自己的反斜杠加入反斜杠，子子孙孙无穷尽
-                String jsonFileList = fileList.toString();
-                jsonFileList = jsonFileList.replace("\\", "")
-                        .replace("\"{", "{")
-                        .replace("}\"", "}");
-                //这虽然不符合JSON标准，而且如果含有非法字符可能会报错，但目前是可用的
-                return jsonFileList;
+                return hdfsClient.tree(hdfsOptRequest.getPath());
             }
             case "mkdir":
                 return hdfsClient.makeDirectory(hdfsOptRequest.getPath());
@@ -137,13 +132,12 @@ public class App {
             case "upload":
                 return hdfsClient.uploadFromLocal(hdfsOptRequest.getLocalPath(),hdfsOptRequest.getPath());
             default:
-                break;
+                return ApiResult.createNgMsg("Error Kind");
         }
-
-        return "Error Kind";
     }
 
     @CrossOrigin(origins = "*")
+
     @RequestMapping(path = {"/run"}, method = {RequestMethod.POST})
     @ResponseBody
     public String run(@RequestBody String body) throws IOException {
