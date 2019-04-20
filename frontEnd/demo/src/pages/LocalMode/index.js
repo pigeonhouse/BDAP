@@ -9,8 +9,6 @@ import styles from './index.less';
 import Run from "../../LocalModeComponents/RunPanel/run"
 import Model from "../../PublicComponents/Model"
 import { FlowDataPanel } from '../../LocalModeComponents/EditorDataPanel';
-import FlowConnect from '../../PublicComponents/EditorConnect';
-import { data } from '../../ExampleData/FlowData'
 const TabPane = Tabs.TabPane;
 class LocalMode extends React.Component {
   Intro = (key) => {

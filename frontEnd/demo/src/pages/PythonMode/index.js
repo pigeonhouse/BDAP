@@ -4,7 +4,6 @@ import GGEditor, { Flow } from '@src';
 import { FlowContextMenu } from '../../PublicComponents/EditorContextMenu';
 import { FlowToolbar } from '../../PublicComponents/EditorToolbar';
 import { FlowDetailPanel } from '../../PublicComponents/EditorDetailPanel';
-import FlowConnect from '../../PublicComponents/EditorConnect';
 import styles from './index.less';
 
 import Run from "../../PythonModeComponents/RunPanel/run"

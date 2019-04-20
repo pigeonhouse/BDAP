@@ -4,8 +4,9 @@ import {
 const defaultState = {
     Dataset: [],
     did:true,
-    name:"模型",
-    info:"这是我的模型",
+    name:"模型1号",
+    info:"这是我的第1个模型",
+    count:1,
 }
 export default (state = defaultState, action) => {
     if(action.type === MODEL){
@@ -19,6 +20,9 @@ export default (state = defaultState, action) => {
     if(action.type === 'test'){
         const newState = JSON.parse(JSON.stringify(state));
         newState.did = action.did;
+        newState.count = action.count;
+        console.log("-----------")
+        console.log(newState)
         return newState;
     }
     return state;

@@ -5,7 +5,6 @@ import { FlowContextMenu } from '../../PublicComponents/EditorContextMenu';
 import { FlowToolbar } from '../../PublicComponents/EditorToolbar';
 import { FlowDetailPanel } from '../../PublicComponents/EditorDetailPanel';
 import styles from './index.less';
-import FlowConnect from '../../PublicComponents/EditorConnect';
 
 import { FlowItemPanel } from '../../ClusterModeComponents/EditorItemPanel';
 import SparkRun from "../../ClusterModeComponents/SparkRunPanel/sparkRun"
@@ -289,7 +288,7 @@ class ClusterMode extends React.Component {
               <SparkRun></SparkRun>
           </Col>
           <Col span={9}>
-            <FlowConnect style={{width:0, height:0}} connectCtrl={this.state.connectCtrl}/>
+            {/* <FlowConnect style={{width:0, height:0}} connectCtrl={this.state.connectCtrl}/> */}
           </Col>
         </Row>
         

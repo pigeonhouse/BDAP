@@ -158,6 +158,7 @@ class Model extends Component{
         const action = {
           type:'test',
           did:true,
+          count:count+1
         }
         store.dispatch(action)
       }
@@ -199,15 +200,21 @@ class Model extends Component{
         const { count, dataSource } = this.state;
         const newData = {
           key: count,
-          Name: `存储模型${count}号`,
+          Name: `模型${count}号`,
           Date: 2019.4,
-          Description: `这是你第${count}个模型`,
+          Description: `这是我的第${count}个模型`,
           Model:inf    //注意不能有和它重名的
         };
         this.setState({
           dataSource: [...dataSource, newData],
           count: count + 1,
         });
+        const action = {
+          type:'test',
+          did:true,
+          count:count+1
+        }
+        store.dispatch(action);
         message.success("成功存储了一个新模型!")
     }
     
