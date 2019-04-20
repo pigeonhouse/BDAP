@@ -12,8 +12,8 @@ class FlowToolbar extends React.Component {
 
   state = {
     visible: false,
-    inp1:"what",
-    inp2:"what",
+    inp1:"模型x",
+    inp2:"这是我的模型",
   }
 
   ShowModal = () => {
@@ -45,10 +45,10 @@ class FlowToolbar extends React.Component {
     const action = {
       type:MODEL,
       value:inf,
-      did:false
+      did:false,
+      name:this.state.inp1,
+      info:this.state.inp2,
     }
-    console.log("---------")
-    console.log(action)
     store.dispatch(action)
     this.setState({
       visible: false,
@@ -61,9 +61,7 @@ class FlowToolbar extends React.Component {
   handleInput2(e){
     this.setState({inp2:e.target.value});
   }
-  render() {  
-    const inp1 = this.state.inp1;
-    const inp2 = this.state.inp2;
+  render() { 
 
     return (
       <div>
@@ -165,7 +163,7 @@ class FlowToolbar extends React.Component {
         <br/>
         <Input placeholder="我的模型" 
         style={{width:"300px", margin:"10px"}}
-        defaultValue="模型1"
+        defaultValue="模型x"
         onChange = {(e) => this.handleInput1(e)}
         />
         <br/>

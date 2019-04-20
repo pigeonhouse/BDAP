@@ -98,9 +98,11 @@ class Model extends Component{
         }, {
           title: 'Date',
           dataIndex: 'Date',
+          editable: true,
         }, {
           title: 'Description',
           dataIndex: 'Description',
+          editable: true,
         }, {
           title: 'Operation',
           dataIndex: 'Operation',
@@ -123,7 +125,7 @@ class Model extends Component{
     // this.handleStoreChange = this.handleStoreChange.bind(this);
     this.state = {
       dataSource:[],
-      count: 0
+      count: 1
         //   dataSource: [{
         //     key: '0',
         //     name: 'Edward King 0',
@@ -144,9 +146,9 @@ class Model extends Component{
         const { count, dataSource } = this.state;
         const newData = {
           key: count,
-          Name: `存储模型${count}号`,
+          Name: sta.name,
           Date: 2019.4,
-          Description: `这是你第${count}个模型`,
+          Description: sta.info,
           Model:sta.Dataset    //注意不能有和它重名的
         };
         this.setState({
@@ -170,19 +172,21 @@ class Model extends Component{
     }
     handleDelete = (key) => {
         const dataSource = [...this.state.dataSource];
-        const count = this.state.count
         this.setState({ 
           dataSource: dataSource.filter(item => item.key !== key),
-          count:count-1
         });
         message.success("此模型被删除成功!")
     }
     handleShow = (key) => {
         const dataSource = [...this.state.dataSource];
         const { propsAPI } = this.props;
-        if(dataSource.length > 0 && dataSource[key].hasOwnProperty("Model")){
-          let inf = JSON.parse(JSON.stringify(dataSource[key].Model));
-          propsAPI.read(inf);
+        if(dataSource.length > 0){
+            for(let i = 0; i < dataSource.length; i ++){
+              if(dataSource[i].key === key){
+                let inf = JSON.parse(JSON.stringify(dataSource[i].Model));
+                propsAPI.read(inf);
+              }
+            }
         }
         this.setState({
           visible:false
