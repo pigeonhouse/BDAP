@@ -5,14 +5,17 @@ import styles from './index.less';
 import iconfont from '../../theme/iconfont.less';
 import { withPropsAPI } from '@src';
 import store from '../../store';
-import { getStopLineAction, getShowLineAction, UpINF } from '../../store/actionCreate';
 import { data } from '../../ExampleData/FlowData';
+import { MODEL } from "../../store/storeType"
 var inf = data;
 class FlowToolbar extends React.Component {
 
   state = {
     visible: false,
+    inp1:"what",
+    inp2:"what",
   }
+
   ShowModal = () => {
     this.setState({
       visible: true,
@@ -31,28 +34,36 @@ class FlowToolbar extends React.Component {
       visible: false,
     });
   }
-  stopLine = () =>{
-    const action = getStopLineAction();
-    store.dispatch(action);
-    console.log(store.getState().running);
-  }
   handleModel = () =>{
     const { propsAPI } = this.props;
     const { read } = propsAPI;
     read(inf);
   }
-  handleSave = () =>{
-    const { propsAPI } = this.props;
-    const { save } = propsAPI;
-    inf = save();
-  }
   handleClick = () =>{
+    const { propsAPI } = this.props;
+    inf = JSON.parse(JSON.stringify(propsAPI.save()));
+    const action = {
+      type:MODEL,
+      value:inf,
+      did:false
+    }
+    console.log("---------")
+    console.log(action)
+    store.dispatch(action)
     this.setState({
       visible: false,
     });
     message.success("成功的存储了一个模型!")
   }
+  handleInput1(e){
+    this.setState({inp1:e.target.value});
+  }
+  handleInput2(e){
+    this.setState({inp2:e.target.value});
+  }
   render() {  
+    const inp1 = this.state.inp1;
+    const inp2 = this.state.inp2;
 
     return (
       <div>
@@ -152,13 +163,22 @@ class FlowToolbar extends React.Component {
         >
         <span>自定义模型名:</span>
         <br/>
-        <Input placeholder="我的模型" style={{width:"300px", margin:"10px"}}/>
+        <Input placeholder="我的模型" 
+        style={{width:"300px", margin:"10px"}}
+        defaultValue="模型1"
+        onChange = {(e) => this.handleInput1(e)}
+        />
         <br/>
         <span>自定义描述:</span>
         <br/>
-        <Input placeholder="描述" style={{width:"300px", margin:"10px"}}/>
+        <Input placeholder="描述" 
+        style={{width:"300px", margin:"10px"}}
+        defaultValue="这是我的模型"
+        onChange = {(e)=>this.handleInput1(e)}
+        />
         <br/>
-        <Button type="primary" onClick={()=>this.handleClick()} style={{width:"250px",marginLeft:"20px"}}>提交</Button>
+        <Button type="primary" onClick={()=>this.handleClick()} style={{width:"250px",marginLeft:"20px"}}>
+        提交</Button>
       </Modal>
       </div>
       </div>

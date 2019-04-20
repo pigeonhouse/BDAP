@@ -119,22 +119,19 @@ class Model extends Component{
               ) : null
           ),
         }];
-    this.handleStoreChange = this.handleStoreChange.bind(this);
+    // this.state = store.getState();
+    // this.handleStoreChange = this.handleStoreChange.bind(this);
     this.state = {
-            dataSource:[],
+      dataSource:[],
+      count: 0
         //   dataSource: [{
         //     key: '0',
         //     name: 'Edward King 0',
         //     age: '32',
         //     address: 'London, Park Lane no. 0',
-        //   }, {
-        //     key: '1',
-        //     name: 'Edward King 1',
-        //     age: '32',
-        //     address: 'London, Park Lane no. 1',
-        //   }],
-          count: 0,
-        };
+        //   }
+      };
+        
     }
 
     state = {
@@ -142,10 +139,30 @@ class Model extends Component{
         editing: false,
     }
     ShowModal = () => {
+      const sta = store.getState();
+      if(!sta.did){
+        const { count, dataSource } = this.state;
+        const newData = {
+          key: count,
+          Name: `存储模型${count}号`,
+          Date: 2019.4,
+          Description: `这是你第${count}个模型`,
+          Model:sta.Dataset    //注意不能有和它重名的
+        };
         this.setState({
-          visible: true,
+          dataSource: [...dataSource, newData],
+          count: count + 1,
         });
+        const action = {
+          type:'test',
+          did:true,
+        }
+        store.dispatch(action)
       }
+      this.setState({
+        visible: true,
+      });
+    }
     DisModal = () => {
         this.setState({
           visible: false,
@@ -153,7 +170,11 @@ class Model extends Component{
     }
     handleDelete = (key) => {
         const dataSource = [...this.state.dataSource];
-        this.setState({ dataSource: dataSource.filter(item => item.key !== key) });
+        const count = this.state.count
+        this.setState({ 
+          dataSource: dataSource.filter(item => item.key !== key),
+          count:count-1
+        });
         message.success("此模型被删除成功!")
     }
     handleShow = (key) => {
@@ -167,16 +188,6 @@ class Model extends Component{
           visible:false
         });
         message.success("这个模型被成功调出!")
-    }
-    handleStoreChange(){
-      console.log("changed");
-    }
-    handleSend(inf){
-      const action = {
-        type:MODEL,
-        value:inf
-      }
-      store.dispatch(action)
     }
     handleAdd = () => {
         const { propsAPI } = this.props;
@@ -247,7 +258,7 @@ class Model extends Component{
                 width={1100}
                 >
                 <Button onClick={this.handleAdd} type="primary" style={{ marginBottom: 16 }}>
-                添加模型
+                添加当前模型
                 </Button>
                 <Table
                 components={components}
