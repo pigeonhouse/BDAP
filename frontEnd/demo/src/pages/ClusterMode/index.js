@@ -190,13 +190,13 @@ class ClusterMode extends React.Component {
             <Button style={{border:0,backgroundColor:'#343941',color:"#ddd",fontSize:18,fontFamily:'consolas'}}>BigDataPlayground Local-Mode</Button>
           </Col>      
           <Col span={2}>
-            <a href="https://www.yuque.com/ddrid/tx7z84">
+            <a href="https://www.yuque.com/ddrid/tx7z84" target="_blank">
               <Button style={{border:0,backgroundColor:'#343941',color:"#ddd",fontSize:25}} >
                 <Icon type="question-circle" data-step="5" data-intro="如果想要进一步了解详细的使用教程及组件介绍，请点击此处查看文档。"/>
               </Button>                  
             </a>
           </Col>      
-          <a href="https://github.com/pigeonhouse/BigDataPlayground" className={styles.githubCorner} aria-label="View source on GitHub">
+          <a href="https://github.com/pigeonhouse/BigDataPlayground" target="_blank" className={styles.githubCorner} aria-label="View source on GitHub">
             <svg 
               width="45" 
               height="45" 
