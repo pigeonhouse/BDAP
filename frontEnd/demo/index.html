@@ -1,4 +1,6 @@
 <!DOCTYPE html>
+
+
 <html lang="zh-CN">
 <head>
   <meta charset="UTF-8">
@@ -8,7 +10,6 @@
   <link rel="stylesheet" href="https://cdn.bootcss.com/intro.js/2.9.3/introjs.css">
   <link rel="stylesheet" href="https://cdn.bootcss.com/twitter-bootstrap/4.2.1/css/bootstrap.css">
   <link rel="stylesheet" href="//f.alicdn.com/antd/3.4.0/antd.min.css">
-  
   <style type="text/css">
     #root, #root > div {
       display: flex;
@@ -17,9 +18,32 @@
       overflow: hidden;
     }
   </style>
+
 </head>
 <body>
-  <div id="root"></div>
+    <div id="i-loading">
+        <div class="loading-center">
+          <p style="text-align:center">
+              <img src="./my.gif" alt="My Image">
+          </p>
+        </div>
+      </div>
+ 
+    <div id="loadDiv" class="lds-css" style="visibility:hidden">
+    <div class="lds-spinner">
+      <div></div>
+      <div></div>
+      <div></div>
+      <div></div>
+      <div></div>
+      <div></div>
+      <div></div>
+      <div></div>
+      <div></div>
+      <div></div>
+    </div>
+  </div>
+  <div id="root"> </div>
   <script src="https://www.lactame.com/lib/ml/3.3.0/ml.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@0.14.2/dist/tf.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs-vis"></script>
