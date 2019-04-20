@@ -1,5 +1,5 @@
 import React from 'react';
-import { Tooltip, Divider, Modal,List, Avatar, Button, Icon } from 'antd';
+import { Tooltip, Divider, message,Modal,Button, Icon ,Input } from 'antd';
 import { Toolbar, Command } from '@src';
 import styles from './index.less';
 import iconfont from '../../theme/iconfont.less';
@@ -8,42 +8,14 @@ import store from '../../store';
 import { getStopLineAction, getShowLineAction, UpINF } from '../../store/actionCreate';
 import { data } from '../../ExampleData/FlowData';
 var inf = data;
-const dat = [
-  {
-    title: 'Ant Design Title 1',
-  },
-  {
-    title: 'Ant Design Title 2',
-  },
-  {
-    title: 'Ant Design Title 3',
-  },
-  {
-    title: 'Ant Design Title 4',
-  },
-];
 class FlowToolbar extends React.Component {
 
   state = {
     visible: false,
-    v:false
   }
-  sModal = () => {
+  ShowModal = () => {
     this.setState({
-      v: true,
-    });
-  }
-  hOk = (e) => {
-    console.log(e);
-    this.setState({
-      v: false,
-    });
-  }
-
-  hCancel = (e) => {
-    console.log(e);
-    this.setState({
-      v: false,
+      visible: true,
     });
   }
   handleOk = (e) => {
@@ -68,17 +40,18 @@ class FlowToolbar extends React.Component {
     const { propsAPI } = this.props;
     const { read } = propsAPI;
     read(inf);
-    console.log("----propsAPI------")
-    console.log(inf)
   }
   handleSave = () =>{
-    console.log("----存储模型显示---------")
     const { propsAPI } = this.props;
     const { save } = propsAPI;
     inf = save();
-    console.log(inf)
   }
-
+  handleClick = () =>{
+    this.setState({
+      visible: false,
+    });
+    message.success("成功的存储了一个模型!")
+  }
   render() {  
 
     return (
@@ -159,37 +132,35 @@ class FlowToolbar extends React.Component {
             <i className={`${iconfont.iconfont} ${iconfont.iconUngroup}`} />
           </Tooltip>
         </Command>
-      <Button onClick={()=>this.handleModel()} >
+      <Button onClick={()=>this.ShowModal()} >
         <Icon type="search"/>模型
       </Button>
-      <Button onClick={()=>this.handleSave()} >
+      <Button onClick={()=>this.ShowModal()} >
         <Icon type="lock"/>存储
       </Button>
       </Toolbar>
       
       </div>
-      {/* <div>
+      <div>
         <Modal
-          title="模型仓库"
-          visible={this.state.v}
-          onOk={this.hOk}
-          onCancel={this.hCancel}
+          title="模型定义"
+          visible={this.state.visible}
+          onOk={this.handleOk}
+          onCancel={this.handleCancel}
+          bodyStyle={{height: '250px'}}
+          width={450}
         >
-          <List
-          itemLayout="horizontal"
-          dataSource={dat}
-          renderItem={item => (
-            <List.Item>
-              <List.Item.Meta
-                avatar={<Avatar src="https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png" />}
-                title={<a href="https://ant.design">{item.title}</a>}
-                description="Ant Design, a design language for background applications, is refined by Ant UED Team"
-              />
-            </List.Item>
-          )}
-        />
+        <span>自定义模型名:</span>
+        <br/>
+        <Input placeholder="我的模型" style={{width:"300px", margin:"10px"}}/>
+        <br/>
+        <span>自定义描述:</span>
+        <br/>
+        <Input placeholder="描述" style={{width:"300px", margin:"10px"}}/>
+        <br/>
+        <Button type="primary" onClick={()=>this.handleClick()} style={{width:"250px",marginLeft:"20px"}}>提交</Button>
       </Modal>
-      </div> */}
+      </div>
       </div>
     );
   }

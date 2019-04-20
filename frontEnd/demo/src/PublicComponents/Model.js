@@ -1,8 +1,8 @@
 import React, { Component } from 'react'
 import { Button,Modal,Icon,message,Avatar, Table, Input, Popconfirm, Form, Divider} from 'antd'
 import { withPropsAPI } from '@src';
-
-var inf;
+import store from "../store"
+import { MODEL } from "../store/storeType"
 const FormItem = Form.Item;
 const EditableContext = React.createContext();
   const EditableRow = ({ form, index, ...props }) => (
@@ -119,8 +119,8 @@ class Model extends Component{
               ) : null
           ),
         }];
-    
-        this.state = {
+    this.handleStoreChange = this.handleStoreChange.bind(this);
+    this.state = {
             dataSource:[],
         //   dataSource: [{
         //     key: '0',
@@ -153,22 +153,34 @@ class Model extends Component{
     }
     handleDelete = (key) => {
         const dataSource = [...this.state.dataSource];
-        console.log("-----------")
-        console.log(dataSource)
         this.setState({ dataSource: dataSource.filter(item => item.key !== key) });
         message.success("此模型被删除成功!")
     }
     handleShow = (key) => {
         const dataSource = [...this.state.dataSource];
         const { propsAPI } = this.props;
-        inf = dataSource[key].Model;
-        propsAPI.read(inf);
+        if(dataSource.length > 0 && dataSource[key].hasOwnProperty("Model")){
+          let inf = JSON.parse(JSON.stringify(dataSource[key].Model));
+          propsAPI.read(inf);
+        }
+        this.setState({
+          visible:false
+        });
         message.success("这个模型被成功调出!")
     }
-    
+    handleStoreChange(){
+      console.log("changed");
+    }
+    handleSend(inf){
+      const action = {
+        type:MODEL,
+        value:inf
+      }
+      store.dispatch(action)
+    }
     handleAdd = () => {
         const { propsAPI } = this.props;
-        inf = propsAPI.save();
+        let inf = JSON.parse(JSON.stringify(propsAPI.save()));
         const { count, dataSource } = this.state;
         const newData = {
           key: count,
