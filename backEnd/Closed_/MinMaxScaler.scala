@@ -17,8 +17,6 @@ import spark.implicits._
     val aimarray = aim.split(" ")
     var df_ = df
 
-  df.show(100)
-
     for(i <- 0 to aimarray.length - 1){
       df_ = df.select(aimarray(i))
       val assembler = new VectorAssembler().setInputCols(Array(aimarray(i))).setOutputCol("scaled")
@@ -31,8 +29,6 @@ import spark.implicits._
       df = df.join(df_1, df("idx") === df_1("idx")).drop("idx")
       df = df.limit(df.count().toInt)
     }
-
-  df.show(100)
   
   df.write.format("parquet").mode(SaveMode.Overwrite).save(project + "/" + id)
 

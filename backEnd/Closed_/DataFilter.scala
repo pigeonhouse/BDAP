@@ -3,7 +3,7 @@ import org.apache.spark.sql.functions._
 
       val project = "Demo"
       val id = "%s"
-      val newcol = "Newcol"
+      val newcol = "%s"
       val previous = "%s"
       val condition = "%s"
       val file = project + "/" + previous

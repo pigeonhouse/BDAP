@@ -9,14 +9,9 @@ import scalaj.http._
     val drop = false
     val file = project + "/" + previous
 
-
     val df = spark.read.parquet(file)
     var df_ = df
     val aimarray = aim.split(" ")
-  
-  
-  
-    df.show(100)
 
     for(aims <- aimarray){
       val indexer = new StringIndexer().setInputCol(aims).setOutputCol(s"${aims}Index")

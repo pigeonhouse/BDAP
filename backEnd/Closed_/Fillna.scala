@@ -37,6 +37,34 @@ import scalaj.http._
           df_ = df_.na.fill(medianvalue(0), temp)
         }
       }
+    }else if(Type == "mode"){
+      for(i <- 0 to aimarray.length - 1){
+        val temp = Array(aimarray(i))
+        val usearray = df.select(aimarray(i)).collect()
+        var dataCount : Map[Row, Int] = Map()
+          for (xi <- usearray) {
+             if (!dataCount.contains(xi) ) {
+                  dataCount += (xi -> 1)
+             } else {
+                var count = dataCount(xi)
+                count += 1
+                dataCount += (xi -> count)
+             }
+          }
+          var dataSeq = dataCount.toSeq.sortBy(_._2)
+          println(dataSeq)
+          var (a, b) = dataSeq(dataSeq.length - 1)
+          if(a(0) == null){
+             a = dataSeq(dataSeq.length - 2)._1
+          }
+          if(usearray(0)(0).getClass.getSimpleName == "String"){
+            df_ = df_.na.fill(a(0).toString, temp)
+          }else if(usearray(0)(0).getClass.getSimpleName == "Double"){
+            df_ = df_.na.fill(a(0).toString.toDouble, temp)
+          }else if(usearray(0)(0).getClass.getSimpleName == "Int"){
+            df_ = df_.na.fill(a(0).toString.toDouble, temp)
+          }
+        }
     }else if(Type == "min"){
       for(i <- 0 to aimarray.length - 1){
         val temp = Array(aimarray(i))

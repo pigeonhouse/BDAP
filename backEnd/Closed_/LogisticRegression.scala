@@ -2,14 +2,17 @@ import org.apache.spark.ml.classification.LogisticRegression
 import org.apache.spark.ml.feature.VectorAssembler
 import org.apache.spark.sql.DataFrame
 import org.apache.spark.sql.functions.col
+import org.apache.spark.ml.evaluation.BinaryClassificationEvaluator
 
     val project = "Demo"
     val id = "%s"
-    val train = "%s"
+    val train = "SexIndex NewCol MinMaxScaledAge MinMaxScaledPclass MinMaxScaledFare"
     val label = "%s"
     val previous = "%s"
+    val newcol = "%s"
+    val idcol = "PassengerId"
     val file = project + "/" + previous
-    val all = train + " " + label
+    val all = train + " " + label + " " + idcol
 
     val PreviousArray = previous.split(" ")
     val Trainfile = project + "/" + PreviousArray(0)
@@ -25,7 +28,7 @@ import org.apache.spark.sql.functions.col
     var df_1 = df_Predict
 
     df_ = df_.select(aimarray.map(A => col(A)): _*)
-    df_1 = df_1.select(trainArray.map(A => col(A)):_*)
+    df_1 = df_1.select(aimarray.map(A => col(A)):_*)
 
     val assembler = new VectorAssembler().setInputCols(trainArray).setOutputCol("features")
     df_ = assembler.transform(df_)
@@ -38,13 +41,16 @@ import org.apache.spark.sql.functions.col
     lrModel.extractParamMap()
 
     val predictions = lrModel.transform(df_1)
-    val predict_result = predictions.selectExpr("features", "round(prediction,1) as prediction")
 
-    predict_result.write.format("parquet").mode(SaveMode.Overwrite).save(project + "/" + id)
+    val predict_result = predictions.selectExpr("PassengerId", s"round(prediction,1) as ${newcol}")
+
+    predict_result.write.format("csv").option("header", "true").option("inferSchema", "true").mode(SaveMode.Overwrite).save(project + "/" + id)
     
-    var fin = predict_result.limit(20).toJSON.collectAsList.toString
+    //val evaluator = new BinaryClassificationEvaluator().setRawPredictionCol(newcol).setLabelCol(label)
+    //val c = predict_result.select(label, newcol)
+    //val accuracy = evaluator.evaluate(c)
 
-    predict_result.show(100)
+    var fin = predict_result.limit(20).toJSON.collectAsList.toString
 
     val colname = predict_result.columns
     val fin_ = fin.substring(1, fin.length - 1)
@@ -54,7 +60,7 @@ import org.apache.spark.sql.functions.col
 
     fin = "[" + json ++ fin_ + "]"
 
-    val result = Http("http://10.122.224.119:5000/RunningPost").postData(fin.toString).header("Content-Type", "application/json").header("Charset", "UTF-8").option(HttpOptions.readTimeout(10000)).asString
+    val result = Http("http://10.122.226.59:5000/RunningPost").postData(fin.toString).header("Content-Type", "application/json").header("Charset", "UTF-8").option(HttpOptions.readTimeout(10000)).asString
 
 
 
