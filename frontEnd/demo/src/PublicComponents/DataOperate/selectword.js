@@ -61,10 +61,33 @@ class Selectword extends Component{
         return labelArray;
 
         switch(label){
+            case '归一化':    
+            for(let i in labelArray){
+                if(labelArray[i][1]){
+                    labelarr.push(['MinMaxScaled'+labelArray[i][0], false])
+                }
+            }
+            return [...labelArray, ...labelarr];
+            case '标准化':
+                for(let i in labelArray){
+                    if(labelArray[i][1]){
+                        labelarr.push(['StandardScaled'+labelArray[i][0], false])
+                    }
+                }
+                return [...labelArray, ...labelarr];
+            case 'StringIndexer':
+                for(let i in labelArray){
+                    if(labelArray[i][1]){
+                        labelarr.push([labelArray[i][0]+'Index', false])
+                    }
+                }
+                return [...labelArray, ...labelarr];
+            case '特征分组归类':
+                return [...labelArray, [item.model.attr['新生成列名'], false]];
+
             case '缺失值填充':
-            case '归一化':
             case '数据随机划分':
-            return labelArray;
+                return labelArray;
 
             case '特征区间化':
                 let labelarr = new Array();
@@ -74,11 +97,10 @@ class Selectword extends Component{
                     }
                 }
                 return [...labelArray, ...labelarr];
-            case '特征分组归类':
-            case '特征二进制化':
-            
+
+            case '特征二进制化':          
             case '数据类型转换':
-            return labelArray;
+                return labelArray;
         }
     }
     findSourceLabel=(item)=>{
