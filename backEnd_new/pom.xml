@@ -65,6 +65,12 @@
             <artifactId>livy-client-http</artifactId>
             <version>0.6.0-incubating</version>
         </dependency>
+        <dependency>
+            <groupId>com.opencsv</groupId>
+            <artifactId>opencsv</artifactId>
+            <version>4.5</version>
+        </dependency>
+
 
 
     </dependencies>

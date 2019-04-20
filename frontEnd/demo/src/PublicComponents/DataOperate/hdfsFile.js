@@ -40,7 +40,7 @@ class HdfsFile extends Component{
     submit = ()=>{       
         const init={
         method: 'POST', 
-        body:JSON.stringify(this.state.inpValu),
+        body:this.state.inpValu,
         mode: 'cors',
         headers: {'Content-Type': 'application/json'},
         }
@@ -53,7 +53,7 @@ class HdfsFile extends Component{
         .then(response => {
             if(response.status===200){
                 response.json().then((respData)=>{
-                    let label = respData[0].colName.split(', ');
+                    let label = respData[0].colName;
                     const data = respData.slice(1);
                     var Dataset = new Array();
                     for(let i in label){

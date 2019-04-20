@@ -1,11 +1,19 @@
 package com.bigdataplayground.demo.MolulesSpark.util;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.opencsv.CSVReader;
+import com.sun.org.apache.xerces.internal.xs.datatypes.ObjectList;
+import org.apache.hadoop.io.IOUtils;
+
+import java.io.ByteArrayInputStream;
+import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.nio.ByteBuffer;
 import java.nio.channels.AsynchronousFileChannel;
 import java.nio.charset.Charset;
 import java.nio.file.Path;
-import java.util.List;
+import java.util.*;
 import java.util.concurrent.Future;
 
 public class ToolSet {
@@ -54,4 +62,33 @@ public class ToolSet {
         return string;
     }
 
+    public static String readCSVFile(String file) throws IOException {
+        ObjectMapper objectMapper = new ObjectMapper();
+        CSVReader reader = new CSVReader(new InputStreamReader(new ByteArrayInputStream(file.getBytes()), "utf-8"));
+        String [] nextLine;
+        String [] colName = reader.readNext();
+        List<Map<String,Object>> mapList = new ArrayList<Map<String,Object>>();
+        Map<String,Object> lineMap = new LinkedHashMap<>(); //有序的
+        Map<String,Object> colNameMap = new LinkedHashMap<>(); //有序的
+        colNameMap.put("colName",colName);
+        while ((nextLine = reader.readNext()) != null) {
+            // nextLine[] is an array of values from the line
+            for(int i=0;i<nextLine.length;i++) {
+                try {
+                    int num = Integer.parseInt(nextLine[i]);
+                    lineMap.put(colName[i],num);
+                }catch (NumberFormatException e){
+                    if(nextLine[i].equals("")){
+                        lineMap.put(colName[i],null);
+                    }else{
+                        lineMap.put(colName[i],nextLine[i]);
+                    }
+                }
+            }
+            mapList.add(lineMap);
+        }
+        mapList.add(0,colNameMap);
+        System.out.println(objectMapper.writeValueAsString(mapList));
+        return objectMapper.writeValueAsString(mapList);
+    }
 }

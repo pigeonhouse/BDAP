@@ -1,12 +1,14 @@
-package com.bigdataplayground.demo.MolulesSpark;
+package com.bigdataplayground.demo;
 
+import com.bigdataplayground.demo.MolulesSpark.ApiResult;
+import com.bigdataplayground.demo.MolulesSpark.HdfsOptRequest;
+import com.bigdataplayground.demo.MolulesSpark.SparkExecutor;
 import com.bigdataplayground.demo.MolulesSpark.util.HdfsClient;
-import com.bigdataplayground.demo.MolulesSpark.util.LivyContact;
 import com.bigdataplayground.demo.MolulesSpark.util.ToolSet;
 import com.bigdataplayground.demo.controller.Node;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.module.SimpleModule;
+import com.google.common.io.Files;
 import org.springframework.boot.*;
 import org.springframework.boot.autoconfigure.*;
 import org.springframework.web.bind.annotation.*;
@@ -15,13 +17,11 @@ import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 import java.io.IOException;
 import java.net.URISyntaxException;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.*;
 
 
 @RestController
-@EnableAutoConfiguration
+@SpringBootApplication
 public class App {
     //配置时将appAddr改成自己的地址（只需要改这一处)。涉及到结果回传，因此不能用127.0.0.1
     private String appAddr = "10.122.217.207:5000"; //后端所在地址（本机地址)
@@ -38,18 +38,26 @@ public class App {
         return "yo!";
     }
 
-    @CrossOrigin(origins = "*") //跨域请求
     @RequestMapping(path = {"/handleInput"}, method = {RequestMethod.POST})
-    String handleInput(@RequestBody String body) throws IOException {
+    String handleInput(@RequestBody String body) throws IOException, URISyntaxException, InterruptedException {
+        HdfsClient hdfsClient = new HdfsClient("hdfs://" + hdfsAddr,"tseg");
+        String data ;
+        String path = body;
+        String ext = Files.getFileExtension(path); //获取后缀名
 
-        Path path = Paths.get("src/main/scala/handleFile.scala");
+        ApiResult result = hdfsClient.readFile("/demoData/"+body);
+        if(result.getData()!=null){
+             data = (String)result.getData();
+        }else{
+            return ApiResult.createNgMsg("File does not exist").toString();
+        }
+        switch (ext){
+            case "csv":
+                return ToolSet.readCSVFile(data);
+            default:
+        }
+        return data;
 
-        String code = String.format(ToolSet.openFile(path), body.replace("\"",""),//应该是要去除双引号的
-                "http://"+appAddr+"/inputPost");//App.java所在主机地址
-        //提交scala
-        LivyContact.postCode(livyAddr,code);
-
-        return inputData;
     }
 
     @RequestMapping(path = {"/RunningPost"}, method = {RequestMethod.POST})
@@ -100,9 +108,7 @@ public class App {
      * @throws IOException
      * @throws InterruptedException
      */
-    @CrossOrigin(origins = "*")
-    @PostMapping("/hdfs")
-    @ResponseBody
+    @PostMapping(path ="/hdfs",headers="Content-Type=application/json")
     public ApiResult hdfs(@RequestBody @Valid HdfsOptRequest hdfsOptRequest)
             throws URISyntaxException, IOException, InterruptedException {
 
@@ -136,10 +142,7 @@ public class App {
         }
     }
 
-    @CrossOrigin(origins = "*")
-
     @RequestMapping(path = {"/run"}, method = {RequestMethod.POST})
-    @ResponseBody
     public String run(@RequestBody String body) throws IOException {
 
         SparkExecutor sparkExecutor = new SparkExecutor(livyAddr,appAddr);
