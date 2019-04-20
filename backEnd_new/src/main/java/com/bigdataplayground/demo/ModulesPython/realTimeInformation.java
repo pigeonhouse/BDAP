@@ -11,7 +11,7 @@ import java.io.IOException;
 public class realTimeInformation {
     @RequestMapping("/trainingAccuracy")
     public String trainingAccuracy(){
-        String pathname = "C:\\Users\\Surface\\SavedFile\\test.txt";
+        String pathname = "/home/tseg/inf.txt";
         try (FileReader reader = new FileReader(pathname);
              BufferedReader br = new BufferedReader(reader)
         ) {

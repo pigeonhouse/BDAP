@@ -10,7 +10,7 @@ import java.io.File;
 public class DeleteFile {
     @RequestMapping("/DeleteFile")
     public Boolean DeleteFile(@RequestParam("fileName") String fileName){
-        File f = new File("C:\\Users\\Surface\\SavedFile\\"+fileName);
+        File f = new File("/home/tseg/TestFile/"+fileName);
         return f.delete();
     }
 }

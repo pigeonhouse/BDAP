@@ -9,6 +9,7 @@ public class Node {
     private List<NodeSourceId> sourceId;
     private Map<String,String> attribute;
     private Map<String,List<String>> labelArray;
+    private String group;
 
 
     public String getId() {
@@ -30,6 +31,8 @@ public class Node {
     public Map<String, List<String>> getLabelArray() {
         return labelArray;
     }
+
+    public String getGroup(){ return group; }
 
     public void setId(String id) {
         this.id = id;

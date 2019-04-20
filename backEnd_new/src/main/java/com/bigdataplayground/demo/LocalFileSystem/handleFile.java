@@ -8,7 +8,7 @@ import java.io.File;
 public class handleFile {
     @RequestMapping("/handleFile")
     public String[] handleFile(@RequestParam("file") MultipartFile file) {
-        String path = "C:/Users/Surface/SavedFile/";
+        String path = "/home/tseg/TestFile/";
         String fileName = file.getOriginalFilename();
         File saveFile = new File(path+fileName);
 
