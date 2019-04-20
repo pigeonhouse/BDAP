@@ -182,14 +182,14 @@ class FeatureRegion extends Component {
                   {getFieldDecorator(`value[${index}]`, item[0]?{
                     rules:[{
                       required:false,
-                      pattern: new RegExp(/^[1-9]\d*$/, "g"),
+                      pattern: new RegExp(/^[0-9]+.?[0-9]*/, "g"),
                       message: '请输入数字'
                     }],
                     initialValue: item[0]
                   }:{
                     rules:[{
                       required:false,
-                      pattern: new RegExp(/^[1-9]\d*$/, "g"),
+                      pattern: new RegExp(/^[0-9]+.?[0-9]*/, "g"),
                       message: '请输入数字'
                     }],
                   })(
@@ -210,14 +210,14 @@ class FeatureRegion extends Component {
                   {getFieldDecorator(`min[${index}]`, item[1]?{
                     rules:[{
                       required:false,
-                      pattern: new RegExp(/^[1-9]\d*$/, "g"),
+                      pattern: new RegExp(/^[0-9]+.?[0-9]*/, "g"),
                       message: '请输入数字'
                     }],
                     initialValue: item[1]
                   }:{
                     rules:[{
                       required:false,
-                      pattern: new RegExp(/^[1-9]\d*$/, "g"),
+                      pattern: new RegExp(/^[0-9]+.?[0-9]*/, "g"),
                       message: '请输入数字'
                     }],
                   })(

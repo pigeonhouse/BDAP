@@ -1,7 +1,7 @@
 import React from 'react';
 import { ItemPanel, Item } from '@src';
 import styles from './index.less';
-import { Menu, Icon ,Tooltip} from 'antd';
+import { Menu, Icon } from 'antd';
 const SubMenu = Menu.SubMenu;
 const MenuItemGroup = Menu.ItemGroup;
 import GGEditor,{ Flow, RegisterNode } from '@src';
@@ -181,7 +181,8 @@ class FlowItemPanel extends React.Component {
               />
             </GGEditor>
           <SubMenu key="sub1" title={<span><Icon type="mail" /><span>数据源</span></span>}>
-              <Menu.Item key="1" ><Tooltip title="左键单击拖拽至右面" ><div> <ItemPanel><Item
+              <Menu.Item key="1" >
+                <ItemPanel><Item
                 type="node"
                 size="200*40"
                 shape='zero-one'
@@ -199,10 +200,9 @@ class FlowItemPanel extends React.Component {
                     state_icon_url: 'https://gw.alipayobjects.com/zos/rmsportal/uZVdwjJGqDooqKLKtvGA.svg',
                   }
                 }}         
-              /></ItemPanel></div></Tooltip></Menu.Item>
+              /></ItemPanel></Menu.Item>
               <Menu.Item key="2" > 
-              <Tooltip title="左键单击拖拽至右面"  >
-              <div><ItemPanel><Item
+              <ItemPanel><Item
                 type="node"
                 size="200*40"
                 shape='zero-one'
@@ -220,10 +220,9 @@ class FlowItemPanel extends React.Component {
                     state_icon_url: 'https://gw.alipayobjects.com/zos/rmsportal/uZVdwjJGqDooqKLKtvGA.svg',
                   }
                 }}         
-              /></ItemPanel></div></Tooltip></Menu.Item>
+              /></ItemPanel></Menu.Item>
               <Menu.Item key="3" > 
-              <Tooltip title="左键单击拖拽至右面" >
-              <div><ItemPanel><Item
+              <ItemPanel><Item
                 type="node"
                 size="200*40"
                 shape='zero-one'
@@ -241,23 +240,12 @@ class FlowItemPanel extends React.Component {
                     state_icon_url: 'https://gw.alipayobjects.com/zos/rmsportal/uZVdwjJGqDooqKLKtvGA.svg',
                   }
                 }}         
-              /></ItemPanel></div></Tooltip></Menu.Item>
-              {/* <Menu.Item key="2"><ItemPanel><Item
-                type="node"
-                size="200*40"
-                shape="one-zero"
-                model={{
-                  // color: '#FA8C16',
-                  label: 'Output',
-                  attr:{'targetFile':'new_people'}
-                  anchor: [1, 0]
-                }}           
-              /></ItemPanel></Menu.Item>        */}
+              /></ItemPanel></Menu.Item>
           </SubMenu>
             
           <SubMenu key="sub2" title={<span><Icon type="mail" /><span>数据预处理</span></span>}>
-          <Menu.Item key="7"><Tooltip title="左键单击拖拽至右面" >
-              <div><ItemPanel><Item
+          <Menu.Item key="7">
+              <ItemPanel><Item
                 type="node"
                 size="200*40"
                 shape="one-one"
@@ -275,10 +263,10 @@ class FlowItemPanel extends React.Component {
                     state_icon_url: 'https://gw.alipayobjects.com/zos/rmsportal/uZVdwjJGqDooqKLKtvGA.svg',
                   }
                 }}      
-          /></ItemPanel></div></Tooltip></Menu.Item>
+          /></ItemPanel></Menu.Item>
 
-          <Menu.Item key="8"><Tooltip title="左键单击拖拽至右面" >
-              <div><ItemPanel><Item
+          <Menu.Item key="8">
+            <ItemPanel><Item
                 type="node"
                 size="200*40"
                 shape="one-one"
@@ -296,10 +284,10 @@ class FlowItemPanel extends React.Component {
                     state_icon_url: 'https://gw.alipayobjects.com/zos/rmsportal/uZVdwjJGqDooqKLKtvGA.svg',
                   }
                 }}
-              /></ItemPanel></div></Tooltip></Menu.Item>
+              /></ItemPanel></Menu.Item>
 
-              <Menu.Item key="9"><Tooltip title="左键单击拖拽至右面">
-              <div><ItemPanel><Item
+              <Menu.Item key="9">
+                <ItemPanel><Item
                 type="node"
                 size="200*40"
                 shape="one-one"
@@ -316,10 +304,10 @@ class FlowItemPanel extends React.Component {
                     state_icon_url: 'https://gw.alipayobjects.com/zos/rmsportal/uZVdwjJGqDooqKLKtvGA.svg',
                   }
                 }}
-              /></ItemPanel></div></Tooltip></Menu.Item>
+              /></ItemPanel></Menu.Item>
 
-              <Menu.Item key="10"><Tooltip title="左键单击拖拽至右面" >
-              <div><ItemPanel><Item
+              <Menu.Item key="10">
+                <ItemPanel><Item
                 type="node"
                 size="200*40"
                 shape="one-one"
@@ -336,10 +324,10 @@ class FlowItemPanel extends React.Component {
                     state_icon_url: 'https://gw.alipayobjects.com/zos/rmsportal/uZVdwjJGqDooqKLKtvGA.svg',
                   }
                 }}    
-              /></ItemPanel></div></Tooltip></Menu.Item>
+              /></ItemPanel></Menu.Item>
 
-              <Menu.Item key="11"><Tooltip title="左键单击拖拽至右面" >
-              <div><ItemPanel><Item
+              <Menu.Item key="11">
+                <ItemPanel><Item
                 type="node"
                 size="200*40"
                 shape="one-one"
@@ -356,9 +344,9 @@ class FlowItemPanel extends React.Component {
                     state_icon_url: 'https://gw.alipayobjects.com/zos/rmsportal/uZVdwjJGqDooqKLKtvGA.svg',
                   }
                 }}           
-              /></ItemPanel></div></Tooltip></Menu.Item>
-              <Menu.Item key="12"><Tooltip title="左键单击拖拽至右面" >
-              <div><ItemPanel><Item
+              /></ItemPanel></Menu.Item>
+              <Menu.Item key="12">
+                <ItemPanel><Item
                 type="node"
                 size="200*40"
                 shape="one-two"
@@ -375,10 +363,9 @@ class FlowItemPanel extends React.Component {
                     state_icon_url: 'https://gw.alipayobjects.com/zos/rmsportal/uZVdwjJGqDooqKLKtvGA.svg',
                   }
                 }}           
-              /></ItemPanel></div></Tooltip></Menu.Item>
+              /></ItemPanel></Menu.Item>
 
-              <Menu.Item key="21"><Tooltip title="左键单击拖拽至右面"  >
-              <div><ItemPanel><Item
+              <Menu.Item key="21"><ItemPanel><Item
                 type="node"
                 size="200*40"
                 shape="one-one"
@@ -396,14 +383,13 @@ class FlowItemPanel extends React.Component {
                     state_icon_url: 'https://gw.alipayobjects.com/zos/rmsportal/uZVdwjJGqDooqKLKtvGA.svg',
                   }
                 }}           
-              /></ItemPanel></div></Tooltip></Menu.Item>
+              /></ItemPanel></Menu.Item>
           </SubMenu>
 
           <SubMenu key="sub3" title={<span><Icon type="appstore" /><span>机器学习</span></span>}>
             <SubMenu key="g3" title="回归">
             
-              <Menu.Item key="13"><Tooltip title="左键单击拖拽至右面"  >
-              <div><ItemPanel><Item
+              <Menu.Item key="13"><ItemPanel><Item
                   type="node"
                   size="200*40"
                   shape='two-one'
@@ -422,9 +408,8 @@ class FlowItemPanel extends React.Component {
                     }
                   }}
                   
-                /></ItemPanel></div></Tooltip></Menu.Item>
-              <Menu.Item key="14"><Tooltip title="左键单击拖拽至右面"  >
-              <div><ItemPanel><Item
+                /></ItemPanel></Menu.Item>
+              <Menu.Item key="14"><ItemPanel><Item
                   type="node"
                   size="200*40"
                   shape='two-one'
@@ -441,10 +426,9 @@ class FlowItemPanel extends React.Component {
                       state_icon_url: 'https://gw.alipayobjects.com/zos/rmsportal/uZVdwjJGqDooqKLKtvGA.svg',
                     }
                   }}            
-                /></ItemPanel></div></Tooltip></Menu.Item>
+                /></ItemPanel></Menu.Item>
 
-                <Menu.Item key="15"><Tooltip title="左键单击拖拽至右面"  >
-              <div><ItemPanel><Item
+                <Menu.Item key="15"><ItemPanel><Item
                   type="node"
                   size="200*40"
                   shape='two-one'
@@ -461,10 +445,9 @@ class FlowItemPanel extends React.Component {
                       state_icon_url: 'https://gw.alipayobjects.com/zos/rmsportal/uZVdwjJGqDooqKLKtvGA.svg',
                     }
                   }}           
-                /></ItemPanel></div></Tooltip></Menu.Item>
+                /></ItemPanel></Menu.Item>
 
-                <Menu.Item key="16"><Tooltip title="左键单击拖拽至右面"  >
-              <div><ItemPanel><Item
+                <Menu.Item key="16"><ItemPanel><Item
                   type="node"
                   size="200*40"
                   shape='two-one'
@@ -481,9 +464,8 @@ class FlowItemPanel extends React.Component {
                       state_icon_url: 'https://gw.alipayobjects.com/zos/rmsportal/uZVdwjJGqDooqKLKtvGA.svg',
                     }
                   }}              
-                /></ItemPanel></div></Tooltip></Menu.Item>
-                <Menu.Item key="17"><Tooltip title="左键单击拖拽至右面"  >
-              <div><ItemPanel><Item
+                /></ItemPanel></Menu.Item>
+                <Menu.Item key="17"><ItemPanel><Item
                   type="node"
                   size="200*40"
                   shape='two-one'
@@ -505,12 +487,11 @@ class FlowItemPanel extends React.Component {
                       state_icon_url: 'https://gw.alipayobjects.com/zos/rmsportal/uZVdwjJGqDooqKLKtvGA.svg',
                     }
                   }}           
-                /></ItemPanel></div></Tooltip></Menu.Item>         
+                /></ItemPanel></Menu.Item>         
             </SubMenu>
 
             <SubMenu key="g4" title="分类">
-              <Menu.Item key="18"><Tooltip title="左键单击拖拽至右面"  >
-              <div><ItemPanel><Item
+              <Menu.Item key="18"><ItemPanel><Item
                 type="node"
                 size="200*40"
                 shape='two-one'
@@ -527,10 +508,9 @@ class FlowItemPanel extends React.Component {
                     state_icon_url: 'https://gw.alipayobjects.com/zos/rmsportal/uZVdwjJGqDooqKLKtvGA.svg',
                   }
                 }}   
-              /></ItemPanel></div></Tooltip></Menu.Item>
+              /></ItemPanel></Menu.Item>
 
-              <Menu.Item key="19"><Tooltip title="左键单击拖拽至右面"  >
-              <div><ItemPanel><Item
+              <Menu.Item key="19"><ItemPanel><Item
                 type="node"
                 size="200*40"
                 shape='two-one'
@@ -554,12 +534,11 @@ class FlowItemPanel extends React.Component {
                     state_icon_url: 'https://gw.alipayobjects.com/zos/rmsportal/uZVdwjJGqDooqKLKtvGA.svg',
                   }
                 }}    
-              /></ItemPanel></div></Tooltip></Menu.Item>
+              /></ItemPanel></Menu.Item>
             </SubMenu>
           </SubMenu>
           <SubMenu key="sub4" title={<span><Icon type="setting" /><span>深度学习</span></span>}>
-          <Menu.Item key="20"><Tooltip title="左键单击拖拽至右面"  >
-              <div><ItemPanel><Item
+          <Menu.Item key="20"><ItemPanel><Item
                 type="node"
                 size="200*40"
                 shape='one-one'
@@ -576,7 +555,7 @@ class FlowItemPanel extends React.Component {
                     state_icon_url: 'https://gw.alipayobjects.com/zos/rmsportal/uZVdwjJGqDooqKLKtvGA.svg',
                   }
                 }}
-              /></ItemPanel></div></Tooltip></Menu.Item>
+              /></ItemPanel></Menu.Item>
           </SubMenu>
         </Menu>
       </div>
