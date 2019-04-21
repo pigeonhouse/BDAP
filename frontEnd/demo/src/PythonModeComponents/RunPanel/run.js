@@ -45,11 +45,9 @@ class Run extends Component{
     .then(res=>{
       if(res.status === 200)
         res.json().then(res=>{
-          console.log('final')
-          console.log(res)
-          // const currentStatus = this.state.currentStatus;
-          // currentStatus[4].value = res;
-          // this.setState({currentStatus});
+          const currentStatus = this.state.currentStatus;
+          currentStatus[4].value = res;
+          this.setState({currentStatus});
         })
     })
     document.getElementById('accuracyChart').removeAttribute("_echarts_instance_")
@@ -61,6 +59,10 @@ class Run extends Component{
     accuracyChart.setOption({
       title: {
         text: '准确率'
+      },
+      grid: {
+        left: '0.1%',
+        containLabel: true
       },
       tooltip: {
           trigger: 'axis',
@@ -100,6 +102,10 @@ class Run extends Component{
           axisPointer: {
               animation: false
           }
+      },
+      grid: {
+        left: '0.1%',
+        containLabel: true
       },
       xAxis: {
           type: 'category',
@@ -143,12 +149,18 @@ class Run extends Component{
           showSymbol: false,
           hoverAnimation: false,
           data: []
-      }]
+      }],
+      grid: {
+        left: '0.1%',
+        containLabel: true
+      },
     })
-    this.showLineChart([], [], [],
-      accuracyChart, lessChart, learningRateChart);
+    accuracyChart.showLoading();
+    lessChart.showLoading();
+    learningRateChart.showLoading();
+    this.showLineChartFirst([], [], [], accuracyChart, lessChart, learningRateChart);
   }
-  showLineChart=(dataa, datal, datar, accuracyChart, lessChart, learningRateChart)=>{
+  showLineChartFirst=(dataa, datal, datar, accuracyChart, lessChart, learningRateChart)=>{
     setTimeout(()=>{
       fetch("http://10.105.222.92:5000/trainingAccuracy")
       .then(res => {
@@ -157,17 +169,20 @@ class Run extends Component{
             if(Number(res.round) === 0 && Number(res.accuracy) === 0 &&
               Number(res.learning_rate) === 0 && Number(res.loss) === 0 ){
               if(dataa.length === 0)
-              this.showLineChart(dataa, datal, datar, accuracyChart, lessChart, learningRateChart);
+              this.showLineChartFirst(dataa, datal, datar, accuracyChart, lessChart, learningRateChart);
             }
             else {
+              accuracyChart.hideLoading();
+              lessChart.hideLoading();
+              learningRateChart.hideLoading();
               dataa.push({value:[res.round, res.accuracy]});
               datar.push({value:[res.round, res.learning_rate]});
               datal.push({value:[res.round, res.loss]});
               var currentStatus = this.state.currentStatus;
-              currentStatus[0].value = res.round;
-              currentStatus[1].value = res.accuracy;
-              currentStatus[2].value = res.loss;
-              currentStatus[3].value = res.learning_rate;
+              currentStatus[0].value = Number(res.round);
+              currentStatus[1].value = Number(res.accuracy);
+              currentStatus[2].value = Number(res.loss);
+              currentStatus[3].value = Number(res.learning_rate);
               this.setState({currentStatus});
               accuracyChart.setOption({
                 series: [{
@@ -189,8 +204,48 @@ class Run extends Component{
           })
         }
       })
-    }, 500);
+    }, 200);
   }
+  showLineChart=(dataa, datal, datar, accuracyChart, lessChart, learningRateChart)=>{
+    setTimeout(()=>{
+      fetch("http://10.105.222.92:5000/trainingAccuracy")
+      .then(res => {
+        if(res.status === 200){
+          res.json().then(res=>{
+            if(Number(res.round) !== 0 || Number(res.accuracy) !== 0 ||
+              Number(res.learning_rate) !== 0 || Number(res.loss) !== 0 ){
+                dataa.push({value:[res.round, res.accuracy]});
+                datar.push({value:[res.round, res.learning_rate]});
+                datal.push({value:[res.round, res.loss]});
+                var currentStatus = this.state.currentStatus;
+                currentStatus[0].value = Number(res.round);
+                currentStatus[1].value = Number(res.accuracy);
+                currentStatus[2].value = Number(res.loss);
+                currentStatus[3].value = Number(res.learning_rate);
+                this.setState({currentStatus});
+                accuracyChart.setOption({
+                  series: [{
+                    data: dataa
+                  }]
+                })
+                lessChart.setOption({
+                  series: [{
+                    data: datal
+                  }]
+                })
+                learningRateChart.setOption({
+                  series: [{
+                    data: datar
+                  }]
+                })
+                this.showLineChart(dataa, datal, datar, accuracyChart, lessChart, learningRateChart);
+            }
+          })
+        }
+      })
+    }, 200);
+  }
+
   handleOk = () => {
     this.setState({
       visible: false,
@@ -370,9 +425,6 @@ class Run extends Component{
                 break
             case '特征二进制化':
                 outcome = Onehot(all_data)
-                break
-            case '数据类型转化':
-                
                 break
             case '缺失值填充':
                 outcome = fillNa(all_data);

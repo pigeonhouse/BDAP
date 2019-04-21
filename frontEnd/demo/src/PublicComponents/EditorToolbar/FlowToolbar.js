@@ -37,20 +37,43 @@ class FlowToolbar extends React.Component {
     read(inf);
   }
   handleClick = () =>{
-    const { propsAPI } = this.props;
-    inf = JSON.parse(JSON.stringify(propsAPI.save()));
-    const action = {
-      type:MODEL,
-      value:inf,
-      did:false,
-      name:this.state.inp1,
-      info:this.state.inp2,
+    if(this.props.type === 'local'){
+      const { propsAPI } = this.props;
+      inf = JSON.parse(JSON.stringify(propsAPI.save()));
+      const action = {
+        type:MODEL,
+        value:inf,
+        did:false,
+        name:this.state.inp1,
+        info:this.state.inp2,
+      }
+      store.dispatch(action)
+      this.setState({
+        visible: false,
+      });
+      message.success("成功的存储了一个模型!");
     }
-    store.dispatch(action)
-    this.setState({
-      visible: false,
-    });
-    message.success("成功的存储了一个模型!")
+    else if(this.props.type === 'python'){
+      const init={
+        method: 'POST', 
+        body:"fileName=",
+        mode: 'cors',
+        headers: {
+          "Content-Type": "application/x-www-form-urlencoded;charset=utf-8"
+      　},
+      }
+      fetch(
+        '', init
+      )
+      .then((response) => {
+        return response.json()
+      })
+      .then(a=>{message.success("成功的存储了一个模型!");})
+      .catch(e => console.log('错误:', e))
+    }
+    else if(this.props.type === 'cluster'){
+
+    }
   }
   handleInput1(e){
     this.setState({inp1:e.target.value});
@@ -59,13 +82,10 @@ class FlowToolbar extends React.Component {
     this.setState({inp2:e.target.value});
   }
   componentWillMount(){
-    // console.log("xxxxxxxxxxxxxxxx")
-    // const sta = store.getState();
-    // const count = sta.count;
     this.setState({
       inp1:"模型",
       inp2:"这是我的模型"
-    })
+    });
   }
   render() { 
     
@@ -147,9 +167,9 @@ class FlowToolbar extends React.Component {
             <i className={`${iconfont.iconfont} ${iconfont.iconUngroup}`} />
           </Tooltip>
         </Command>
-      <Button onClick={()=>this.ShowModal()} >
-        <Icon type="lock"/>存储模型
-      </Button>
+        <Button onClick={()=>this.ShowModal()} >
+          <Icon type="lock"/>存储模型
+        </Button>
       </Toolbar>
       
       </div>
@@ -164,19 +184,19 @@ class FlowToolbar extends React.Component {
         >
         <span>自定义模型名:</span>
         <br/>
-        <Input placeholder="我的模型" 
-        style={{width:"300px", margin:"10px"}}
-        defaultValue={this.state.inp1}
-        onChange = {(e) => this.handleInput1(e)}
-        />
+          <Input placeholder="我的模型" 
+            style={{width:"300px", margin:"10px"}}
+            defaultValue={this.state.inp1}
+            onChange = {(e) => this.handleInput1(e)}
+          />
         <br/>
         <span>自定义描述:</span>
         <br/>
-        <Input placeholder="描述" 
-        style={{width:"300px", margin:"10px"}}
-        defaultValue={this.state.inp2}
-        onChange = {(e)=>this.handleInput1(e)}
-        />
+          <Input placeholder="描述" 
+            style={{width:"300px", margin:"10px"}}
+            defaultValue={this.state.inp2}
+            onChange = {(e)=>this.handleInput1(e)}
+          />
         <br/>
         <Button type="primary" onClick={()=>this.handleClick()} style={{width:"250px",marginLeft:"20px"}}>
         提交</Button>

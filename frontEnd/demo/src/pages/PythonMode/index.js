@@ -9,7 +9,7 @@ import styles from './index.less';
 import Run from "../../PythonModeComponents/RunPanel/run"
 import { FlowItemPanel } from '../../PythonModeComponents/EditorItemPanel';
 import { FlowDataPanel } from '../../PythonModeComponents/EditorDataPanel';
-import { data } from '../../ExampleData/FlowData'
+import Model from '../../PythonModeComponents/ModelStore/Model'
 const TabPane = Tabs.TabPane;
 class LocalMode extends React.Component {
   Intro = (key) => {
@@ -235,9 +235,7 @@ class LocalMode extends React.Component {
           </Col>
           <Col span={9}></Col>
           <Col span={2}>
-              <Button style={{border:0,backgroundColor:'#343941',color:"#ddd",fontSize:25}} >
-                <Icon type="search" style={{fontSize:25}}/>模型
-              </Button>
+              <Model></Model>
           </Col>
         </Row>
         

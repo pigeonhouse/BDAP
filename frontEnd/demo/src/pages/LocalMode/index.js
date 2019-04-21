@@ -7,7 +7,7 @@ import { FlowItemPanel } from '../../LocalModeComponents/EditorItemPanel';
 import { FlowDetailPanel } from '../../PublicComponents/EditorDetailPanel';
 import styles from './index.less';
 import Run from "../../LocalModeComponents/RunPanel/run"
-import Model from "../../PublicComponents/Model"
+import Model from "../../LocalModeComponents/ModelStore/Model"
 import { FlowDataPanel } from '../../LocalModeComponents/EditorDataPanel';
 const TabPane = Tabs.TabPane;
 class LocalMode extends React.Component {
@@ -200,7 +200,7 @@ class LocalMode extends React.Component {
            
           <Col span={15} className={styles.editorContent} style={{height:'calc(100vh - 105px)'}}>
             <div className={styles.editorHd} data-step="2" data-intro='在工具栏可以进行撤销，复制，删除，成组等操作。' > 
-              <FlowToolbar/>
+              <FlowToolbar type='local'/>
             </div>
             <Flow style={{height:'calc(100vh - 142px)'}}
              />
@@ -231,7 +231,7 @@ class LocalMode extends React.Component {
           </Col>
           <Col span={9}></Col>
           <Col span={2}>
-              <Model></Model>
+              <Model type = 'local'></Model>
               {/* <Button style={{border:0,backgroundColor:'#343941',color:"#ddd",fontSize:25}} >
                 <Icon type="search" style={{fontSize:25}}/>模型
               </Button> */}

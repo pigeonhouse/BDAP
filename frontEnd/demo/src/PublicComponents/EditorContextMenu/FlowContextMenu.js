@@ -1,5 +1,5 @@
 import React from 'react'
-import { Modal, Table , Icon,Collapse,Row,Col,Button,Cascader,Radio, Form, Input} from 'antd';
+import { Modal, Table , Icon,Collapse,Row,Col,Button,Cascader,Radio, Form, Input, message} from 'antd';
 import {
   Command,
   NodeMenu,
@@ -63,13 +63,16 @@ class FlowContextMenu extends React.Component {
     ];
     chartData[0].all_attr[`${data.label}`] = ['normal', groupDivide];
     chartData = SeprtbyFeat(chartData)['Dataset'][0].group;
-    if(showType === 'bar'){
+    if(chartData.length > 30){
+      message.warn("数据分组过多，无法显示！")
+      return ;
+    }
+    else if(showType === 'bar'){
       var xAxisGroup = new Array();
       var seriesGroup = [{
         type: 'bar',
         data: new Array()
       }];
-      console.log(chartData)
       if(data.stat.type === 'string'){
         for(let i in chartData){
           xAxisGroup.push(chartData[i][0]);
@@ -77,17 +80,13 @@ class FlowContextMenu extends React.Component {
         }
       }
       else for(let i in chartData){
-        xAxisGroup.push(`${parseInt(chartData[i][0])}`+'-'+`${parseInt(chartData[i][1])}`);
+        xAxisGroup.push(`${chartData[i][0].toPrecision(4)}`+'-'+`${chartData[i][1].toPrecision(4)}`);
         seriesGroup[0].data.push(chartData[i][2]);
       }
       myChart.setOption({
         xAxis: {
-            data: xAxisGroup,
-            name: data.label,
-            axisLabel: {  
-              interval:0,  
-              rotate:40  
-            }
+          data: xAxisGroup,
+          name: data.label,
         },
         yAxis: {
           name: '频数'
@@ -97,7 +96,17 @@ class FlowContextMenu extends React.Component {
           containLabel: true
         },
         series: seriesGroup
-    });
+      });
+      if(chartData.length > 5){
+        myChart.setOption({
+          xAxis: {
+            axisLabel: {  
+              interval:0,  
+              rotate:40  
+            }
+          }
+        });
+      }
     }
     else if(showType === 'pie'){
       document.getElementById('main').removeAttribute("_echarts_instance_")
@@ -107,12 +116,21 @@ class FlowContextMenu extends React.Component {
         type: 'pie',
         data: new Array()
       }];
-      for(let i in chartData){
+      if(data.stat.type === 'string'){
+        for(let i in chartData){
+          seriesGroup[0].data.push({
+            value:chartData[i][2],
+            name:chartData[i][0]
+          });
+        }
+      }
+      else for(let i in chartData){
         seriesGroup[0].data.push({
           value:chartData[i][2],
-          name:chartData[i][0]
+          name:chartData[i][0].toPrecision(4)
         });
       }
+
       myChart.setOption({
           series: seriesGroup
       });
@@ -158,9 +176,9 @@ class FlowContextMenu extends React.Component {
             data: Data.boxData,
           },
           {
-              name: 'outlier',
-              type: 'scatter',
-              data: Data.outliers
+            name: 'outlier',
+            type: 'scatter',
+            data: Data.outliers
           }
         ]
       })

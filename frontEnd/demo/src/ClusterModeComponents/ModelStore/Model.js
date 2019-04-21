@@ -1,9 +1,8 @@
 import React, { Component } from 'react'
-import { Button,Modal,Icon,message,Avatar, Table, Input, Popconfirm, Form, Divider} from 'antd'
+import { Button,Modal,Icon,message, Table, Input, Popconfirm, Form, Divider} from 'antd'
 import { withPropsAPI } from '@src';
-import store from "../store"
-import { MODEL } from "../store/storeType"
-import { data } from "../ExampleData/FlowData"
+import store from "../../store"
+import { data } from "../../ExampleData/FlowData"
 const dat = data;
 const nwData = {
   key: 0,
@@ -139,8 +138,8 @@ class Model extends Component{
     }
 
     state = {
-        visible:false,
-        editing: false,
+      visible:false,
+      editing: false,
     }
     handleStoreChange = () => {
       const sta = store.getState();
@@ -171,32 +170,32 @@ class Model extends Component{
       });
     }
     DisModal = () => {
-        this.setState({
-          visible: false,
-        });
+      this.setState({
+        visible: false,
+      });
     }
     handleDelete = (key) => {
-        const dataSource = [...this.state.dataSource];
-        this.setState({ 
-          dataSource: dataSource.filter(item => item.key !== key),
-        });
-        message.success("此模型被删除成功!")
+      const dataSource = [...this.state.dataSource];
+      this.setState({ 
+        dataSource: dataSource.filter(item => item.key !== key),
+      });
+      message.success("此模型被删除成功!")
     }
     handleShow = (key) => {
-        const dataSource = [...this.state.dataSource];
-        const { propsAPI } = this.props;
-        if(dataSource.length > 0){
-            for(let i = 0; i < dataSource.length; i ++){
-              if(dataSource[i].key === key){
-                let inf = JSON.parse(JSON.stringify(dataSource[i].Model));
-                propsAPI.read(inf);
-              }
-            }
+      const dataSource = [...this.state.dataSource];
+      const { propsAPI } = this.props;
+      if(dataSource.length > 0){
+        for(let i = 0; i < dataSource.length; i ++){
+          if(dataSource[i].key === key){
+            let inf = JSON.parse(JSON.stringify(dataSource[i].Model));
+            propsAPI.read(inf);
+          }
         }
-        this.setState({
-          visible:false
-        });
-        message.success("这个模型被成功调出!")
+      }
+      this.setState({
+        visible:false
+      });
+      message.success("这个模型被成功调出!")
     }
     handleAdd = () => {
         const { propsAPI } = this.props;
@@ -236,52 +235,52 @@ class Model extends Component{
     render(){
         const { dataSource } = this.state;
         const components = {
-        body: {
+          body: {
             row: EditableFormRow,
             cell: EditableCell,
-        },
+          },
         };
         const columns = this.columns.map((col) => {
-            if (!col.editable) {
-                return col;
-            }
-            return {
-                ...col,
-                onCell: record => ({
-                record,
-                editable: col.editable,
-                dataIndex: col.dataIndex,
-                title: col.title,
-                handleSave: this.handleSave,
-                }),
-            };
+          if (!col.editable) {
+            return col;
+          }
+          return {
+            ...col,
+            onCell: record => ({
+              record,
+              editable: col.editable,
+              dataIndex: col.dataIndex,
+              title: col.title,
+              handleSave: this.handleSave,
+            }),
+          };
         });
         return(
         <div>
             <div>  
-            <Button onClick={()=>this.ShowModal()} style={{border:0,backgroundColor:'#343941',color:"#ddd",fontSize:25}}>
-                    <Icon type="search" style={{fontSize:25}}/>模型
-            </Button>
+              <Button onClick={()=>this.ShowModal()} style={{border:0,backgroundColor:'#343941',color:"#ddd",fontSize:25}}>
+                <Icon type="search" style={{fontSize:25}}/>模型
+              </Button>
             </div>
             <div>
                 <Modal
-                title="模型仓库"
-                visible={this.state.visible}
-                onOk={this.DisModal}
-                onCancel={this.DisModal}
-                bodyStyle={{height: '720px'}}
-                width={1100}
+                  title="模型仓库"
+                  visible={this.state.visible}
+                  onOk={this.DisModal}
+                  onCancel={this.DisModal}
+                  bodyStyle={{height: '720px'}}
+                  width={1100}
                 >
-                <Button onClick={this.handleAdd} type="primary" style={{ marginBottom: 16 }}>
-                添加当前模型
-                </Button>
-                <Table
-                components={components}
-                rowClassName={() => 'editable-row'}
-                bordered
-                dataSource={dataSource}
-                columns={columns}
-                />
+                  {/* <Button onClick={this.handleAdd} type="primary" style={{ marginBottom: 16 }}>
+                    添加当前模型
+                  </Button> */}
+                  <Table
+                    components={components}
+                    rowClassName={() => 'editable-row'}
+                    bordered
+                    dataSource={dataSource}
+                    columns={columns}
+                  />
                 </Modal>
             </div>
         </div>
