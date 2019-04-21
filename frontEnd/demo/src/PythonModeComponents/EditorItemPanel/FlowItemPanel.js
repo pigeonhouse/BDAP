@@ -190,6 +190,7 @@ class FlowItemPanel extends React.Component {
                   label: '本地数据',
                   elabel:'localFile',
                   attr:{},
+                  attrDetail:[],
                   Dataset: [],
                   labelArray: {}, 
                   length: 0,
@@ -210,6 +211,7 @@ class FlowItemPanel extends React.Component {
                   label: 'Titanic测试',
                   elabel:'TitanicTestFile',
                   attr:{},
+                  attrDetail:[],
                   Dataset: [],
                   labelArray: {}, 
                   length: 0,
@@ -230,6 +232,7 @@ class FlowItemPanel extends React.Component {
                   label: 'Titanic训练',
                   elabel:'TitanicTrainFile',
                   attr:{},
+                  attrDetail:[],
                   Dataset: [],
                   labelArray: {}, 
                   length: 0,
@@ -254,6 +257,7 @@ class FlowItemPanel extends React.Component {
                   elabel:'Fillna',
                   anchor: [1, 1],
                   attr:{type:'average'},
+                  attrDetail:[],
                   Dataset: [],
                   labelArray: {}, 
                   length: 0,
@@ -274,6 +278,7 @@ class FlowItemPanel extends React.Component {
                   label: '归一化',
                   elabel:'MinMaxScaler',
                   attr:{},
+                  attrDetail:[],
                   Dataset: [],
                   labelArray: {}, 
                   length: 0,
@@ -294,6 +299,7 @@ class FlowItemPanel extends React.Component {
                 model={{
                   label: '特征区间化',
                   attr:{},
+                  attrDetail:[],
                   Dataset: [],
                   labelArray: {}, 
                   length: 0,
@@ -314,6 +320,7 @@ class FlowItemPanel extends React.Component {
                 model={{
                   label: '特征分组归类',
                   attr:{},
+                  attrDetail:[],
                   Dataset: [],
                   labelArray: {}, 
                   length: 0,
@@ -334,6 +341,7 @@ class FlowItemPanel extends React.Component {
                 model={{
                   label: '特征二进制化',
                   attr:{},
+                  attrDetail:[],
                   Dataset: [],
                   labelArray: {}, 
                   length: 0,
@@ -353,6 +361,7 @@ class FlowItemPanel extends React.Component {
                 model={{
                   label: '数据随机划分',
                   attr:{public:0.7},
+                  attrDetail:[],
                   Dataset: [],
                   labelArray: {}, 
                   length: 0,
@@ -373,6 +382,7 @@ class FlowItemPanel extends React.Component {
                   label: '数据类型转换',
                   elabel:'TransformType',
                   attr:{},
+                  attrDetail:[],
                   Dataset: [],
                   labelArray: {}, 
                   length: 0,
@@ -397,6 +407,7 @@ class FlowItemPanel extends React.Component {
                     label: '单变量线性回归',
                     anchor: [2, 1],
                     attr:{},
+                    attrDetail:[],
                     Dataset: [],
                     labelArray: {}, 
                     length: 0,
@@ -416,6 +427,7 @@ class FlowItemPanel extends React.Component {
                   model={{
                     label: '单变量多项式回归',
                     attr:{'sourceFile':'people', '多项式最高幂': 0},
+                    attrDetail:[],
                     anchor: [2, 1],
                     Dataset: [],
                     labelArray: {},
@@ -435,6 +447,7 @@ class FlowItemPanel extends React.Component {
                   model={{
                     label: '多变量线性回归',
                     attr:{'sourceFile':'people'},
+                    attrDetail:[],
                     group:"ml",
                     anchor: [2, 1],
                     Dataset: [],
@@ -454,6 +467,7 @@ class FlowItemPanel extends React.Component {
                   model={{
                     label: '决策树回归',
                     attr:{'sourceFile':'people'},
+                    attrDetail:[],
                     anchor: [2, 1],
                     Dataset: [],
                     labelArray: {}, 
@@ -476,7 +490,8 @@ class FlowItemPanel extends React.Component {
                           'maxFeatures': 2,
                           'replacement': false,
                           'nEstimators': 200
-                        },
+                    },
+                    attrDetail:[],
                     anchor: [2, 1],
                     Dataset: [],
                     labelArray: {}, 
@@ -498,6 +513,7 @@ class FlowItemPanel extends React.Component {
                 model={{
                   label: '朴素贝叶斯',
                   attr:{'sourceFile':'people'},
+                  attrDetail:[],
                   anchor: [2, 1],
                   Dataset: [],
                   labelArray: {}, 
@@ -523,7 +539,8 @@ class FlowItemPanel extends React.Component {
                         'maxIterations': 10000,
                         'kernel': 'rbf',
                         'kernelOptionsSigma': 0.5
-                      },
+                  },
+                  attrDetail:[],
                   anchor: [2, 1],
                   Dataset: [],
                   labelArray: {}, 
@@ -545,6 +562,7 @@ class FlowItemPanel extends React.Component {
                 model={{
                   label: '卷积神经网络',
                   attr:{'激活函数':'relu','卷积步长':2,'优化器':'rmsprop','batchSize':50,'遍历次数':1},
+                  attrDetail:[],
                   anchor: [1, 1],
                   Dataset: [],
                   labelArray: {}, 
