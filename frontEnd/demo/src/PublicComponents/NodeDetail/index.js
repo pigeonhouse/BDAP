@@ -1,5 +1,5 @@
 import React from 'react';
-import { Card, Form, Input } from 'antd';
+import { Card, Form, Input, Select } from 'antd';
 import { withPropsAPI } from '@src';
 import Selectword from '../DataOperate/selectword'
 import Uploadfile from '../DataOperate/upload'
@@ -12,7 +12,7 @@ import Papa from 'papaparse'
 import { Stat } from '../DataOperate/stat'
 
 const { Item } = Form;
-
+const Option = Select.Option;
 const inlineFormItemLayout = {
   labelCol: {
     sm: { span: 10 },
@@ -220,6 +220,39 @@ class NodeDetail extends React.Component {
             </Item>
     }
   }
+  handleSelectChange=(label, value)=>{
+    const { propsAPI } = this.props;
+    const { getSelected, executeCommand, update } = propsAPI;
+    const item = getSelected()[0];
+    const attr = JSON.parse(JSON.stringify(item.model.attr));
+    attr[label] = value;
+    executeCommand(() => {
+      update(item, {attr});
+    });
+  }
+  handleInputSubmit=(e)=>{
+    e.preventDefault();
+
+    const { form, propsAPI } = this.props;
+    const { getSelected, executeCommand, update } = propsAPI;
+    form.validateFieldsAndScroll((err, values) => {
+      if (err) {
+        return;
+      }
+      const item = getSelected()[0];
+      if (!item) {
+        return;
+      }
+      values = values.attr;
+      const attr = JSON.parse(JSON.stringify(item.model.attr));
+      for(var i in values) {
+        attr[i] = values[i];
+      }
+      executeCommand(() => {
+        update(item, {attr});
+      });
+    });
+  }
   render() {
     const { form, propsAPI } = this.props;
     const { getFieldDecorator } = form;
@@ -230,7 +263,7 @@ class NodeDetail extends React.Component {
     if (!item) {
       return null;
     }
-    const { label, attr, anchor, group, Dataset } = item.getModel();
+    const { label, attr, anchor, group, Dataset, attrDetail } = item.getModel();
 
     if(label === '数据随机划分'){
       var targetid = new Array();
@@ -289,6 +322,41 @@ class NodeDetail extends React.Component {
                       })(<Input style={{margin:0}} onBlur={this.handleSubmit}/>)
                     }
                   </Item>;
+          })}
+          {attrDetail.map((item)=>{
+            if(item.type === 'Select'){
+              return (
+                <Item style={{margin:0}} label={item.label} {...inlineFormItemLayout}>
+                  {
+                    getFieldDecorator(item.elabel, {
+                      initialValue: attr[item.elabel],
+                    })(
+                      <Select onChange={this.handleSelectChange.bind(this, item.elabel)}>
+                        {item.evalue.map((value, index)=>{
+                          return <Option value={value}>{item.value[index]}</Option>
+                        })}
+                      </Select>
+                    )
+                  }
+                </Item>
+              );
+            }
+            else if(item.type === 'Input'){
+              return (
+                <Item style={{margin:0}} label={item.label} {...inlineFormItemLayout}>
+                  {
+                    getFieldDecorator(`attr.${item.elabel}` , {
+                      rules:[{
+                        required:false,
+                        pattern: new RegExp(item.regexp, "g"),
+                        message: '请输入数字'
+                      }],
+                      initialValue: attr[item.elabel],
+                    })(<Input style={{margin:0}} onBlur={this.handleInputSubmit}/>)
+                  }
+                </Item>
+              );
+            }
           })}
           {targetid.map((value, index)=>{
             return <Selectword 
