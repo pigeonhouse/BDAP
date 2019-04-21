@@ -13,11 +13,11 @@ import { SVM } from '../Models/MachineLearning/Classification/SVM'
 import { fillNa } from '../../PublicComponents/DataOperate/DataProcess/fillNa'
 import { Onehot } from '../../PublicComponents/DataOperate/DataProcess/Onehot'
 import { Randis } from '../../PublicComponents/DataOperate/DataProcess/Randis'
-import { SelectCol } from '../../PublicComponents/DataOperate/DataProcess/SelectCol'
+// import { SelectCol } from '../../PublicComponents/DataOperate/DataProcess/SelectCol'
 import { SeprtbyFeat } from '../../PublicComponents/DataOperate/DataProcess/SeprtbyFeat'
 import { StrToNum } from '../../PublicComponents/DataOperate/DataProcess/StrToNum';
 import { Nomalize } from '../../PublicComponents/DataOperate/DataProcess/Nomalize';
-var echarts = require('echarts');
+// var echarts = require('echarts');
 var current = 0;
 var NeedDetection = 1;
 class Run extends Component{
@@ -28,73 +28,73 @@ class Run extends Component{
     this.setState({
       visible: true,
     });
-    const init={
-      method: 'POST', 
-      body:JSON.stringify(stream),
-      mode: 'cors',
-      headers: {'Content-Type': 'application/json'},
-    }
-    fetch("http://localhost:5000/run",init)
-    .then(res=>{
-      console.log('---')
-      console.log(res)
-    })
-    document.getElementById('dlChart').removeAttribute("_echarts_instance_")
-    var myChart = echarts.init(document.getElementById('dlChart'));
-    myChart.setOption({
-      title: {
-        text: '准确率'
-      },
-      tooltip: {
-          trigger: 'axis',
-          formatter: function (params) {
-              params = params[0];
-              return params.value[0]+'/'+params.value[1];
-          },
-          axisPointer: {
-              animation: false
-          }
-      },
-      xAxis: {
-          type: 'category',
-          boundaryGap: false,
-      },
-      yAxis: {
-          type: 'value',
-          boundaryGap: [0, '100%'],
-      },
-      series: [{
-          type: 'line',
-          showSymbol: false,
-          hoverAnimation: false,
-          data: []
-      }]
-    })
-    this.showLineChart([{
-      value: [
-        0, 0
-      ]
-    }], myChart);
+    // const init={
+    //   method: 'POST', 
+    //   body:JSON.stringify(stream),
+    //   mode: 'cors',
+    //   headers: {'Content-Type': 'application/json'},
+    // }
+    // fetch("http://localhost:5000/run",init)
+    // .then(res=>{
+    //   console.log('---')
+    //   console.log(res)
+    // })
+    // document.getElementById('dlChart').removeAttribute("_echarts_instance_")
+    // var myChart = echarts.init(document.getElementById('dlChart'));
+    // myChart.setOption({
+    //   title: {
+    //     text: '准确率'
+    //   },
+    //   tooltip: {
+    //       trigger: 'axis',
+    //       formatter: function (params) {
+    //           params = params[0];
+    //           return params.value[0]+'/'+params.value[1];
+    //       },
+    //       axisPointer: {
+    //           animation: false
+    //       }
+    //   },
+    //   xAxis: {
+    //       type: 'category',
+    //       boundaryGap: false,
+    //   },
+    //   yAxis: {
+    //       type: 'value',
+    //       boundaryGap: [0, '100%'],
+    //   },
+    //   series: [{
+    //       type: 'line',
+    //       showSymbol: false,
+    //       hoverAnimation: false,
+    //       data: []
+    //   }]
+    // })
+    // this.showLineChart([{
+    //   value: [
+    //     0, 0
+    //   ]
+    // }], myChart);
   }
-  showLineChart=(data, myChart)=>{
-    setTimeout(()=>{
-      // fetch("http://localhost:5000/trainingAccuracy")
-      // .then(res => {
-      //   if(res.status === 200){
-      //     res.json().then(res=>{
-      //       console.log(res)
-      //     })
-      //   }
-      // })
-      data.push({value:[data[data.length-1].value[0]+1, data[data.length-1].value[1]+1]})
-      myChart.setOption({
-        series: [{
-          data: data
-        }]
-      })
-      this.showLineChart(data, myChart)
-    }, 1000);
-  }
+  // showLineChart=(data, myChart)=>{
+  //   setTimeout(()=>{
+  //     // fetch("http://localhost:5000/trainingAccuracy")
+  //     // .then(res => {
+  //     //   if(res.status === 200){
+  //     //     res.json().then(res=>{
+  //     //       console.log(res)
+  //     //     })
+  //     //   }
+  //     // })
+  //     data.push({value:[data[data.length-1].value[0]+1, data[data.length-1].value[1]+1]})
+  //     myChart.setOption({
+  //       series: [{
+  //         data: data
+  //       }]
+  //     })
+  //     this.showLineChart(data, myChart)
+  //   }, 1000);
+  // }
   handleOk = () => {
     this.setState({
       visible: false,
@@ -270,19 +270,11 @@ class Run extends Component{
             case '特征二进制化':
                 outcome = Onehot(all_data)
                 break
-            case '数据类型转化':
-                
-                break
             case '缺失值填充':
                 outcome = fillNa(all_data);
                 break
             case '归一化':
                 outcome = Nomalize(all_data);
-                break
-            case '卷积神经网络':
-                this.showModal(stream);
-                // runMnist()
-                
                 break
             default:
               break;
@@ -508,11 +500,11 @@ class Run extends Component{
             <Icon type="play-circle" style={{fontSize:25}}/>运行
         </Button>
 
-        <Modal title="Deep Learning" visible={this.state.visible}
+        {/* <Modal title="Deep Learning" visible={this.state.visible}
             onOk={this.handleOk} onCancel={this.handleCancel} width={900}
           >
             <div id="dlChart" style={{ maxWidth: 350, height: 280 }}> </div>
-        </Modal>
+        </Modal> */}
       </div>
     );
   }

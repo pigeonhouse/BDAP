@@ -2,11 +2,11 @@ import MLR from 'ml-regression-multivariate-linear';
 import {selectData, transposition} from '../normalFunction'
 import { Stat } from '../../../../PublicComponents/DataOperate/stat'
 
-function normalize(pre, predictObj, PreArray){
+function normalize(pre, predictObj, PreArray, predict_y){
     const preObj = transposition(predictObj);
     let Dataset = pre;
     for(let i in PreArray){
-        Dataset.push({label:PreArray[i], value:preObj[i]})
+        Dataset.push({label:predict_y[0]+PreArray[i], value:preObj[i]})
     }
     return {Dataset:Stat(Dataset)};
 }
@@ -21,5 +21,5 @@ export function MutiVarLinearRegression(all_data){
 
     const mlr = new MLR(x, y);
     const predictObj = mlr.predict(predict);
-    return normalize(textData, predictObj, labelArray.predict_y);
+    return normalize(textData, predictObj, labelArray.train_y, labelArray.predict_y);
 }
