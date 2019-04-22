@@ -7,6 +7,7 @@ import com.bigdataplayground.demo.controller.Node;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -135,4 +136,13 @@ public class SparkExecutor {
         LivyContact.postCode(livyAddr,code);
     }
 
+    public void executeAll(List<Node> nodeList) throws IOException {
+        for(Node node : nodeList){
+            System.out.println(node.getLabel()+" is running");
+
+            executeNode(node);
+
+        }
+
+    }
 }

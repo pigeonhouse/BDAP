@@ -11,9 +11,10 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.io.Files;
 import org.springframework.boot.*;
 import org.springframework.boot.autoconfigure.*;
+import org.springframework.session.data.redis.config.annotation.web.http.EnableRedisHttpSession;
 import org.springframework.web.bind.annotation.*;
 
-import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import java.io.IOException;
 import java.net.URISyntaxException;
@@ -22,16 +23,49 @@ import java.util.*;
 
 @RestController
 @SpringBootApplication
+@EnableRedisHttpSession
 public class App {
-    //配置时将appAddr改成自己的地址（只需要改这一处)。涉及到结果回传，因此不能用127.0.0.1
+    /**
+     * 配置步骤：
+     * 1. appAddr改成自己的地址（只需要改这一处)。涉及到结果回传，因此不能用127.0.0.1
+     * 2. 添加hosts
+     * Win:
+     * C:\Windows\System32\drivers\etc\hosts
+     * MacOS/Linux:
+     * /etc/hosts
+     * 添加以下四行
+     * 10.105.222.90   mirage17
+     * 10.105.222.91   mirage18
+     * 10.105.222.92   mirage19
+     * 10.105.222.93   mirage20
+     */
+
     private String appAddr = "10.122.217.207:5000"; //后端所在地址（本机地址)
     private String livyAddr = "10.105.222.90:8998"; //livy 服务器+端口
     private String hdfsAddr = "10.105.222.90:9000"; //HDFS namenode
 
-    private HttpServletResponse response;
     private ObjectMapper objectMapper = new ObjectMapper();
     private String runningData;
     private String inputData;
+
+
+
+    //Spring Session https://www.jianshu.com/p/ece9ac8e2f81
+    @GetMapping("/setUrl")
+    public Map<String,Object> setSession(HttpServletRequest request,String key,String value){
+        request.getSession().setAttribute(key, value);
+        Map<String,Object> map = new HashMap<>();
+        map.put(key,value );
+        return map;
+    }
+
+    @GetMapping("/getSession")
+    public Map<String,Object> getSession(HttpServletRequest request,String key){
+        Map<String,Object> map = new HashMap<>();
+        map.put("sessionId", request.getSession().getId());
+        map.put("url", request.getSession().getAttribute("url"));
+        return map;
+    }
 
     @RequestMapping(path={"/"}, method = {RequestMethod.POST,RequestMethod.GET})
     String home() {
@@ -46,6 +80,7 @@ public class App {
         String ext = Files.getFileExtension(path); //获取后缀名
 
         ApiResult result = hdfsClient.readFile("/demoData/"+body);
+
         if(result.getData()!=null){
              data = (String)result.getData();
         }else{
@@ -142,19 +177,41 @@ public class App {
         }
     }
 
-    @RequestMapping(path = {"/run"}, method = {RequestMethod.POST})
-    public String run(@RequestBody String body) throws IOException {
 
+    @ResponseBody
+    @RequestMapping(path = {"/run"}, method = {RequestMethod.POST,RequestMethod.GET})
+    public String run(@RequestBody String body, HttpServletRequest request) throws IOException {
+
+        System.out.println(request.isRequestedSessionIdValid());
+        System.out.println(request.isRequestedSessionIdFromCookie());
+
+        String preBody =null;
+        List<Node> preNodeList = null;
         SparkExecutor sparkExecutor = new SparkExecutor(livyAddr,appAddr);
 
-        System.out.println(body);
-        //此处要用TypeReference，用list.class会出错
+        preBody = (String) request.getSession().getAttribute("node");
+        if(preBody!= null)
+            preNodeList = objectMapper.readValue(preBody,new TypeReference<List<Node>>(){});
+
         List<Node> nodeList= objectMapper.readValue(body,new TypeReference<List<Node>>(){});
+        request.getSession(true).setAttribute("node", body);   // 覆盖session
+
+
+        System.out.println(request.getSession().getId()+"body "+(String)request.getSession(true).getAttribute("node"));
+
+        System.out.println("preBody "+preBody);
+        System.out.println("body "+body);
         System.out.println(nodeList);
 
         List<List<Object>>finalData = new ArrayList<>();
 
-        for(Node node : nodeList){
+        for(int i=0;i<nodeList.size();i++){
+            if(preNodeList!=null){
+                if(nodeList.get(i)==preNodeList.get(i))
+                    System.out.println("skip"+nodeList.get(i).getLabel());
+                    continue;
+            }
+            Node node = nodeList.get(i);
             System.out.println(node.getLabel()+" is running");
 
             sparkExecutor.executeNode(node);

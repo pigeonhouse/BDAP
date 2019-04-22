@@ -2,11 +2,8 @@ package com.bigdataplayground.demo.MolulesSpark.util;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.opencsv.CSVReader;
-import com.sun.org.apache.xerces.internal.xs.datatypes.ObjectList;
-import org.apache.hadoop.io.IOUtils;
 
 import java.io.ByteArrayInputStream;
-import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.nio.ByteBuffer;
@@ -67,10 +64,14 @@ public class ToolSet {
         CSVReader reader = new CSVReader(new InputStreamReader(new ByteArrayInputStream(file.getBytes()), "utf-8"));
         String [] nextLine;
         String [] colName = reader.readNext();
-        List<Map<String,Object>> mapList = new ArrayList<Map<String,Object>>();
+
+        List<Map<String,Object>> mapList = new ArrayList<>();
         Map<String,Object> lineMap = new LinkedHashMap<>(); //有序的
         Map<String,Object> colNameMap = new LinkedHashMap<>(); //有序的
+
         colNameMap.put("colName",colName);
+        mapList.add(colNameMap);
+
         while ((nextLine = reader.readNext()) != null) {
             // nextLine[] is an array of values from the line
             for(int i=0;i<nextLine.length;i++) {
@@ -85,10 +86,12 @@ public class ToolSet {
                     }
                 }
             }
-            mapList.add(lineMap);
+            //放入的是对象，不是值
+            //不能写成 mapList.add(lineMap);
+            mapList.add(new HashMap<>(lineMap));
         }
-        mapList.add(0,colNameMap);
-        System.out.println(objectMapper.writeValueAsString(mapList));
+
+
         return objectMapper.writeValueAsString(mapList);
     }
 }
