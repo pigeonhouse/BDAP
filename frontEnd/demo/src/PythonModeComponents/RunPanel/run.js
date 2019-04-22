@@ -475,8 +475,8 @@ class Run extends Component{
     NeedDetection = 1;
     const { propsAPI } = this.props;
     const inf = propsAPI.save();
-    console.log("--------LegalTest---------")
-    console.log(inf);
+    console.log("--------保存信息---------")
+    console.log(JSON.stringify(inf));
     if(!inf.hasOwnProperty("nodes")){
       message.error("先从左边拖来一些部件框吧")
       return 1;

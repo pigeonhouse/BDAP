@@ -771,6 +771,51 @@ class FlowItemPanel extends React.Component {
                 }}
               /></ItemPanel></div>
               </Menu.Item>
+
+              <Menu.Item key="6">
+              <div><ItemPanel><Item
+                type="node"
+                size="200*40"
+                shape='one-one'
+                model={{
+                  label: '扁平化',
+                  attr:{},
+                  attrDetail:[],
+                  anchor: [1, 1],
+                  Dataset: [],
+                  labelArray: {}, 
+                  group:'dl',
+                  length: 0,
+                  keyConfig:{
+                    color_type: '#1890FF',
+                    state_icon_url: 'https://gw.alipayobjects.com/zos/rmsportal/uZVdwjJGqDooqKLKtvGA.svg',
+                  }
+                }}
+              /></ItemPanel></div>
+              </Menu.Item>
+
+              <Menu.Item key="7">
+              <div><ItemPanel><Item
+                type="node"
+                size="200*40"
+                shape='one-one'
+                model={{
+                  label: 'Dropout',
+                  attr:{},
+                  attrDetail:[],
+                  anchor: [1, 1],
+                  Dataset: [],
+                  labelArray: {}, 
+                  group:'dl',
+                  length: 0,
+                  keyConfig:{
+                    color_type: '#1890FF',
+                    state_icon_url: 'https://gw.alipayobjects.com/zos/rmsportal/uZVdwjJGqDooqKLKtvGA.svg',
+                  }
+                }}
+              /></ItemPanel></div>
+              </Menu.Item>
+
                 </SubMenu>
           </SubMenu>
         </Menu>
