@@ -57,51 +57,54 @@ class Selectword extends Component{
         return false;
     }
     changeSourceLabel=(item, labelArray)=>{
-        if(item.group !== 'feature')
-        return labelArray;
-
-        switch(label){
-            case '归一化':    
-            for(let i in labelArray){
-                if(labelArray[i][1]){
-                    labelarr.push(['MinMaxScaled'+labelArray[i][0], false])
-                }
+        if(this.props.type === 'Cluster'){
+            let labelarr = [];
+            switch(item.model.label){
+                case '归一化':    
+                    for(let i in labelArray){
+                        if(labelArray[i][1]){
+                            labelarr.push(['MinMaxScaled'+labelArray[i][0], false])
+                        }
+                    }
+                return [...labelArray, ...labelarr];
+                case '标准化':
+                    for(let i in labelArray){
+                        if(labelArray[i][1]){
+                            labelarr.push(['StandardScaled'+labelArray[i][0], false])
+                        }
+                    }
+                    return [...labelArray, ...labelarr];
+                case 'StringIndexer':
+                    for(let i in labelArray){
+                        if(labelArray[i][1]){
+                            labelarr.push([labelArray[i][0]+'Index', false])
+                        }
+                    }
+                    return [...labelArray, ...labelarr];
+                case '特征分组归类':
+                    return [...labelArray, [item.model.attr['新生成列名'], false]];
+                case '数据筛选':
+                    return [...labelArray, [item.model.attr['新生成列名'], false]];
+                default: return labelArray;
             }
-            return [...labelArray, ...labelarr];
-            case '标准化':
-                for(let i in labelArray){
-                    if(labelArray[i][1]){
-                        labelarr.push(['StandardScaled'+labelArray[i][0], false])
+        }
+        else if(this.props.type === 'Local'){
+            let labelarr = [];
+            switch(item.model.label){
+                case '特征区间化':
+                    let labelarr = new Array();
+                    for(let i in labelArray){
+                        if(labelArray[i][1]){
+                            labelarr.push([labelArray[i][0]+'_Gaped', false])
+                        }
                     }
-                }
-                return [...labelArray, ...labelarr];
-            case 'StringIndexer':
-                for(let i in labelArray){
-                    if(labelArray[i][1]){
-                        labelarr.push([labelArray[i][0]+'Index', false])
-                    }
-                }
-                return [...labelArray, ...labelarr];
-            case '特征分组归类':
-                return [...labelArray, [item.model.attr['新生成列名'], false]];
-            case '数据筛选':
-                return [...labelArray, [item.model.attr['新生成列名'], false]];
-            case '缺失值填充':
-            case '数据随机划分':
-                return labelArray;
+                    return [...labelArray, ...labelarr];
 
-            case '特征区间化':
-                let labelarr = new Array();
-                for(let i in labelArray){
-                    if(labelArray[i][1]){
-                        labelarr.push([labelArray[i][0]+'_Gaped', false])
-                    }
-                }
-                return [...labelArray, ...labelarr];
-
-            case '特征二进制化':          
-            case '数据类型转换':
-                return labelArray;
+                case '特征二进制化':          
+                case '数据类型转换':
+                    return labelArray;
+                default: return labelArray;
+            }
         }
     }
     findSourceLabel=(item)=>{

@@ -266,7 +266,7 @@ class ClusterMode extends React.Component {
 
           <Col span={4} className={styles.editorSidebar} style={{height:'calc(100vh - 105px)'}}>
             <div className={styles.detailPanel} data-step="3" style={{maxHeight:'calc(100vh - 105px)'}} data-intro='在参数栏对你的组件进行参数配置。' data-position='left'>
-              <FlowDetailPanel />
+              <FlowDetailPanel type='Cluster'/>
             </div>
           </Col>
         
