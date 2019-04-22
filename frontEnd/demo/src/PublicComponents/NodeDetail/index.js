@@ -365,6 +365,7 @@ class NodeDetail extends React.Component {
                       index={index}
                       style={{margin:0}}
                       changeLabelArray={this.changeLabelArray}
+                      type = {this.props.type}
                     ></Selectword>;
           })}
           {this.testLabelInput(group, getFieldDecorator)}

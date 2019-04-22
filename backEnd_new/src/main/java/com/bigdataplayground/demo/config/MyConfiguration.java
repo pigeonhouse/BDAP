@@ -1,4 +1,4 @@
-package com.bigdataplayground.demo;
+package com.bigdataplayground.demo.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

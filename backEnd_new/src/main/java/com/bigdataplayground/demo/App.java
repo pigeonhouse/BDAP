@@ -47,7 +47,7 @@ public class App {
     private ObjectMapper objectMapper = new ObjectMapper();
     private String runningData;
     private String inputData;
-    
+
 
     @RequestMapping(path={"/"}, method = {RequestMethod.POST,RequestMethod.GET})
     String home() {
@@ -183,18 +183,18 @@ public class App {
 
         System.out.println("preBody "+preBody);
         System.out.println("body "+body);
-        System.out.println(nodeList);
 
         List<List<Object>>finalData = new ArrayList<>();
-
-        for(int i=0;i<nodeList.size();i++){
-            if(preNodeList!=null){
-                if(nodeList.get(i).equals(preNodeList.get(i))) {
-                    System.out.println("skip " + nodeList.get(i).getLabel());
-                    continue;
-                }
-            }
-            Node node = nodeList.get(i);
+        int i = 0;
+        for(;   i<nodeList.size() &&
+                preNodeList != null &&
+                i < preNodeList.size() &&
+                nodeList.get(i).equals(preNodeList.get(i)); i++
+        ) {
+            System.out.println("skip " + nodeList.get(i).getLabel());
+        }
+        for(int j =i;j<nodeList.size();j++){
+            Node node = nodeList.get(j);
             System.out.println(node.getLabel()+" is running");
 
             sparkExecutor.executeNode(node);

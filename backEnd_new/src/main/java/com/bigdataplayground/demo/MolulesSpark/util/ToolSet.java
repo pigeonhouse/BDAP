@@ -53,7 +53,7 @@ public class ToolSet {
             if(i ==list.size()-1){
                 string = string + list.get(i);
             }else{
-                string = string + " ";
+                string = string + list.get(i) + " ";
             }
         }
         return string;
