@@ -13,7 +13,7 @@ var df_ = df
 
 var cols = df.columns
 for(i <- 0 to cols.length - 1){
-      cols(i) = cols(i) + "_"
+  cols(i) = cols(i) + "_"
 }
 cols = cols++:Array(newcol)
 
@@ -37,4 +37,4 @@ val json = colname.mkString(start,", ",end) + "}, "
 
 fin = "[" + json ++ fin_ + "]"
 
-val result = Http("%s").postData(fin.toString).header("Content-Type", "application/json").header("Charset", "UTF-8").option(HttpOptions.readTimeout(10000)).asString
+val result = Http("http://10.122.226.59:5000/RunningPost").postData(fin.toString).header("Content-Type", "application/json").header("Charset", "UTF-8").option(HttpOptions.readTimeout(10000)).asString
