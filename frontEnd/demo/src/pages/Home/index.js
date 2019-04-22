@@ -43,13 +43,7 @@ loadAccountInfo=()=>{
 }
 componentWillMount() {
     this.loadAccountInfo();
-    let loading = document.getElementById('i-loading')
-    if (loading) {
-      loading.setAttribute('class', 'i-loading-out')
-      setTimeout(() => {
-        loading.style.display = 'none'
-      }, 100)
-    }
+  
 }
 
 handleSubmit = (e) => {
