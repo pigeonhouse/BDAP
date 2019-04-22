@@ -15,7 +15,7 @@ import { withPropsAPI } from '@src';
 import LineMarkerEcharts from './LineMarkerEcharts';
 import GGEditor, { Flow, RegisterCommand } from '@src';
 
-import Downlowd from '../DataOperate/download';
+import Download from '../DataOperate/download';
 import { SeprtbyFeat } from '../DataOperate/DataProcess/SeprtbyFeat'
 
 const Panel = Collapse.Panel;
@@ -80,7 +80,7 @@ class FlowContextMenu extends React.Component {
         }
       }
       else for(let i in chartData){
-        xAxisGroup.push(`${chartData[i][0].toPrecision(4)}`+'-'+`${chartData[i][1].toPrecision(4)}`);
+        xAxisGroup.push(`${chartData[i][0].toPrecision(2)}`+'-'+`${chartData[i][1].toPrecision(2)}`);
         seriesGroup[0].data.push(chartData[i][2]);
       }
       myChart.setOption({
@@ -97,7 +97,7 @@ class FlowContextMenu extends React.Component {
         },
         series: seriesGroup
       });
-      if(chartData.length > 5){
+      if(chartData.length >= 5){
         myChart.setOption({
           xAxis: {
             axisLabel: {  
@@ -196,7 +196,7 @@ class FlowContextMenu extends React.Component {
     for(let i = 0; i < currentData.length; i++){
       let first = currentData[i].value[0]
       let len = 50;
-      len = String(first).length>currentData[i].label.length?(String(first).length+2)*13:(currentData[i].label.length+2)*13;
+      len = String(first).length>currentData[i].label.length?(String(first).length+2)*10:(currentData[i].label.length+2)*10;
       sum = sum+len
       columns.push({
                   title : <Button 
@@ -585,18 +585,19 @@ class FlowContextMenu extends React.Component {
               <span>删除</span>
             </div>
           </Command>
-          <Command name="copy">
+          <Command name="showpicture">
             <div className={styles.item} onClick={this.showModal}>
               <Icon type="form" />
               <span>数据预览</span>
             </div>
           </Command>
-          <Command name="copy">
+          <Command name="showpicture">
             <div className={styles.item} onClick={this.modelEvaluation}>
               <Icon type="solution" />
               <span>模型评估</span>
             </div>
           </Command>
+          <Download></Download>
         </NodeMenu>
         <Modal title="模型评估" visible={this.state.MlEvaluteVisible}
           onOk={this.handleOk} onCancel={this.handleCancel} width={500}

@@ -107,9 +107,7 @@ class Selectword extends Component{
                     }
                     return [...labelArray, ...labelarr];
 
-                case '特征二进制化':          
-                case '数据类型转换':
-                    return labelArray;
+                case '特征二进制化':
                 default: return labelArray;
             }
         }
