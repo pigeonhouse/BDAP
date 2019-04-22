@@ -180,7 +180,7 @@ class FlowItemPanel extends React.Component {
                 extend = {'model-all'}
               />
             </GGEditor>
-          <SubMenu key="sub1" title={<span><Icon type="mail" /><span>数据源</span></span>}>
+          <SubMenu key="sub1" title={<span><Icon type="folder" /><span>数据源</span></span>}>
               <Menu.Item key="1" >
                 <ItemPanel><Item
                 type="node"
@@ -246,7 +246,7 @@ class FlowItemPanel extends React.Component {
               /></ItemPanel></Menu.Item>
           </SubMenu>
             
-          <SubMenu key="sub2" title={<span><Icon type="mail" /><span>数据预处理</span></span>}>
+          <SubMenu key="sub2" title={<span><Icon type="tool" /><span>数据预处理</span></span>}>
           <Menu.Item key="7">
               <ItemPanel><Item
                 type="node"
@@ -396,7 +396,7 @@ class FlowItemPanel extends React.Component {
               /></ItemPanel></Menu.Item>
           </SubMenu>
 
-          <SubMenu key="sub3" title={<span><Icon type="appstore" /><span>机器学习</span></span>}>
+          <SubMenu key="sub3" title={<span><Icon type="filter" /><span>机器学习</span></span>}>
             <SubMenu key="g3" title="回归">
             
               <Menu.Item key="13"><ItemPanel><Item
@@ -554,8 +554,8 @@ class FlowItemPanel extends React.Component {
               /></ItemPanel></Menu.Item>
             </SubMenu>
           </SubMenu>
-          <SubMenu key="sub4" title={<span><Icon type="setting" /><span>深度学习</span></span>}>
-                <SubMenu key="a1" title = {<span><Icon type="setting" /><span>经典数据集</span></span>}>
+          <SubMenu key="sub4" title={<span><Icon type="global" /><span>深度学习</span></span>} defaultOpenKeys={['a1','a2','a3']}>
+                <SubMenu key="a1" title = {<span><Icon type="folder" /><span>经典数据集</span></span>}>
                   <Menu.Item key="1">
 
                   <div><ItemPanel><Item
@@ -623,7 +623,7 @@ class FlowItemPanel extends React.Component {
                   </Menu.Item>
                 </SubMenu>
 
-                <SubMenu key="a2" title = {<span><Icon type="setting" /><span>训练与预测</span></span>}>
+                <SubMenu key="a2" title = {<span><Icon type="edit" /><span>训练与预测</span></span>}>
           <Menu.Item key="0">
               <div><ItemPanel><Item
                 type="node"
@@ -674,7 +674,7 @@ class FlowItemPanel extends React.Component {
               </Menu.Item>
               </SubMenu>
 
-              <SubMenu key="a3" title = {<span><Icon type="setting" /><span>网络层</span></span>}>
+              <SubMenu key="a3" title = {<span><Icon type="link" /><span>网络层</span></span>}>
               <Menu.Item key="2">
               <div><ItemPanel><Item
                 type="node"
@@ -682,8 +682,10 @@ class FlowItemPanel extends React.Component {
                 shape='one-one'
                 model={{
                   label: 'reshape',
-                  attr:{},
-                  attrDetail:[],
+                  attr:{width:28,height:28,layer:1},
+                  attrDetail:[{elabel:'width',label:'width',type:'Input'},
+                  {elabel:'height',label:'height',type:'Input'},
+                  {elabel:'layer',label:'layer',type:'Input'},],
                   anchor: [1, 1],
                   Dataset: [],
                   labelArray: {}, 
