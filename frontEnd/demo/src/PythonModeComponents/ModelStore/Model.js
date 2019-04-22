@@ -133,7 +133,7 @@ class Model extends Component{
         store.subscribe(this.handleStoreChange)
         nwData.Model = data;
         let nw2Data = {
-          key: 0,
+          key: 1,
           Name: "例:另一个模型",
           Date: 2019.4,
           Description: "我们在这里为你准备了另一个初始模型",
