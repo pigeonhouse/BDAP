@@ -47,25 +47,7 @@ public class App {
     private ObjectMapper objectMapper = new ObjectMapper();
     private String runningData;
     private String inputData;
-
-
-
-    //Spring Session https://www.jianshu.com/p/ece9ac8e2f81
-    @GetMapping("/setUrl")
-    public Map<String,Object> setSession(HttpServletRequest request,String key,String value){
-        request.getSession().setAttribute(key, value);
-        Map<String,Object> map = new HashMap<>();
-        map.put(key,value );
-        return map;
-    }
-
-    @GetMapping("/getSession")
-    public Map<String,Object> getSession(HttpServletRequest request,String key){
-        Map<String,Object> map = new HashMap<>();
-        map.put("sessionId", request.getSession().getId());
-        map.put("url", request.getSession().getAttribute("url"));
-        return map;
-    }
+    
 
     @RequestMapping(path={"/"}, method = {RequestMethod.POST,RequestMethod.GET})
     String home() {
@@ -207,9 +189,10 @@ public class App {
 
         for(int i=0;i<nodeList.size();i++){
             if(preNodeList!=null){
-                if(nodeList.get(i)==preNodeList.get(i))
-                    System.out.println("skip"+nodeList.get(i).getLabel());
+                if(nodeList.get(i).equals(preNodeList.get(i))) {
+                    System.out.println("skip " + nodeList.get(i).getLabel());
                     continue;
+                }
             }
             Node node = nodeList.get(i);
             System.out.println(node.getLabel()+" is running");

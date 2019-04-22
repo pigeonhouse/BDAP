@@ -94,6 +94,7 @@ class SparkRun extends Component{
         body:JSON.stringify(stream),
         mode: 'cors',
         headers: {'Content-Type': 'application/json'},
+        credentials:'include'
         }
         fetch(
           'http://localhost:5000/run',init

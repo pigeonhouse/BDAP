@@ -9,7 +9,6 @@ public class Node {
     private List<NodeSourceId> sourceId;
     private Map<String,String> attribute;
     private Map<String,List<String>> labelArray;
-    private String group;
 
 
     public String getId() {
@@ -32,8 +31,6 @@ public class Node {
         return labelArray;
     }
 
-    public String getGroup(){ return group; }
-
     public void setId(String id) {
         this.id = id;
     }
@@ -52,6 +49,29 @@ public class Node {
 
     public void setLabelArray(Map<String, List<String>> labelArray) {
         this.labelArray = labelArray;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if(obj == this){
+            return true;
+        }
+        if (obj instanceof Node) {
+            Node other = (Node)obj;
+            if (other.getLabel().equals(other.getLabel())&& other.getId().equals(this.getId())){
+            }else {
+                return false;
+            }
+            for(int i = 0 ;i<this.getSourceId().size();i++){
+                if(this.getSourceId().get(i).equals(other.getSourceId().get(i))){
+                    continue;
+                }
+            }
+            if(other.getAttribute().equals(this.getAttribute()) && other.getLabelArray().equals(this.getLabelArray())){
+                return true;
+            }
+        }
+        return false;
     }
 }
 
