@@ -161,6 +161,32 @@ class Feature extends Component{
                         </Fragment>
             })
     }
+    componentWillReceiveProps(nextProps){
+        const { propsAPI } = this.props;
+        const { getSelected, update } = propsAPI;
+        const item = getSelected()[0];
+        const attr = item.model.attr;
+        const nextLabelArray = nextProps.labelArray;
+        var nextarr=[];
+        for(let i in nextLabelArray){
+            if(nextLabelArray[i][1]){
+                nextarr.push(nextLabelArray[i][0]);
+            }
+        }
+        var arr=[];
+        let labelArray = this.props.labelArray;
+        for(let i in labelArray){
+            if(labelArray[i][1]){
+                arr.push(labelArray[i][0]);
+            }
+        }
+        for(let i in arr){
+            if(nextarr.indexOf(arr[i]) === -1){
+                delete attr[arr[i]];
+            }
+        }
+        update(item, {attr});
+    }
     render(){
         var arr=[];
         let labelArray = this.props.labelArray;

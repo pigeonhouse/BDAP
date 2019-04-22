@@ -32,6 +32,32 @@ class FeatureRegion extends Component {
         this.setState({region:attr[this.props.tag].slice(1)})
     }
   }
+  componentWillReceiveProps(nextProps){
+    if(nextProps.tag !== this.props.tag){
+      const { propsAPI } = this.props;
+      const { getSelected } = propsAPI;
+      const item = getSelected()[0];
+      const attr = item.model.attr;
+      
+      if(attr[nextProps.tag]){
+        this.setState({
+          groupingType:attr[nextProps.tag][0]
+        })
+        if(attr[nextProps.tag][0] === 'user-defined'){
+          this.setState({region:attr[nextProps.tag].slice(1)})
+        }
+        else {
+          this.setState({region:[[]]})
+        }
+      }
+      else {
+        this.setState({
+          groupingType:"normal",
+          region:[[]]
+        })
+      }
+    }
+  }
   handleSubmit1 = (value) => {
     const { propsAPI } = this.props;
     const { getSelected, executeCommand, update } = propsAPI;
@@ -73,9 +99,30 @@ class FeatureRegion extends Component {
       this.setState({
         region: attr[tag].slice(1)
       })
-      // console.log(propsAPI.save());
     });
   }
+  // handleSubmitInput=(e)=>{
+  //   e.preventDefault();
+
+  //   const { form, propsAPI } = this.props;
+  //   const { getSelected, executeCommand, update } = propsAPI;
+
+  //   form.validateFieldsAndScroll((err, values) => {
+  //     if (err) {
+  //       return;
+  //     }
+  //     const item = getSelected()[0];
+  //     if (!item) {
+  //       return;
+  //     }
+  //     let attr = item.model.attr;
+  //     const tag = this.props.tag;
+  //     attr[`${tag}Default`] = values.defaultName;
+  //     executeCommand(() => {
+  //       update(item,{attr});
+  //     });
+  //   });
+  // }
   add=()=>{
     const { propsAPI } = this.props;
     const { getSelected, executeCommand, update } = propsAPI;
@@ -161,9 +208,10 @@ class FeatureRegion extends Component {
       else {
         region = this.state.region;
       }
+      // let defaultName;
+      // defaultName = attr[`${tag}Default`];
       return  <Form>
         {region.map((item, index)=>{
-          console.log(item)
           return (
             <Row>
               <Col span={7}>
