@@ -1,7 +1,7 @@
 package com.bigdataplayground.demo.MolulesSpark.util;
 
-import com.bigdataplayground.demo.MolulesSpark.ApiResult;
-import com.bigdataplayground.demo.MolulesSpark.FileStatusEx;
+import com.bigdataplayground.demo.MolulesSpark.domain.ApiResult;
+import com.bigdataplayground.demo.MolulesSpark.domain.FileStatusEx;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import org.apache.hadoop.conf.Configuration;

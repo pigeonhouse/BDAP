@@ -1,4 +1,4 @@
-package com.bigdataplayground.demo.MolulesSpark;
+package com.bigdataplayground.demo.MolulesSpark.domain;
 
 import java.io.Serializable;
 import java.util.List;

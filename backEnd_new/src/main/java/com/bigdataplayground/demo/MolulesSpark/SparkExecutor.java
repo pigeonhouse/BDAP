@@ -2,7 +2,7 @@ package com.bigdataplayground.demo.MolulesSpark;
 
 import com.bigdataplayground.demo.MolulesSpark.util.LivyContact;
 import com.bigdataplayground.demo.MolulesSpark.util.ToolSet;
-import com.bigdataplayground.demo.controller.Node;
+import com.bigdataplayground.demo.MolulesSpark.domain.Node;
 
 import java.io.IOException;
 import java.nio.file.Path;

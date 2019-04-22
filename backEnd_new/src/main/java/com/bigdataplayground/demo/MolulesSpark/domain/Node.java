@@ -1,4 +1,4 @@
-package com.bigdataplayground.demo.controller;
+package com.bigdataplayground.demo.MolulesSpark.domain;
 
 import java.util.List;
 import java.util.Map;

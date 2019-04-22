@@ -1,4 +1,4 @@
-package com.bigdataplayground.demo.config;
+package com.bigdataplayground.demo.MolulesSpark.config;
 
 import org.springframework.context.annotation.Configuration;
 import org.springframework.session.data.redis.config.annotation.web.http.EnableRedisHttpSession;

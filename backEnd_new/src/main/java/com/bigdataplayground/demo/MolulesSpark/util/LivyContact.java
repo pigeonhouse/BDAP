@@ -1,7 +1,7 @@
 package com.bigdataplayground.demo.MolulesSpark.util;
 
-import com.bigdataplayground.demo.MolulesSpark.LivySessionDescription;
-import com.bigdataplayground.demo.MolulesSpark.LivySessionInfo;
+import com.bigdataplayground.demo.MolulesSpark.domain.LivySessionDescription;
+import com.bigdataplayground.demo.MolulesSpark.domain.LivySessionInfo;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.http.*;
