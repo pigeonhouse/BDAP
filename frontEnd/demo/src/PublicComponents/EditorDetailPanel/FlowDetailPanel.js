@@ -18,7 +18,7 @@ class FlowDetailPanel extends React.Component {
     return (
       <DetailPanel className={styles.detailPanel}>
         <NodePanel>
-          <NodeDetail />
+          <NodeDetail type={this.props.type}/>
         </NodePanel>
         <EdgePanel>
           <EdgeDetail />
