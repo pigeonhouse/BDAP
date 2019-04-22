@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.io.BufferedReader;
+import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.LinkedHashMap;
@@ -18,7 +19,6 @@ import java.util.Map;
 @RestController
 public class executorPython {
     public static void runCode(String[] arguments){
-
         try {
             Process process = Runtime.getRuntime().exec(arguments);
             BufferedReader in = new BufferedReader(new InputStreamReader(process.getInputStream()));
@@ -34,11 +34,23 @@ public class executorPython {
         }
     }
     @RequestMapping("/runPython")
-    public void runPython(@RequestBody String body)throws IOException {
-        //ObjectMapper objectMapper = new ObjectMapper();
-        //List<Node> nodeList= objectMapper.readValue(body,new TypeReference<List<Node>>(){});
-        String[] arguments = new String[]{"python","src/main/python/mnist.py"};
+    public String runPython(@RequestBody String body)throws IOException {
+        ObjectMapper objectMapper = new ObjectMapper();
+        List<Node> nodeList= objectMapper.readValue(body,new TypeReference<List<Node>>(){});
+        String[] arguments = new String[]{"python","/home/tseg/mnist.py"};
         runCode(arguments);
+        String pathname = "/home/tseg/final_acc.txt";
+        try (FileReader reader = new FileReader(pathname);
+             BufferedReader br = new BufferedReader(reader)
+        ) {
+            String line = br.readLine();
+            System.out.println(line);
+            return line;
+        } catch (IOException e) {
+            e.printStackTrace();
+            return "error";
+        }
+
 //        int len = nodeList.size();
 //        JSONObject obj = new JSONObject(new LinkedHashMap());
 //

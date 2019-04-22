@@ -5,6 +5,7 @@ import numpy as np
 import json
 mnist = input_data.read_data_sets("/tmp/mnist/", one_hot=True)
 
+print("entered!!!!!!!!!!!")
 #   conv1   conv2   fc  acc all with batchnorm
 #   1       2    100 0.97
 #   2       4   100 0.9844
@@ -77,6 +78,7 @@ def train():
             print(str(i)+"loss:"+str(np.sum(train_loss)))
             inf={}
             f =  open('/home/tseg/inf.txt', 'w')
+            inf["round"] = str(i)
             inf["accuracy"] = str(train_acc)
             inf["learning_rate"] = str(learning)
             inf["loss"] = str(np.sum(train_loss))
@@ -90,8 +92,12 @@ def train():
             acc += sess.run(accuracy, feed_dict={x:batch[0],y_:batch[1], is_training:False})
         eval_acc=acc/(10000//test_batch_size)
         print("test acc"+str(eval_acc))
+        final_acc = open('/home/tseg/final_acc.txt')
+        final_acc.write(str(eval_acc))
+        final_acc.close()
         inf={}
         f =  open('/home/tseg/inf.txt', 'w')
+        inf["round"] = '0'
         inf["accuracy"] = '0'
         inf["learning_rate"] = '0'
         inf["loss"] = '0'
