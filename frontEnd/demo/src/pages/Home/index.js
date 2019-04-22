@@ -4,6 +4,7 @@ import { Redirect } from 'react-router-dom';
 import style from './index.less';
 const FormItem = Form.Item;
 
+
 class HomePage extends React.Component {
   state={
     redirect:false,
@@ -12,6 +13,8 @@ class HomePage extends React.Component {
     remind:'',
     rememberPassword: false,
   }
+
+
 
 loadAccountInfo=()=>{
     let arr,reg=new RegExp("(^| )"+'accountInfo'+"=([^;]*)(;|$)");

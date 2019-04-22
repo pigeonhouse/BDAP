@@ -11,6 +11,7 @@ import Model from "../../LocalModeComponents/ModelStore/Model"
 import { FlowDataPanel } from '../../LocalModeComponents/EditorDataPanel';
 const TabPane = Tabs.TabPane;
 class LocalMode extends React.Component {
+  
   Intro = (key) => {
     notification.close(key)
     IntroJs().setOptions({

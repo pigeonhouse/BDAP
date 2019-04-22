@@ -12,6 +12,7 @@ import { FlowDataPanel } from '../../ClusterModeComponents/EditorDataPanel';
 
 const TabPane = Tabs.TabPane;
 class ClusterMode extends React.Component {
+
   Intro = (key) => {
     notification.close(key)
     IntroJs().setOptions({
