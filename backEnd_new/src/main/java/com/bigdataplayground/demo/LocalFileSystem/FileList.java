@@ -9,6 +9,7 @@ import java.io.File;
 public class FileList {
     @RequestMapping("/FileList")
     public String[] FileList(){
+        System.out.println("fileList");
         String path = "/home/tseg/TestFile/";
         File f = new File(path);
         return f.list();

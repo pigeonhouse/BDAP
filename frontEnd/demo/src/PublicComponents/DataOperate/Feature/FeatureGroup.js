@@ -9,7 +9,6 @@ class FeatureGroup extends Component {
       super(props);
       this.state={
         group:[[]],
-        stat: [],
         children:[]
       }
   }
@@ -25,12 +24,31 @@ class FeatureGroup extends Component {
       })
     }
     let children = new Array;
-    this.props.stat.map((value, index)=>{
-      children.push(<Option key={index}>{value.name}</Option>)
+    this.props.stat.map((value)=>{
+      children.push(<Option key={value.name}>{value.name}</Option>)
     })
     this.setState({
       children
     })
+  }
+  componentWillReceiveProps(nextProps){
+    if(nextProps.tag !== this.props.tag){
+      const { propsAPI } = this.props;
+      const { getSelected } = propsAPI;
+      const item = getSelected()[0];
+      const attr = item.model.attr;
+      const tag = nextProps.tag;
+      this.setState({
+        group: attr[tag]||[[]]
+      })
+      let children = new Array;
+      nextProps.stat.map((value)=>{
+        children.push(<Option key={value.name}>{value.name}</Option>)
+      })
+      this.setState({
+        children
+      })
+    }
   }
   handleSubmitInput = (e) => {
     e.preventDefault();
@@ -61,6 +79,30 @@ class FeatureGroup extends Component {
       })
     });
   }
+  // handleSubmitInputDefault=(e)=>{
+  //   e.preventDefault();
+
+  //   const { form, propsAPI } = this.props;
+  //   const { getSelected, executeCommand, update } = propsAPI;
+
+  //   form.validateFieldsAndScroll((err, values) => {
+  //     if (err) {
+  //       return;
+  //     }
+  //     const item = getSelected()[0];
+  //     if (!item) {
+  //       return;
+  //     }
+  //     let attr = JSON.parse(JSON.stringify(item.model.attr));
+  //     const tag = this.props.tag;
+  //     var re = /^[0-9]+.?[0-9]*/;
+  //     let temp = re.test(values.defaultName)?Number(values.defaultName):values.defaultName;
+  //     attr[`${tag}Default`] = temp;
+  //     executeCommand(() => {
+  //       update(item,{attr});
+  //     });
+  //   });
+  // }
   handleSubmitSelect(index, value){
     const { propsAPI } = this.props;
     const { getSelected, executeCommand, update } = propsAPI;

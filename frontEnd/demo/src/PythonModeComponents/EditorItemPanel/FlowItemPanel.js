@@ -21,7 +21,7 @@ class FlowItemPanel extends React.Component {
       className={this.state.isMouseEnter?styles.scrollapp:styles.unscrollapp}
       style={{backgroundColor:'#fff'}}>
         <Menu
-            defaultOpenKeys={['sub1','sub2','sub3']}
+            defaultOpenKeys={['sub4']}
             mode="inline"
             style={{maxHeight:'calc(100vh - 105px)', width:'245px', borderRight:0}}
             selectable={false}
@@ -555,25 +555,221 @@ class FlowItemPanel extends React.Component {
             </SubMenu>
           </SubMenu>
           <SubMenu key="sub4" title={<span><Icon type="setting" /><span>深度学习</span></span>}>
-          <Menu.Item key="20"><ItemPanel><Item
+                <SubMenu key="a1" title = {<span><Icon type="setting" /><span>经典数据集</span></span>}>
+                  <Menu.Item key="1">
+
+                  <div><ItemPanel><Item
                 type="node"
                 size="200*40"
-                shape='one-one'
+                shape='two-one'
                 model={{
-                  label: '卷积神经网络',
-                  attr:{'激活函数':'relu','卷积步长':2,'优化器':'rmsprop','batchSize':50,'遍历次数':1},
+                  label: 'mnist手写字符',
+                  attr:{},
                   attrDetail:[],
                   anchor: [1, 1],
                   Dataset: [],
                   labelArray: {}, 
-                  feature:'dl',
+                  group:'dl',
                   length: 0,
                   keyConfig:{
                     color_type: '#1890FF',
                     state_icon_url: 'https://gw.alipayobjects.com/zos/rmsportal/uZVdwjJGqDooqKLKtvGA.svg',
                   }
                 }}
-              /></ItemPanel></Menu.Item>
+              /></ItemPanel></div></Menu.Item>
+
+              <Menu.Item key="2">
+                <div><ItemPanel><Item
+                type="node"
+                size="200*40"
+                shape='two-one'
+                model={{
+                  label: 'cifar10',
+                  attr:{},
+                  attrDetail:[],
+                  anchor: [1, 1],
+                  Dataset: [],
+                  labelArray: {}, 
+                  group:'dl',
+                  length: 0,
+                  keyConfig:{
+                    color_type: '#1890FF',
+                    state_icon_url: 'https://gw.alipayobjects.com/zos/rmsportal/uZVdwjJGqDooqKLKtvGA.svg',
+                  }
+                }}
+              /></ItemPanel></div>
+              </Menu.Item>     
+
+              <Menu.Item key="3">
+              <div><ItemPanel><Item
+                type="node"
+                size="200*40"
+                shape='two-one'
+                model={{
+                  label: 'cifar100',
+                  attr:{},
+                  attrDetail:[],
+                  anchor: [1, 1],
+                  Dataset: [],
+                  labelArray: {}, 
+                  group:'dl',
+                  length: 0,
+                  keyConfig:{
+                    color_type: '#1890FF',
+                    state_icon_url: 'https://gw.alipayobjects.com/zos/rmsportal/uZVdwjJGqDooqKLKtvGA.svg',
+                  }
+                }}
+              /></ItemPanel></div>
+                  </Menu.Item>
+                </SubMenu>
+
+                <SubMenu key="a2" title = {<span><Icon type="setting" /><span>训练与预测</span></span>}>
+          <Menu.Item key="0">
+              <div><ItemPanel><Item
+                type="node"
+                size="200*40"
+                shape='two-one'
+                model={{
+                  label: '训练',
+                  attr:{optimizer:'Adam',initialLearningRate:0.0001 ,epoch:1,category:10,batch:100 },
+                  attrDetail:[{elabel:'optimizer',label:'优化器',type:'Select', evalue:['GradientDescent', 'Adam','Momentum'], value:['GradientDescent', 'Adam','Momentum']},
+                              {elabel:'initialLearningRate',label:'初始学习率',type:'Input'},
+                              {elabel:'epoch',label:'训练周期',type:'Select', evalue:['1', '3','5','10'], value:['1', '3','5','10']},
+                              {elabel:'category',label:'分类数',type:'Input'},
+                              {elabel:'batch',label:'batch大小',type:'Input'},
+                              ],
+                  anchor: [1, 1],
+                  Dataset: [],
+                  labelArray: {}, 
+                  group:'dl',
+                  length: 0,
+                  keyConfig:{
+                    color_type: '#1890FF',
+                    state_icon_url: 'https://gw.alipayobjects.com/zos/rmsportal/uZVdwjJGqDooqKLKtvGA.svg',
+                  }
+                }}
+              /></ItemPanel></div>
+              </Menu.Item>
+
+              <Menu.Item key="1">
+              <div><ItemPanel><Item
+                type="node"
+                size="200*40"
+                shape='two-one'
+                model={{
+                  label: '预测',
+                  attr:{},
+                  attrDetail:[],
+                  anchor: [1, 1],
+                  Dataset: [],
+                  labelArray: {}, 
+                  group:'dl',
+                  length: 0,
+                  keyConfig:{
+                    color_type: '#1890FF',
+                    state_icon_url: 'https://gw.alipayobjects.com/zos/rmsportal/uZVdwjJGqDooqKLKtvGA.svg',
+                  }
+                }}
+              /></ItemPanel></div>
+              </Menu.Item>
+              </SubMenu>
+
+              <SubMenu key="a3" title = {<span><Icon type="setting" /><span>网络层</span></span>}>
+              <Menu.Item key="2">
+              <div><ItemPanel><Item
+                type="node"
+                size="200*40"
+                shape='one-one'
+                model={{
+                  label: 'reshape',
+                  attr:{},
+                  attrDetail:[],
+                  anchor: [1, 1],
+                  Dataset: [],
+                  labelArray: {}, 
+                  group:'dl',
+                  length: 0,
+                  keyConfig:{
+                    color_type: '#1890FF',
+                    state_icon_url: 'https://gw.alipayobjects.com/zos/rmsportal/uZVdwjJGqDooqKLKtvGA.svg',
+                  }
+                }}
+              /></ItemPanel></div>
+              </Menu.Item>
+
+              <Menu.Item key="3">
+              <div><ItemPanel><Item
+                type="node"
+                size="200*40"
+                shape='one-one'
+                model={{
+                  label: '卷积层',
+                  attr:{num:6,stride:1,padding:0,size:'3 x 3',activation:'relu'},
+                  attrDetail:[{elabel:'num',label:'卷积核个数',type:'Input'},
+                  {elabel:'stride',label:'卷积步长',type:'Input'},
+                  {elabel:'padding',label:'填充',type:'Input'},
+                  {elabel:'size',label:'卷积核大小',type:'Select', evalue:['1 x 1', '3 x 3','5 x 5'], value:['1 x 1', '3 x 3','5 x 5']},
+                  {elabel:'activation',label:'激活函数',type:'Select', evalue:['sigmoid', 'relu','tanh'], value:['sigmoid', 'relu','tanh']},
+                ],
+                  anchor: [1, 1],
+                  Dataset: [],
+                  labelArray: {}, 
+                  group:'dl',
+                  length: 0,
+                  keyConfig:{
+                    color_type: '#1890FF',
+                    state_icon_url: 'https://gw.alipayobjects.com/zos/rmsportal/uZVdwjJGqDooqKLKtvGA.svg',
+                  }
+                }}
+              /></ItemPanel></div>
+              </Menu.Item>
+
+              <Menu.Item key="4">
+              <div><ItemPanel><Item
+                type="node"
+                size="200*40"
+                shape='one-one'
+                model={{
+                  label: '池化层',
+                  attr:{type:'MaxPooling',size:'2 x 2'},
+                  attrDetail:[{elabel:'type',label:'池化类型',type:'Select', evalue:['MaxPooling','AveragePooling'], value:['最大池化','平均池化']},
+                  {elabel:'size',label:'池化核大小',type:'Select', evalue:['1 x 1', '2 x 2','3 x 3'], value:['1 x 1', '2 x 2','3 x 3']}],
+                  anchor: [1, 1],
+                  Dataset: [],
+                  labelArray: {}, 
+                  group:'dl',
+                  length: 0,
+                  keyConfig:{
+                    color_type: '#1890FF',
+                    state_icon_url: 'https://gw.alipayobjects.com/zos/rmsportal/uZVdwjJGqDooqKLKtvGA.svg',
+                  }
+                }}
+              /></ItemPanel></div>
+              </Menu.Item>
+
+              <Menu.Item key="5">
+              <div><ItemPanel><Item
+                type="node"
+                size="200*40"
+                shape='one-one'
+                model={{
+                  label: '全连接层',
+                  attr:{num:100,activation:'relu'},
+                  attrDetail:[{elabel:'num',label:'神经元个数',type:'Input'},
+                  {elabel:'activation',label:'激活函数',type:'Select', evalue:['sigmoid', 'relu','tanh'], value:['sigmoid', 'relu','tanh']},],
+                  anchor: [1, 1],
+                  Dataset: [],
+                  labelArray: {}, 
+                  group:'dl',
+                  length: 0,
+                  keyConfig:{
+                    color_type: '#1890FF',
+                    state_icon_url: 'https://gw.alipayobjects.com/zos/rmsportal/uZVdwjJGqDooqKLKtvGA.svg',
+                  }
+                }}
+              /></ItemPanel></div>
+              </Menu.Item>
+                </SubMenu>
           </SubMenu>
         </Menu>
       </div>
