@@ -18,7 +18,7 @@ export function StrToNum(allData){
             if(Dataset[i].stat.type == 'string'){
                 let tp = new Array();
                 tp = JSON.parse(JSON.stringify(Dataset[i]));
-                tp.label = tp.label+"1";
+                tp.label = tp.label+"_trans";
                 console.log(Dataset);
                 for(let j = 0; j < Dataset[i].value.length; j++){
                     let found = 0;
