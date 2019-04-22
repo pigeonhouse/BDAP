@@ -131,12 +131,7 @@ class Model extends Component{
         }];
         this.handleStoreChange = this.handleStoreChange.bind(this)
         store.subscribe(this.handleStoreChange)
-        if(this.props.type == "local"){
-          nwData.Model = data1;
-        }
-        else if(this.props.type == "python"){
-          nwData.Model = data2;
-        }
+        nwData.Model = data1;
         this.state = {
           dataSource:[nwData],
           count: 1

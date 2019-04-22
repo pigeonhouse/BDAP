@@ -2,14 +2,14 @@ import React, { Component } from 'react'
 import { Button,Modal,Icon,message, Table, Input, Popconfirm, Form, Divider} from 'antd'
 import { withPropsAPI } from '@src';
 import store from "../../store"
-import { data } from "../../ExampleData/FlowData"
+import { data ,data1} from "../../ExampleData/FlowData"
 const dat = data;
 const nwData = {
   key: 0,
   Name: "例:泰坦尼克号模型",
   Date: 2019.4,
   Description: "我们在这里为你准备了一个初始模型",
-  Model:dat
+  Model:data1
 };
 const FormItem = Form.Item;
 const EditableContext = React.createContext();
@@ -131,10 +131,17 @@ class Model extends Component{
         }];
         this.handleStoreChange = this.handleStoreChange.bind(this)
         store.subscribe(this.handleStoreChange)
-        this.state = {
-          dataSource:[nwData],
-          count: 1
-        };
+        let nw1Data = {
+          key: 1,
+          Name: "例:另一个模型",
+          Date: 2019.4,
+          Description: "我们在这里为你准备了另一个初始模型",
+          Model:data
+        }
+        this.setState({
+          dataSource: [nwData, nw1Data],
+          count: 2
+        });
     }
 
     state = {

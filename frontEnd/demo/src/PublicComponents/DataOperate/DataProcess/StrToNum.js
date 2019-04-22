@@ -17,8 +17,9 @@ export function StrToNum(allData){
         if(labelArray[i][1] == true){
             if(Dataset[i].stat.type == 'string'){
                 let tp = new Array();
-                tp = Dataset[i];
+                tp = JSON.parse(JSON.stringify(Dataset[i]));
                 tp.label = tp.label+"1";
+                console.log(Dataset);
                 for(let j = 0; j < Dataset[i].value.length; j++){
                     let found = 0;
                     Object.keys(attr).forEach(function(key){
@@ -40,6 +41,7 @@ export function StrToNum(allData){
             }
         }
     }
+
     allData[1].Dataset = Dataset;
     return allData[1];
 }
