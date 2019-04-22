@@ -234,7 +234,7 @@ class LocalMode extends React.Component {
           </Col>
           <Col span={9}></Col>
           <Col span={2}>
-              <Model></Model>
+              <Model type="python"></Model>
           </Col>
         </Row>
         
