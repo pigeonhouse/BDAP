@@ -7,7 +7,6 @@ import com.bigdataplayground.demo.controller.Node;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.ArrayList;
 import java.util.List;
 
 
@@ -26,7 +25,7 @@ public class SparkExecutor {
      * @return
      */
     private String matchFunction(Node node, String code){
-        String data =new String();
+        String data = "";
         switch (node.getLabel()){
             case "Fillna": data = String.format(code,
                     node.getId(), node.getSourceId().get(0).getSource(),
@@ -144,7 +143,6 @@ public class SparkExecutor {
     public void executeAll(List<Node> nodeList) throws IOException {
         for(Node node : nodeList){
             System.out.println(node.getLabel()+" is running");
-
             executeNode(node);
 
         }

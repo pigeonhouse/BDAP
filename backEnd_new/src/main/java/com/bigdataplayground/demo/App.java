@@ -193,6 +193,7 @@ public class App {
         ) {
             System.out.println("skip " + nodeList.get(i).getLabel());
         }
+
         for(int j =i;j<nodeList.size();j++){
             Node node = nodeList.get(j);
             System.out.println(node.getLabel()+" is running");

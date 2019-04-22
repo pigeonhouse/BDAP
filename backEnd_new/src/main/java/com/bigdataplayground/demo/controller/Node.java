@@ -7,7 +7,7 @@ public class Node {
     private String id;
     private String label;
     private List<NodeSourceId> sourceId;
-    private Map<String,String> attribute;
+    private Map<String,Object> attribute;
     private Map<String,List<String>> labelArray;
 
 
@@ -23,7 +23,7 @@ public class Node {
         return sourceId;
     }
 
-    public Map<String, String> getAttribute() {
+    public Map<String, Object> getAttribute() {
         return attribute;
     }
 
@@ -43,7 +43,7 @@ public class Node {
         this.sourceId = sourceId;
     }
 
-    public void setAttribute(Map<String, String> attribute) {
+    public void setAttribute(Map<String, Object> attribute) {
         this.attribute = attribute;
     }
 
@@ -63,8 +63,8 @@ public class Node {
                 return false;
             }
             for(int i = 0 ;i<this.getSourceId().size();i++){
-                if(this.getSourceId().get(i).equals(other.getSourceId().get(i))){
-                    continue;
+                if(!this.getSourceId().get(i).equals(other.getSourceId().get(i))){
+                    return false;
                 }
             }
             if(other.getAttribute().equals(this.getAttribute()) && other.getLabelArray().equals(this.getLabelArray())){
