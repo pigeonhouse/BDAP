@@ -74,6 +74,13 @@ class Selectword extends Component{
                         }
                     }
                     return [...labelArray, ...labelarr];
+                case 'one-hot编码':
+                    for(let i in labelArray){
+                        if(labelArray[i][1]){
+                            labelarr.push([labelArray[i][0] + 'ClassVec', false])
+                        }
+                    }
+                return [...labelArray, ...labelarr];
                 case 'StringIndexer':
                     for(let i in labelArray){
                         if(labelArray[i][1]){

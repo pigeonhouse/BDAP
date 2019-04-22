@@ -67,6 +67,11 @@ public class SparkExecutor {
                     node.getSourceId().get(0).getSource(),
                     "http://"+appAddr+"/RunningPost"
             ); break;
+            case "DataFilter": data = String.format(code,
+                    node.getId(), node.getAttribute().get("新生成列名"), node.getSourceId().get(0).getSource(),
+                    node.getAttribute().get("condition"),
+                    "http://"+appAddr+"/RunningPost"
+            ); break;
             case "QuantileDiscretizer": data = String.format(code,
                     node.getId(), ToolSet.listToString(node.getLabelArray().get("public")),
                     node.getAttribute().get("新生成列名"),node.getSourceId().get(0).getSource(),
