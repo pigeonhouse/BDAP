@@ -91,10 +91,10 @@ class FlowContextMenu extends React.Component {
         yAxis: {
           name: '频数'
         },
-        grid: {
-          right: '15%',
-          containLabel: true
-        },
+        // grid: {
+        //   right: '2%',
+        //   containLabel: true
+        // },
         series: seriesGroup
       });
       if(chartData.length >= 5){
