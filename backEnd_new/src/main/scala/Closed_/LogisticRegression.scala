@@ -12,7 +12,8 @@ val previous = "%s"
 val newcol = "%s"
 val idcol = "PassengerId"
 val file = project + "/" + previous
-val all = train + " " + label + " " + idcol
+val all1 = train + " " + label + " " + idcol
+val all2 = train + " " + idcol
 
 val PreviousArray = previous.split(" ")
 val Trainfile = project + "/" + PreviousArray(0)
@@ -21,14 +22,15 @@ val Predictfile= project + "/" + PreviousArray(1)
 val df_Train = spark.read.format("parquet").load(Trainfile)
 val df_Predict = spark.read.format("parquet").load(Predictfile)
 
-val aimarray = all.split(" ")
+val aim1array = all1.split(" ")
+val aim2array = all2.split(" ")
 val trainArray = train.split(" ")
 
 var df_ = df_Train
 var df_1 = df_Predict
 
-df_ = df_.select(aimarray.map(A => col(A)): _*)
-df_1 = df_1.select(aimarray.map(A => col(A)):_*)
+df_ = df_.select(aim1array.map(A => col(A)): _*)
+df_1 = df_1.select(aim2array.map(A => col(A)):_*)
 
 val assembler = new VectorAssembler().setInputCols(trainArray).setOutputCol("features")
 df_ = assembler.transform(df_)
@@ -42,7 +44,7 @@ lrModel.extractParamMap()
 
 val predictions = lrModel.transform(df_1)
 
-val predict_result = predictions.selectExpr("PassengerId", s"round(prediction,1) as ${newcol}")
+val predict_result = predictions.selectExpr(idcol, s"round(prediction,1) as ${newcol}")
 
 predict_result.write.format("csv").option("header", "true").option("inferSchema", "true").mode(SaveMode.Overwrite).save(project + "/" + id)
 

@@ -3,29 +3,45 @@ import org.apache.spark.ml.regression.LinearRegression
 import org.apache.spark.sql.DataFrame
 import org.apache.spark.sql.functions.col
 
-    val project = "Taitanic"
-    val id = "9"
-    val train = "MinMaxScaledAgeIndex MinMaxScaledPclass MinMaxScaledMother MinMaxScaledSexIndex MinMaxScaledFare"
-    val label = "Survived"
-    val previous = "8"
-    val file = project + "/" + previous
-    val all = train + " " + label
+    val project = "Demo"
+    val id = "%s"
+    val train = "%s"
+    val label = "%s"
+    val previous = "%s"
+    val newcol = "%s"
+    val idcol = "PassengerId"
 
-    val df = spark.read.format("json").load(file)
-    val aimarray = all.split(" ")
+    val file = project + "/" + previous
+    val all1 = train + " " + label + " " + idcol
+    val all2 = train + " " + idcol
+
+    val PreviousArray = previous.split(" ")
+    val Trainfile = project + "/" + PreviousArray(0)
+    val Predictfile= project + "/" + PreviousArray(1)
+
+    val df_Train = spark.read.format("parquet").load(Trainfile)
+    val df_Predict = spark.read.format("parquet").load(Predictfile)
+
+    val aim1array = all1.split(" ")
+    val aim2array = all2.split(" ")
     val trainArray = train.split(" ")
-    var df_ = df
-    df_ = df_.select(aimarray.map(A => col(A)): _*)
+
+    var df_ = df_Train
+    var df_1 = df_Predict
+
+    df_ = df_.select(aim1array.map(A => col(A)): _*)
+    df_1 = df_1.select(aim2array.map(A => col(A)):_*)
 
     val assembler = new VectorAssembler().setInputCols(trainArray).setOutputCol("features")
     df_ = assembler.transform(df_)
+    df_1 = assembler.transform(df_1)
 
     val lr1 = new LinearRegression()
     val lr = lr1.setFeaturesCol("features").setLabelCol(label).setFitIntercept(true).setMaxIter(50)
 
     val lrModel = lr.fit(df_)
-
     lrModel.extractParamMap()
+
     println(s"Coefficients: ${lrModel.coefficients} Intercept: ${lrModel.intercept}")
 
     val trainingSummary = lrModel.summary
@@ -35,8 +51,20 @@ import org.apache.spark.sql.functions.col
     println(s"RMSE: ${trainingSummary.rootMeanSquaredError}")
     println(s"r2: ${trainingSummary.r2}")
 
-    val predictions: DataFrame = lrModel.transform(df_)
-    println("输出预测结果")
-    val predict_result: DataFrame =predictions.selectExpr("features","Survived", "round(prediction,1) as prediction")
-    predict_result.foreach(println(_))
-    df_.show(200,false)
+    val predictions = lrModel.transform(df_1)
+
+    val predict_result = predictions.selectExpr(idcol, s"round(prediction,1) as ${newcol}")
+
+    predict_result.write.format("csv").option("header", "true").option("inferSchema", "true").mode(SaveMode.Overwrite).save(project + "/" + id)
+
+    var fin = predict_result.limit(20).toJSON.collectAsList.toString
+
+    val colname = predict_result.columns
+    val fin_ = fin.substring(1, fin.length - 1)
+    val start = """{"colName":""""
+    val end = "\""
+    val json = colname.mkString(start,", ",end) + "}, "
+
+    fin = "[" + json ++ fin_ + "]"
+
+    val result = Http("%s").postData(fin.toString).header("Content-Type", "application/json").header("Charset", "UTF-8").option(HttpOptions.readTimeout(10000)).asString
