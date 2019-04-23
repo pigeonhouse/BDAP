@@ -13,11 +13,12 @@
     -o-transition: opacity 1s ease;
     transition: opacity 1s ease;
 }
+/* 使用base64编码嵌入加载的logo */
 .loader-content {
     display: block;
     position: relative;
-    padding-top: 50px;
-    top: 45%;
+    padding-top: 0%;
+    top: 35%;
     
 }
 .fadeout {
@@ -40,7 +41,8 @@
         transform:none
     }
 }
-@keyframes fadeInDown{
+@keyframes fadeInDown
+{
     0%
     {
         opacity:0;
