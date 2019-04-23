@@ -10,6 +10,7 @@ import Run from "../../LocalModeComponents/RunPanel/run"
 import Model from "../../LocalModeComponents/ModelStore/Model"
 import { FlowDataPanel } from '../../LocalModeComponents/EditorDataPanel';
 const TabPane = Tabs.TabPane;
+var IntroJs = require('intro.js')
 class LocalMode extends React.Component {
   
   Intro = (key) => {
@@ -128,7 +129,7 @@ class LocalMode extends React.Component {
             </Button>
           </Col>
           <Col span={21}>
-            <Button style={{border:0,backgroundColor:'#343941',color:"#ddd",fontSize:18,fontFamily:'consolas'}}>BigDataPlayground Local-Mode</Button>
+            <Button style={{border:0,backgroundColor:'#343941',color:"#ddd",fontSize:18,fontFamily:'consolas'}}>BigDataPlayground Preview-Mode</Button>
           </Col>      
           <Col span={2}>
             <a href="https://www.yuque.com/ddrid/tx7z84" target="_blank">
@@ -180,16 +181,6 @@ class LocalMode extends React.Component {
                 className={styles.leftMenu}
                 tab={<Icon type="api" className={styles.iconStyle}/>} 
                 key="2"
-              >
-                <div style={{height:'calc(100vh - 105px)'}} span={4} className={styles.editorSidebar}
-                  data-step="1" data-intro='在组件栏可以挑选想要的模块，左键单击拖拽添加至右侧画布内。' data-position='right'> 
-                  <FlowItemPanel />
-                </div>
-              </TabPane>
-              <TabPane 
-                className={styles.leftMenu}
-                tab={<Icon type="setting" className={styles.iconStyle}/>} 
-                key="3"
               >
                 <div style={{height:'calc(100vh - 105px)'}} span={4} className={styles.editorSidebar}
                   data-step="1" data-intro='在组件栏可以挑选想要的模块，左键单击拖拽添加至右侧画布内。' data-position='right'> 

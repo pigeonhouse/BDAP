@@ -16,26 +16,31 @@ export function StrToNum(allData){
     for(let i = 0; i < labelArray.length;i++){
         if(labelArray[i][1] == true){
             if(Dataset[i].stat.type == 'string'){
-                console.log("---------")
-                console.log(attr);
+                let tp = new Array();
+                tp = JSON.parse(JSON.stringify(Dataset[i]));
+                tp.label = tp.label+"_trans";
+                console.log(Dataset);
                 for(let j = 0; j < Dataset[i].value.length; j++){
+                    let found = 0;
                     Object.keys(attr).forEach(function(key){
-                        // console.log("77777777777777")
-                        // console.log(attr[key][0])
                         for(let k = 0; k < attr[key].length; k++){
                             for(let m = 1; m < attr[key][k].length; m++){
                                 if(Dataset[i].value[j] == attr[key][k][m]){
-                                    Dataset[i].value[j] = attr[key][k][0];
+                                    tp.value[j] = attr[key][k][0];
+                                    found = 1;
                                     break;
                                 }
                             }
-                        }
+                        } 
                     })
+                    if(!found){
+                        tp.value[j] = 0;
+                    }
                 }
+                Dataset.push(tp);
             }
         }
     }
-    console.log(Dataset)
 
     allData[1].Dataset = Dataset;
     return allData[1];

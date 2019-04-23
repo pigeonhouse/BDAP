@@ -6,7 +6,7 @@ import org.apache.spark.ml.evaluation.BinaryClassificationEvaluator
 
 val project = "Demo"
 val id = "%s"
-val train = "SexIndex NewCol MinMaxScaledAge MinMaxScaledPclass MinMaxScaledFare"
+val train = "%s"
 val label = "%s"
 val previous = "%s"
 val newcol = "%s"

@@ -1,22 +1,20 @@
-package com.bigdataplayground.demo.MolulesSpark;
+package com.bigdataplayground.demo.MolulesSpark.service;
 
-import com.bigdataplayground.demo.MolulesSpark.util.LivyContact;
+import com.bigdataplayground.demo.MolulesSpark.domain.Node;
 import com.bigdataplayground.demo.MolulesSpark.util.ToolSet;
-import com.bigdataplayground.demo.controller.Node;
+import org.springframework.stereotype.Service;
 
 import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.ArrayList;
 import java.util.List;
-
 
 public class SparkExecutor {
     private String livyAddr;
     private String appAddr;
 
 
-    public SparkExecutor(String livyAddr,String appAddr){
+    public SparkExecutor(String livyAddr, String appAddr){
         this.appAddr = appAddr;
         this.livyAddr = livyAddr;
     }
@@ -26,7 +24,7 @@ public class SparkExecutor {
      * @return
      */
     private String matchFunction(Node node, String code){
-        String data =new String();
+        String data = "";
         switch (node.getLabel()){
             case "Fillna": data = String.format(code,
                     node.getId(), node.getSourceId().get(0).getSource(),
@@ -44,7 +42,8 @@ public class SparkExecutor {
             case "LogisticRegression": data = String.format(code,
                     node.getId(), ToolSet.listToString(node.getLabelArray().get("train_x")),
                     ToolSet.listToString(node.getLabelArray().get("train_y")),
-                    node.getSourceId().get(0).getSource(),node.getSourceId().get(1).getSource(),
+                    node.getSourceId().get(0).getSource() + " " + node.getSourceId().get(1).getSource(),
+                    ToolSet.listToString(node.getLabelArray().get("predict_y")),
                     "http://"+appAddr+"/RunningPost"
             ); break;
             case "TransformType": data = String.format(code,
@@ -65,6 +64,11 @@ public class SparkExecutor {
             case "StandardScaler": data = String.format(code,
                     node.getId(), ToolSet.listToString(node.getLabelArray().get("public")),
                     node.getSourceId().get(0).getSource(),
+                    "http://"+appAddr+"/RunningPost"
+            ); break;
+            case "DataFilter": data = String.format(code,
+                    node.getId(), node.getAttribute().get("新生成列名"), node.getSourceId().get(0).getSource(),
+                    node.getAttribute().get("condition"),
                     "http://"+appAddr+"/RunningPost"
             ); break;
             case "QuantileDiscretizer": data = String.format(code,
@@ -100,6 +104,7 @@ public class SparkExecutor {
                     node.getAttribute().get("activation")
             ); break;
             case "InputPicture": data = String.format(code,
+                    node.getId(),
                     node.getAttribute().get("训练集数据"), node.getAttribute().get("训练集标签"),
                     node.getAttribute().get("验证集数据"), node.getAttribute().get("验证集标签"),
                     node.getAttribute().get("batchSize")
@@ -107,8 +112,8 @@ public class SparkExecutor {
             case "Train": data = String.format(code,
                     node.getId(), node.getAttribute().get("学习率"), node.getAttribute().get("学习率衰减"),
                     node.getAttribute().get("训练次数")
-            );
-            case "Evalution": data = String.format(code,
+            ); break;
+            case "Evaluation": data = String.format(code,
                     node.getId(), node.getSourceId().get(0).getSource()
             ); break;
             case "Predict": data = String.format(code,
@@ -133,13 +138,12 @@ public class SparkExecutor {
         System.out.println("#Code to run:#");
         System.out.println(code);
 
-        LivyContact.postCode(livyAddr,code);
+        LivyService.postCode(livyAddr,code);
     }
 
     public void executeAll(List<Node> nodeList) throws IOException {
         for(Node node : nodeList){
             System.out.println(node.getLabel()+" is running");
-
             executeNode(node);
 
         }

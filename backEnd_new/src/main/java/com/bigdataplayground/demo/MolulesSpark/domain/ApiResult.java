@@ -1,9 +1,11 @@
-package com.bigdataplayground.demo.MolulesSpark;
+package com.bigdataplayground.demo.MolulesSpark.domain;
 
 public class ApiResult {
 
     private int code;
+
     private String msg;
+
     private Object data;
 
     public static ApiResult createOKData(Object data) {

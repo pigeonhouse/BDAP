@@ -2,7 +2,7 @@ import org.apache.spark.ml.feature.{OneHotEncoderEstimator, StringIndexer, Vecto
 import org.apache.spark.mllib.linalg.{SparseVector, Vectors}
 import org.apache.spark.sql.functions.monotonically_increasing_id
 import org.apache.spark.sql.types.{ArrayType, DoubleType, StructField, StructType}
-import org.apache.spark.sql.Row
+import org.apache.spark.sql.{Row, SaveMode}
 import org.apache.spark.sql.functions.col
 
 val project = "Demo"

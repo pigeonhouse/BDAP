@@ -15,7 +15,7 @@ import { withPropsAPI } from '@src';
 import LineMarkerEcharts from './LineMarkerEcharts';
 import GGEditor, { Flow, RegisterCommand } from '@src';
 
-import Downlowd from '../DataOperate/download';
+import Download from '../DataOperate/download';
 import { SeprtbyFeat } from '../DataOperate/DataProcess/SeprtbyFeat'
 
 const Panel = Collapse.Panel;
@@ -80,7 +80,7 @@ class FlowContextMenu extends React.Component {
         }
       }
       else for(let i in chartData){
-        xAxisGroup.push(`${chartData[i][0].toPrecision(4)}`+'-'+`${chartData[i][1].toPrecision(4)}`);
+        xAxisGroup.push(`${parseInt(chartData[i][0])}`+'-'+`${parseInt(chartData[i][1])}`);
         seriesGroup[0].data.push(chartData[i][2]);
       }
       myChart.setOption({
@@ -97,7 +97,7 @@ class FlowContextMenu extends React.Component {
         },
         series: seriesGroup
       });
-      if(chartData.length > 5){
+      if(chartData.length >= 5){
         myChart.setOption({
           xAxis: {
             axisLabel: {  
@@ -127,7 +127,7 @@ class FlowContextMenu extends React.Component {
       else for(let i in chartData){
         seriesGroup[0].data.push({
           value:chartData[i][2],
-          name:chartData[i][0].toPrecision(4)
+          name:parseInt(chartData[i][0])
         });
       }
 
@@ -585,18 +585,19 @@ class FlowContextMenu extends React.Component {
               <span>删除</span>
             </div>
           </Command>
-          <Command name="copy">
+          <Command name="showpicture">
             <div className={styles.item} onClick={this.showModal}>
               <Icon type="form" />
               <span>数据预览</span>
             </div>
           </Command>
-          <Command name="copy">
+          <Command name="showpicture">
             <div className={styles.item} onClick={this.modelEvaluation}>
               <Icon type="solution" />
               <span>模型评估</span>
             </div>
           </Command>
+          <Download></Download>
         </NodeMenu>
         <Modal title="模型评估" visible={this.state.MlEvaluteVisible}
           onOk={this.handleOk} onCancel={this.handleCancel} width={500}
@@ -658,7 +659,7 @@ class FlowContextMenu extends React.Component {
                   <div >
                     {this.chartRadio()}
                     <div>{this.compare()}{this.groupDivide()}</div>         
-                    <div id="main" style={{ maxWidth: 350, height: 280 }}> </div>
+                    <div id="main" style={{ maxWidth: 400, height: 280 }}> </div>
                   </div>
                 </Panel>
               </Collapse>

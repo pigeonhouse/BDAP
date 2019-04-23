@@ -8,6 +8,7 @@ import store from '../../store';
 import { data } from '../../ExampleData/FlowData';
 import { MODEL } from "../../store/storeType"
 var inf = data;
+var count = 1;
 class FlowToolbar extends React.Component {
 
   state = {
@@ -37,43 +38,20 @@ class FlowToolbar extends React.Component {
     read(inf);
   }
   handleClick = () =>{
-    if(this.props.type === 'local'){
-      const { propsAPI } = this.props;
-      inf = JSON.parse(JSON.stringify(propsAPI.save()));
-      const action = {
-        type:MODEL,
-        value:inf,
-        did:false,
-        name:this.state.inp1,
-        info:this.state.inp2,
-      }
-      store.dispatch(action)
-      this.setState({
-        visible: false,
-      });
-      message.success("成功的存储了一个模型!");
+    const { propsAPI } = this.props;
+    inf = JSON.parse(JSON.stringify(propsAPI.save()));
+    const action = {
+      type:MODEL,
+      value:inf,
+      did: false,
+      name:this.state.inp1,
+      info:this.state.inp2,
     }
-    else if(this.props.type === 'python'){
-      const init={
-        method: 'POST', 
-        body:"fileName=",
-        mode: 'cors',
-        headers: {
-          "Content-Type": "application/x-www-form-urlencoded;charset=utf-8"
-      　},
-      }
-      fetch(
-        '', init
-      )
-      .then((response) => {
-        return response.json()
-      })
-      .then(a=>{message.success("成功的存储了一个模型!");})
-      .catch(e => console.log('错误:', e))
-    }
-    else if(this.props.type === 'cluster'){
-
-    }
+    store.dispatch(action)
+    this.setState({
+      visible: false,
+    });
+    message.success("成功的存储了一个模型!");
   }
   handleInput1(e){
     this.setState({inp1:e.target.value});

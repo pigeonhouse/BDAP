@@ -27,6 +27,7 @@ import spark.implicits._
       val df_1 = df_.map{case Row(v: Vector) => v(0)}.toDF("MinMaxScaled" + aimarray(i)).withColumn("idx", monotonically_increasing_id())
       df = df.withColumn("idx", monotonically_increasing_id())
       df = df.join(df_1, df("idx") === df_1("idx")).drop("idx")
+      df = df.limit(df.count().toInt)
     }
 
     df.write.format("parquet").mode(SaveMode.Overwrite).save(project + "/" + id)

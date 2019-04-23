@@ -1,15 +1,14 @@
 import React, { Component } from 'react'
-import { Button,Modal,Icon,message, Table, Input, Popconfirm, Form, Divider} from 'antd'
+import { Button,Modal,Icon,message, Pagination,Table, Input, Popconfirm, Form, Divider} from 'antd'
 import { withPropsAPI } from '@src';
 import store from "../../store"
-import { data } from "../../ExampleData/FlowData"
-const dat = data;
+import { vgg,lenet } from "../../ExampleData/FlowData"
 const nwData = {
   key: 0,
-  Name: "例:泰坦尼克号模型",
+  Name: "LeNet-mnist",
   Date: 2019.4,
-  Description: "我们在这里为你准备了一个初始模型",
-  Model:dat
+  Description: "利用经典的LeNet卷积神经网络进行手写字符识别",
+  Model:{}
 };
 const FormItem = Form.Item;
 const EditableContext = React.createContext();
@@ -118,9 +117,9 @@ class Model extends Component{
             this.state.dataSource.length >= 1
               ? (
                 <div>
-                    <Popconfirm title="确定展示这个模型?" onConfirm={() => this.handleShow(record.key)}>
-                    <a href="javascript:;">调出</a>
-                    </Popconfirm>
+                    {/* <Popconfirm title="确定展示这个模型?" onConfirm={() => this.handleShow(record.key)}> */}
+                    <a href="javascript:;" onClick={() => this.handleShow(record.key)}>调出</a>
+                    {/* </Popconfirm> */}
                     <Divider type="vertical" />
                     <Popconfirm title="确定删除?" onConfirm={() => this.handleDelete(record.key)}>
                     <a href="javascript:;">删除</a>
@@ -131,12 +130,19 @@ class Model extends Component{
         }];
         this.handleStoreChange = this.handleStoreChange.bind(this)
         store.subscribe(this.handleStoreChange)
+        nwData.Model = lenet;
+        let nw2Data = {
+          key: 1,
+          Name: "VGG-16",
+          Date: 2019.4,
+          Description: "利用VGG-16识别cifar100数据集",
+          Model:vgg
+        };
         this.state = {
-          dataSource:[nwData],
-          count: 1
+          dataSource:[nwData,nw2Data],
+          count: 2
         };
     }
-
     state = {
       visible:false,
       editing: false,
@@ -179,7 +185,7 @@ class Model extends Component{
       this.setState({ 
         dataSource: dataSource.filter(item => item.key !== key),
       });
-      message.success("此模型被删除成功!")
+      message.success("删除成功!")
     }
     handleShow = (key) => {
       const dataSource = [...this.state.dataSource];
@@ -195,7 +201,7 @@ class Model extends Component{
       this.setState({
         visible:false
       });
-      message.success("这个模型被成功调出!")
+      //message.success("这个模型被成功调出!")
     }
     handleAdd = () => {
         const { propsAPI } = this.props;
@@ -268,8 +274,8 @@ class Model extends Component{
                   visible={this.state.visible}
                   onOk={this.DisModal}
                   onCancel={this.DisModal}
-                  bodyStyle={{height: '720px'}}
-                  width={1100}
+                  bodyStyle={{height: '400px'}}
+                  width={1000}
                 >
                   {/* <Button onClick={this.handleAdd} type="primary" style={{ marginBottom: 16 }}>
                     添加当前模型
@@ -278,10 +284,14 @@ class Model extends Component{
                     components={components}
                     rowClassName={() => 'editable-row'}
                     bordered
+                    pagination={{
+                      pageSize: 5
+                    }}
                     dataSource={dataSource}
                     columns={columns}
                   />
                 </Modal>
+                
             </div>
         </div>
         );

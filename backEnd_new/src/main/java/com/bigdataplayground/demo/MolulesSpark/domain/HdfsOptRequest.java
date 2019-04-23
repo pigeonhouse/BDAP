@@ -1,4 +1,4 @@
-package com.bigdataplayground.demo.MolulesSpark;
+package com.bigdataplayground.demo.MolulesSpark.domain;
 
 public class HdfsOptRequest {
     private String kind;

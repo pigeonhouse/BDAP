@@ -161,89 +161,99 @@ class Run extends Component{
     this.showLineChartFirst([], [], [], accuracyChart, lessChart, learningRateChart);
   }
   showLineChartFirst=(dataa, datal, datar, accuracyChart, lessChart, learningRateChart)=>{
-    setTimeout(()=>{
-      fetch("http://10.105.222.92:5000/trainingAccuracy")
-      .then(res => {
-        if(res.status === 200){
-          res.json().then(res=>{
-            if(Number(res.round) === 0 && Number(res.accuracy) === 0 &&
-              Number(res.learning_rate) === 0 && Number(res.loss) === 0 ){
-              if(dataa.length === 0)
-              this.showLineChartFirst(dataa, datal, datar, accuracyChart, lessChart, learningRateChart);
-            }
-            else {
-              accuracyChart.hideLoading();
-              lessChart.hideLoading();
-              learningRateChart.hideLoading();
-              dataa.push({value:[res.round, res.accuracy]});
-              datar.push({value:[res.round, res.learning_rate]});
-              datal.push({value:[res.round, res.loss]});
-              var currentStatus = this.state.currentStatus;
-              currentStatus[0].value = Number(res.round);
-              currentStatus[1].value = Number(res.accuracy);
-              currentStatus[2].value = Number(res.loss);
-              currentStatus[3].value = Number(res.learning_rate);
-              this.setState({currentStatus});
-              accuracyChart.setOption({
-                series: [{
-                  data: dataa
-                }]
-              })
-              lessChart.setOption({
-                series: [{
-                  data: datal
-                }]
-              })
-              learningRateChart.setOption({
-                series: [{
-                  data: datar
-                }]
-              })
-              this.showLineChart(dataa, datal, datar, accuracyChart, lessChart, learningRateChart);
-            }
-          })
-        }
-      })
-    }, 200);
+    fetch("http://10.105.222.92:5000/trainingAccuracy")
+    .then(res => {
+      if(res.status === 200){
+        res.json().then(res=>{
+          if(Number(res.round) === 0 && Number(res.accuracy) === 0 &&
+            Number(res.learning_rate) === 0 && Number(res.loss) === 0 ){
+            if(dataa.length === 0)
+            this.showLineChartFirst(dataa, datal, datar, accuracyChart, lessChart, learningRateChart);
+          }
+          else {
+            accuracyChart.hideLoading();
+            lessChart.hideLoading();
+            learningRateChart.hideLoading();
+            dataa.push({value:[res.round, res.accuracy]});
+            datar.push({value:[res.round, res.learning_rate]});
+            datal.push({value:[res.round, res.loss]});
+            var currentStatus = this.state.currentStatus;
+            currentStatus[0].value = Number(res.round);
+            currentStatus[1].value = Number(res.accuracy);
+            currentStatus[2].value = Number(res.loss);
+            currentStatus[3].value = Number(res.learning_rate);
+            this.setState({currentStatus});
+            accuracyChart.setOption({
+              series: [{
+                data: dataa
+              }]
+            })
+            lessChart.setOption({
+              series: [{
+                data: datal
+              }]
+            })
+            learningRateChart.setOption({
+              series: [{
+                data: datar
+              }]
+            })
+            this.showLineChart(dataa, datal, datar, accuracyChart, lessChart, learningRateChart);
+          }
+        })
+        .catch(e=>{
+          setTimeout(()=>{
+          this.showLineChartFirst(dataa, datal, datar, accuracyChart, lessChart, learningRateChart);
+          }, 100);
+        })
+      }
+    })
   }
   showLineChart=(dataa, datal, datar, accuracyChart, lessChart, learningRateChart)=>{
     setTimeout(()=>{
       fetch("http://10.105.222.92:5000/trainingAccuracy")
       .then(res => {
         if(res.status === 200){
-          res.json().then(res=>{
-            if(Number(res.round) !== 0 || Number(res.accuracy) !== 0 ||
-              Number(res.learning_rate) !== 0 || Number(res.loss) !== 0 ){
-                dataa.push({value:[res.round, res.accuracy]});
-                datar.push({value:[res.round, res.learning_rate]});
-                datal.push({value:[res.round, res.loss]});
-                var currentStatus = this.state.currentStatus;
-                currentStatus[0].value = Number(res.round);
-                currentStatus[1].value = Number(res.accuracy);
-                currentStatus[2].value = Number(res.loss);
-                currentStatus[3].value = Number(res.learning_rate);
-                this.setState({currentStatus});
-                accuracyChart.setOption({
-                  series: [{
-                    data: dataa
-                  }]
-                })
-                lessChart.setOption({
-                  series: [{
-                    data: datal
-                  }]
-                })
-                learningRateChart.setOption({
-                  series: [{
-                    data: datar
-                  }]
-                })
-                this.showLineChart(dataa, datal, datar, accuracyChart, lessChart, learningRateChart);
-            }
-          })
+          return res.json();
         }
       })
-    }, 200);
+      .then(res=>{
+        if(Number(res.round) !== 0 || Number(res.accuracy) !== 0 ||
+          Number(res.learning_rate) !== 0 || Number(res.loss) !== 0 ){
+            dataa.push({value:[res.round, res.accuracy]});
+            datar.push({value:[res.round, res.learning_rate]});
+            datal.push({value:[res.round, res.loss]});
+            var currentStatus = this.state.currentStatus;
+            currentStatus[0].value = Number(res.round);
+            currentStatus[1].value = Number(res.accuracy);
+            currentStatus[2].value = Number(res.loss);
+            currentStatus[3].value = Number(res.learning_rate);
+            this.setState({currentStatus});
+            accuracyChart.setOption({
+              series: [{
+                data: dataa
+              }]
+            })
+            lessChart.setOption({
+              series: [{
+                data: datal
+              }]
+            })
+            learningRateChart.setOption({
+              series: [{
+                data: datar
+              }]
+            })
+            this.showLineChart(dataa, datal, datar, accuracyChart, lessChart, learningRateChart);
+        }
+      })
+      .catch(e=>{
+        console.log(e)
+        setTimeout(()=>{
+          this.showLineChart(dataa, datal, datar, accuracyChart, lessChart, learningRateChart);
+        }, 100);
+      })
+    }, 100);
   }
 
   handleOk = () => {
@@ -349,13 +359,13 @@ class Run extends Component{
   run = (stream, propsAPI)=>{  
     if(NeedDetection){
       console.log("------Detected---------")
-      if(this.handleLegal())  return ;
-      else NeedDetection = 0;
+      // if(this.handleLegal())  return ;
+      // else NeedDetection = 0;
     }
     setTimeout(()=>{
       if(current !== stream.length){
         let k = current;
-        const all_data = this.inputdata(stream[k], propsAPI);
+        // const all_data = this.inputdata(stream[k], propsAPI);
         var outcome = new Array()
         if(stream[k].label !== '本地数据'){
           const { find } = propsAPI;
@@ -393,52 +403,52 @@ class Run extends Component{
             }
           }
           switch (stream[k].label) {
-            case '单变量线性回归':
-                outcome = OneVarLinearRegression(all_data);
-                break
-            case '多变量线性回归':
-                outcome = MutiVarLinearRegression(all_data);
-                break
-            case '单变量多项式回归':
-                outcome = OneVarPolynomialRegression(all_data);
-                break
-            case '决策树回归':
-                outcome = DecisionTreeRegression(all_data);
-                break
-            case '随机森林回归':
-                outcome = RandomForest(all_data);
-                break
-            case '朴素贝叶斯':
-                outcome = NaiveBayes(all_data)
-                break
-            case '支持向量机':
-                outcome = SVM(all_data)
-                break
-            case '数据随机划分':
-                outcome = Randis(all_data)
-                break
-            case '特征区间化':
-                outcome = SeprtbyFeat(all_data)
-                break  
-            case '特征分组归类':
-                outcome = StrToNum(all_data)
-                break
-            case '特征二进制化':
-                outcome = Onehot(all_data)
-                break
-            case '缺失值填充':
-                outcome = fillNa(all_data);
-                break
-            case '归一化':
-                outcome = Nomalize(all_data);
-                break
-            case '卷积神经网络':
+            // case '单变量线性回归':
+            //     outcome = OneVarLinearRegression(all_data);
+            //     break
+            // case '多变量线性回归':
+            //     outcome = MutiVarLinearRegression(all_data);
+            //     break
+            // case '单变量多项式回归':
+            //     outcome = OneVarPolynomialRegression(all_data);
+            //     break
+            // case '决策树回归':
+            //     outcome = DecisionTreeRegression(all_data);
+            //     break
+            // case '随机森林回归':
+            //     outcome = RandomForest(all_data);
+            //     break
+            // case '朴素贝叶斯':
+            //     outcome = NaiveBayes(all_data)
+            //     break
+            // case '支持向量机':
+            //     outcome = SVM(all_data)
+            //     break
+            // case '数据随机划分':
+            //     outcome = Randis(all_data)
+            //     break
+            // case '特征区间化':
+            //     outcome = SeprtbyFeat(all_data)
+            //     break  
+            // case '特征分组归类':
+            //     outcome = StrToNum(all_data)
+            //     break
+            // case '特征二进制化':
+            //     outcome = Onehot(all_data)
+            //     break
+            // case '缺失值填充':
+            //     outcome = fillNa(all_data);
+            //     break
+            // case '归一化':
+            //     outcome = Nomalize(all_data);
+            //     break
+            case '训练':
                 this.showModal(stream);              
                 break
             default:
               break;
           }
-          this.outputdata(stream[k].id, outcome, propsAPI);
+          // this.outputdata(stream[k].id, outcome, propsAPI);
           const { update, executeCommand } = propsAPI;
           const currentitem = find(stream[k].id);
           var value = JSON.parse(JSON.stringify(currentitem.model.keyConfig));
@@ -468,15 +478,15 @@ class Run extends Component{
         }
         else this.run(stream, propsAPI);
       }
-    },1000)
+    },200)
 
   }
   handleLegal = ()=> {
     NeedDetection = 1;
     const { propsAPI } = this.props;
     const inf = propsAPI.save();
-    console.log("--------LegalTest---------")
-    console.log(inf);
+    console.log("--------保存信息---------")
+    console.log(JSON.stringify(inf));
     if(!inf.hasOwnProperty("nodes")){
       message.error("先从左边拖来一些部件框吧")
       return 1;

@@ -1,6 +1,6 @@
 import React, {Component, Fragment} from 'react'
 import { withPropsAPI } from '@src';
-import { Divider } from 'antd'
+import { Divider, Row, Col } from 'antd'
 import FeatureRegion from './Feature/FeatureRegion'
 import FeatureGroup from './Feature/FeatureGroup'
 import FillNa from './Feature/fillNa'
@@ -117,7 +117,7 @@ class Feature extends Component{
                             tag = {tag}/>
                             <Divider></Divider>
                         </Fragment>
-            case '特征二进制化':
+            case 'one-hot编码':
                 return;
             case '数据筛选':
                 return <Fragment>
@@ -140,7 +140,16 @@ class Feature extends Component{
                 </Fragment>
             case '数据随机划分':
                 return <Fragment>
-                    划分比例：<Randis/>
+                    <Row>
+                        <Col span={2}>
+                        </Col>
+                        <Col span={8}>
+                            划分比例：
+                        </Col>
+                        <Col span={14}>
+                            <Randis/>
+                        </Col>
+                    </Row>
                 </Fragment>
             case '数据筛选':
                 if(arr.length)

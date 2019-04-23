@@ -1,7 +1,7 @@
-package com.bigdataplayground.demo.MolulesSpark.util;
+package com.bigdataplayground.demo.MolulesSpark.service;
 
-import com.bigdataplayground.demo.MolulesSpark.ApiResult;
-import com.bigdataplayground.demo.MolulesSpark.FileStatusEx;
+import com.bigdataplayground.demo.MolulesSpark.domain.ApiResult;
+import com.bigdataplayground.demo.MolulesSpark.domain.FileStatusEx;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import org.apache.hadoop.conf.Configuration;
@@ -15,14 +15,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 
-
-public class HdfsClient {
+public class HdfsService {
     private Configuration conf = new Configuration();
     private URI hdfsHome ;
     private FileSystem fileSystem ;
     private ObjectMapper objectMapper = new ObjectMapper();
 
-    public HdfsClient(String hdfsHome,String userName) throws URISyntaxException, IOException, InterruptedException {
+    public HdfsService(String hdfsHome, String userName) throws URISyntaxException, IOException, InterruptedException {
         //配置hosts https://my.oschina.net/gordonnemo/blog/3017724
         if(userName==null||userName=="") userName = "tseg"; //用开发阶段
         this.hdfsHome= new URI(hdfsHome);
@@ -34,8 +33,8 @@ public class HdfsClient {
 
     /**
      * 递归地创建目录
-     * @param newDir
-     * @return
+     * @param newDir 新目录
+     * @return 返回api结果
      * @throws IOException
      */
     public ApiResult makeDirectory(String newDir) throws IOException {

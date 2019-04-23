@@ -267,7 +267,7 @@ class Run extends Component{
             case '特征分组归类':
                 outcome = StrToNum(all_data)
                 break
-            case '特征二进制化':
+            case 'one-hot编码':
                 outcome = Onehot(all_data)
                 break
             case '缺失值填充':

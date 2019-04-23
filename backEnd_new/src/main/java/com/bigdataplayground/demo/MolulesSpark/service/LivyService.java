@@ -1,10 +1,11 @@
-package com.bigdataplayground.demo.MolulesSpark.util;
+package com.bigdataplayground.demo.MolulesSpark.service;
 
-import com.bigdataplayground.demo.MolulesSpark.LivySessionDescription;
-import com.bigdataplayground.demo.MolulesSpark.LivySessionInfo;
+import com.bigdataplayground.demo.MolulesSpark.domain.LivySessionDescription;
+import com.bigdataplayground.demo.MolulesSpark.domain.LivySessionInfo;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.http.*;
+import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
 import java.io.IOException;
@@ -16,7 +17,7 @@ import java.util.Map;
 /**
  * 一些Livy通信上的常用代码，获取Session状态，创建Session，执行代码等。均是static
  */
-public class LivyContact {
+public class LivyService {
     private static ObjectMapper objectMapper = new ObjectMapper();
     /**
      * 提交.scala至livy
@@ -86,8 +87,8 @@ public class LivyContact {
         }
         if(livySessionDescription.getTotal()==0 || availableSession==null){
             System.out.print("Not a single idle session is available. Wait to create a new Livy Session");
-            LivySessionInfo newSession = LivyContact.createSession();
-            while(!LivyContact.getSession(livyAddr,newSession.getId()).getState().equals("idle")){
+            LivySessionInfo newSession = LivyService.createSession();
+            while(!LivyService.getSession(livyAddr,newSession.getId()).getState().equals("idle")){
                 System.out.print(".");
                 try {
                     Thread.sleep(1000); //防止频繁get

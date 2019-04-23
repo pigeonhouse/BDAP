@@ -56,6 +56,36 @@ class Selectword extends Component{
         }
         return false;
     }
+    findDataset=(sourceID, sourceAnchor)=>{
+        const { propsAPI } = this.props;
+        const { find } = propsAPI;
+        const sourceItem = find(sourceID);
+        const { Dataset, anchor } = sourceItem.getModel();
+        if(Dataset.length !== 0){
+            if(anchor[1] !== 1){
+                if(sourceAnchor === 1){
+                    Dataset = Dataset[0];
+                }
+                else {
+                    Dataset = Dataset[1];
+                }
+            }
+            return Dataset;
+        }
+        else {
+            console.log('------')
+            if(anchor[0] === 1){
+                const edges = propsAPI.save().edges;
+                for(let i in edges){
+                    console.log(edges[i])
+                    if(edges[i].target === sourceID){
+                        return this.findDataset(edges[i].source, edges[i].sourceAnchor);
+                    }
+                }
+                return [];
+            }
+        }
+    }
     changeSourceLabel=(item, labelArray)=>{
         if(this.props.type === 'Cluster'){
             let labelarr = [];
@@ -74,6 +104,13 @@ class Selectword extends Component{
                         }
                     }
                     return [...labelArray, ...labelarr];
+                case 'one-hot编码':
+                    for(let i in labelArray){
+                        if(labelArray[i][1]){
+                            labelarr.push([labelArray[i][0] + 'ClassVec', false])
+                        }
+                    }
+                return [...labelArray, ...labelarr];
                 case 'StringIndexer':
                     for(let i in labelArray){
                         if(labelArray[i][1]){
@@ -88,21 +125,45 @@ class Selectword extends Component{
                 default: return labelArray;
             }
         }
-        else if(this.props.type === 'Local'){
-            let labelarr = [];
+        else{
+            let labelarr = new Array();
             switch(item.model.label){
                 case '特征区间化':
-                    let labelarr = new Array();
                     for(let i in labelArray){
                         if(labelArray[i][1]){
                             labelarr.push([labelArray[i][0]+'_Gaped', false])
                         }
                     }
                     return [...labelArray, ...labelarr];
-
-                case '特征二进制化':          
-                case '数据类型转换':
-                    return labelArray;
+                case '特征分组归类':
+                    for(let i in labelArray){
+                        if(labelArray[i][1]){
+                            labelarr.push([labelArray[i][0]+'_trans', false])
+                        }
+                    }
+                    return [...labelArray, ...labelarr];
+                case 'one-hot编码':
+                    if(item.model.Dataset.length === 0)
+                    var Dataset = this.findDataset(this.props.sourceid, this.props.index);
+                    else var Dataset = item.model.Dataset;
+                    for(let i in labelArray){
+                        if(labelArray[i][1]){
+                            for(let j in Dataset){
+                                if(Dataset[j].label === labelArray[i][0]){
+                                    const Stat = Dataset[j].stat;
+                                    if(Stat.type === 'number')
+                                    break;
+                                    else {
+                                        for(let k in Stat.value){
+                                            const index = Number(k)+1;
+                                            labelarr.push([labelArray[i][0]+'_'+index, false])
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    return [...labelArray, ...labelarr];
                 default: return labelArray;
             }
         }
@@ -280,7 +341,7 @@ class Selectword extends Component{
             <div>
                 {this.tooltipWord()}
                 <Tooltip arrowPointAtCenter 
-                    visible={this.state.Tooltipvisible}
+                    // visible={this.state.Tooltipvisible}
                     placement="bottom" 
                     title={() => {
                         return (
@@ -296,18 +357,20 @@ class Selectword extends Component{
                     mouseLeaveDelay="0.1"
                 >
                     <Button style={{width:'100%', marginBottom:'10px'}} onClick={this.displayTransfer}
-                    onMouseEnter={this.handleMouseEnterClose}
-                    onMouseLeave={this.handleMouseLeaveClose}>选择字段</Button>
+                        // onMouseEnter={this.handleMouseEnterClose}
+                        mouseLeaveDela={0.01}
+                        // onMouseLeave={this.handleMouseLeaveClose}
+                    >选择字段</Button>
                 </Tooltip>
             </div>
         )
     }
-    handleMouseEnterClose=()=>{
-        this.setState({Tooltipvisible:true})
-    }
-    handleMouseLeaveClose=()=>{
-        this.setState({Tooltipvisible:false})  
-    }
+    // handleMouseEnterClose=()=>{
+    //     this.setState({Tooltipvisible:true})
+    // }
+    // handleMouseLeaveClose=()=>{
+    //     this.setState({Tooltipvisible:false})  
+    // }
     render(){
         return (
             <div>
