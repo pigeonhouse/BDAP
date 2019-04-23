@@ -1,6 +1,6 @@
 import React, { Component, Fragment } from 'react'
 import { withPropsAPI } from '@src';
-import { Form, Icon, Button, Select, Input, Row, Col } from 'antd'
+import { Form, Icon, Button, Select, Input, Row, Col, Tooltip } from 'antd'
 import './feature.less'
 const { Item } = Form;
 const Option = Select.Option;
@@ -193,27 +193,33 @@ class FeatureGroup extends Component {
                 required={false}
                 key={index*2}
               >
-                <Col span = {6}>
-                  组名：
-                </Col>
-                <Col span = {14}>
-                  {getFieldDecorator(`name[${index}]`,typeof(item[0]) != "undefined"?{
-                    initialValue: item[0]}:{}
-                  )(
-                    <Input 
-                      onChange={this.handleSubmitInput}
-                      onBlur={this.handleSubmitInput}
-                    />
-                  )}
-                </Col>
-                <Col span = {4}>
-                  <Icon
-                    className="dynamic-delete-button"
-                    type="minus-circle-o"
-                    onClick={() => this.remove(index)}
-                    style={{cursor:'pointer', marginLeft:'5px'}}
-                  />
-                </Col>
+                <Tooltip title='转化后的值' mouseLeaveDelay="0.1">
+                  <Col span = {6}>
+                    组名：
+                  </Col>
+                  <Col span = {14}>
+                    {getFieldDecorator(`name[${index}]`,typeof(item[0]) != "undefined"?{
+                      initialValue: item[0]}:{}
+                    )(
+                      <Input 
+                        onChange={this.handleSubmitInput}
+                        onBlur={this.handleSubmitInput}
+                      />
+                    )}
+                  </Col>
+                </Tooltip>
+                
+                  <Col span = {4}>
+                    <Tooltip title='删除此项' mouseLeaveDelay="0.1">
+                      <Icon
+                        className="dynamic-delete-button"
+                        type="minus-circle-o"
+                        onClick={() => this.remove(index)}
+                        style={{cursor:'pointer', marginLeft:'5px'}}
+                      />
+                    </Tooltip>
+                  </Col>
+                
               </Item>
             </Row>
 
@@ -224,30 +230,34 @@ class FeatureGroup extends Component {
                 required={false}
                 key={index*2+1}
               >
-                <Col span = {6}>
-                  标签：
-                </Col>
-                <Col span = {18}>
-                  {getFieldDecorator(`value[${index}]`, item.slice(1)?{
-                    initialValue: item.slice(1)}:{}
-                  )(
-                    <Select
-                      mode="tags"
-                      onChange={this.handleSubmitSelect.bind(this, index)}
-                      showArrow
-                    >
-                      {this.state.children}
-                    </Select>
-                  )}
-                </Col>
+                <Tooltip title='需要转化的标签' mouseLeaveDelay="0.1">
+                  <Col span = {6}>
+                    标签：
+                  </Col>
+                  <Col span = {18}>
+                    {getFieldDecorator(`value[${index}]`, item.slice(1)?{
+                      initialValue: item.slice(1)}:{}
+                    )(
+                      <Select
+                        mode="tags"
+                        onChange={this.handleSubmitSelect.bind(this, index)}
+                        showArrow
+                      >
+                        {this.state.children}
+                      </Select>
+                    )}
+                  </Col>
+                </Tooltip>
               </Item>
             </Row>
           </Fragment>
           })}
           <Item>
-            <Button type="dashed" onClick={this.add} style={{width:'100%'}}>
-                <Icon type="plus" /> Add group
-            </Button>
+            <Tooltip title='增加项' mouseLeaveDelay="0.1">
+              <Button type="dashed" onClick={this.add} style={{width:'100%'}}>
+                  <Icon type="plus" /> Add group
+              </Button>
+            </Tooltip>
           </Item>
       </Form>
     );

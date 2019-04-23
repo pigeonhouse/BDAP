@@ -11,6 +11,7 @@ import { FlowItemPanel } from '../../PythonModeComponents/EditorItemPanel';
 import { FlowDataPanel } from '../../PythonModeComponents/EditorDataPanel';
 import Model from '../../PythonModeComponents/ModelStore/Model'
 const TabPane = Tabs.TabPane;
+var IntroJs = require('intro.js')
 class LocalMode extends React.Component {
   Intro = (key) => {
     notification.close(key)

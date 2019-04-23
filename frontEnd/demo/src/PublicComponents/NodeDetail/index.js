@@ -5,6 +5,9 @@ import Selectword from '../DataOperate/selectword'
 import Uploadfile from '../DataOperate/upload'
 import LocalTestData from '../DataOperate/LocalTestData'
 import LocalTrainData from '../DataOperate/LocalTrainData'
+import SimpleTest from '../DataOperate/SimpleTest'
+import SimpleTrain from '../DataOperate/SimpleTrain'
+import Pokemon from '../DataOperate/Pokemon'
 import HdfsFile from '../DataOperate/hdfsFile'
 import styles from './index.less';
 import Feature from '../DataOperate/Feature'
@@ -100,6 +103,20 @@ class NodeDetail extends React.Component {
     else if(label === 'Titanic训练' && Dataset.length === 0){
       return(
         <LocalTrainData ></LocalTrainData>
+      )
+    }
+    else if(label === 'Pokemon' && Dataset.length === 0){
+      return(
+        <Pokemon></Pokemon>
+      )
+    }
+    else if(label === 'SimpleTest' && Dataset.length === 0){
+      return(
+        <SimpleTest></SimpleTest>
+      )
+    }else if(label === 'SimpleTrain' && Dataset.length === 0){
+      return(
+        <SimpleTrain></SimpleTrain>
       )
     }
     else if(group === 'input' && Dataset.length === 0){
@@ -253,6 +270,20 @@ class NodeDetail extends React.Component {
       });
     });
   }
+  handleChangeNumber=(label, value)=>{
+    const { propsAPI } = this.props;
+    const { getSelected, executeCommand, update } = propsAPI;
+
+    const item = getSelected()[0];
+    if (!item) {
+    return;
+    }
+    var attr = JSON.parse(JSON.stringify(item.model.attr));
+    attr[label] = value;
+    executeCommand(() => {
+        update(item,{attr});
+    });
+  }
   render() {
     const { form, propsAPI } = this.props;
     const { getFieldDecorator } = form;
@@ -349,13 +380,31 @@ class NodeDetail extends React.Component {
                       rules:[{
                         required:false,
                         pattern: new RegExp(item.regexp, "g"),
-                        message: '请输入数字'
+                        message: '请输入正确格式'
                       }],
                       initialValue: attr[item.elabel],
                     })(<Input style={{margin:0}} onBlur={this.handleInputSubmit}/>)
                   }
                 </Item>
               );
+            }
+            else if(item.type === 'Number'){
+              return (
+                <Item style={{margin:0}} label={item.label} {...inlineFormItemLayout}>
+                  {
+                    getFieldDecorator(`attr.${item.elabel}` , {
+                      initialValue: attr[item.elabel],
+                    })(        
+                      <InputNumber
+                        style={{margin:0}}
+                        min={item.min} 
+                        max={item.max} 
+                        step={item.step}
+                        onChange={this.handleChangeNumber.bind(this, item.elabel)} 
+                    />)
+                  }
+                </Item>
+              )
             }
           })}
           {targetid.map((value, index)=>{

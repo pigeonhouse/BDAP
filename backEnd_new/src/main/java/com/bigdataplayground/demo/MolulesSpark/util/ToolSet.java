@@ -48,7 +48,7 @@ public class ToolSet {
      * @return
      */
     public static String listToString(List<String> list){
-        String string = new String();
+        String string = "";
         for(int i = 0 ;i<list.size();i++){
             if(i ==list.size()-1){
                 string = string + list.get(i);

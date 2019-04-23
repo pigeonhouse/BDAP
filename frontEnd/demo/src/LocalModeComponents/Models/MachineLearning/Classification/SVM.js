@@ -8,6 +8,26 @@ function normalize(pre, predictObj, PreArray){
     Dataset.push(Stat([{label:PreArray[0], value:predictObj}])[0]);
     return {Dataset:Dataset};
 }
+function changeZero(label){
+    let result = [];
+    for(let i in label){
+        if(label[i] === 0){
+            result.push(-1);
+        }
+        else result.push(label[i]);
+    }
+    return result;
+}
+function setZero(label){
+    let result = [];
+    for(let i in label){
+        if(label[i] === -1){
+            result.push(0);
+        }
+        else result.push(label[i]);
+    }
+    return result;
+}
 export function SVM(all_data){
     var SVM = require('ml-svm');
     
@@ -22,37 +42,33 @@ export function SVM(all_data){
     const attr = all_data[0].all_attr;
 
     const features = selectData(trainData, labelArray.train_x);
-    const labels = selectDataUntransport(trainData, labelArray.train_y);
+    var labels = selectDataUntransport(trainData, labelArray.train_y);
     const predict = selectData(textData, labelArray.predict_x);
-
+    // labels = changeZero(labels);
+    console.log(labels)
     var options = {
-        C: attr.C,
-        tol: attr.tol,
-        maxPasses: attr.maxPasses,
-        maxIterations: attr.maxIterations,
-        kernel: attr.kernel,
+        C: 0.01,
+        tol: 10e-4,
+        maxPasses: 10,
+        maxIterations: 10000,
+        kernel: 'rbf',
         kernelOptions: {
-            sigma: attr.kernelOptionsSigma
+          sigma: 0.5
         }
     };
 
     var svm = new SVM(options);
     svm.train(features, labels);
-    console.log('attr')
-    console.log(features)
-    console.log(labels)
-    console.log(options)
 
     const testx = selectData(Dataset[1], labelArray.train_x);
     const testy = selectDataUntransport(Dataset[1], labelArray.train_y);
 
     var pre = svm.predict(testx)
-    console.log('pre')
 
-    console.log(pre)
     const CM2 = ConfusionMatrix.fromLabels(testy, pre);
     var predictObj = svm.predict(predict);
-
+    // predictObj = setZero(predictObj);
+    console.log(predictObj)
     var resultData = normalize(textData, predictObj, labelArray.predict_y);
     resultData["evaluation"]=[["Precision",CM2.getAccuracy(),"正确率"]];
     return resultData;

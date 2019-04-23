@@ -17,10 +17,10 @@ export function RandomForest(all_data){
     const y = selectDataUntransport(trainData, labelArray.train_y);
     const predict = selectData(textData, labelArray.predict_x);
     const options = {
-        seed: attr.seed,
-        maxFeatures: attr.maxFeatures,
-        replacement: attr.replacement === 'false'? false:true,
-        nEstimators: attr.nEstimators
+        seed: 3, 
+        maxFeatures: 2,
+        replacement: false,
+        nEstimators: 200
     }
     var regression = new RFRegression(options);
     regression.train(x, y);

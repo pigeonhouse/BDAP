@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import { withPropsAPI } from '@src';
-import { Form, Icon, Button, Select, InputNumber, Input, Row, Col } from 'antd'
+import { Form, Icon, Button, Select, InputNumber, Input, Row, Col, Tooltip } from 'antd'
 import './feature.less'
 const { Item } = Form;
 const Option = Select.Option;
@@ -188,7 +188,7 @@ class FeatureRegion extends Component {
           defaultValue={groupvalue}
           style={{margin:10, width:'65%', marginBottom:0}}
           onChange={this.handleSubmit1} />
-      </div>
+        </div>
     }
     else if(this.state.groupingType === 'user-defined'){
       const { getFieldDecorator } = this.props.form;
@@ -208,95 +208,105 @@ class FeatureRegion extends Component {
       else {
         region = this.state.region;
       }
-      // let defaultName;
-      // defaultName = attr[`${tag}Default`];
       return  <Form>
         {region.map((item, index)=>{
           return (
             <Row>
+              
+                <Col span={7}>
+                <Tooltip title='转化后的值' mouseLeaveDelay="0.1"><div>
+                    <Item 
+                      style={{margin:0}}
+                      required={false}
+                      key={index*4}
+                    >
+                      {getFieldDecorator(`value[${index}]`, item[0] !== null?{
+                        // rules:[{
+                        //   required:false,
+                        //   pattern: new RegExp(/^[0-9]+.?[0-9]*/, "g"),
+                        //   message: '请输入数字'
+                        // }],
+                        initialValue: item[0]
+                      }:{
+                        // rules:[{
+                        //   required:false,
+                        //   pattern: new RegExp(/^[0-9]+.?[0-9]*/, "g"),
+                        //   message: '请输入数字'
+                        // }],
+                      })(
+                        // <Tooltip title='转化后的值' mouseLeaveDelay="0.1">
+                          <Input
+                            placeholder='value'
+                            onChange={this.handleSubmit2}
+                            onBlur={this.handleSubmit2}
+                          />
+                        // {/* </Tooltip> */}
+                      )}
+                    </Item></div></Tooltip>
+                  
+                </Col>
               <Col span={7}>
-                <Item 
-                  style={{margin:0}}
-                  required={false}
-                  key={index*4}
-                >
-                  {getFieldDecorator(`value[${index}]`, item[0] !== null?{
-                    // rules:[{
-                    //   required:false,
-                    //   pattern: new RegExp(/^[0-9]+.?[0-9]*/, "g"),
-                    //   message: '请输入数字'
-                    // }],
-                    initialValue: item[0]
-                  }:{
-                    // rules:[{
-                    //   required:false,
-                    //   pattern: new RegExp(/^[0-9]+.?[0-9]*/, "g"),
-                    //   message: '请输入数字'
-                    // }],
-                  })(
-                    <Input
-                      placeholder='value'
-                      onChange={this.handleSubmit2}
-                      onBlur={this.handleSubmit2}
-                    />
-                  )}
-                </Item>
+                <Tooltip title='转化下界' mouseLeaveDelay="0.1">
+                <div>
+                  <Item 
+                    style={{margin:0}}
+                    required={false}
+                    key={index*4+1}
+                  >
+                    {getFieldDecorator(`min[${index}]`, item[1] !== null?{
+                      // rules:[{
+                      //   required:false,
+                      //   pattern: new RegExp(/^[0-9]+.?[0-9]*/, "g"),
+                      //   message: '请输入数字'
+                      // }],
+                      initialValue: item[1]
+                    }:{
+                      // rules:[{
+                      //   required:false,
+                      //   pattern: new RegExp(/^[0-9]+.?[0-9]*/, "g"),
+                      //   message: '请输入数字'
+                      // }],
+                    })(
+                      // 
+                        <Input
+                          placeholder='min'
+                          onChange={this.handleSubmit2}
+                          onBlur={this.handleSubmit2}
+                        />
+                      // </Tooltip>
+                    )}
+                  </Item></div></Tooltip>
               </Col>
               <Col span={7}>
-                <Item 
-                  style={{margin:0}}
-                  required={false}
-                  key={index*4+1}
-                >
-                  {getFieldDecorator(`min[${index}]`, item[1] !== null?{
-                    // rules:[{
-                    //   required:false,
-                    //   pattern: new RegExp(/^[0-9]+.?[0-9]*/, "g"),
-                    //   message: '请输入数字'
-                    // }],
-                    initialValue: item[1]
-                  }:{
-                    // rules:[{
-                    //   required:false,
-                    //   pattern: new RegExp(/^[0-9]+.?[0-9]*/, "g"),
-                    //   message: '请输入数字'
-                    // }],
-                  })(
-                  <Input
-                    placeholder='min'
-                    onChange={this.handleSubmit2}
-                    onBlur={this.handleSubmit2}
-                  />
-                  )}
-                </Item>
-              </Col>
-              <Col span={7}>
-                <Item 
-                  style={{margin:0}}
-                  required={false}
-                  key={index*4+2}
-                >
-                  {getFieldDecorator(`max[${index}]`, item[2] !== null?{
-                    // rules:[{
-                    //   required:false,
-                    //   pattern: new RegExp(/^[0-9]+.?[0-9]*/, "g"),
-                    //   message: '请输入数字'
-                    // }],
-                    initialValue: item[2]
-                  }:{
-                    // rules:[{
-                    //   required:false,
-                    //   pattern: new RegExp(/^[0-9]+.?[0-9]*/, "g"),
-                    //   message: '请输入数字'
-                    // }],
-                  })(
-                    <Input
-                      placeholder='max'
-                      onChange={this.handleSubmit2}
-                      onBlur={this.handleSubmit2}
-                    />
-                  )}
-                </Item>
+              <Tooltip title='转化上界' mouseLeaveDelay="0.1"><div>
+                  <Item 
+                    style={{margin:0}}
+                    required={false}
+                    key={index*4+2}
+                  >
+                    {getFieldDecorator(`max[${index}]`, item[2] !== null?{
+                      // rules:[{
+                      //   required:false,
+                      //   pattern: new RegExp(/^[0-9]+.?[0-9]*/, "g"),
+                      //   message: '请输入数字'
+                      // }],
+                      initialValue: item[2]
+                    }:{
+                      // rules:[{
+                      //   required:false,
+                      //   pattern: new RegExp(/^[0-9]+.?[0-9]*/, "g"),
+                      //   message: '请输入数字'
+                      // }],
+                    })(
+                      // <Tooltip title='转化上界' mouseLeaveDelay="0.1">
+                        <Input
+                          placeholder='max'
+                          onChange={this.handleSubmit2}
+                          onBlur={this.handleSubmit2}
+                        />
+                      // </Tooltip>
+                    )}
+                  </Item></div></Tooltip>
               </Col>
               <Col span={3}>
                 <Item 
@@ -304,21 +314,25 @@ class FeatureRegion extends Component {
                   required={false}
                   key={index*4+3}
                 >
+                <Tooltip title='删除此项' mouseLeaveDelay="0.1">
                   <Icon
                     className="dynamic-delete-button"
                     type="minus-circle-o"
                     onClick={() => this.remove(index)}
                     style={{cursor:'pointer'}}
                   />
+                  </Tooltip>
                 </Item>
               </Col>
             </Row>
           );
         })}
         <Item>
-          <Button type="dashed" onClick={this.add} style={{width:'100%'}}>
-              <Icon type="plus" /> Add group
-          </Button>
+          <Tooltip title='增加项' mouseLeaveDelay="0.1">
+            <Button type="dashed" onClick={this.add} style={{width:'100%'}}>
+                <Icon type="plus" /> Add group
+            </Button>
+          </Tooltip>
         </Item>
       </Form>
     }

@@ -11,6 +11,7 @@ import SparkRun from "../../ClusterModeComponents/SparkRunPanel/sparkRun"
 import { FlowDataPanel } from '../../ClusterModeComponents/EditorDataPanel';
 
 const TabPane = Tabs.TabPane;
+var IntroJs = require('intro.js')
 class ClusterMode extends React.Component {
 
   Intro = (key) => {
