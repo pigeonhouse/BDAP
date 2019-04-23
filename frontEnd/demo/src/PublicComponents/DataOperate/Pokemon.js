@@ -10,7 +10,7 @@ class Pokemon extends Component{
         const { getSelected, update } = propsAPI;
         var fieldNameArray = [];
         let vectorLength;
-        var results = {'data':Data,'meta':{'fields':["Name",,"Type 1","Type 2","Total","HP","Attack","Defense","Sp. Atk","Sp. Def","Speed","Generation","Legendary"]}};
+        var results = {'data':Data,'meta':{'fields':["Name","Type 1","Type 2","Total","HP","Attack","Defense","Sp. Atk","Sp. Def","Speed","Generation","Legendary"]}};
         fieldNameArray.push(results.meta.fields);
         vectorLength = results.data.length - 1;
         var n = new Array();
