@@ -117,7 +117,7 @@ class Feature extends Component{
                             tag = {tag}/>
                             <Divider></Divider>
                         </Fragment>
-            case '特征二进制化':
+            case 'one-hot编码':
                 return;
             case '数据筛选':
                 return <Fragment>

@@ -112,7 +112,7 @@ class Selectword extends Component{
                         }
                     }
                     return [...labelArray, ...labelarr];
-                case '特征二进制化':
+                case 'one-hot编码':
                     const Dataset = item.model.Dataset;
                     for(let i in labelArray){
                         if(labelArray[i][1]){

@@ -339,7 +339,7 @@ class FlowItemPanel extends React.Component {
                 size="200*40"
                 shape="one-one"
                 model={{
-                  label: '特征二进制化',
+                  label: 'one-hot编码',
                   attr:{},
                   attrDetail:[],
                   Dataset: [],
