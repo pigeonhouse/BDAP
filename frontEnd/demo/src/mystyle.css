@@ -14,12 +14,11 @@
     transition: opacity 1s ease;
 }
 .loader-content {
-
-    background-size: 500px 250px;
     display: block;
+    position: relative;
     padding-top: 50px;
-    top:  50%;
-    float: center;
+    top: 45%;
+    
 }
 .fadeout {
     opacity: 0;

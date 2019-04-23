@@ -214,7 +214,7 @@ class FeatureRegion extends Component {
             <Row>
               
                 <Col span={7}>
-                  
+                <Tooltip title='转化后的值' mouseLeaveDelay="0.1"><div>
                     <Item 
                       style={{margin:0}}
                       required={false}
@@ -234,19 +234,20 @@ class FeatureRegion extends Component {
                         //   message: '请输入数字'
                         // }],
                       })(
-                        <Tooltip title='转化后的值' mouseLeaveDelay="0.1">
+                        // <Tooltip title='转化后的值' mouseLeaveDelay="0.1">
                           <Input
                             placeholder='value'
                             onChange={this.handleSubmit2}
                             onBlur={this.handleSubmit2}
                           />
-                        </Tooltip>
+                        // {/* </Tooltip> */}
                       )}
-                    </Item>
+                    </Item></div></Tooltip>
                   
                 </Col>
               <Col span={7}>
-                
+                <Tooltip title='转化下界' mouseLeaveDelay="0.1">
+                <div>
                   <Item 
                     style={{margin:0}}
                     required={false}
@@ -266,17 +267,18 @@ class FeatureRegion extends Component {
                       //   message: '请输入数字'
                       // }],
                     })(
-                      <Tooltip title='转化下界' mouseLeaveDelay="0.1">
+                      // 
                         <Input
                           placeholder='min'
                           onChange={this.handleSubmit2}
                           onBlur={this.handleSubmit2}
                         />
-                      </Tooltip>
+                      // </Tooltip>
                     )}
-                  </Item>
+                  </Item></div></Tooltip>
               </Col>
               <Col span={7}>
+              <Tooltip title='转化上界' mouseLeaveDelay="0.1"><div>
                   <Item 
                     style={{margin:0}}
                     required={false}
@@ -296,15 +298,15 @@ class FeatureRegion extends Component {
                       //   message: '请输入数字'
                       // }],
                     })(
-                      <Tooltip title='转化上界' mouseLeaveDelay="0.1">
+                      // <Tooltip title='转化上界' mouseLeaveDelay="0.1">
                         <Input
                           placeholder='max'
                           onChange={this.handleSubmit2}
                           onBlur={this.handleSubmit2}
                         />
-                      </Tooltip>
+                      // </Tooltip>
                     )}
-                  </Item>
+                  </Item></div></Tooltip>
               </Col>
               <Col span={3}>
                 <Item 
