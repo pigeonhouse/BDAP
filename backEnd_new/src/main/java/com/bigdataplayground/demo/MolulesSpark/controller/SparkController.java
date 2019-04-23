@@ -1,20 +1,18 @@
 package com.bigdataplayground.demo.MolulesSpark.controller;
 
 import com.bigdataplayground.demo.MolulesSpark.domain.HdfsOptRequest;
-import com.bigdataplayground.demo.MolulesSpark.SparkExecutor;
-import com.bigdataplayground.demo.MolulesSpark.util.HdfsClient;
+import com.bigdataplayground.demo.MolulesSpark.service.SparkExecutor;
+import com.bigdataplayground.demo.MolulesSpark.service.HdfsService;
 import com.bigdataplayground.demo.MolulesSpark.util.ToolSet;
 import com.bigdataplayground.demo.MolulesSpark.domain.ApiResult;
 import com.bigdataplayground.demo.MolulesSpark.domain.Node;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.io.Files;
-import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.session.data.redis.config.annotation.web.http.EnableRedisHttpSession;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.validation.Valid;
 import java.io.IOException;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
@@ -37,12 +35,12 @@ public class SparkController {
 
     @RequestMapping(path = {"/handleInput"}, method = {RequestMethod.POST})
     String handleInput(@RequestBody String body) throws IOException, URISyntaxException, InterruptedException {
-        HdfsClient hdfsClient = new HdfsClient("hdfs://" + hdfsAddr,"tseg");
+        HdfsService hdfsService = new HdfsService("hdfs://" + hdfsAddr,"tseg");
         String data ;
         String path = body;
         String ext = Files.getFileExtension(path); //获取后缀名
 
-        ApiResult result = hdfsClient.readFile("/demoData/"+body);
+        ApiResult result = hdfsService.readFile("/demoData/"+body);
 
         if(result.getData()!=null){
             data = (String)result.getData();
@@ -99,46 +97,46 @@ public class SparkController {
      * @throws InterruptedException
      */
     @PostMapping(path ="/hdfs",headers="Content-Type=application/json")
-    public ApiResult hdfs(@RequestBody @Valid HdfsOptRequest hdfsOptRequest)
+    public ApiResult hdfs(@RequestBody HdfsOptRequest hdfsOptRequest)
             throws URISyntaxException, IOException, InterruptedException {
 
-        if(hdfsOptRequest.getPath()==null) return ApiResult.createNgMsg("path = null!");
-        if(hdfsOptRequest.getUser()==null) return ApiResult.createNgMsg("user = null!");
-        if(hdfsOptRequest.getKind()==null) return ApiResult.createNgMsg("kind = null!");
+        if(hdfsOptRequest.getPath().isEmpty()||hdfsOptRequest.getPath()==null)
+            return ApiResult.createNgMsg("path = null or empty!");
+        if(hdfsOptRequest.getUser().isEmpty()||hdfsOptRequest.getUser()==null)
+            return ApiResult.createNgMsg("user = null or empty!");
+        if(hdfsOptRequest.getKind().isEmpty()||hdfsOptRequest.getKind()==null)
+            return ApiResult.createNgMsg("kind = null or empty!");
 
-        HdfsClient hdfsClient = new HdfsClient("hdfs://" + hdfsAddr,hdfsOptRequest.getUser());
+        HdfsService hdfsService = new HdfsService("hdfs://" + hdfsAddr,hdfsOptRequest.getUser());
         switch (hdfsOptRequest.getKind()) {
             case "tree": {
-                return hdfsClient.tree(hdfsOptRequest.getPath());
+                return hdfsService.tree(hdfsOptRequest.getPath());
             }
             case "mkdir":
-                return hdfsClient.makeDirectory(hdfsOptRequest.getPath());
+                return hdfsService.makeDirectory(hdfsOptRequest.getPath());
             case "rm"://R:递归地删除文件夹，高危操作，要让用户确定一下。为避免误操作，删除文件时不能加参数。
                 if(hdfsOptRequest.getParam().equals("R")) {
-                    return hdfsClient.removeR(hdfsOptRequest.getPath());
+                    return hdfsService.removeR(hdfsOptRequest.getPath());
                 }else{
-                    return hdfsClient.remove(hdfsOptRequest.getPath());
+                    return hdfsService.remove(hdfsOptRequest.getPath());
                 }
             case "read":
-                return hdfsClient.readFile(hdfsOptRequest.getPath());
+                return hdfsService.readFile(hdfsOptRequest.getPath());
             case "save":
                 if(hdfsOptRequest.getContent()==null) hdfsOptRequest.setContent("");
                 boolean override = (hdfsOptRequest.getPath()!=null && hdfsOptRequest.getParam().equals("O"));
-                return hdfsClient.saveFile(hdfsOptRequest.getPath(),hdfsOptRequest.getContent(),override);
+                return hdfsService.saveFile(hdfsOptRequest.getPath(),hdfsOptRequest.getContent(),override);
             case "upload":
-                return hdfsClient.uploadFromLocal(hdfsOptRequest.getLocalPath(),hdfsOptRequest.getPath());
+                return hdfsService.uploadFromLocal(hdfsOptRequest.getLocalPath(),hdfsOptRequest.getPath());
             default:
                 return ApiResult.createNgMsg("Error Kind");
         }
     }
 
-
-    @ResponseBody
     @RequestMapping(path = {"/run"}, method = {RequestMethod.POST,RequestMethod.GET})
     public String run(@RequestBody String body, HttpServletRequest request) throws IOException {
 
-        System.out.println(request.isRequestedSessionIdValid());
-        System.out.println(request.isRequestedSessionIdFromCookie());
+        System.out.println("isRequestedSessionIdFromCookie"+request.isRequestedSessionIdFromCookie());
 
         String preBody;
         List<Node> preNodeList = null;

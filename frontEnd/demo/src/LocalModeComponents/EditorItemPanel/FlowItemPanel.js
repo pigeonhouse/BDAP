@@ -270,7 +270,7 @@ class FlowItemPanel extends React.Component {
                   anchor: [1, 1],
                   attr:{type:'average'},
                   // attrDetail:[{elabel:'type',label:'填充值', type:'Input', regexp:'^[0-9]+.?[0-9]*'}],
-                  attrDetail:[{elabel:'type',label:'填充值', type:'Select', evalue:['average', 'median'], value:['平均值', '中位数']}],
+                  attrDetail:[{elabel:'type',label:'填充值', type:'Select', evalue:['average', 'median', 'max', 'min'], value:['平均值', '中位数', '最大值', '最小值']}],
                   Dataset: [],
                   labelArray: {}, 
                   length: 0,
@@ -419,8 +419,8 @@ class FlowItemPanel extends React.Component {
                   shape='two-one'
                   model={{
                     label: '单变量多项式回归',
-                    attr:{'sourceFile':'people', '多项式最高幂': 0},
-                    attrDetail:[],
+                    attr:{'多项式最高幂': 5},
+                    attrDetail:[{elabel:'多项式最高幂',label:'多项式最高幂', type:'Select', evalue:[1, 2, 3, 4, 5], value:[1, 2, 3, 4, 5]}],
                     anchor: [2, 1],
                     Dataset: [],
                     labelArray: {},
@@ -439,7 +439,7 @@ class FlowItemPanel extends React.Component {
                   shape='two-one'
                   model={{
                     label: '多变量线性回归',
-                    attr:{'sourceFile':'people'},
+                    attr:{},
                     attrDetail:[],
                     group:"ml",
                     anchor: [2, 1],
@@ -459,7 +459,7 @@ class FlowItemPanel extends React.Component {
                   shape='two-one'
                   model={{
                     label: '决策树回归',
-                    attr:{'sourceFile':'people'},
+                    attr:{},
                     attrDetail:[],
                     anchor: [2, 1],
                     Dataset: [],
@@ -478,12 +478,7 @@ class FlowItemPanel extends React.Component {
                   shape='two-one'
                   model={{
                     label: '随机森林回归',
-                    attr:{'sourceFile':'people', 
-                          'seed': 3, 
-                          'maxFeatures': 2,
-                          'replacement': false,
-                          'nEstimators': 200
-                        },
+                    attr:{},
                     attrDetail:[],
                     anchor: [2, 1],
                     Dataset: [],
@@ -505,7 +500,7 @@ class FlowItemPanel extends React.Component {
                 shape='two-one'
                 model={{
                   label: '朴素贝叶斯',
-                  attr:{'sourceFile':'people'},
+                  attr:{},
                   attrDetail:[],
                   anchor: [2, 1],
                   Dataset: [],
@@ -525,7 +520,7 @@ class FlowItemPanel extends React.Component {
                 shape='two-one'
                 model={{
                   label: '支持向量机',
-                  attr:{'sourceFile':'people',
+                  attr:{
                         'C': 0.01,
                         'tol': 10e-4,
                         'maxPasses': 10,
