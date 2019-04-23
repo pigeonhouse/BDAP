@@ -2,8 +2,7 @@ import React, { Component } from 'react'
 import { Button,Modal,Icon,message, Table, Input, Popconfirm, Form, Divider} from 'antd'
 import { withPropsAPI } from '@src';
 import store from "../../store"
-import { data,data1,data2 } from "../../ExampleData/FlowData"
-const dat = data;
+import { data } from "../../ExampleData/FlowData"
 const nwData = {
   key: 0,
   Name: "例:泰坦尼克号模型",
@@ -131,7 +130,7 @@ class Model extends Component{
         }];
         this.handleStoreChange = this.handleStoreChange.bind(this)
         store.subscribe(this.handleStoreChange)
-        nwData.Model = data1;
+        nwData.Model = data;
         this.state = {
           dataSource:[nwData],
           count: 1
