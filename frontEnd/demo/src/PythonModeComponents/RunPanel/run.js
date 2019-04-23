@@ -349,13 +349,13 @@ class Run extends Component{
   run = (stream, propsAPI)=>{  
     if(NeedDetection){
       console.log("------Detected---------")
-      if(this.handleLegal())  return ;
-      else NeedDetection = 0;
+      // if(this.handleLegal())  return ;
+      // else NeedDetection = 0;
     }
     setTimeout(()=>{
       if(current !== stream.length){
         let k = current;
-        const all_data = this.inputdata(stream[k], propsAPI);
+        // const all_data = this.inputdata(stream[k], propsAPI);
         var outcome = new Array()
         if(stream[k].label !== '本地数据'){
           const { find } = propsAPI;
@@ -393,52 +393,52 @@ class Run extends Component{
             }
           }
           switch (stream[k].label) {
-            case '单变量线性回归':
-                outcome = OneVarLinearRegression(all_data);
-                break
-            case '多变量线性回归':
-                outcome = MutiVarLinearRegression(all_data);
-                break
-            case '单变量多项式回归':
-                outcome = OneVarPolynomialRegression(all_data);
-                break
-            case '决策树回归':
-                outcome = DecisionTreeRegression(all_data);
-                break
-            case '随机森林回归':
-                outcome = RandomForest(all_data);
-                break
-            case '朴素贝叶斯':
-                outcome = NaiveBayes(all_data)
-                break
-            case '支持向量机':
-                outcome = SVM(all_data)
-                break
-            case '数据随机划分':
-                outcome = Randis(all_data)
-                break
-            case '特征区间化':
-                outcome = SeprtbyFeat(all_data)
-                break  
-            case '特征分组归类':
-                outcome = StrToNum(all_data)
-                break
-            case '特征二进制化':
-                outcome = Onehot(all_data)
-                break
-            case '缺失值填充':
-                outcome = fillNa(all_data);
-                break
-            case '归一化':
-                outcome = Nomalize(all_data);
-                break
-            case '卷积神经网络':
+            // case '单变量线性回归':
+            //     outcome = OneVarLinearRegression(all_data);
+            //     break
+            // case '多变量线性回归':
+            //     outcome = MutiVarLinearRegression(all_data);
+            //     break
+            // case '单变量多项式回归':
+            //     outcome = OneVarPolynomialRegression(all_data);
+            //     break
+            // case '决策树回归':
+            //     outcome = DecisionTreeRegression(all_data);
+            //     break
+            // case '随机森林回归':
+            //     outcome = RandomForest(all_data);
+            //     break
+            // case '朴素贝叶斯':
+            //     outcome = NaiveBayes(all_data)
+            //     break
+            // case '支持向量机':
+            //     outcome = SVM(all_data)
+            //     break
+            // case '数据随机划分':
+            //     outcome = Randis(all_data)
+            //     break
+            // case '特征区间化':
+            //     outcome = SeprtbyFeat(all_data)
+            //     break  
+            // case '特征分组归类':
+            //     outcome = StrToNum(all_data)
+            //     break
+            // case '特征二进制化':
+            //     outcome = Onehot(all_data)
+            //     break
+            // case '缺失值填充':
+            //     outcome = fillNa(all_data);
+            //     break
+            // case '归一化':
+            //     outcome = Nomalize(all_data);
+            //     break
+            case '训练':
                 this.showModal(stream);              
                 break
             default:
               break;
           }
-          this.outputdata(stream[k].id, outcome, propsAPI);
+          // this.outputdata(stream[k].id, outcome, propsAPI);
           const { update, executeCommand } = propsAPI;
           const currentitem = find(stream[k].id);
           var value = JSON.parse(JSON.stringify(currentitem.model.keyConfig));
