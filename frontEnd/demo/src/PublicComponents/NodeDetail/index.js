@@ -253,6 +253,20 @@ class NodeDetail extends React.Component {
       });
     });
   }
+  handleChangeNumber=(label, value)=>{
+    const { propsAPI } = this.props;
+    const { getSelected, executeCommand, update } = propsAPI;
+
+    const item = getSelected()[0];
+    if (!item) {
+    return;
+    }
+    var attr = JSON.parse(JSON.stringify(item.model.attr));
+    attr[label] = value;
+    executeCommand(() => {
+        update(item,{attr});
+    });
+  }
   render() {
     const { form, propsAPI } = this.props;
     const { getFieldDecorator } = form;
@@ -349,13 +363,31 @@ class NodeDetail extends React.Component {
                       rules:[{
                         required:false,
                         pattern: new RegExp(item.regexp, "g"),
-                        message: '请输入数字'
+                        message: '请输入正确格式'
                       }],
                       initialValue: attr[item.elabel],
                     })(<Input style={{margin:0}} onBlur={this.handleInputSubmit}/>)
                   }
                 </Item>
               );
+            }
+            else if(item.type === 'Number'){
+              return (
+                <Item style={{margin:0}} label={item.label} {...inlineFormItemLayout}>
+                  {
+                    getFieldDecorator(`attr.${item.elabel}` , {
+                      initialValue: attr[item.elabel],
+                    })(        
+                      <InputNumber
+                        style={{margin:0}}
+                        min={item.min} 
+                        max={item.max} 
+                        step={item.step}
+                        onChange={this.handleChangeNumber.bind(this, item.elabel)} 
+                    />)
+                  }
+                </Item>
+              )
             }
           })}
           {targetid.map((value, index)=>{

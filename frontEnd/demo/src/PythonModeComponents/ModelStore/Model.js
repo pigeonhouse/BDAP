@@ -1,9 +1,8 @@
 import React, { Component } from 'react'
-import { Button,Modal,Icon,message, Table, Input, Popconfirm, Form, Divider} from 'antd'
+import { Button,Modal,Icon,message, Pagination,Table, Input, Popconfirm, Form, Divider} from 'antd'
 import { withPropsAPI } from '@src';
 import store from "../../store"
 import { vgg,lenet } from "../../ExampleData/FlowData"
-
 const nwData = {
   key: 0,
   Name: "LeNet-mnist",
@@ -144,7 +143,6 @@ class Model extends Component{
           count: 2
         };
     }
-
     state = {
       visible:false,
       editing: false,
@@ -286,10 +284,14 @@ class Model extends Component{
                     components={components}
                     rowClassName={() => 'editable-row'}
                     bordered
+                    pagination={{
+                      pageSize: 5
+                    }}
                     dataSource={dataSource}
                     columns={columns}
                   />
                 </Modal>
+                
             </div>
         </div>
         );

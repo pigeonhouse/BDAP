@@ -8,6 +8,7 @@ import store from '../../store';
 import { data } from '../../ExampleData/FlowData';
 import { MODEL } from "../../store/storeType"
 var inf = data;
+var count = 1;
 class FlowToolbar extends React.Component {
 
   state = {
@@ -42,7 +43,7 @@ class FlowToolbar extends React.Component {
     const action = {
       type:MODEL,
       value:inf,
-      did:false,
+      did: false,
       name:this.state.inp1,
       info:this.state.inp2,
     }

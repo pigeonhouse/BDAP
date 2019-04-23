@@ -161,89 +161,99 @@ class Run extends Component{
     this.showLineChartFirst([], [], [], accuracyChart, lessChart, learningRateChart);
   }
   showLineChartFirst=(dataa, datal, datar, accuracyChart, lessChart, learningRateChart)=>{
-    setTimeout(()=>{
-      fetch("http://10.105.222.92:5000/trainingAccuracy")
-      .then(res => {
-        if(res.status === 200){
-          res.json().then(res=>{
-            if(Number(res.round) === 0 && Number(res.accuracy) === 0 &&
-              Number(res.learning_rate) === 0 && Number(res.loss) === 0 ){
-              if(dataa.length === 0)
-              this.showLineChartFirst(dataa, datal, datar, accuracyChart, lessChart, learningRateChart);
-            }
-            else {
-              accuracyChart.hideLoading();
-              lessChart.hideLoading();
-              learningRateChart.hideLoading();
-              dataa.push({value:[res.round, res.accuracy]});
-              datar.push({value:[res.round, res.learning_rate]});
-              datal.push({value:[res.round, res.loss]});
-              var currentStatus = this.state.currentStatus;
-              currentStatus[0].value = Number(res.round);
-              currentStatus[1].value = Number(res.accuracy);
-              currentStatus[2].value = Number(res.loss);
-              currentStatus[3].value = Number(res.learning_rate);
-              this.setState({currentStatus});
-              accuracyChart.setOption({
-                series: [{
-                  data: dataa
-                }]
-              })
-              lessChart.setOption({
-                series: [{
-                  data: datal
-                }]
-              })
-              learningRateChart.setOption({
-                series: [{
-                  data: datar
-                }]
-              })
-              this.showLineChart(dataa, datal, datar, accuracyChart, lessChart, learningRateChart);
-            }
-          })
-        }
-      })
-    }, 200);
+    fetch("http://10.105.222.92:5000/trainingAccuracy")
+    .then(res => {
+      if(res.status === 200){
+        res.json().then(res=>{
+          if(Number(res.round) === 0 && Number(res.accuracy) === 0 &&
+            Number(res.learning_rate) === 0 && Number(res.loss) === 0 ){
+            if(dataa.length === 0)
+            this.showLineChartFirst(dataa, datal, datar, accuracyChart, lessChart, learningRateChart);
+          }
+          else {
+            accuracyChart.hideLoading();
+            lessChart.hideLoading();
+            learningRateChart.hideLoading();
+            dataa.push({value:[res.round, res.accuracy]});
+            datar.push({value:[res.round, res.learning_rate]});
+            datal.push({value:[res.round, res.loss]});
+            var currentStatus = this.state.currentStatus;
+            currentStatus[0].value = Number(res.round);
+            currentStatus[1].value = Number(res.accuracy);
+            currentStatus[2].value = Number(res.loss);
+            currentStatus[3].value = Number(res.learning_rate);
+            this.setState({currentStatus});
+            accuracyChart.setOption({
+              series: [{
+                data: dataa
+              }]
+            })
+            lessChart.setOption({
+              series: [{
+                data: datal
+              }]
+            })
+            learningRateChart.setOption({
+              series: [{
+                data: datar
+              }]
+            })
+            this.showLineChart(dataa, datal, datar, accuracyChart, lessChart, learningRateChart);
+          }
+        })
+        .catch(e=>{
+          setTimeout(()=>{
+          this.showLineChartFirst(dataa, datal, datar, accuracyChart, lessChart, learningRateChart);
+          }, 100);
+        })
+      }
+    })
   }
   showLineChart=(dataa, datal, datar, accuracyChart, lessChart, learningRateChart)=>{
     setTimeout(()=>{
       fetch("http://10.105.222.92:5000/trainingAccuracy")
       .then(res => {
         if(res.status === 200){
-          res.json().then(res=>{
-            if(Number(res.round) !== 0 || Number(res.accuracy) !== 0 ||
-              Number(res.learning_rate) !== 0 || Number(res.loss) !== 0 ){
-                dataa.push({value:[res.round, res.accuracy]});
-                datar.push({value:[res.round, res.learning_rate]});
-                datal.push({value:[res.round, res.loss]});
-                var currentStatus = this.state.currentStatus;
-                currentStatus[0].value = Number(res.round);
-                currentStatus[1].value = Number(res.accuracy);
-                currentStatus[2].value = Number(res.loss);
-                currentStatus[3].value = Number(res.learning_rate);
-                this.setState({currentStatus});
-                accuracyChart.setOption({
-                  series: [{
-                    data: dataa
-                  }]
-                })
-                lessChart.setOption({
-                  series: [{
-                    data: datal
-                  }]
-                })
-                learningRateChart.setOption({
-                  series: [{
-                    data: datar
-                  }]
-                })
-                this.showLineChart(dataa, datal, datar, accuracyChart, lessChart, learningRateChart);
-            }
-          })
+          return res.json();
         }
       })
-    }, 200);
+      .then(res=>{
+        if(Number(res.round) !== 0 || Number(res.accuracy) !== 0 ||
+          Number(res.learning_rate) !== 0 || Number(res.loss) !== 0 ){
+            dataa.push({value:[res.round, res.accuracy]});
+            datar.push({value:[res.round, res.learning_rate]});
+            datal.push({value:[res.round, res.loss]});
+            var currentStatus = this.state.currentStatus;
+            currentStatus[0].value = Number(res.round);
+            currentStatus[1].value = Number(res.accuracy);
+            currentStatus[2].value = Number(res.loss);
+            currentStatus[3].value = Number(res.learning_rate);
+            this.setState({currentStatus});
+            accuracyChart.setOption({
+              series: [{
+                data: dataa
+              }]
+            })
+            lessChart.setOption({
+              series: [{
+                data: datal
+              }]
+            })
+            learningRateChart.setOption({
+              series: [{
+                data: datar
+              }]
+            })
+            this.showLineChart(dataa, datal, datar, accuracyChart, lessChart, learningRateChart);
+        }
+      })
+      .catch(e=>{
+        console.log(e)
+        setTimeout(()=>{
+          this.showLineChart(dataa, datal, datar, accuracyChart, lessChart, learningRateChart);
+        }, 100);
+      })
+    }, 100);
   }
 
   handleOk = () => {
