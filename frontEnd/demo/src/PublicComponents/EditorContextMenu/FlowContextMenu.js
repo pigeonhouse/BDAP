@@ -80,7 +80,7 @@ class FlowContextMenu extends React.Component {
         }
       }
       else for(let i in chartData){
-        xAxisGroup.push(`${chartData[i][0].toPrecision(2)}`+'-'+`${chartData[i][1].toPrecision(2)}`);
+        xAxisGroup.push(`${parseInt(chartData[i][0])}`+'-'+`${parseInt(chartData[i][1])}`);
         seriesGroup[0].data.push(chartData[i][2]);
       }
       myChart.setOption({
@@ -127,7 +127,7 @@ class FlowContextMenu extends React.Component {
       else for(let i in chartData){
         seriesGroup[0].data.push({
           value:chartData[i][2],
-          name:chartData[i][0].toPrecision(4)
+          name:parseInt(chartData[i][0])
         });
       }
 

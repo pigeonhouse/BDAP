@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import { withPropsAPI } from '@src';
-import { InputNumber } from 'antd'
+import { InputNumber, Tooltip } from 'antd'
 import './feature.less'
 class Randis extends Component {
   constructor(props){
@@ -40,6 +40,7 @@ class Randis extends Component {
 
   render() {
     return (
+      <Tooltip title='随机划分比例'>
         <InputNumber
             min={0.1} 
             max={0.9} 
@@ -47,6 +48,7 @@ class Randis extends Component {
             defaultValue = {this.state.randomValue}
             onChange={this.handleChange} 
         />
+      </Tooltip>
     );
   }
 }
