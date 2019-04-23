@@ -196,7 +196,7 @@ class FlowContextMenu extends React.Component {
     for(let i = 0; i < currentData.length; i++){
       let first = currentData[i].value[0]
       let len = 50;
-      len = String(first).length>currentData[i].label.length?(String(first).length+2)*10:(currentData[i].label.length+2)*10;
+      len = String(first).length>currentData[i].label.length?(String(first).length+2)*13:(currentData[i].label.length+2)*13;
       sum = sum+len
       columns.push({
                   title : <Button 

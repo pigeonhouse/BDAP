@@ -96,18 +96,42 @@ class Selectword extends Component{
             }
         }
         else if(this.props.type === 'Local'){
-            let labelarr = [];
+            let labelarr = new Array();
             switch(item.model.label){
                 case '特征区间化':
-                    let labelarr = new Array();
                     for(let i in labelArray){
                         if(labelArray[i][1]){
                             labelarr.push([labelArray[i][0]+'_Gaped', false])
                         }
                     }
                     return [...labelArray, ...labelarr];
-
+                case '特征分组归类':
+                    for(let i in labelArray){
+                        if(labelArray[i][1]){
+                            labelarr.push([labelArray[i][0]+'_trans', false])
+                        }
+                    }
+                    return [...labelArray, ...labelarr];
                 case '特征二进制化':
+                    const Dataset = item.model.Dataset;
+                    for(let i in labelArray){
+                        if(labelArray[i][1]){
+                            for(let j in Dataset){
+                                if(Dataset[j].label === labelArray[i][0]){
+                                    const Stat = Dataset[j].stat;
+                                    if(Stat.type === 'number')
+                                    break;
+                                    else {
+                                        for(let k in Stat.value){
+                                            const index = Number(k)+1;
+                                            labelarr.push([labelArray[i][0]+index, false])
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    return [...labelArray, ...labelarr];
                 default: return labelArray;
             }
         }
@@ -301,18 +325,20 @@ class Selectword extends Component{
                     mouseLeaveDelay="0.1"
                 >
                     <Button style={{width:'100%', marginBottom:'10px'}} onClick={this.displayTransfer}
-                    onMouseEnter={this.handleMouseEnterClose}
-                    onMouseLeave={this.handleMouseLeaveClose}>选择字段</Button>
+                        // onMouseEnter={this.handleMouseEnterClose}
+                        mouseLeaveDela={0.01}
+                        // onMouseLeave={this.handleMouseLeaveClose}
+                    >选择字段</Button>
                 </Tooltip>
             </div>
         )
     }
-    handleMouseEnterClose=()=>{
-        this.setState({Tooltipvisible:true})
-    }
-    handleMouseLeaveClose=()=>{
-        this.setState({Tooltipvisible:false})  
-    }
+    // handleMouseEnterClose=()=>{
+    //     this.setState({Tooltipvisible:true})
+    // }
+    // handleMouseLeaveClose=()=>{
+    //     this.setState({Tooltipvisible:false})  
+    // }
     render(){
         return (
             <div>
