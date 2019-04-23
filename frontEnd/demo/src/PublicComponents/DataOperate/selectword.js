@@ -56,6 +56,36 @@ class Selectword extends Component{
         }
         return false;
     }
+    findDataset=(sourceID, sourceAnchor)=>{
+        const { propsAPI } = this.props;
+        const { find } = propsAPI;
+        const sourceItem = find(sourceID);
+        const { Dataset, anchor } = sourceItem.getModel();
+        if(Dataset.length !== 0){
+            if(anchor[1] !== 1){
+                if(sourceAnchor === 1){
+                    Dataset = Dataset[0];
+                }
+                else {
+                    Dataset = Dataset[1];
+                }
+            }
+            return Dataset;
+        }
+        else {
+            console.log('------')
+            if(anchor[0] === 1){
+                const edges = propsAPI.save().edges;
+                for(let i in edges){
+                    console.log(edges[i])
+                    if(edges[i].target === sourceID){
+                        return this.findDataset(edges[i].source, edges[i].sourceAnchor);
+                    }
+                }
+                return [];
+            }
+        }
+    }
     changeSourceLabel=(item, labelArray)=>{
         if(this.props.type === 'Cluster'){
             let labelarr = [];
@@ -95,7 +125,7 @@ class Selectword extends Component{
                 default: return labelArray;
             }
         }
-        else if(this.props.type === 'Local'){
+        else{
             let labelarr = new Array();
             switch(item.model.label){
                 case '特征区间化':
@@ -113,7 +143,9 @@ class Selectword extends Component{
                     }
                     return [...labelArray, ...labelarr];
                 case 'one-hot编码':
-                    const Dataset = item.model.Dataset;
+                    if(item.model.Dataset.length === 0)
+                    var Dataset = this.findDataset(this.props.sourceid, this.props.index);
+                    else var Dataset = item.model.Dataset;
                     for(let i in labelArray){
                         if(labelArray[i][1]){
                             for(let j in Dataset){
@@ -124,7 +156,7 @@ class Selectword extends Component{
                                     else {
                                         for(let k in Stat.value){
                                             const index = Number(k)+1;
-                                            labelarr.push([labelArray[i][0]+index, false])
+                                            labelarr.push([labelArray[i][0]+'_'+index, false])
                                         }
                                     }
                                 }
@@ -309,7 +341,7 @@ class Selectword extends Component{
             <div>
                 {this.tooltipWord()}
                 <Tooltip arrowPointAtCenter 
-                    visible={this.state.Tooltipvisible}
+                    // visible={this.state.Tooltipvisible}
                     placement="bottom" 
                     title={() => {
                         return (

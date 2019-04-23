@@ -39,7 +39,7 @@ export function Onehot(allData){
                 count = 1;
                 for(let k = 0; k < col.length ; k++){
                     tp = new Array();
-                    tep = { 'label': labelArray[i][0]+count,'stat': new Array(),'value' : new Array()};
+                    tep = { 'label': labelArray[i][0]+'_'+count,'stat': new Array(),'value' : new Array()};
                     count++;
                     for(let n = 0;n < Dataset[i].value.length; n++){
                         if(Dataset[i].value[n] == col[k])   tp[n] = 1;
