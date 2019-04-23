@@ -62,7 +62,7 @@ val json = colname.mkString(start,", ",end) + "}, "
 
 fin = "[" + json ++ fin_ + "]"
 
-    val result = Http("%s").postData(fin.toString).header("Content-Type", "application/json").header("Charset", "UTF-8").option(HttpOptions.readTimeout(10000)).asString
+val result = Http("%s").postData(fin.toString).header("Content-Type", "application/json").header("Charset", "UTF-8").option(HttpOptions.readTimeout(10000)).asString
 
 
 

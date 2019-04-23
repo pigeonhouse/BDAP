@@ -1,37 +1,66 @@
-import org.apache.spark.mllib.regression.LabeledPoint
-import org.apache.spark.rdd.RDD
-import org.apache.spark.mllib.tree.RandomForest
-import org.apache.spark.mllib.tree.model.RandomForestModel
-import org.apache.spark.mllib.linalg.{Vectors, Vector}
+import org.apache.spark.sql.DataFrame
+import org.apache.spark.sql.functions.col
+import org.apache.spark.ml.evaluation.BinaryClassificationEvaluator
+import org.apache.spark.ml.Pipeline
+import org.apache.spark.ml.classification.{RandomForestClassificationModel, RandomForestClassifier}
+import org.apache.spark.ml.evaluation.MulticlassClassificationEvaluator
+import org.apache.spark.ml.feature.{IndexToString, StringIndexer, VectorIndexer}
+import org.apache.spark.ml.feature.VectorAssembler
+import org.apache.spark.ml.linalg.{Vectors, Vector}
 
-val id = "2"
-val previous = "1"
-val project = "TEST1"
+val id = "%s"
+val project = "Demo"
+val train = "%s"
+val label = "%s"
+val previous = "%s"
+val newcol = "%s"
+val numTree = %d
+val idcol = "PassengerId"
 val file = project + "/" + previous
-val df = spark.read.format("parquet").load(file).drop("label")
+val all1 = train + " " + label + " " + idcol
+val all2 = train + " " + idcol
 
-val featInd = df.columns.indexOf("Features")
-val targetInd = df.columns.indexOf("MinMaxScaledlabel") 
-val dataRDD = df.rdd.map{case Row(v:Vector, d:Double) => LabeledPoint(d, v)}
+val PreviousArray = previous.split(" ")
+val Trainfile = project + "/" + PreviousArray(0)
+val Predictfile= project + "/" + PreviousArray(1)
 
-val dataParts = dataRDD.randomSplit(Array(0.8, 0.2))
-val data = dataParts(0)
-val input = dataParts(1)
+val df_Train = spark.read.format("parquet").load(Trainfile)
+val df_Predict = spark.read.format("parquet").load(Predictfile)
 
-val numClasses = 2
-val categoricalFeaturesInfo = Map[Int, Int]()
-val impurity = "gini"
-val maxDepth = 5
-val maxBins = 32
-val featureSubsetStrategy = "auto"
-val numTrees = 1000
-val model: RandomForestModel = RandomForest.trainClassifier(data, numClasses, categoricalFeaturesInfo,numTrees,
-                                featureSubsetStrategy, impurity, maxDepth, maxBins)
- 
- val predictResult = input.map { point =>
- val prediction = model.predict(point.features)
- (point.label, prediction)
-}
+val aim1array = all1.split(" ")
+val aim2array = all2.split(" ")
+val trainArray = train.split(" ")
 
-val accuracy = 1.0 * predictResult.filter(x => x._1 == x._2).count() / input.count()
-println("Accuracy = " + accuracy)
+var df_ = df_Train
+var df_1 = df_Predict
+
+df_ = df_.select(aim1array.map(A => col(A)): _*)
+df_1 = df_1.select(aim2array.map(A => col(A)):_*)
+
+val assembler = new VectorAssembler().setInputCols(trainArray).setOutputCol("features")
+df_ = assembler.transform(df_)
+df_1 = assembler.transform(df_1)
+
+val rf = new RandomForestClassifier().setLabelCol(label).setFeaturesCol("features").setNumTrees(numTree)
+
+val model = rf.fit(df_)
+
+val predictions = model.transform(df_1)
+
+val predict_result = predictions.selectExpr(idcol, s"round(prediction,1) as ${newcol}")
+
+predict_result.write.format("csv").option("header", "true").option("inferSchema", "true").mode(SaveMode.Overwrite).save(project + "/" + id)
+
+var fin = predict_result.limit(20).toJSON.collectAsList.toString
+
+val colname = predict_result.columns
+val fin_ = fin.substring(1, fin.length - 1)
+val start = """{"colName":""""
+val end = "\""
+val json = colname.mkString(start,", ",end) + "}, "
+
+fin = "[" + json ++ fin_ + "]"
+
+val result = Http("%s").postData(fin.toString).header("Content-Type", "application/json").header("Charset", "UTF-8").option(HttpOptions.readTimeout(10000)).asString
+
+

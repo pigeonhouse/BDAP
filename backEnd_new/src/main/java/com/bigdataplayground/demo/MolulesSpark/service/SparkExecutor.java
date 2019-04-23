@@ -46,6 +46,14 @@ public class SparkExecutor {
                     ToolSet.listToString(node.getLabelArray().get("predict_y")),
                     "http://"+appAddr+"/RunningPost"
             ); break;
+            case "RandomForestModel": data = String.format(code,
+                    node.getId(), ToolSet.listToString(node.getLabelArray().get("train_x")),
+                    ToolSet.listToString(node.getLabelArray().get("train_y")),
+                    node.getSourceId().get(0).getSource() + " " + node.getSourceId().get(1).getSource(),
+                    ToolSet.listToString(node.getLabelArray().get("predict_y")),
+                    node.getAttribute().get("NumTree"),
+                    "http://"+appAddr+"/RunningPost"
+            ); break;
             case "TransformType": data = String.format(code,
                     node.getId(), ToolSet.listToString(node.getLabelArray().get("public")),
                     node.getSourceId().get(0).getSource(),"number",
@@ -118,6 +126,21 @@ public class SparkExecutor {
             ); break;
             case "Predict": data = String.format(code,
                     node.getId(), node.getSourceId().get(0).getSource()
+            ); break;
+            case "NewNetwork_": data = String.format(code,
+                    node.getId()
+            ); break;
+            case "Embedding": data = String.format(code,
+                    node.getAttribute().get("输入维度"), node.getAttribute().get("输出维度"), node.getAttribute().get("input_length")
+            ); break;
+            case "LSTM": data = String.format(code,
+                    node.getAttribute().get("输出维度"), node.getAttribute().get("Dropout")
+            ); break;
+            case "Dense": data = String.format(code,
+                    node.getAttribute().get("输出维度"), node.getAttribute().get("activation")
+            ); break;
+            case "Imdb": data = String.format(code,
+                    "http://"+appAddr+"/RunningPost"
             ); break;
             /*
             case "NewModule" : data = String.format(code,

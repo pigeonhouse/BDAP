@@ -548,6 +548,26 @@ class FlowItemPanel extends React.Component {
                 }
               }}    
             /></ItemPanel></Menu.Item>
+            <Menu.Item key="34"><ItemPanel><Item
+                type="node"
+                size="200*40"
+                shape='two-one'
+                model={{
+                  label: '随机森林分类器',
+                  elabel: 'RandomForestModel',
+                  attr:{NumTree: '10'},
+                  attrDetail:[],
+                  anchor: [2, 1],
+                  Dataset: [],
+                  labelArray: {}, 
+                  length: 0,
+                  group:"ml",
+                  keyConfig:{
+                    color_type: '#1890FF',
+                    state_icon_url: 'https://gw.alipayobjects.com/zos/rmsportal/uZVdwjJGqDooqKLKtvGA.svg',
+                  }
+                }}           
+              /></ItemPanel></Menu.Item>
             <Menu.Item key='23'><ItemPanel><Item
                 type="node"
                 size="200*40"
@@ -571,6 +591,7 @@ class FlowItemPanel extends React.Component {
           </SubMenu>
         </SubMenu>
           <SubMenu key="sub4" title={<span><Icon type="setting" /><span>深度学习</span></span>}>
+          <SubMenu key="g6" title="BigDL">
           <Menu.Item key="31"><ItemPanel><Item
               type="node"
               size="200*40"
@@ -666,44 +687,6 @@ class FlowItemPanel extends React.Component {
                 }
               }}
             /></ItemPanel></Menu.Item>
-          <Menu.Item key="27"><ItemPanel><Item
-              type="node"
-              size="200*40"
-              shape='one-one'
-              model={{
-                label: 'Flatten',
-                elabel:'Flatten',
-                attr:{},
-                attrDetail:[],
-                anchor: [1, 1],
-                Dataset: [],
-                labelArray: {}, 
-                length: 0,
-                keyConfig:{
-                  color_type: '#1890FF',
-                  state_icon_url: 'https://gw.alipayobjects.com/zos/rmsportal/uZVdwjJGqDooqKLKtvGA.svg',
-                }
-              }}
-            /></ItemPanel></Menu.Item>
-            <Menu.Item key="28"><ItemPanel><Item
-                type="node"
-                size="200*40"
-                shape='one-one'
-                model={{
-                  label: 'Dense',
-                  elabel: 'Dense',
-                  attr:{'输出维度': 28, 'activation': 'Tanh'},
-                  attrDetail:[],
-                  anchor: [1, 1],
-                  Dataset: [],
-                  labelArray: {}, 
-                  length: 0,
-                  keyConfig:{
-                    color_type: '#1890FF',
-                    state_icon_url: 'https://gw.alipayobjects.com/zos/rmsportal/uZVdwjJGqDooqKLKtvGA.svg',
-                  }
-                }}
-              /></ItemPanel></Menu.Item>
             <Menu.Item key="29"><ItemPanel><Item
                 type="node"
                 size="200*40"
@@ -780,6 +763,123 @@ class FlowItemPanel extends React.Component {
                 }
               }}
             /></ItemPanel></Menu.Item>
+            </SubMenu>
+            <SubMenu key="g5" title="Keras">
+            <Menu.Item key="38"><ItemPanel><Item
+              type="node"
+              size="200*40"
+              shape='one-one'
+              model={{
+                label: 'Imdb数据集',
+                elabel:'Imdb',
+                attr:{},
+                anchor: [1, 1],
+                attrDetail:[],
+                Dataset: [],
+                labelArray: {}, 
+                length: 0,
+                keyConfig:{
+                  color_type: '#1890FF',
+                  state_icon_url: 'https://gw.alipayobjects.com/zos/rmsportal/uZVdwjJGqDooqKLKtvGA.svg',
+                }
+              }}
+            /></ItemPanel></Menu.Item>
+            <Menu.Item key="35"><ItemPanel><Item
+              type="node"
+              size="200*40"
+              shape='one-one'
+              model={{
+                label: '新建神经网络',
+                elabel:'NewNetwork_',
+                attr:{},
+                anchor: [1, 1],
+                attrDetail:[],
+                Dataset: [],
+                labelArray: {}, 
+                length: 0,
+                keyConfig:{
+                  color_type: '#1890FF',
+                  state_icon_url: 'https://gw.alipayobjects.com/zos/rmsportal/uZVdwjJGqDooqKLKtvGA.svg',
+                }
+              }}
+            /></ItemPanel></Menu.Item>
+            <Menu.Item key="28"><ItemPanel><Item
+                type="node"
+                size="200*40"
+                shape='one-one'
+                model={{
+                  label: 'Dense',
+                  elabel: 'Dense',
+                  attr:{'输出维度': 1, 'activation': 'sigmoid'},
+                  attrDetail:[],
+                  anchor: [1, 1],
+                  Dataset: [],
+                  labelArray: {}, 
+                  length: 0,
+                  keyConfig:{
+                    color_type: '#1890FF',
+                    state_icon_url: 'https://gw.alipayobjects.com/zos/rmsportal/uZVdwjJGqDooqKLKtvGA.svg',
+                  }
+                }}
+              /></ItemPanel></Menu.Item>
+              <Menu.Item key="27"><ItemPanel><Item
+              type="node"
+              size="200*40"
+              shape='one-one'
+              model={{
+                label: 'Flatten',
+                elabel:'Flatten',
+                attr:{},
+                attrDetail:[],
+                anchor: [1, 1],
+                Dataset: [],
+                labelArray: {}, 
+                length: 0,
+                keyConfig:{
+                  color_type: '#1890FF',
+                  state_icon_url: 'https://gw.alipayobjects.com/zos/rmsportal/uZVdwjJGqDooqKLKtvGA.svg',
+                }
+              }}
+            /></ItemPanel></Menu.Item>
+            <Menu.Item key="36"><ItemPanel><Item
+              type="node"
+              size="200*40"
+              shape='one-one'
+              model={{
+                label: 'LSTM',
+                elabel:'LSTM',
+                attr:{输出维度: 128, Dropout: 0.2},
+                attrDetail:[],
+                anchor: [1, 1],
+                Dataset: [],
+                labelArray: {}, 
+                length: 0,
+                keyConfig:{
+                  color_type: '#1890FF',
+                  state_icon_url: 'https://gw.alipayobjects.com/zos/rmsportal/uZVdwjJGqDooqKLKtvGA.svg',
+                }
+              }}
+            /></ItemPanel></Menu.Item>
+            <Menu.Item key="37"><ItemPanel><Item
+              type="node"
+              size="200*40"
+              shape='one-one'
+              model={{
+                label: 'Embedding',
+                elabel:'Embedding',
+                attr:{输入维度: 2000, 输出维度: 256, input_length: 800},
+                attrDetail:[],
+                anchor: [1, 1],
+                Dataset: [],
+                labelArray: {}, 
+                length: 0,
+                keyConfig:{
+                  color_type: '#1890FF',
+                  state_icon_url: 'https://gw.alipayobjects.com/zos/rmsportal/uZVdwjJGqDooqKLKtvGA.svg',
+                }
+              }}
+            /></ItemPanel></Menu.Item>
+            </SubMenu>
           </SubMenu>
         </Menu>
       </div>
