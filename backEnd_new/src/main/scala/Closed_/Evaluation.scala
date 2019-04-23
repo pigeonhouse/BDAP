@@ -3,7 +3,6 @@ import com.intel.analytics.bigdl.dataset.image.{BytesToGreyImg, GreyImgNormalize
 import com.intel.analytics.bigdl.nn.Module
 import com.intel.analytics.bigdl.optim.{Top1Accuracy, ValidationMethod}
 import com.intel.analytics.bigdl.utils.Engine
-import org.apache.log4j.{Level, Logger}
 
 val id = "%s"
 val previous = "%s"

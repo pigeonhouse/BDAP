@@ -43,7 +43,8 @@ public class SparkExecutor {
             case "LogisticRegression": data = String.format(code,
                     node.getId(), ToolSet.listToString(node.getLabelArray().get("train_x")),
                     ToolSet.listToString(node.getLabelArray().get("train_y")),
-                    node.getSourceId().get(0).getSource(),node.getSourceId().get(1).getSource(),
+                    node.getSourceId().get(0).getSource() + " " + node.getSourceId().get(1).getSource(),
+                    ToolSet.listToString(node.getLabelArray().get("predict_y")),
                     "http://"+appAddr+"/RunningPost"
             ); break;
             case "TransformType": data = String.format(code,
@@ -104,6 +105,7 @@ public class SparkExecutor {
                     node.getAttribute().get("activation")
             ); break;
             case "InputPicture": data = String.format(code,
+                    node.getId(),
                     node.getAttribute().get("训练集数据"), node.getAttribute().get("训练集标签"),
                     node.getAttribute().get("验证集数据"), node.getAttribute().get("验证集标签"),
                     node.getAttribute().get("batchSize")
@@ -111,8 +113,8 @@ public class SparkExecutor {
             case "Train": data = String.format(code,
                     node.getId(), node.getAttribute().get("学习率"), node.getAttribute().get("学习率衰减"),
                     node.getAttribute().get("训练次数")
-            );
-            case "Evalution": data = String.format(code,
+            ); break;
+            case "Evaluation": data = String.format(code,
                     node.getId(), node.getSourceId().get(0).getSource()
             ); break;
             case "Predict": data = String.format(code,
