@@ -46,7 +46,6 @@ loadAccountInfo=()=>{
 }
 componentWillMount() {
     this.loadAccountInfo();
-  
 }
 
 handleSubmit = (e) => {
