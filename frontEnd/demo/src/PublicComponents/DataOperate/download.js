@@ -39,7 +39,7 @@ class Download extends Component{
     }
     downFile = (list)=> {
         var elementA = document.createElement('a');
-        elementA.download = "downLoad.csv";
+        elementA.download = "Dataset.csv";
         elementA.style.display = 'none';
         var blob = new Blob([list], {
             type: "text/csv;charset="+ 'utf-8' + ";"
