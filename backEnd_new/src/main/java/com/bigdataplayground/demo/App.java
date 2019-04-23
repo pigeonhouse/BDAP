@@ -2,12 +2,10 @@ package com.bigdataplayground.demo;
 
 import org.springframework.boot.*;
 import org.springframework.boot.autoconfigure.*;
-import org.springframework.scheduling.annotation.EnableAsync;
-import org.springframework.session.data.redis.config.annotation.web.http.EnableRedisHttpSession;
 
 /**
  * 配置步骤：
- * 1. appAddr改成自己的地址（只需要改这一处)。涉及到结果回传，因此不能用127.0.0.1
+ * 1. appAddr改成自己的地址（只需要改此一处)。涉及到结果回传，因此不能用127.0.0.1
  * 2. 添加hosts
  * Win:
  * C:\Windows\System32\drivers\etc\hosts
@@ -26,7 +24,6 @@ import org.springframework.session.data.redis.config.annotation.web.http.EnableR
  * controller   一些controller
  */
 @SpringBootApplication
-@EnableAsync
 public class App {
     public static void main(String[] args) {
         SpringApplication.run(App.class, args);

@@ -1,21 +1,20 @@
-package com.bigdataplayground.demo.MolulesSpark;
+package com.bigdataplayground.demo.MolulesSpark.service;
 
-import com.bigdataplayground.demo.MolulesSpark.util.LivyContact;
-import com.bigdataplayground.demo.MolulesSpark.util.ToolSet;
 import com.bigdataplayground.demo.MolulesSpark.domain.Node;
+import com.bigdataplayground.demo.MolulesSpark.util.ToolSet;
+import org.springframework.stereotype.Service;
 
 import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.List;
 
-
 public class SparkExecutor {
     private String livyAddr;
     private String appAddr;
 
 
-    public SparkExecutor(String livyAddr,String appAddr){
+    public SparkExecutor(String livyAddr, String appAddr){
         this.appAddr = appAddr;
         this.livyAddr = livyAddr;
     }
@@ -137,7 +136,7 @@ public class SparkExecutor {
         System.out.println("#Code to run:#");
         System.out.println(code);
 
-        LivyContact.postCode(livyAddr,code);
+        LivyService.postCode(livyAddr,code);
     }
 
     public void executeAll(List<Node> nodeList) throws IOException {

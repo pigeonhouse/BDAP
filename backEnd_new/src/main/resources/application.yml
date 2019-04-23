@@ -1,0 +1,25 @@
+#配置信息
+server:
+  port: 5000
+  servlet:
+    session:
+      timeout: 1200
+
+#激活 profile=HWY
+spring:
+  profiles:
+    active:
+  jackson:
+    default-property-inclusion: non_null
+    serialization:
+      indent-output: true
+  session:
+    store-type: redis
+    redis:
+      namespace: spring:session
+  redis:
+    host: 10.105.222.90
+    password: tsegredis
+    port: 6379
+
+
