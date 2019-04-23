@@ -71,13 +71,18 @@ export function SeprtbyFeat(allData){
                     }
                     else if(attr[key][0] == 'user-defined'){
                         let Tol = attr[key].length;
+                        let tpl = new Array();
+                        tpl = JSON.parse(JSON.stringify(Dataset[i]));
+                        tpl.label = tpl.label+"_UserGaped";
+
                         for(let j = 1; j < Tol;j++){
                             for(let l = 0; l < Dataset[i].value.length; l++){
                                 if((Dataset[i].value[l] >= attr[key][j][1]) && (Dataset[i].value[l] <= attr[key][j][2])){
-                                    Dataset[i].value[l] = attr[key][j][0];
+                                    tpl.value[l] = attr[key][j][0];
                                 }
                             }
                         }
+                        Dataset.push(tpl)
                     }
                 }
            });

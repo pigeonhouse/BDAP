@@ -322,6 +322,78 @@ class FlowDataPanel extends React.Component {
                 />
               </ItemPanel>
         </Menu.Item>
+        <Menu.Item key="4" > 
+              <ItemPanel>
+                <Item
+                  type="node"
+                  size="200*40"
+                  shape='zero-one'
+                  model={{
+                    label: 'Pokemon',
+                    elabel:'Pokemon',
+                    attr:{},
+                    attrDetail:[],
+                    Dataset: [],
+                    labelArray: {}, 
+                    length: 0,
+                    anchor: [0, 1],
+                    group:'input',
+                    keyConfig:{
+                      color_type: '#1890FF',
+                      state_icon_url: 'https://gw.alipayobjects.com/zos/rmsportal/uZVdwjJGqDooqKLKtvGA.svg',
+                    }
+                  }}         
+                />
+              </ItemPanel>
+        </Menu.Item>
+        <Menu.Item key="5" > 
+              <ItemPanel>
+                <Item
+                  type="node"
+                  size="200*40"
+                  shape='zero-one'
+                  model={{
+                    label: 'SimpleTest',
+                    elabel:'SimpleTest',
+                    attr:{},
+                    attrDetail:[],
+                    Dataset: [],
+                    labelArray: {}, 
+                    length: 0,
+                    anchor: [0, 1],
+                    group:'input',
+                    keyConfig:{
+                      color_type: '#1890FF',
+                      state_icon_url: 'https://gw.alipayobjects.com/zos/rmsportal/uZVdwjJGqDooqKLKtvGA.svg',
+                    }
+                  }}         
+                />
+              </ItemPanel>
+        </Menu.Item>
+        <Menu.Item key="6" > 
+              <ItemPanel>
+                <Item
+                  type="node"
+                  size="200*40"
+                  shape='zero-one'
+                  model={{
+                    label: 'SimpleTrain',
+                    elabel:'SimpleTrain',
+                    attr:{},
+                    attrDetail:[],
+                    Dataset: [],
+                    labelArray: {}, 
+                    length: 0,
+                    anchor: [0, 1],
+                    group:'input',
+                    keyConfig:{
+                      color_type: '#1890FF',
+                      state_icon_url: 'https://gw.alipayobjects.com/zos/rmsportal/uZVdwjJGqDooqKLKtvGA.svg',
+                    }
+                  }}         
+                />
+              </ItemPanel>
+        </Menu.Item>
           {children}
       </SubMenu>
     </Menu>

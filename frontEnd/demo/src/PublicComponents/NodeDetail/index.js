@@ -5,6 +5,9 @@ import Selectword from '../DataOperate/selectword'
 import Uploadfile from '../DataOperate/upload'
 import LocalTestData from '../DataOperate/LocalTestData'
 import LocalTrainData from '../DataOperate/LocalTrainData'
+import SimpleTest from '../DataOperate/SimpleTest'
+import SimpleTrain from '../DataOperate/SimpleTrain'
+import Pokemon from '../DataOperate/Pokemon'
 import HdfsFile from '../DataOperate/hdfsFile'
 import styles from './index.less';
 import Feature from '../DataOperate/Feature'
@@ -100,6 +103,20 @@ class NodeDetail extends React.Component {
     else if(label === 'Titanic训练' && Dataset.length === 0){
       return(
         <LocalTrainData ></LocalTrainData>
+      )
+    }
+    else if(label === 'Pokemon' && Dataset.length === 0){
+      return(
+        <Pokemon></Pokemon>
+      )
+    }
+    else if(label === 'SimpleTest' && Dataset.length === 0){
+      return(
+        <SimpleTest></SimpleTest>
+      )
+    }else if(label === 'SimpleTrain' && Dataset.length === 0){
+      return(
+        <SimpleTrain></SimpleTrain>
       )
     }
     else if(group === 'input' && Dataset.length === 0){
