@@ -2,6 +2,7 @@
 
 .loader {
     position: fixed;
+
     z-index: 9999;
     width: 100%;
     height: 100%;
@@ -14,12 +15,12 @@
     transition: opacity 1s ease;
 }
 .loader-content {
-
-    background-size: 500px 250px;
     display: block;
-    padding-top: 50px;
-    top:  50%;
-    float: center;
+    position: relative;
+    padding-top: 0%;
+    padding-bottom: 50%;
+    top: 45%;
+    
 }
 .fadeout {
     opacity: 0;
