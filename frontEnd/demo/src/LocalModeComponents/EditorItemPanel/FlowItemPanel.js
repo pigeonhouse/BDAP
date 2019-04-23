@@ -21,7 +21,7 @@ class FlowItemPanel extends React.Component {
       className={this.state.isMouseEnter?styles.scrollapp:styles.unscrollapp}
       style={{backgroundColor:'#fff'}}>
         <Menu
-            defaultOpenKeys={['sub1','sub2','sub3']}
+            defaultOpenKeys={['sub2','sub3']}
             mode="inline"
             style={{maxHeight:'calc(100vh - 105px)', width:'245px', borderRight:0}}
             selectable={false}
@@ -192,7 +192,7 @@ class FlowItemPanel extends React.Component {
                 extend = {'model-all'}
               />
             </GGEditor>
-          <SubMenu key="sub1" title={<span><Icon type="mail" /><span>数据源</span></span>}>
+          {/* <SubMenu key="sub1" title={<span><Icon type="mail" /><span>数据源</span></span>}>
               <Menu.Item key="1" >
                 <ItemPanel><Item
                 type="node"
@@ -256,7 +256,7 @@ class FlowItemPanel extends React.Component {
                   }
                 }}         
               /></ItemPanel></Menu.Item>
-          </SubMenu>
+          </SubMenu> */}
             
           <SubMenu key="sub2" title={<span><Icon type="mail" /><span>数据预处理</span></span>}>
           <Menu.Item key="7">
@@ -352,7 +352,7 @@ class FlowItemPanel extends React.Component {
                 size="200*40"
                 shape="one-one"
                 model={{
-                  label: '特征二进制化',
+                  label: 'one-hot编码',
                   attr:{},
                   attrDetail:[],
                   Dataset: [],

@@ -468,7 +468,7 @@ class Run extends Component{
         }
         else this.run(stream, propsAPI);
       }
-    },1000)
+    },200)
 
   }
   handleLegal = ()=> {

@@ -659,7 +659,7 @@ class FlowContextMenu extends React.Component {
                   <div >
                     {this.chartRadio()}
                     <div>{this.compare()}{this.groupDivide()}</div>         
-                    <div id="main" style={{ maxWidth: 350, height: 280 }}> </div>
+                    <div id="main" style={{ maxWidth: 400, height: 280 }}> </div>
                   </div>
                 </Panel>
               </Collapse>
