@@ -44,16 +44,16 @@ export function SVM(all_data){
     const features = selectData(trainData, labelArray.train_x);
     var labels = selectDataUntransport(trainData, labelArray.train_y);
     const predict = selectData(textData, labelArray.predict_x);
-    labels = changeZero(labels);
+    // labels = changeZero(labels);
     console.log(labels)
     var options = {
-        C: attr.C,
-        tol: attr.tol,
-        maxPasses: attr.maxPasses,
-        maxIterations: attr.maxIterations,
-        kernel: attr.kernel,
+        C: 0.01,
+        tol: 10e-4,
+        maxPasses: 10,
+        maxIterations: 10000,
+        kernel: 'rbf',
         kernelOptions: {
-            sigma: attr.kernelOptionsSigma
+          sigma: 0.5
         }
     };
 
@@ -67,7 +67,7 @@ export function SVM(all_data){
 
     const CM2 = ConfusionMatrix.fromLabels(testy, pre);
     var predictObj = svm.predict(predict);
-    predictObj = setZero(predictObj);
+    // predictObj = setZero(predictObj);
     console.log(predictObj)
     var resultData = normalize(textData, predictObj, labelArray.predict_y);
     resultData["evaluation"]=[["Precision",CM2.getAccuracy(),"正确率"]];

@@ -520,14 +520,7 @@ class FlowItemPanel extends React.Component {
                 shape='two-one'
                 model={{
                   label: '支持向量机',
-                  attr:{
-                        'C': 0.01,
-                        'tol': 10e-4,
-                        'maxPasses': 10,
-                        'maxIterations': 10000,
-                        'kernel': 'rbf',
-                        'kernelOptionsSigma': 0.5
-                  },
+                  attr:{},
                   attrDetail:[],
                   anchor: [2, 1],
                   Dataset: [],
