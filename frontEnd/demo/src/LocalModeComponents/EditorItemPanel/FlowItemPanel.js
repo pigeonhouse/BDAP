@@ -421,8 +421,7 @@ class FlowItemPanel extends React.Component {
                   model={{
                     label: '单变量多项式回归',
                     attr:{'多项式最高幂': 5},
-                    attrDetail:[],
-                    // attrDetail:[{elabel:'多项式最高幂',label:'多项式最高幂', type:'Select', evalue:[1, 2, 3, 4, 5], value:[1, 2, 3, 4, 5]}],
+                    attrDetail:[{elabel:'多项式最高幂',label:'多项式最高幂', type:'Input', regexp:'^[1-9][0-9]*$'}],
                     anchor: [2, 1],
                     Dataset: [],
                     labelArray: {},

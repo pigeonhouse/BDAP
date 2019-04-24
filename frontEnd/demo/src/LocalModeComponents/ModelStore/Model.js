@@ -2,10 +2,17 @@ import React, { Component } from 'react'
 import { Button,Modal,Icon,message, Table, Input, Popconfirm, Form, Divider} from 'antd'
 import { withPropsAPI } from '@src';
 import store from "../../store"
-import { data } from "../../ExampleData/FlowData"
+import { Pokemon, Simple } from "../../ExampleData/FlowData"
 const nwData = {
+  key: 1,
+  Name: "例:Pokeman模型",
+  Date: 2019.4,
+  Description: "我们在这里为你准备了一个初始模型",
+  Model:{}
+};
+const exampleData = {
   key: 0,
-  Name: "例:泰坦尼克号模型",
+  Name: "例:Simple模型",
   Date: 2019.4,
   Description: "我们在这里为你准备了一个初始模型",
   Model:{}
@@ -130,10 +137,11 @@ class Model extends Component{
         }];
         this.handleStoreChange = this.handleStoreChange.bind(this)
         store.subscribe(this.handleStoreChange)
-        nwData.Model = data;
+        nwData.Model = Pokemon;
+        exampleData.Model = Simple;
         this.state = {
-          dataSource:[nwData],
-          count: 1
+          dataSource:[exampleData, nwData],
+          count: 2
         };
     }
 
@@ -268,8 +276,8 @@ class Model extends Component{
                   visible={this.state.visible}
                   onOk={this.DisModal}
                   onCancel={this.DisModal}
-                  bodyStyle={{height: '720px'}}
-                  width={1100}
+                  bodyStyle={{height: '400px'}}
+                  width={1000}
                 >
                   {/* <Button onClick={this.handleAdd} type="primary" style={{ marginBottom: 16 }}>
                     添加当前模型
@@ -277,6 +285,9 @@ class Model extends Component{
                   <Table
                     components={components}
                     rowClassName={() => 'editable-row'}
+                    pagination={{
+                      pageSize: 5
+                    }}
                     bordered
                     dataSource={dataSource}
                     columns={columns}

@@ -15,6 +15,7 @@ class Download extends Component{
         var allData = model.Dataset;
         if(allData.length === 0){
             message.warning('no file!');
+            return ;
         }
         else {
             var fieldNameArray = new Array();
@@ -23,7 +24,7 @@ class Download extends Component{
             for(let i in model.labelArray.public){
                 fieldNameArray.push(model.labelArray.public[i][0]);
             }
-            for(let i = 0;i < length;i++){
+            for(let i in allData[0].value){
                 var row = new Array();
                 for(let j in allData){
                     row.push(allData[j].value[i]);
