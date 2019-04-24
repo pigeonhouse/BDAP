@@ -5,16 +5,16 @@ import store from "../../store"
 import { Pokemon, Simple } from "../../ExampleData/FlowData"
 const nwData = {
   key: 1,
-  Name: "例:Pokeman模型",
+  Name: "Pokemon数据集",
   Date: 2019.4,
-  Description: "我们在这里为你准备了一个初始模型",
+  Description: "通过宝可梦的各项属性值预测其是否为神兽。",
   Model:{}
 };
 const exampleData = {
   key: 0,
-  Name: "例:Simple模型",
+  Name: "简单的线性回归",
   Date: 2019.4,
-  Description: "我们在这里为你准备了一个初始模型",
+  Description: "通过简单的线性回归熟悉数据挖掘基本流程。",
   Model:{}
 };
 const FormItem = Form.Item;
@@ -124,9 +124,7 @@ class Model extends Component{
             this.state.dataSource.length >= 1
               ? (
                 <div>
-                    <Popconfirm title="确定展示这个模型?" onConfirm={() => this.handleShow(record.key)}>
-                    <a href="javascript:;">调出</a>
-                    </Popconfirm>
+                    <a href="javascript:;" onClick={() => this.handleShow(record.key)}>调出</a>
                     <Divider type="vertical" />
                     <Popconfirm title="确定删除?" onConfirm={() => this.handleDelete(record.key)}>
                     <a href="javascript:;">删除</a>
@@ -187,7 +185,7 @@ class Model extends Component{
       this.setState({ 
         dataSource: dataSource.filter(item => item.key !== key),
       });
-      message.success("此模型被删除成功!")
+      message.success("模型删除成功!")
     }
     handleShow = (key) => {
       const dataSource = [...this.state.dataSource];
@@ -203,7 +201,7 @@ class Model extends Component{
       this.setState({
         visible:false
       });
-      message.success("这个模型被成功调出!")
+      message.success("成功调出模型!")
     }
     handleAdd = () => {
         const { propsAPI } = this.props;
