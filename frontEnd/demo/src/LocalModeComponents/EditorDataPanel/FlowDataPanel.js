@@ -5,88 +5,88 @@ import { Menu, Icon , message } from 'antd';
 const SubMenu = Menu.SubMenu;
 import GGEditor,{ Flow, RegisterNode } from '@src';
 class FlowDataPanel extends React.Component {
-  state={
-    dataTable: []
-  }
+  // state={
+  //   dataTable: []
+  // }
   
-  componentWillMount(){
-    fetch(
-      'http://localhost:3000/FileList'
-    )
-    .then((response) => {
-      if(response.status===200){
-        response.json().then((respData)=>{
-          this.setState({
-            dataTable:respData,
-          });
-        })
-      }
-    })
-  }
-  componentWillReceiveProps(nextProps){
-    if(nextProps.dataTable.length !== 0){
-      this.setState({dataTable:nextProps.dataTable})
-    }
-  }
-  deleteFile = (dataName)=>{
-    const init={
-      method: 'POST', 
-      body:"fileName="+dataName,
-      mode: 'cors',
-      headers: {
-        "Content-Type": "application/x-www-form-urlencoded;charset=utf-8"
-    　　 },
-      }
-      fetch(
-        'http://localhost:3000/DeleteFile',init
-      )
-      .then((response) => {
-        return response.json()
-      })
-      .then(a=>{message.success(`${dataName}file deleted successfully`)})
-      .catch(e => console.log('错误:', e))
-  }
-  deleteDataName=(dataName)=>{
-    var dataTable = this.state.dataTable;
-    const index = dataTable.indexOf(dataName);
-    dataTable.splice(index, 1);
-    this.setState({dataTable})
-    this.deleteFile(dataName);
-  }
+  // componentWillMount(){
+  //   fetch(
+  //     'http://localhost:3000/FileList'
+  //   )
+  //   .then((response) => {
+  //     if(response.status===200){
+  //       response.json().then((respData)=>{
+  //         this.setState({
+  //           dataTable:respData,
+  //         });
+  //       })
+  //     }
+  //   })
+  // }
+  // componentWillReceiveProps(nextProps){
+  //   if(nextProps.dataTable.length !== 0){
+  //     this.setState({dataTable:nextProps.dataTable})
+  //   }
+  // }
+  // deleteFile = (dataName)=>{
+  //   const init={
+  //     method: 'POST', 
+  //     body:"fileName="+dataName,
+  //     mode: 'cors',
+  //     headers: {
+  //       "Content-Type": "application/x-www-form-urlencoded;charset=utf-8"
+  //   　　 },
+  //     }
+  //     fetch(
+  //       'http://localhost:3000/DeleteFile',init
+  //     )
+  //     .then((response) => {
+  //       return response.json()
+  //     })
+  //     .then(a=>{message.success(`${dataName}file deleted successfully`)})
+  //     .catch(e => console.log('错误:', e))
+  // }
+  // deleteDataName=(dataName)=>{
+  //   var dataTable = this.state.dataTable;
+  //   const index = dataTable.indexOf(dataName);
+  //   dataTable.splice(index, 1);
+  //   this.setState({dataTable})
+  //   this.deleteFile(dataName);
+  // }
   render() {
-    var children = [];
-    if(this.state.dataTable.length !== 0){
-      var dataTable = this.state.dataTable;
-      for(let i in dataTable){
-        children.push(
-          <Menu.Item key={i+3} > 
-                <ItemPanel>
-                  <Item
-                    type="node"
-                    size="200*40"
-                    shape='zero-one'
-                    model={{
-                      label: dataTable[i],
-                      elabel: dataTable[i],
-                      attr:{},
-                      attrDetail:[],
-                      Dataset: [],
-                      labelArray: {}, 
-                      length: 0,
-                      anchor: [0, 1],
-                      group:'input',
-                      keyConfig:{
-                        color_type: '#1890FF',
-                        state_icon_url: 'https://gw.alipayobjects.com/zos/rmsportal/uZVdwjJGqDooqKLKtvGA.svg',
-                      }
-                    }}
-                    deleteDataName={this.deleteDataName}    
-                  />
-                </ItemPanel>
-          </Menu.Item>
-        )
-      }
-    }
+    // var children = [];
+    // if(this.state.dataTable.length !== 0){
+    //   var dataTable = this.state.dataTable;
+    //   for(let i in dataTable){
+    //     children.push(
+    //       <Menu.Item key={i+3} > 
+    //             <ItemPanel>
+    //               <Item
+    //                 type="node"
+    //                 size="200*40"
+    //                 shape='zero-one'
+    //                 model={{
+    //                   label: dataTable[i],
+    //                   elabel: dataTable[i],
+    //                   attr:{},
+    //                   attrDetail:[],
+    //                   Dataset: [],
+    //                   labelArray: {}, 
+    //                   length: 0,
+    //                   anchor: [0, 1],
+    //                   group:'input',
+    //                   keyConfig:{
+    //                     color_type: '#1890FF',
+    //                     state_icon_url: 'https://gw.alipayobjects.com/zos/rmsportal/uZVdwjJGqDooqKLKtvGA.svg',
+    //                   }
+    //                 }}
+    //                 deleteDataName={this.deleteDataName}    
+    //               />
+    //             </ItemPanel>
+    //       </Menu.Item>
+    //     )
+    //   }
+    // }
     return (
       <Menu
         defaultOpenKeys={['sub1','sub2','sub3']}
@@ -394,7 +394,7 @@ class FlowDataPanel extends React.Component {
                 />
               </ItemPanel>
         </Menu.Item>
-          {children}
+          {/* {children} */}
       </SubMenu>
     </Menu>
     );

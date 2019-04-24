@@ -104,20 +104,20 @@ class LocalMode extends React.Component {
   tabChange=(value)=>{
     this.setState({currentTab:value})
   }
-  handleChange=(info)=>{
-    if (info.file.status === 'done') {
-      message.success(`${info.file.name} file uploaded successfully`);
-      this.setState({dataTable:info.file.response})
-    } else if (info.file.status === 'error') {
-      message.error(`${info.file.name} file upload failed.`);
-    }
-  }
+  // handleChange=(info)=>{
+  //   if (info.file.status === 'done') {
+  //     message.success(`${info.file.name} file uploaded successfully`);
+  //     this.setState({dataTable:info.file.response})
+  //   } else if (info.file.status === 'error') {
+  //     message.error(`${info.file.name} file upload failed.`);
+  //   }
+  // }
   
   render() {
-    const props = {
-      name: 'file',
-      action: 'http://10.105.222.92:3000/handleFile',
-    };
+    // const props = {
+    //   name: 'file',
+    //   action: 'http://10.105.222.92:3000/handleFile',
+    // };
     return (   
       <GGEditor className={styles.editor}>   
         <Row
@@ -211,11 +211,11 @@ class LocalMode extends React.Component {
         data-step="4" data-intro="所有配置完成后，点击'运行'按钮开始运行整个工作流。" data-position='top'
         >
           <Col span={2}>
-            <Upload {...props} onChange={this.handleChange}>
+            {/* <Upload {...props} onChange={this.handleChange}>
               <Button style={{border:0,backgroundColor:'#343941',color:"#ddd",fontSize:25}}>
                 <Icon type="plus" style={{fontSize:25}}/>上传
               </Button>
-            </Upload>
+            </Upload> */}
           </Col>
           <Col span={9}></Col>
           <Col span={2}>

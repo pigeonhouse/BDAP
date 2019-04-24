@@ -145,6 +145,7 @@ class FlowToolbar extends React.Component {
             <i className={`${iconfont.iconfont} ${iconfont.iconUngroup}`} />
           </Tooltip>
         </Command>
+        <Divider type="vertical" />
         <Button onClick={()=>this.ShowModal()} >
           <Icon type="lock"/>存储模型
         </Button>

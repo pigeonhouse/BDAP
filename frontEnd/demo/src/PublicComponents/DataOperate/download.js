@@ -55,7 +55,7 @@ class Download extends Component{
         return (
             <Command name="showpicture">
                 <div className={styles.item} onClick={this.makeFile}>
-                    <Icon type="solution" />
+                    <Icon type="download" />
                     <span>下载</span>
                 </div>
             </Command>

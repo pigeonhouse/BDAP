@@ -43,7 +43,8 @@ class Item extends React.Component {
   }
   iconClose=(group, label)=>{
     if(group === 'input' && this.state.isMouseEnter
-      && label !== '本地数据' && label !== 'Titanic测试' && label !== 'Titanic训练'){
+      && label !== '本地数据' && label !== 'Pokemon' && label !== 'SimpleTest' 
+      && label!=='SimpleTrain'&&label!=='Titanic测试' && label!=='Titanic训练'){
       return (
         <Col span={4}>
           <Popconfirm placement="rightTop" title="是否删除此文件" onConfirm={this.handleClickClose.bind(this, label)} okText="是" cancelText="否">
