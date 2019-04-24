@@ -34,6 +34,13 @@ class Run extends Component{
   showModal = (stream) => {
     this.setState({
       visible: true,
+      currentStatus: [
+        {title:`迭代次数:`, value:0},
+        {title:`准确率:`, value:0},
+        {title:`损失函数:`, value:0},
+        {title:`学习率:`, value:0},
+        {title:`最终准确率:`, value:'未完成'}
+      ]
     });
     const init={
       method: 'POST', 
@@ -461,7 +468,7 @@ class Run extends Component{
           const { find, update, executeCommand } = propsAPI;
           const nextitem = find(stream[k+1].id);
           var value = JSON.parse(JSON.stringify(nextitem.model.keyConfig));
-          value.state_icon_url = 'https://gw.alipayobjects.com/zos/rmsportal/czNEJAmyDpclFaSucYWB.svg';
+          value.state_icon_url = 'https://loading.io/spinners/palette-ring/index.rotate-palette-loader.svg';
           executeCommand(() => {
             update(nextitem, {keyConfig:{...value}});
           });
