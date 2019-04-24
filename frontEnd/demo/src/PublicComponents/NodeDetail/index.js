@@ -338,22 +338,6 @@ class NodeDetail extends React.Component {
               })(<Input onBlur={this.handleSubmit}/>)
             }
           </Item>
-          {arr.map((item)=>{
-            const itemKey = Object.keys(item)[0];
-            var re = /^[0-9]+.?[0-9]*/;
-            return <Item style={{margin:0}} label={itemKey} {...inlineFormItemLayout}>
-                    {
-                      getFieldDecorator(`attr.${itemKey}` , {
-                        rules:re.test(item[itemKey])?[{
-                          required:false,
-                          pattern: new RegExp(/^[0-9]+.?[0-9]*/, "g"),
-                          message: '请输入数字'
-                        }]:[],
-                        initialValue: item[itemKey],
-                      })(<Input style={{margin:0}} onBlur={this.handleSubmit}/>)
-                    }
-                  </Item>;
-          })}
           {attrDetail.map((item)=>{
             if(item.type === 'Select'){
               return (
