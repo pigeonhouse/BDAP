@@ -1,7 +1,7 @@
 import React from 'react';
 import { ItemPanel, Item } from '@src';
 import { Menu, Icon } from 'antd';
-import ItemDecoration from './ItemDecoration'
+import ItemDecoration from '../../PublicComponents/ItemDecoration/ItemDecoration'
 import styles from './index.less';
 
 /**

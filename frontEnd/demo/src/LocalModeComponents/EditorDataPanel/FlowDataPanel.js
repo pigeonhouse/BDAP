@@ -1,7 +1,7 @@
 import React from 'react';
 import { ItemPanel, Item } from '@src';
 import { Menu, Icon, message } from 'antd';
-import ItemDecoration from '../EditorItemPanel/ItemDecoration'
+import ItemDecoration from '../../PublicComponents/ItemDecoration/ItemDecoration'
 import styles from './index.less';
 
 /**
