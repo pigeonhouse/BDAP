@@ -9,10 +9,11 @@ import SimpleTest from '../DataOperate/DataUpload/SimpleTest'
 import SimpleTrain from '../DataOperate/DataUpload/SimpleTrain'
 import Pokemon from '../DataOperate/DataUpload/Pokemon'
 import HdfsFile from '../DataOperate/FileOperate/hdfsFile'
-import styles from './index.less';
 import Feature from '../DataOperate/FeatureNodeDetail/Feature'
-import Papa from 'papaparse'
 import { Stat } from '../DataOperate/DataToolFunctions/stat'
+
+import Papa from 'papaparse'
+import styles from './index.less';
 
 const { Item } = Form;
 const Option = Select.Option;
