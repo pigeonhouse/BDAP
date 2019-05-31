@@ -1,7 +1,6 @@
 import React, { Component } from 'react'
 import { Button,Modal,Icon,message, Table, Input, Popconfirm, Form, Divider} from 'antd'
 import { withPropsAPI } from '@src';
-import store from "../../store"
 
 const FormItem = Form.Item;
 const EditableContext = React.createContext();
@@ -107,7 +106,7 @@ class Model extends Component{
           title: 'Operation',
           dataIndex: 'Operation',
           render: (text, record) => (
-            this.state.dataSource.length >= 1
+            this.state.ModelList.length >= 1
               ? (
                 <div>
                     <a href="javascript:;" onClick={() => this.handleShow(record.key)}>调出</a>
@@ -119,60 +118,55 @@ class Model extends Component{
               ) : null
           ),
         }];
-        this.handleStoreChange = this.handleStoreChange.bind(this)
-        store.subscribe(this.handleStoreChange)
+      //第一次全局渲染
+      //后端拿来[{},{}]
+        
+      // fetch("http://********/****")
+      // .then(
+      //   listAll=>{
+      //     console.log(listAll);
+      //     this.setState({
+      //       ModelList:[{},{}],
+      //       count: length;
+      //     });
+      //   }
+      // ) 
     }
     state = {
       visible:false,
       editing: false,
     }
-    handleStoreChange = () => {
-      const sta = store.getState();
-      if(!sta.did){
-        const { count, dataSource } = this.state;
-        const newData = {
-          key: count,
-          Name: sta.name,
-          Date: 2019.4,
-          Description: sta.info,
-          Model:sta.Dataset
-        };
-        this.setState({
-          dataSource: [...dataSource, newData],
-          count: count + 1,
-        });
-        const action = {
-          type:'test',
-          did:true,
-          count:count+1
-        }
-        store.dispatch(action)
-      }
-    }
+
     ShowModal = () => {
       this.setState({
         visible: true,
       });
     }
+
     DisModal = () => {
       this.setState({
         visible: false,
       });
     }
     handleDelete = (key) => {
-      const dataSource = [...this.state.dataSource];
+      //后端Delete(key)
+
+      const ModelList = [...this.state.ModelList];
       this.setState({ 
-        dataSource: dataSource.filter(item => item.key !== key),
+        ModelList: ModelList.filter(item => item.key !== key),
       });
       message.success("删除成功!")
     }
     handleShow = (key) => {
-      const dataSource = [...this.state.dataSource];
+      const ModelList = [...this.state.ModelList];
       const { propsAPI } = this.props;
-      if(dataSource.length > 0){
-        for(let i = 0; i < dataSource.length; i ++){
-          if(dataSource[i].key === key){
-            let inf = JSON.parse(JSON.stringify(dataSource[i].Model));
+
+      if(ModelList.length > 0){
+        for(let i = 0; i < ModelList.length; i ++){
+          if(ModelList[i].key === key){
+            //post  data
+            //inf 就是拿来的data
+            let inf = JSON.parse(JSON.stringify(ModelList[i].Model));
             propsAPI.read(inf);
           }
         }
@@ -180,45 +174,52 @@ class Model extends Component{
       this.setState({
         visible:false
       });
-      //message.success("这个模型被成功调出!")
     }
+
     handleAdd = () => {
         const { propsAPI } = this.props;
         let inf = JSON.parse(JSON.stringify(propsAPI.save()));
-        const { count, dataSource } = this.state;
+        const { count, ModelList } = this.state;
+
+        //后端要add这个newData
         const newData = {
           key: count,
           Name: `模型${count}号`,
           Date: 2019.4,
           Description: `这是我的第${count}个模型`,
-          Model:inf    //注意不能有和它重名的
+          Model:inf   //这个就是Data
         };
+        //后端Add操作
+
         this.setState({
-          dataSource: [...dataSource, newData],
+          ModelList: [...ModelList, newData],
           count: count + 1,
         });
-        const action = {
-          type:'test',
-          did:true,
-          count:count+1
-        }
-        store.dispatch(action);
+        
+
         message.success("成功存储了一个新模型!")
     }
     
     handleSave = (row) => {
-        const newData = [...this.state.dataSource];
-        const index = newData.findIndex(item => row.key === item.key);
-        const item = newData[index];
-        newData.splice(index, 1, {
+        //这里用于修改某个model
+
+        const newList = [...this.state.ModelList];
+        const index = newList.findIndex(item => row.key === item.key);
+        const item = newList[index];
+        //item为新修改的对象 index为下标
+
+        //在这里post index,item到后端
+        //然后对对应项修改
+        newList.splice(index, 1, {
           ...item,
           ...row,
-        });
-        this.setState({ dataSource: newData });
+        }); //本地修改
+        this.setState({ ModelList: newList });
+        
     }
 
     render(){
-        const { dataSource } = this.state;
+        const { ModelList } = this.state;
         const components = {
           body: {
             row: EditableFormRow,
@@ -266,7 +267,7 @@ class Model extends Component{
                     pagination={{
                       pageSize: 5
                     }}
-                    dataSource={dataSource}
+                    ModelList={ModelList}
                     columns={columns}
                   />
                 </Modal>      
