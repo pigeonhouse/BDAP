@@ -3,7 +3,7 @@ import { Icon, Button } from 'antd'
 import Papa from 'papaparse'
 import { withPropsAPI } from '@src';
 import { Stat } from './stat';
-import { Data }from '../../ExampleData/SimpleTest';
+import { Data }from '../../LocalModeComponents/ExampleData/SimpleTest';
 class SimpleTest extends Component{
     readFile = ()=>{
         const { propsAPI } = this.props;

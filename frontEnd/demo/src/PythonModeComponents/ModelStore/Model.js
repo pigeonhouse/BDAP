@@ -1,15 +1,8 @@
 import React, { Component } from 'react'
-import { Button,Modal,Icon,message, Pagination,Table, Input, Popconfirm, Form, Divider} from 'antd'
+import { Button,Modal,Icon,message, Table, Input, Popconfirm, Form, Divider} from 'antd'
 import { withPropsAPI } from '@src';
 import store from "../../store"
-import { vgg,lenet } from "../../ExampleData/FlowData"
-const nwData = {
-  key: 0,
-  Name: "LeNet-mnist",
-  Date: 2019.4,
-  Description: "利用经典的LeNet卷积神经网络进行手写字符识别",
-  Model:{}
-};
+
 const FormItem = Form.Item;
 const EditableContext = React.createContext();
   const EditableRow = ({ form, index, ...props }) => (
@@ -117,9 +110,7 @@ class Model extends Component{
             this.state.dataSource.length >= 1
               ? (
                 <div>
-                    {/* <Popconfirm title="确定展示这个模型?" onConfirm={() => this.handleShow(record.key)}> */}
                     <a href="javascript:;" onClick={() => this.handleShow(record.key)}>调出</a>
-                    {/* </Popconfirm> */}
                     <Divider type="vertical" />
                     <Popconfirm title="确定删除?" onConfirm={() => this.handleDelete(record.key)}>
                     <a href="javascript:;">删除</a>
@@ -130,18 +121,6 @@ class Model extends Component{
         }];
         this.handleStoreChange = this.handleStoreChange.bind(this)
         store.subscribe(this.handleStoreChange)
-        nwData.Model = lenet;
-        let nw2Data = {
-          key: 1,
-          Name: "VGG-16",
-          Date: 2019.4,
-          Description: "利用VGG-16识别cifar100数据集",
-          Model:vgg
-        };
-        this.state = {
-          dataSource:[nwData,nw2Data],
-          count: 2
-        };
     }
     state = {
       visible:false,
@@ -290,8 +269,7 @@ class Model extends Component{
                     dataSource={dataSource}
                     columns={columns}
                   />
-                </Modal>
-                
+                </Modal>      
             </div>
         </div>
         );

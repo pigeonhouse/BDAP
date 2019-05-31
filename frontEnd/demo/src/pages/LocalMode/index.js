@@ -224,9 +224,6 @@ class LocalMode extends React.Component {
           <Col span={9}></Col>
           <Col span={2}>
               <Model type = 'local'></Model>
-              {/* <Button style={{border:0,backgroundColor:'#343941',color:"#ddd",fontSize:25}} >
-                <Icon type="search" style={{fontSize:25}}/>模型
-              </Button> */}
           </Col>
         </Row>
         
