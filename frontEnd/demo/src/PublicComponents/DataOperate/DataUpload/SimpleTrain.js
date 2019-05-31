@@ -2,8 +2,8 @@ import React, { Component } from 'react';
 import { Icon, Button } from 'antd'
 import Papa from 'papaparse'
 import { withPropsAPI } from '@src';
-import { Stat } from './stat';
-import { Data }from '../../LocalModeComponents/ExampleData/SimpleTrain';
+import { Stat } from '../DataToolFunctions/stat';
+import { Data }from '../../../LocalModeComponents/ExampleData/SimpleTrain';
 class SimpleTrain extends Component{
     readFile = ()=>{
         const { propsAPI } = this.props;

@@ -2,53 +2,21 @@ import React, { Component } from 'react';
 import { Icon, Button } from 'antd'
 import Papa from 'papaparse'
 import { withPropsAPI } from '@src';
-import { Stat } from './stat';
-// import { SeprtbyFeat } from './DataProcess/SeprtbyFeat';
+import { Stat } from '../DataToolFunctions/stat';
 class Uploadfile extends Component{
     
-    // makeFile = ()=>{
-    //   var allData = this.state.dataSet[0]
-  
-    //   var fieldNameArray = this.state.labelArray[0]
-  
-    //   var vectorlength = this.state.length[0]
-
-    //   var newData = new Array();
-  
-    //   for(let indexOfRows = 0;indexOfRows < vectorlength; indexOfRows++){
-    //     var row = new Array();
-    //     for(let indexOfCols = 0; indexOfCols < fieldNameArray.length; indexOfCols++ ){
-    //         row.push(allData[fieldNameArray[indexOfCols]][indexOfRows])
-    //     }
-    //     newData.push(row);
-    //   }
-    //   var csv = Papa.unparse({
-    //     "fields": fieldNameArray,
-    //     "data": newData
-    //   });
-  
-    //     this.setState({
-    //       finalData:csv
-    //     })
-    //   }
     readFile = (e)=>{
       var files = e.target.files;
-      console.log('*****file');
-      console.log(files);
-      
       var reader = new FileReader();
       const { propsAPI } = this.props;
       const { getSelected, update } = propsAPI;
       reader.readAsText(files[0],'gbk');
       reader.onload = function(e) {
-        console.log('**********reader');
-        console.log(reader);
         
         var fieldNameArray = [];
         let vectorLength;
         var results = Papa.parse(e.target.result,{header:true,dynamicTyping: true});
-        console.log('*********result');
-        console.log(results);
+
         fieldNameArray.push(results.meta.fields);
         vectorLength = results.data.length - 1
         var n = new Array();

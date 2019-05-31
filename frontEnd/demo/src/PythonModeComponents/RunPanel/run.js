@@ -2,21 +2,21 @@ import React, { Component } from 'react'
 import { Button, Modal, Icon, message, Row, Col, List } from 'antd'
 import { withPropsAPI } from '@src';
 
-import { OneVarLinearRegression } from '../Models/MachineLearning/Regression/OneVarLinearRegression'
-import { NaiveBayes } from '../Models/MachineLearning/Classification/NaiveBayes'
-import { MutiVarLinearRegression } from '../Models/MachineLearning/Regression/MutiVarLinearRegression'
-import { OneVarPolynomialRegression } from '../Models/MachineLearning/Regression/OneVarPolynomialRegression'
-import { DecisionTreeRegression } from '../Models/MachineLearning/Regression/DecisionTree'
-import { RandomForest } from '../Models/MachineLearning/Regression/RandomForest'
-import { SVM } from '../Models/MachineLearning/Classification/SVM'
+// import { OneVarLinearRegression } from '../Models/MachineLearning/Regression/OneVarLinearRegression'
+// import { NaiveBayes } from '../Models/MachineLearning/Classification/NaiveBayes'
+// import { MutiVarLinearRegression } from '../Models/MachineLearning/Regression/MutiVarLinearRegression'
+// import { OneVarPolynomialRegression } from '../Models/MachineLearning/Regression/OneVarPolynomialRegression'
+// import { DecisionTreeRegression } from '../Models/MachineLearning/Regression/DecisionTree'
+// import { RandomForest } from '../Models/MachineLearning/Regression/RandomForest'
+// import { SVM } from '../Models/MachineLearning/Classification/SVM'
 
-import { fillNa } from '../../PublicComponents/DataOperate/DataProcess/fillNa'
-import { Onehot } from '../../PublicComponents/DataOperate/DataProcess/Onehot'
-import { Randis } from '../../PublicComponents/DataOperate/DataProcess/Randis'
-import { SelectCol } from '../../PublicComponents/DataOperate/DataProcess/SelectCol'
-import { SeprtbyFeat } from '../../PublicComponents/DataOperate/DataProcess/SeprtbyFeat'
-import { StrToNum } from '../../PublicComponents/DataOperate/DataProcess/StrToNum';
-import { Nomalize } from '../../PublicComponents/DataOperate/DataProcess/Nomalize';
+// import { fillNa } from '../../PublicComponents/DataOperate/DataProcess/fillNa'
+// import { Onehot } from '../../PublicComponents/DataOperate/DataProcess/Onehot'
+// import { Randis } from '../../PublicComponents/DataOperate/DataProcess/Randis'
+// import { SelectCol } from '../../PublicComponents/DataOperate/DataProcess/SelectCol'
+// import { SeprtbyFeat } from '../../PublicComponents/DataOperate/DataProcess/SeprtbyFeat'
+// import { StrToNum } from '../../PublicComponents/DataOperate/DataProcess/StrToNum';
+// import { Nomalize } from '../../PublicComponents/DataOperate/DataProcess/Nomalize';
 
 import { inputdata } from '../../PublicComponents/HandleStream/streamRunner'
 import { outputdata } from '../../PublicComponents/HandleStream/streamRunner'

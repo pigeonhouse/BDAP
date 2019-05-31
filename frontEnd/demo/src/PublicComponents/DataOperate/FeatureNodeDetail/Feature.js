@@ -1,13 +1,13 @@
 import React, {Component, Fragment} from 'react'
 import { withPropsAPI } from '@src';
 import { Divider, Row, Col } from 'antd'
-import FeatureRegion from './Feature/FeatureRegion'
-import FeatureGroup from './Feature/FeatureGroup'
-import FillNa from './Feature/fillNa'
-import Randis from './Feature/Randis'
-import TypeChange from './Feature/TypeChange'
-import DataFilter from './Feature/DataFilter/DataFilter'
-import DataFilterA from './Feature/DataFilter/DataFilterA'
+import FeatureRegion from './FeatureRegion'
+import FeatureGroup from './FeatureGroup'
+import FillNa from './fillNa'
+import Randis from './Randis'
+import TypeChange from './TypeChange'
+import DataFilter from './DataFilter/DataFilter'
+import DataFilterA from './DataFilter/DataFilterA'
 
 class Feature extends Component{
     constructor(props){

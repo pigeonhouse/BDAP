@@ -1,16 +1,14 @@
 import React, { Component } from 'react';
-import { Icon, Button } from 'antd'
-import Papa from 'papaparse'
 import { withPropsAPI } from '@src';
-import { Stat } from './stat';
-import { Data }from '../../LocalModeComponents/ExampleData/SimpleTest';
-class SimpleTest extends Component{
+import { Stat } from '../DataToolFunctions/stat';
+import { data }from '../../../LocalModeComponents/ExampleData/TitanicTrain';
+class LocalTrainData extends Component{
     readFile = ()=>{
         const { propsAPI } = this.props;
         const { getSelected, update } = propsAPI;
         var fieldNameArray = [];
         let vectorLength;
-        var results = {'data':Data,'meta':{'fields':["id","age","gender"]}};
+        var results = {'data':data,'meta':{'fields':["PassengerId","Pclass","Name","Sex","Age","SibSp","Parch","Ticket","Fare","Cabin","Embarked"]}};
         fieldNameArray.push(results.meta.fields);
         vectorLength = results.data.length - 1;
         var n = new Array();
@@ -45,4 +43,4 @@ class SimpleTest extends Component{
     }
 }
 
-export default withPropsAPI(SimpleTest);
+export default withPropsAPI(LocalTrainData);

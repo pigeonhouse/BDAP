@@ -1,18 +1,18 @@
 import React from 'react';
 import { Card, Form, Input, Select } from 'antd';
 import { withPropsAPI } from '@src';
-import Selectword from '../DataOperate/selectword'
-import Uploadfile from '../DataOperate/upload'
-import LocalTestData from '../DataOperate/LocalTestData'
-import LocalTrainData from '../DataOperate/LocalTrainData'
-import SimpleTest from '../DataOperate/SimpleTest'
-import SimpleTrain from '../DataOperate/SimpleTrain'
-import Pokemon from '../DataOperate/Pokemon'
-import HdfsFile from '../DataOperate/hdfsFile'
+import Selectword from '../DataOperate/SelectWord/selectword'
+import Uploadfile from '../DataOperate/FileOperate/upload'
+import LocalTestData from '../DataOperate/DataUpload/LocalTestData'
+import LocalTrainData from '../DataOperate/DataUpload/LocalTrainData'
+import SimpleTest from '../DataOperate/DataUpload/SimpleTest'
+import SimpleTrain from '../DataOperate/DataUpload/SimpleTrain'
+import Pokemon from '../DataOperate/DataUpload/Pokemon'
+import HdfsFile from '../DataOperate/FileOperate/hdfsFile'
 import styles from './index.less';
-import Feature from '../DataOperate/Feature'
+import Feature from '../DataOperate/FeatureNodeDetail/Feature'
 import Papa from 'papaparse'
-import { Stat } from '../DataOperate/stat'
+import { Stat } from '../DataOperate/DataToolFunctions/stat'
 
 const { Item } = Form;
 const Option = Select.Option;

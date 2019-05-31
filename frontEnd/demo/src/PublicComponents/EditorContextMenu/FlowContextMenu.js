@@ -15,8 +15,8 @@ import { withPropsAPI } from '@src';
 import LineMarkerEcharts from './LineMarkerEcharts';
 import GGEditor, { Flow, RegisterCommand } from '@src';
 
-import Download from '../DataOperate/download';
-import { SeprtbyFeat } from '../DataOperate/DataProcess/SeprtbyFeat'
+import Download from '../DataOperate/FileOperate/download';
+import { SeprtbyFeat } from '../../LocalModeComponents/DataProcess/SeprtbyFeat'
 
 const Panel = Collapse.Panel;
 var echarts = require('echarts');

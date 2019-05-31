@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import { Button } from 'antd'
 import { withPropsAPI } from '@src';
-import { Stat } from '../../PublicComponents/DataOperate/stat'
+import { Stat } from '../../PublicComponents/DataOperate/DataToolFunctions/stat'
 var cur = 0
 
 class SparkRun extends Component{

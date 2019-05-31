@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import { Button, Input, Form } from 'antd'
 import { withPropsAPI } from '@src';
-import { Stat } from './stat'
+import { Stat } from '../DataToolFunctions/stat'
 
 class HdfsFile extends Component{
     state={

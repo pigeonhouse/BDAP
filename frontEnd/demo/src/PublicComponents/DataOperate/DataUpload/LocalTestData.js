@@ -1,10 +1,8 @@
 import React, { Component } from 'react';
-import { Icon, Button } from 'antd'
-import Papa from 'papaparse'
 import { withPropsAPI } from '@src';
-import { Stat } from './stat';
-import { data }from '../../LocalModeComponents/ExampleData/TitanicTrain';
-class LocalTrainData extends Component{
+import { Stat } from '../DataToolFunctions/stat';
+import { data }from '../../../LocalModeComponents/ExampleData/TitanicTest';
+class LocalTestData extends Component{
     readFile = ()=>{
         const { propsAPI } = this.props;
         const { getSelected, update } = propsAPI;
@@ -45,4 +43,4 @@ class LocalTrainData extends Component{
     }
 }
 
-export default withPropsAPI(LocalTrainData);
+export default withPropsAPI(LocalTestData);

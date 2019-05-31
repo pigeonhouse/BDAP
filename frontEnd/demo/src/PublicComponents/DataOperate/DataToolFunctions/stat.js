@@ -1,6 +1,4 @@
-import min from 'ml-array-min';
 import max from 'ml-array-max';
-import mean from 'ml-array-mean';
 import median from 'ml-array-median';
 import variance from 'ml-array-variance';
 import standardDeviation from 'ml-array-standard-deviation';
@@ -54,25 +52,12 @@ export function Stat(n){
         if(n[i].value[j] != null && n[i].value[j] < Min) Min = n[i].value[j];
         total+=n[i].value[j];
       }
-      // console.log("value");
-      // console.log(value);
+      
       const Max = max(value);
       const Median = median(value);
       const Variance = variance(value);
       const StandardDeviation = standardDeviation(value);
-      // let med = new Array;
-      // for(let j = 0; j < n[i].value.length;j++){
-      //   med[j] = n[i].value[j];
-      // }
-      // for(let j = 0; j < n[i].value.length;j++){
-      //   for(let k = j+1; k < n[i].value.length;k++){
-      //     if(med[j] > med[k]){
-      //       tep = med[j];
-      //       med[j] = med[k];
-      //       med[k] = tep;
-      //     }
-      //   }
-      // }
+
       let tem_avr = parseFloat((total/n[i].value.length));
       stat = {};
       stat.max = Max;
