@@ -1,14 +1,17 @@
 import React from 'react';
-import { Row, Col, Button, message, notification,Icon,Tabs,Upload} from 'antd';
 import GGEditor, { Flow } from '@src';
+import { Row, Col, Button, message, notification,Icon,Tabs,Upload} from 'antd';
+
 import { FlowContextMenu } from '../../PublicComponents/EditorContextMenu';
 import { FlowToolbar } from '../../PublicComponents/EditorToolbar';
-import { FlowItemPanel } from '../../LocalModeComponents/EditorItemPanel';
 import { FlowDetailPanel } from '../../PublicComponents/EditorDetailPanel';
-import styles from './index.less';
+
+import { FlowItemPanel } from '../../LocalModeComponents/EditorItemPanel';
+import { FlowDataPanel } from '../../LocalModeComponents/EditorDataPanel';
 import Run from "../../LocalModeComponents/RunPanel/run"
 import Model from "../../LocalModeComponents/ModelStore/Model"
-import { FlowDataPanel } from '../../LocalModeComponents/EditorDataPanel';
+
+import styles from './index.less';
 const TabPane = Tabs.TabPane;
 var IntroJs = require('intro.js')
 class LocalMode extends React.Component {

@@ -1,10 +1,14 @@
 import React from 'react';
 import { ItemPanel, Item } from '@src';
-import styles from './index.less';
 import { Menu, Icon } from 'antd';
+import ItemDecoration from './ItemDecoration'
+import styles from './index.less';
+
+/**
+ * 左侧下拉菜单栏，包括可操作实现的组件
+ */
 const SubMenu = Menu.SubMenu;
-const MenuItemGroup = Menu.ItemGroup;
-import GGEditor,{ Flow, RegisterNode } from '@src';
+
 class FlowItemPanel extends React.Component {
   state={
     isMouseEnter:false
@@ -26,238 +30,7 @@ class FlowItemPanel extends React.Component {
             style={{maxHeight:'calc(100vh - 105px)', width:'245px', borderRight:0}}
             selectable={false}
           >
-          <GGEditor style={{height:0, width:0}}>
-              <Flow />
-              <RegisterNode 
-                name = {'model-all'}
-                config =  {{
-                  draw(item) {
-                    const group = item.getGraphicGroup();
-                    const model = item.getModel();
-                    const width = 184;
-                    const height = 40;
-                    const x = -width / 2;
-                    const y = -height / 2;
-                    const borderRadius = 4;
-                    const keyShape = group.addShape('rect', {
-                      attrs: {
-                        x,
-                        y,
-                        width,
-                        height,
-                        radius: borderRadius,
-                        fill: 'white',
-                        stroke: '#CED4D9'
-                      }
-                    });
-                    // 左侧色条
-                    group.addShape('path', {
-                      attrs: {
-                        path: [
-                          [ 'M', x, y + borderRadius ],
-                          [ 'L', x, y + height - borderRadius ],
-                          [ 'A', borderRadius, borderRadius, 0, 0, 0, x + borderRadius, y + height ],
-                          [ 'L', x + borderRadius, y ],
-                          [ 'A', borderRadius, borderRadius, 0, 0, 0, x, y + borderRadius ]
-                        ],
-                        fill: model.keyConfig.color_type
-                      }
-                    });
-                    // 类型 logo
-                    group.addShape('image', {
-                      attrs: {
-                        img: this.type_icon_url,
-                        x: x + 16,
-                        y: y + 12,
-                        width: 20,
-                        height: 16
-                      }
-                    });
-                    // 名称文本
-                    const label = model.label;
-                    group.addShape('text', {
-                      attrs: {
-                        text: label,
-                        x: x + 52,
-                        y: y + 15,
-                        textAlign: 'start',
-                        textBaseline: 'top',
-                        fill: 'rgba(0,0,0,0.65)'
-                      }
-                    });
-                    // 状态 logo
-                    const images = group.addShape('image', {
-                      attrs: {
-                        x: x + 158,
-                        y: y + 12,
-                        width: 16,
-                        height: 16,
-                        img: model.keyConfig.state_icon_url
-                      }
-                    });
-                    images.animate({
-                      onFrame(ratio) {
-                        const matrix = Util.mat3.create();
-                        const toMatrix = Util.transform(matrix, [
-                          ['r', ratio * Math.PI * 2]
-                        ]) ;
-                        return {
-                          matrix: toMatrix
-                        };
-                      },
-                      repeat: true
-                    }, 3000, 'easeCubic');
-                    return keyShape;
-                  },
-                  anchor: [
-                    [ 0.5, 0, {
-                      type: 'input'
-                    }],
-                    [ 0.5, 1, {
-                      type: 'output'
-                    }],
-                  ],
-                  type_icon_url: 'https://gw.alipayobjects.com/zos/rmsportal/czNEJAmyDpclFaSucYWB.svg',
-                }}
-                extend = {'flow-rect'}
-              />
-              <RegisterNode 
-                name = {'two-one'}
-                config =  {{
-                  anchor: [
-                    [ 0.33, 0, {
-                      type: 'input'
-                    }],
-                    [ 0.66, 0, {
-                      type: 'input'
-                    }],
-                    [ 0.5, 1, {
-                      type: 'output'
-                    }]
-                  ]
-                }}
-                extend = {'model-all'}
-              />
-              <RegisterNode 
-                name = {'one-one'}
-                config =  {{
-                  anchor: [
-                    [ 0.5, 0, {
-                      type: 'input'
-                    }],
-                    [ 0.5, 1, {
-                      type: 'output'
-                    }]
-                  ]
-                }}
-                extend = {'model-all'}
-              />
-              <RegisterNode 
-                name = {'one-two'}
-                config =  {{
-                  anchor: [
-                    [ 0.5, 0, {
-                      type: 'input'
-                    }],
-                    [ 0.33, 1, {
-                      type: 'output'
-                    }],
-                    [ 0.66, 1, {
-                      type: 'output'
-                    }]
-                  ]
-                }}
-                extend = {'model-all'}
-              />
-              <RegisterNode 
-                name = {'zero-one'}
-                config =  {{
-                  anchor: [
-                    [ 0.5, 1, {
-                      type: 'output'
-                    }]
-                  ]
-                }}
-                extend = {'model-all'}
-              />
-              <RegisterNode 
-                name = {'one-zero'}
-                config =  {{
-                  anchor: [
-                    [ 0.5, 0, {
-                      type: 'input'
-                    }]
-                  ]
-                }}
-                extend = {'model-all'}
-              />
-            </GGEditor>
-          {/* <SubMenu key="sub1" title={<span><Icon type="mail" /><span>数据源</span></span>}>
-              <Menu.Item key="1" >
-                <ItemPanel><Item
-                type="node"
-                size="200*40"
-                shape='zero-one'
-                model={{
-                  label: '本地数据',
-                  elabel:'localFile',
-                  attr:{},
-                  attrDetail:[],
-                  Dataset: [],
-                  labelArray: {}, 
-                  length: 0,
-                  anchor: [0, 1],
-                  group:'input',
-                  keyConfig:{
-                    color_type: '#1890FF',
-                    state_icon_url: 'https://gw.alipayobjects.com/zos/rmsportal/uZVdwjJGqDooqKLKtvGA.svg',
-                  }
-                }}         
-              /></ItemPanel></Menu.Item>
-              <Menu.Item key="2" > 
-              <ItemPanel><Item
-                type="node"
-                size="200*40"
-                shape='zero-one'
-                model={{
-                  label: 'Titanic测试',
-                  elabel:'TitanicTestFile',
-                  attr:{},
-                  attrDetail:[],
-                  Dataset: [],
-                  labelArray: {}, 
-                  length: 0,
-                  anchor: [0, 1],
-                  group:'input',
-                  keyConfig:{
-                    color_type: '#1890FF',
-                    state_icon_url: 'https://gw.alipayobjects.com/zos/rmsportal/uZVdwjJGqDooqKLKtvGA.svg',
-                  }
-                }}         
-              /></ItemPanel></Menu.Item>
-              <Menu.Item key="3" > 
-              <ItemPanel><Item
-                type="node"
-                size="200*40"
-                shape='zero-one'
-                model={{
-                  label: 'Titanic训练',
-                  elabel:'TitanicTrainFile',
-                  attr:{},
-                  attrDetail:[],
-                  Dataset: [],
-                  labelArray: {}, 
-                  length: 0,
-                  anchor: [0, 1],
-                  group:'input',
-                  keyConfig:{
-                    color_type: '#1890FF',
-                    state_icon_url: 'https://gw.alipayobjects.com/zos/rmsportal/uZVdwjJGqDooqKLKtvGA.svg',
-                  }
-                }}         
-              /></ItemPanel></Menu.Item>
-          </SubMenu> */}
-            
+          <ItemDecoration/>
           <SubMenu key="sub2" title={<span><Icon type="mail" /><span>数据预处理</span></span>}>
           <Menu.Item key="7">
               <ItemPanel><Item
@@ -537,8 +310,8 @@ class FlowItemPanel extends React.Component {
             </SubMenu>
           </SubMenu>
         </Menu>
-      </div>
       
+      </div> 
     );
   }
 }

@@ -1,11 +1,9 @@
 /**
  * 检测组件连接及内部属性的合法性,返回0为合法，其他为不合法
  */
-export function isLegal (){
-    const { propsAPI } = this.props;
+export function isLegal(propsAPI){
     const inf = propsAPI.save();
     console.log("--------LegalTest---------")
-    console.log(inf);
     if(!inf.hasOwnProperty("nodes")){
       message.error("先从左边拖来一些部件框吧")
       return 1;

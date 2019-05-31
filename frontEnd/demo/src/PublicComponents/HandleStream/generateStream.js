@@ -2,8 +2,7 @@
  * 根据画布上模块，进行拓扑排序，生成一维数组并返回此数组
  */
 
-export function generateStream(){
-    const { propsAPI } = this.props;
+export function generateStream(propsAPI){
     const inf = propsAPI.save();
     var Sourc = 0;
     var tag = 'Input';
@@ -85,5 +84,5 @@ export function generateStream(){
     }
     console.log('stream:')
     console.log(stream);
-    return stream;
+    return JSON.parse(JSON.stringify(stream));
   }

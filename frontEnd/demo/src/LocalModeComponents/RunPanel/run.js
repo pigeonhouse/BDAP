@@ -2,13 +2,13 @@ import React, { Component } from 'react'
 import { Button,Icon,message} from 'antd'
 import { withPropsAPI } from '@src';
 
-import { OneVarLinearRegression } from '../Models/MachineLearning/Regression/OneVarLinearRegression'
-import { NaiveBayes } from '../Models/MachineLearning/Classification/NaiveBayes'
-import { MutiVarLinearRegression } from '../Models/MachineLearning/Regression/MutiVarLinearRegression'
-import { OneVarPolynomialRegression } from '../Models/MachineLearning/Regression/OneVarPolynomialRegression'
-import { DecisionTreeRegression } from '../Models/MachineLearning/Regression/DecisionTree'
-import { RandomForest } from '../Models/MachineLearning/Regression/RandomForest'
-import { SVM } from '../Models/MachineLearning/Classification/SVM'
+import { OneVarLinearRegression } from '../Processor/MachineLearning/Regression/OneVarLinearRegression'
+import { NaiveBayes } from '../Processor/MachineLearning/Classification/NaiveBayes'
+import { MutiVarLinearRegression } from '../Processor/MachineLearning/Regression/MutiVarLinearRegression'
+import { OneVarPolynomialRegression } from '../Processor/MachineLearning/Regression/OneVarPolynomialRegression'
+import { DecisionTreeRegression } from '../Processor/MachineLearning/Regression/DecisionTree'
+import { RandomForest } from '../Processor/MachineLearning/Regression/RandomForest'
+import { SVM } from '../Processor/MachineLearning/Classification/SVM'
 
 import { fillNa } from '../../PublicComponents/DataOperate/DataProcess/fillNa'
 import { Onehot } from '../../PublicComponents/DataOperate/DataProcess/Onehot'
@@ -29,16 +29,19 @@ import { isLegal } from '../../PublicComponents/HandleStream/isLegal'
 var current = 0;
 class Run extends Component{
   onClickButton = ()=>{
-    const stream = generateStream();
+    const { propsAPI } = this.props;
+    const stream = generateStream(propsAPI);
+    console.log(stream);
     this.run(stream);
   }
   run = (stream)=>{
     const { propsAPI } = this.props;
-    if(isLegal)  return ;
+    if(isLegal(propsAPI))  return ;
     setTimeout(()=>{
       if(current !== stream.length){
         let k = current;
         const all_data = inputdata(stream[k], propsAPI);
+        console.log(all_data)
         var outcome = new Array()
         if(stream[k].label !== '本地数据'){
           const { find } = propsAPI;
