@@ -17,8 +17,8 @@ import { SeprtbyFeat } from '../../PublicComponents/DataOperate/DataProcess/Sepr
 import { StrToNum } from '../../PublicComponents/DataOperate/DataProcess/StrToNum';
 import { Nomalize } from '../../PublicComponents/DataOperate/DataProcess/Nomalize';
 
-import { inputdata } from './streamRunner'
-import { outputdata } from './streamRunner'
+import { inputdata } from '../../PublicComponents/HandleStream/streamRunner'
+import { outputdata } from '../../PublicComponents/HandleStream/streamRunner'
 import { generateStream } from '../../PublicComponents/HandleStream/generateStream'
 import { isLegal } from '../../PublicComponents/HandleStream/isLegal'
 

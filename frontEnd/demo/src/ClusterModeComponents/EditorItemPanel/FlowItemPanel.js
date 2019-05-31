@@ -1,7 +1,7 @@
 import React from 'react';
 import { ItemPanel, Item } from '@src';
 import styles from './index.less';
-import { Menu, Icon} from 'antd';
+import { Menu, Icon } from 'antd';
 import ItemDecoration from '../../PublicComponents/ItemDecoration/ItemDecoration'
 
 const SubMenu = Menu.SubMenu;
