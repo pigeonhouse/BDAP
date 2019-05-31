@@ -31,8 +31,49 @@ class Run extends Component{
   onClickButton = ()=>{
     const { propsAPI } = this.props;
     const stream = generateStream(propsAPI);
-    console.log(stream);
     this.run(stream);
+  }
+  selectFunction=(stream, all_data)=>{
+    switch (stream) {
+      case '单变量线性回归':
+          return OneVarLinearRegression(all_data);
+      case '多变量线性回归':
+          return MutiVarLinearRegression(all_data);
+      case '单变量多项式回归':
+          return OneVarPolynomialRegression(all_data);
+      case '决策树回归':
+          return DecisionTreeRegression(all_data);
+      case '随机森林回归':
+          return RandomForest(all_data);
+      case '朴素贝叶斯':
+          return NaiveBayes(all_data)
+      case '支持向量机':
+          return SVM(all_data)
+      case '数据随机划分':
+          return Randis(all_data)
+      case '特征区间化':
+          return SeprtbyFeat(all_data) 
+      case '特征分组归类':
+          return StrToNum(all_data)
+      case 'one-hot编码':
+          return Onehot(all_data)
+      case '缺失值填充':
+          return fillNa(all_data);
+      case '归一化':
+          return Nomalize(all_data);
+      default:
+        break;
+    }
+  }
+  changeStatusColor=(id, color)=>{
+    const { propsAPI } = this.props;
+    const { find, update, executeCommand } = propsAPI;
+    const nextitem = find(id);
+    var value = JSON.parse(JSON.stringify(nextitem.model.keyConfig));
+    value.state_icon_url = color;
+    executeCommand(() => {
+      update(nextitem, {keyConfig:{...value}});
+    });
   }
   run = (stream)=>{
     const { propsAPI } = this.props;
@@ -51,13 +92,8 @@ class Run extends Component{
             if(stream[k].label !== '数据随机划分'){
               if(!all_data[0].labelArray.hasOwnProperty('public')){
                 message.error("还没有选择字段，请在右边参数栏点击选择字段");
-                const { find, update, executeCommand } = propsAPI;
-                const nextitem = find(stream[k].id);
-                var value = JSON.parse(JSON.stringify(nextitem.model.keyConfig));
-                value.state_icon_url = 'https://gw.alipayobjects.com/zos/rmsportal/czNEJAmyDpclFaSucYWB.svg';
-                executeCommand(() => {
-                  update(nextitem, {keyConfig:{...value}});
-                });
+                this.changeStatusColor(stream[k].id, 
+                'https://gw.alipayobjects.com/zos/rmsportal/czNEJAmyDpclFaSucYWB.svg');
                 return ;
               } 
             }
@@ -66,76 +102,20 @@ class Run extends Component{
             if(all_data[0].labelArray.train_x.length == 0 || all_data[0].labelArray.train_y.length == 0
             || all_data[0].labelArray.predict_x.length == 0){
               message.error("还没有选择完字段，请在右边参数栏点击选择字段");
-                const { find, update, executeCommand } = propsAPI;
-                const nextitem = find(stream[k].id);
-                var value = JSON.parse(JSON.stringify(nextitem.model.keyConfig));
-                value.state_icon_url = 'https://gw.alipayobjects.com/zos/rmsportal/czNEJAmyDpclFaSucYWB.svg';
-                executeCommand(() => {
-                  update(nextitem, {keyConfig:{...value}});
-                });
-                return 0;
+              this.changeStatusColor(stream[k].id,
+                'https://gw.alipayobjects.com/zos/rmsportal/czNEJAmyDpclFaSucYWB.svg');
+              return 0;
             }
           }
-          switch (stream[k].label) {
-            case '单变量线性回归':
-                outcome = OneVarLinearRegression(all_data);
-                break
-            case '多变量线性回归':
-                outcome = MutiVarLinearRegression(all_data);
-                break
-            case '单变量多项式回归':
-                outcome = OneVarPolynomialRegression(all_data);
-                break
-            case '决策树回归':
-                outcome = DecisionTreeRegression(all_data);
-                break
-            case '随机森林回归':
-                outcome = RandomForest(all_data);
-                break
-            case '朴素贝叶斯':
-                outcome = NaiveBayes(all_data)
-                break
-            case '支持向量机':
-                outcome = SVM(all_data)
-                break
-            case '数据随机划分':
-                outcome = Randis(all_data)
-                break
-            case '特征区间化':
-                outcome = SeprtbyFeat(all_data)
-                break  
-            case '特征分组归类':
-                outcome = StrToNum(all_data)
-                break
-            case 'one-hot编码':
-                outcome = Onehot(all_data)
-                break
-            case '缺失值填充':
-                outcome = fillNa(all_data);
-                break
-            case '归一化':
-                outcome = Nomalize(all_data);
-                break
-            default:
-              break;
-          }
+          outcome = this.selectFunction(stream[k].label, all_data);
           outputdata(stream[k].id, outcome, propsAPI);
-          const { update, executeCommand } = propsAPI;
-          const currentitem = find(stream[k].id);
-          var value = JSON.parse(JSON.stringify(currentitem.model.keyConfig));
-          value.state_icon_url = 'https://gw.alipayobjects.com/zos/rmsportal/MXXetJAxlqrbisIuZxDO.svg';
-          executeCommand(() => {
-            update(currentitem, {keyConfig:{...value}});
-          });
+          console.log('----------')
+          this.changeStatusColor(stream[k].id,
+            'https://gw.alipayobjects.com/zos/rmsportal/MXXetJAxlqrbisIuZxDO.svg');
         }
         if(k < stream.length-1 && stream[k+1].label !== '本地数据'){
-          const { find, update, executeCommand } = propsAPI;
-          const nextitem = find(stream[k+1].id);
-          var value = JSON.parse(JSON.stringify(nextitem.model.keyConfig));
-          value.state_icon_url = 'https://gw.alipayobjects.com/zos/rmsportal/czNEJAmyDpclFaSucYWB.svg';
-          executeCommand(() => {
-            update(nextitem, {keyConfig:{...value}});
-          });
+          this.changeStatusColor(stream[k+1].id,
+            'https://loading.io/spinners/palette-ring/index.rotate-palette-loader.svg');
         }
         current++;
         if(current === stream.length){

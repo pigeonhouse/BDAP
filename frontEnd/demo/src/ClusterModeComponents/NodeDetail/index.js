@@ -29,7 +29,7 @@ class NodeDetail extends React.Component {
   }
 
   componentWillMount(){
-    const {  propsAPI } = this.props;
+    const { propsAPI } = this.props;
     const { getSelected } = propsAPI;
     const item = getSelected()[0];
     const { labelArray } = item.getModel();

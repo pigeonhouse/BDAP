@@ -9,11 +9,9 @@ class SparkRun extends Component{
     visible: false,
   }
 
-  showDetail = ()=>{
-    // this.handleLegal()
+  onClickButton = ()=>{
     const { propsAPI } = this.props;
     console.log(propsAPI.save())
-
     const inf = propsAPI.save();
 
     var Sourc = 0;
@@ -156,9 +154,6 @@ class SparkRun extends Component{
       },1000)
     }
   }
-
-
-
   transmit = ()=>{
     const init={
       method: 'GET', 
@@ -175,73 +170,10 @@ class SparkRun extends Component{
         .catch(e => console.log('错误:', e))
   }
 
-
- handleLegal = ()=> {
-    const { propsAPI } = this.props;
-    var isLegal = 0;
-    var noneed = 1;
-    const inf = propsAPI.save();
-
-    if(inf.hasOwnProperty('edges')){
-      if (inf.nodes.length > 1) {
-        var Sourc;
-        const lenE = inf.edges.length;
-        const LenE =lenE;
-        let path = new Array(inf.nodes.length).fill(0);
-
-        for (let indexN of inf.nodes.keys()) {
-          if ('Input' === inf.nodes[indexN].label) {
-            Sourc = inf.nodes[indexN].id;
-            path[indexN] = 1;
-            noneed = 0;
-            break;
-          }
-        }
-        if(noneed === 0) {
-          for (var k = 0; k < lenE; k++) {
-
-            for (let indexE of inf.edges.keys()) {
-              if (Sourc === inf.edges[indexE].source) {
-                Sourc = inf.edges[indexE].target;
-
-                for (let indexN of inf.nodes.keys()) {
-                  if (inf.nodes[indexN].id === Sourc) {
-                    if (path[indexN] === 0) {
-                      if (k === LenE - 1 && inf.nodes[indexN].label === 'Output') {
-                        isLegal = 1;
-                        break;
-                      } else {
-                        path[indexN] = 1;
-                        break;
-                      }
-                    } else {
-                      noneed = 1;
-                      break;
-                    }
-                  }
-                }
-                break;
-              }
-            }
-            if (noneed === 1) {
-              break;
-            }
-          }
-        }
-      }
-    }
-    if(isLegal === 1) {
-      alert('legal');
-    }else{
-      alert('illegal');
-    }
-
-  }
-  
   render(){
     return (
       <div>
-        <Button onClick={()=>this.showDetail()}>SparkRun</Button>
+        <Button onClick={()=>this.onClickButton()}>SparkRun</Button>
         <Button onClick={()=>this.intervaltest()}>intervalTest</Button>
       </div>
     );

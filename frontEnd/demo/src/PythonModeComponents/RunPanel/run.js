@@ -19,7 +19,6 @@ import { StrToNum } from '../../PublicComponents/DataOperate/DataProcess/StrToNu
 import { Nomalize } from '../../PublicComponents/DataOperate/DataProcess/Nomalize';
 var echarts = require('echarts');
 var current = 0;
-var NeedDetection = 1;
 class Run extends Component{
   state = { 
     visible: false,
@@ -273,7 +272,7 @@ class Run extends Component{
       visible: false,
     });
   }
-  showDetail = ()=>{
+  onClickButton = ()=>{
     const { propsAPI } = this.props;
     console.log("---save---")
     console.log(propsAPI.save())
@@ -670,9 +669,8 @@ class Run extends Component{
   }
   render(){
     return (
-      <div>
-        
-        <Button onClick={()=>this.showDetail()} style={{border:0,backgroundColor:'#343941',color:"#ddd",fontSize:25}}>
+      <div>  
+        <Button onClick={()=>this.onClickButton()} style={{border:0,backgroundColor:'#343941',color:"#ddd",fontSize:25}}>
             <Icon type="play-circle" style={{fontSize:25}}/>运行
         </Button>
 
