@@ -1,0 +1,95 @@
+.editor {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+}
+.www{
+  position: absolute;
+}
+.editor-hd {
+  //padding: 8px;
+  border: 1px solid #E6E9ED;
+}
+
+.editor-sidebar,
+.editor-content {
+  display: flex;
+  flex-direction: column;
+}
+
+.editor-sidebar {
+  background: #FAFAFA;
+  -moz-user-select: none;
+  -webkit-user-select: none;
+  -ms-user-select: none;
+
+
+  &:first-child {
+    border-right: 1px solid #E6E9ED;
+  }
+
+  &:last-child {
+    border-left: 1px solid #E6E9ED;
+  }
+}
+
+.flow {
+  flex: 1;
+}
+.detail-panel {
+  flex: 1;
+  background: #FAFAFA;
+
+  :global {
+    .ant-card {
+      background: #FAFAFA;
+    }
+    .ant-card-body {
+      padding-right: 10px;
+    }
+  }
+}
+.leftMenuSelect{
+  border:0;
+  margin-top: 25px;
+}
+.leftMenuTab{
+  :global{
+    .ant-tabs-bar .ant-tabs-tab {
+      float: none;
+      margin: 0;
+      padding: 8px;
+      display: block;
+    }
+    .ant-tabs-bar .ant-tabs-tab:hover{
+      float: none;
+      margin: 0;
+      padding: 8px;
+      display: block;
+      background-color: #519bbc;
+    }
+    .ant-tabs-tab-active{
+      float: none;
+      margin: 0;
+      padding: 8px;
+      display: block;
+      background-color: #519bbc;
+    }
+    .ant-tabs-content{
+      padding-left:0 !important;
+    }
+  }
+
+}
+.leftMenu{
+  background-color:#fff;
+  color:#eee;
+  border:0;
+  padding:0;
+  margin-top: 0px;
+}
+.iconStyle{
+  font-size: 40px;
+  color:#fff;
+}
+.github-corner:hover .octo-arm{animation:octocat-wave 560ms ease-in-out}@keyframes octocat-wave{0%,100%{transform:rotate(0)}20%,60%{transform:rotate(-25deg)}40%,80%{transform:rotate(10deg)}}@media (max-width:500px){.github-corner:hover .octo-arm{animation:none}.github-corner .octo-arm{animation:octocat-wave 560ms ease-in-out}}
