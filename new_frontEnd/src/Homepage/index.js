@@ -1,6 +1,7 @@
 import React from 'react';
 import { Row, Col, Card, Form, Input, Button, message, Icon, Checkbox, notification} from 'antd';
 import { Redirect } from 'react-router-dom';
+import "./index.less"
 import style from './index.less';
 
 const FormItem = Form.Item;
@@ -84,7 +85,7 @@ class HomePage extends React.Component {
         }
         const {getFieldDecorator} = this.props.form;
         return (
-            <div className = "editor">
+            <div className = "editor" >
                 <Row
                     style={{ lineHeight: '40px',height: '40px', backgroundColor:'#343941',color:"white" }}
                 >
