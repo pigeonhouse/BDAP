@@ -84,7 +84,7 @@ class HomePage extends React.Component {
         }
         const {getFieldDecorator} = this.props.form;
         return (
-            <div className = {style.editor}>
+            <div className = "editor">
                 <Row
                     style={{ lineHeight: '40px',height: '40px', backgroundColor:'#343941',color:"white" }}
                 >
