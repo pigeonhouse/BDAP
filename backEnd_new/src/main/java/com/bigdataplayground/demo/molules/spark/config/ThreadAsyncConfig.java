@@ -11,7 +11,7 @@ import java.util.concurrent.Executor;
 @Configuration
 @EnableAsync
 public class ThreadAsyncConfig implements AsyncConfigurer {
-    @Bean
+    @Bean(name = "asyncExecutor")
     public Executor getAsyncExecutor() {
         ThreadPoolTaskExecutor threadPool = new ThreadPoolTaskExecutor();
         //设置核心线程数
@@ -25,7 +25,7 @@ public class ThreadAsyncConfig implements AsyncConfigurer {
         // 等待时间 （默认为0，此时立即停止），并没等待xx秒后强制停止
         threadPool.setAwaitTerminationSeconds(60);
         //  线程名称前缀
-        threadPool.setThreadNamePrefix("MyAsync-");
+        threadPool.setThreadNamePrefix("Async-");
         // 初始化线程
         threadPool.initialize();
         return threadPool;

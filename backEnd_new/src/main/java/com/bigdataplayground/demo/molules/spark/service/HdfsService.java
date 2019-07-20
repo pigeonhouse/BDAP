@@ -7,6 +7,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.fs.*;
 import org.apache.hadoop.io.IOUtils;
+import org.springframework.scheduling.annotation.Async;
 
 import java.io.*;
 import java.net.URI;
@@ -14,7 +15,7 @@ import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.List;
 
-
+@Async
 public class HdfsService {
     private Configuration conf = new Configuration();
     private URI hdfsHome ;
@@ -37,6 +38,7 @@ public class HdfsService {
      * @return 返回api结果
      * @throws IOException
      */
+    @Async("asyncExecutor")
     public ApiResult makeDirectory(String newDir) throws IOException {
         if(fileSystem.exists(new Path(newDir))){
             return ApiResult.createNgMsg("Already Exists.");

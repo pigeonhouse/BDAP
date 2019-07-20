@@ -1,0 +1,23 @@
+package com.bigdataplayground.demo.MolulesSpark.controller;
+
+import com.bigdataplayground.demo.MolulesSpark.service.AsyncStatisticsService;
+import com.bigdataplayground.demo.MolulesSpark.service.CommonService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+@RestController
+public class AsyncController {
+    @Autowired
+    private CommonService commonService;
+    @Autowired
+    private AsyncStatisticsService asyncStatisticsService;
+
+    @RequestMapping("/async")
+    public String demo() {
+        commonService.dealCommonService_1();
+        asyncStatisticsService.asyncStatistics();
+        commonService.dealCommonService_2();
+        return "SUCCESS";
+    }
+}
