@@ -1,4 +1,4 @@
-package com.bigdataplayground.demo.MolulesSpark.service;
+package com.bigdataplayground.demo.molules.spark.service;
 
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;

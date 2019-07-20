@@ -1,7 +1,7 @@
-package com.bigdataplayground.demo.MolulesSpark.controller;
+package com.bigdataplayground.demo.molules.spark.controller;
 
-import com.bigdataplayground.demo.MolulesSpark.service.AsyncStatisticsService;
-import com.bigdataplayground.demo.MolulesSpark.service.CommonService;
+import com.bigdataplayground.demo.molules.spark.service.AsyncStatisticsService;
+import com.bigdataplayground.demo.molules.spark.service.CommonService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;

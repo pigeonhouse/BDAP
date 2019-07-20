@@ -1,4 +1,4 @@
-package com.bigdataplayground.demo.MolulesSpark.util;
+package com.bigdataplayground.demo.molules.spark.util;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.opencsv.CSVReader;

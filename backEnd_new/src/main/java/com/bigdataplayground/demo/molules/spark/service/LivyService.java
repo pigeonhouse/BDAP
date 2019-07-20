@@ -1,11 +1,10 @@
-package com.bigdataplayground.demo.MolulesSpark.service;
+package com.bigdataplayground.demo.molules.spark.service;
 
-import com.bigdataplayground.demo.MolulesSpark.domain.LivySessionDescription;
-import com.bigdataplayground.demo.MolulesSpark.domain.LivySessionInfo;
+import com.bigdataplayground.demo.molules.spark.domain.LivySessionDescription;
+import com.bigdataplayground.demo.molules.spark.domain.LivySessionInfo;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.http.*;
-import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
 import java.io.IOException;

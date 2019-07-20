@@ -1,10 +1,11 @@
-package com.bigdataplayground.demo.MolulesSpark.domain;
+package com.bigdataplayground.demo.molules.spark.domain;
 
 import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.databind.SerializerProvider;
 import com.fasterxml.jackson.databind.ser.std.StdSerializer;
 
 import java.io.IOException;
+
 
 public class FileStatusExSerializer extends StdSerializer<FileStatusEx> {
     public FileStatusExSerializer() {

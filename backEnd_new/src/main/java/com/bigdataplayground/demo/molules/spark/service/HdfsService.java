@@ -1,7 +1,7 @@
-package com.bigdataplayground.demo.MolulesSpark.service;
+package com.bigdataplayground.demo.molules.spark.service;
 
-import com.bigdataplayground.demo.MolulesSpark.domain.ApiResult;
-import com.bigdataplayground.demo.MolulesSpark.domain.FileStatusEx;
+import com.bigdataplayground.demo.molules.spark.domain.ApiResult;
+import com.bigdataplayground.demo.molules.spark.domain.FileStatusEx;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import org.apache.hadoop.conf.Configuration;

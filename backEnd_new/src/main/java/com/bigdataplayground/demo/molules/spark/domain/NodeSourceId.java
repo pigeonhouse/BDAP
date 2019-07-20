@@ -1,4 +1,4 @@
-package com.bigdataplayground.demo.MolulesSpark.domain;
+package com.bigdataplayground.demo.molules.spark.domain;
 
 public class NodeSourceId{
     private String source;

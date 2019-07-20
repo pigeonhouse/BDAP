@@ -1,4 +1,4 @@
-package com.bigdataplayground.demo.MolulesSpark.domain;
+package com.bigdataplayground.demo.molules.spark.domain;
 
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import org.apache.hadoop.fs.FileStatus;

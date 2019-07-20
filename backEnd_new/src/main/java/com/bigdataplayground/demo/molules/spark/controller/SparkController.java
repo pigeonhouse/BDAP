@@ -1,11 +1,11 @@
-package com.bigdataplayground.demo.MolulesSpark.controller;
+package com.bigdataplayground.demo.molules.spark.controller;
 
-import com.bigdataplayground.demo.MolulesSpark.domain.HdfsOptRequest;
-import com.bigdataplayground.demo.MolulesSpark.service.SparkExecutor;
-import com.bigdataplayground.demo.MolulesSpark.service.HdfsService;
-import com.bigdataplayground.demo.MolulesSpark.util.ToolSet;
-import com.bigdataplayground.demo.MolulesSpark.domain.ApiResult;
-import com.bigdataplayground.demo.MolulesSpark.domain.Node;
+import com.bigdataplayground.demo.molules.spark.domain.HdfsOptRequest;
+import com.bigdataplayground.demo.molules.spark.service.SparkExecutor;
+import com.bigdataplayground.demo.molules.spark.service.HdfsService;
+import com.bigdataplayground.demo.molules.spark.domain.ApiResult;
+import com.bigdataplayground.demo.molules.spark.domain.Node;
+import com.bigdataplayground.demo.molules.spark.util.ToolSet;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.io.Files;
@@ -103,12 +103,15 @@ public class SparkController {
     public ApiResult hdfs(@RequestBody HdfsOptRequest hdfsOptRequest)
             throws URISyntaxException, IOException, InterruptedException {
 
-        if (hdfsOptRequest.getPath().isEmpty() || hdfsOptRequest.getPath() == null)
+        if (hdfsOptRequest.getPath().isEmpty() || hdfsOptRequest.getPath() == null) {
             return ApiResult.createNgMsg("path = null or empty!");
-        if (hdfsOptRequest.getUser().isEmpty() || hdfsOptRequest.getUser() == null)
+        }
+        if (hdfsOptRequest.getUser().isEmpty() || hdfsOptRequest.getUser() == null) {
             return ApiResult.createNgMsg("user = null or empty!");
-        if (hdfsOptRequest.getKind().isEmpty() || hdfsOptRequest.getKind() == null)
+        }
+        if (hdfsOptRequest.getKind().isEmpty() || hdfsOptRequest.getKind() == null) {
             return ApiResult.createNgMsg("kind = null or empty!");
+        }
 
         HdfsService hdfsService = new HdfsService("hdfs://" + hdfsAddr, hdfsOptRequest.getUser());
         switch (hdfsOptRequest.getKind()) {
@@ -117,7 +120,8 @@ public class SparkController {
             }
             case "mkdir":
                 return hdfsService.makeDirectory(hdfsOptRequest.getPath());
-            case "rm"://R:递归地删除文件夹，高危操作，要让用户确定一下。为避免误操作，删除文件时不能加参数。
+            case "rm":
+                //R:递归地删除文件夹，高危操作，要让用户确定一下。为避免误操作，删除文件时不能加参数。
                 if (hdfsOptRequest.getParam().equals("R")) {
                     return hdfsService.removeR(hdfsOptRequest.getPath());
                 } else {
@@ -152,7 +156,8 @@ public class SparkController {
 
         List<Node> nodeList = objectMapper.readValue(body, new TypeReference<List<Node>>() {
         });
-        request.getSession(true).setAttribute("node", body);   // 覆盖session
+        // 覆盖session
+        request.getSession(true).setAttribute("node", body);
 
 
         System.out.println(request.getSession().getId() + "body " + request.getSession(true).getAttribute("node"));

@@ -1,8 +1,7 @@
-package com.bigdataplayground.demo.MolulesSpark.service;
+package com.bigdataplayground.demo.molules.spark.service;
 
-import com.bigdataplayground.demo.MolulesSpark.domain.Node;
-import com.bigdataplayground.demo.MolulesSpark.util.ToolSet;
-import org.springframework.stereotype.Service;
+import com.bigdataplayground.demo.molules.spark.domain.Node;
+import com.bigdataplayground.demo.molules.spark.util.ToolSet;
 
 import java.io.IOException;
 import java.nio.file.Path;

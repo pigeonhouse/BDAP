@@ -1,4 +1,4 @@
-package com.bigdataplayground.demo.MolulesSpark.config;
+package com.bigdataplayground.demo.molules.spark.config;
 
 import org.springframework.aop.interceptor.AsyncUncaughtExceptionHandler;
 import org.springframework.context.annotation.Bean;
