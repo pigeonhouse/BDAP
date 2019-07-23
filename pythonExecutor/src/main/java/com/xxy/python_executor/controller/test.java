@@ -14,7 +14,7 @@ import java.io.InputStreamReader;
 public class test {
     @RequestMapping("/test")
     public Long run(){
-        String[] arguments = new String[]{"python","C:\\Users\\Surface\\Desktop\\test.py"};
+        String[] arguments = new String[]{"python","C:\\Users\\Surface\\Desktop\\test.py","99999"};
         long startTime =  System.currentTimeMillis();
         System.out.println("started!");
         try {
@@ -34,8 +34,9 @@ public class test {
         long usedTime = (endTime-startTime)/1000;
 
         System.out.println("--------------");
-
+        System.out.println(String.format("%d is ",1000));
         System.out.println("over,used time: "+usedTime);
+
         return usedTime;
     }
 }
