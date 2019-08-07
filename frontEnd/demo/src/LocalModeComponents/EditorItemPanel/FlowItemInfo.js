@@ -1,3 +1,6 @@
+/**
+ * 记录local版本的数据格式
+ */
 export const localItem = {
     defaultOpenKeys:['sub2','sub3'], mode:"inline", selectable:false, subMenu:[{
         key:"sub2",type:"mail",name:"数据预处理",menu:[{
