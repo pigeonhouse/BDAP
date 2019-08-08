@@ -3,13 +3,13 @@ import { ItemPanel, Item } from '@src';
 import { Menu, Icon } from 'antd';
 import ItemDecoration from '../ItemDecoration/ItemDecoration';
 import styles from './index.less';
-import { localItem } from '../../LocalModeComponents/EditorItemPanel/FlowItemInfo';
-import { pythonItem } from '../../PythonModeComponents/EditorItemPanel/FlowItemInfo';
-import { clusterItem } from '../../ClusterModeComponents/EditorItemPanel/FlowItemInfo';
+import { localItem } from '../../LocalModeComponents/EditorItemInfo/FlowItemInfo';
+import { pythonItem } from '../../PythonModeComponents/EditorItemInfo/FlowItemInfo';
+import { clusterItem } from '../../ClusterModeComponents/EditorItemInfo/FlowItemInfo';
 
 /**
  * 左侧下拉菜单栏，包括可操作实现的组件
- * 整理为一个通用的组件，将具体信息放入对应版本EditorItemPanel/FlowItemData中，数据格式整理如下：
+ * 整理为一个通用的组件，将具体信息放入对应版本EditorItemInfo/FlowItemInfo中，数据格式整理如下：
  * 
 Item 数据格式：
 {
@@ -52,7 +52,7 @@ Item 数据格式：
 */
 const SubMenu = Menu.SubMenu;
 
-class FlowItemPanel extends React.Component {
+class FlowItemModel extends React.Component {
 	state = {
 		isMouseEnter: false,
 		itemNumber: 1,
@@ -145,4 +145,4 @@ class FlowItemPanel extends React.Component {
 	}
 }
 
-export default FlowItemPanel;
+export default FlowItemModel;
