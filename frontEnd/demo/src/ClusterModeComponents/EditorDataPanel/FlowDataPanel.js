@@ -54,40 +54,7 @@ class FlowDataPanel extends React.Component {
 		this.deleteFile(dataName);
 	}
 	render() {
-		// var children = [];
-		// if(this.state.dataTable.length !== 0){
-		//   var dataTable = this.state.dataTable;
-		//   for(let i in dataTable){
-		//     children.push(
-		//       <Menu.Item key={i+3} > 
-		//             <ItemPanel>
-		//               <Item
-		//                 type="node"
-		//                 size="200*40"
-		//                 shape='zero-one'
-		//                 model={{
-		//                   label: dataTable[i],
-		//                   elabel: dataTable[i],
-		//                   attr:{},
-		//                   attrDetail:[],
-		//                   Dataset: [],
-		//                   labelArray: {}, 
-		//                   length: 0,
-		//                   anchor: [0, 1],
-		//                   group:'input',
-		//                   keyConfig:{
-		//                     color_type: '#1890FF',
-		//                     state_icon_url: 'https://gw.alipayobjects.com/zos/rmsportal/uZVdwjJGqDooqKLKtvGA.svg',
-		//                   }
-		//                 }}
-		//                 deleteDataName={this.deleteDataName}    
-		//               />
-		//             </ItemPanel>
-		//       </Menu.Item>
-		//     )
-		//   }
-		// }
-		var dataTable = [{
+		var itemData = [{
 			label: '本地数据',
 			elabel: 'localFile'
 		}, {
@@ -96,9 +63,17 @@ class FlowDataPanel extends React.Component {
 		}, {
 			label: 'Titanic训练',
 			elabel: 'TitanicTrainFile'
-		}]
+		}];
+		var dataTable = [];
+		if (this.state.dataTable.length !== 0) {
+			var info = this.state.dataTable;
+			for (let i in info) {
+				dataTable.push({label:info[i],elabel:info[i]})
+			}
+		}
+		itemData = itemData.concat(dataTable);
 		return (
-			<FlowDataModel itemData={dataTable}></FlowDataModel>
+			<FlowDataModel itemData={itemData}></FlowDataModel>
 		);
 	}
 }
