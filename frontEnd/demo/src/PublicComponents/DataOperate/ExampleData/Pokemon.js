@@ -1,4 +1,4 @@
-export const Data=[
+export const Pokemon=[
     {"Name":"Alakazam","Type 1":"Psychic","Type 2":"","Total":500,"HP":55,"Attack":50,"Defense":45,"Sp. Atk":135,"Sp. Def":95,"Speed":120,"Generation":1,"Legendary":0},
     {"Name":"AlakazamMega Alakazam","Type 1":"Psychic","Type 2":"","Total":590,"HP":55,"Attack":50,"Defense":65,"Sp. Atk":175,"Sp. Def":95,"Speed":150,"Generation":1,"Legendary":0},
     {"Name":"AltariaMega Altaria","Type 1":"Dragon","Type 2":"Fairy","Total":590,"HP":75,"Attack":110,"Defense":110,"Sp. Atk":110,"Sp. Def":105,"Speed":80,"Generation":3,"Legendary":0},

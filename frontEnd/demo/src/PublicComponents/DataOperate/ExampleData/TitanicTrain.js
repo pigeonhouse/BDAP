@@ -1,4 +1,4 @@
-export const data = [
+export const TitanicTrain = [
     {"PassengerId":1,"Survived":0,"Pclass":3,"Name":"Braund, Mr. Owen Harris","Sex":"male","Age":22,"SibSp":1,"Parch":0,"Ticket":"A/5 21171","Fare":7.25,"Cabin":null,"Embarked":"S"},
     {"PassengerId":2,"Survived":1,"Pclass":1,"Name":"Cumings, Mrs. John Bradley (Florence Briggs Thayer)","Sex":"female","Age":38,"SibSp":1,"Parch":0,"Ticket":"PC 17599","Fare":71.2833,"Cabin":"C85","Embarked":"C"},
     {"PassengerId":3,"Survived":1,"Pclass":3,"Name":"Heikkinen, Miss. Laina","Sex":"female","Age":26,"SibSp":0,"Parch":0,"Ticket":"STON/O2. 3101282","Fare":7.925,"Cabin":null,"Embarked":"S"},

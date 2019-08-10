@@ -1,14 +1,11 @@
 import React from 'react';
 import { Card, Form, Input, Select } from 'antd';
 import { withPropsAPI } from '@src';
+
+import UploadFile from '../DataOperate/FileOperate/UploadFile'
+import HdfsFile from '../DataOperate/FileOperate/HdfsFile'
+import ExampleDataUpload from '../DataOperate/FileOperate/ExampleDataUpload'
 import Selectword from '../DataOperate/SelectWord/selectword'
-import Uploadfile from '../DataOperate/FileOperate/upload'
-import LocalTestData from '../DataOperate/ExampleDataUpload/LocalTestData'
-import LocalTrainData from '../DataOperate/ExampleDataUpload/LocalTrainData'
-import SimpleTest from '../DataOperate/ExampleDataUpload/SimpleTest'
-import SimpleTrain from '../DataOperate/ExampleDataUpload/SimpleTrain'
-import Pokemon from '../DataOperate/ExampleDataUpload/Pokemon'
-import HdfsFile from '../DataOperate/FileOperate/hdfsFile'
 import Feature from '../DataOperate/FeatureNodeDetail/Feature'
 import { Stat } from '../DataOperate/DataToolFunctions/stat'
 
@@ -88,17 +85,12 @@ class NodeDetail extends React.Component {
 		});
 	}
 	isInputOutput(label, group, Dataset) {
-		if (label === 'hdfs数据')
-			return (<HdfsFile ></HdfsFile>);
-		else if (label === '本地数据')
-			return (<Uploadfile ></Uploadfile>);
+		if (label === 'hdfs数据') return (<HdfsFile ></HdfsFile>);
+		else if (label === '本地数据') return (<UploadFile ></UploadFile>);
 		else if (Dataset.length === 0 && group === 'input') {
 			switch (label) {
-				case 'Titanic测试': return (<LocalTestData ></LocalTestData>);
-				case 'Titanic训练': return (<LocalTrainData ></LocalTrainData>);
-				case 'Pokemon': return (<Pokemon ></Pokemon>);
-				case 'SimpleTest': return (<SimpleTest ></SimpleTest>);
-				case 'SimpleTrain': return (<SimpleTrain ></SimpleTrain>);
+				case 'Titanic测试': case 'Titanic训练': case 'Pokemon':
+				case 'SimpleTest': case 'SimpleTrain': return (<ExampleDataUpload fileName={label}></ExampleDataUpload>);
 				default:
 					const { propsAPI } = this.props;
 					const { getSelected } = propsAPI;

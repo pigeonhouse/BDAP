@@ -1,4 +1,4 @@
-export const Data = [
+export const SimpleTest = [
     {"id":24,"age":10,"gender":"male"},
     {"id":25,"age":12,"gender":"female"},
     {"id":26,"age":14,"gender":"male"},

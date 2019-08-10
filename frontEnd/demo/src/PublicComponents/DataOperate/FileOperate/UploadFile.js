@@ -3,7 +3,8 @@ import { Icon, Button } from 'antd'
 import Papa from 'papaparse'
 import { withPropsAPI } from '@src';
 import { Stat } from '../DataToolFunctions/stat';
-class Uploadfile extends Component {
+
+class UploadFile extends Component {
 
 	readFile = (e) => {
 		var files = e.target.files;
@@ -79,4 +80,4 @@ class Uploadfile extends Component {
 	}
 }
 
-export default withPropsAPI(Uploadfile);
+export default withPropsAPI(UploadFile);

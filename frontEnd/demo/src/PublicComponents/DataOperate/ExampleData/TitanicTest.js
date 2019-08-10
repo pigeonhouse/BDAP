@@ -1,4 +1,4 @@
-export const data = [
+export const TitanicTest = [
     {"PassengerId":892,"Pclass":3,"Name":"Kelly, Mr. James","Sex":"male","Age":34.5,"SibSp":0,"Parch":0,"Ticket":330911,"Fare":7.8292,"Cabin":null,"Embarked":"Q"},
     {"PassengerId":893,"Pclass":3,"Name":"Wilkes, Mrs. James (Ellen Needs)","Sex":"female","Age":47,"SibSp":1,"Parch":0,"Ticket":363272,"Fare":7,"Cabin":null,"Embarked":"S"},
     {"PassengerId":894,"Pclass":2,"Name":"Myles, Mr. Thomas Francis","Sex":"male","Age":62,"SibSp":0,"Parch":0,"Ticket":240276,"Fare":9.6875,"Cabin":null,"Embarked":"Q"},

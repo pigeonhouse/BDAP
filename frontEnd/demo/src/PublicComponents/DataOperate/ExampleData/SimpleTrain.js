@@ -1,4 +1,4 @@
-export const Data = [
+export const SimpleTrain = [
     {"id":1,"age":10,"gender":"male","score":35},
     {"id":2,"age":12,"gender":"female","score":36},
     {"id":3,"age":14,"gender":"male","score":37},

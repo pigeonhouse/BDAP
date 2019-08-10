@@ -15,7 +15,7 @@ import { withPropsAPI } from '@src';
 import LineMarkerEcharts from './LineMarkerEcharts';
 import GGEditor, { Flow, RegisterCommand } from '@src';
 
-import Download from '../DataOperate/FileOperate/download';
+import Download from '../DataOperate/FileOperate/Download';
 import { SeprtbyFeat } from '../../LocalModeComponents/DataProcess/SeprtbyFeat'
 
 const Panel = Collapse.Panel;
