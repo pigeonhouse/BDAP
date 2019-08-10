@@ -1,5 +1,3 @@
-import { array } from "ml-stat";
-
 export function SeprtbyFeat(allData){
     var attr = allData[0].all_attr;
     var Dataset = allData[1].Dataset;

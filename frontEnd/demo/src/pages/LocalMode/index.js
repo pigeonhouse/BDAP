@@ -8,7 +8,7 @@ import { FlowDetailPanel } from '../../PublicComponents/EditorDetailPanel';
 import { FlowItemPanel } from '../../PublicComponents/EditorNodePanel/EditorItemPanel';
 
 import { FlowDataPanel } from '../../LocalModeComponents/EditorDataPanel';
-import Run from "../../LocalModeComponents/RunPanel/run"
+import Run from "../../LocalModeComponents/RunPanel/Run"
 import Model from "../../LocalModeComponents/ModelStore/Model"
 
 import styles from './index.less';

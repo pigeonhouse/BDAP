@@ -6,7 +6,7 @@ import UploadFile from '../DataOperate/FileOperate/UploadFile';
 import HdfsFile from '../DataOperate/FileOperate/HdfsFile';
 import ExampleDataUpload from '../DataOperate/FileOperate/ExampleDataUpload';
 import AttrDetail from './AttrDetail';
-import Selectword from '../DataOperate/SelectWord/selectword';
+import Selectword from '../DataOperate/SelectWord';
 import Feature from '../DataOperate/FeatureNodeDetail/Feature';
 import { Stat } from '../DataOperate/DataToolFunctions/stat';
 

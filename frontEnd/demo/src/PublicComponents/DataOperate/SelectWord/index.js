@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import { Button, Modal, Transfer, Tooltip, Divider } from 'antd'
 import { withPropsAPI } from '@src';
-import styles from './inputStyle.less'
+import styles from './index.less'
 
 class Selectword extends Component{
     constructor(props){

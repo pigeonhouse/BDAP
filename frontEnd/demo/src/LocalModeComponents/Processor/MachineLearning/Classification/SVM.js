@@ -1,6 +1,6 @@
-import {selectData, selectDataUntransport} from '../ToolFunctions//ToolFunctions'
-import { Stat } from '../../../../PublicComponents/DataOperate/DataToolFunctions/stat'
-import { Randis } from '../../../DataProcess/Randis'
+import {selectData, selectDataUntransport} from '../ToolFunctions//ToolFunctions';
+import { Stat } from '../../../../PublicComponents/DataOperate/DataToolFunctions/stat';
+import { Randis } from '../../FeatureProcess/Randis';
 import ConfusionMatrix from 'ml-confusion-matrix';
 
 function normalize(pre, predictObj, PreArray){

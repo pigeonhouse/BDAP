@@ -10,12 +10,12 @@ import { DecisionTreeRegression } from '../Processor/MachineLearning/Regression/
 import { RandomForest } from '../Processor/MachineLearning/Regression/RandomForest'
 import { SVM } from '../Processor/MachineLearning/Classification/SVM'
 
-import { fillNa } from '../DataProcess/fillNa'
-import { Onehot } from '../DataProcess/Onehot'
-import { Randis } from '../DataProcess/Randis'
-import { SeprtbyFeat } from '../DataProcess/SeprtbyFeat'
-import { StrToNum } from '../DataProcess/StrToNum';
-import { Nomalize } from '../DataProcess/Nomalize';
+import { fillNa } from '../Processor/FeatureProcess/fillNa'
+import { Onehot } from '../Processor/FeatureProcess/Onehot'
+import { Randis } from '../Processor/FeatureProcess/Randis'
+import { SeprtbyFeat } from '../Processor/FeatureProcess/SeprtbyFeat'
+import { StrToNum } from '../Processor/FeatureProcess/StrToNum';
+import { Nomalize } from '../Processor/FeatureProcess/Nomalize';
 
 import { inputdata } from '../../PublicComponents/HandleStream/streamRunner'
 import { outputdata } from '../../PublicComponents/HandleStream/streamRunner'
