@@ -2,14 +2,15 @@ import React from 'react';
 import { Card, Form, Input, Select } from 'antd';
 import { withPropsAPI } from '@src';
 
-import UploadFile from '../DataOperate/FileOperate/UploadFile'
-import HdfsFile from '../DataOperate/FileOperate/HdfsFile'
-import ExampleDataUpload from '../DataOperate/FileOperate/ExampleDataUpload'
-import Selectword from '../DataOperate/SelectWord/selectword'
-import Feature from '../DataOperate/FeatureNodeDetail/Feature'
-import { Stat } from '../DataOperate/DataToolFunctions/stat'
+import UploadFile from '../DataOperate/FileOperate/UploadFile';
+import HdfsFile from '../DataOperate/FileOperate/HdfsFile';
+import ExampleDataUpload from '../DataOperate/FileOperate/ExampleDataUpload';
+import AttrDetail from './AttrDetail';
+import Selectword from '../DataOperate/SelectWord/selectword';
+import Feature from '../DataOperate/FeatureNodeDetail/Feature';
+import { Stat } from '../DataOperate/DataToolFunctions/stat';
 
-import Papa from 'papaparse'
+import Papa from 'papaparse';
 import styles from './index.less';
 
 const { Item } = Form;
@@ -69,28 +70,32 @@ class NodeDetail extends React.Component {
 			});
 		});
 	}
+
 	showModal = () => {
 		this.setState({
 			visible: true,
 		});
 	}
+
 	handleOk = () => {
 		this.setState({
 			visible: false,
 		});
 	}
+
 	handleCancel = () => {
 		this.setState({
 			visible: false,
 		});
 	}
+
 	isInputOutput(label, group, Dataset) {
-		if (label === 'hdfs数据') return (<HdfsFile ></HdfsFile>);
-		else if (label === '本地数据') return (<UploadFile ></UploadFile>);
+		if (label === 'hdfs数据') return (<HdfsFile />);
+		else if (label === '本地数据') return (<UploadFile />);
 		else if (Dataset.length === 0 && group === 'input') {
 			switch (label) {
 				case 'Titanic测试': case 'Titanic训练': case 'Pokemon':
-				case 'SimpleTest': case 'SimpleTrain': return (<ExampleDataUpload fileName={label}></ExampleDataUpload>);
+				case 'SimpleTest': case 'SimpleTrain': return (<ExampleDataUpload fileName={label} />);
 				default:
 					const { propsAPI } = this.props;
 					const { getSelected } = propsAPI;
@@ -155,6 +160,7 @@ class NodeDetail extends React.Component {
 			}
 		}
 	}
+
 	isFeature = (group, label, sourceID) => {
 		if (group === 'feature') {
 			return <Feature
@@ -163,11 +169,13 @@ class NodeDetail extends React.Component {
 				labelArray={this.state.labelArray} />
 		}
 	}
+
 	changeLabelArray = (labelArray) => {
 		this.setState({
 			labelArray,
 		})
 	}
+
 	handleSubmitTest = (e) => {
 		e.preventDefault();
 
@@ -191,6 +199,7 @@ class NodeDetail extends React.Component {
 			});
 		});
 	}
+
 	testLabelInput = (group, getFieldDecorator) => {
 		if (group === 'ml') {
 			const { propsAPI } = this.props;
@@ -210,58 +219,11 @@ class NodeDetail extends React.Component {
 			</Item>
 		}
 	}
-	handleSelectChange = (label, value) => {
-		const { propsAPI } = this.props;
-		const { getSelected, executeCommand, update } = propsAPI;
-		const item = getSelected()[0];
-		const attr = JSON.parse(JSON.stringify(item.model.attr));
-		attr[label] = value;
-		executeCommand(() => {
-			update(item, { attr });
-		});
-	}
-	handleInputSubmit = (e) => {
-		e.preventDefault();
 
-		const { form, propsAPI } = this.props;
-		const { getSelected, executeCommand, update } = propsAPI;
-		form.validateFieldsAndScroll((err, values) => {
-			if (err) {
-				return;
-			}
-			const item = getSelected()[0];
-			if (!item) {
-				return;
-			}
-			values = values.attr;
-			const attr = JSON.parse(JSON.stringify(item.model.attr));
-			for (var i in values) {
-				attr[i] = values[i];
-			}
-			executeCommand(() => {
-				update(item, { attr });
-			});
-		});
-	}
-	handleChangeNumber = (label, value) => {
-		const { propsAPI } = this.props;
-		const { getSelected, executeCommand, update } = propsAPI;
-
-		const item = getSelected()[0];
-		if (!item) {
-			return;
-		}
-		var attr = JSON.parse(JSON.stringify(item.model.attr));
-		attr[label] = value;
-		executeCommand(() => {
-			update(item, { attr });
-		});
-	}
 	render() {
 		const { form, propsAPI } = this.props;
 		const { getFieldDecorator } = form;
 		const { getSelected } = propsAPI;
-
 		const item = getSelected()[0];
 
 		if (!item) {
@@ -304,6 +266,7 @@ class NodeDetail extends React.Component {
 				className={styles.scrollapp}
 			>
 				<Form onSubmit={this.handleSubmit}>
+					{/**显示label：{label}*/}
 					<Item style={{ margin: 0 }} label="label" {...inlineFormItemLayout}>
 						{
 							getFieldDecorator('label', {
@@ -311,59 +274,10 @@ class NodeDetail extends React.Component {
 							})(<Input onBlur={this.handleSubmit} />)
 						}
 					</Item>
-					{attrDetail.map((item) => {
-						if (item.type === 'Select') {
-							return (
-								<Item style={{ margin: 0 }} label={item.label} {...inlineFormItemLayout}>
-									{
-										getFieldDecorator(item.elabel, {
-											initialValue: attr[item.elabel],
-										})(
-											<Select onChange={this.handleSelectChange.bind(this, item.elabel)}>
-												{item.evalue.map((value, index) => {
-													return <Option value={value}>{item.value[index]}</Option>
-												})}
-											</Select>
-										)
-									}
-								</Item>
-							);
-						}
-						else if (item.type === 'Input') {
-							return (
-								<Item style={{ margin: 0 }} label={item.label} {...inlineFormItemLayout}>
-									{
-										getFieldDecorator(`attr.${item.elabel}`, {
-											rules: [{
-												required: false,
-												pattern: new RegExp(item.regexp, "g"),
-												message: '请输入正确格式'
-											}],
-											initialValue: attr[item.elabel],
-										})(<Input style={{ margin: 0 }} onBlur={this.handleInputSubmit} />)
-									}
-								</Item>
-							);
-						}
-						else if (item.type === 'Number') {
-							return (
-								<Item style={{ margin: 0 }} label={item.label} {...inlineFormItemLayout}>
-									{
-										getFieldDecorator(`attr.${item.elabel}`, {
-											initialValue: attr[item.elabel],
-										})(
-											<InputNumber
-												style={{ margin: 0 }}
-												min={item.min}
-												max={item.max}
-												step={item.step}
-												onChange={this.handleChangeNumber.bind(this, item.elabel)}
-											/>)
-									}
-								</Item>
-							)
-						}
-					})}
+
+					{/* 显示attrDetail，即属性的细节，取决于标签框中的attrDetail属性*/}
+					<AttrDetail attrDetail={attrDetail} attr={attr} />
+					
 					{targetid.map((value, index) => {
 						return <Selectword
 							sourceid={value}

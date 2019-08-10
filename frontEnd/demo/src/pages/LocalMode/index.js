@@ -5,7 +5,7 @@ import { Row, Col, Button, message, notification, Icon, Tabs, Upload } from 'ant
 import { FlowContextMenu } from '../../PublicComponents/EditorContextMenu';
 import { FlowToolbar } from '../../PublicComponents/EditorToolbar';
 import { FlowDetailPanel } from '../../PublicComponents/EditorDetailPanel';
-import { FlowItemPanel } from '../../PublicComponents/EditorItemPanel';
+import { FlowItemPanel } from '../../PublicComponents/EditorNodePanel/EditorItemPanel';
 
 import { FlowDataPanel } from '../../LocalModeComponents/EditorDataPanel';
 import Run from "../../LocalModeComponents/RunPanel/run"

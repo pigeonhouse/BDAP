@@ -7,6 +7,7 @@ class HdfsFile extends Component {
 	state = {
 		inpValu: ''
 	}
+
 	componentWillMount() {
 		const { propsAPI } = this.props;
 		const { getSelected } = propsAPI;
@@ -15,6 +16,7 @@ class HdfsFile extends Component {
 		const inpValu = model.attr.fileName || '';
 		this.setState({ inpValu });
 	}
+
 	handleChange = (e) => {
 		e.preventDefault();
 		const { form, propsAPI } = this.props;
@@ -105,12 +107,11 @@ class HdfsFile extends Component {
 		return (
 			<Form onSubmit={this.handleChange}>
 				<Form.Item label="location" {...inlineFormItemLayout}>
-					{
-						getFieldDecorator('attr.fileName', {
-							initialValue: this.state.inpValu
-						})(
-							<Input onBlur={this.handleChange} />
-						)}
+					{getFieldDecorator('attr.fileName', {
+						initialValue: this.state.inpValu
+					})(
+						<Input onBlur={this.handleChange} />
+					)}
 					<Button onClick={() => this.submit()}>confirm</Button>
 				</Form.Item>
 			</Form>

@@ -11,9 +11,10 @@ class UploadFile extends Component {
 		var reader = new FileReader();
 		const { propsAPI } = this.props;
 		const { getSelected, update } = propsAPI;
+
+		//从句柄读入数据
 		reader.readAsText(files[0], 'gbk');
 		reader.onload = function (e) {
-
 			var fieldNameArray = [];
 			let vectorLength;
 			var results = Papa.parse(e.target.result, { header: true, dynamicTyping: true });
@@ -22,6 +23,7 @@ class UploadFile extends Component {
 			vectorLength = results.data.length - 1
 			var n = new Array();
 
+			//进行规格化 为对象内 label为特征名，value为整个特征的值，类型为数组
 			for (let indexOfCols = 0; indexOfCols < fieldNameArray[0].length; indexOfCols++) {
 				var colName = fieldNameArray[0][indexOfCols];
 				var colValue = new Array();
@@ -30,6 +32,8 @@ class UploadFile extends Component {
 				}
 				n.push({ label: colName, value: colValue })
 			}
+
+			//通过Stat函数计算data的一些数据包括最大值最小值等
 			var STAT = new Array();
 			STAT = Stat(n);
 			let m = fieldNameArray[0].map((item) => {
@@ -40,14 +44,17 @@ class UploadFile extends Component {
 				labelArray: { public: m },
 				length: vectorLength
 			}
+
+			update(item, { ...values });
 			const item = getSelected()[0];
 			values['keyConfig'] = JSON.parse(JSON.stringify(item.model.keyConfig));
 			values.keyConfig.state_icon_url = 'https://gw.alipayobjects.com/zos/rmsportal/MXXetJAxlqrbisIuZxDO.svg';
-			update(item, { ...values });
+
 			console.log("propsAPI")
 			console.log(propsAPI.save())
 		}
 	}
+
 	render() {
 		return (
 			<Button href="javascript:void(0)"

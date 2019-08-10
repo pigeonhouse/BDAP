@@ -4,6 +4,7 @@ import { withPropsAPI } from '@src'
 import Papa from 'papaparse'
 import { Command } from '@src';
 import styles from '../../EditorContextMenu/index.less';
+
 class Download extends Component{
     makeFile = ()=>{
         const { propsAPI } = this.props;

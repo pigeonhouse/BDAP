@@ -1,11 +1,11 @@
 import React from 'react';
 import { ItemPanel, Item } from '@src';
 import { Menu, Icon } from 'antd';
-import ItemDecoration from '../ItemDecoration/ItemDecoration';
+import ItemDecoration from '../ItemDecoration';
 import styles from './index.less';
-import { localItem } from '../../LocalModeComponents/EditorItemInfo/FlowItemInfo';
-import { pythonItem } from '../../PythonModeComponents/EditorItemInfo/FlowItemInfo';
-import { clusterItem } from '../../ClusterModeComponents/EditorItemInfo/FlowItemInfo';
+import { localItem } from '../../../LocalModeComponents/EditorItemInfo/FlowItemInfo';
+import { pythonItem } from '../../../PythonModeComponents/EditorItemInfo/FlowItemInfo';
+import { clusterItem } from '../../../ClusterModeComponents/EditorItemInfo/FlowItemInfo';
 
 /**
  * 左侧下拉菜单栏，包括可操作实现的组件
