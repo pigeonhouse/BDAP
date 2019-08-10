@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import { Button, Modal, Icon, message, Table, Input, Popconfirm, Form, Divider } from 'antd'
 import { withPropsAPI } from '@src';
 import store from "../../store"
-import { Pokemon, Simple } from "../ExampleData/modelExample"
+import { Pokemon, Simple } from "../../PublicComponents/DataOperate/ExampleData/modelExample"
 /**
  * 存储LocalMode的模型用例，直接存储在浏览器内，不进行后端交互，可调出
  */

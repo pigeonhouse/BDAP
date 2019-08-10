@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
 import { withPropsAPI } from '@src';
 import { Stat } from '../DataToolFunctions/stat';
-import { data }from '../../../LocalModeComponents/ExampleData/TitanicTest';
-class LocalTestData extends Component{
+import { data }from '../ExampleData/TitanicTrain';
+class LocalTrainData extends Component{
     readFile = ()=>{
         const { propsAPI } = this.props;
         const { getSelected, update } = propsAPI;
@@ -43,4 +43,4 @@ class LocalTestData extends Component{
     }
 }
 
-export default withPropsAPI(LocalTestData);
+export default withPropsAPI(LocalTrainData);

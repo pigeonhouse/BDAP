@@ -1,20 +1,27 @@
 .scrollapp {
-    max-height: calc(100vh - 40px - 65px);
-    overflow-x: hidden;
-    overflow-y: auto;
-  }
-.scrollapp::-webkit-scrollbar {/*滚动条整体样式*/
-  width: 5px;     /*高宽分别对应横竖滚动条的尺寸*/
-  height: 1px;
-  border-radius: 5px;
+	max-height: calc(100vh - 40px - 65px);
+	overflow-x: hidden;
+	overflow-y: auto;
 }
-.scrollapp::-webkit-scrollbar-thumb {/*滚动条里面小方块*/
-  border-radius: 5px;
-  -webkit-box-shadow: inset 0 0 5px rgba(0,0,0,0.2);
-  background: #535353;
+
+.scrollapp::-webkit-scrollbar {
+	/*滚动条整体样式*/
+	width: 5px;
+	/*高宽分别对应横竖滚动条的尺寸*/
+	height       : 1px;
+	border-radius: 5px;
 }
-.scrollapp::-webkit-scrollbar-track {/*滚动条里面轨道*/
-  -webkit-box-shadow: inset 0 0 5px rgba(0,0,0,0.2);
-  border-radius: 5px;
-  background: #EDEDED;
+
+.scrollapp::-webkit-scrollbar-thumb {
+	/*滚动条里面小方块*/
+	border-radius     : 5px;
+	-webkit-box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.2);
+	background        : #535353;
+}
+
+.scrollapp::-webkit-scrollbar-track {
+	/*滚动条里面轨道*/
+	-webkit-box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.2);
+	border-radius     : 5px;
+	background        : #EDEDED;
 }

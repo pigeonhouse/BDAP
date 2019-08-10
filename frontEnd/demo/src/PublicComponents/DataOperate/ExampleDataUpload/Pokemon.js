@@ -1,14 +1,14 @@
 import React, { Component } from 'react';
 import { withPropsAPI } from '@src';
 import { Stat } from '../DataToolFunctions/stat';
-import { data }from '../../../LocalModeComponents/ExampleData/TitanicTrain';
-class LocalTrainData extends Component{
+import { Data }from '../ExampleData/Pokemon';
+class Pokemon extends Component{
     readFile = ()=>{
         const { propsAPI } = this.props;
         const { getSelected, update } = propsAPI;
         var fieldNameArray = [];
         let vectorLength;
-        var results = {'data':data,'meta':{'fields':["PassengerId","Pclass","Name","Sex","Age","SibSp","Parch","Ticket","Fare","Cabin","Embarked"]}};
+        var results = {'data':Data,'meta':{'fields':["Name","Type 1","Type 2","Total","HP","Attack","Defense","Sp. Atk","Sp. Def","Speed","Generation","Legendary"]}};
         fieldNameArray.push(results.meta.fields);
         vectorLength = results.data.length - 1;
         var n = new Array();
@@ -43,4 +43,4 @@ class LocalTrainData extends Component{
     }
 }
 
-export default withPropsAPI(LocalTrainData);
+export default withPropsAPI(Pokemon);

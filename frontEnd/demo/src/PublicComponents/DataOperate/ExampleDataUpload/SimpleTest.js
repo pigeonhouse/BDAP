@@ -1,16 +1,14 @@
 import React, { Component } from 'react';
-import { Icon, Button } from 'antd'
-import Papa from 'papaparse'
 import { withPropsAPI } from '@src';
 import { Stat } from '../DataToolFunctions/stat';
-import { Data }from '../../../LocalModeComponents/ExampleData/Pokemon';
-class Pokemon extends Component{
+import { Data }from '../ExampleData/SimpleTest';
+class SimpleTest extends Component{
     readFile = ()=>{
         const { propsAPI } = this.props;
         const { getSelected, update } = propsAPI;
         var fieldNameArray = [];
         let vectorLength;
-        var results = {'data':Data,'meta':{'fields':["Name","Type 1","Type 2","Total","HP","Attack","Defense","Sp. Atk","Sp. Def","Speed","Generation","Legendary"]}};
+        var results = {'data':Data,'meta':{'fields':["id","age","gender"]}};
         fieldNameArray.push(results.meta.fields);
         vectorLength = results.data.length - 1;
         var n = new Array();
@@ -45,4 +43,4 @@ class Pokemon extends Component{
     }
 }
 
-export default withPropsAPI(Pokemon);
+export default withPropsAPI(SimpleTest);
