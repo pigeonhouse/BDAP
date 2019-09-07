@@ -19,10 +19,10 @@ public class SparkExecution implements IExecution {
     LivyService livyService;
 
     @Override
-    public void executeOneNode(NodeInfo nodeInfo){
-        try{
+    public void executeOneNode(NodeInfo nodeInfo) {
+        try {
             livyService.postCode(nodeInfo.getCode());
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }

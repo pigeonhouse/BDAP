@@ -12,8 +12,8 @@ import org.springframework.stereotype.Service;
 @Service("TokenService")
 public class TokenService {
     public String getToken(User user) {
-        String token="";
-        token= JWT.create().withAudience(user.getId())
+        String token = "";
+        token = JWT.create().withAudience(user.getId())
                 .sign(Algorithm.HMAC256(user.getPassword()));
         return token;
     }

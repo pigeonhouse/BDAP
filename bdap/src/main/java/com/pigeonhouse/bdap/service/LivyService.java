@@ -1,10 +1,8 @@
 package com.pigeonhouse.bdap.service;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.pigeonhouse.bdap.config.AddressConfig;
 import com.pigeonhouse.bdap.entity.LivySessionDescription;
 import com.pigeonhouse.bdap.entity.LivySessionInfo;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.*;
 import org.springframework.stereotype.Service;
@@ -24,13 +22,13 @@ import java.util.Map;
 @Service
 public class LivyService {
 
-    @Autowired
-    AddressConfig addressConfig;
-
     private static ObjectMapper objectMapper = new ObjectMapper();
 
     @Value("${sessionId}")
     int sessionId;
+
+    @Value("${livyAddr}")
+    String livyAddr;
 
     /**
      * 提交.scala至livy
@@ -40,7 +38,6 @@ public class LivyService {
      * @throws IOException
      */
     public void postCode(String code) throws IOException {
-        String livyAddr = addressConfig.getLivyAddr();
 
         //LivySessionInfo availableSession = selectAvailableSession();
 
@@ -100,7 +97,6 @@ public class LivyService {
      */
     public LivySessionInfo selectAvailableSession() throws IOException {
 
-        String livyAddr = addressConfig.getLivyAddr();
         LivySessionDescription livySessionDescription = getSession();
         LivySessionInfo availableSession = new LivySessionInfo();
 
@@ -139,7 +135,6 @@ public class LivyService {
      * @throws IOException
      */
     public LivySessionInfo getSession(int id) throws IOException {
-        String livyAddr = addressConfig.getLivyAddr();
 
         String sessionUrl;
 
@@ -160,7 +155,6 @@ public class LivyService {
      * @throws IOException
      */
     public LivySessionDescription getSession() throws IOException {
-        String livyAddr = addressConfig.getLivyAddr();
 
         String sessionUrl;
 
