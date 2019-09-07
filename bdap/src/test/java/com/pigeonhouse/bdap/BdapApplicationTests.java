@@ -16,7 +16,9 @@ public class BdapApplicationTests {
 
     @Test
     public void contextLoads() {
-        System.out.println(addressConfig.getLivyAddr());
+        String name = "aaa";
+        String s = "${name}";
+        System.out.println(s);
 
     }
 

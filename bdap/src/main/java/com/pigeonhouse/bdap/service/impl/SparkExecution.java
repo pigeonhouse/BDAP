@@ -6,6 +6,8 @@ import com.pigeonhouse.bdap.service.LivyService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 /**
  * @Author: XueXiaoYue
  * @Date: 2019/9/7 11:28
@@ -26,7 +28,9 @@ public class SparkExecution implements IExecution {
     }
 
     @Override
-    public void executeAllNodes() {
-
+    public void executeAllNodes(List<NodeInfo> flowInfo) {
+        for (NodeInfo nodeInfo : flowInfo) {
+            executeOneNode(nodeInfo);
+        }
     }
 }

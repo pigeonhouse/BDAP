@@ -2,7 +2,7 @@ package com.pigeonhouse.bdap.service;
 
 import com.pigeonhouse.bdap.entity.NodeInfo;
 
-import javax.xml.soap.Node;
+import java.util.List;
 
 /**
  * @Author: XueXiaoYue
@@ -12,5 +12,5 @@ public interface IExecution {
 
     void executeOneNode(NodeInfo nodeInfo);
 
-    void executeAllNodes();
+    void executeAllNodes(List<NodeInfo> flowInfo);
 }

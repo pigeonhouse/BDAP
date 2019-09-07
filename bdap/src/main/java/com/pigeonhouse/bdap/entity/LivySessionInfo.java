@@ -1,77 +1,23 @@
 package com.pigeonhouse.bdap.entity;
 
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
 import java.io.Serializable;
 import java.util.List;
 
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
 public class LivySessionInfo implements Serializable {
 
     private int id;
-
     private String appId;
-
     private String owner;
-
     private String proxyUser;
-
     private String state;
-
     private String kind;
-
     private List<String> log;
 
-    public int getId() {
-        return id;
-    }
-
-    public String getAppId() {
-        return appId;
-    }
-
-    public String getOwner() {
-        return owner;
-    }
-
-    public String getProxyUser() {
-        return proxyUser;
-    }
-
-    public String getState() {
-        return state;
-    }
-
-    public String getKind() {
-        return kind;
-    }
-
-    public List<String> getLog() {
-        return log;
-    }
-
-    public void setId(int id) {
-        this.id = id;
-    }
-
-    public void setAppId(String appId) {
-        this.appId = appId;
-    }
-
-    public void setOwner(String owner) {
-        this.owner = owner;
-    }
-
-    public void setProxyUser(String proxyUser) {
-        this.proxyUser = proxyUser;
-    }
-
-    public void setState(String state) {
-        this.state = state;
-    }
-
-    public void setKind(String kind) {
-        this.kind = kind;
-    }
-
-    public void setLog(List<String> log) {
-        this.log = log;
-    }
 }

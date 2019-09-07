@@ -6,15 +6,15 @@ import lombok.NoArgsConstructor;
 
 /**
  * @Author: XueXiaoYue
- * @Date: 2019/9/7 11:18
+ * @Date: 2019/9/7 20:24
  */
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class NodeInfo {
+public class User {
+    String id;
+    String username;
+    String password;
 
-    private Integer id;
-    private String code;
-    private boolean isCheckPoint;
 
 }

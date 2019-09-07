@@ -22,12 +22,7 @@ public class PostCode {
 
     @RequestMapping(value = "/code", method = RequestMethod.POST)
     void test(@RequestBody List<NodeInfo> flowInfo) {
-        System.out.println("entered");
-//        String s = "val data = spark.read.format(\"csv\").option(\"header\",\"true\").option(\"multiLine\", true).load(\"hdfs:///bdap/demoData/simpleTest.csv\")";
-////        sparkExecution.executeOneNode(s);
         System.out.println(flowInfo);
-        for (NodeInfo nodeInfo : flowInfo) {
-            sparkExecution.executeOneNode(nodeInfo);
-        }
+        sparkExecution.executeAllNodes(flowInfo);
     }
 }
