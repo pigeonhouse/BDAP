@@ -1,9 +1,13 @@
-package com.bigdataplayground.demo.molules.spark.service;
+package com.pigeonhouse.bdap.service;
 
-import com.bigdataplayground.demo.molules.spark.domain.LivySessionDescription;
-import com.bigdataplayground.demo.molules.spark.domain.LivySessionInfo;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.pigeonhouse.bdap.config.AddressConfig;
+import com.pigeonhouse.bdap.entity.LivySessionDescription;
+import com.pigeonhouse.bdap.entity.LivySessionInfo;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.*;
+import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
 import java.io.IOException;
@@ -13,30 +17,43 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * 一些Livy通信上的常用代码，获取Session状态，创建Session，执行代码等。均是static
+ * @Author: HouWeiYing
+ * @Date: 2019/9/7 11:33
  */
+
+@Service
 public class LivyService {
+
+    @Autowired
+    AddressConfig addressConfig;
+
     private static ObjectMapper objectMapper = new ObjectMapper();
+
+    @Value("${sessionId}")
+    int sessionId;
 
     /**
      * 提交.scala至livy
      *
-     * @param livyAddr
      * @param code
      * @return
      * @throws IOException
      */
+    public void postCode(String code) throws IOException {
+        String livyAddr = addressConfig.getLivyAddr();
 
-    public static void postCode(String livyAddr, String code) throws IOException {
+        //LivySessionInfo availableSession = selectAvailableSession();
 
-        LivySessionInfo availableSession = selectAvailableSession(livyAddr);
+        System.out.println(livyAddr);
 
         Map<String, String> map = new HashMap<>();
         map.put("code", code);
         map.put("kind", "spark");
         String jsonData = objectMapper.writeValueAsString(map);
 
-        String availableSessionUrl = "http://" + livyAddr + "/sessions/" + availableSession.getId();
+        String availableSessionUrl = "http://" + livyAddr + "/sessions/" + sessionId;
+
+        System.out.println(availableSessionUrl);
 
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
@@ -63,6 +80,13 @@ public class LivyService {
                 System.out.println("#post finished#");
                 break;
             }
+
+            try {
+                Thread.sleep(100);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
         }
         return;
 
@@ -71,13 +95,13 @@ public class LivyService {
     /**
      * 选择空闲Session，否则创建一个
      *
-     * @param livyAddr
      * @return
      * @throws IOException
      */
-    public static LivySessionInfo selectAvailableSession(String livyAddr) throws IOException {
+    public LivySessionInfo selectAvailableSession() throws IOException {
 
-        LivySessionDescription livySessionDescription = getSession(livyAddr);
+        String livyAddr = addressConfig.getLivyAddr();
+        LivySessionDescription livySessionDescription = getSession();
         LivySessionInfo availableSession = new LivySessionInfo();
 
         for (LivySessionInfo sessionInfo : livySessionDescription.getSessions()) {
@@ -90,10 +114,11 @@ public class LivyService {
         if (livySessionDescription.getTotal() == 0 || availableSession == null) {
             System.out.print("Not a single idle session is available. Wait to create a new Livy Session");
             LivySessionInfo newSession = LivyService.createSession();
-            while (!LivyService.getSession(livyAddr, newSession.getId()).getState().equals("idle")) {
+            while (!getSession(newSession.getId()).getState().equals("idle")) {
                 System.out.print(".");
                 try {
-                    Thread.sleep(1000); //防止频繁get
+                    Thread.sleep(1000);
+                    //防止频繁get
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
@@ -109,12 +134,13 @@ public class LivyService {
     /**
      * 获取某个Session信息（用来获取state）
      *
-     * @param livyAddr
      * @param id
      * @return
      * @throws IOException
      */
-    public static LivySessionInfo getSession(String livyAddr, int id) throws IOException {
+    public LivySessionInfo getSession(int id) throws IOException {
+        String livyAddr = addressConfig.getLivyAddr();
+
         String sessionUrl;
 
         sessionUrl = "http://" + livyAddr + "/sessions/" + id;
@@ -130,11 +156,12 @@ public class LivyService {
     /**
      * 获取 所有Session
      *
-     * @param livyAddr
      * @return
      * @throws IOException
      */
-    public static LivySessionDescription getSession(String livyAddr) throws IOException {
+    public LivySessionDescription getSession() throws IOException {
+        String livyAddr = addressConfig.getLivyAddr();
+
         String sessionUrl;
 
         sessionUrl = "http://" + livyAddr + "/sessions";
