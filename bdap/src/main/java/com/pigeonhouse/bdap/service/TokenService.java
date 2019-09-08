@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 /**
  * @Author: XueXiaoYue
  * @Date: 2019/9/7 20:39
+ * 生成token
  */
 @Service("TokenService")
 public class TokenService {

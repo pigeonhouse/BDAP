@@ -19,6 +19,7 @@ import java.lang.reflect.Method;
 /**
  * @Author: XueXiaoYue
  * @Date: 2019/9/7 20:26
+ * 使用jwt进行页面拦截
  */
 public class AuthenticationInterceptor implements HandlerInterceptor {
     @Autowired
@@ -31,7 +32,6 @@ public class AuthenticationInterceptor implements HandlerInterceptor {
 
         // 如果不是映射到方法直接通过
         if (!(object instanceof HandlerMethod)) {
-            System.out.println("不是映射方法");
             return true;
         }
 
