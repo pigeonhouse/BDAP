@@ -6,14 +6,16 @@ import com.pigeonhouse.bdap.service.TokenService;
 import com.pigeonhouse.bdap.service.UserService;
 import com.pigeonhouse.bdap.util.UserLoginToken;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RestController;
 
 /**
  * @Author: XueXiaoYue
  * @Date: 2019/9/7 20:38
  */
 @RestController
-@RequestMapping("api")
 public class UserApi {
     @Autowired
     UserService userService;
@@ -21,18 +23,22 @@ public class UserApi {
     TokenService tokenService;
 
     @PostMapping("/login")
-    public Object login(@RequestBody User user) {
+    public Object login(@RequestBody()User user) {
         JSONObject jsonObject = new JSONObject();
         User userForBase = userService.findUserById(user.getId());
         if (userForBase == null) {
+            jsonObject.put("isSuccess", "false");
             jsonObject.put("message", "登录失败,用户不存在");
             return jsonObject;
         } else {
             if (!userForBase.getPassword().equals(user.getPassword())) {
+                jsonObject.put("isSuccess", "false");
                 jsonObject.put("message", "登录失败,密码错误");
                 return jsonObject;
             } else {
                 String token = tokenService.getToken(userForBase);
+                jsonObject.put("isSuccess", "true");
+                jsonObject.put("message", "登录成功");
                 jsonObject.put("token", token);
                 jsonObject.put("user", userForBase);
                 return jsonObject;

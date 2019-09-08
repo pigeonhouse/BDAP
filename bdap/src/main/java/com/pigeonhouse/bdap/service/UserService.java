@@ -19,8 +19,4 @@ public class UserService {
         return user;
     }
 
-    public User findUserByName(String username) {
-        User user = userMapper.selectUserById(username);
-        return user;
-    }
 }
