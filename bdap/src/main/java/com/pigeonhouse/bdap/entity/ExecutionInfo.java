@@ -6,15 +6,13 @@ import lombok.NoArgsConstructor;
 
 /**
  * @Author: XueXiaoYue
- * @Date: 2019/9/7 11:18
+ * @Date: 2019/9/8 22:27
  */
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class NodeInfo {
-
-    private Integer index;
-    private String code;
-    private Boolean isCheckPoint;
-
+public class ExecutionInfo {
+    Integer index;
+    String jobId;
+    String resultUrl;
 }

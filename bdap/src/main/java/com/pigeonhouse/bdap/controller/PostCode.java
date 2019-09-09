@@ -2,13 +2,10 @@ package com.pigeonhouse.bdap.controller;
 
 import com.pigeonhouse.bdap.entity.NodeInfo;
 import com.pigeonhouse.bdap.service.RandomIdService;
-import com.pigeonhouse.bdap.service.impl.SparkExecution;
+import com.pigeonhouse.bdap.service.SparkExecution;
 import com.pigeonhouse.bdap.util.UserLoginToken;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -26,10 +23,11 @@ public class PostCode {
     RandomIdService randomIdService;
 
     @UserLoginToken
-    @RequestMapping(value = "/postcode", method = RequestMethod.POST)
-    String postcode(@RequestBody List<NodeInfo> flowInfo) {
+    @PostMapping(value = "/postcode")
+    Object postcode(@RequestBody List<NodeInfo> flowInfo) {
+
         System.out.println(flowInfo);
-        //sparkExecution.executeAllNodes(flowInfo);
-        return randomIdService.getId();
+
+        return sparkExecution.executeAllNodes(flowInfo);
     }
 }

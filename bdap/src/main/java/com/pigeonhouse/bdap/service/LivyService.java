@@ -37,7 +37,7 @@ public class LivyService {
      * @return
      * @throws IOException
      */
-    public void postCode(String code) throws IOException {
+    public String postCode(String code) throws IOException {
 
         //LivySessionInfo availableSession = selectAvailableSession();
 
@@ -69,23 +69,7 @@ public class LivyService {
         System.out.println("#resultUrl#");
         System.out.println(resultUrl);
 
-        while (true) {
-            if (objectMapper.readValue(
-                    restTemplate.getForObject(resultUrl, String.class), Map.class)
-                    .get("state").equals("available")
-            ) {
-                System.out.println("#post finished#");
-                break;
-            }
-
-            try {
-                Thread.sleep(100);
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-
-        }
-        return;
+        return resultUrl;
 
     }
 

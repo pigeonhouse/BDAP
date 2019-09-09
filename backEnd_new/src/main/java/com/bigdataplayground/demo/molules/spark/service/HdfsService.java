@@ -24,11 +24,13 @@ public class HdfsService {
 
     public HdfsService(String hdfsHome, String userName) throws URISyntaxException, IOException, InterruptedException {
         //配置hosts https://my.oschina.net/gordonnemo/blog/3017724
-        if(userName==null||userName=="") userName = "tseg"; //用开发阶段
+        if(userName==null||userName=="") userName = "tseg";
+        //用开发阶段
         this.hdfsHome= new URI(hdfsHome);
         conf.set("fs.defaultFS", hdfsHome);
         conf.set("fs.hdfs.impl","org.apache.hadoop.hdfs.DistributedFileSystem");
-        conf.set("dfs.client.use.datanode.hostname", "true"); //需要添加hosts 将集群别名映射到公网地址10.105.222.***
+        conf.set("dfs.client.use.datanode.hostname", "true");
+        //需要添加hosts 将集群别名映射到公网地址10.105.222.***
         fileSystem = FileSystem.get(this.hdfsHome,conf,userName);
     }
 
@@ -200,7 +202,8 @@ public class HdfsService {
 
     public List<FileStatusEx> getAllFilePath(Path filePath) throws IOException {
         List<FileStatusEx> fileStatusExList = new ArrayList<>();
-        FileStatus[] fileStatusList = fileSystem.listStatus(filePath);//存放当前目录下所有文件或子目录
+        FileStatus[] fileStatusList = fileSystem.listStatus(filePath);
+        //存放当前目录下所有文件或子目录
         for (FileStatus fileStatus : fileStatusList) {
             //或许可以继承什么的，面向对象没学好= =，先用个笨点的办法
             FileStatusEx fileStatusEx = new FileStatusEx(fileStatus);
@@ -210,7 +213,7 @@ public class HdfsService {
                 fileStatusExList.add(fileStatusEx);
             } else {
                 //加入文件
-                fileStatusExList.add(fileStatusEx);//
+                fileStatusExList.add(fileStatusEx);
             }
         }
         return fileStatusExList;
