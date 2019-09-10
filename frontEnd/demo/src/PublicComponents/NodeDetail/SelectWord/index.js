@@ -1,7 +1,9 @@
 import React, { Component, Fragment } from 'react';
 import { withPropsAPI } from '@src';
-import TransferSelect from './TransferSelect.js';
+
 import { changeSourceLabelArray } from './changeSourceLabelArray.js';
+import TransferSelect from './TransferSelect.js';
+import Feature from '../../DataOperate/FeatureNodeDetail/Feature';
 
 //对labelArray进行选择，即选择字段
 
@@ -152,6 +154,9 @@ class SelectWord extends Component {
         return (
             <Fragment>
                 {this.createSelect()}
+
+                {/* 有关预处理的函数 */}
+				<Feature item={this.props.item} labelArray={this.state.labelArray}/>
             </Fragment>
         );
     }

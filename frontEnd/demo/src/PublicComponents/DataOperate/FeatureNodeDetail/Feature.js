@@ -19,10 +19,13 @@ class Feature extends Component {
     }
 
     componentWillReceiveProps(nextProps) {
-        const { propsAPI, item } = this.props;
+        const { propsAPI, item, labelArray } = this.props;
         const { update } = propsAPI;
-        const { attr, labelArray } = item.model;
+        const { attr, group } = item.model;
         const nextLabelArray = nextProps.labelArray;
+
+        if(group !== 'feature') return;
+
         var nextarr = [];
         for (let i in nextLabelArray) {
             if (nextLabelArray[i][1]) {
@@ -87,7 +90,7 @@ class Feature extends Component {
         let sourceID;
         for (let i in edges) {
             if (edges[i].target === item.id) {
-                sourceID = edges[i].anchor;
+                sourceID = edges[i].source;
             }
         }
         if (sourceID === undefined) return;
@@ -166,8 +169,8 @@ class Feature extends Component {
     }
 
     isDynamic = () => {
-        const { item } = this.props;
-        const { label, labelArray, group } = item.model;
+        const { item, labelArray } = this.props;
+        const { label, group } = item.model;
 
         if (group !== 'feature') return;
 
