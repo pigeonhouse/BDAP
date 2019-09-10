@@ -56,7 +56,7 @@ class AttrDetail extends React.Component {
         });
     }
 
-     //Input模式的修改函数
+    //Input模式的修改函数
     handleInputSubmit = (e) => {
         e.preventDefault();
 
@@ -106,7 +106,7 @@ class AttrDetail extends React.Component {
             return (<Item style={{ margin: 0 }} label={item.label} {...inlineFormItemLayout}>
                 {
                     getFieldDecorator(item.elabel, {
-                        initialValue: attr[item.elabel]?attr[item.elabel]:item.evalue[0],
+                        initialValue: attr[item.elabel] ? attr[item.elabel] : item.evalue[0],
                     })(
                         <Select onChange={this.handleSelectChange.bind(this, item.elabel)}>
                             {item.evalue.map((value, index) => {
@@ -127,7 +127,7 @@ class AttrDetail extends React.Component {
                                 pattern: new RegExp(item.regexp, "g"),
                                 message: '请输入正确格式'
                             }],
-                            initialValue: attr[item.elabel]?attr[item.elabel]:null,
+                            initialValue: attr[item.elabel] ? attr[item.elabel] : null,
                         })(<Input style={{ margin: 0 }} onBlur={this.handleInputSubmit} />)
                     }
                 </Item>
@@ -138,7 +138,7 @@ class AttrDetail extends React.Component {
                 <Item style={{ margin: 0 }} label={item.label} {...inlineFormItemLayout}>
                     {
                         getFieldDecorator(`attr.${item.elabel}`, {
-                            initialValue: attr[item.elabel]?attr[item.elabel]:null,
+                            initialValue: attr[item.elabel] ? attr[item.elabel] : null,
                         })(
                             <InputNumber
                                 style={{ margin: 0 }}

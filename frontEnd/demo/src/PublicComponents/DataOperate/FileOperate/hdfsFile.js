@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Button, Input, Form } from 'antd'
 import { withPropsAPI } from '@src';
-import { Stat } from '../DataToolFunctions/stat'
+import { Stat } from '../DataToolFunctions/Stat'
 
 class HdfsFile extends Component {
 	state = {
@@ -79,7 +79,7 @@ class HdfsFile extends Component {
 						var values = {
 							Dataset: Stat(Dataset),
 							length,
-							labelArray: { public: labelArray },
+							labelArray: labelArray,
 
 						}
 						console.log('values')

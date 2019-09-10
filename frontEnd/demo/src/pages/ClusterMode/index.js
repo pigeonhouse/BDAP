@@ -7,7 +7,7 @@ import { FlowDetailPanel } from '../../PublicComponents/EditorDetailPanel';
 import { FlowItemPanel } from '../../PublicComponents/EditorNodePanel/EditorItemPanel';
 import styles from './index.less';
 
-import SparkRun from "../../ClusterModeComponents/SparkRunPanel/sparkRun"
+import SparkRun from "../../ClusterModeComponents/SparkRunPanel/SparkRun"
 import { FlowDataPanel } from '../../ClusterModeComponents/EditorDataPanel';
 
 const TabPane = Tabs.TabPane;
@@ -269,7 +269,7 @@ class ClusterMode extends React.Component {
 
 					<Col span={4} className={styles.editorSidebar} style={{ height: 'calc(100vh - 105px)' }}>
 						<div className={styles.detailPanel} data-step="3" style={{ maxHeight: 'calc(100vh - 105px)' }} data-intro='在参数栏对你的组件进行参数配置。' data-position='left'>
-							<FlowDetailPanel type='Cluster' />
+							<FlowDetailPanel type='cluster' />
 						</div>
 					</Col>
 

@@ -10,6 +10,7 @@ export function generateStream(propsAPI) {
 	var stream = new Array();
 	var attribute = new Array();
 	var labelarray = new Array();
+	let group;
 
 	if (inf.hasOwnProperty('edges')) {
 		let Deg = new Array(inf.nodes.length).fill(0);
@@ -40,28 +41,33 @@ export function generateStream(propsAPI) {
 					Sourc = inf.nodes[indexN].id;
 					tag = inf.nodes[indexN].label;
 					attribute = inf.nodes[indexN].attr;
+					group = inf.nodes[indexN].group;
 					labelarray = inf.nodes[indexN].labelArray;
-					if (inf.nodes[indexN].group === 'ml') {
-						const { find, update } = propsAPI;
-						const item = find(Sourc);
-						var temp = new Object();
-						//error
-						if (!labelarray.hasOwnProperty("predict_x")) labelarray['predict_x'] = [];
-						if (!labelarray.hasOwnProperty("train_x")) labelarray['train_x'] = [];
-						if (!labelarray.hasOwnProperty("train_y")) labelarray['train_y'] = [];
-						temp = JSON.parse(JSON.stringify(labelarray));
-						temp['public'] = [...temp.predict_x, ...temp.predict_y];
-						update(item, { labelArray: temp });
-					}
+
 					let labelarr = {};
-					for (let i in labelarray) {
-						labelarr[i] = new Array();
-						for (let j in labelarray[i]) {
-							if (labelarray[i][j][1] === true) {
-								labelarr[i].push(labelarray[i][j][0]);
+					if(group === 'ml'){
+						labelarr.train_x = new Array();
+						labelarr.train_y = new Array();
+						for (let i in labelarray[0]) {
+							if (labelarray[0][i][1] === true) {
+								labelarr.train_x.push(labelarray[0][i][0]);
+							}
+							if (labelarray[1][i][1] === true) {
+								labelarr.train_y.push(labelarray[1][i][0]);
+							}
+						}
+						labelarr.predict_x = JSON.parse(JSON.stringify(labelarr.train_x));
+						labelarr.predict_y = [attribute.predict_y];
+					}
+					else{
+						labelarr.public = new Array();
+						for (let i in labelarray) {
+							if (labelarray[i][1] === true) {
+								labelarr.public.push(labelarray[i][0]);
 							}
 						}
 					}
+					
 					labelarray = JSON.parse(JSON.stringify(labelarr));
 					stream.push({
 						'id': Sourc,

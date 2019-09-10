@@ -1,4 +1,4 @@
-import React, {Component, Fragment} from 'react'
+import React, { Component, Fragment } from 'react'
 import { withPropsAPI } from '@src';
 import { Divider, Row, Col } from 'antd'
 import FeatureRegion from './FeatureRegion'
@@ -9,41 +9,68 @@ import TypeChange from './TypeChange'
 import DataFilter from './DataFilter/DataFilter'
 import DataFilterA from './DataFilter/DataFilterA'
 
-class Feature extends Component{
-    constructor(props){
+class Feature extends Component {
+    constructor(props) {
         super(props);
-        this.state={
+        this.state = {
             info: [],
-            labelArray:[],
+            labelArray: [],
         }
     }
-    findStat(sourceID, tag, sourceAnchor){
+
+    componentWillReceiveProps(nextProps) {
+        const { propsAPI, item } = this.props;
+        const { update } = propsAPI;
+        const { attr, labelArray } = item.model;
+        const nextLabelArray = nextProps.labelArray;
+        var nextarr = [];
+        for (let i in nextLabelArray) {
+            if (nextLabelArray[i][1]) {
+                nextarr.push(nextLabelArray[i][0]);
+            }
+        }
+
+        var arr = [];
+        for (let i in labelArray) {
+            if (labelArray[i][1]) {
+                arr.push(labelArray[i][0]);
+            }
+        }
+        for (let i in arr) {
+            if (nextarr.indexOf(arr[i]) === -1) {
+                delete attr[arr[i]];
+            }
+        }
+        update(item, { attr });
+    }
+
+    findStat(sourceID, tag, sourceAnchor) {
         const { propsAPI } = this.props;
         const { find } = propsAPI;
         const sourceItem = find(sourceID);
         const { Dataset, anchor } = sourceItem.getModel();
-        if(Dataset){
-            if(anchor[1] !== 1){
-                if(sourceAnchor === 1){
+        if (Dataset) {
+            if (anchor[1] !== 1) {
+                if (sourceAnchor === 1) {
                     Dataset = Dataset[0];
                 }
                 else {
                     Dataset = Dataset[1];
                 }
             }
-            for(let i in Dataset){
-                if(Dataset[i].label === tag){
-                    if(Dataset[i].stat.type === 'string')
-                    return Dataset[i].stat.value;
+            for (let i in Dataset) {
+                if (Dataset[i].label === tag) {
+                    if (Dataset[i].stat.type === 'string')
+                        return Dataset[i].stat.value;
                     else return [];
                 }
             }
         }
         else {
-            if(anchor[0] === 1){
+            if (anchor[0] === 1) {
                 const edges = propsAPI.save().edges;
-                for(let i in edges){
-                    if(edges[i].target === sourceID){
+                for (let i in edges) {
+                    if (edges[i].target === sourceID) {
                         return this.findStat(edges[i].source, tag, edges[i].sourceAnchor);
                     }
                 }
@@ -51,18 +78,27 @@ class Feature extends Component{
             }
         }
     }
-    findStatFirst=(sourceID, tag)=>{
-        const { propsAPI } = this.props;
-        const { find, getSelected } = propsAPI;
+
+    findStatFirst = (tag) => {
+        const { propsAPI, item } = this.props;
+        const { find, save } = propsAPI;
+        const { edges } = save();
+
+        let sourceID;
+        for (let i in edges) {
+            if (edges[i].target === item.id) {
+                sourceID = edges[i].anchor;
+            }
+        }
+        if (sourceID === undefined) return;
+
         const sourceItem = find(sourceID);
         const { Dataset, anchor } = sourceItem.getModel();
-        const item = getSelected()[0];
-        if(Dataset.length !== 0){
-            if(anchor[1] !== 1){
-                const edges = propsAPI.save().edges;
-                for(let i in edges){
-                    if(edges[i].source === sourceID && edges[i].target === item.id){
-                        if(edges[i].sourceAnchor === 1){
+        if (Dataset.length !== 0) {
+            if (anchor[1] !== 1) {
+                for (let i in edges) {
+                    if (edges[i].source === sourceID && edges[i].target === item.id) {
+                        if (edges[i].sourceAnchor === 1) {
                             Dataset = Dataset[0];
                         }
                         else {
@@ -72,19 +108,18 @@ class Feature extends Component{
                     }
                 }
             }
-            for(let i in Dataset){
-                if(Dataset[i].label === tag){
-                    if(Dataset[i].stat.type === 'string')
-                    return Dataset[i].stat.value;
+            for (let i in Dataset) {
+                if (Dataset[i].label === tag) {
+                    if (Dataset[i].stat.type === 'string')
+                        return Dataset[i].stat.value;
                     else return [];
                 }
             }
         }
         else {
-            if(sourceItem.model.group === 'input' || sourceItem.model.group === 'feature'){
-                const edges = propsAPI.save().edges;
-                for(let i in edges){
-                    if(edges[i].target === sourceID){
+            if (sourceItem.model.group === 'input' || sourceItem.model.group === 'feature') {
+                for (let i in edges) {
+                    if (edges[i].target === sourceID) {
                         return this.findStat(edges[i].source, tag, edges[i].sourceAnchor);
                     }
                 }
@@ -92,51 +127,61 @@ class Feature extends Component{
             }
         }
     }
-    featureType=(tag, label)=>{
-        switch(label){
+
+    featureType = (tag, label) => {
+        switch (label) {
             case '特征区间化':
-                return  <Fragment>
-                            <Divider>{tag}</Divider>
-                            <FeatureRegion 
-                            tag = {tag}/>
-                            <Divider></Divider>
-                        </Fragment>
+                return <Fragment>
+                    <Divider>{tag}</Divider>
+                    <FeatureRegion
+                        tag={tag} />
+                    <Divider></Divider>
+                </Fragment>
             case '特征分组归类':
-                let Stat = this.findStatFirst(this.props.sourceID, tag);
-                return  <Fragment>
-                            <Divider>{tag}</Divider>
-                            <FeatureGroup
-                            tag = {tag}
-                            stat = {Stat}/>
-                            <Divider></Divider>
-                        </Fragment>
+                let Stat = this.findStatFirst(tag);
+                return <Fragment>
+                    <Divider>{tag}</Divider>
+                    <FeatureGroup
+                        tag={tag}
+                        stat={Stat} />
+                    <Divider></Divider>
+                </Fragment>
             case '数据类型转换':
-                return  <Fragment>
-                            <Divider>{tag}</Divider>
-                            <TypeChange 
-                            tag = {tag}/>
-                            <Divider></Divider>
-                        </Fragment>
+                return <Fragment>
+                    <Divider>{tag}</Divider>
+                    <TypeChange
+                        tag={tag} />
+                    <Divider></Divider>
+                </Fragment>
             case 'one-hot编码':
                 return;
             case '数据筛选':
                 return <Fragment>
-                            <Divider>{tag}</Divider>
-                            <DataFilter 
-                            tag = {tag}/>
-                            <Divider></Divider>
-                        </Fragment>
-            }
+                    <Divider>{tag}</Divider>
+                    <DataFilter
+                        tag={tag} />
+                    <Divider></Divider>
+                </Fragment>
+        }
     }
-    isDynamic = (arr)=>{
-        const { propsAPI } = this.props;
-        const { getSelected} = propsAPI;
-        const item = getSelected()[0];
-        const label = item.model.label;
-        switch(label){
+
+    isDynamic = () => {
+        const { item } = this.props;
+        const { label, labelArray, group } = item.model;
+
+        if (group !== 'feature') return;
+
+        var arr = [];
+        for (let i in labelArray) {
+            if (labelArray[i][1]) {
+                arr.push(labelArray[i][0]);
+            }
+        }
+
+        switch (label) {
             case '缺失值填充':
                 return <Fragment>
-                    填充值：<FillNa/>
+                    填充值：<FillNa />
                 </Fragment>
             case '数据随机划分':
                 return <Fragment>
@@ -147,67 +192,36 @@ class Feature extends Component{
                             划分比例：
                         </Col>
                         <Col span={14}>
-                            <Randis/>
+                            <Randis />
                         </Col>
                     </Row>
                 </Fragment>
             case '数据筛选':
-                if(arr.length)
+                if (arr.length)
+                    return <Fragment>
+                        列间关系：<DataFilterA />
+                        {
+                            arr.map((item) => {
+                                return <Fragment>
+                                    {this.featureType(item, label)}
+                                </Fragment>
+                            })
+                        }
+                    </Fragment>
+            default: return arr.map((item) => {
                 return <Fragment>
-                    列间关系：<DataFilterA/>
-                    {
-                        arr.map((item)=>{
-                            return  <Fragment>
-                                        {this.featureType(item, label)}
-                                    </Fragment>
-                        })
-                    }
+                    {this.featureType(item, label)}
                 </Fragment>
-        }
-        return arr.map((item)=>{
-                return  <Fragment>
-                            {this.featureType(item, label)}
-                        </Fragment>
             })
+        }
+
     }
-    componentWillReceiveProps(nextProps){
-        const { propsAPI } = this.props;
-        const { getSelected, update } = propsAPI;
-        const item = getSelected()[0];
-        const attr = item.model.attr;
-        const nextLabelArray = nextProps.labelArray;
-        var nextarr=[];
-        for(let i in nextLabelArray){
-            if(nextLabelArray[i][1]){
-                nextarr.push(nextLabelArray[i][0]);
-            }
-        }
-        var arr=[];
-        let labelArray = this.props.labelArray;
-        for(let i in labelArray){
-            if(labelArray[i][1]){
-                arr.push(labelArray[i][0]);
-            }
-        }
-        for(let i in arr){
-            if(nextarr.indexOf(arr[i]) === -1){
-                delete attr[arr[i]];
-            }
-        }
-        update(item, {attr});
-    }
-    render(){
-        var arr=[];
-        let labelArray = this.props.labelArray;
-        for(let i in labelArray){
-            if(labelArray[i][1]){
-                arr.push(labelArray[i][0]);
-            }
-        }
+
+    render() {
         return (
-            <div>
-                {this.isDynamic(arr)}
-            </div>
+            <Fragment>
+                {this.isDynamic()}
+            </Fragment>
         );
     }
 }

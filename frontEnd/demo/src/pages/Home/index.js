@@ -128,7 +128,7 @@ render() {
           <Row style={{alignItems:'center', verticalAlign: 'middle', margin: '0 auto'}}>
             <Col span={15} />
               <Col span={6} style={{margin: '0 auto'}}>
-                <Card title="Welcome to demo!"  className={style.loginCard} color='black' >
+                <Card title="Welcome to BigDataPlayground!"  className={style.loginCard} color='black' >
                 <Form onSubmit={this.handleSubmit} className="login-form">
                      <FormItem>
                          {

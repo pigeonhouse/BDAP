@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { Icon, Button } from 'antd'
 import Papa from 'papaparse'
 import { withPropsAPI } from '@src';
-import { Stat } from '../DataToolFunctions/stat';
+import { Stat } from '../DataToolFunctions/Stat';
 
 class UploadFile extends Component {
 
@@ -41,7 +41,7 @@ class UploadFile extends Component {
 			})
 			var values = {
 				Dataset: STAT,
-				labelArray: { public: m },
+				labelArray: m,
 				length: vectorLength
 			}
 

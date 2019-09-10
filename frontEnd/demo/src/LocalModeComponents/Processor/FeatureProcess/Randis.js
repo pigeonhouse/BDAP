@@ -1,4 +1,4 @@
-import { Stat } from "../../../PublicComponents/DataOperate/DataToolFunctions/stat";
+import { Stat } from "../../../PublicComponents/DataOperate/DataToolFunctions/Stat";
 export function Randis(allData){
     var attr = allData[0].all_attr;
     var Dataset = allData[1].Dataset;

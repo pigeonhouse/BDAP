@@ -7,7 +7,7 @@ import { FlowDetailPanel } from '../../PublicComponents/EditorDetailPanel';
 import { FlowItemPanel } from '../../PublicComponents/EditorNodePanel/EditorItemPanel';
 import styles from './index.less';
 
-import Run from "../../PythonModeComponents/RunPanel/run"
+import Run from "../../PythonModeComponents/RunPanel/Run"
 import { FlowDataPanel } from '../../PythonModeComponents/EditorDataPanel';
 import Model from '../../PythonModeComponents/ModelStore/Model'
 
@@ -214,7 +214,7 @@ class LocalMode extends React.Component {
 
 					<Col span={4} className={styles.editorSidebar} style={{ height: 'calc(100vh - 105px)' }}>
 						<div className={styles.detailPanel} data-step="3" style={{ maxHeight: 'calc(100vh - 105px)' }} data-intro='在参数栏对你的组件进行参数配置。' data-position='left'>
-							<FlowDetailPanel type='Python' />
+							<FlowDetailPanel type='python' />
 						</div>
 					</Col>
 

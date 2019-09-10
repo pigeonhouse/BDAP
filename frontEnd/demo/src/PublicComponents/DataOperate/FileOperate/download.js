@@ -20,8 +20,8 @@ class Download extends Component{
             var fieldNameArray = new Array();
             var newData = new Array();
             var length = model.length;
-            for(let i in model.labelArray.public){
-                fieldNameArray.push(model.labelArray.public[i][0]);
+            for(let i in model.labelArray){
+                fieldNameArray.push(model.labelArray[i][0]);
             }
             for(let i in allData[0].value){
                 var row = new Array();

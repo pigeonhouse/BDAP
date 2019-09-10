@@ -38,7 +38,7 @@ Item 数据格式：
             attr:{}，一些属性
             attrDetail:[]，属性的细节
             Dataset: []，此标签框对应的展示数据
-            labelArray: {}，此标签框对应展示数据的标签
+            labelArray: []，此标签框对应展示数据的标签
             length: 0，对应数据的长度个数
             anchor: [1, 1]，锚点个数【上，下】
             group: 'feature'，标签对应的分组

@@ -1,5 +1,5 @@
 import {selectData, selectDataUntransport} from '../ToolFunctions//ToolFunctions';
-import { Stat } from '../../../../PublicComponents/DataOperate/DataToolFunctions/stat';
+import { Stat } from '../../../../PublicComponents/DataOperate/DataToolFunctions/Stat';
 import { Randis } from '../../FeatureProcess/Randis';
 import ConfusionMatrix from 'ml-confusion-matrix';
 

@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { withPropsAPI } from '@src';
-import { Stat } from '../DataToolFunctions/stat';
+import { Stat } from '../DataToolFunctions/Stat';
 
 import { TitanicTest } from '../ExampleData/TitanicTest';
 import { TitanicTrain } from '../ExampleData/TitanicTrain';
@@ -43,7 +43,7 @@ class ExampleDataUpload extends Component {
         })
         var values = {
             Dataset: STAT,
-            labelArray: { public: m },
+            labelArray: m,
             length: vectorLength
         }
         const item = getSelected()[0];

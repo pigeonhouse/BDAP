@@ -37,7 +37,7 @@ class FlowDataModel extends React.Component {
 						attr: {},
 						attrDetail: [],
 						Dataset: [],
-						labelArray: {},
+						labelArray: [],
 						length: 0,
 						anchor: [0, 1],
 						group: 'input',

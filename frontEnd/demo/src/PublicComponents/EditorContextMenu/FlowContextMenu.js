@@ -58,7 +58,7 @@ class FlowContextMenu extends React.Component {
 		var chartData = [
 			{
 				all_attr: {},
-				labelArray: { public: [data.label] }
+				labelArray: [data.label]
 			},
 			{ Dataset: [data] }
 		];
