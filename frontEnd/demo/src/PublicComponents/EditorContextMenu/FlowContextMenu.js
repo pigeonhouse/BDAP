@@ -12,7 +12,6 @@ import {
 import styles from './index.less';
 import iconfont from '../../theme/iconfont.less';
 import { withPropsAPI } from '@src';
-import LineMarkerEcharts from './LineMarkerEcharts';
 import GGEditor, { Flow, RegisterCommand } from '@src';
 
 import Download from '../DataOperate/FileOperate/Download';
@@ -276,12 +275,7 @@ class FlowContextMenu extends React.Component {
 				<RadioButton value="box">箱线图</RadioButton>
 			</RadioGroup>
 	}
-	showNModal = () => {
-		this.setState({
-			Nvisible: true,
-		});
-		this.Datum();
-	}
+
 	handleNOk = (e) => {
 		console.log(e);
 		this.setState({
@@ -613,17 +607,6 @@ class FlowContextMenu extends React.Component {
 							</Panel>)
 						})}
 					</Collapse>
-				</Modal>
-
-				<Modal
-					title="Modal"
-					visible={this.state.Nvisible}
-					onOk={this.handleNOk}
-					onCancel={this.handleNCancel}
-					bodyStyle={{ height: '450px' }}
-					width={1100}
-				>
-					<LineMarkerEcharts trans={() => this.trans()} />
 				</Modal>
 
 				<Modal

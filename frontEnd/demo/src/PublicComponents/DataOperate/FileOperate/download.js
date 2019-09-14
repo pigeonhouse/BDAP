@@ -11,17 +11,25 @@ class Download extends Component{
         const { getSelected } = propsAPI;
         const item = getSelected()[0];
         const model = item.getModel();
+        const { group } = model;
         var allData = model.Dataset;
+        var labelArray = model.labelArray;
+
         if(allData.length === 0){
             message.warning('no file!');
             return ;
         }
         else {
+            if(group === 'ml'){
+                allData = allData[1];
+                labelArray = labelArray[1];
+            }
+
             var fieldNameArray = new Array();
             var newData = new Array();
-            var length = model.length;
-            for(let i in model.labelArray){
-                fieldNameArray.push(model.labelArray[i][0]);
+            
+            for(let i in labelArray){
+                fieldNameArray.push(labelArray[i][0]);
             }
             for(let i in allData[0].value){
                 var row = new Array();
@@ -37,6 +45,7 @@ class Download extends Component{
             this.downFile(csv);
         }
     }
+
     downFile = (list)=> {
         var elementA = document.createElement('a');
         elementA.download = "Dataset.csv";
