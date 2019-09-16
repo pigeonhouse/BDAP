@@ -4,6 +4,10 @@ import Papa from 'papaparse'
 import { withPropsAPI } from '@src';
 import { Stat } from '../DataToolFunctions/Stat';
 
+/**
+ * 任意csv文件上传至Input组件中
+ */
+
 class UploadFile extends Component {
 
 	readFile = (e) => {

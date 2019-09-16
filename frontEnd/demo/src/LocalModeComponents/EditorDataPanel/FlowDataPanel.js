@@ -3,8 +3,12 @@ import FlowDataModel from '../../PublicComponents/EditorNodePanel/EditorDataMode
 
 /**
  * 左侧菜单栏，表示数据的组件
+ * 目前仅有示例数据
+ * 注释部分为从后端获取文件的代码
  */
+
 class FlowDataPanel extends React.Component {
+
 	state = {
 		dataTable: []
 	}
@@ -81,6 +85,7 @@ class FlowDataPanel extends React.Component {
 			}
 		}
 		itemData = itemData.concat(dataTable);
+		// 通过FlowDataModel渲染Data组件
 		return (
 			<FlowDataModel itemData={itemData}></FlowDataModel>
 		);

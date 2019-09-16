@@ -9,6 +9,12 @@ import GetInputOutput from './GetInputOutput';
 
 import styles from './index.less';
 
+/**
+ * 右侧属性细节组件
+ * 包括选择字段，参数输入，输入文件，预处理参数选择，预测集列名
+ * @param {string} type
+ */
+
 const { Item } = Form;
 const inlineFormItemLayout = {
 	labelCol: {
@@ -29,7 +35,7 @@ class NodeDetail extends React.Component {
 		if (!item) {
 			return null;
 		}
-		const { label, attr, group, Dataset, attrDetail, type } = item.getModel();
+		const { label, attr, group, Dataset, attrDetail } = item.getModel();
 
 		return (
 			<Card
@@ -53,7 +59,7 @@ class NodeDetail extends React.Component {
 					<AttrDetail attrDetail={attrDetail} attr={attr} />
 
 					{/* 选择字段 */}
-					<SelectWord item={item} type={type} />
+					<SelectWord item={item} type={this.props.type} />
 
 					{/* 选择字段后，对于预测集列名的重命名 */}
 					<PredictLabel group={group} />

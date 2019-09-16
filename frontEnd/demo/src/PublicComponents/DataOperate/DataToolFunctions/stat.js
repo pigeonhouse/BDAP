@@ -3,6 +3,11 @@ import median from 'ml-array-median';
 import variance from 'ml-array-variance';
 import standardDeviation from 'ml-array-standard-deviation';
 
+/**
+ * 将数据标准化，提取出一些必要属性，例如最大值，最小值等
+ * @param {Array} n 
+ */
+
 export function Stat(n) {
 	var stat;
 	var temp = 0, Min;

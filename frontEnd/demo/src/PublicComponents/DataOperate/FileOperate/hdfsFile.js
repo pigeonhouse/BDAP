@@ -3,6 +3,10 @@ import { Button, Input, Form } from 'antd'
 import { withPropsAPI } from '@src';
 import { Stat } from '../DataToolFunctions/Stat'
 
+/**
+ * hdfs文件上传
+ */
+
 class HdfsFile extends Component {
 	state = {
 		inpValu: ''

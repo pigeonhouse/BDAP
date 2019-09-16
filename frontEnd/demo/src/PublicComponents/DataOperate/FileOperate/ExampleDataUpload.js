@@ -8,6 +8,11 @@ import { Pokemon } from '../ExampleData/Pokemon';
 import { SimpleTest } from '../ExampleData/SimpleTest';
 import { SimpleTrain } from '../ExampleData/SimpleTrain';
 
+/**
+ * 上传文件
+ * 将实例数据，即ExampleData中的数据上载到Input组件中
+ */
+
 class ExampleDataUpload extends Component {
     readFile = () => {
         const { propsAPI } = this.props;

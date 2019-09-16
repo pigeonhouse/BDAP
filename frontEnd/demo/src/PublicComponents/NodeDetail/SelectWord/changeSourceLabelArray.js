@@ -1,8 +1,8 @@
 /**
  * 根据提供labelArray的源头item中的label对labelArray进行修改
  * @param {*} item 
- * @param {*} sourceLabelArray 
- * @param {*} type 
+ * @param {Array} sourceLabelArray 
+ * @param {String} type 
  */
 export function changeSourceLabelArray(item, sourceLabelArray, type) {
     let labelArray = [];

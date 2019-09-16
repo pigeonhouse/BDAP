@@ -1,26 +1,29 @@
 import React from 'react';
-import { Button,Card,icon, Tooltip, Row, Col} from 'antd';
+import { Button, Card, Row, Col } from 'antd';
 import { Redirect } from 'react-router-dom';
 var IntroJs = require('intro.js')
-
+/**
+ * 选择版本界面
+ */
 class RouteMode extends React.Component {
-  state={
+
+  state = {
     redirect: 'route',
   }
 
-  insertLocal=()=>{
+  insertLocal = () => {
     this.setState({
-      redirect:'local'
+      redirect: 'local'
     })
   }
-  insertCluster=()=>{
+  insertCluster = () => {
     this.setState({
-      redirect:'cluster'
+      redirect: 'cluster'
     })
   }
-  insertPython=()=>{
+  insertPython = () => {
     this.setState({
-      redirect:'python'
+      redirect: 'python'
     })
   }
 
@@ -30,52 +33,52 @@ class RouteMode extends React.Component {
       nextLabel: "下一步",
       skipLabel: "跳过",
       doneLabel: "结束",
-      showProgress:true,
-      exitOnEsc:true,
-      showButtons:true,
-      showStepNumbers:true,
-      keyboardNavigation:true,
+      showProgress: true,
+      exitOnEsc: true,
+      showButtons: true,
+      showStepNumbers: true,
+      keyboardNavigation: true,
       showBullets: false,
     }).oncomplete(function () {
     }).onexit(function () {
     }).start();
-}
+  }
   render() {
     if (this.state.redirect === 'local') {
-      this.setState({redirect:'route'})
+      this.setState({ redirect: 'route' })
       return <Redirect to="/local" />;
     }
-    else if(this.state.redirect === 'cluster'){
-      this.setState({redirect:'route'})
+    else if (this.state.redirect === 'cluster') {
+      this.setState({ redirect: 'route' })
       return <Redirect to="/cluster" />;
     }
-    else if(this.state.redirect === 'python'){
-      this.setState({redirect:'route'})
+    else if (this.state.redirect === 'python') {
+      this.setState({ redirect: 'route' })
       return <Redirect to="/python" />;
     }
     else return (
-      <div>     
+      <div>
         <Row>
           <Row id='root' data-step="1" data-intro='开始引导!'>
-              <Card bordered={true} style={{ width: '100%' }} >
-                  <Button icon="question" shape='circle' onClick={() => this.startIntro()}></Button>
-              </Card>
+            <Card bordered={true} style={{ width: '100%' }} >
+              <Button icon="question" shape='circle' onClick={() => this.startIntro()}></Button>
+            </Card>
           </Row>
-          <Col span={8}>      
+          <Col span={8}>
             <div data-step="2" data-intro='单机模式'>
-              <Button style={{height:200,width:400,margin:60,fontSize:25}} onClick={this.insertLocal}>LOCAL MODE</Button>
+              <Button style={{ height: 200, width: 400, margin: 60, fontSize: 25 }} onClick={this.insertLocal}>LOCAL MODE</Button>
             </div>
           </Col>
-      
+
           <Col span={8}>
             <div data-step="3" data-intro='本地模式'>
-              <Button style={{height:200,width:400,margin:60,fontSize:25}} onClick={this.insertPython}>PYTHON MODE</Button>
+              <Button style={{ height: 200, width: 400, margin: 60, fontSize: 25 }} onClick={this.insertPython}>PYTHON MODE</Button>
             </div>
           </Col>
 
           <Col span={8}>
             <div data-step="4" data-intro='集群模式'>
-              <Button style={{height:200,width:400,margin:60,fontSize:25}} onClick={this.insertCluster}>CLUSTER MODE</Button>
+              <Button style={{ height: 200, width: 400, margin: 60, fontSize: 25 }} onClick={this.insertCluster}>CLUSTER MODE</Button>
             </div>
           </Col>
         </Row>

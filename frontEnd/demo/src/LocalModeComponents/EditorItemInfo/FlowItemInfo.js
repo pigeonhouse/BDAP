@@ -1,5 +1,5 @@
 /**
- * 记录local版本的数据格式，格式在PublicComponents/EditorItemPanal/FlowItemPanel中介绍
+ * 记录local版本的计算可拖拽组件框的数据格式，其格式在PublicComponents/EditorItemPanal/FlowItemPanel中介绍
  */
 export const localItem = {
     defaultOpenKeys:['sub2','sub3'], mode:"inline", selectable:false, subMenu:[{

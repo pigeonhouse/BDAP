@@ -1,6 +1,6 @@
 /**
  * 用于前端Local模式运行的处理某个模块输入及输出
- * @param {*} stream 
+ * @param { Array } stream 
  * @param {*} propsAPI 
  */
 export function inputdata(stream, propsAPI) {

@@ -3,6 +3,9 @@ import { Button, Modal, Icon, message, Table, Input, Popconfirm, Form, Divider }
 import { withPropsAPI } from '@src';
 import store from "../../store"
 import { data } from "../../ExampleData/FlowData"
+/**
+ * 存储模型组件
+ */
 const dat = data;
 const nwData = {
 	key: 0,

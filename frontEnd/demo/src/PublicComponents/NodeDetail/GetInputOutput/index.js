@@ -8,6 +8,13 @@ import { Stat } from '../../DataOperate/DataToolFunctions/Stat';
 
 import Papa from 'papaparse';
 
+/**
+ * get输入文件
+ * @param {String} label
+ * @param {String} group
+ * @param {Array} Dataset
+ */
+
 class GetInputOutput extends React.Component {
     // 检测是否为Input，Output Item，分为三种情况
     // 如果为本地数据或HDFS数据，则返回这两种组件，分别等待上传和回传数据

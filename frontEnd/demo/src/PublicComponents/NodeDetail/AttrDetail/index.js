@@ -30,6 +30,10 @@ import { Form, Input, Select } from 'antd';
 
     最后会修改attr中与elabel相同的键的值，此键可事先不设定默认值，attrDetail也可不写
 */
+/**
+ * @param {class} attrDetail
+ * @param {class} attr
+ */
 
 const { Item } = Form;
 const Option = Select.Option;

@@ -5,7 +5,13 @@ import Papa from 'papaparse'
 import { Command } from '@src';
 import styles from '../../EditorContextMenu/index.less';
 
+/**
+ * 下载文件
+ */
+
 class Download extends Component{
+
+    //将数据转化为文件所用格式
     makeFile = ()=>{
         const { propsAPI } = this.props;
         const { getSelected } = propsAPI;
@@ -46,6 +52,7 @@ class Download extends Component{
         }
     }
 
+    //提供下载
     downFile = (list)=> {
         var elementA = document.createElement('a');
         elementA.download = "Dataset.csv";

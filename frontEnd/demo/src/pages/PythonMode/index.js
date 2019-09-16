@@ -11,9 +11,21 @@ import Run from "../../PythonModeComponents/RunPanel/Run"
 import { FlowDataPanel } from '../../PythonModeComponents/EditorDataPanel';
 import Model from '../../PythonModeComponents/ModelStore/Model'
 
+/***
+ * python界面
+ */
 const TabPane = Tabs.TabPane;
 var IntroJs = require('intro.js')
 class LocalMode extends React.Component {
+	state = {
+		currentTab: '1',
+		dataTable: [],
+		username: '',
+		password: '',
+		remind: 'false',
+		connectCtrl: false,
+	}
+
 	Intro = (key) => {
 		notification.close(key)
 		IntroJs().setOptions({
@@ -32,14 +44,7 @@ class LocalMode extends React.Component {
 		}).onexit(function () {
 		}).start();
 	}
-	state = {
-		currentTab: '1',
-		dataTable: [],
-		username: '',
-		password: '',
-		remind: 'false',
-		connectCtrl: false,
-	}
+
 	noRemind = (key) => {
 		notification.close(key)
 		let accountInfo = this.state.username + '&' + this.state.password + '&false';
@@ -48,6 +53,7 @@ class LocalMode extends React.Component {
 		exp.setTime(exp.getTime() + Days * 24 * 60 * 60 * 1000);
 		document.cookie = 'accountInfo' + "=" + escape(accountInfo) + ";expires=" + exp.toGMTString()
 	}
+
 	componentWillMount() {
 		let arr, reg = new RegExp("(^| )" + 'accountInfo' + "=([^;]*)(;|$)");
 		let accountInfo = ''
@@ -77,6 +83,7 @@ class LocalMode extends React.Component {
 				})
 		}
 	}
+
 	componentDidMount() {
 		if (this.state.remind === 'true') {
 			const key = `open${Date.now()}`;
@@ -102,9 +109,11 @@ class LocalMode extends React.Component {
 			});
 		}
 	}
+
 	tabChange = (value) => {
 		this.setState({ currentTab: value })
 	}
+	
 	handleChange = (info) => {
 		if (info.file.status === 'done') {
 			message.success(`${info.file.name} file uploaded successfully`);

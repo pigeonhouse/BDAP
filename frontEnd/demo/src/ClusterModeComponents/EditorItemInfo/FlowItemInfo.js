@@ -1,5 +1,5 @@
 /**
- * 记录Cluster版本的数据格式
+ * 记录Cluster版本的可拖拽组件框的数据格式，其格式在PublicComponents/EditorItemPanal/FlowItemPanel中介绍
  */
 export const clusterItem = {
   defaultOpenKeys:['sub1','sub2','sub3'], mode:"inline", selectable:false, subMenu:[{

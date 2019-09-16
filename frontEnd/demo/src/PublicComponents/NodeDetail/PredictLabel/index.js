@@ -2,6 +2,11 @@ import React, { Fragment } from 'react';
 import { Form, Input } from 'antd';
 import { withPropsAPI } from '@src';
 
+/**
+ * 获取预测集名称输入
+ * @param {string} group
+ */
+
 const { Item } = Form;
 const inlineFormItemLayout = {
 	labelCol: {

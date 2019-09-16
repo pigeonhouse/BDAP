@@ -5,7 +5,11 @@ import { changeSourceLabelArray } from './changeSourceLabelArray.js';
 import TransferSelect from './TransferSelect.js';
 import Feature from '../../DataOperate/FeatureNodeDetail/Feature';
 
-//对labelArray进行选择，即选择字段
+/**
+ * 选择字段组件
+ * 对labelArray进行选择，即选择字段
+ * @param { string } type
+ */
 
 class SelectWord extends Component {
     state = {

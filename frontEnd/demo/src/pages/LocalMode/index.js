@@ -12,6 +12,9 @@ import Run from "../../LocalModeComponents/RunPanel/Run"
 import Model from "../../LocalModeComponents/ModelStore/Model"
 
 import styles from './index.less';
+/**
+ * local界面
+ */
 const TabPane = Tabs.TabPane;
 var IntroJs = require('intro.js')
 class LocalMode extends React.Component {

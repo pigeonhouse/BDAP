@@ -3,7 +3,9 @@ import { Button } from 'antd'
 import { withPropsAPI } from '@src';
 import { Stat } from '../../PublicComponents/DataOperate/DataToolFunctions/Stat'
 var cur = 0
-
+/**
+ * cluster版本的Run组件，与local不同
+ */
 class SparkRun extends Component {
 	state = {
 		visible: false,
