@@ -4,12 +4,12 @@ import com.alibaba.fastjson.JSONObject;
 import com.pigeonhouse.bdap.entity.User;
 import com.pigeonhouse.bdap.service.TokenService;
 import com.pigeonhouse.bdap.service.UserService;
-import com.pigeonhouse.bdap.util.UserLoginToken;
+import com.pigeonhouse.bdap.util.PassToken;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletResponse;
 
 /**
  * @Author: XueXiaoYue
@@ -22,8 +22,9 @@ public class UserApi {
     @Autowired
     TokenService tokenService;
 
+    @PassToken
     @PostMapping("/login")
-    public Object login(@RequestBody()User user) {
+    public Object login(@RequestBody()User user, HttpServletResponse response) {
         JSONObject jsonObject = new JSONObject();
         User userForBase = userService.findUserById(user.getId());
         if (userForBase == null) {
@@ -36,17 +37,21 @@ public class UserApi {
                 jsonObject.put("message", "登录失败,密码错误");
                 return jsonObject;
             } else {
-                String token = tokenService.getToken(userForBase);
+                String token = tokenService.getToken(user.getId());
+                Cookie cookie = new Cookie("token",token);
+                response.addCookie(cookie);
                 jsonObject.put("isSuccess", "true");
                 jsonObject.put("message", "登录成功");
-                jsonObject.put("token", token);
+
+                //jsonObject.put("token", token);
+
                 jsonObject.put("user", userForBase);
                 return jsonObject;
             }
         }
     }
 
-    @UserLoginToken
+
     @GetMapping("/getMessage")
     public String getMessage() {
         return "你已通过验证";
