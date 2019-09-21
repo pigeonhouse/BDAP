@@ -1,11 +1,10 @@
 package com.pigeonhouse.bdap;
 
-import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.autoconfigure.mongo.MongoAutoConfiguration;
 
-@MapperScan("com.pigeonhouse.bdap.mapper")
-@SpringBootApplication
+@SpringBootApplication()
 public class BdapApplication {
 
     public static void main(String[] args) {

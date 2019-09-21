@@ -1,9 +1,11 @@
 package com.pigeonhouse.bdap.service;
 
+import com.pigeonhouse.bdap.dao.UserRepository;
 import com.pigeonhouse.bdap.entity.User;
-import com.pigeonhouse.bdap.mapper.UserMapper;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import javax.annotation.Resource;
+import java.util.Optional;
 
 /**
  * @Author: XueXiaoYue
@@ -11,12 +13,12 @@ import org.springframework.stereotype.Service;
  */
 @Service("UserService")
 public class UserService {
-    @Autowired
-    UserMapper userMapper;
+    @Resource
+    UserRepository userRepository;
 
-    public User findUserById(String id) {
-        User user = userMapper.selectUserById(id);
-        return user;
+    public User findUserById(String userId) {
+        Optional<User> user = userRepository.findByUserId(userId);
+        return user.isPresent() ? user.get() : null;
+
     }
-
 }

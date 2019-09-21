@@ -3,6 +3,7 @@ package com.pigeonhouse.bdap.entity;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.data.annotation.Id;
 
 /**
  * @Author: XueXiaoYue
@@ -12,8 +13,10 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class User {
-    String id;
-    String username;
+    @Id
+    String cid;
+    String userId;
+    String userName;
     String password;
 
 }

@@ -26,7 +26,7 @@ public class UserApi {
     @PostMapping("/login")
     public Object login(@RequestBody()User user, HttpServletResponse response) {
         JSONObject jsonObject = new JSONObject();
-        User userForBase = userService.findUserById(user.getId());
+        User userForBase = userService.findUserById(user.getUserId());
         if (userForBase == null) {
             jsonObject.put("isSuccess", "false");
             jsonObject.put("message", "登录失败,用户不存在");
@@ -37,13 +37,11 @@ public class UserApi {
                 jsonObject.put("message", "登录失败,密码错误");
                 return jsonObject;
             } else {
-                String token = tokenService.getToken(user.getId());
+                String token = tokenService.getToken(user.getUserId());
                 Cookie cookie = new Cookie("token",token);
                 response.addCookie(cookie);
                 jsonObject.put("isSuccess", "true");
                 jsonObject.put("message", "登录成功");
-
-                //jsonObject.put("token", token);
 
                 jsonObject.put("user", userForBase);
                 return jsonObject;
