@@ -12,7 +12,7 @@ import styles from '../../EditorContextMenu/index.less';
 class Download extends Component{
 
     //将数据转化为文件所用格式
-    makeFile = ()=>{
+    _makeFile = () => {
         const { propsAPI } = this.props;
         const { getSelected } = propsAPI;
         const item = getSelected()[0];
@@ -20,26 +20,23 @@ class Download extends Component{
         const { group } = model;
         var allData = model.Dataset;
         var labelArray = model.labelArray;
-
-        if(allData.length === 0){
+        if (allData.length === 0) {
             message.warning('no file!');
-            return ;
+            return;
         }
         else {
-            if(group === 'ml'){
+            if (group === 'ml') {
                 allData = allData[1];
                 labelArray = labelArray[1];
             }
-
             var fieldNameArray = new Array();
             var newData = new Array();
-            
-            for(let i in labelArray){
+            for (let i in labelArray) {
                 fieldNameArray.push(labelArray[i][0]);
             }
-            for(let i in allData[0].value){
+            for (let i in allData[0].value) {
                 var row = new Array();
-                for(let j in allData){
+                for (let j in allData) {
                     row.push(allData[j].value[i]);
                 }
                 newData.push(row);
@@ -50,6 +47,12 @@ class Download extends Component{
             });
             this.downFile(csv);
         }
+    };
+    get makeFile() {
+        return this._makeFile;
+    }
+    set makeFile(value) {
+        this._makeFile = value;
     }
 
     //提供下载
@@ -74,6 +77,9 @@ class Download extends Component{
                     <span>下载</span>
                 </div>
             </Command>
+
+
+
         );
     }
 }

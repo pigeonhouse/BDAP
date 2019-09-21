@@ -1,5 +1,5 @@
 import React from 'react';
-import FlowDataModel from '../../PublicComponents/EditorNodePanel/EditorDataModel'
+import FlowDataModel from '../../PublicComponents/EditorNodePanel/EditorDataModel'//用来处理展示数据源的部分
 
 /**
  * 左侧菜单栏，表示数据的组件

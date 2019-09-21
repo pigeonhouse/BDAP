@@ -9,6 +9,7 @@ export const localItem = {
             shape:"one-one",
             model:{
                 label: '缺失值填充',
+                
                 elabel:'Fillna',
                 anchor: [1, 1],
                 attr:{type:'average'},
