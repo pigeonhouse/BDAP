@@ -18,7 +18,7 @@ public class UserService {
 
     public User findUserById(String userId) {
         Optional<User> user = userRepository.findByUserId(userId);
-        return user.isPresent() ? user.get() : null;
+        return user.orElse(null);
 
     }
 }
