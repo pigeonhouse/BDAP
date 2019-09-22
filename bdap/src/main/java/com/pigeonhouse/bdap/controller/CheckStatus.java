@@ -2,7 +2,7 @@ package com.pigeonhouse.bdap.controller;
 
 import com.alibaba.fastjson.JSONObject;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.pigeonhouse.bdap.entity.ExecutionInfo;
+import com.pigeonhouse.bdap.entity.execution.ExecutionInfo;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;

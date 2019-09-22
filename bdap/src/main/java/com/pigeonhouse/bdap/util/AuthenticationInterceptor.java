@@ -6,7 +6,7 @@ import com.auth0.jwt.JWTVerifier;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.exceptions.JWTDecodeException;
 import com.auth0.jwt.exceptions.JWTVerificationException;
-import com.pigeonhouse.bdap.entity.User;
+import com.pigeonhouse.bdap.entity.prework.User;
 import com.pigeonhouse.bdap.service.TokenService;
 import com.pigeonhouse.bdap.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;

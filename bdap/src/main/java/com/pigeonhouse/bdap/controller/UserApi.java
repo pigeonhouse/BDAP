@@ -1,12 +1,15 @@
 package com.pigeonhouse.bdap.controller;
 
 import com.alibaba.fastjson.JSONObject;
-import com.pigeonhouse.bdap.entity.User;
+import com.pigeonhouse.bdap.entity.prework.User;
 import com.pigeonhouse.bdap.service.TokenService;
 import com.pigeonhouse.bdap.service.UserService;
 import com.pigeonhouse.bdap.util.PassToken;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletResponse;
@@ -24,7 +27,7 @@ public class UserApi {
 
     @PassToken
     @PostMapping("/login")
-    public Object login(@RequestBody()User user, HttpServletResponse response) {
+    public Object login(@RequestBody() User user, HttpServletResponse response) {
         JSONObject jsonObject = new JSONObject();
         User userForBase = userService.findUserById(user.getUserId());
         if (userForBase == null) {
@@ -38,7 +41,7 @@ public class UserApi {
                 return jsonObject;
             } else {
                 String token = tokenService.getToken(user.getUserId());
-                Cookie cookie = new Cookie("token",token);
+                Cookie cookie = new Cookie("token", token);
                 response.addCookie(cookie);
                 jsonObject.put("isSuccess", "true");
                 jsonObject.put("message", "登录成功");

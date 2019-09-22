@@ -1,8 +1,8 @@
 package com.pigeonhouse.bdap.service;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.pigeonhouse.bdap.entity.LivySessionDescription;
-import com.pigeonhouse.bdap.entity.LivySessionInfo;
+import com.pigeonhouse.bdap.entity.execution.LivySessionDescription;
+import com.pigeonhouse.bdap.entity.execution.LivySessionInfo;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.*;
 import org.springframework.stereotype.Service;

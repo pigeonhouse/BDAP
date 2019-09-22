@@ -1,7 +1,8 @@
 package com.pigeonhouse.bdap.service;
 
 import com.pigeonhouse.bdap.dao.UserRepository;
-import com.pigeonhouse.bdap.entity.User;
+import com.pigeonhouse.bdap.entity.prework.User;
+import com.pigeonhouse.bdap.entity.prework.attributes.InputAttribute;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -18,7 +19,7 @@ public class UserService {
 
     public User findUserById(String userId) {
         Optional<User> user = userRepository.findByUserId(userId);
+        InputAttribute inputAttribute = new InputAttribute();
         return user.orElse(null);
-
     }
 }

@@ -1,7 +1,7 @@
 package com.pigeonhouse.bdap.service;
 
-import com.pigeonhouse.bdap.entity.ExecutionInfo;
-import com.pigeonhouse.bdap.entity.NodeInfo;
+import com.pigeonhouse.bdap.entity.execution.ExecutionInfo;
+import com.pigeonhouse.bdap.entity.execution.NodeInfo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
