@@ -1,5 +1,4 @@
 package com.pigeonhouse.bdap.service;
-
 import com.pigeonhouse.bdap.entity.prework.Hdfsfile;
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.fs.*;
@@ -22,13 +21,16 @@ import java.util.Map;
 public class HdfsService {
 
     private Logger logger = LoggerFactory.getLogger(HdfsService.class);
-    private Configuration conf = null;
+    private Configuration conf =null;
 
     /**
      * 默认的HDFS路径
      */
     private String defaultHdfsUri = "hdfs://10.105.222.90:8020";
-
+    public HdfsService() {
+        this.conf = new org.apache.hadoop.conf.Configuration();
+        conf.set("fs.defaultFS",defaultHdfsUri);
+    }
     /**
      * 获取HDFS文件系统
      * @return org.apache.hadoop.fs.FileSystem
@@ -51,7 +53,7 @@ public class HdfsService {
         }else{
             hdfsPath = hdfsPath + "/" + dstPath;
         }
-
+        System.out.println(hdfsPath);
         return hdfsPath;
     }
 
@@ -62,14 +64,13 @@ public class HdfsService {
      * @param path HDFS的相对目录路径，比如：/testDir
      * @return 新的文件树hashmap
      */
-    public Hdfsfile mkdir(String path){
-        if(checkExists(path)){
-            return listFiles(generateHdfsPath(path),null);
+    public Object mkdir(String path){
+        FileSystem fileSystem =checkExists(path);
+        if(fileSystem!=null){
+            return "directory has existed!";
         }else{
-            FileSystem fileSystem = null;
 
             try {
-                fileSystem = getFileSystem();
 
                 //最终的HDFS文件目录
                 String hdfsPath = generateHdfsPath(path);
@@ -96,13 +97,12 @@ public class HdfsService {
     public Hdfsfile listFiles(String path, PathFilter pathFilter){
         //返回数据
         Hdfsfile result = new Hdfsfile();
-
+        FileSystem fileSystem = checkExists(path);
         //如果目录已经存在，则继续操作
-        if(checkExists(path)){
-            FileSystem fileSystem = null;
+        if(fileSystem!=null){
+
 
             try {
-                fileSystem = getFileSystem();
 
                 //最终的HDFS文件目录
                 String hdfsPath = generateHdfsPath(path);
@@ -203,19 +203,22 @@ public class HdfsService {
      * @param path HDFS的相对目录路径，比如：/testDir、/testDir/a.txt
      * @return boolean
      */
-    public boolean checkExists(String path){
+    public FileSystem checkExists(String path){
         FileSystem fileSystem = null;
         try {
             fileSystem = getFileSystem();
 
             //最终的HDFS文件目录
             String hdfsPath = generateHdfsPath(path);
-
+            if(fileSystem.exists(new Path(hdfsPath)))
             //创建目录
-            return fileSystem.exists(new Path(hdfsPath));
+                return fileSystem;
+            else
+                return null;
+
         } catch (IOException e) {
             logger.error(MessageFormat.format("'判断文件或者目录是否在HDFS上面存在'失败，path:{0}",path),e);
-            return false;
+            return null;
         }finally {
             close(fileSystem);
         }

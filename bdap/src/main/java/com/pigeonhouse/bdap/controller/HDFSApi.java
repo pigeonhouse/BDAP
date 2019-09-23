@@ -31,7 +31,8 @@ public class HDFSApi {
         catch (Exception e)
     {
         JSONObject errorJson = new JSONObject();
-        return errorJson.put("error",e.toString());
+        errorJson.put("error",e.toString());
+        return errorJson;
 
     }
     }
@@ -40,18 +41,27 @@ public class HDFSApi {
     public Object mkdir(@RequestParam(value="filepath") String Hdfspath)
     {
         try {
-            Hdfsfile fileList = hdfsService.mkdir(Hdfspath);
-            JSONObject fileListJson = new JSONObject();
-            for (int idx = 0; idx < fileList.getFilelist().size(); idx++) {
-                JSONObject fileJson = new JSONObject(fileList.getFilelist().get(idx));
-                fileListJson.put("fileInfo"+(idx+1), fileJson);
+            Object fileList = hdfsService.mkdir(Hdfspath);
+            if (fileList instanceof Hdfsfile) {
+                JSONObject fileListJson = new JSONObject();
+                for (int idx = 0; idx < ((Hdfsfile) fileList).getFilelist().size(); idx++) {
+                    JSONObject fileJson = new JSONObject(((Hdfsfile) fileList).getFilelist().get(idx));
+                    fileListJson.put("fileInfo" + (idx + 1), fileJson);
+                    return fileListJson;
+                }
+            } else {
+                JSONObject errorJson = new JSONObject();
+                errorJson.put("exist", fileList.toString());
+                return errorJson;
+
             }
-            return fileListJson;
+            return null;
         }
         catch (Exception e)
         {
             JSONObject errorJson = new JSONObject();
-            return errorJson.put("error",e.toString());
+            errorJson.put("error",e.toString());
+            return errorJson;
 
         }
     }
