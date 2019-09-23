@@ -3,11 +3,19 @@ package com.pigeonhouse.bdap.controller;
 import com.alibaba.fastjson.JSONObject;
 import com.pigeonhouse.bdap.entity.prework.Hdfsfile;
 import com.pigeonhouse.bdap.service.HdfsService;
+import org.apache.commons.lang.StringUtils;
+import org.apache.hadoop.fs.FSDataOutputStream;
+import org.apache.hadoop.fs.FileSystem;
+import org.apache.hadoop.fs.Path;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.File;
+import java.io.IOException;
+import java.text.MessageFormat;
 import java.util.LinkedHashMap;
 
 /**
@@ -80,4 +88,27 @@ public class HDFSApi {
 
         }
     }
+
+    @PostMapping("/hdfs/upload")
+    public Object upload(@RequestParam("file") MultipartFile file, @RequestParam("filepath") String dstPath) throws IOException {
+        try {
+            if (StringUtils.isEmpty(dstPath) || file.getBytes() == null) {
+                JSONObject errorJson = new JSONObject();
+                errorJson.put("info", "invalid input!");
+                return errorJson;
+            }
+            String returnInfo = (String) hdfsService.upload(file, dstPath);
+            JSONObject infoJson = new JSONObject();
+            infoJson.put("info", returnInfo);
+            return infoJson;
+        } catch (Exception e) {
+            JSONObject errorJson = new JSONObject();
+            errorJson.put("info", e.toString());
+            return errorJson;
+
+        }
+
+    }
+
+
 }

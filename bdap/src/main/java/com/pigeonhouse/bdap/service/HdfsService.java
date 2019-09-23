@@ -6,6 +6,8 @@ import org.apache.hadoop.fs.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.text.MessageFormat;
@@ -32,6 +34,7 @@ public class HdfsService {
 
     public HdfsService() {
         this.conf = new org.apache.hadoop.conf.Configuration();
+        conf.set("dfs.client.use.datanode.hostname", "true");
         conf.set("fs.defaultFS", defaultHdfsUri);
     }
 
@@ -99,7 +102,7 @@ public class HdfsService {
      * 获取HDFS上面的某个路径下面的所有文件或目录（不包含子目录）信息
      *
      * @param path HDFS的相对目录路径，比如：/testDir
-     * @return java.util.List<java.util.Map   <   java.lang.String   ,   java.lang.Object>>
+     * @return java.util.List<java.util.Map               <               java.lang.String               ,               java.lang.Object>>
      * @author 邢天宇
      * @since 1.0.0
      */
@@ -198,10 +201,11 @@ public class HdfsService {
         try {
             fileSystem = getFileSystem();
 
-            if (fileSystem.delete(new Path(hdfsPath), true))
+            if (fileSystem.delete(new Path(hdfsPath), true)) {
                 return true;
-            else
+            } else {
                 return false;
+            }
         } catch (IOException e) {
             logger.error(MessageFormat.format("删除HDFS文件或目录失败，path:{0}", path), e);
         } finally {
@@ -226,16 +230,40 @@ public class HdfsService {
 
             //最终的HDFS文件目录
             String hdfsPath = generateHdfsPath(path);
-            if (fileSystem.exists(new Path(hdfsPath)))
+            if (fileSystem.exists(new Path(hdfsPath))) {
                 //创建目录
                 return fileSystem;
-            else
+            } else {
                 return null;
+            }
 
         } catch (IOException e) {
             logger.error(MessageFormat.format("'判断文件或者目录是否在HDFS上面存在'失败，path:{0}", path), e);
             return null;
         }
+    }
+
+    /**
+     * upload方法
+     *
+     * @author 邢天宇
+     * @since 1.0.0
+     */
+
+
+    public Object upload(MultipartFile file, String dstPath) throws IOException {
+
+        String fileName = file.getOriginalFilename();
+        FileSystem fs = getFileSystem();
+        // 上传时默认当前目录，后面自动拼接文件的目录
+        Path newPath = new Path(generateHdfsPath(dstPath + "/" + fileName));
+        // 打开一个输出流
+        //可以根据需要设置是否覆盖选项，默认覆盖
+        FSDataOutputStream outputStream = fs.create(newPath);
+        outputStream.write(file.getBytes());
+        outputStream.close();
+        close(fs);
+        return "file upload success!";
     }
 
     /**
