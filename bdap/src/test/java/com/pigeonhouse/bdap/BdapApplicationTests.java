@@ -1,5 +1,8 @@
 package com.pigeonhouse.bdap;
 
+import com.pigeonhouse.bdap.dao.UserDao;
+import com.pigeonhouse.bdap.entity.prework.User;
+import com.pigeonhouse.bdap.service.UserService;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,11 +13,20 @@ import org.springframework.test.context.junit4.SpringRunner;
 @SpringBootTest
 public class BdapApplicationTests {
 
+    @Autowired
+    UserDao userDao;
+
     @Test
-    public void contextLoads() {
-        String name = "aaa";
-        String s = "${name}";
-        System.out.println(s);
+    public void test01() {
+        User user = userDao.findByUserId("2017211524");
+        System.out.println(user);
+
+        userDao.deleteUserById("2017211524");
+
+        User user1 = new User("2017211506", "兰泽军", "456789");
+        User user2 = new User("2017211524", "邱吉", "123456");
+        userDao.saveUser(user1);
+        userDao.saveUser(user2);
 
     }
 

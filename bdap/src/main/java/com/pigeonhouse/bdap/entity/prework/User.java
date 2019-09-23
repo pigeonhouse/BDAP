@@ -13,10 +13,16 @@ import org.springframework.data.annotation.Id;
 @AllArgsConstructor
 @NoArgsConstructor
 public class User {
+
     @Id
     String cid;
     String userId;
     String userName;
     String password;
 
+    public User(String id, String name, String password) {
+        this.userId = id;
+        this.userName = name;
+        this.password = password;
+    }
 }
