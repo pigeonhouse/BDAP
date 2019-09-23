@@ -12,12 +12,12 @@ import java.util.Map;
 @AllArgsConstructor
 public class Hdfsfile {
     private List<Map<String, Object>> filelist;
-    public Hdfsfile()
-    {
-        this.filelist=new ArrayList<Map<String, Object>>();
+
+    public Hdfsfile() {
+        this.filelist = new ArrayList<Map<String, Object>>();
     }
-    public void setfilelist(Map<String,Object> file)
-    {
+
+    public void setfilelist(Map<String, Object> file) {
         this.filelist.add(file);
     }
 }
