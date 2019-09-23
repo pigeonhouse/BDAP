@@ -27,8 +27,8 @@ public class UserDao {
      */
     public User findByUserId(String id){
         Query userId = new Query(Criteria.where("userId").is(id));
-        User user = mongoTemplate.findOne(userId, User.class);
-        return user;
+        User findUser = mongoTemplate.findOne(userId, User.class);
+        return findUser;
     }
 
 
