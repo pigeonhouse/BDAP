@@ -46,11 +46,13 @@ public class UserDao {
     }
 
 
+    /**
+     * 删除数据库User对象
+     * @param userId 删除User对象的Id
+     */
     public void deleteUserById(String userId) {
         Query query=new Query(Criteria.where("userId").is(userId));
         mongoTemplate.remove(query, User.class);
     }
-
-
 
 }

@@ -17,15 +17,15 @@ import java.util.Optional;
 @Service("UserService")
 public class UserService {
 
-    @Resource
-    UserRepository userRepository;
+//    @Resource
+//    UserRepository userRepository;
 
     @Autowired
     UserDao userDao;
 
     public User findUserById(String userId) {
-        Optional<User> user = userRepository.findByUserId(userId);
+        User user = userDao.findByUserId(userId);
         InputAttribute inputAttribute = new InputAttribute();
-        return user.orElse(null);
+        return user;
     }
 }
