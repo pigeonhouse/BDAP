@@ -22,6 +22,18 @@ public class SparkCode {
      */
     String codeId;
 
+
+    /**
+     * 模块中文名称
+     */
+    String label;
+
+
+    /**
+     * 模块英文名称
+     */
+    String elabel;
+
     /**
      * 代码类型
      * 如：
