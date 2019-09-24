@@ -23,7 +23,7 @@ public class TokenService {
         String token;
         Date date = new Date(System.currentTimeMillis() + expireTime);
         token = JWT.create().withAudience(id)
-                .withExpiresAt(date)
+                //.withExpiresAt(date)
                 .sign(Algorithm.HMAC256(id));
 
         return token;
