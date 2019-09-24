@@ -1,5 +1,6 @@
 package com.pigeonhouse.bdap.service;
 
+import com.alibaba.fastjson.JSONObject;
 import com.pigeonhouse.bdap.dao.SparkCodeDao;
 import com.pigeonhouse.bdap.entity.prework.SparkCode;
 import com.pigeonhouse.bdap.entity.prework.attributes.Attribute;
@@ -17,14 +18,20 @@ public class SparkCodeService {
     @Autowired
     SparkCodeDao sparkCodeDao;
 
-    public SparkCode findByCodeId(String codeId){
+    public String findByCodeIdToJson(String codeId){
         SparkCode sparkCode = sparkCodeDao.findByCodeId(codeId);
-        return sparkCode;
+        String jsonString = JSONObject.toJSONString(sparkCode);
+        return jsonString;
     }
 
-    public List<SparkCode> findAllToJson(){
+    public List<String> findAllToJson(){
         List<SparkCode> sparkCodes = sparkCodeDao.findAll();
-        return sparkCodes;
+        ArrayList<String> sparkCodeStrings = new ArrayList<>();
+        for(SparkCode sparkCode: sparkCodes){
+            String jsonString = JSONObject.toJSONString(sparkCode);
+            sparkCodeStrings.add(jsonString);
+        }
+        return sparkCodeStrings;
     }
 
     public void addSparkCode(String codeId, String type, String label, String elabel, String originCode, String shape){

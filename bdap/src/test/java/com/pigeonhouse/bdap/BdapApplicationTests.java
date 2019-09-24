@@ -1,5 +1,7 @@
 package com.pigeonhouse.bdap;
 
+import com.alibaba.fastjson.JSONObject;
+import com.pigeonhouse.bdap.controller.SparkCodeController;
 import com.pigeonhouse.bdap.dao.SparkCodeDao;
 import com.pigeonhouse.bdap.dao.UserDao;
 import com.pigeonhouse.bdap.entity.prework.SparkCode;
@@ -30,10 +32,13 @@ public class BdapApplicationTests {
     @Autowired
     SparkCodeService sparkCodeService;
 
+    @Autowired
+    SparkCodeController sparkCodeController;
+
     @Test
     public void test01() {
-        List<User> users = userDao.findAll();
-        System.out.println(users);
+        String s = sparkCodeController.returnSparkCode();
+        System.out.println(s);
     }
 
 }
