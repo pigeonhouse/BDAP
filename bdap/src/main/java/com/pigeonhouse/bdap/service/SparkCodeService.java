@@ -63,7 +63,7 @@ public class SparkCodeService {
     public void addSelectAttribute(String codeId, String label, String elabel, ArrayList<String> value, Boolean multiChoice){
         SparkCode sparkCode = sparkCodeDao.findByCodeId(codeId);
         ArrayList<Attribute> attributes = sparkCode.getAttributes();
-        attributes.add(new Attribute(label, elabel, "Number", value, multiChoice));
+        attributes.add(new Attribute(label, elabel, "Select", value, multiChoice));
         sparkCode.setAttributes(attributes);
         sparkCodeDao.updateSparkCode(sparkCode);
     }

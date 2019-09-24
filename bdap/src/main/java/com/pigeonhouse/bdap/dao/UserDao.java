@@ -52,7 +52,7 @@ public class UserDao {
      */
     public void updateUse(User user) {
         Query query=new Query(Criteria.where("userId").is(user.getUserId()));
-        Update update= new Update().set("userName", user.getUserName()).set("passWord", user.getPassword());
+        Update update= new Update().set("userName", user.getUserName()).set("passWord", user.getPassword()).set("currentFile", user.getCurrentFile());
         //更新查询返回结果集的第一条
         mongoTemplate.updateFirst(query, update, User.class);
     }
