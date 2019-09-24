@@ -13,8 +13,14 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class InputAttribute extends Attribute {
+
     /**
      * 规范输入的正则表达式
      */
     String regexp;
+
+    public InputAttribute(String label, String elabel, String attrType, String regexp) {
+        super(label, elabel, attrType);
+        this.regexp = regexp;
+    }
 }

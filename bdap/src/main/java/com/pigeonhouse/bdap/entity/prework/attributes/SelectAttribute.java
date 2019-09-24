@@ -22,4 +22,10 @@ public class SelectAttribute extends Attribute {
     ArrayList<String> value;
 
     Boolean multiChoice;
+
+    public SelectAttribute(String label, String elabel, String attrType, ArrayList<String> value, Boolean multiChoice) {
+        super(label, elabel, attrType);
+        this.value = value;
+        this.multiChoice = multiChoice;
+    }
 }

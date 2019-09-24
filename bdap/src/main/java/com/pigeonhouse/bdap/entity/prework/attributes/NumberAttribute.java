@@ -25,4 +25,11 @@ public class NumberAttribute extends Attribute {
      * 步长，供前端使用上调下调按钮提高用户体验。
      */
     double step;
+
+    public NumberAttribute(String label, String elabel, String attrType, double min, double max, double step) {
+        super(label, elabel, attrType);
+        this.min = min;
+        this.max = max;
+        this.step = step;
+    }
 }

@@ -9,6 +9,8 @@ import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.data.mongodb.core.query.Update;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
+
 @Repository
 public class SparkCodeDao {
 
@@ -32,6 +34,16 @@ public class SparkCodeDao {
         Query query = new Query(Criteria.where("codeId").is(codeId));
         SparkCode code = mongoTemplate.findOne(query, SparkCode.class);
         return code;
+    }
+
+
+    /**
+     * 查询数据库所有SparkCode对象
+     * @return 查询结果
+     */
+    public List<SparkCode> findAll(){
+        List<SparkCode> sparkCodes = mongoTemplate.find(new Query(new Criteria()), SparkCode.class);
+        return sparkCodes;
     }
 
     /**

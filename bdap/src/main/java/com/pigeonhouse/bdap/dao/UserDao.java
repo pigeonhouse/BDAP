@@ -9,6 +9,9 @@ import org.springframework.data.mongodb.core.query.Update;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Repository;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Repository
 public class UserDao {
 
@@ -32,6 +35,15 @@ public class UserDao {
         Query userId = new Query(Criteria.where("userId").is(id));
         User findUser = mongoTemplate.findOne(userId, User.class);
         return findUser;
+    }
+
+    /**
+     * 查询数据库所有User对象
+     * @return 查询结果
+     */
+    public List<User> findAll(){
+        List<User> users = mongoTemplate.find(new Query(new Criteria()), User.class);
+        return users;
     }
 
     /**
