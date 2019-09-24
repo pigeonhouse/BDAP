@@ -4,8 +4,6 @@ import com.alibaba.fastjson.JSONObject;
 import com.pigeonhouse.bdap.dao.SparkCodeDao;
 import com.pigeonhouse.bdap.entity.prework.SparkCode;
 import com.pigeonhouse.bdap.entity.prework.attributes.Attribute;
-import com.pigeonhouse.bdap.entity.prework.attributes.InputAttribute;
-import com.pigeonhouse.bdap.entity.prework.attributes.NumberAttribute;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -46,10 +44,28 @@ public class SparkCodeService {
         sparkCodeDao.saveSparkCode(sparkCode);
     }
 
-    public void addAttribute(String codeId){
+    public void addInputAttribute(String codeId, String label, String elabel, String regexp){
         SparkCode sparkCode = sparkCodeDao.findByCodeId(codeId);
         ArrayList<Attribute> attributes = sparkCode.getAttributes();
-        attributes.add(new InputAttribute());
+        attributes.add(new Attribute(label, elabel, "Input",regexp));
+        sparkCode.setAttributes(attributes);
+        sparkCodeDao.updateSparkCode(sparkCode);
+    }
+
+    public void addNumberAttribute(String codeId, String label, String elabel, double min, double max, double step){
+        SparkCode sparkCode = sparkCodeDao.findByCodeId(codeId);
+        ArrayList<Attribute> attributes = sparkCode.getAttributes();
+        attributes.add(new Attribute(label, elabel, "Number", min, max, step));
+        sparkCode.setAttributes(attributes);
+        sparkCodeDao.updateSparkCode(sparkCode);
+    }
+
+    public void addSelectAttribute(String codeId, String label, String elabel, ArrayList<String> value, Boolean multiChoice){
+        SparkCode sparkCode = sparkCodeDao.findByCodeId(codeId);
+        ArrayList<Attribute> attributes = sparkCode.getAttributes();
+        attributes.add(new Attribute(label, elabel, "Number", value, multiChoice));
+        sparkCode.setAttributes(attributes);
+        sparkCodeDao.updateSparkCode(sparkCode);
     }
 
     public void deleteSparkCode(String codeId){
