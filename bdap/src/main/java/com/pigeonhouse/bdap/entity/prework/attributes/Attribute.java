@@ -43,16 +43,16 @@ public class Attribute {
     /**
      * 数字下界
      */
-    double min;
+    String min;
 
     /**
      * 数字上界
      */
-    double max;
+    String max;
     /**
      * 步长，供前端使用上调下调按钮提高用户体验。
      */
-    double step;
+    String step;
 
     /**
      * 下拉菜单显示的参数值，
@@ -72,7 +72,7 @@ public class Attribute {
         this.regexp = regexp;
     }
 
-    public Attribute(String label, String elabel, String attrType, double min, double max, double step) {
+    public Attribute(String label, String elabel, String attrType, String min, String max, String step) {
         this.label = label;
         this.elabel = elabel;
         this.attrType = attrType;

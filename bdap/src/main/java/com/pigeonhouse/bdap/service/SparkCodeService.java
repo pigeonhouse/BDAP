@@ -52,7 +52,7 @@ public class SparkCodeService {
         sparkCodeDao.updateSparkCode(sparkCode);
     }
 
-    public void addNumberAttribute(String codeId, String label, String elabel, double min, double max, double step){
+    public void addNumberAttribute(String codeId, String label, String elabel, String min, String max, String step){
         SparkCode sparkCode = sparkCodeDao.findByCodeId(codeId);
         ArrayList<Attribute> attributes = sparkCode.getAttributes();
         attributes.add(new Attribute(label, elabel, "Number", min, max, step));
