@@ -52,7 +52,6 @@ public class UserApi {
         }
     }
 
-
     @GetMapping("/getMessage")
     public String getMessage() {
         return "你已通过验证";

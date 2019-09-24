@@ -68,5 +68,4 @@ public class SparkCodeDao {
         Query query=new Query(Criteria.where("codeId").is(codeId));
         mongoTemplate.remove(query, SparkCode.class);
     }
-
 }
