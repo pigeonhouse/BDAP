@@ -1,6 +1,7 @@
 package com.pigeonhouse.bdap;
 
 import com.alibaba.fastjson.JSONObject;
+import com.pigeonhouse.bdap.controller.FileHeaderAttriController;
 import com.pigeonhouse.bdap.controller.SparkCodeController;
 import com.pigeonhouse.bdap.dao.FileHeaderAttriDao;
 import com.pigeonhouse.bdap.dao.SparkCodeDao;
@@ -18,6 +19,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
+import java.io.*;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -44,6 +46,9 @@ public class BdapApplicationTests {
     @Autowired
     FileHeaderAttriService fileHeaderAttriService;
 
+    @Autowired
+    FileHeaderAttriController fileHeaderAttriController;
+
     @Test
     public void test01() {
         HeaderAttribute id = new HeaderAttribute("id", "String");
@@ -54,17 +59,15 @@ public class BdapApplicationTests {
         attributes.add(name);
         attributes.add(age);
 
-        CsvHeader header = new CsvHeader("1", "test", attributes);
+        CsvHeader header = new CsvHeader("1", "test", "/test", attributes);
 
 //        fileHeaderAttriDao.saveCsvHeader(header);
     }
 
     @Test
-    public void test02(){
-        HashMap<String, String> map = new HashMap<>();
-        map.put("age", "Integer");
-        map.put("name", "String");
-
+    public void test02() throws IOException {
+        String header = fileHeaderAttriController.getCsvHeader("001");
+        System.out.println(header);
     }
 
 }

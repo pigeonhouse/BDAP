@@ -23,6 +23,11 @@ public class CsvHeader {
     private String fileName;
 
     /**
+     * 文件路径
+     */
+    private String filePath;
+
+    /**
      * 文件字段头信息
      */
     private ArrayList<HeaderAttribute> attrHeaderSet;

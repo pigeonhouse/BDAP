@@ -52,7 +52,9 @@ public class FileHeaderAttriDao {
      */
     public void updateCsvHeader(CsvHeader csvHeader) {
         Query query=new Query(Criteria.where("fileId").is(csvHeader.getFileId()));
-        Update update= new Update().set("fileName", csvHeader.getFileName()).set("attrHeaderSet", csvHeader.getAttrHeaderSet());
+        Update update= new Update().set("fileName", csvHeader.getFileName())
+                .set("attrHeaderSet", csvHeader.getAttrHeaderSet())
+                .set("filePath", csvHeader.getFilePath());
         //更新查询返回结果集的第一条
         mongoTemplate.updateFirst(query, update, CsvHeader.class);
     }
