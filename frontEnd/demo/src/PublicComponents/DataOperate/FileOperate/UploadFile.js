@@ -48,13 +48,12 @@ class UploadFile extends Component {
 				labelArray: m,
 				length: vectorLength
 			}
-
-			update(item, { ...values });
-			const item = getSelected()[0];
 			values['keyConfig'] = JSON.parse(JSON.stringify(item.model.keyConfig));
 			values.keyConfig.state_icon_url = 'https://gw.alipayobjects.com/zos/rmsportal/MXXetJAxlqrbisIuZxDO.svg';
+			
+			const item = getSelected()[0];
+			update(item, { ...values });
 
-			console.log("propsAPI")
 			console.log(propsAPI.save())
 		}
 	}

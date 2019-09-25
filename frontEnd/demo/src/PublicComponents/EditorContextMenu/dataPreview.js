@@ -1,5 +1,5 @@
-import React ,{ Component } from 'react'
-import { Modal,Table, Collapse,Icon,  Row, Col, Button, Cascader } from 'antd';
+import React, { Component } from 'react'
+import { Modal, Table, Collapse, Icon, Row, Col, Button, Cascader } from 'antd';
 import {
 	Command,
 } from '@src';
@@ -7,9 +7,10 @@ import styles from './index.less';
 import { withPropsAPI } from '@src';
 
 const Panel = Collapse.Panel;
+
 var echarts = require('echarts');
 
-class DataPreview extends Component{
+class DataPreview extends Component {
 	state = {
 		visible: false,
 		compareVisible: false,
@@ -22,10 +23,9 @@ class DataPreview extends Component{
 		visibleChartRadio: false,
 		currentdata: [],
 		currentChartType: 'bar'
-		// filterDropdownVisible:false
 	}
 
-	Chart = (indexOfFeature, data, showType, groupDivide) => {//选中数据
+	Chart = (indexOfFeature, data) => {//选中数据
 		this.setState({
 			currentIndex: indexOfFeature,
 			currentdata: data,
@@ -48,7 +48,7 @@ class DataPreview extends Component{
 			sum = sum + len
 			columns.push({
 				title: <Button
-					onClick={() => { this.visibleChart(i, currentData[i], this.state.groupNumbers) }}
+					onClick={() => { this.visibleChart(i, currentData[i]) }}
 				>{currentData[i].label}
 				</Button>,
 				dataIndex: currentData[i].label,
@@ -125,16 +125,18 @@ class DataPreview extends Component{
 			data: []
 		});
 	}
-	visibleChart = (indexOfFeature, data, groupDivide) => { //展示统计信息
-		this.Chart(indexOfFeature, data, 'bar', groupDivide);
+
+	visibleChart = (indexOfFeature, data) => { //展示统计信息
+		this.Chart(indexOfFeature, data);
 		this.setState({ visibleChartRadio: true, currentChartType: 'bar' })
-	}	
+	}
+
 	showModal = () => { //让数据预览页面显示的函数
 		this.setState({
 			visible: true,
 			newRandomkey: (this.state.newRandomkey + 1) % 10
 		});
-		 this.Datum();
+		this.Datum();
 	}
 
 	compare = () => { //两个变量的散点图
@@ -265,24 +267,113 @@ class DataPreview extends Component{
 		}
 	}
 
+	createChart = () => {
+		const { propsAPI } = this.props;
+		const { getSelected } = propsAPI;
+		const item = getSelected()[0];
+		var myChart = echarts.init(document.getElementById('main'));
+
+		var graph = {};
+		var categories = [];
+		var option;
+		for (var i = 0; i < 9; i++) {
+			categories[i] = {
+				name: '类目' + i
+			};
+		}
+
+		var nodesNum = 62;
+		var edges = item.getModel().Dataset;
+
+		graph.nodes = [];
+		graph.links = [];
+		for (let i = 0; i < 6; i++) {
+			for (let node = 0; node < nodesNum; node++) {
+				graph.nodes.push({
+					id: node + i * nodesNum,
+					itemStyle: null,
+					symbolSize: 10,
+					value: 10,
+					category: i,
+					x: null,
+					y: null,
+					draggable: true,
+					name: node + i * nodesNum
+				});
+			}
+
+			for (let edge = 0; edge < edges[0].value.length; edge++) {
+				graph.links.push({
+					id: edge,
+					lineStyle: { normal: {} },
+					name: null,
+					source: edges[0].value[edge] + i * nodesNum,
+					target: edges[1].value[edge] + i * nodesNum,
+				})
+			}
+		}
+
+		console.log(graph)
+
+		option = {
+			title: {
+				text: 'Les Miserables',
+				subtext: 'Default layout',
+				top: 'bottom',
+				left: 'right'
+			},
+			tooltip: {},
+			legend: [{
+				data: categories.map(function (a) {
+					return a.name;
+				})
+			}],
+			animation: false,
+			series: [
+				{
+					name: 'Les Miserables',
+					type: 'graph',
+					layout: 'force',
+					data: graph.nodes,
+					links: graph.links,
+					categories: categories,
+					roam: true,
+					label: {
+						normal: {
+							position: 'right'
+						}
+					},
+					force: {
+						repulsion: 100
+					}
+				}
+			]
+		};
+
+		myChart.setOption(option);
+	}
+
 	render() {
-		return(	
-			    <div>
-					<Command name="showpicture">
-						<div className={styles.item} onClick={this.showModal}>
-							<Icon type="form" />
-							<span>数据预览</span>
-						</div>
-					</Command>
-					<Modal
-						key={this.state.newRandomkey}
-						title="数据展示"
-						visible={this.state.visible}
-						style={{ top: 30 }}
-						width={1200}
-						onOk={this.handleOk}
-						onCancel={this.handleCancel}
-					>
+		return (
+			<div>
+				<Command name="showpicture">
+					<div className={styles.item} onClick={this.showModal}>
+						<Icon type="form" />
+						<span>数据预览</span>
+					</div>
+				</Command>
+				<Modal
+					key={this.state.newRandomkey}
+					title="数据展示"
+					visible={this.state.visible}
+					style={{ top: 30 }}
+					width={1200}
+					onOk={this.handleOk}
+					onCancel={this.handleCancel}
+				>
+					{/* <Button onClick={this.createChart}>展示关系图</Button>
+					<div id="main" style={{ maxWidth: 800, height: 600 }} /> */}
+
 					<Row>
 						<Col span={15} >
 							<div >
@@ -314,9 +405,10 @@ class DataPreview extends Component{
 							</Collapse>
 						</Col>
 					</Row>
-				 </Modal>
-				</div>
-					
+				
+				</Modal>
+			</div>
+
 		);
 	}
 }
