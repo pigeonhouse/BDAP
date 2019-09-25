@@ -26,6 +26,7 @@ public class SparkCodeService {
         List<SparkCode> sparkCodes = sparkCodeDao.findAll();
         ArrayList<String> sparkCodeStrings = new ArrayList<>();
         for(SparkCode sparkCode: sparkCodes){
+            sparkCode.setOriginCode(null);
             String jsonString = JSONObject.toJSONString(sparkCode);
             sparkCodeStrings.add(jsonString);
         }

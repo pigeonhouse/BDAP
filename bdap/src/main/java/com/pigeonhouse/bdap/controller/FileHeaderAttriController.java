@@ -20,7 +20,6 @@ public class FileHeaderAttriController {
 
     @PostMapping("/csvHeader")
     public String getCsvHeader(@RequestParam("fileId") String fileId){
-        System.out.println(fileId);
         String header = fileHeaderAttriService.findByFileIdToJson(fileId);
         return header;
     }
