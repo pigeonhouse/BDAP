@@ -13,11 +13,13 @@ import java.util.List;
 public class LivySessionInfo implements Serializable {
 
     private int id;
+    private String name;
     private String appId;
     private String owner;
     private String proxyUser;
     private String state;
     private String kind;
+    private LivySessionAppInfo appInfo;
     private List<String> log;
 
 }
