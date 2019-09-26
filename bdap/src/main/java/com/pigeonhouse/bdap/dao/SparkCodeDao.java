@@ -36,7 +36,6 @@ public class SparkCodeDao {
         return code;
     }
 
-
     /**
      * 查询数据库所有SparkCode对象
      * @return 查询结果

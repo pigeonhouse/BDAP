@@ -17,9 +17,12 @@ public class SparkCodeController {
     @Autowired
     SparkCodeService sparkCodeService;
 
+    /**
+     * 返回算法模块的参数信息
+     * @return 算法模块名称和参数
+     */
     @PostMapping("/module")
     public String returnSparkCode(){
-
         List<String> all = sparkCodeService.findAllToJson();
         return all.toString();
     }

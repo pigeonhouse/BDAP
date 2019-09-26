@@ -17,11 +17,6 @@ public class FileHeaderAttriService {
     @Autowired
     FileHeaderAttriDao fileHeaderAttriDao;
 
-    public CsvHeader findByFileId(String fileId){
-        CsvHeader csvHeader = fileHeaderAttriDao.findByFileId(fileId);
-        return csvHeader;
-    }
-
     public void SaveFileHeader(String fileName, String filePath,Map<String, String> headers){
 
         ArrayList<HeaderAttribute> attributes = new ArrayList<>();
@@ -32,6 +27,7 @@ public class FileHeaderAttriService {
         CsvHeader csvHeader = new CsvHeader(fileName, filePath,attributes);
         fileHeaderAttriDao.saveCsvHeader(csvHeader);
     }
+
     public CsvHeader findByFilePath(String filePath){
         CsvHeader csvHeader = fileHeaderAttriDao.findByFilePath(filePath);
         return csvHeader;
