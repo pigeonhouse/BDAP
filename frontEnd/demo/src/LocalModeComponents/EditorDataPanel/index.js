@@ -1,5 +1,5 @@
-import FlowDataPanel from './FlowDataPanel';
+import LocalFlowDataPanel from './FlowDataPanel';
 
 export {
-  FlowDataPanel,
+  LocalFlowDataPanel,
 };

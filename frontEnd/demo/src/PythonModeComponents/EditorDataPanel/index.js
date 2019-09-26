@@ -1,5 +1,5 @@
-import FlowDataPanel from './FlowDataPanel';
+import PythonFlowDataPanel from './FlowDataPanel';
 
 export {
-  FlowDataPanel,
+  PythonFlowDataPanel,
 };

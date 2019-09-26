@@ -1,32 +1,31 @@
 import React from 'react';
-import { Row, Col, Button, message, notification, Icon, Tabs, Upload } from 'antd';
 import GGEditor, { Flow } from '@src';
+import { Row, Col, Button, message, notification, Icon, Tabs, Upload } from 'antd';
+
 import { FlowContextMenu } from '../../PublicComponents/EditorContextMenu';
 import { FlowToolbar } from '../../PublicComponents/EditorToolbar';
 import { FlowDetailPanel } from '../../PublicComponents/EditorDetailPanel';
 import { FlowItemPanel } from '../../PublicComponents/EditorNodePanel/EditorItemPanel';
+
+import { LocalFlowDataPanel } from '../../LocalModeComponents/EditorDataPanel';
+import LocalRun from "../../LocalModeComponents/RunPanel/Run";
+import LocalModel from "../../LocalModeComponents/ModelStore/Model";
+
+import PythonRun from "../../PythonModeComponents/RunPanel/Run";
+import { PythonFlowDataPanel } from '../../PythonModeComponents/EditorDataPanel';
+import PythonModel from '../../PythonModeComponents/ModelStore/Model';
+
+import SparkRun from "../../ClusterModeComponents/SparkRunPanel/SparkRun";
+import { ClusterFlowDataPanel } from '../../ClusterModeComponents/EditorDataPanel';
+
 import styles from './index.less';
-
-import SparkRun from "../../ClusterModeComponents/SparkRunPanel/SparkRun"
-import { FlowDataPanel } from '../../ClusterModeComponents/EditorDataPanel';
-
 /**
- * cluster版本界面
- * 
+ * 主界面，根据link的信息，进行不同版本的组件渲染
+ * 已将三个版本的界面合成一个
  */
 const TabPane = Tabs.TabPane;
 var IntroJs = require('intro.js')
-class ClusterMode extends React.Component {
-	
-	state = {
-		currentTab: '2',
-		dataTable: [],
-		username: '',
-		password: '',
-		remind: 'false',
-		connectCtrl: false,
-	}
-	
+class LocalMode extends React.Component {
 	Intro = (key) => {
 		notification.close(key)
 		IntroJs().setOptions({
@@ -45,7 +44,15 @@ class ClusterMode extends React.Component {
 		}).onexit(function () {
 		}).start();
 	}
-
+	state = {
+		currentTab: '1',
+		dataTable: [],
+		username: '',
+		password: '',
+		remind: 'false',
+		connectCtrl: false,
+		type: 'local',
+	}
 	noRemind = (key) => {
 		notification.close(key)
 		let accountInfo = this.state.username + '&' + this.state.password + '&false';
@@ -54,8 +61,9 @@ class ClusterMode extends React.Component {
 		exp.setTime(exp.getTime() + Days * 24 * 60 * 60 * 1000);
 		document.cookie = 'accountInfo' + "=" + escape(accountInfo) + ";expires=" + exp.toGMTString()
 	}
-
 	componentWillMount() {
+		this.setState({type:this.props.location.state.type});
+
 		let arr, reg = new RegExp("(^| )" + 'accountInfo' + "=([^;]*)(;|$)");
 		let accountInfo = ''
 
@@ -85,17 +93,16 @@ class ClusterMode extends React.Component {
 		}
 	}
 	componentDidMount() {
-		console.log(this.state.remind)
 		if (this.state.remind === 'true') {
 			const key = `open${Date.now()}`;
 			const btn = (
 				<div>
 					<Button type="primary" onClick={() => this.Intro(key)} style={{ marginRight: '10px' }}>
 						需要
-          </Button>
+          			</Button>
 					<Button type="primary" onClick={() => this.noRemind(key)}>
 						不再提醒
-          </Button>
+          			</Button>
 				</div>
 			);
 			notification.open({
@@ -113,20 +120,48 @@ class ClusterMode extends React.Component {
 	tabChange = (value) => {
 		this.setState({ currentTab: value })
 	}
-	handleChange = (info) => {
-		if (info.file.status === 'done') {
-			message.success(`${info.file.name} file uploaded successfully`);
-			this.setState({ dataTable: info.file.response })
-		} else if (info.file.status === 'error') {
-			message.error(`${info.file.name} file upload failed.`);
+	// handleChange=(info)=>{
+	//   if (info.file.status === 'done') {
+	//     message.success(`${info.file.name} file uploaded successfully`);
+	//     this.setState({dataTable:info.file.response})
+	//   } else if (info.file.status === 'error') {
+	//     message.error(`${info.file.name} file upload failed.`);
+	//   }
+	// }
+
+	//以下三个函数分别根据版本返回不同的组件
+	selectFlowDataPanel = () => {
+		switch(this.state.type){
+			case 'local':
+				return <LocalFlowDataPanel dataTable={this.state.dataTable} />;
+			case 'python':
+				return <PythonFlowDataPanel dataTable={this.state.dataTable} />;
+			case 'cluster':
+				return <ClusterFlowDataPanel dataTable={this.state.dataTable} />;
+		}
+	}
+
+	selectRunPanel = () => {
+		switch(this.state.type){
+			case 'local': return <LocalRun/>
+			case 'python': return <PythonRun/>
+			case 'cluster':	return <SparkRun/>
+		}
+	}
+
+	selectModelPanel = () => {
+		switch(this.state.type){
+			case 'local': return <LocalModel/>
+			case 'python': return <PythonModel/>
+			case 'cluster':	return <LocalModel/>
 		}
 	}
 
 	render() {
-		const props = {
-			name: 'file',
-			action: 'http://10.105.222.92:3000/handleFile',
-		};
+		// const props = {
+		//   name: 'file',
+		//   action: 'http://10.105.222.92:3000/handleFile',
+		// };
 		return (
 			<GGEditor className={styles.editor}>
 				<Row
@@ -138,7 +173,7 @@ class ClusterMode extends React.Component {
 						</Button>
 					</Col>
 					<Col span={21}>
-						<Button style={{ border: 0, backgroundColor: '#343941', color: "#ddd", fontSize: 18, fontFamily: 'consolas' }}>BigDataPlayground Cluster-Mode</Button>
+						<Button style={{ border: 0, backgroundColor: '#343941', color: "#ddd", fontSize: 18, fontFamily: 'consolas' }}>BigDataPlayground Preview-Mode</Button>
 					</Col>
 					<Col span={2}>
 						<a href="https://www.yuque.com/ddrid/tx7z84" target="_blank">
@@ -184,7 +219,7 @@ class ClusterMode extends React.Component {
 							>
 								<div style={{ height: 'calc(100vh - 105px)' }} span={4} className={styles.editorSidebar}
 									data-step="1" data-intro='在组件栏可以挑选想要的模块，左键单击拖拽添加至右侧画布内。' data-position='right'>
-									<FlowDataPanel dataTable={this.state.dataTable} />
+									{this.selectFlowDataPanel()}
 								</div>
 							</TabPane>
 							<TabPane
@@ -194,17 +229,7 @@ class ClusterMode extends React.Component {
 							>
 								<div style={{ height: 'calc(100vh - 105px)' }} span={4} className={styles.editorSidebar}
 									data-step="1" data-intro='在组件栏可以挑选想要的模块，左键单击拖拽添加至右侧画布内。' data-position='right'>
-									<FlowItemPanel type='cluster' />
-								</div>
-							</TabPane>
-							<TabPane
-								className={styles.leftMenu}
-								tab={<Icon type="setting" className={styles.iconStyle} />}
-								key="3"
-							>
-								<div style={{ height: 'calc(100vh - 105px)' }} span={4} className={styles.editorSidebar}
-									data-step="1" data-intro='在组件栏可以挑选想要的模块，左键单击拖拽添加至右侧画布内。' data-position='right'>
-									<FlowItemPanel type='cluster' />
+									<FlowItemPanel type={this.state.type} />
 								</div>
 							</TabPane>
 						</Tabs>
@@ -212,14 +237,15 @@ class ClusterMode extends React.Component {
 
 					<Col span={15} className={styles.editorContent} style={{ height: 'calc(100vh - 105px)' }}>
 						<div className={styles.editorHd} data-step="2" data-intro='在工具栏可以进行撤销，复制，删除，成组等操作。' >
-							<FlowToolbar />
+							<FlowToolbar type={this.state.type} />
 						</div>
-						<Flow style={{ height: 'calc(100vh - 142px)' }} />
+						<Flow style={{ height: 'calc(100vh - 142px)' }}
+						/>
 					</Col>
 
 					<Col span={4} className={styles.editorSidebar} style={{ height: 'calc(100vh - 105px)' }}>
 						<div className={styles.detailPanel} data-step="3" style={{ maxHeight: 'calc(100vh - 105px)' }} data-intro='在参数栏对你的组件进行参数配置。' data-position='left'>
-							<FlowDetailPanel type='cluster' />
+							<FlowDetailPanel type={this.state.type} />
 						</div>
 					</Col>
 
@@ -230,27 +256,27 @@ class ClusterMode extends React.Component {
 					data-step="4" data-intro="所有配置完成后，点击'运行'按钮开始运行整个工作流。" data-position='top'
 				>
 					<Col span={2}>
-						<Upload {...props} onChange={this.handleChange}>
-							<Button style={{ border: 0, backgroundColor: '#343941', color: "#ddd", fontSize: 25 }}>
-								<Icon type="plus" style={{ fontSize: 25 }} />上传
+						{/* <Upload {...props} onChange={this.handleChange}>
+              <Button style={{border:0,backgroundColor:'#343941',color:"#ddd",fontSize:25}}>
+                <Icon type="plus" style={{fontSize:25}}/>上传
               </Button>
-						</Upload>
+            </Upload> */}
 					</Col>
 					<Col span={9}></Col>
-					<Col span={4}>
-						<SparkRun></SparkRun>
+					<Col span={2}>
+						{this.selectRunPanel()}
 					</Col>
-					<Col span={9}>
-						{/* <FlowConnect style={{width:0, height:0}} connectCtrl={this.state.connectCtrl}/> */}
+					<Col span={9}></Col>
+					<Col span={2}>
+						{this.selectModelPanel()}
 					</Col>
 				</Row>
 
 				<FlowContextMenu />
 
 			</GGEditor>
-
 		);
 	}
 }
 
-export default ClusterMode;
+export default LocalMode;
