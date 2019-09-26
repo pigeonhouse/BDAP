@@ -26,8 +26,8 @@ public class InterceptorConfig implements WebMvcConfigurer {
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
         registry.addInterceptor(authenticationInterceptor())
-                //   .addPathPatterns("/login/**");//供测试使用，屏蔽token校验
-                .addPathPatterns("/**");
+                   .addPathPatterns("/login/**");//供测试使用，屏蔽token校验
+               // .addPathPatterns("/**");
     }
 
     @Bean

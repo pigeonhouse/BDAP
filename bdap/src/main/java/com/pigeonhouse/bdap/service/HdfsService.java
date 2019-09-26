@@ -1,15 +1,16 @@
 package com.pigeonhouse.bdap.service;
 
+import com.pigeonhouse.bdap.config.HdfsConfig;
 import com.pigeonhouse.bdap.entity.prework.Hdfsfile;
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.fs.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.text.MessageFormat;
 import java.text.SimpleDateFormat;
 import java.util.HashMap;
@@ -25,17 +26,17 @@ import java.util.Map;
 public class HdfsService {
 
     private Logger logger = LoggerFactory.getLogger(HdfsService.class);
-    private Configuration conf = null;
+    private Configuration conf;
 
     /**
      * 默认的HDFS路径
      */
-    private String defaultHdfsUri = "hdfs://10.105.222.90:8020";
+    private String defaultHdfsUri;
 
     public HdfsService() {
-        this.conf = new org.apache.hadoop.conf.Configuration();
-        conf.set("dfs.client.use.datanode.hostname", "true");
-        conf.set("fs.defaultFS", defaultHdfsUri);
+        HdfsConfig config=new HdfsConfig();
+        this.conf = config.getconf();
+        this.defaultHdfsUri=config.getDefaultHdfsUri();
     }
 
     /**
@@ -260,10 +261,39 @@ public class HdfsService {
         // 打开一个输出流
         //可以根据需要设置是否覆盖选项，默认覆盖
         FSDataOutputStream outputStream = fs.create(newPath);
+        String []buf=fileName.split("\\.");
+       switch(buf[buf.length-1])
+        {
+            case "txt": case "csv" : case  "xls": case "xlsx":
+             break;
+            default:
+                break;
+
+        }
+        byte[] header=file.getBytes();
+
         outputStream.write(file.getBytes());
         outputStream.close();
         close(fs);
         return "file upload success!";
+    }
+
+    /**
+     * download方法
+     *
+     * @author 邢天宇
+     * @since 1.0.0
+     */
+
+    public Object download(String dstPath) throws IOException {
+
+        FileSystem fs = getFileSystem();
+        // 上传时默认当前目录，后面自动拼接文件的目录
+        Path newPath = new Path(generateHdfsPath(dstPath ));
+        // 打开一个输出流
+        //可以根据需要设置是否覆盖选项，默认覆盖
+        InputStream inputStream = fs.open(newPath);
+        return inputStream;
     }
 
     /**

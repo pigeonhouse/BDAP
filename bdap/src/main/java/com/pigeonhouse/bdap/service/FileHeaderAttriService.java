@@ -32,7 +32,10 @@ public class FileHeaderAttriService {
         CsvHeader csvHeader = new CsvHeader(fileName, filePath,attributes);
         fileHeaderAttriDao.saveCsvHeader(csvHeader);
     }
-
+    public CsvHeader findByFilePath(String filePath){
+        CsvHeader csvHeader = fileHeaderAttriDao.findByFilePath(filePath);
+        return csvHeader;
+    }
 //    public void SaveFileHeaderJSON(String json){
 //        JSONObject jsonObject = new JSONObject(json);
 //        ArrayList<HeaderAttribute> attributes = new ArrayList<>();
