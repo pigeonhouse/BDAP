@@ -77,13 +77,19 @@ public class CommonFilesApi {
     }
 
     @PostMapping("/commonFiles/setnewfile")
-    public Object insertNewFile(@RequestParam(value = "userId") String userId, @RequestParam(value = "filepath") String filepath) {
+    public Object insertNewFile(@RequestParam(value = "userId") String userId, @RequestParam(value = "filePath") String filePath) {
         try {
             JSONObject info = new JSONObject();
-            CommonFiles commonFiles = commonFilesService.getFileListById(userId);
-            CsvHeader csvHeader=fileHeaderAttriService.findByFilePath(filepath);
-            commonFilesService.setNewFile(csvHeader,userId);
-            info.put("info","加入文件成功!");
+            Boolean isExist = commonFilesService.fileExist(filePath,userId);
+            if(isExist)
+            {
+                info.put("info","文件已存在!");
+            }
+            else {
+                CsvHeader csvHeader = fileHeaderAttriService.findByFilePath(filePath);
+                commonFilesService.setNewFile(csvHeader, userId);
+                info.put("info", "加入文件成功!");
+            }
 
         } catch (Exception e) {
             System.out.println(e);

@@ -103,7 +103,7 @@ public class HdfsService {
      * 获取HDFS上面的某个路径下面的所有文件或目录（不包含子目录）信息
      *
      * @param path HDFS的相对目录路径，比如：/testDir
-     * @return java.util.List<java.util.Map               <               java.lang.String               ,               java.lang.Object>>
+     * @return java.util.List<java.util.Map               <   java.lang.String               ,               java.lang.Object>>
      * @author 邢天宇
      * @since 1.0.0
      */
@@ -113,10 +113,7 @@ public class HdfsService {
         FileSystem fileSystem = checkExists(path);
         //如果目录已经存在，则继续操作
         if (fileSystem != null) {
-
-
             try {
-
                 //最终的HDFS文件目录
                 String hdfsPath = generateHdfsPath(path);
 
@@ -136,7 +133,8 @@ public class HdfsService {
                         fileMap.put("filename", pathBuf[pathBuf.length - 1]);
                         fileMap.put("isDir", status.isDirectory());
 
-                        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss"); //设置格式
+                        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+                        //设置格式
                         String timeText = format.format(status.getModificationTime());
                         fileMap.put("ModificationtTime", timeText);
                         result.setfilelist(fileMap);

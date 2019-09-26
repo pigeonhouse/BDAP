@@ -1,6 +1,5 @@
 package com.pigeonhouse.bdap.service;
 
-import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.pigeonhouse.bdap.dao.CommonFilesDao;
@@ -10,9 +9,6 @@ import com.pigeonhouse.bdap.entity.prework.attributes.FileAttribute;
 import com.pigeonhouse.bdap.entity.prework.attributes.HeaderAttribute;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
-
-import javax.annotation.Resource;
 
 /**
  * @Author XingTianYu
@@ -61,47 +57,52 @@ public class CommonFilesService {
 
     /**
      * 在已有用户中添加一个新文件
-     *
      */
-    public void setNewFile( CsvHeader csvHeader,String userId)
-    {
-        FileAttribute fileAttribute=new FileAttribute();
+    public void setNewFile(CsvHeader csvHeader, String userId) {
+        FileAttribute fileAttribute = new FileAttribute();
         fileAttribute.setFileName(csvHeader.getFileName());
         fileAttribute.setFilePath(csvHeader.getFilePath());
         fileAttribute.setFileColumnsInfo(csvHeader.getAttrHeaderSet());
-        commonFilesDao.updateFileList(fileAttribute,userId);
+        commonFilesDao.addNewFile(fileAttribute, userId);
     }
+
     /**
      * 将类对象转化为JSON
      */
 
-    public JSONObject commonFilesToJson(CommonFiles commonFiles)
-    {
-        JSONObject result=new JSONObject();
-        result.put("userId",commonFiles.getUserId());
-        result.put("userName",commonFiles.getUserName());
-        JSONArray file=new JSONArray();
-        for(int FLidx=0;FLidx<commonFiles.getFileList().size();FLidx++)
-        {
+    public JSONObject commonFilesToJson(CommonFiles commonFiles) {
+        JSONObject result = new JSONObject();
+        result.put("userId", commonFiles.getUserId());
+        result.put("userName", commonFiles.getUserName());
+        JSONArray file = new JSONArray();
+        for (int FLidx = 0; FLidx < commonFiles.getFileList().size(); FLidx++) {
 
-            JSONObject fileInfo=new JSONObject();
-            FileAttribute FA=commonFiles.getFileList().get(FLidx);
-            fileInfo.put("fileName",FA.getFileName());
-            fileInfo.put("filePath",FA.getFilePath());
-            JSONArray colInfo=new JSONArray();
-            for(int cols=0;cols<FA.getFileColumnsInfo().size();cols++)
-            {
-                JSONObject columnInfo=new JSONObject();
-                HeaderAttribute HA=FA.getFileColumnsInfo().get(cols);
-                columnInfo.put("colName",HA.getColName());
-                columnInfo.put("dataType",HA.getDataType());
+            JSONObject fileInfo = new JSONObject();
+            FileAttribute FA = commonFiles.getFileList().get(FLidx);
+            fileInfo.put("fileName", FA.getFileName());
+            fileInfo.put("filePath", FA.getFilePath());
+            JSONArray colInfo = new JSONArray();
+            for (int cols = 0; cols < FA.getFileColumnsInfo().size(); cols++) {
+                JSONObject columnInfo = new JSONObject();
+                HeaderAttribute HA = FA.getFileColumnsInfo().get(cols);
+                columnInfo.put("colName", HA.getColName());
+                columnInfo.put("dataType", HA.getDataType());
                 colInfo.add(columnInfo);
             }
-            fileInfo.put("fileColumnsInfo",colInfo);
+            fileInfo.put("fileColumnsInfo", colInfo);
             file.add(fileInfo);
 
         }
-        result.put("fileList",file);
+        result.put("fileList", file);
         return result;
+    }
+
+    /**
+     * 判断用户的某一文件是否存在
+     */
+    public boolean fileExist(String filePath, String userId) {
+        FileAttribute fileAttribute = commonFilesDao.findByFilePath(filePath, userId);
+        return fileAttribute == null ? false : true;
+
     }
 }

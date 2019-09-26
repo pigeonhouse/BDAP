@@ -17,7 +17,7 @@ public class FileHeaderAttriService {
     @Autowired
     FileHeaderAttriDao fileHeaderAttriDao;
 
-    public CsvHeader findByFilePath(String fileId){
+    public CsvHeader findByFileId(String fileId){
         CsvHeader csvHeader = fileHeaderAttriDao.findByFileId(fileId);
         return csvHeader;
     }
