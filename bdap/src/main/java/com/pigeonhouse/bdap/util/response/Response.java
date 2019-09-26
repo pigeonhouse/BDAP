@@ -15,7 +15,7 @@ public class Response {
     private String message;
     private Object data;
 
-    public Response(Status status, Object data){
+    public Response(Status status, Object data) {
         this.code = status.getCode();
         this.message = status.getMessage();
         this.data = data;

@@ -4,9 +4,6 @@ import com.alibaba.fastjson.JSONObject;
 import com.pigeonhouse.bdap.entity.prework.Hdfsfile;
 import com.pigeonhouse.bdap.service.HdfsService;
 import org.apache.commons.lang.StringUtils;
-import org.apache.hadoop.fs.FSDataOutputStream;
-import org.apache.hadoop.fs.FileSystem;
-import org.apache.hadoop.fs.Path;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -15,11 +12,9 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletResponse;
-import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.text.MessageFormat;
 import java.util.LinkedHashMap;
 
 /**
@@ -105,6 +100,7 @@ public class HDFSApi {
 
         }
     }
+
     /**
      * 将文件上传至HDFS文件夹函数
      * 返回值:带有提示信息的JSON字符串
@@ -113,7 +109,7 @@ public class HDFSApi {
     @ResponseBody
     //超大规模文件尚未通过测试，有待后续补充，已知文件超过500M浏览器会崩掉，切片功能还在写
     //xls支持尚在开发中
-    public Object upload(MultipartFile file,String dstPath) throws IOException {
+    public Object upload(MultipartFile file, String dstPath) throws IOException {
         try {
             if (StringUtils.isEmpty(dstPath) || file.getBytes() == null) {
                 JSONObject errorJson = new JSONObject();
@@ -132,6 +128,7 @@ public class HDFSApi {
         }
 
     }
+
     /**
      * 下载文件所用函数
      * 返回值:文件流
@@ -144,20 +141,36 @@ public class HDFSApi {
                 errorJson.put("info", "invalid input!");
                 return errorJson;
             }
-            InputStream inputStream =  (InputStream)hdfsService.download( dstPath);
+            InputStream inputStream = (InputStream) hdfsService.download(dstPath);
 
-            String []buf=dstPath.split("\\.");
-            switch (buf[buf.length-1])
-            {
-                case "bmp":response.setContentType("image/bmp");break;
-                case "gif":response.setContentType("image/gif");break;
-                case "jpeg":response.setContentType("image/jpeg");break;
-                case "jpg":response.setContentType("image/jpeg");break;
-                case "html":response.setContentType("text/html");break;
-                case "txt":response.setContentType("text/plain");break;
-                case "csv":response.setContentType("text/plain");break;
-                case "xml":response.setContentType("text/xml");break;
-                default:break;
+            String[] buf = dstPath.split("\\.");
+            switch (buf[buf.length - 1]) {
+                case "bmp":
+                    response.setContentType("image/bmp");
+                    break;
+                case "gif":
+                    response.setContentType("image/gif");
+                    break;
+                case "jpeg":
+                    response.setContentType("image/jpeg");
+                    break;
+                case "jpg":
+                    response.setContentType("image/jpeg");
+                    break;
+                case "html":
+                    response.setContentType("text/html");
+                    break;
+                case "txt":
+                    response.setContentType("text/plain");
+                    break;
+                case "csv":
+                    response.setContentType("text/plain");
+                    break;
+                case "xml":
+                    response.setContentType("text/xml");
+                    break;
+                default:
+                    break;
             }
             OutputStream os = response.getOutputStream();
             byte[] b = new byte[4096];

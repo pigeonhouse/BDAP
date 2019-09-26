@@ -2,7 +2,6 @@ package com.pigeonhouse.bdap.entity.prework.attributes;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.NoArgsConstructor;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -17,8 +16,9 @@ import java.util.List;
 public class FileAttribute {
     private String fileName;
     private String filePath;
-    private  List <HeaderAttribute> fileColumnsInfo;
-    public FileAttribute(){
-        this.fileColumnsInfo=new ArrayList<HeaderAttribute>();
+    private List<HeaderAttribute> fileColumnsInfo;
+
+    public FileAttribute() {
+        this.fileColumnsInfo = new ArrayList<HeaderAttribute>();
     }
 }

@@ -1,10 +1,8 @@
 package com.pigeonhouse.bdap.entity.prework;
 
 import com.pigeonhouse.bdap.entity.prework.attributes.FileAttribute;
-
 import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.Id;
 
 import java.util.ArrayList;
@@ -22,8 +20,9 @@ public class CommonFiles {
     String userId;
     String userName;
     List<FileAttribute> fileList;
-    public CommonFiles(){
-        this.fileList=new ArrayList<FileAttribute>();
+
+    public CommonFiles() {
+        this.fileList = new ArrayList<FileAttribute>();
     }
 
 

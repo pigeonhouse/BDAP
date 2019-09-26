@@ -1,15 +1,13 @@
 package com.pigeonhouse.bdap.controller;
 
-import com.alibaba.fastjson.*;
+import com.alibaba.fastjson.JSONObject;
 import com.pigeonhouse.bdap.entity.prework.CommonFiles;
 import com.pigeonhouse.bdap.entity.prework.CsvHeader;
 import com.pigeonhouse.bdap.entity.prework.attributes.FileAttribute;
 import com.pigeonhouse.bdap.service.CommonFilesService;
-
 import com.pigeonhouse.bdap.service.FileHeaderAttriService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -24,7 +22,8 @@ public class CommonFilesApi {
     @Autowired
     CommonFilesService commonFilesService;
     @Autowired
-    FileHeaderAttriService  fileHeaderAttriService;
+    FileHeaderAttriService fileHeaderAttriService;
+
     /**
      * @param userid 用户名称
      * @return 常用数据列表JSON
@@ -34,15 +33,12 @@ public class CommonFilesApi {
     @PostMapping("/commonfiles/getcommonfiles")
     public Object getCommonFiles(@RequestParam("userId") String userid) {
         try {
-             JSONObject info=new JSONObject();
+            JSONObject info = new JSONObject();
             CommonFiles commonFiles = commonFilesService.getFileListById(userid);
-            if(commonFiles!=null)
-            {
+            if (commonFiles != null) {
                 return commonFilesService.commonFilesToJson(commonFiles);
-            }
-            else
-            {
-                info.put("info","not found!");
+            } else {
+                info.put("info", "not found!");
                 return info;
             }
         } catch (Exception e) {
@@ -54,6 +50,7 @@ public class CommonFilesApi {
 
     /**
      * 在常用数据表中插入新用户
+     *
      * @param userId   用户ID
      * @param userName 用户名称
      * @return 错误提示信息或插入成功通知
@@ -80,12 +77,10 @@ public class CommonFilesApi {
     public Object insertNewFile(@RequestParam(value = "userId") String userId, @RequestParam(value = "filePath") String filePath) {
         try {
             JSONObject info = new JSONObject();
-            Boolean isExist = commonFilesService.fileExist(filePath,userId);
-            if(isExist)
-            {
-                info.put("info","文件已存在!");
-            }
-            else {
+            Boolean isExist = commonFilesService.fileExist(filePath, userId);
+            if (isExist) {
+                info.put("info", "文件已存在!");
+            } else {
                 CsvHeader csvHeader = fileHeaderAttriService.findByFilePath(filePath);
                 commonFilesService.setNewFile(csvHeader, userId);
                 info.put("info", "加入文件成功!");

@@ -124,7 +124,7 @@ public class LivyService {
     }
 
     public static LivySessionInfo createSession() throws IOException {
-        String session_url =  "http://" + "${livyAddr}" + "/sessions";
+        String session_url = "http://" + "${livyAddr}" + "/sessions";
         //header
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);

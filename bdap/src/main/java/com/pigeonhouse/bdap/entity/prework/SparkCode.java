@@ -37,9 +37,9 @@ public class SparkCode {
     /**
      * 代码类型
      * 如：
-     *      preprocessing
-     *      machineLearning
-     *      ......
+     * preprocessing
+     * machineLearning
+     * ......
      */
     String type;
 
@@ -51,11 +51,11 @@ public class SparkCode {
     /**
      * 有几个输入，有几个输出
      * 如：
-     *      one-one
-     *      two-one
-     *      one-two
-     *      two-two
-     *      .......
+     * one-one
+     * two-one
+     * one-two
+     * two-two
+     * .......
      */
     String shape;
 

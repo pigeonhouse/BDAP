@@ -34,9 +34,9 @@ public class HdfsService {
     private String defaultHdfsUri;
 
     public HdfsService() {
-        HdfsConfig config=new HdfsConfig();
+        HdfsConfig config = new HdfsConfig();
         this.conf = config.getconf();
-        this.defaultHdfsUri=config.getDefaultHdfsUri();
+        this.defaultHdfsUri = config.getDefaultHdfsUri();
     }
 
     /**
@@ -103,7 +103,7 @@ public class HdfsService {
      * 获取HDFS上面的某个路径下面的所有文件或目录（不包含子目录）信息
      *
      * @param path HDFS的相对目录路径，比如：/testDir
-     * @return java.util.List<java.util.Map               <   java.lang.String               ,               java.lang.Object>>
+     * @return java.util.List<java.util.Map < java.lang.String, java.lang.Object>>
      * @author 邢天宇
      * @since 1.0.0
      */
@@ -200,11 +200,7 @@ public class HdfsService {
         try {
             fileSystem = getFileSystem();
 
-            if (fileSystem.delete(new Path(hdfsPath), true)) {
-                return true;
-            } else {
-                return false;
-            }
+            return fileSystem.delete(new Path(hdfsPath), true);
         } catch (IOException e) {
             logger.error(MessageFormat.format("删除HDFS文件或目录失败，path:{0}", path), e);
         } finally {
@@ -259,16 +255,18 @@ public class HdfsService {
         // 打开一个输出流
         //可以根据需要设置是否覆盖选项，默认覆盖
         FSDataOutputStream outputStream = fs.create(newPath);
-        String []buf=fileName.split("\\.");
-       switch(buf[buf.length-1])
-        {
-            case "txt": case "csv" : case  "xls": case "xlsx":
-             break;
+        String[] buf = fileName.split("\\.");
+        switch (buf[buf.length - 1]) {
+            case "txt":
+            case "csv":
+            case "xls":
+            case "xlsx":
+                break;
             default:
                 break;
 
         }
-        byte[] header=file.getBytes();
+        byte[] header = file.getBytes();
 
         outputStream.write(file.getBytes());
         outputStream.close();
@@ -287,7 +285,7 @@ public class HdfsService {
 
         FileSystem fs = getFileSystem();
         // 上传时默认当前目录，后面自动拼接文件的目录
-        Path newPath = new Path(generateHdfsPath(dstPath ));
+        Path newPath = new Path(generateHdfsPath(dstPath));
         // 打开一个输出流
         //可以根据需要设置是否覆盖选项，默认覆盖
         InputStream inputStream = fs.open(newPath);

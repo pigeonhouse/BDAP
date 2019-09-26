@@ -6,5 +6,6 @@ package com.pigeonhouse.bdap.util.response;
  */
 public interface Status {
     Integer getCode();
+
     String getMessage();
 }

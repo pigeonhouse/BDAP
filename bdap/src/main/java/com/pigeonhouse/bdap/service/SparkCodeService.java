@@ -16,16 +16,16 @@ public class SparkCodeService {
     @Autowired
     SparkCodeDao sparkCodeDao;
 
-    public String findByCodeIdToJson(String codeId){
+    public String findByCodeIdToJson(String codeId) {
         SparkCode sparkCode = sparkCodeDao.findByCodeId(codeId);
         String jsonString = JSONObject.toJSONString(sparkCode);
         return jsonString;
     }
 
-    public List<String> findAllToJson(){
+    public List<String> findAllToJson() {
         List<SparkCode> sparkCodes = sparkCodeDao.findAll();
         ArrayList<String> sparkCodeStrings = new ArrayList<>();
-        for(SparkCode sparkCode: sparkCodes){
+        for (SparkCode sparkCode : sparkCodes) {
             sparkCode.setOriginCode(null);
             String jsonString = JSONObject.toJSONString(sparkCode);
             sparkCodeStrings.add(jsonString);
@@ -33,7 +33,7 @@ public class SparkCodeService {
         return sparkCodeStrings;
     }
 
-    public void addSparkCode(String codeId, String type, String label, String elabel, String originCode, String shape){
+    public void addSparkCode(String codeId, String type, String label, String elabel, String originCode, String shape) {
         SparkCode sparkCode = new SparkCode();
         sparkCode.setCodeId(codeId);
         sparkCode.setType(type);
@@ -45,15 +45,15 @@ public class SparkCodeService {
         sparkCodeDao.saveSparkCode(sparkCode);
     }
 
-    public void addInputAttribute(String codeId, String label, String elabel, String regexp){
+    public void addInputAttribute(String codeId, String label, String elabel, String regexp) {
         SparkCode sparkCode = sparkCodeDao.findByCodeId(codeId);
         ArrayList<Attribute> attributes = sparkCode.getAttributes();
-        attributes.add(new Attribute(label, elabel, "Input",regexp));
+        attributes.add(new Attribute(label, elabel, "Input", regexp));
         sparkCode.setAttributes(attributes);
         sparkCodeDao.updateSparkCode(sparkCode);
     }
 
-    public void addNumberAttribute(String codeId, String label, String elabel, String min, String max, String step){
+    public void addNumberAttribute(String codeId, String label, String elabel, String min, String max, String step) {
         SparkCode sparkCode = sparkCodeDao.findByCodeId(codeId);
         ArrayList<Attribute> attributes = sparkCode.getAttributes();
         attributes.add(new Attribute(label, elabel, "Number", min, max, step));
@@ -61,7 +61,7 @@ public class SparkCodeService {
         sparkCodeDao.updateSparkCode(sparkCode);
     }
 
-    public void addSelectAttribute(String codeId, String label, String elabel, ArrayList<String> value, Boolean multiChoice){
+    public void addSelectAttribute(String codeId, String label, String elabel, ArrayList<String> value, Boolean multiChoice) {
         SparkCode sparkCode = sparkCodeDao.findByCodeId(codeId);
         ArrayList<Attribute> attributes = sparkCode.getAttributes();
         attributes.add(new Attribute(label, elabel, "Select", value, multiChoice));
@@ -69,7 +69,7 @@ public class SparkCodeService {
         sparkCodeDao.updateSparkCode(sparkCode);
     }
 
-    public void deleteSparkCode(String codeId){
+    public void deleteSparkCode(String codeId) {
         sparkCodeDao.deleteSparkCodeById(codeId);
     }
 

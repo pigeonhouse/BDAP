@@ -102,7 +102,7 @@ public class CommonFilesService {
      */
     public boolean fileExist(String filePath, String userId) {
         FileAttribute fileAttribute = commonFilesDao.findByFilePath(filePath, userId);
-        return fileAttribute == null ? false : true;
+        return fileAttribute != null;
 
     }
 }

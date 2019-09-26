@@ -1,6 +1,7 @@
 package com.pigeonhouse.bdap.config;
 
 import org.apache.hadoop.conf.Configuration;
+
 /**
  * @Author: XingTianYu
  * @Date: 2019/9/24 11:30
