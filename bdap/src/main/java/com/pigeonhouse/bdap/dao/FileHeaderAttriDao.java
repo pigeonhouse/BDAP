@@ -26,15 +26,10 @@ public class FileHeaderAttriDao {
     }
 
     /**
-     * 根据codeId查询数据库CsvHeader对象
+     * 根据filePath查询数据库CsvHeader对象
      * @param filePath 数据库对象filePath
      * @return 查询的CsvHeader对象
      */
-    public CsvHeader findByFileId(String filePath){
-        Query query = new Query(Criteria.where("filePath").is(filePath));
-        CsvHeader header = mongoTemplate.findOne(query, CsvHeader.class);
-        return header;
-    }
     public CsvHeader findByFilePath(String filePath){
         Query query = new Query(Criteria.where("filePath").is(filePath));
         CsvHeader header = mongoTemplate.findOne(query, CsvHeader.class);

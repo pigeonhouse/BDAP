@@ -18,9 +18,13 @@ public class FileHeaderAttriController {
     @Autowired
     FileHeaderAttriService fileHeaderAttriService;
 
+    /**
+     * 请求CSV文件字段信息
+     * @param filePath 文件路径
+     * @return 文件字段信息
+     */
     @PostMapping("/csvHeader")
-    public String getCsvHeader(@RequestParam("fileId") String filePath){
-
+    public String getCsvHeader(@RequestParam("filePath") String filePath){
         CsvHeader csvHeader = fileHeaderAttriService.findByFilePath(filePath);
         return JSONObject.toJSONString(csvHeader);
     }
