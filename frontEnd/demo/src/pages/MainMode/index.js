@@ -62,7 +62,9 @@ class LocalMode extends React.Component {
 		document.cookie = 'accountInfo' + "=" + escape(accountInfo) + ";expires=" + exp.toGMTString()
 	}
 	componentWillMount() {
-		this.setState({type:this.props.location.state.type});
+		if(this.props.location.state !== undefined){
+			this.setState({type:this.props.location.state.type});
+		}
 
 		let arr, reg = new RegExp("(^| )" + 'accountInfo' + "=([^;]*)(;|$)");
 		let accountInfo = ''
