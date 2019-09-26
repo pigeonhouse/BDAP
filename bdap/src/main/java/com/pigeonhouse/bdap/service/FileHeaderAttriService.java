@@ -17,19 +17,19 @@ public class FileHeaderAttriService {
     @Autowired
     FileHeaderAttriDao fileHeaderAttriDao;
 
-    public String findByFileIdToJson(String fileId){
+    public CsvHeader findByFilePath(String fileId){
         CsvHeader csvHeader = fileHeaderAttriDao.findByFileId(fileId);
-        return JSONObject.toJSONString(csvHeader);
+        return csvHeader;
     }
 
-    public void SaveFileHeader(String fileId, String fileName, String filePath,Map<String, String> headers){
+    public void SaveFileHeader(String fileName, String filePath,Map<String, String> headers){
 
         ArrayList<HeaderAttribute> attributes = new ArrayList<>();
         for (String key: headers.keySet()){
             HeaderAttribute attribute = new HeaderAttribute(key, headers.get(key));
             attributes.add(attribute);
         }
-        CsvHeader csvHeader = new CsvHeader(fileId, fileName, filePath,attributes);
+        CsvHeader csvHeader = new CsvHeader(fileName, filePath,attributes);
         fileHeaderAttriDao.saveCsvHeader(csvHeader);
     }
 

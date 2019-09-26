@@ -27,11 +27,11 @@ public class FileHeaderAttriDao {
 
     /**
      * 根据codeId查询数据库CsvHeader对象
-     * @param fileId 数据库对象fileId
+     * @param filePath 数据库对象filePath
      * @return 查询的CsvHeader对象
      */
-    public CsvHeader findByFileId(String fileId){
-        Query query = new Query(Criteria.where("fileId").is(fileId));
+    public CsvHeader findByFileId(String filePath){
+        Query query = new Query(Criteria.where("filePath").is(filePath));
         CsvHeader header = mongoTemplate.findOne(query, CsvHeader.class);
         return header;
     }
@@ -51,10 +51,9 @@ public class FileHeaderAttriDao {
      * @param csvHeader 更新的对象
      */
     public void updateCsvHeader(CsvHeader csvHeader) {
-        Query query=new Query(Criteria.where("fileId").is(csvHeader.getFileId()));
+        Query query=new Query(Criteria.where("filePath").is(csvHeader.getFilePath()));
         Update update= new Update().set("fileName", csvHeader.getFileName())
-                .set("attrHeaderSet", csvHeader.getAttrHeaderSet())
-                .set("filePath", csvHeader.getFilePath());
+                .set("attrHeaderSet", csvHeader.getAttrHeaderSet());
         //更新查询返回结果集的第一条
         mongoTemplate.updateFirst(query, update, CsvHeader.class);
     }
@@ -62,10 +61,10 @@ public class FileHeaderAttriDao {
 
     /**
      * 删除数据库CsvHeader对象
-     * @param fileId 删除对象的fileId
+     * @param filePath 删除对象的filePath
      */
-    public void deleteCsvHeaderById(String fileId) {
-        Query query=new Query(Criteria.where("fileId").is(fileId));
+    public void deleteCsvHeaderByPath(String filePath) {
+        Query query=new Query(Criteria.where("filePath").is(filePath));
         mongoTemplate.remove(query, CsvHeader.class);
     }
 }

@@ -19,8 +19,9 @@ public class FileHeaderAttriController {
     FileHeaderAttriService fileHeaderAttriService;
 
     @PostMapping("/csvHeader")
-    public String getCsvHeader(@RequestParam("fileId") String fileId){
-        String header = fileHeaderAttriService.findByFileIdToJson(fileId);
-        return header;
+    public String getCsvHeader(@RequestParam("fileId") String filePath){
+
+        CsvHeader csvHeader = fileHeaderAttriService.findByFilePath(filePath);
+        return JSONObject.toJSONString(csvHeader);
     }
 }

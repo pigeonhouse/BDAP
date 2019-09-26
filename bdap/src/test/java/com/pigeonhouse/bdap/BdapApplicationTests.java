@@ -1,6 +1,7 @@
 package com.pigeonhouse.bdap;
 
 import com.alibaba.fastjson.JSONObject;
+import com.csvreader.CsvReader;
 import com.pigeonhouse.bdap.controller.FileHeaderAttriController;
 import com.pigeonhouse.bdap.controller.SparkCodeController;
 import com.pigeonhouse.bdap.dao.FileHeaderAttriDao;
@@ -20,6 +21,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import java.io.*;
+import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -59,15 +61,18 @@ public class BdapApplicationTests {
         attributes.add(name);
         attributes.add(age);
 
-        CsvHeader header = new CsvHeader("1", "test", "/test", attributes);
+        CsvHeader header = new CsvHeader("test", "/test", attributes);
 
+//        CsvHeader csvHeader = fileHeaderAttriService.findByFilePath("/");
+
+        String csvHeader = fileHeaderAttriController.getCsvHeader("/");
+        System.out.println(csvHeader);
 //        fileHeaderAttriDao.saveCsvHeader(header);
     }
 
     @Test
     public void test02() throws IOException {
-        String header = fileHeaderAttriController.getCsvHeader("001");
-        System.out.println(header);
+
     }
 
 }

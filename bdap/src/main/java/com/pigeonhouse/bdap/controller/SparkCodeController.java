@@ -19,7 +19,9 @@ public class SparkCodeController {
 
     @PostMapping("/module")
     public String returnSparkCode(){
+
         List<String> all = sparkCodeService.findAllToJson();
         return all.toString();
     }
+
 }
