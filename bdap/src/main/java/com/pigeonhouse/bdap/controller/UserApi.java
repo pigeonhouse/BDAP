@@ -31,12 +31,15 @@ public class UserApi {
 
         User userForBase = userService.findUserById(user.getUserId());
         if (userForBase == null) {
+            //不存在这个用户
             return new Response(LoginStatus.NO_SUCH_USER, null);
         } else {
             if (!userForBase.getPassword().equals(user.getPassword())) {
+                //密码错误
                 return new Response(LoginStatus.WRONG_PASSWORD, null);
             } else {
                 String token = tokenService.getToken(user.getUserId());
+                //成功，获取token并将其置于cookie中返回前端
                 Cookie cookie = new Cookie("token", token);
                 response.addCookie(cookie);
                 return new Response(LoginStatus.SUCCESS, userForBase);
