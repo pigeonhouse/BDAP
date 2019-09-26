@@ -1,7 +1,7 @@
 package com.pigeonhouse.bdap.config;
 
 
-import com.pigeonhouse.bdap.util.AuthenticationInterceptor;
+import com.pigeonhouse.bdap.util.token.AuthenticationInterceptor;
 import org.springframework.beans.factory.BeanFactory;
 import org.springframework.beans.factory.NoSuchBeanDefinitionException;
 import org.springframework.context.annotation.Bean;
