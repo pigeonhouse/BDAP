@@ -12,6 +12,7 @@ import com.pigeonhouse.bdap.entity.prework.SparkCode;
 import com.pigeonhouse.bdap.entity.prework.attributes.HeaderAttribute;
 import com.pigeonhouse.bdap.service.FileHeaderAttriService;
 import com.pigeonhouse.bdap.service.HdfsService;
+import com.pigeonhouse.bdap.service.JoinCodeService;
 import com.pigeonhouse.bdap.service.SparkCodeService;
 import org.apache.hadoop.io.retry.AtMostOnce;
 import org.junit.Test;
@@ -51,6 +52,9 @@ public class BdapApplicationTests {
     @Autowired
     FileHeaderAttriController fileHeaderAttriController;
 
+    @Autowired
+    JoinCodeService joinCodeService;
+
     @Test
     public void test01() {
         HeaderAttribute id = new HeaderAttribute("id", "String");
@@ -72,7 +76,14 @@ public class BdapApplicationTests {
 
     @Test
     public void test02() throws IOException {
-
+        SparkCode code = sparkCodeDao.findByCodeId("PP002");
+        HashMap<String, String> map = new HashMap<>();
+        map.put("moduleId", "123456");
+        map.put("targetCol", "age");
+        map.put("numBuckets", "5");
+        map.put("newColName", "target");
+        String s = joinCodeService.transParam("PP002", map);
+        System.out.println(s);
     }
 
 }

@@ -16,7 +16,7 @@ public class FileHeaderAttriService {
     @Autowired
     FileHeaderAttriDao fileHeaderAttriDao;
 
-    public void SaveFileHeader(String fileName, String filePath, Map<String, String> headers) {
+    public void saveFileHeader(String fileName, String filePath, Map<String, String> headers) {
 
         ArrayList<HeaderAttribute> attributes = new ArrayList<>();
         for (String key : headers.keySet()) {
@@ -31,6 +31,7 @@ public class FileHeaderAttriService {
         CsvHeader csvHeader = fileHeaderAttriDao.findByFilePath(filePath);
         return csvHeader;
     }
+
 //    public void SaveFileHeaderJSON(String json){
 //        JSONObject jsonObject = new JSONObject(json);
 //        ArrayList<HeaderAttribute> attributes = new ArrayList<>();
