@@ -58,7 +58,7 @@ public class Attribute {
      * 下拉菜单显示的参数值，
      * 如["平均值","中位数","最大值","最小值"]
      */
-    ArrayList<String> value;
+    ArrayList<ChinaEngBean> value;
 
     /**
      * 能否多选
@@ -81,7 +81,7 @@ public class Attribute {
         this.step = step;
     }
 
-    public Attribute(String label, String elabel, String attrType, ArrayList<String> value, Boolean multiChoice) {
+    public Attribute(String label, String elabel, String attrType, ArrayList<ChinaEngBean> value, Boolean multiChoice) {
         this.label = label;
         this.elabel = elabel;
         this.attrType = attrType;

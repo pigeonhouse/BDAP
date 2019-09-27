@@ -9,6 +9,7 @@ import com.pigeonhouse.bdap.dao.SparkCodeDao;
 import com.pigeonhouse.bdap.dao.UserDao;
 import com.pigeonhouse.bdap.entity.prework.CsvHeader;
 import com.pigeonhouse.bdap.entity.prework.SparkCode;
+import com.pigeonhouse.bdap.entity.prework.attributes.ChinaEngBean;
 import com.pigeonhouse.bdap.entity.prework.attributes.HeaderAttribute;
 import com.pigeonhouse.bdap.service.FileHeaderAttriService;
 import com.pigeonhouse.bdap.service.HdfsService;
@@ -77,6 +78,7 @@ public class BdapApplicationTests {
     @Test
     public void test02() throws IOException {
         SparkCode code = sparkCodeDao.findByCodeId("PP002");
+
         HashMap<String, String> map = new HashMap<>();
         map.put("moduleId", "123456");
         map.put("targetCol", "age");
@@ -86,4 +88,8 @@ public class BdapApplicationTests {
         System.out.println(s);
     }
 
+    @Test
+    public void test03(){
+        System.out.println(sparkCodeService.findByCodeIdToJson("PP005"));
+    }
 }

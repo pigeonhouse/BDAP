@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.pigeonhouse.bdap.dao.SparkCodeDao;
 import com.pigeonhouse.bdap.entity.prework.SparkCode;
 import com.pigeonhouse.bdap.entity.prework.attributes.Attribute;
+import com.pigeonhouse.bdap.entity.prework.attributes.ChinaEngBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -48,6 +49,9 @@ public class SparkCodeService {
     public void addInputAttribute(String codeId, String label, String elabel, String regexp) {
         SparkCode sparkCode = sparkCodeDao.findByCodeId(codeId);
         ArrayList<Attribute> attributes = sparkCode.getAttributes();
+        if(attributes == null){
+            attributes = new ArrayList<Attribute>();
+        }
         attributes.add(new Attribute(label, elabel, "Input", regexp));
         sparkCode.setAttributes(attributes);
         sparkCodeDao.updateSparkCode(sparkCode);
@@ -56,14 +60,20 @@ public class SparkCodeService {
     public void addNumberAttribute(String codeId, String label, String elabel, String min, String max, String step) {
         SparkCode sparkCode = sparkCodeDao.findByCodeId(codeId);
         ArrayList<Attribute> attributes = sparkCode.getAttributes();
+        if(attributes == null){
+            attributes = new ArrayList<Attribute>();
+        }
         attributes.add(new Attribute(label, elabel, "Number", min, max, step));
         sparkCode.setAttributes(attributes);
         sparkCodeDao.updateSparkCode(sparkCode);
     }
 
-    public void addSelectAttribute(String codeId, String label, String elabel, ArrayList<String> value, Boolean multiChoice) {
+    public void addSelectAttribute(String codeId, String label, String elabel, ArrayList<ChinaEngBean> value, Boolean multiChoice) {
         SparkCode sparkCode = sparkCodeDao.findByCodeId(codeId);
         ArrayList<Attribute> attributes = sparkCode.getAttributes();
+        if(attributes == null){
+            attributes = new ArrayList<Attribute>();
+        }
         attributes.add(new Attribute(label, elabel, "Select", value, multiChoice));
         sparkCode.setAttributes(attributes);
         sparkCodeDao.updateSparkCode(sparkCode);
