@@ -1,14 +1,13 @@
 package com.pigeonhouse.bdap.config;
 
 
-import com.pigeonhouse.bdap.util.AuthenticationInterceptor;
+import com.pigeonhouse.bdap.util.token.AuthenticationInterceptor;
 import org.springframework.beans.factory.BeanFactory;
 import org.springframework.beans.factory.NoSuchBeanDefinitionException;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.convert.CustomConversions;
 import org.springframework.data.mongodb.MongoDbFactory;
-import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.convert.DbRefResolver;
 import org.springframework.data.mongodb.core.convert.DefaultDbRefResolver;
 import org.springframework.data.mongodb.core.convert.DefaultMongoTypeMapper;
@@ -26,8 +25,8 @@ public class InterceptorConfig implements WebMvcConfigurer {
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
         registry.addInterceptor(authenticationInterceptor())
-                //   .addPathPatterns("/login/**");//供测试使用，屏蔽token校验
-                .addPathPatterns("/**");
+                 .addPathPatterns("/login/**");//供测试使用，屏蔽token校验
+                //.addPathPatterns("/**");
     }
 
     @Bean

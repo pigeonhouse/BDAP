@@ -1,12 +1,12 @@
 package com.pigeonhouse.bdap.controller;
 
-import com.alibaba.fastjson.JSONObject;
 import com.pigeonhouse.bdap.entity.prework.User;
 import com.pigeonhouse.bdap.service.TokenService;
 import com.pigeonhouse.bdap.service.UserService;
-import com.pigeonhouse.bdap.util.PassToken;
+import com.pigeonhouse.bdap.util.response.Response;
+import com.pigeonhouse.bdap.util.response.statusimpl.LoginStatus;
+import com.pigeonhouse.bdap.util.token.PassToken;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -28,32 +28,24 @@ public class UserApi {
     @PassToken
     @PostMapping("/login")
     public Object login(@RequestBody() User user, HttpServletResponse response) {
-        JSONObject jsonObject = new JSONObject();
+
         User userForBase = userService.findUserById(user.getUserId());
         if (userForBase == null) {
-            jsonObject.put("isSuccess", "false");
-            jsonObject.put("message", "登录失败,用户不存在");
-            return jsonObject;
+            //不存在这个用户
+            return new Response(LoginStatus.NO_SUCH_USER, null);
         } else {
             if (!userForBase.getPassword().equals(user.getPassword())) {
-                jsonObject.put("isSuccess", "false");
-                jsonObject.put("message", "登录失败,密码错误");
-                return jsonObject;
+                //密码错误
+                return new Response(LoginStatus.WRONG_PASSWORD, null);
             } else {
                 String token = tokenService.getToken(user.getUserId());
+                //成功，获取token并将其置于cookie中返回前端
                 Cookie cookie = new Cookie("token", token);
                 response.addCookie(cookie);
-                jsonObject.put("isSuccess", "true");
-                jsonObject.put("message", "登录成功");
-
-                jsonObject.put("user", userForBase);
-                return jsonObject;
+                return new Response(LoginStatus.SUCCESS, userForBase);
             }
         }
     }
 
-    @GetMapping("/getMessage")
-    public String getMessage() {
-        return "你已通过验证";
-    }
+
 }

@@ -1,4 +1,4 @@
-package com.pigeonhouse.bdap.util;
+package com.pigeonhouse.bdap.util.token;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;

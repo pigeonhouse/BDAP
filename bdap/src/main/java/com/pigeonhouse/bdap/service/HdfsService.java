@@ -1,15 +1,16 @@
 package com.pigeonhouse.bdap.service;
 
+import com.pigeonhouse.bdap.config.HdfsConfig;
 import com.pigeonhouse.bdap.entity.prework.Hdfsfile;
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.fs.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.text.MessageFormat;
 import java.text.SimpleDateFormat;
 import java.util.HashMap;
@@ -25,17 +26,17 @@ import java.util.Map;
 public class HdfsService {
 
     private Logger logger = LoggerFactory.getLogger(HdfsService.class);
-    private Configuration conf = null;
+    private Configuration conf;
 
     /**
      * 默认的HDFS路径
      */
-    private String defaultHdfsUri = "hdfs://10.105.222.90:8020";
+    private String defaultHdfsUri;
 
     public HdfsService() {
-        this.conf = new org.apache.hadoop.conf.Configuration();
-        conf.set("dfs.client.use.datanode.hostname", "true");
-        conf.set("fs.defaultFS", defaultHdfsUri);
+        HdfsConfig config = new HdfsConfig();
+        this.conf = config.getconf();
+        this.defaultHdfsUri = config.getDefaultHdfsUri();
     }
 
     /**
@@ -102,7 +103,7 @@ public class HdfsService {
      * 获取HDFS上面的某个路径下面的所有文件或目录（不包含子目录）信息
      *
      * @param path HDFS的相对目录路径，比如：/testDir
-     * @return java.util.List<java.util.Map               <               java.lang.String               ,               java.lang.Object>>
+     * @return java.util.List<java.util.Map < java.lang.String, java.lang.Object>>
      * @author 邢天宇
      * @since 1.0.0
      */
@@ -112,10 +113,7 @@ public class HdfsService {
         FileSystem fileSystem = checkExists(path);
         //如果目录已经存在，则继续操作
         if (fileSystem != null) {
-
-
             try {
-
                 //最终的HDFS文件目录
                 String hdfsPath = generateHdfsPath(path);
 
@@ -135,7 +133,8 @@ public class HdfsService {
                         fileMap.put("filename", pathBuf[pathBuf.length - 1]);
                         fileMap.put("isDir", status.isDirectory());
 
-                        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss"); //设置格式
+                        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+                        //设置格式
                         String timeText = format.format(status.getModificationTime());
                         fileMap.put("ModificationTime", timeText);
                         result.setfilelist(fileMap);
@@ -201,11 +200,7 @@ public class HdfsService {
         try {
             fileSystem = getFileSystem();
 
-            if (fileSystem.delete(new Path(hdfsPath), true)) {
-                return true;
-            } else {
-                return false;
-            }
+            return fileSystem.delete(new Path(hdfsPath), true);
         } catch (IOException e) {
             logger.error(MessageFormat.format("删除HDFS文件或目录失败，path:{0}", path), e);
         } finally {
@@ -260,10 +255,47 @@ public class HdfsService {
         // 打开一个输出流
         //可以根据需要设置是否覆盖选项，默认覆盖
         FSDataOutputStream outputStream = fs.create(newPath);
+        String[] buf = fileName.split("\\.");
+        switch (buf[buf.length - 1]) {
+            case "txt":
+            case "csv":
+            case "xls":
+            case "xlsx":
+                break;
+            default:
+                break;
+
+        }
+        byte[] header = file.getBytes();
+
         outputStream.write(file.getBytes());
         outputStream.close();
         close(fs);
         return "file upload success!";
+    }
+
+    /**
+     * download方法
+     *
+     * @author 邢天宇
+     * @since 1.0.0
+     */
+
+    public Object download(String dstPath) throws IOException {
+
+        FileSystem fs = getFileSystem();
+        // 上传时默认当前目录，后面自动拼接文件的目录
+        Path newPath = new Path(generateHdfsPath(dstPath));
+        // 打开一个输出流
+            //可以根据需要设置是否覆盖选项，默认覆盖
+            if(fs.exists(newPath)) {
+            InputStream inputStream = fs.open(newPath);
+            return inputStream;
+        }
+        else
+        {
+            return null;
+        }
     }
 
     /**

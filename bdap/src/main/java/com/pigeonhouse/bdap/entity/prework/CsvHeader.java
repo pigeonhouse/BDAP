@@ -13,11 +13,6 @@ import java.util.ArrayList;
 public class CsvHeader {
 
     /**
-     * 文件编码
-     */
-    private String fileId;
-
-    /**
      * 文件名
      */
     private String fileName;

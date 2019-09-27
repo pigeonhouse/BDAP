@@ -29,16 +29,16 @@ public class UserService {
         return user;
     }
 
-    public void addCurrentFile(String userId, String currentFile){
+    public void addCurrentFile(String userId, String currentFile) {
         User user = userDao.findByUserId(userId);
         ArrayList<String> files = user.getCurrentFile();
 
-        if(files.remove(currentFile)){
+        if (files.remove(currentFile)) {
             files.add(currentFile);
-        } else if(files.size() >= maxFileNum){
+        } else if (files.size() >= maxFileNum) {
             files.remove(0);
             files.add(currentFile);
-        }else{
+        } else {
             files.add(currentFile);
         }
 

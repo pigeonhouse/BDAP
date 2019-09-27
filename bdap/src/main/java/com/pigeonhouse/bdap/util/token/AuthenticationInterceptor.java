@@ -1,4 +1,4 @@
-package com.pigeonhouse.bdap.util;
+package com.pigeonhouse.bdap.util.token;
 
 import com.alibaba.fastjson.JSONObject;
 import com.auth0.jwt.JWT;
