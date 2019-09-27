@@ -16,14 +16,14 @@ public class SparkCodeService {
 
     @Autowired
     SparkCodeDao sparkCodeDao;
-    public String findCodeById(String codeId){
-        String code = sparkCodeDao.findByCodeId(codeId).getOriginCode();
-        return code;
+
+    public SparkCode findByCodeId(String codeId){
+        SparkCode sparkCode = sparkCodeDao.findByCodeId(codeId);
+        return sparkCode;
     }
 
     public String findByCodeIdToJson(String codeId) {
-        SparkCode sparkCode = sparkCodeDao.findByCodeId(codeId);
-        String jsonString = JSONObject.toJSONString(sparkCode);
+        String jsonString = JSONObject.toJSONString(findByCodeId(codeId));
         return jsonString;
     }
 

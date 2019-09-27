@@ -21,7 +21,8 @@ public class SparkExecution {
     RandomIdService randomIdService;
     @Autowired
     SparkCodeService sparkCodeService;
-
+    @Autowired
+    JoinCodeService joinCodeService;
     public String executeCode(String code) {
         System.out.println(code);
         String resultUrl = livyService.postCode(code);
@@ -43,9 +44,9 @@ public class SparkExecution {
      * 执行所有节点
      * 初始化代码
      * for 节点：节点集
-     *   从数据库拿出代码
-     *   填入参数
+     *   从数据库拿出代码填入参数
      *   代码拼接
+     * 传参需要上下节点的信息
      * @param flowInfo
      * @return
      */
@@ -53,7 +54,8 @@ public class SparkExecution {
         List<ExecutionInfo> executionInfoList = new ArrayList<>();
         String codeToRun = "";
         for (NodeInfo nodeInfo : flowInfo) {
-            nodeInfo.setCode(sparkCodeService.findCodeById(nodeInfo.getCodeId()));
+            nodeInfo.setCode(joinCodeService.transParam(nodeInfo.getCodeId(),nodeInfo.getAttributes()));
+
             codeToRun =codeToRun + nodeInfo.getCode() + "\n";
 
             if (nodeInfo.getIsCheckPoint()) {

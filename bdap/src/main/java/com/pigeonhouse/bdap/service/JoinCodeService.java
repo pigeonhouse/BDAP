@@ -14,7 +14,7 @@ import java.util.Map;
 public class JoinCodeService {
 
     @Autowired
-    SparkCodeDao sparkCodeDao;
+    SparkCodeService sparkCodeService;
 
     /**
      * 给代码传入参数
@@ -23,7 +23,7 @@ public class JoinCodeService {
      * @return 完整spark代码
      */
     public String transParam(String codeId, Map<String, String> attributes){
-        SparkCode sparkCode = sparkCodeDao.findByCodeId(codeId);
+        SparkCode sparkCode = sparkCodeService.findByCodeId(codeId);
         String code = sparkCode.getOriginCode();
 
         String data = "";
