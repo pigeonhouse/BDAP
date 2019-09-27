@@ -15,6 +15,10 @@ public class SparkCodeService {
 
     @Autowired
     SparkCodeDao sparkCodeDao;
+    public String findCodeById(String codeId){
+        String code = sparkCodeDao.findByCodeId(codeId).getOriginCode();
+        return code;
+    }
 
     public String findByCodeIdToJson(String codeId){
         SparkCode sparkCode = sparkCodeDao.findByCodeId(codeId);
