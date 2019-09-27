@@ -30,7 +30,6 @@ public class JoinCodeService {
 
         String[] split = code.split("%s");
 
-
         for(int i = 0; i < split.length - 1; i++){
             split[i] += "%s";
             if(i == 0){
@@ -48,7 +47,6 @@ public class JoinCodeService {
             } else{
                 data += String.format(split[i], attributes.get(sparkCode.getAttributes().get(i - 3).getElabel()));
             }
-
         }
         data += split[split.length - 1];
 
