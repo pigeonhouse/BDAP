@@ -23,7 +23,6 @@ import org.springframework.web.client.RestTemplate;
  * @Author: HouWeiYing
  * @Date: 2019/9/7 11:33
  */
-@EnableAsync
 @Service("LivyService")
 public class LivyService {
     private Logger logger = LoggerFactory.getLogger(HdfsService.class);
@@ -37,7 +36,6 @@ public class LivyService {
      *
      * @param code
      * @return
-     * @throws IOException
      */
     public String postCode(String code) {
         LivySessionInfo availableSession = selectAvailableSession();
@@ -45,6 +43,7 @@ public class LivyService {
         Map<String, String> map = new HashMap<>(2);
         map.put("code", code);
         map.put("kind", "spark");
+        System.out.println(map);
         String jsonData = null;
         try {
             jsonData = objectMapper.writeValueAsString(map);
@@ -70,9 +69,7 @@ public class LivyService {
      * 选择空闲Session，否则创建一个（仅阻塞当前线程/任务）
      *
      * @return
-     * @throws IOException
      */
-    @Async
     public LivySessionInfo selectAvailableSession() {
         LivySessionDescription livySessionDescription = getSessionList();
         LivySessionInfo availableSession = new LivySessionInfo();
@@ -89,7 +86,6 @@ public class LivyService {
             while (!getSession(newSession.getId()).getState().equals("idle")) {
                 try {
                     Thread.sleep(1000);
-
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
@@ -100,7 +96,6 @@ public class LivyService {
         }
         return availableSession;
     }
-
     /**
      * 获取某个Session信息（用来获取state）
      *
@@ -126,7 +121,6 @@ public class LivyService {
      * 获取 所有Session
      *
      * @return
-     * @throws IOException
      */
     public LivySessionDescription getSessionList() {
         String sessionUrl;
