@@ -3,6 +3,7 @@ package com.pigeonhouse.bdap.service;
 import com.pigeonhouse.bdap.entity.execution.ExecutionInfo;
 import com.pigeonhouse.bdap.entity.execution.NodeInfo;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -23,6 +24,8 @@ public class SparkExecution {
     SparkCodeService sparkCodeService;
     @Autowired
     JoinCodeService joinCodeService;
+    @Value("${serverIp}")
+    private String serverIp;
     public String executeCode(String code) {
         System.out.println(code);
         String resultUrl = livyService.postCode(code);
@@ -52,17 +55,23 @@ public class SparkExecution {
      */
     public List<ExecutionInfo> executeFlow(List<NodeInfo> flowInfo) {
         List<ExecutionInfo> executionInfoList = new ArrayList<>();
-        String codeToRun = "";
+        StringBuilder codeToRun = new StringBuilder();
         for (NodeInfo nodeInfo : flowInfo) {
             nodeInfo.setCode(joinCodeService.transParam(nodeInfo.getCodeId(),nodeInfo.getAttributes()));
-
-            codeToRun =codeToRun + nodeInfo.getCode() + "\n";
-
+//            nodeInfo.setCode(sparkCodeService.findByCodeId(nodeInfo.getCodeId()).getOriginCode());
+            codeToRun.append(nodeInfo.getCode()).append("\n");
+            //由于最后一个结点强制设为了checkpoint 所以不需要额外检查
             if (nodeInfo.getIsCheckPoint()) {
                 String jobId = randomIdService.getId();
                 //saveCheckPoint(codeToRun, jobId);
-                String resultUrl = executeCode(codeToRun);
-                codeToRun = "";
+                String postStatusCode = "val result = Http(\"http://%s:8888/runningStatus\")"+
+                        ".postData(\"{\\\"jobId\\\":\\\"%s\\\",\\\"codeId\\\":\\\"%s\\\"}\")"+
+                        ".header(\"Content-Type\", \"application/json\").header(\"Charset\", \"UTF-8\")."+
+                        "option(HttpOptions.readTimeout(10000)).asString";
+                postStatusCode = String.format(postStatusCode,serverIp,jobId,nodeInfo.getCodeId());
+                codeToRun.append(postStatusCode);
+                String resultUrl = executeCode(codeToRun.toString());
+                codeToRun = new StringBuilder();
                 ExecutionInfo executionInfo = new ExecutionInfo(nodeInfo.getIndex(),jobId,resultUrl);
                 executionInfoList.add(executionInfo);
             }
