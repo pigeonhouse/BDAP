@@ -287,9 +287,15 @@ public class HdfsService {
         // 上传时默认当前目录，后面自动拼接文件的目录
         Path newPath = new Path(generateHdfsPath(dstPath));
         // 打开一个输出流
-        //可以根据需要设置是否覆盖选项，默认覆盖
-        InputStream inputStream = fs.open(newPath);
-        return inputStream;
+            //可以根据需要设置是否覆盖选项，默认覆盖
+            if(fs.exists(newPath)) {
+            InputStream inputStream = fs.open(newPath);
+            return inputStream;
+        }
+        else
+        {
+            return null;
+        }
     }
 
     /**
