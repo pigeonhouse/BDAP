@@ -8,6 +8,14 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class ChinaEngBean {
+
+    /**
+     * 中文标签
+     */
     private String label;
+
+    /**
+     * 英文标签
+     */
     private String elabel;
 }

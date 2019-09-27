@@ -58,33 +58,19 @@ public class BdapApplicationTests {
 
     @Test
     public void test01() {
-        HeaderAttribute id = new HeaderAttribute("id", "String");
-        HeaderAttribute name = new HeaderAttribute("name", "String");
-        HeaderAttribute age = new HeaderAttribute("age", "Integer");
-        ArrayList<HeaderAttribute> attributes = new ArrayList<>();
-        attributes.add(id);
-        attributes.add(name);
-        attributes.add(age);
 
-        CsvHeader header = new CsvHeader("test", "/test", attributes);
-
-//        CsvHeader csvHeader = fileHeaderAttriService.findByFilePath("/");
-
-        String csvHeader = fileHeaderAttriController.getCsvHeader("/");
-        System.out.println(csvHeader);
-//        fileHeaderAttriDao.saveCsvHeader(header);
     }
 
     @Test
     public void test02() throws IOException {
-        SparkCode code = sparkCodeDao.findByCodeId("PP002");
 
         HashMap<String, String> map = new HashMap<>();
+        map.put("previousId", "654321");
+        map.put("userId", "2017211524");
         map.put("moduleId", "123456");
         map.put("targetCol", "age");
-        map.put("numBuckets", "5");
-        map.put("newColName", "target");
-        String s = joinCodeService.transParam("PP002", map);
+        map.put("NormalAlgorithm", "Standard");
+        String s = joinCodeService.transParam("PP003", map);
         System.out.println(s);
     }
 

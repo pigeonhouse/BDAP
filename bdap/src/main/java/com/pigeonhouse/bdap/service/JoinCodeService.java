@@ -30,18 +30,28 @@ public class JoinCodeService {
 
         String[] split = code.split("%s");
 
-        System.out.println(split.length);
-        for(int i = 0; i < attributes.size(); i++){
+
+        for(int i = 0; i < split.length - 1; i++){
             split[i] += "%s";
             if(i == 0){
-                data += String.format(split[i], attributes.get("moduleId"));
+                data += String.format(split[i], attributes.get("userId"));
             } else if(i == 1){
+                data += String.format(split[i], attributes.get("moduleId"));
+            } else if(i == 2){
                 data += String.format(split[i], attributes.get("targetCol"));
+            } else if(i == split.length - 4){
+                data += String.format(split[i], attributes.get("previousId"));
+            } else if(i == split.length - 3){
+                data += String.format(split[i], attributes.get("moduleId"));
+            }  else if(i == split.length - 2){
+                data += String.format(split[i], "10.105.222.90");
             } else{
-                data += String.format(split[i], attributes.get(sparkCode.getAttributes().get(i - 2).getElabel()));
+                data += String.format(split[i], attributes.get(sparkCode.getAttributes().get(i - 3).getElabel()));
             }
+
         }
         data += split[split.length - 1];
+
         return data;
     }
 }
