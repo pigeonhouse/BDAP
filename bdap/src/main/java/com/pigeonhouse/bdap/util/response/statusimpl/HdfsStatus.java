@@ -12,6 +12,9 @@ public enum HdfsStatus implements Status {
     //错误信息
     FILE_NOT_EXISTED(409, "文件不存在!"),
     INVALID_INPUT(410,"输入非法!"),
+    USER_NOT_EXISTED(411, "用户不存在!"),
+    DIRECTORY_HAS_EXISTED(412, "文件夹已存在!"),
+    FILE_HAS_EXISTED(413, "文件已存在,但未选择覆盖,故此操作未执行"),
     //其他信息
     BACKEND_ERROR(999,"后端出现算法错误,仅供调试使用,不显示给用户");
 

@@ -63,7 +63,6 @@ public class HdfsService {
         } else {
             hdfsPath = hdfsPath + "/" + dstPath;
         }
-        System.out.println(hdfsPath);
         return hdfsPath;
     }
 
@@ -103,7 +102,7 @@ public class HdfsService {
      * 获取HDFS上面的某个路径下面的所有文件或目录（不包含子目录）信息
      *
      * @param path HDFS的相对目录路径，比如：/testDir
-     * @return java.util.List<java.util.Map < java.lang.String, java.lang.Object>>
+     * @return java.util.List<java.util.Map       <       java.lang.String   ,       java.lang.Object>>
      * @author 邢天宇
      * @since 1.0.0
      */
@@ -147,9 +146,10 @@ public class HdfsService {
             } finally {
                 close(fileSystem);
             }
+        } else {
+            return null;
         }
-
-        return result;
+        return null;
     }
 
     /**
@@ -224,15 +224,21 @@ public class HdfsService {
             fileSystem = getFileSystem();
 
             //最终的HDFS文件目录
-            String hdfsPath = generateHdfsPath(path);
-            if (fileSystem.exists(new Path(hdfsPath))) {
+            Path hdfsPath = new Path(generateHdfsPath(path));
+            if(fileSystem.isDirectory(hdfsPath))
+            {
+                return fileSystem;
+            }
+            else if (fileSystem.exists(hdfsPath))
+            {
                 //创建目录
                 return fileSystem;
-            } else {
+            }
+            else {
                 return null;
             }
-
-        } catch (IOException e) {
+            }
+            catch (IOException e) {
             logger.error(MessageFormat.format("'判断文件或者目录是否在HDFS上面存在'失败，path:{0}", path), e);
             return null;
         }
@@ -246,32 +252,44 @@ public class HdfsService {
      */
 
 
-    public Object upload(MultipartFile file, String dstPath) throws IOException {
+    public String upload(MultipartFile file, String userId, boolean replace) throws IOException {
 
         String fileName = file.getOriginalFilename();
-        FileSystem fs = getFileSystem();
-        // 上传时默认当前目录，后面自动拼接文件的目录
-        Path newPath = new Path(generateHdfsPath(dstPath + "/" + fileName));
-        // 打开一个输出流
-        //可以根据需要设置是否覆盖选项，默认覆盖
-        FSDataOutputStream outputStream = fs.create(newPath);
-        String[] buf = fileName.split("\\.");
-        switch (buf[buf.length - 1]) {
-            case "txt":
-            case "csv":
-            case "xls":
-            case "xlsx":
-                break;
-            default:
-                break;
+        FileSystem fs = this.checkExists(userId);
+        if (fs != null) {
 
+            // 上传时默认当前目录，后面自动拼接文件的目录
+            Path newPath = new Path(generateHdfsPath(userId + "/" + fileName));
+            // 打开一个输出流
+            //可以根据需要设置是否覆盖选项，默认覆盖
+            if ((fs.exists(newPath) && replace) || !fs.exists(newPath)) {
+                FSDataOutputStream outputStream = fs.create(newPath);
+                String[] buf = fileName.split("\\.");
+                switch (buf[buf.length - 1]) {
+                    case "txt":
+                    case "csv":
+                    case "xls":
+                    case "xlsx":
+                        break;
+                    default:
+                        break;
+
+                }
+                byte[] header = file.getBytes();
+
+                outputStream.write(file.getBytes());
+                outputStream.close();
+                close(fs);
+                //上传成功
+                return "success";
+            } else {
+                //文件已存在未选择覆盖
+                return "fileexist";
+            }
+        } else {
+            //用户不存在
+            return "userinvalid";
         }
-        byte[] header = file.getBytes();
-
-        outputStream.write(file.getBytes());
-        outputStream.close();
-        close(fs);
-        return "file upload success!";
     }
 
     /**
@@ -287,13 +305,11 @@ public class HdfsService {
         // 上传时默认当前目录，后面自动拼接文件的目录
         Path newPath = new Path(generateHdfsPath(dstPath));
         // 打开一个输出流
-            //可以根据需要设置是否覆盖选项，默认覆盖
-            if(fs.exists(newPath)) {
+        //可以根据需要设置是否覆盖选项，默认覆盖
+        if (fs.exists(newPath)) {
             InputStream inputStream = fs.open(newPath);
             return inputStream;
-        }
-        else
-        {
+        } else {
             return null;
         }
     }

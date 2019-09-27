@@ -65,7 +65,7 @@ public class CommonFilesService {
     }
 
     /**
-     * 将类对象转化为JSON
+     * 将类的实例转化为JSON
      */
 
     public JSONObject commonFilesToJson(CommonFiles commonFiles) {

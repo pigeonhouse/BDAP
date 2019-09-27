@@ -4,9 +4,9 @@ import com.alibaba.fastjson.JSONObject;
 import com.pigeonhouse.bdap.entity.prework.Hdfsfile;
 import com.pigeonhouse.bdap.service.HdfsService;
 import com.pigeonhouse.bdap.util.response.Response;
-import com.pigeonhouse.bdap.util.response.statusimpl.CommonFileStatus;
 import com.pigeonhouse.bdap.util.response.statusimpl.HdfsStatus;
 import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.ObjectUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -21,6 +21,7 @@ import java.io.OutputStream;
 import java.util.LinkedHashMap;
 
 /**
+ * 本文件所有Api均使用userId作为唯一性索引,在HDFS上的默认用户文件夹名称也为userId
  * @Author: Xingtianyu
  * @Date: 2019/9/19 20:38
  */
@@ -35,15 +36,22 @@ public class HDFSApi {
      * 返回值:带有文件树的JSON字符串
      */
     @PostMapping("/hdfs/getfilelist")
-    public Object getFileList(@RequestParam(value = "filepath") String hdfsPath) {
+    public Object getFileList(@RequestParam(value = "userId") String userId) {
         try {
-            Hdfsfile fileList = hdfsService.listFiles(hdfsPath, null);
-            JSONObject fileListJson = new JSONObject(new LinkedHashMap());
-            for (int idx = 0; idx < fileList.getFilelist().size(); idx++) {
-                JSONObject fileJson = new JSONObject(fileList.getFilelist().get(idx));
-                fileListJson.put("fileInfo" + (idx + 1), fileJson);
+            Hdfsfile fileList = hdfsService.listFiles(userId, null);
+            if (fileList!= null) {
+                JSONObject fileListJson = new JSONObject(new LinkedHashMap());
+                for (int idx = 0; idx < fileList.getFilelist().size(); idx++) {
+                    JSONObject fileJson = new JSONObject(fileList.getFilelist().get(idx));
+                    fileListJson.put("fileInfo" + (idx + 1), fileJson);
+                }
+
+                return new Response(HdfsStatus.FILETREE_GET_SUCCESS, fileListJson);
             }
-            return fileListJson;
+            else
+            {
+                return new Response(HdfsStatus.USER_NOT_EXISTED,null);
+            }
         } catch (Exception e) {
             return new Response(HdfsStatus.BACKEND_ERROR, e.toString());
         }
@@ -54,24 +62,17 @@ public class HDFSApi {
      * 返回值:带有提示信息的JSON字符串
      */
     @PostMapping("/hdfs/mkdir")
-    public Object mkdir(@RequestParam(value = "filepath") String hdfsPath) {
+    public Object mkdir(@RequestParam(value = "dirName") String dirName,@RequestParam(value = "userId") String userId) {
         try {
-            boolean success = hdfsService.mkdir(hdfsPath);
+            boolean success = hdfsService.mkdir(userId+"/"+dirName);
             if (success) {
-                JSONObject successJson = new JSONObject();
-                successJson.put("issuccess", "create directory successfully!");
-                return successJson;
+                return new Response(HdfsStatus.DIRECTORY_CREATE_SUCCESS, null);
             } else {
-                JSONObject existJson = new JSONObject();
-                existJson.put("issuccess", "directory has existed!");
-                return existJson;
+                return new Response(HdfsStatus.DIRECTORY_HAS_EXISTED, null);
 
             }
         } catch (Exception e) {
-            JSONObject errorJson = new JSONObject();
-            errorJson.put("error", e.toString());
-            return errorJson;
-
+            return new Response(HdfsStatus.BACKEND_ERROR, e.toString());
         }
     }
 
@@ -80,9 +81,9 @@ public class HDFSApi {
      * 返回值:带有提示信息的JSON字符串
      */
     @PostMapping("/hdfs/delete")
-    public Object delete(@RequestParam(value = "filepath") String Hdfspath) {
+    public Object delete(@RequestParam(value = "dirName") String dirName,@RequestParam(value = "userId") String userId) {
         try {
-            boolean success = hdfsService.delete(Hdfspath);
+            boolean success = hdfsService.delete(dirName+"/"+userId);
             if (success) {
                 return new Response(HdfsStatus.FILE_DELETE_SUCCESS, null);
             } else {
@@ -104,16 +105,19 @@ public class HDFSApi {
     @ResponseBody
     //超大规模文件尚未通过测试，有待后续补充，已知文件超过500M浏览器会崩掉，切片功能还在写
     //xls支持尚在开发中
-    public Object upload(MultipartFile file, String dstPath) throws IOException {
+    public Object upload(MultipartFile file,String userId,boolean replace) throws IOException {
         try {
-            if (StringUtils.isEmpty(dstPath) || file.getBytes() == null) {
+            if ( file==null||file.getBytes() == null) {
                 return new Response(HdfsStatus.INVALID_INPUT,null);
             }
-            String returnInfo = (String) hdfsService.upload(file, dstPath);
-             return new Response(HdfsStatus.FILE_UPLOAD_SUCCESS,null);
+            String status=hdfsService.upload(file, userId,replace);
+            switch (status){
+                case "success":return new Response(HdfsStatus.FILE_UPLOAD_SUCCESS,null);
+                case "fileexist":return new Response(HdfsStatus.FILE_HAS_EXISTED,null);
+                case "userinvalid":return new Response(HdfsStatus.USER_NOT_EXISTED,null);
+                default:return null;
+            }
         } catch (Exception e) {
-            JSONObject errorJson = new JSONObject();
-            errorJson.put("info", e.toString());
             return new Response(HdfsStatus.BACKEND_ERROR, e.toString());
 
         }
@@ -125,14 +129,14 @@ public class HDFSApi {
      * 返回值:文件流
      */
     @PostMapping("/hdfs/download")
-    public Object download(@RequestParam("filepath") String dstPath, HttpServletResponse response) throws IOException {
+    public Object download(@RequestParam("fileName") String fileName,@RequestParam("userId") String userId ,HttpServletResponse response) throws IOException {
         try {
-            if (StringUtils.isEmpty(dstPath)) {
+            if (StringUtils.isEmpty(fileName)) {
                 return new Response(HdfsStatus.INVALID_INPUT,null);
             }
-            InputStream inputStream = (InputStream) hdfsService.download(dstPath);
+            InputStream inputStream = (InputStream) hdfsService.download(userId+"/"+fileName);
             if(inputStream!=null) {
-                String[] buf = dstPath.split("\\.");
+                String[] buf = fileName.split("\\.");
                 switch (buf[buf.length - 1]) {
                     case "bmp":
                         response.setContentType("image/bmp");
@@ -177,8 +181,6 @@ public class HDFSApi {
                 return new Response(HdfsStatus.FILE_NOT_EXISTED, null);
             }
         } catch (Exception e) {
-            JSONObject errorJson = new JSONObject();
-            errorJson.put("info", e.toString());
             return new Response(HdfsStatus.BACKEND_ERROR, e.toString());
 
         }

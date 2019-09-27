@@ -37,7 +37,6 @@ public class CommonFilesApi {
     @PostMapping("/commonfiles/getcommonfiles")
     public Object getCommonFiles(@RequestParam("userId") String userid) {
         try {
-            JSONObject info = new JSONObject();
             CommonFiles commonFiles = commonFilesService.getFileListById(userid);
             if (commonFiles != null) {
                 return  new Response(CommonFileStatus.FILE_GET_SUCCESS, commonFilesService.commonFilesToJson(commonFiles));
@@ -61,7 +60,6 @@ public class CommonFilesApi {
     @PostMapping("/commonFiles/setnewuser")
     public Object insertNewUser(@RequestParam(value = "userId") String userId, @RequestParam(value = "userName") String userName) {
         try {
-            JSONObject info = new JSONObject();
             CommonFiles commonFiles = new CommonFiles();
             commonFiles.setUserId(userId);
             commonFiles.setUserName(userName);
@@ -88,12 +86,11 @@ public class CommonFilesApi {
             JSONObject info = new JSONObject();
             Boolean isExist = commonFilesService.fileExist(filePath, userId);
             if (isExist) {
-                new Response(CommonFileStatus.FILE_HAS_EXISTED, null);
+                return  new Response(CommonFileStatus.FILE_HAS_EXISTED, null);
             } else {
                 CsvHeader csvHeader = fileHeaderAttriService.findByFilePath(filePath);
                 commonFilesService.setNewFile(csvHeader, userId);
-                new Response(CommonFileStatus.FILE_INSERT_SUCCESS, null);
-                return info;
+                return new Response(CommonFileStatus.FILE_INSERT_SUCCESS, null);
             }
 
         } catch (Exception e) {
