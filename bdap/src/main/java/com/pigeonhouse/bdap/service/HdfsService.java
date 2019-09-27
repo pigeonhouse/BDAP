@@ -137,7 +137,7 @@ public class HdfsService {
 
                         SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss"); //设置格式
                         String timeText = format.format(status.getModificationTime());
-                        fileMap.put("ModificationtTime", timeText);
+                        fileMap.put("ModificationTime", timeText);
                         result.setfilelist(fileMap);
 
                     }

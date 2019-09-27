@@ -16,5 +16,8 @@ public class NodeInfo {
     private Integer index;
     private String code;
     private Boolean isCheckPoint;
+    public void codeAppend(String addition){
+        code += addition;
+    }
 
 }

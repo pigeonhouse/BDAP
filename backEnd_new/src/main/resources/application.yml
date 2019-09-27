@@ -13,13 +13,13 @@ spring:
     default-property-inclusion: non_null
     serialization:
       indent-output: true
-  session:
-    store-type: redis
-    redis:
-      namespace: spring:session
-  redis:
-    host: 10.105.222.90
-    password: tsegredis
-    port: 6379
+  # session:
+  #   store-type: redis
+  #   redis:
+  #     namespace: spring:session
+  # redis:
+  #   host: 10.105.222.90
+  #   password: tsegredis
+  #   port: 6379
 
 

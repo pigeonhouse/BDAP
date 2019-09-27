@@ -1,5 +1,6 @@
 package com.pigeonhouse.bdap.service;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.pigeonhouse.bdap.entity.execution.LivySessionDescription;
 import com.pigeonhouse.bdap.entity.execution.LivySessionInfo;
@@ -36,13 +37,18 @@ public class LivyService {
      * @return
      * @throws IOException
      */
-    public String postCode(String code) throws IOException {
+    public String postCode(String code) {
         LivySessionInfo availableSession = selectAvailableSession();
         int sessionId = availableSession.getId();
         Map<String, String> map = new HashMap<>(2);
         map.put("code", code);
         map.put("kind", "spark");
-        String jsonData = objectMapper.writeValueAsString(map);
+        String jsonData = null;
+        try {
+            jsonData = objectMapper.writeValueAsString(map);
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
+        }
         String availableSessionUrl = "http://" + livyAddr + "/sessions/" + sessionId;
         System.out.println(availableSessionUrl);
         HttpHeaders headers = new HttpHeaders();
@@ -66,7 +72,7 @@ public class LivyService {
      * @return
      * @throws IOException
      */
-    public LivySessionInfo selectAvailableSession() throws IOException {
+    public LivySessionInfo selectAvailableSession() {
         LivySessionDescription livySessionDescription = getSessionList();
         LivySessionInfo availableSession = new LivySessionInfo();
         for (LivySessionInfo sessionInfo : livySessionDescription.getSessions()) {
@@ -101,12 +107,18 @@ public class LivyService {
      * @return
      * @throws IOException
      */
-    public LivySessionInfo getSession(int id) throws IOException {
+    public LivySessionInfo getSession(int id)  {
         String sessionUrl;
         sessionUrl = "http://" + livyAddr + "/sessions/" + id;
         RestTemplate restTemplate = new RestTemplate();
         String res = restTemplate.getForObject(sessionUrl, String.class);
-        return objectMapper.readValue(res, LivySessionInfo.class);
+        LivySessionInfo livySessionInfo = null;
+        try {
+            livySessionInfo = objectMapper.readValue(res, LivySessionInfo.class);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return livySessionInfo;
     }
 
     /**
@@ -115,16 +127,22 @@ public class LivyService {
      * @return
      * @throws IOException
      */
-    public LivySessionDescription getSessionList() throws IOException {
+    public LivySessionDescription getSessionList(){
         String sessionUrl;
         sessionUrl = "http://" + livyAddr + "/sessions";
         RestTemplate restTemplate = new RestTemplate();
         String res = restTemplate.getForObject(sessionUrl, String.class);
-        return objectMapper.readValue(res, LivySessionDescription.class);
+        LivySessionDescription livySessionDescription = null;
+        try {
+            livySessionDescription = objectMapper.readValue(res, LivySessionDescription.class);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return livySessionDescription;
     }
 
-    public static LivySessionInfo createSession() throws IOException {
-        String session_url =  "http://" + "${livyAddr}" + "/sessions";
+    public static LivySessionInfo createSession(){
+        String session_url =  "http://" + "10.105.222.90:8998" + "/sessions";
         //header
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
@@ -141,12 +159,22 @@ public class LivyService {
         confHashMap.put("spark.scheduler.minRegisteredResourcesRatio", 1.0);
         confHashMap.put("spark.speculation", false);
         bodyHashMap.put("conf", confHashMap);
-        String jsonBody = objectMapper.writeValueAsString(bodyHashMap);
+        String jsonBody = null;
+        try {
+            jsonBody = objectMapper.writeValueAsString(bodyHashMap);
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
+        }
         //restTemplate
         RestTemplate restTemplate = new RestTemplate();
         HttpEntity<String> httpEntity = new HttpEntity<>(jsonBody, headers);
         ResponseEntity<String> res = restTemplate.exchange(session_url, HttpMethod.POST, httpEntity, String.class);
-        LivySessionInfo livySessionInfo = objectMapper.readValue(res.getBody(), LivySessionInfo.class);
+        LivySessionInfo livySessionInfo = null;
+        try {
+            livySessionInfo = objectMapper.readValue(res.getBody(), LivySessionInfo.class);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
         return livySessionInfo;
     }
 
