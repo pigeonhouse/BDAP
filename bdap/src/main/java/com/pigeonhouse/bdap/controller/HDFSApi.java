@@ -3,6 +3,9 @@ package com.pigeonhouse.bdap.controller;
 import com.alibaba.fastjson.JSONObject;
 import com.pigeonhouse.bdap.entity.prework.Hdfsfile;
 import com.pigeonhouse.bdap.service.HdfsService;
+import com.pigeonhouse.bdap.util.response.Response;
+import com.pigeonhouse.bdap.util.response.statusimpl.CommonFileStatus;
+import com.pigeonhouse.bdap.util.response.statusimpl.HdfsStatus;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -42,10 +45,7 @@ public class HDFSApi {
             }
             return fileListJson;
         } catch (Exception e) {
-            JSONObject errorJson = new JSONObject();
-            errorJson.put("error", e.toString());
-            return errorJson;
-
+            return new Response(HdfsStatus.BACKEND_ERROR, e.toString());
         }
     }
 
@@ -84,19 +84,14 @@ public class HDFSApi {
         try {
             boolean success = hdfsService.delete(Hdfspath);
             if (success) {
-                JSONObject successJson = new JSONObject();
-                successJson.put("issuccess", "delete directory successfully!");
-                return successJson;
+                return new Response(HdfsStatus.FILE_DELETE_SUCCESS, null);
             } else {
-                JSONObject existJson = new JSONObject();
-                existJson.put("issuccess", " file not existed!");
-                return existJson;
+                return new Response(HdfsStatus.FILE_NOT_EXISTED, null);
 
             }
 
         } catch (Exception e) {
-            JSONObject errorJson = new JSONObject();
-            return errorJson.put("error", e.toString());
+            return new Response(HdfsStatus.BACKEND_ERROR, e.toString());
 
         }
     }
@@ -112,18 +107,14 @@ public class HDFSApi {
     public Object upload(MultipartFile file, String dstPath) throws IOException {
         try {
             if (StringUtils.isEmpty(dstPath) || file.getBytes() == null) {
-                JSONObject errorJson = new JSONObject();
-                errorJson.put("issuccess", "invalid input!");
-                return errorJson;
+                return new Response(HdfsStatus.INVALID_INPUT,null);
             }
             String returnInfo = (String) hdfsService.upload(file, dstPath);
-            JSONObject infoJson = new JSONObject();
-            infoJson.put("issuccess", returnInfo);
-            return infoJson;
+             return new Response(HdfsStatus.FILE_UPLOAD_SUCCESS,null);
         } catch (Exception e) {
             JSONObject errorJson = new JSONObject();
             errorJson.put("info", e.toString());
-            return errorJson;
+            return new Response(HdfsStatus.BACKEND_ERROR, e.toString());
 
         }
 
@@ -137,54 +128,58 @@ public class HDFSApi {
     public Object download(@RequestParam("filepath") String dstPath, HttpServletResponse response) throws IOException {
         try {
             if (StringUtils.isEmpty(dstPath)) {
-                JSONObject errorJson = new JSONObject();
-                errorJson.put("info", "invalid input!");
-                return errorJson;
+                return new Response(HdfsStatus.INVALID_INPUT,null);
             }
             InputStream inputStream = (InputStream) hdfsService.download(dstPath);
+            if(inputStream!=null) {
+                String[] buf = dstPath.split("\\.");
+                switch (buf[buf.length - 1]) {
+                    case "bmp":
+                        response.setContentType("image/bmp");
+                        break;
+                    case "gif":
+                        response.setContentType("image/gif");
+                        break;
+                    case "jpeg":
+                        response.setContentType("image/jpeg");
+                        break;
+                    case "jpg":
+                        response.setContentType("image/jpeg");
+                        break;
+                    case "html":
+                        response.setContentType("text/html");
+                        break;
+                    case "txt":
+                        response.setContentType("text/plain");
+                        break;
+                    case "csv":
+                        response.setContentType("text/plain");
+                        break;
+                    case "xml":
+                        response.setContentType("text/xml");
+                        break;
+                    default:
+                        break;
+                }
+                OutputStream os = response.getOutputStream();
+                byte[] b = new byte[4096];
+                int length;
 
-            String[] buf = dstPath.split("\\.");
-            switch (buf[buf.length - 1]) {
-                case "bmp":
-                    response.setContentType("image/bmp");
-                    break;
-                case "gif":
-                    response.setContentType("image/gif");
-                    break;
-                case "jpeg":
-                    response.setContentType("image/jpeg");
-                    break;
-                case "jpg":
-                    response.setContentType("image/jpeg");
-                    break;
-                case "html":
-                    response.setContentType("text/html");
-                    break;
-                case "txt":
-                    response.setContentType("text/plain");
-                    break;
-                case "csv":
-                    response.setContentType("text/plain");
-                    break;
-                case "xml":
-                    response.setContentType("text/xml");
-                    break;
-                default:
-                    break;
+                while ((length = inputStream.read(b)) > 0) {
+                    os.write(b, 0, length);
+                }
+                os.close();
+                inputStream.close();
+                return new Response(HdfsStatus.FILE_DOWNLOAD_SUCCESS, null);
             }
-            OutputStream os = response.getOutputStream();
-            byte[] b = new byte[4096];
-            int length;
-            while ((length = inputStream.read(b)) > 0) {
-                os.write(b, 0, length);
+            else
+            {
+                return new Response(HdfsStatus.FILE_NOT_EXISTED, null);
             }
-            os.close();
-            inputStream.close();
-            return null;
         } catch (Exception e) {
             JSONObject errorJson = new JSONObject();
             errorJson.put("info", e.toString());
-            return errorJson;
+            return new Response(HdfsStatus.BACKEND_ERROR, e.toString());
 
         }
 

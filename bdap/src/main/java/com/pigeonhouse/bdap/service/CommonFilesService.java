@@ -35,23 +35,21 @@ public class CommonFilesService {
     /**
      * 在数据库中创建新用户的常用文件列表
      */
-    public JSONObject setNewUser(CommonFiles commonFiles) {
-        JSONObject info = new JSONObject();
+    public boolean setNewUser(CommonFiles commonFiles) {
+
         try {
 
             CommonFiles result = commonFilesDao.findByUserId(commonFiles.getUserId());
             if (result == null) {
                 commonFilesDao.createNewUser(commonFiles);
-                info.put("info", "创建用户成功!");
+                return true;
             } else {
-                info.put("info", "用户已存在!");
-                return info;
+               return false;
             }
         } catch (Exception e) {
-            info.put("info", e.toString());
-            return info;
+            System.out.println(e);
         }
-        return null;
+        return false;
     }
 
 
