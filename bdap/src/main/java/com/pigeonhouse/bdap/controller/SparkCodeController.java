@@ -1,6 +1,8 @@
 package com.pigeonhouse.bdap.controller;
 
 import com.pigeonhouse.bdap.service.SparkCodeService;
+import com.pigeonhouse.bdap.util.response.Response;
+import com.pigeonhouse.bdap.util.response.statusimpl.CodeStatus;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -19,9 +21,9 @@ public class SparkCodeController {
      * @return 算法模块名称和参数
      */
     @PostMapping("/module")
-    public String returnSparkCode() {
+    public Response returnSparkCode() {
         List<String> all = sparkCodeService.findAllToJson();
-        return all.toString();
+        return new Response(CodeStatus.CODE_PUT_SUCCESS, all.toString());
     }
 
 }
