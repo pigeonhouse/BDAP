@@ -32,11 +32,13 @@ public class HdfsService {
      * 默认的HDFS路径
      */
     private String defaultHdfsUri;
+    private String defaultDirectory;
 
     public HdfsService() {
         HdfsConfig config = new HdfsConfig();
         this.conf = config.getconf();
         this.defaultHdfsUri = config.getDefaultHdfsUri();
+        this.defaultDirectory = config.getDefaultDirectory();
     }
 
     /**
@@ -56,8 +58,8 @@ public class HdfsService {
      * @author 邢天宇
      * @since 1.0.0
      */
-    private String generateHdfsPath(String dstPath) {
-        String hdfsPath = defaultHdfsUri;
+    public String generateHdfsPath(String dstPath) {
+        String hdfsPath = defaultHdfsUri+defaultDirectory;
         if (dstPath.startsWith("/")) {
             hdfsPath += dstPath;
         } else {
@@ -264,19 +266,6 @@ public class HdfsService {
             //可以根据需要设置是否覆盖选项，默认覆盖
             if ((fs.exists(newPath) && replace) || !fs.exists(newPath)) {
                 FSDataOutputStream outputStream = fs.create(newPath);
-                String[] buf = fileName.split("\\.");
-                switch (buf[buf.length - 1]) {
-                    case "txt":
-                    case "csv":
-                    case "xls":
-                    case "xlsx":
-                        break;
-                    default:
-                        break;
-
-                }
-                byte[] header = file.getBytes();
-
                 outputStream.write(file.getBytes());
                 outputStream.close();
                 close(fs);

@@ -8,7 +8,8 @@ import org.apache.hadoop.conf.Configuration;
  */
 public class HdfsConfig {
 
-    private String defaultHdfsUri = "hdfs://10.105.222.90:8020/bdap/students";
+    private String defaultHdfsUri = "hdfs://10.105.222.90:8020";
+    private String defaultDirectory="/bdap/students";
     private Configuration conf = new org.apache.hadoop.conf.Configuration();
 
     public HdfsConfig() {
@@ -22,6 +23,9 @@ public class HdfsConfig {
 
     public String getDefaultHdfsUri() {
         return this.defaultHdfsUri;
+    }
+    public String getDefaultDirectory() {
+        return this.defaultDirectory;
     }
 
 }

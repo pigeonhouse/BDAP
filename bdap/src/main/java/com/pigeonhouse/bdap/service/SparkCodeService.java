@@ -83,6 +83,12 @@ public class SparkCodeService {
         sparkCodeDao.updateSparkCode(sparkCode);
     }
 
+    public void updateOriginCode(String codeId, String originCode){
+        SparkCode sparkCode = sparkCodeDao.findByCodeId(codeId);
+        sparkCode.setOriginCode(originCode);
+        sparkCodeDao.updateSparkCode(sparkCode);
+    }
+
     public void deleteSparkCode(String codeId) {
         sparkCodeDao.deleteSparkCodeById(codeId);
     }
