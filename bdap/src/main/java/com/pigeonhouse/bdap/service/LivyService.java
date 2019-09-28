@@ -66,7 +66,7 @@ public class LivyService {
     }
 
     /**
-     * 选择空闲Session，否则创建一个（仅阻塞当前线程/任务）
+     * 选择空闲Session，否则创建一个
      *
      * @return
      */
