@@ -102,8 +102,11 @@ public class HDFSApi {
     }
 
     /**
-     * 将文件上传至HDFS文件夹函数
-     * 返回值:带有提示信息的JSON字符串
+     * 将文件上传至HDFS文件夹，不解析文件头
+     * @return :带有提示信息的JSON字符串
+     * @param file 文件传输流
+     * @param userId 用户Id,唯一识别码
+     * @param replace 如存在重名文件，是否覆盖标签
      */
     @PostMapping("/hdfs/upload")
     @ResponseBody

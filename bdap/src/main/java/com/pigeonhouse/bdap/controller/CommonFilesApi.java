@@ -78,7 +78,13 @@ public class CommonFilesApi {
         return null;
     }
 
-
+    /**
+     * 在常用数据表中插入文件
+     *
+     * @param userId   用户ID
+     * @param filePath 文件路径
+     * @return 错误提示信息或插入成功通知
+     */
     @PostMapping("/commonFiles/setnewfile")
     @PassToken
     public Object insertNewFile(@RequestParam(value = "userId") String userId, @RequestParam(value = "filePath") String filePath) {
