@@ -2,7 +2,6 @@ import React from 'react';
 import { ItemPanel, Item } from '@src';
 import { Menu, Icon } from 'antd';
 import ItemDecoration from '../ItemDecoration';
-import styles from './index.less';
 import { localItem } from '../../../LocalModeComponents/EditorItemInfo/FlowItemInfo';
 import { pythonItem } from '../../../PythonModeComponents/EditorItemInfo/FlowItemInfo';
 import { clusterItem } from '../../../ClusterModeComponents/EditorItemInfo/FlowItemInfo';
@@ -54,7 +53,6 @@ const SubMenu = Menu.SubMenu;
 
 class FlowItemModel extends React.Component {
 	state = {
-		isMouseEnter: false,
 		itemNumber: 1,
 		itemData: [],
 	}
@@ -63,21 +61,15 @@ class FlowItemModel extends React.Component {
 		if (this.props.type === 'local') {
 			itemInfo = localItem;
 		}
-		else if(this.props.type === 'python'){
+		else if (this.props.type === 'python') {
 			itemInfo = pythonItem;
 		}
-		else if(this.props.type === 'cluster'){
+		else if (this.props.type === 'cluster') {
 			itemInfo = clusterItem;
 		}
 		this.setState({
 			itemData: itemInfo
 		})
-	}
-	mouseEnter = () => {
-		this.setState({ isMouseEnter: true })
-	}
-	mouseLeave = () => {
-		this.setState({ isMouseEnter: false })
 	}
 	createItemPanel = (item) => {
 		var result = [];
@@ -128,19 +120,15 @@ class FlowItemModel extends React.Component {
 	render() {
 		var itemData = this.state.itemData;
 		return (
-			<div onMouseEnter={this.mouseEnter} onMouseLeave={this.mouseLeave}
-				className={this.state.isMouseEnter ? styles.scrollapp : styles.unscrollapp}
-				style={{ backgroundColor: '#fff' }}>
-				<Menu
-					defaultOpenKeys={itemData.defaultOpenKeys}
-					mode={itemData.mode}
-					style={{ maxHeight: 'calc(100vh - 105px)', width: '245px', borderRight: 0 }}
-					selectable={itemData.selectable}
-				>
-					<ItemDecoration />
-					{this.createItemPanel(itemData)}
-				</Menu>
-			</div>
+			<Menu
+				defaultOpenKeys={itemData.defaultOpenKeys}
+				mode={itemData.mode}
+				style={{ maxHeight: 'calc(100vh - 105px)', width: '240px', borderRight: 0 }}
+				selectable={itemData.selectable}
+			>
+				<ItemDecoration />
+				{this.createItemPanel(itemData)}
+			</Menu>
 		);
 	}
 }
