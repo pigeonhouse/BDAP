@@ -1,5 +1,5 @@
 import React from 'react';
-import FlowDataModel from '../../PublicComponents/EditorNodePanel/EditorDataModel'
+import FlowDataModel from '../../PublicComponents/EditorNodePanel/EditorDataModel';
 
 /**
  * 左侧菜单栏，表示数据的组件
@@ -57,6 +57,7 @@ class FlowDataPanel extends React.Component {
 	// 	this.setState({ dataTable })
 	// 	this.deleteFile(dataName);
 	// }
+	
 	render() {
 		var itemData = [{
 			label: '本地数据',

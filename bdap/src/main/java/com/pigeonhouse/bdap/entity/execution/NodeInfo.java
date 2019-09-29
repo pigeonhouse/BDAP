@@ -1,12 +1,10 @@
 package com.pigeonhouse.bdap.entity.execution;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.pigeonhouse.bdap.entity.prework.attributes.Attribute;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 
 /**
@@ -18,8 +16,8 @@ import java.util.HashMap;
 @NoArgsConstructor
 public class NodeInfo {
     /**
-    * Node在整个flow里的唯一序号
-    */
+     * Node在整个flow里的唯一序号
+     */
     private Integer index;
     /**
      * code序号，对应SparkCode.codeId
@@ -30,7 +28,7 @@ public class NodeInfo {
     /**
      * 参数
      */
-    private HashMap<String,String> attributes;
+    private HashMap<String, String> attributes;
     /**
      * 是否在此保存中间结果
      */

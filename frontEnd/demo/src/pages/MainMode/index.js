@@ -1,22 +1,16 @@
 import React from 'react';
 import GGEditor, { Flow } from '@src';
-import { Row, Col, Button, message, notification, Icon, Tabs, Upload } from 'antd';
+import { Row, Col, Button, message, notification, Icon, Tabs } from 'antd';
 
 import { FlowContextMenu } from '../../PublicComponents/EditorContextMenu';
 import { FlowToolbar } from '../../PublicComponents/EditorToolbar';
 import { FlowDetailPanel } from '../../PublicComponents/EditorDetailPanel';
-import { FlowItemPanel } from '../../PublicComponents/EditorNodePanel/EditorItemPanel';
+import FlowNodePanel from '../../PublicComponents/EditorNodePanel';
+import Model from '../../PublicComponents/ModelStore';
 
-import { LocalFlowDataPanel } from '../../LocalModeComponents/EditorDataPanel';
 import LocalRun from "../../LocalModeComponents/RunPanel/Run";
-import LocalModel from "../../LocalModeComponents/ModelStore/Model";
-
 import PythonRun from "../../PythonModeComponents/RunPanel/Run";
-import { PythonFlowDataPanel } from '../../PythonModeComponents/EditorDataPanel';
-import PythonModel from '../../PythonModeComponents/ModelStore/Model';
-
 import SparkRun from "../../ClusterModeComponents/SparkRunPanel/SparkRun";
-import { ClusterFlowDataPanel } from '../../ClusterModeComponents/EditorDataPanel';
 
 import styles from './index.less';
 /**
@@ -46,7 +40,6 @@ class LocalMode extends React.Component {
 	}
 	state = {
 		currentTab: '1',
-		dataTable: [],
 		username: '',
 		password: '',
 		remind: 'false',
@@ -62,8 +55,8 @@ class LocalMode extends React.Component {
 		document.cookie = 'accountInfo' + "=" + escape(accountInfo) + ";expires=" + exp.toGMTString()
 	}
 	componentWillMount() {
-		if(this.props.location.state !== undefined){
-			this.setState({type:this.props.location.state.type});
+		if (this.props.location.state !== undefined) {
+			this.setState({ type: this.props.location.state.type });
 		}
 
 		let arr, reg = new RegExp("(^| )" + 'accountInfo' + "=([^;]*)(;|$)");
@@ -131,39 +124,17 @@ class LocalMode extends React.Component {
 	//   }
 	// }
 
-	//以下三个函数分别根据版本返回不同的组件
-	selectFlowDataPanel = () => {
-		switch(this.state.type){
-			case 'local':
-				return <LocalFlowDataPanel dataTable={this.state.dataTable} />;
-			case 'python':
-				return <PythonFlowDataPanel dataTable={this.state.dataTable} />;
-			case 'cluster':
-				return <ClusterFlowDataPanel dataTable={this.state.dataTable} />;
-		}
-	}
-
+	//根据版本返回不同的组件
 	selectRunPanel = () => {
-		switch(this.state.type){
-			case 'local': return <LocalRun/>
-			case 'python': return <PythonRun/>
-			case 'cluster':	return <SparkRun/>
-		}
-	}
-
-	selectModelPanel = () => {
-		switch(this.state.type){
-			case 'local': return <LocalModel/>
-			case 'python': return <PythonModel/>
-			case 'cluster':	return <LocalModel/>
+		switch (this.state.type) {
+			case 'local': return <LocalRun />
+			case 'python': return <PythonRun />
+			case 'cluster': return <SparkRun />
 		}
 	}
 
 	render() {
-		// const props = {
-		//   name: 'file',
-		//   action: 'http://10.105.222.92:3000/handleFile',
-		// };
+
 		return (
 			<GGEditor className={styles.editor}>
 				<Row
@@ -205,64 +176,58 @@ class LocalMode extends React.Component {
 					</a>
 				</Row>
 
-				<Row type="flex" style={{ height: 'calc(100vh - 105px)' }}>
-
-					<Col span={5} style={{ backgroundColor: '#71b0d1', height: 'calc(100vh - 105px)' }}>
-						<Tabs
-							tabPosition='left'
-							activeKey={this.state.currentTab}
-							className={styles.leftMenuTab}
-							onChange={this.tabChange}
-						>
-							<TabPane
-								className={styles.leftMenu}
-								tab={<Icon type="database" className={styles.iconStyle} />}
-								key="1"
-							>
+				<Tabs
+					tabPosition='left'
+					activeKey={this.state.currentTab}
+					className={styles.leftMenuTab}
+					onChange={this.tabChange}
+				>
+					<TabPane
+						className={styles.leftMenu}
+						style={{ height: 'calc(100vh - 105px)' }}
+						tab={<Icon type="credit-card" className={styles.iconStyle} />}
+						key="1"
+					>
+						<Row type="flex" style={{ height: 'calc(100vh - 105px)' }}>
+							<Col span={4} style={{ backgroundColor: '#fff' }}>
 								<div style={{ height: 'calc(100vh - 105px)' }} span={4} className={styles.editorSidebar}
 									data-step="1" data-intro='在组件栏可以挑选想要的模块，左键单击拖拽添加至右侧画布内。' data-position='right'>
-									{this.selectFlowDataPanel()}
+									<FlowNodePanel type={this.state.type} />
 								</div>
-							</TabPane>
-							<TabPane
-								className={styles.leftMenu}
-								tab={<Icon type="api" className={styles.iconStyle} />}
-								key="2"
-							>
-								<div style={{ height: 'calc(100vh - 105px)' }} span={4} className={styles.editorSidebar}
-									data-step="1" data-intro='在组件栏可以挑选想要的模块，左键单击拖拽添加至右侧画布内。' data-position='right'>
-									<FlowItemPanel type={this.state.type} />
+							</Col>
+
+							<Col span={16} className={styles.editorContent}>
+								<div className={styles.editorHd} data-step="2" data-intro='在工具栏可以进行撤销，复制，删除，成组等操作。' >
+									<FlowToolbar type={this.state.type} />
 								</div>
-							</TabPane>
-						</Tabs>
-					</Col>
+								<Flow style={{ height: 'calc(100vh - 142px)' }}
+								/>
+							</Col>
 
-					<Col span={15} className={styles.editorContent} style={{ height: 'calc(100vh - 105px)' }}>
-						<div className={styles.editorHd} data-step="2" data-intro='在工具栏可以进行撤销，复制，删除，成组等操作。' >
-							<FlowToolbar type={this.state.type} />
+							<Col span={4} className={styles.editorSidebar}>
+								<div className={styles.detailPanel} data-step="3" style={{ maxHeight: 'calc(100vh - 105px)' }} data-intro='在参数栏对你的组件进行参数配置。' data-position='left'>
+									<FlowDetailPanel type={this.state.type} />
+								</div>
+							</Col>
+						</Row>
+					</TabPane>
+
+					<TabPane
+						className={styles.leftMenu}
+						tab={<Icon type="api" className={styles.iconStyle} />}
+						key="2"
+					>
+						<div style={{ height: 'calc(100vh - 105px)' }} span={4} className={styles.editorSidebar}
+							data-step="1" data-intro='在组件栏可以挑选想要的模块，左键单击拖拽添加至右侧画布内。' data-position='right'>
+
 						</div>
-						<Flow style={{ height: 'calc(100vh - 142px)' }}
-						/>
-					</Col>
-
-					<Col span={4} className={styles.editorSidebar} style={{ height: 'calc(100vh - 105px)' }}>
-						<div className={styles.detailPanel} data-step="3" style={{ maxHeight: 'calc(100vh - 105px)' }} data-intro='在参数栏对你的组件进行参数配置。' data-position='left'>
-							<FlowDetailPanel type={this.state.type} />
-						</div>
-					</Col>
-
-				</Row>
-
+					</TabPane>
+				</Tabs>
 
 				<Row type="flex" style={{ bottom: 0, height: '65px', lineHeight: '65px', backgroundColor: '#343941' }}
 					data-step="4" data-intro="所有配置完成后，点击'运行'按钮开始运行整个工作流。" data-position='top'
 				>
 					<Col span={2}>
-						{/* <Upload {...props} onChange={this.handleChange}>
-              <Button style={{border:0,backgroundColor:'#343941',color:"#ddd",fontSize:25}}>
-                <Icon type="plus" style={{fontSize:25}}/>上传
-              </Button>
-            </Upload> */}
 					</Col>
 					<Col span={9}></Col>
 					<Col span={2}>
@@ -270,13 +235,13 @@ class LocalMode extends React.Component {
 					</Col>
 					<Col span={9}></Col>
 					<Col span={2}>
-						{this.selectModelPanel()}
+						<Model></Model>
 					</Col>
 				</Row>
 
 				<FlowContextMenu />
 
-			</GGEditor>
+			</GGEditor >
 		);
 	}
 }

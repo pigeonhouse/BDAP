@@ -15,7 +15,6 @@ import com.pigeonhouse.bdap.service.FileHeaderAttriService;
 import com.pigeonhouse.bdap.service.HdfsService;
 import com.pigeonhouse.bdap.service.JoinCodeService;
 import com.pigeonhouse.bdap.service.SparkCodeService;
-import com.pigeonhouse.bdap.util.response.Response;
 import org.apache.hadoop.io.retry.AtMostOnce;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -59,9 +58,8 @@ public class BdapApplicationTests {
 
     @Test
     public void test01() {
-        Response response = fileHeaderAttriController.getCsvHeader("/s");
 
-        System.out.println(response);
+
     }
 
     @Test

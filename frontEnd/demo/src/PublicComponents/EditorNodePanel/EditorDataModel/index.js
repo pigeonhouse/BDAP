@@ -2,7 +2,6 @@ import React from 'react';
 import { ItemPanel, Item } from '@src';
 import { Menu, Icon } from 'antd';
 import ItemDecoration from '../ItemDecoration';
-import styles from './index.less';
 
 /**
  * 左侧下拉菜单栏，包括可操作实现的组件
@@ -12,15 +11,7 @@ import styles from './index.less';
 const SubMenu = Menu.SubMenu;
 
 class FlowDataModel extends React.Component {
-	state = {
-		isMouseEnter: false,
-	}
-	mouseEnter = () => {
-		this.setState({ isMouseEnter: true })
-	}
-	mouseLeave = () => {
-		this.setState({ isMouseEnter: false })
-	}
+
 	createDataPanel = (item) => {
 		var result = [];
 		var menu;
@@ -54,22 +45,17 @@ class FlowDataModel extends React.Component {
 	render() {
 		var itemData = this.props.itemData;
 		return (
-			<div onMouseEnter={this.mouseEnter} onMouseLeave={this.mouseLeave}
-				className={this.state.isMouseEnter ? styles.scrollapp : styles.unscrollapp}
-				style={{ backgroundColor: '#fff' }}>
-				<Menu
-					defaultOpenKeys={['sub1']}
-					mode="inline"
-					className={styles.scrollapp}
-					style={{ maxHeight: 'calc(100vh - 105px)' }}
-					selectable={false}
-				>
-					<ItemDecoration />
-					<SubMenu key="sub1" title={<span><Icon type="mail" /><span>数据源</span></span>}>					
-						{this.createDataPanel(itemData)}
-					</SubMenu>
-				</Menu>
-			</div>
+			<Menu
+				defaultOpenKeys={['sub1']}
+				mode="inline"
+				style={{ maxHeight: 'calc(100vh - 105px)', width: '240px', borderRight: 0 }}
+				selectable={false}
+			>
+				<ItemDecoration />
+				<SubMenu key="sub1" title={<span><Icon type="mail" /><span>数据源</span></span>}>					
+					{this.createDataPanel(itemData)}
+				</SubMenu>
+			</Menu>
 		);
 	}
 }

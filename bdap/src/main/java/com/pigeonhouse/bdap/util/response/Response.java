@@ -6,7 +6,7 @@ import lombok.NoArgsConstructor;
 /**
  * @Author: XueXiaoYue
  * @Date: 2019/9/26 19:43
- *
+ * <p>
  * 在controller中返回时
  * 统一使用该类进行封装
  * 即返回一个new Response()

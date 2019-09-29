@@ -1,13 +1,10 @@
-package com.pigeonhouse.bdap.service;
+package com.pigeonhouse.bdap.service.runcode;
 
-import com.pigeonhouse.bdap.dao.SparkCodeDao;
 import com.pigeonhouse.bdap.entity.prework.SparkCode;
-import com.pigeonhouse.bdap.entity.prework.attributes.Attribute;
+import com.pigeonhouse.bdap.service.filesystem.SparkCodeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.Map;
 
 /**
@@ -22,11 +19,12 @@ public class JoinCodeService {
 
     /**
      * 给代码传入参数
-     * @param codeId Spark代码编号
+     *
+     * @param codeId     Spark代码编号
      * @param attributes 传入参数
      * @return 完整spark代码
      */
-    public String transParam(String codeId, Map<String, String> attributes){
+    public String transParam(String codeId, Map<String, String> attributes) {
         SparkCode sparkCode = sparkCodeService.findByCodeId(codeId);
         String code = sparkCode.getOriginCode();
 
@@ -34,21 +32,21 @@ public class JoinCodeService {
 
         String[] split = code.split("%s");
 
-        for(int i = 0; i < split.length - 1; i++){
+        for (int i = 0; i < split.length - 1; i++) {
             split[i] += "%s";
-            if(i == 0){
+            if (i == 0) {
                 data += String.format(split[i], attributes.get("userId"));
-            } else if(i == 1){
+            } else if (i == 1) {
                 data += String.format(split[i], attributes.get("moduleId"));
-            } else if(i == 2){
+            } else if (i == 2) {
                 data += String.format(split[i], attributes.get("targetCol"));
-            } else if(i == split.length - 4){
+            } else if (i == split.length - 4) {
                 data += String.format(split[i], attributes.get("previousId"));
-            } else if(i == split.length - 3){
+            } else if (i == split.length - 3) {
                 data += String.format(split[i], attributes.get("moduleId"));
-            } else if(i == split.length - 2){
+            } else if (i == split.length - 2) {
                 data += String.format(split[i], "10.105.222.90");
-            } else{
+            } else {
                 data += String.format(split[i], attributes.get(sparkCode.getAttributes().get(i - 3).getElabel()));
             }
         }
@@ -57,7 +55,7 @@ public class JoinCodeService {
         return data;
     }
 
-    public String openFileCode( Map<String, String> attributes){
+    public String openFileCode(Map<String, String> attributes) {
         SparkCode sparkCode = sparkCodeService.findByCodeId("OF001");
         String code = sparkCode.getOriginCode();
 
