@@ -4,9 +4,6 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.pigeonhouse.bdap.entity.execution.LivySessionDescription;
 import com.pigeonhouse.bdap.entity.execution.LivySessionInfo;
-import java.io.IOException;
-import java.util.*;
-
 import com.pigeonhouse.bdap.service.filesystem.HdfsService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -14,6 +11,9 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.*;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
+
+import java.io.IOException;
+import java.util.*;
 
 /**
  * @Author: HouWeiYing
@@ -35,13 +35,13 @@ public class LivyService {
     @Value("${executorCores}")
     int executorCores;
     @Value("${spark.shuffle.reduceLocality.enabled}")
-    boolean sparkShuffleReduceLocalityEnabled ;
+    boolean sparkShuffleReduceLocalityEnabled;
     @Value("${spark.shuffle.blockTransferService}")
     String sparkShuffleBlockTransferService;
     @Value("${spark.scheduler.minRegisteredResourcesRatio}")
     double sparkSchedulerMinRegisteredResourcesRatio;
     @Value("${spark.speculation}")
-    boolean sparkSpeculation ;
+    boolean sparkSpeculation;
     @Value("http://" + "${livyAddr}" + "/sessions")
     String livySessionsUrl;
 
@@ -64,7 +64,7 @@ public class LivyService {
         } catch (JsonProcessingException e) {
             e.printStackTrace();
         }
-        String availableSessionUrl = livySessionsUrl +"/"+ sessionId;
+        String availableSessionUrl = livySessionsUrl + "/" + sessionId;
         System.out.println(availableSessionUrl);
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
@@ -104,11 +104,12 @@ public class LivyService {
                     e.printStackTrace();
                 }
             }
-            logger.info("Create A New Session."+ "ID :" + newSession.getId());
+            logger.info("Create A New Session." + "ID :" + newSession.getId());
             availableSession = newSession;
         }
         return availableSession;
     }
+
     /**
      * 获取某个Session信息（用来获取state）
      *

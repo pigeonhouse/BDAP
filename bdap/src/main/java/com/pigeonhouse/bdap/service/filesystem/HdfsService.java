@@ -59,7 +59,7 @@ public class HdfsService {
      * @since 1.0.0
      */
     public String generateHdfsPath(String dstPath) {
-        String hdfsPath = defaultHdfsUri+defaultDirectory;
+        String hdfsPath = defaultHdfsUri + defaultDirectory;
         if (dstPath.startsWith("/")) {
             hdfsPath += dstPath;
         } else {
@@ -104,7 +104,7 @@ public class HdfsService {
      * 获取HDFS上面的某个路径下面的所有文件或目录（不包含子目录）信息
      *
      * @param path HDFS的相对目录路径，比如：/testDir
-     * @return java.util.List<java.util.Map       <       java.lang.String   ,       java.lang.Object>>
+     * @return java.util.List<java.util.Map < java.lang.String, java.lang.Object>>
      * @author 邢天宇
      * @since 1.0.0
      */
@@ -227,20 +227,15 @@ public class HdfsService {
 
             //最终的HDFS文件目录
             Path hdfsPath = new Path(generateHdfsPath(path));
-            if(fileSystem.isDirectory(hdfsPath))
-            {
+            if (fileSystem.isDirectory(hdfsPath)) {
                 return fileSystem;
-            }
-            else if (fileSystem.exists(hdfsPath))
-            {
+            } else if (fileSystem.exists(hdfsPath)) {
                 //创建目录
                 return fileSystem;
-            }
-            else {
+            } else {
                 return null;
             }
-            }
-            catch (IOException e) {
+        } catch (IOException e) {
             logger.error(MessageFormat.format("'判断文件或者目录是否在HDFS上面存在'失败，path:{0}", path), e);
             return null;
         }
