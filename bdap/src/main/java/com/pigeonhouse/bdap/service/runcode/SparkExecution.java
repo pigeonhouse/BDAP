@@ -1,7 +1,8 @@
-package com.pigeonhouse.bdap.service;
+package com.pigeonhouse.bdap.service.runcode;
 
 import com.pigeonhouse.bdap.entity.execution.ExecutionInfo;
 import com.pigeonhouse.bdap.entity.execution.NodeInfo;
+import com.pigeonhouse.bdap.service.filesystem.SparkCodeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -26,6 +27,7 @@ public class SparkExecution {
     JoinCodeService joinCodeService;
     @Value("${serverIp}")
     private String serverIp;
+
     public String executeCode(String code) {
         System.out.println(code);
         String resultUrl = livyService.postCode(code);
@@ -39,7 +41,7 @@ public class SparkExecution {
      * @param jobId
      */
     public void saveCheckPoint(NodeInfo nodeInfo, String jobId) {
-        String appendSaving ="";
+        String appendSaving = "";
         //"output.write.parquet(\"/user/student/" + jobId + ".parquet\")";
     }
 
@@ -47,9 +49,10 @@ public class SparkExecution {
      * 执行所有节点
      * 初始化代码
      * for 节点：节点集
-     *   从数据库拿出代码填入参数
-     *   代码拼接
+     * 从数据库拿出代码填入参数
+     * 代码拼接
      * 传参需要上下节点的信息
+     *
      * @param flowInfo
      * @return
      */
@@ -57,22 +60,22 @@ public class SparkExecution {
         List<ExecutionInfo> executionInfoList = new ArrayList<>();
         StringBuilder codeToRun = new StringBuilder();
         for (NodeInfo nodeInfo : flowInfo) {
-            nodeInfo.setCode(joinCodeService.transParam(nodeInfo.getCodeId(),nodeInfo.getAttributes()));
+            nodeInfo.setCode(joinCodeService.transParam(nodeInfo.getCodeId(), nodeInfo.getAttributes()));
 //            nodeInfo.setCode(sparkCodeService.findByCodeId(nodeInfo.getCodeId()).getOriginCode());
             codeToRun.append(nodeInfo.getCode()).append("\n");
             //由于最后一个结点强制设为了checkpoint 所以不需要额外检查
             if (nodeInfo.getIsCheckPoint()) {
                 String jobId = randomIdService.getId();
                 //saveCheckPoint(codeToRun, jobId);
-                String postStatusCode = "val result = Http(\"http://%s:8888/runningStatus\")"+
-                        ".postData(\"{\\\"jobId\\\":\\\"%s\\\",\\\"codeId\\\":\\\"%s\\\"}\")"+
-                        ".header(\"Content-Type\", \"application/json\").header(\"Charset\", \"UTF-8\")."+
+                String postStatusCode = "val result = Http(\"http://%s:8888/runningStatus\")" +
+                        ".postData(\"{\\\"jobId\\\":\\\"%s\\\",\\\"codeId\\\":\\\"%s\\\"}\")" +
+                        ".header(\"Content-Type\", \"application/json\").header(\"Charset\", \"UTF-8\")." +
                         "option(HttpOptions.readTimeout(10000)).asString";
-                postStatusCode = String.format(postStatusCode,serverIp,jobId,nodeInfo.getCodeId());
+                postStatusCode = String.format(postStatusCode, serverIp, jobId, nodeInfo.getCodeId());
                 codeToRun.append(postStatusCode);
                 String resultUrl = executeCode(codeToRun.toString());
                 codeToRun = new StringBuilder();
-                ExecutionInfo executionInfo = new ExecutionInfo(nodeInfo.getIndex(),jobId,resultUrl);
+                ExecutionInfo executionInfo = new ExecutionInfo(nodeInfo.getIndex(), jobId, resultUrl);
                 executionInfoList.add(executionInfo);
             }
         }

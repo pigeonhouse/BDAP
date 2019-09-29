@@ -1,4 +1,4 @@
-package com.pigeonhouse.bdap.service;
+package com.pigeonhouse.bdap.service.filesystem;
 
 import com.alibaba.fastjson.JSONObject;
 import com.pigeonhouse.bdap.dao.SparkCodeDao;
@@ -17,7 +17,7 @@ public class SparkCodeService {
     @Autowired
     SparkCodeDao sparkCodeDao;
 
-    public SparkCode findByCodeId(String codeId){
+    public SparkCode findByCodeId(String codeId) {
         SparkCode sparkCode = sparkCodeDao.findByCodeId(codeId);
         return sparkCode;
     }
@@ -53,7 +53,7 @@ public class SparkCodeService {
     public void addInputAttribute(String codeId, String label, String elabel, String regexp) {
         SparkCode sparkCode = sparkCodeDao.findByCodeId(codeId);
         ArrayList<Attribute> attributes = sparkCode.getAttributes();
-        if(attributes == null){
+        if (attributes == null) {
             attributes = new ArrayList<Attribute>();
         }
         attributes.add(new Attribute(label, elabel, "Input", regexp));
@@ -64,7 +64,7 @@ public class SparkCodeService {
     public void addNumberAttribute(String codeId, String label, String elabel, String min, String max, String step) {
         SparkCode sparkCode = sparkCodeDao.findByCodeId(codeId);
         ArrayList<Attribute> attributes = sparkCode.getAttributes();
-        if(attributes == null){
+        if (attributes == null) {
             attributes = new ArrayList<Attribute>();
         }
         attributes.add(new Attribute(label, elabel, "Number", min, max, step));
@@ -75,7 +75,7 @@ public class SparkCodeService {
     public void addSelectAttribute(String codeId, String label, String elabel, ArrayList<ChinaEngBean> value, Boolean multiChoice) {
         SparkCode sparkCode = sparkCodeDao.findByCodeId(codeId);
         ArrayList<Attribute> attributes = sparkCode.getAttributes();
-        if(attributes == null){
+        if (attributes == null) {
             attributes = new ArrayList<Attribute>();
         }
         attributes.add(new Attribute(label, elabel, "Select", value, multiChoice));
@@ -83,7 +83,7 @@ public class SparkCodeService {
         sparkCodeDao.updateSparkCode(sparkCode);
     }
 
-    public void updateOriginCode(String codeId, String originCode){
+    public void updateOriginCode(String codeId, String originCode) {
         SparkCode sparkCode = sparkCodeDao.findByCodeId(codeId);
         sparkCode.setOriginCode(originCode);
         sparkCodeDao.updateSparkCode(sparkCode);

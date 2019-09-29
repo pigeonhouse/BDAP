@@ -1,14 +1,13 @@
-package com.pigeonhouse.bdap.controller;
+package com.pigeonhouse.bdap.controller.filesystem;
 
 import com.alibaba.fastjson.JSONObject;
 import com.pigeonhouse.bdap.entity.prework.CommonFiles;
 import com.pigeonhouse.bdap.entity.prework.CsvHeader;
 import com.pigeonhouse.bdap.entity.prework.attributes.FileAttribute;
-import com.pigeonhouse.bdap.service.CommonFilesService;
-import com.pigeonhouse.bdap.service.FileHeaderAttriService;
+import com.pigeonhouse.bdap.service.filesystem.CommonFilesService;
+import com.pigeonhouse.bdap.service.filesystem.FileHeaderAttriService;
 import com.pigeonhouse.bdap.util.response.Response;
 import com.pigeonhouse.bdap.util.response.statusimpl.CommonFileStatus;
-import com.pigeonhouse.bdap.util.response.statusimpl.LoginStatus;
 import com.pigeonhouse.bdap.util.token.PassToken;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -39,9 +38,9 @@ public class CommonFilesApi {
         try {
             CommonFiles commonFiles = commonFilesService.getFileListById(userid);
             if (commonFiles != null) {
-                return  new Response(CommonFileStatus.FILE_GET_SUCCESS, commonFilesService.commonFilesToJson(commonFiles));
+                return new Response(CommonFileStatus.FILE_GET_SUCCESS, commonFilesService.commonFilesToJson(commonFiles));
             } else {
-                return  new Response(CommonFileStatus.USER_NOT_FOUND, null);
+                return new Response(CommonFileStatus.USER_NOT_FOUND, null);
             }
         } catch (Exception e) {
             System.out.println(e);
@@ -64,11 +63,10 @@ public class CommonFilesApi {
             commonFiles.setUserId(userId);
             commonFiles.setUserName(userName);
             commonFiles.setFileList(new ArrayList<FileAttribute>());
-            if(commonFilesService.setNewUser(commonFiles)) {
-                return new Response(CommonFileStatus.USER_INSERT_SUCCESS,null);
-            }
-            else{
-                return new Response(CommonFileStatus.USER_HAS_EXISTED,null);
+            if (commonFilesService.setNewUser(commonFiles)) {
+                return new Response(CommonFileStatus.USER_INSERT_SUCCESS, null);
+            } else {
+                return new Response(CommonFileStatus.USER_HAS_EXISTED, null);
             }
 
         } catch (Exception e) {
@@ -92,7 +90,7 @@ public class CommonFilesApi {
             JSONObject info = new JSONObject();
             Boolean isExist = commonFilesService.fileExist(filePath, userId);
             if (isExist) {
-                return  new Response(CommonFileStatus.FILE_HAS_EXISTED, null);
+                return new Response(CommonFileStatus.FILE_HAS_EXISTED, null);
             } else {
                 CsvHeader csvHeader = fileHeaderAttriService.findByFilePath(filePath);
                 commonFilesService.setNewFile(csvHeader, userId);
