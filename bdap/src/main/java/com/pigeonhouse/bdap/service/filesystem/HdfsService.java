@@ -1,4 +1,4 @@
-package com.pigeonhouse.bdap.service;
+package com.pigeonhouse.bdap.service.filesystem;
 
 import com.pigeonhouse.bdap.config.HdfsConfig;
 import com.pigeonhouse.bdap.entity.prework.Hdfsfile;
