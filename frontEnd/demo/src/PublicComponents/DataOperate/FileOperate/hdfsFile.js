@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Button, Input, Form } from 'antd'
+import { Button, TreeSelect, Form } from 'antd'
 import { withPropsAPI } from '@src';
 import { Stat } from '../DataToolFunctions/Stat'
 
@@ -9,7 +9,9 @@ import { Stat } from '../DataToolFunctions/Stat'
 
 class HdfsFile extends Component {
 	state = {
-		inpValu: ''
+		inpValu: '',
+		oppositePath:'/',
+		treeData: []
 	}
 
 	componentWillMount() {
@@ -19,6 +21,39 @@ class HdfsFile extends Component {
 		const model = item.getModel();
 		const inpValu = model.attr.fileName || '';
 		this.setState({ inpValu });
+
+		let formData = new FormData();
+		formData.append('oppositePath', this.state.oppositePath)
+		const init = {
+			method: 'POST',
+			body: formData,
+			mode:'cors'
+		}
+
+		fetch('https://result.eolinker.com/MSwz6fu34b763a21e1f7efa84a86a16f767a756952d0f95?uri=localhost:8888/hdfs/getfilelist',init).then(res=>{
+			if(res.status === 200){
+				res.json().then(res=>{
+					if(res.code === 201){
+						let treeData = res.data;
+						let index = 0;
+						for(let item in treeData){
+							let fileItem = treeData[item]
+							if (!fileItem['isDir'] && fileItem['filename']){
+								let file = {
+									title: fileItem.filename,
+									value: `0-${index}`,
+									key: `0-${index}`
+								}
+								this.setState({
+									treeData: [...this.state.treeData, file]
+								});
+								index++;
+							}
+						}
+					}
+				})
+			}
+		})
 	}
 
 	handleChange = (e) => {
@@ -41,6 +76,10 @@ class HdfsFile extends Component {
 			});
 			this.setState({ inpValu: values.attr.fileName })
 		});
+	}
+
+	handleSearch = (e) =>{
+		console.log("搜索");
 	}
 
 	submit = () => {
@@ -98,6 +137,7 @@ class HdfsFile extends Component {
 	}
 
 	render() {
+		const { treeData } = this.state;
 		const { form } = this.props;
 		const { getFieldDecorator } = form;
 		const inlineFormItemLayout = {
@@ -114,7 +154,18 @@ class HdfsFile extends Component {
 					{getFieldDecorator('attr.fileName', {
 						initialValue: this.state.inpValu
 					})(
-						<Input onBlur={this.handleChange} />
+						<TreeSelect
+							showSearch
+							style={{ width: 150 }}
+							value={this.state.value}
+							dropdownStyle={{ maxHeight: 400, overflow: 'auto' }}
+							treeData={treeData}
+							placeholder="Please select"
+							treeDefaultExpandAll
+							onChange={this.handleChange}
+							//  loadData={this.onLoadData}
+							onSearch={this.handleSearch}
+						/>
 					)}
 					<Button onClick={() => this.submit()}>confirm</Button>
 				</Form.Item>
