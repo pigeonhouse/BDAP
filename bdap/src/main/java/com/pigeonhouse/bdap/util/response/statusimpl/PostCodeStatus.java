@@ -9,7 +9,8 @@ import com.pigeonhouse.bdap.util.response.Status;
 public enum PostCodeStatus implements Status {
     //登录状态码
     SUCCESS(200, "提交代码成功"),
-    SESSION_BUSY(401, "session正忙，请稍后再试");
+    SESSION_BUSY(401, "session正忙，请稍后再试"),
+    NOT_EXIST(402,"session不存在，请重新登录");
 
     Integer code;
     String message;

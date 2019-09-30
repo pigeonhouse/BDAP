@@ -42,7 +42,12 @@ public class PostCode {
 
         String token = tokenService.getTokenFromRequest(request, "loginToken");
         LivySessionInfo sessionInfo = tokenService.getLivySessionInfoFromToken(token);
-        LivySessionInfo newSessionInfo = livyService.refreshSessionStatus(sessionInfo);
+        LivySessionInfo newSessionInfo;
+        try{
+            newSessionInfo = livyService.refreshSessionStatus(sessionInfo);
+        }catch (Exception e){
+            return new Response(PostCodeStatus.NOT_EXIST,null);
+        }
         if(!"idle".equals(newSessionInfo.getState())){
             return new Response(PostCodeStatus.SESSION_BUSY,null);
         }
