@@ -27,17 +27,16 @@ public class CheckSessionStatus {
     @RequestMapping("/session/status")
     public Response sessionStatus(HttpServletRequest request) {
         String token = tokenService.getTokenFromRequest(request, "loginToken");
-        String livyAddr = tokenService.getFromToken(token, "livyAddr").asString();
-        int sessionId = tokenService.getFromToken(token, "sessionId").asInt();
-        LivySessionInfo sessionInfo = livyService.getSessionStatus(livyAddr, sessionId);
-        if ("idle".equals(sessionInfo.getState())) {
-            return new Response(SessionStatus.IDLE, sessionInfo);
-        } else if ("starting".equals(sessionInfo.getState())) {
-            return new Response(SessionStatus.STARTING, sessionInfo);
-        } else if ("busy".equals(sessionInfo.getState())) {
-            return new Response(SessionStatus.BUSY, sessionInfo);
+        LivySessionInfo livySessionInfo = tokenService.getLivySessionInfoFromToken(token);
+        LivySessionInfo newSessionInfo = livyService.refreshSessionStatus(livySessionInfo);
+        if ("idle".equals(newSessionInfo.getState())) {
+            return new Response(SessionStatus.IDLE, newSessionInfo);
+        } else if ("starting".equals(newSessionInfo.getState())) {
+            return new Response(SessionStatus.STARTING, newSessionInfo);
+        } else if ("busy".equals(newSessionInfo.getState())) {
+            return new Response(SessionStatus.BUSY, newSessionInfo);
         }
-        return new Response(SessionStatus.DEAD, sessionInfo);
+        return new Response(SessionStatus.DEAD, newSessionInfo);
 
 
     }

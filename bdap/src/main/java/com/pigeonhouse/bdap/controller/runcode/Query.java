@@ -42,9 +42,9 @@ public class Query {
 
         String token = tokenService.getTokenFromRequest(request, "loginToken");
 
-        String livyAddr = tokenService.getFromToken(token, "livyAddr").asString();
+        String livyAddr = tokenService.getValueFromToken(token, "livyAddr").asString();
 
-        int sessionId = tokenService.getFromToken(token, "sessionId").asInt();
+        int sessionId = tokenService.getValueFromToken(token, "sessionId").asInt();
 
         System.out.println(livyAddr + "/sessions/" + sessionId);
     }

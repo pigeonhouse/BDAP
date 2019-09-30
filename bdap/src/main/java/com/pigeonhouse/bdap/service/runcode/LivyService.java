@@ -169,21 +169,23 @@ public class LivyService {
      * @return
      * @throws IOException
      */
-    public LivySessionInfo getSessionStatus(String livyAddr, int sessionId) {
+    public LivySessionInfo refreshSessionStatus(LivySessionInfo livySessionInfo) {
+        String livyAddr = livySessionInfo.getLivyAddr();
+        int sessionId = livySessionInfo.getId();
         String sessionUrl = "http://" + livyAddr + "/sessions" + "/" + sessionId;
         RestTemplate restTemplate = new RestTemplate();
         String res = restTemplate.getForObject(sessionUrl, String.class);
-        LivySessionInfo livySessionInfo = new LivySessionInfo();
+        LivySessionInfo newLivySessionInfo = new LivySessionInfo();
         try {
             JSONObject response = objectMapper.readValue(res, JSONObject.class);
             System.out.println(response);
-            livySessionInfo.setState(response.get("state").toString());
-            livySessionInfo.setLivyAddr(livyAddr);
-            livySessionInfo.setId((int)response.get("id"));
+            newLivySessionInfo.setState(response.get("state").toString());
+            newLivySessionInfo.setLivyAddr(livyAddr);
+            newLivySessionInfo.setId((int)response.get("id"));
         } catch (IOException e) {
             e.printStackTrace();
         }
-        return livySessionInfo;
+        return newLivySessionInfo;
     }
 
 
@@ -230,7 +232,7 @@ public class LivyService {
 
         livySessionInfo.setLivyAddr(livyAddr);
 
-//        while (!"idle".equals(getSessionStatus(livyAddr,livySessionInfo.getId()).getState())) {
+//        while (!"idle".equals(refreshSessionStatus(livyAddr,livySessionInfo.getId()).getState())) {
 //            try {
 //                Thread.sleep(1000);
 //            } catch (InterruptedException e) {
