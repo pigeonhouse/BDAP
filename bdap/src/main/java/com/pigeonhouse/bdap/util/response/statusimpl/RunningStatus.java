@@ -7,7 +7,7 @@ import com.pigeonhouse.bdap.util.response.Status;
  */
 public enum RunningStatus implements Status {
     //查询状态码
-    SUCCEED_TO_QUERY(200, "查询成功"),
+    SUCCESSFUL_QUERY(200, "查询成功"),
     FAIL_TO_QUERY(500, "查询错误");
 
     Integer code;

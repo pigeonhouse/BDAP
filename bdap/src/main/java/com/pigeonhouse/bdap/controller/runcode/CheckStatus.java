@@ -45,6 +45,6 @@ public class CheckStatus {
         JSONObject jsonObject = new JSONObject();
         jsonObject.put("state", state);
         jsonObject.put("output", output);
-        return new Response(RunningStatus.SUCCEED_TO_QUERY, jsonObject);
+        return new Response(RunningStatus.SUCCESSFUL_QUERY, jsonObject);
     }
 }
