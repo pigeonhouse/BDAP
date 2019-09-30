@@ -3,6 +3,7 @@ package com.pigeonhouse.bdap.controller.filesystem;
 import com.alibaba.fastjson.JSONObject;
 import com.pigeonhouse.bdap.config.HdfsConfig;
 import com.pigeonhouse.bdap.entity.prework.Hdfsfile;
+import com.pigeonhouse.bdap.service.TokenService;
 import com.pigeonhouse.bdap.service.filesystem.FileHeaderAttriService;
 import com.pigeonhouse.bdap.service.filesystem.HdfsService;
 import com.pigeonhouse.bdap.util.response.Response;
@@ -14,7 +15,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.multipart.MultipartHttpServletRequest;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.InputStream;
@@ -34,15 +37,19 @@ public class HDFSApi {
     HdfsService hdfsService;
     @Autowired
     FileHeaderAttriService fileHeaderAttriService;
-
+    @Autowired
+    TokenService tokenService;
     /**
      * 获取文件树函数
      * 返回值:带有文件树的JSON字符串
      */
     @PostMapping("/hdfs/getfilelist")
-    public Object getFileList(@RequestParam(value = "userId") String userId) {
+    public Object getFileList(HttpServletRequest request) {
         try {
-            Hdfsfile fileList = hdfsService.listFiles(userId, null);
+            String token=tokenService.getTokenFromRequest(request,"loginToken");
+            String userId=tokenService.getFromToken(token,"userId").asString();
+            String oppositePath=request.getParameter("oppositePath");
+            Hdfsfile fileList = hdfsService.listFiles(userId+oppositePath, null);
             if (fileList != null) {
                 JSONObject fileListJson = new JSONObject(new LinkedHashMap());
                 for (int idx = 0; idx < fileList.getFilelist().size(); idx++) {
@@ -64,9 +71,17 @@ public class HDFSApi {
      * 返回值:带有提示信息的JSON字符串
      */
     @PostMapping("/hdfs/mkdir")
-    public Object mkdir(@RequestParam(value = "dirName") String dirName, @RequestParam(value = "userId") String userId) {
+    public Object mkdir(HttpServletRequest request) {
         try {
-            boolean success = hdfsService.mkdir(userId + "/" + dirName);
+            String token=tokenService.getTokenFromRequest(request,"loginToken");
+            String userId=tokenService.getFromToken(token,"userId").asString();
+            String oppositePath=request.getParameter("oppositePath");
+            String dirName=request.getParameter("dirName");
+            if (oppositePath == "/")
+            {
+                oppositePath="";
+            }
+            boolean success = hdfsService.mkdir(userId + oppositePath+"/" + dirName);
             if (success) {
                 return new Response(HdfsStatus.DIRECTORY_CREATE_SUCCESS, null);
             } else {
@@ -83,9 +98,17 @@ public class HDFSApi {
      * 返回值:带有提示信息的JSON字符串
      */
     @PostMapping("/hdfs/delete")
-    public Object delete(@RequestParam(value = "dirName") String dirName, @RequestParam(value = "userId") String userId) {
+    public Object delete(HttpServletRequest request) {
         try {
-            boolean success = hdfsService.delete(dirName + "/" + userId);
+            String token=tokenService.getTokenFromRequest(request,"loginToken");
+            String userId=tokenService.getFromToken(token,"userId").asString();
+            String oppositePath=request.getParameter("oppositePath");
+            String fileName=request.getParameter("fileName");
+            if (oppositePath == "/")
+            {
+                oppositePath="";
+            }
+            boolean success = hdfsService.delete(userId + oppositePath+"/"+fileName);
             if (success) {
                 return new Response(HdfsStatus.FILE_DELETE_SUCCESS, null);
             } else {
@@ -102,21 +125,25 @@ public class HDFSApi {
     /**
      * 将文件上传至HDFS文件夹，不解析文件头
      *
-     * @param file    文件传输流
-     * @param userId  用户Id,唯一识别码
-     * @param replace 如存在重名文件，是否覆盖标签
+     * @param request    HTTP请求
      * @return :带有提示信息的JSON字符串
      */
     @PostMapping("/hdfs/upload")
     @ResponseBody
     //超大规模文件尚未通过测试，有待后续补充，已知文件超过500M浏览器会崩掉，切片功能还在写
     //xls支持尚在开发中
-    public Object upload(MultipartFile file, String userId, boolean replace) throws IOException {
+    public Object upload(HttpServletRequest request) throws IOException {
         try {
+            MultipartHttpServletRequest multipartRequest = (MultipartHttpServletRequest)request;
+            String token=tokenService.getTokenFromRequest(request,"loginToken");
+            String userId=tokenService.getFromToken(token,"userId").asString();
+            String oppositePath=request.getParameter("oppositePath");
+            boolean replace=Boolean.parseBoolean(request.getParameter("replace"));
+            MultipartFile file=multipartRequest.getFile("file");
             if (file == null || file.getBytes() == null) {
                 return new Response(HdfsStatus.INVALID_INPUT, null);
             } else {
-                String status = hdfsService.upload(file, userId, replace);
+                String status = hdfsService.upload(file, userId+oppositePath, replace);
                 switch (status) {
                     case "success":
                         return new Response(HdfsStatus.FILE_UPLOAD_SUCCESS, null);
@@ -139,15 +166,24 @@ public class HDFSApi {
      * 将文件上传至HDFS文件夹，并解析头文件存入数据库
      * 返回值:带有提示信息的JSON字符串
      *
-     * @param file    文件传输流
-     * @param userId  用户Id,唯一识别码
-     * @param replace 如存在重名文件，是否覆盖标签
-     * @param regex   文件分隔符
+     *  file    文件传输流
+     *  oppositePath 文件传输相对路径
+     *  replace 如存在重名文件，是否覆盖标签
+     *  regex   文件分隔符
      */
     @PostMapping("/hdfs/uploadwithheader")
     @ResponseBody
-    public Object upload(MultipartFile file, String userId, boolean replace, char regex) throws IOException {
+    public Object uploadwithheader(HttpServletRequest request) throws IOException {
         try {
+            MultipartHttpServletRequest multipartRequest = (MultipartHttpServletRequest) request;
+            String token=tokenService.getTokenFromRequest(request,"loginToken");
+            //获取含有登录信息的Token
+            String userId=tokenService.getFromToken(token,"userId").asString();
+            //解析UserId
+            String oppositePath=request.getParameter("oppositePath");
+            boolean replace=Boolean.parseBoolean(request.getParameter("replace"));
+            char regex=request.getParameter("regex").charAt(0);
+            MultipartFile file=multipartRequest.getFile("file");
             if (file == null || file.getBytes() == null) {
                 return new Response(HdfsStatus.INVALID_INPUT, null);
             } else {
@@ -221,7 +257,7 @@ public class HDFSApi {
                     //执行更新
                     fileHeaderAttriService.saveOrUpdateFileHeader(file.getOriginalFilename(), hdfsConfig.getDefaultDirectory() + "/" + userId + "/" + file.getOriginalFilename(), headermap);
                 }
-                String status = hdfsService.upload(file, userId, replace);
+                String status = hdfsService.upload(file, userId+oppositePath, replace);
                 switch (status) {
                     case "success":
                         return new Response(HdfsStatus.FILE_UPLOAD_SUCCESS, null);
@@ -245,12 +281,22 @@ public class HDFSApi {
      * 返回值:文件流
      */
     @PostMapping("/hdfs/download")
-    public Object download(@RequestParam("fileName") String fileName, @RequestParam("userId") String userId, HttpServletResponse response) throws IOException {
+    public Object download(HttpServletRequest request, HttpServletResponse response) throws IOException {
         try {
+            String token = tokenService.getTokenFromRequest(request, "loginToken");
+            //获取含有登录信息的Token
+            String userId = tokenService.getFromToken(token, "userId").asString();
+            //解析UserId
+            String oppositePath = request.getParameter("oppositePath");
+            if (oppositePath == "/")
+            {
+                oppositePath="";
+            }
+            String fileName=request.getParameter("fileName");
             if (StringUtils.isEmpty(fileName)) {
                 return new Response(HdfsStatus.INVALID_INPUT, null);
             }
-            InputStream inputStream = (InputStream) hdfsService.download(userId + "/" + fileName);
+            InputStream inputStream = (InputStream) hdfsService.download(userId + oppositePath+"/" + fileName);
             if (inputStream != null) {
                 String[] buf = fileName.split("\\.");
                 switch (buf[buf.length - 1]) {
