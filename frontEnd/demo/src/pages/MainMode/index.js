@@ -5,6 +5,7 @@ import { Row, Col, Button, message, notification, Icon, Tabs } from 'antd';
 import { FlowContextMenu } from '../../PublicComponents/EditorContextMenu';
 import ExperimentPanel from '../ExperimentPanel';
 import Model from '../../PublicComponents/ModelStore';
+import VisualizedPanel from '../VisualizedPanel';
 
 import LocalRun from "../../LocalModeComponents/RunPanel/Run";
 import PythonRun from "../../PythonModeComponents/RunPanel/Run";
@@ -194,10 +195,7 @@ class LocalMode extends React.Component {
 						tab={<Icon type="api" className={styles.iconStyle} />}
 						key="2"
 					>
-						<div style={{ height: 'calc(100vh - 105px)' }} span={4} className={styles.editorSidebar}
-							data-step="1" data-intro='在组件栏可以挑选想要的模块，左键单击拖拽添加至右侧画布内。' data-position='right'>
-
-						</div>
+						<VisualizedPanel></VisualizedPanel>
 					</TabPane>
 				</Tabs>
 
