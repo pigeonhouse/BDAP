@@ -150,7 +150,7 @@ public class BdapApplicationTests {
         map2.put("targetCol", "age");
         map2.put("normalAlgorithm", "Normal");
         list.add(new NodeInfo(3, "PP003", "", map2, true));
-        //postCode.postcode(list);
+//        postCode.postcode(list, request);
 
     }
 }

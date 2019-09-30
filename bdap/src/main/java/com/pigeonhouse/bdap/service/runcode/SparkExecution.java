@@ -57,7 +57,7 @@ public class SparkExecution {
      * @param flowInfo
      * @return
      */
-    public List<ExecutionInfo> executeFlow(List<NodeInfo> flowInfo,LivySessionInfo livySessionInfo) {
+    public List<ExecutionInfo> executeFlow(List<NodeInfo> flowInfo, LivySessionInfo livySessionInfo) {
         List<ExecutionInfo> executionInfoList = new ArrayList<>();
         StringBuilder codeToRun = new StringBuilder();
         for (NodeInfo nodeInfo : flowInfo) {
