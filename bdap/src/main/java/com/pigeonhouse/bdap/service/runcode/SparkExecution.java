@@ -79,7 +79,6 @@ public class SparkExecution {
                 executionInfoList.add(executionInfo);
             }
         }
-
         return executionInfoList;
     }
 }

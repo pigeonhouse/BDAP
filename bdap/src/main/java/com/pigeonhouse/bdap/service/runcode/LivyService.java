@@ -5,6 +5,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.pigeonhouse.bdap.entity.execution.LivySessionDescription;
 import com.pigeonhouse.bdap.entity.execution.LivySessionInfo;
 import com.pigeonhouse.bdap.service.filesystem.HdfsService;
+import org.apache.livy.LivyClient;
+import org.apache.livy.LivyClientBuilder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
@@ -13,10 +15,12 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
 import java.io.IOException;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.*;
 
 /**
- * @Author: HouWeiYing
+ * @Author: HouWeiying
  * @Date: 2019/9/7 11:33
  */
 @Service("LivyService")
@@ -79,6 +83,16 @@ public class LivyService {
         return resultUrl;
     }
 
+    public void buildClient(){
+        //编程API（未完成）
+        try {
+            LivyClient livyClient = new LivyClientBuilder().setURI(new URI(livyAddr)).build();
+        } catch (IOException | URISyntaxException e) {
+            e.printStackTrace();
+        }
+
+
+    }
     /**
      * 选择空闲Session，否则创建一个
      *
@@ -145,6 +159,11 @@ public class LivyService {
             e.printStackTrace();
         }
         return livySessionDescription;
+    }
+    public void deleteSession(Integer sessionId){
+        RestTemplate restTemplate = new RestTemplate();
+        restTemplate.delete(livySessionsUrl + "/" + sessionId);
+        return ;
     }
 
     public LivySessionInfo createSession() {

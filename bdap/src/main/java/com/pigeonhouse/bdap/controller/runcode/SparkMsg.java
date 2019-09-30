@@ -6,16 +6,16 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 /**
- * spark向后端发送进度
+ * spark向后端发送信息
  *
  * @author HouWeiying
  */
 
 @RestController
-public class RunningStatus {
+public class SparkMsg {
     @PassToken
-    @PostMapping(value = "/runningStatus")
-    public void showStatus(@RequestBody String saying) {
+    @PostMapping(value = "/sparkmsg")
+    public void showMsg(@RequestBody String saying) {
         System.out.println(saying);
     }
 }
