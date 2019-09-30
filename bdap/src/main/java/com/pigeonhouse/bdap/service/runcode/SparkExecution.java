@@ -62,6 +62,7 @@ public class SparkExecution {
         StringBuilder codeToRun = new StringBuilder();
         for (NodeInfo nodeInfo : flowInfo) {
             nodeInfo.setCode(joinCodeService.transParam(nodeInfo.getCodeId(), nodeInfo.getAttributes()));
+//            System.out.println(nodeInfo.getCode());
 //            nodeInfo.setCode(sparkCodeService.findByCodeId(nodeInfo.getCodeId()).getOriginCode());
             codeToRun.append(nodeInfo.getCode()).append("\n");
             //由于最后一个结点强制设为了checkpoint 所以不需要额外检查

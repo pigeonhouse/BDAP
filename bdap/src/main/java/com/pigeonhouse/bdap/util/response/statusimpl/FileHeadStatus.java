@@ -8,6 +8,7 @@ import com.pigeonhouse.bdap.util.response.Status;
  */
 public enum FileHeadStatus implements Status {
 
+    //
     HEAD_PUT_SUCCESS(200, "读取文件字段信息成功"),
     NO_SUCH_FILE(400, "未找到对应文件");
 
