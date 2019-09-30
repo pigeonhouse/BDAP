@@ -3,6 +3,8 @@ package com.pigeonhouse.bdap.controller.filesystem;
 import com.alibaba.fastjson.JSONObject;
 import com.pigeonhouse.bdap.entity.prework.CsvHeader;
 import com.pigeonhouse.bdap.service.filesystem.FileHeaderAttriService;
+import com.pigeonhouse.bdap.util.response.Response;
+import com.pigeonhouse.bdap.util.response.statusimpl.FileHeadStatus;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -21,8 +23,11 @@ public class FileHeaderAttriController {
      * @return 文件字段信息
      */
     @PostMapping("/csvHeader")
-    public String getCsvHeader(@RequestParam("filePath") String filePath) {
+    public Response getCsvHeader(@RequestParam("filePath") String filePath) {
         CsvHeader csvHeader = fileHeaderAttriService.findByFilePath(filePath);
-        return JSONObject.toJSONString(csvHeader);
+        if(csvHeader == null){
+            return new Response(FileHeadStatus.NO_SUCH_FILE, null);
+        }
+        return new Response(FileHeadStatus.HEAD_PUT_SUCCESS, JSONObject.toJSONString(csvHeader));
     }
 }
