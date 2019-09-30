@@ -28,7 +28,7 @@ public class PostCode {
     SparkCodeService sparkCodeService;
 
     @PostMapping(value = "/postcode")
-    Object postcode(@RequestBody List<NodeInfo> flowInfo) {
+    public Object postcode(@RequestBody List<NodeInfo> flowInfo) {
 
         //从token中读取
         LivySessionInfo livySessionInfo = new LivySessionInfo();
@@ -36,6 +36,6 @@ public class PostCode {
         System.out.println(flowInfo);
         // 强制保存最后一个节点
         flowInfo.get(flowInfo.size() - 1).setIsCheckPoint(true);
-        return sparkExecution.executeFlow(flowInfo,livySessionInfo);
+        return sparkExecution.executeFlow(flowInfo, livySessionInfo);
     }
 }
