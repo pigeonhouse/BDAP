@@ -1,8 +1,11 @@
 package com.pigeonhouse.bdap.controller;
 
+import com.alibaba.fastjson.JSONObject;
+import com.pigeonhouse.bdap.entity.execution.LivySessionInfo;
 import com.pigeonhouse.bdap.entity.prework.User;
 import com.pigeonhouse.bdap.service.TokenService;
 import com.pigeonhouse.bdap.service.UserService;
+import com.pigeonhouse.bdap.service.runcode.LivyService;
 import com.pigeonhouse.bdap.util.response.Response;
 import com.pigeonhouse.bdap.util.response.statusimpl.LoginStatus;
 import com.pigeonhouse.bdap.util.token.PassToken;
@@ -24,6 +27,8 @@ public class UserApi {
     UserService userService;
     @Autowired
     TokenService tokenService;
+    @Autowired
+    LivyService livyService;
 
     @PassToken
     @PostMapping("/login")
@@ -38,11 +43,23 @@ public class UserApi {
                 //密码错误
                 return new Response(LoginStatus.WRONG_PASSWORD, null);
             } else {
-                String token = tokenService.getToken(user.getUserId());
+                String livyAddr = livyService.selectLivyServer();
+                LivySessionInfo livySessionInfo = livyService.createSession(livyAddr);
+                Integer sessionId = livySessionInfo.getId();
+                String token = tokenService.getLoginToken(user.getUserId(),livyAddr,sessionId);
                 //成功，获取token并将其置于cookie中返回前端
-                Cookie cookie = new Cookie("token", token);
+                Cookie cookie = new Cookie("loginToken", token);
                 response.addCookie(cookie);
-                return new Response(LoginStatus.SUCCESS, userForBase);
+
+                JSONObject sessionInfo = new JSONObject();
+                sessionInfo.put("livyAddr",livyAddr);
+                sessionInfo.put("sessionId",sessionId);
+
+                JSONObject returnJson = new JSONObject();
+                returnJson.put("userInfo",userForBase);
+                returnJson.put("sessionInfo",sessionInfo);
+
+                return new Response(LoginStatus.SUCCESS, returnJson);
             }
         }
     }

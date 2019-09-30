@@ -6,6 +6,7 @@ import com.auth0.jwt.JWTVerifier;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.exceptions.JWTDecodeException;
 import com.auth0.jwt.exceptions.JWTVerificationException;
+import com.auth0.jwt.interfaces.Claim;
 import com.pigeonhouse.bdap.entity.prework.User;
 import com.pigeonhouse.bdap.service.TokenService;
 import com.pigeonhouse.bdap.service.UserService;
@@ -19,6 +20,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.PrintWriter;
 import java.lang.reflect.Method;
+import java.util.Map;
 
 /**
  * @Author: XueXiaoYue
@@ -40,7 +42,7 @@ public class AuthenticationInterceptor implements HandlerInterceptor {
 
         if (cookies != null) {
             for (Cookie cookie : cookies) {
-                if ("token".equals(cookie.getName())) {
+                if ("loginToken".equals(cookie.getName())) {
                     token = cookie.getValue();
                 }
             }
@@ -68,16 +70,21 @@ public class AuthenticationInterceptor implements HandlerInterceptor {
                 out.append(json.toJSONString());
                 return false;
             }
-            // 获取 token 中的 user id
+            // 解析token
             String userId;
+            Map<String, Claim> claims;
             try {
                 userId = JWT.decode(token).getAudience().get(0);
+                claims = JWT.decode(token).getClaims();
             } catch (JWTDecodeException j) {
                 json.put("msg", "token错误");
                 out = httpServletResponse.getWriter();
                 out.append(json.toJSONString());
                 return false;
             }
+            String livyAddr = claims.get("livyAddr").asString();
+            Integer sessionId = claims.get("sessionId").asInt();
+
             User user = userService.findUserById(userId);
             if (user == null) {
                 json.put("msg", "用户不存在，请重新登录");
@@ -97,7 +104,7 @@ public class AuthenticationInterceptor implements HandlerInterceptor {
             }
 
             //刷新cookie
-            Cookie cookie = new Cookie("token", tokenService.getToken(userId));
+            Cookie cookie = new Cookie("token", tokenService.getLoginToken(userId,livyAddr,sessionId));
             httpServletResponse.addCookie(cookie);
             return true;
         }

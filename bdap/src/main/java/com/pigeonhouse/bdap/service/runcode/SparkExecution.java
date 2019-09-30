@@ -1,6 +1,7 @@
 package com.pigeonhouse.bdap.service.runcode;
 
 import com.pigeonhouse.bdap.entity.execution.ExecutionInfo;
+import com.pigeonhouse.bdap.entity.execution.LivySessionInfo;
 import com.pigeonhouse.bdap.entity.execution.NodeInfo;
 import com.pigeonhouse.bdap.service.filesystem.SparkCodeService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,9 +29,9 @@ public class SparkExecution {
     @Value("${serverIp}")
     private String serverIp;
 
-    public String executeCode(String code) {
+    public String executeCode(String code, LivySessionInfo livySessionInfo) {
         System.out.println(code);
-        String resultUrl = livyService.postCode(code);
+        String resultUrl = livyService.postCode(code,livySessionInfo);
         return resultUrl;
     }
 
@@ -56,7 +57,7 @@ public class SparkExecution {
      * @param flowInfo
      * @return
      */
-    public List<ExecutionInfo> executeFlow(List<NodeInfo> flowInfo) {
+    public List<ExecutionInfo> executeFlow(List<NodeInfo> flowInfo,LivySessionInfo livySessionInfo) {
         List<ExecutionInfo> executionInfoList = new ArrayList<>();
         StringBuilder codeToRun = new StringBuilder();
         for (NodeInfo nodeInfo : flowInfo) {
@@ -73,7 +74,7 @@ public class SparkExecution {
                         "option(HttpOptions.readTimeout(10000)).asString";
                 postStatusCode = String.format(postStatusCode, serverIp, jobId, nodeInfo.getCodeId());
                 codeToRun.append(postStatusCode);
-                String resultUrl = executeCode(codeToRun.toString());
+                String resultUrl = executeCode(codeToRun.toString(),livySessionInfo);
                 codeToRun = new StringBuilder();
                 ExecutionInfo executionInfo = new ExecutionInfo(nodeInfo.getIndex(), jobId, resultUrl);
                 executionInfoList.add(executionInfo);

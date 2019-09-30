@@ -1,5 +1,6 @@
 package com.pigeonhouse.bdap.controller.runcode;
 
+import com.pigeonhouse.bdap.entity.execution.LivySessionInfo;
 import com.pigeonhouse.bdap.entity.execution.NodeInfo;
 import com.pigeonhouse.bdap.service.filesystem.SparkCodeService;
 import com.pigeonhouse.bdap.service.runcode.RandomIdService;
@@ -28,9 +29,13 @@ public class PostCode {
 
     @PostMapping(value = "/postcode")
     Object postcode(@RequestBody List<NodeInfo> flowInfo) {
+
+        //从token中读取
+        LivySessionInfo livySessionInfo = new LivySessionInfo();
+
         System.out.println(flowInfo);
         // 强制保存最后一个节点
         flowInfo.get(flowInfo.size() - 1).setIsCheckPoint(true);
-        return sparkExecution.executeFlow(flowInfo);
+        return sparkExecution.executeFlow(flowInfo,livySessionInfo);
     }
 }

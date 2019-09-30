@@ -12,6 +12,7 @@ import java.util.List;
 @NoArgsConstructor
 public class LivySessionInfo implements Serializable {
 
+    private String livyAddr;
     private int id;
     private String name;
     private String appId;
