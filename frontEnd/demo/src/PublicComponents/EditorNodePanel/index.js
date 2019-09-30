@@ -1,6 +1,4 @@
-import React, { Fragment } from 'react';
-import { } from 'antd';
-
+import React from 'react';
 import { FlowItemPanel } from './EditorItemPanel';
 
 import { LocalFlowDataPanel } from '../../LocalModeComponents/EditorDataPanel';

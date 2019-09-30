@@ -1,11 +1,9 @@
 import React from 'react';
-import GGEditor, { Flow } from '@src';
+import GGEditor from '@src';
 import { Row, Col, Button, message, notification, Icon, Tabs } from 'antd';
 
 import { FlowContextMenu } from '../../PublicComponents/EditorContextMenu';
-import { FlowToolbar } from '../../PublicComponents/EditorToolbar';
-import { FlowDetailPanel } from '../../PublicComponents/EditorDetailPanel';
-import FlowNodePanel from '../../PublicComponents/EditorNodePanel';
+import ExperimentPanel from '../ExperimentPanel';
 import Model from '../../PublicComponents/ModelStore';
 
 import LocalRun from "../../LocalModeComponents/RunPanel/Run";
@@ -188,28 +186,7 @@ class LocalMode extends React.Component {
 						tab={<Icon type="credit-card" className={styles.iconStyle} />}
 						key="1"
 					>
-						<Row type="flex" style={{ height: 'calc(100vh - 105px)' }}>
-							<Col span={4} style={{ backgroundColor: '#fff' }}>
-								<div style={{ height: 'calc(100vh - 105px)' }} span={4} className={styles.editorSidebar}
-									data-step="1" data-intro='在组件栏可以挑选想要的模块，左键单击拖拽添加至右侧画布内。' data-position='right'>
-									<FlowNodePanel type={this.state.type} />
-								</div>
-							</Col>
-
-							<Col span={16} className={styles.editorContent}>
-								<div className={styles.editorHd} data-step="2" data-intro='在工具栏可以进行撤销，复制，删除，成组等操作。' >
-									<FlowToolbar type={this.state.type} />
-								</div>
-								<Flow style={{ height: 'calc(100vh - 142px)' }}
-								/>
-							</Col>
-
-							<Col span={4} className={styles.editorSidebar}>
-								<div className={styles.detailPanel} data-step="3" style={{ maxHeight: 'calc(100vh - 105px)' }} data-intro='在参数栏对你的组件进行参数配置。' data-position='left'>
-									<FlowDetailPanel type={this.state.type} />
-								</div>
-							</Col>
-						</Row>
+						<ExperimentPanel type={this.state.type} />
 					</TabPane>
 
 					<TabPane
