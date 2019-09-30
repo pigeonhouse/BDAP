@@ -1,5 +1,6 @@
 package com.pigeonhouse.bdap.service.runcode;
 
+import com.alibaba.fastjson.JSONObject;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.pigeonhouse.bdap.entity.execution.LivySessionInfo;
@@ -168,18 +169,21 @@ public class LivyService {
      * @return
      * @throws IOException
      */
-    public LivySessionInfo refreshSession(LivySessionInfo livySessionInfo) {
-        String livyAddr = livySessionInfo.getLivyAddr();
-        String sessionUrl = "http://" + livyAddr + "/sessions" + "/" + livySessionInfo.getId();
+    public LivySessionInfo getSessionStatus(String livyAddr, int sessionId) {
+        String sessionUrl = "http://" + livyAddr + "/sessions" + "/" + sessionId;
         RestTemplate restTemplate = new RestTemplate();
         String res = restTemplate.getForObject(sessionUrl, String.class);
-        LivySessionInfo newlivySessionInfo = new LivySessionInfo();
+        LivySessionInfo livySessionInfo = new LivySessionInfo();
         try {
-            newlivySessionInfo = objectMapper.readValue(res, LivySessionInfo.class);
+            JSONObject response = objectMapper.readValue(res, JSONObject.class);
+            System.out.println(response);
+            livySessionInfo.setState(response.get("state").toString());
+            livySessionInfo.setLivyAddr(livyAddr);
+            livySessionInfo.setId((int)response.get("id"));
         } catch (IOException e) {
             e.printStackTrace();
         }
-        return newlivySessionInfo;
+        return livySessionInfo;
     }
 
 
@@ -215,20 +219,28 @@ public class LivyService {
 
 
         try {
-            livySessionInfo = objectMapper.readValue(res.getBody(), LivySessionInfo.class);
+            JSONObject response = objectMapper.readValue(res.getBody(), JSONObject.class);
+            System.out.println(response);
+            livySessionInfo.setState(response.get("state").toString());
+            livySessionInfo.setId((int)response.get("id"));
+
         } catch (IOException e) {
             e.printStackTrace();
         }
 
         livySessionInfo.setLivyAddr(livyAddr);
 
-        while (!"idle".equals(refreshSession(livySessionInfo).getState())) {
-            try {
-                Thread.sleep(1000);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-        }
+//        while (!"idle".equals(getSessionStatus(livyAddr,livySessionInfo.getId()).getState())) {
+//            try {
+//                Thread.sleep(1000);
+//            } catch (InterruptedException e) {
+//                e.printStackTrace();
+//            }
+//        }
+
+        System.out.println(livySessionInfo);
+
+
         return livySessionInfo;
     }
 }
