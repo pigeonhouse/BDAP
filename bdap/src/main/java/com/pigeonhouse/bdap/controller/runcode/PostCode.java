@@ -1,11 +1,10 @@
 package com.pigeonhouse.bdap.controller.runcode;
 
+import com.pigeonhouse.bdap.dao.SparkCodeDao;
 import com.pigeonhouse.bdap.entity.execution.LivySessionInfo;
 import com.pigeonhouse.bdap.entity.execution.NodeInfo;
 import com.pigeonhouse.bdap.service.TokenService;
-import com.pigeonhouse.bdap.service.filesystem.SparkCodeService;
-import com.pigeonhouse.bdap.service.runcode.LivyService;
-import com.pigeonhouse.bdap.service.runcode.RandomIdService;
+import com.pigeonhouse.bdap.dao.LivyDao;
 import com.pigeonhouse.bdap.service.runcode.SparkExecution;
 import com.pigeonhouse.bdap.util.response.Response;
 import com.pigeonhouse.bdap.util.response.statusimpl.PostCodeStatus;
@@ -28,14 +27,11 @@ public class PostCode {
     @Autowired
     SparkExecution sparkExecution;
     @Autowired
-    RandomIdService randomIdService;
-    @Autowired
-    SparkCodeService sparkCodeService;
+    SparkCodeDao sparkCodeDao;
     @Autowired
     TokenService tokenService;
     @Autowired
-    LivyService livyService;
-
+    LivyDao livyDao;
 
     @PostMapping(value = "/postcode")
     public Response postcode(@RequestBody List<NodeInfo> flowInfo, HttpServletRequest request) {
@@ -44,7 +40,7 @@ public class PostCode {
         LivySessionInfo sessionInfo = tokenService.getLivySessionInfoFromToken(token);
         LivySessionInfo newSessionInfo;
         try{
-            newSessionInfo = livyService.refreshSessionStatus(sessionInfo);
+            newSessionInfo = livyDao.refreshSessionStatus(sessionInfo);
         }catch (Exception e){
             return new Response(PostCodeStatus.NOT_EXIST,null);
         }

@@ -1,7 +1,7 @@
 package com.pigeonhouse.bdap.dao;
 
 import com.pigeonhouse.bdap.entity.prework.CommonFiles;
-import com.pigeonhouse.bdap.entity.prework.attributes.FileAttribute;
+import com.pigeonhouse.bdap.entity.prework.valueattrs.FileAttribute;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;

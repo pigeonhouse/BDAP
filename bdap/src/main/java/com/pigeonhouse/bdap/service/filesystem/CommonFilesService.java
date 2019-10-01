@@ -5,8 +5,8 @@ import com.alibaba.fastjson.JSONObject;
 import com.pigeonhouse.bdap.dao.CommonFilesDao;
 import com.pigeonhouse.bdap.entity.prework.CommonFiles;
 import com.pigeonhouse.bdap.entity.prework.CsvHeader;
-import com.pigeonhouse.bdap.entity.prework.attributes.FileAttribute;
-import com.pigeonhouse.bdap.entity.prework.attributes.HeaderAttribute;
+import com.pigeonhouse.bdap.entity.prework.valueattrs.FileAttribute;
+import com.pigeonhouse.bdap.entity.prework.valueattrs.HeaderAttribute;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

@@ -3,7 +3,7 @@ package com.pigeonhouse.bdap.controller.filesystem;
 import com.alibaba.fastjson.JSONObject;
 import com.pigeonhouse.bdap.entity.prework.CommonFiles;
 import com.pigeonhouse.bdap.entity.prework.CsvHeader;
-import com.pigeonhouse.bdap.entity.prework.attributes.FileAttribute;
+import com.pigeonhouse.bdap.entity.prework.valueattrs.FileAttribute;
 import com.pigeonhouse.bdap.service.filesystem.CommonFilesService;
 import com.pigeonhouse.bdap.service.filesystem.FileHeaderAttriService;
 import com.pigeonhouse.bdap.util.response.Response;

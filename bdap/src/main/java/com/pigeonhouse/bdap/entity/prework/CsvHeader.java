@@ -1,6 +1,6 @@
 package com.pigeonhouse.bdap.entity.prework;
 
-import com.pigeonhouse.bdap.entity.prework.attributes.HeaderAttribute;
+import com.pigeonhouse.bdap.entity.prework.valueattrs.HeaderAttribute;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;

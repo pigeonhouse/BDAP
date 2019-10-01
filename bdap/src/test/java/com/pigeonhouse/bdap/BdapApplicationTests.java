@@ -1,8 +1,5 @@
 package com.pigeonhouse.bdap;
 
-import com.alibaba.fastjson.JSONObject;
-import com.csvreader.CsvReader;
-
 import com.pigeonhouse.bdap.controller.filesystem.FileHeaderAttriController;
 import com.pigeonhouse.bdap.controller.filesystem.SparkCodeController;
 import com.pigeonhouse.bdap.controller.runcode.PostCode;
@@ -10,16 +7,8 @@ import com.pigeonhouse.bdap.dao.FileHeaderAttriDao;
 import com.pigeonhouse.bdap.dao.SparkCodeDao;
 import com.pigeonhouse.bdap.dao.UserDao;
 import com.pigeonhouse.bdap.entity.execution.NodeInfo;
-import com.pigeonhouse.bdap.entity.prework.CsvHeader;
-import com.pigeonhouse.bdap.entity.prework.SparkCode;
-import com.pigeonhouse.bdap.entity.prework.attributes.ChinaEngBean;
-import com.pigeonhouse.bdap.entity.prework.attributes.HeaderAttribute;
 
 import com.pigeonhouse.bdap.service.filesystem.FileHeaderAttriService;
-import com.pigeonhouse.bdap.service.filesystem.SparkCodeService;
-import com.pigeonhouse.bdap.service.runcode.JoinCodeService;
-import org.apache.hadoop.io.retry.AtMostOnce;
-import org.apache.hadoop.util.hash.Hash;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,11 +16,8 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import java.io.*;
-import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
@@ -42,9 +28,6 @@ public class BdapApplicationTests {
 
     @Autowired
     SparkCodeDao sparkCodeDao;
-
-    @Autowired
-    SparkCodeService sparkCodeService;
 
     @Autowired
     SparkCodeController sparkCodeController;
@@ -67,7 +50,7 @@ public class BdapApplicationTests {
     @Test
     public void test01() {
 
-        sparkCodeService.addSparkCode("PD001", "Prediction", "预测", "Predict", "import org.apache.spark.ml.classification.LogisticRegression\n" +
+        sparkCodeDao.addSparkCode("PD001", "Prediction", "预测", "Predict", "import org.apache.spark.ml.classification.LogisticRegression\n" +
                 "import org.apache.spark.ml.feature.VectorAssembler\n" +
                 "\n" +
                 "val userId = \"%s\"\n" +
@@ -107,7 +90,7 @@ public class BdapApplicationTests {
                 "\n" +
                 "val result = Http(\"%s\").postData(fin.toString).header(\"Content-Type\", \"application/json\").header(\"Charset\", \"UTF-8\").option(HttpOptions.readTimeout(10000)).asString", "two-one");
 
-        sparkCodeService.addInputAttribute("PD001", "新列名", "newColName", "字母");
+        sparkCodeDao.addInputAttribute("PD001", "新列名", "newColName", "字母");
 
     }
 

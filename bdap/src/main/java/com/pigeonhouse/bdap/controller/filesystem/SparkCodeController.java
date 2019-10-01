@@ -1,6 +1,6 @@
 package com.pigeonhouse.bdap.controller.filesystem;
 
-import com.pigeonhouse.bdap.service.filesystem.SparkCodeService;
+import com.pigeonhouse.bdap.dao.SparkCodeDao;
 import com.pigeonhouse.bdap.util.response.Response;
 import com.pigeonhouse.bdap.util.response.statusimpl.CodeStatus;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,7 +13,7 @@ import java.util.List;
 public class SparkCodeController {
 
     @Autowired
-    SparkCodeService sparkCodeService;
+    SparkCodeDao sparkCodeDao;
 
     /**
      * 返回算法模块的参数信息
@@ -22,7 +22,7 @@ public class SparkCodeController {
      */
     @PostMapping("/module")
     public Response returnSparkCode() {
-        List<String> all = sparkCodeService.findAllToJson();
+        List<String> all = sparkCodeDao.findAllToJson();
         return new Response(CodeStatus.CODE_PUT_SUCCESS, all.toString());
     }
 

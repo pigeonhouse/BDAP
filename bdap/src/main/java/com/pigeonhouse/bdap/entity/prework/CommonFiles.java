@@ -1,6 +1,6 @@
 package com.pigeonhouse.bdap.entity.prework;
 
-import com.pigeonhouse.bdap.entity.prework.attributes.FileAttribute;
+import com.pigeonhouse.bdap.entity.prework.valueattrs.FileAttribute;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import org.springframework.data.annotation.Id;

@@ -1,15 +1,19 @@
 package com.pigeonhouse.bdap.service.runcode;
 
+import com.pigeonhouse.bdap.dao.LivyDao;
+import com.pigeonhouse.bdap.dao.SparkCodeDao;
 import com.pigeonhouse.bdap.entity.execution.ExecutionInfo;
 import com.pigeonhouse.bdap.entity.execution.LivySessionInfo;
 import com.pigeonhouse.bdap.entity.execution.NodeInfo;
-import com.pigeonhouse.bdap.service.filesystem.SparkCodeService;
+import com.pigeonhouse.bdap.entity.prework.SparkCode;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.UUID;
 
 /**
  * @Author: XueXiaoYue HouWeiying
@@ -19,20 +23,20 @@ import java.util.List;
 public class SparkExecution {
 
     @Autowired
-    LivyService livyService;
+    LivyDao livyDao;
     @Autowired
-    RandomIdService randomIdService;
-    @Autowired
-    SparkCodeService sparkCodeService;
-    @Autowired
-    JoinCodeService joinCodeService;
-    @Value("${serverIp}")
-    private String serverIp;
+    SparkCodeDao sparkCodeDao;
 
-    public String executeCode(String code, LivySessionInfo livySessionInfo) {
-        System.out.println(code);
-        String resultUrl = livyService.postCode(code,livySessionInfo);
-        return resultUrl;
+    /**
+     * 给代码传入参数
+     *
+     * @param codeId     Spark代码编号
+     * @param attributes 传入参数
+     * @return 完整spark代码
+     */
+    public String injectParameters(String codeId, Map<String, String> attributes) {
+        StringBuilder parameterStatements = new StringBuilder();
+        return parameterStatements.toString();
     }
 
     /**
@@ -42,8 +46,9 @@ public class SparkExecution {
      * @param jobId
      */
     public void saveCheckPoint(NodeInfo nodeInfo, String jobId) {
-        String appendSaving = "";
-        //"output.write.parquet(\"/user/student/" + jobId + ".parquet\")";
+//        String pre = nodeInfo.getCode();
+//        String appendSaving = "output.write.parquet(\"" + jobId + ".parquet\")";
+//        nodeInfo.setCode(pre + appendSaving + "\n");
     }
 
     /**
@@ -61,21 +66,17 @@ public class SparkExecution {
         List<ExecutionInfo> executionInfoList = new ArrayList<>();
         StringBuilder codeToRun = new StringBuilder();
         for (NodeInfo nodeInfo : flowInfo) {
-            nodeInfo.setCode(joinCodeService.transParam(nodeInfo.getCodeId(), nodeInfo.getAttributes()));
-//            System.out.println(nodeInfo.getCode());
-//            nodeInfo.setCode(sparkCodeService.findByCodeId(nodeInfo.getCodeId()).getOriginCode());
-            codeToRun.append(nodeInfo.getCode()).append("\n");
+
+            //根据codeId在数据库中找到源码
+            codeToRun.append(sparkCodeDao.findByCodeId(nodeInfo.getCodeId())).append("\n");
+
             //由于最后一个结点强制设为了checkpoint 所以不需要额外检查
             if (nodeInfo.getIsCheckPoint()) {
-                String jobId = randomIdService.getId();
-                //saveCheckPoint(codeToRun, jobId);
-                String postStatusCode = "val result = Http(\"http://%s:8888/runningStatus\")" +
-                        ".postData(\"{\\\"jobId\\\":\\\"%s\\\",\\\"codeId\\\":\\\"%s\\\"}\")" +
-                        ".header(\"Content-Type\", \"application/json\").header(\"Charset\", \"UTF-8\")." +
-                        "option(HttpOptions.readTimeout(10000)).asString";
-                postStatusCode = String.format(postStatusCode, serverIp, jobId, nodeInfo.getCodeId());
-                codeToRun.append(postStatusCode);
-                String resultUrl = executeCode(codeToRun.toString(),livySessionInfo);
+                UUID uuid = UUID.randomUUID();
+                String jobId = uuid.toString().replace("-", "");
+
+
+                String resultUrl = livyDao.postCode(codeToRun.toString(),livySessionInfo);
                 codeToRun = new StringBuilder();
                 ExecutionInfo executionInfo = new ExecutionInfo(nodeInfo.getIndex(), jobId, resultUrl);
                 executionInfoList.add(executionInfo);
@@ -83,4 +84,5 @@ public class SparkExecution {
         }
         return executionInfoList;
     }
+
 }

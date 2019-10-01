@@ -11,7 +11,6 @@ import com.pigeonhouse.bdap.util.response.statusimpl.HdfsStatus;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
@@ -47,7 +46,7 @@ public class HDFSApi {
     public Object getFileList(HttpServletRequest request) {
         try {
             String token=tokenService.getTokenFromRequest(request,"loginToken");
-            String userId=tokenService.getFromToken(token,"userId").asString();
+            String userId=tokenService.getValueFromToken(token,"userId").asString();
             String oppositePath=request.getParameter("oppositePath");
             Hdfsfile fileList = hdfsService.listFiles(userId+oppositePath, null);
             if (fileList != null) {
@@ -74,7 +73,7 @@ public class HDFSApi {
     public Object mkdir(HttpServletRequest request) {
         try {
             String token=tokenService.getTokenFromRequest(request,"loginToken");
-            String userId=tokenService.getFromToken(token,"userId").asString();
+            String userId=tokenService.getValueFromToken(token,"userId").asString();
             String oppositePath=request.getParameter("oppositePath");
             String dirName=request.getParameter("dirName");
             if (oppositePath == "/")
@@ -101,7 +100,7 @@ public class HDFSApi {
     public Object delete(HttpServletRequest request) {
         try {
             String token=tokenService.getTokenFromRequest(request,"loginToken");
-            String userId=tokenService.getFromToken(token,"userId").asString();
+            String userId=tokenService.getValueFromToken(token,"userId").asString();
             String oppositePath=request.getParameter("oppositePath");
             String fileName=request.getParameter("fileName");
             if (oppositePath == "/")
@@ -136,7 +135,7 @@ public class HDFSApi {
         try {
             MultipartHttpServletRequest multipartRequest = (MultipartHttpServletRequest)request;
             String token=tokenService.getTokenFromRequest(request,"loginToken");
-            String userId=tokenService.getFromToken(token,"userId").asString();
+            String userId=tokenService.getValueFromToken(token,"userId").asString();
             String oppositePath=request.getParameter("oppositePath");
             boolean replace=Boolean.parseBoolean(request.getParameter("replace"));
             MultipartFile file=multipartRequest.getFile("file");
@@ -178,7 +177,7 @@ public class HDFSApi {
             MultipartHttpServletRequest multipartRequest = (MultipartHttpServletRequest) request;
             String token=tokenService.getTokenFromRequest(request,"loginToken");
             //获取含有登录信息的Token
-            String userId=tokenService.getFromToken(token,"userId").asString();
+            String userId=tokenService.getValueFromToken(token,"userId").asString();
             //解析UserId
             String oppositePath=request.getParameter("oppositePath");
             boolean replace=Boolean.parseBoolean(request.getParameter("replace"));
@@ -285,7 +284,7 @@ public class HDFSApi {
         try {
             String token = tokenService.getTokenFromRequest(request, "loginToken");
             //获取含有登录信息的Token
-            String userId = tokenService.getFromToken(token, "userId").asString();
+            String userId = tokenService.getValueFromToken(token, "userId").asString();
             //解析UserId
             String oppositePath = request.getParameter("oppositePath");
             if (oppositePath == "/")

@@ -2,7 +2,7 @@ package com.pigeonhouse.bdap.controller.runcode;
 
 import com.pigeonhouse.bdap.entity.execution.LivySessionInfo;
 import com.pigeonhouse.bdap.service.TokenService;
-import com.pigeonhouse.bdap.service.runcode.LivyService;
+import com.pigeonhouse.bdap.dao.LivyDao;
 import com.pigeonhouse.bdap.util.response.Response;
 import com.pigeonhouse.bdap.util.response.statusimpl.SessionStatus;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,7 +19,7 @@ import javax.servlet.http.HttpServletRequest;
 public class CheckSessionStatus {
 
     @Autowired
-    LivyService livyService;
+    LivyDao livyDao;
 
     @Autowired
     TokenService tokenService;
@@ -28,7 +28,7 @@ public class CheckSessionStatus {
     public Response sessionStatus(HttpServletRequest request) {
         String token = tokenService.getTokenFromRequest(request, "loginToken");
         LivySessionInfo livySessionInfo = tokenService.getLivySessionInfoFromToken(token);
-        LivySessionInfo newSessionInfo = livyService.refreshSessionStatus(livySessionInfo);
+        LivySessionInfo newSessionInfo = livyDao.refreshSessionStatus(livySessionInfo);
         if ("idle".equals(newSessionInfo.getState())) {
             return new Response(SessionStatus.IDLE, newSessionInfo);
         } else if ("starting".equals(newSessionInfo.getState())) {

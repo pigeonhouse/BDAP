@@ -1,5 +1,6 @@
-package com.pigeonhouse.bdap.entity.prework.attributes;
+package com.pigeonhouse.bdap.entity.prework.viewattrs;
 
+import com.pigeonhouse.bdap.entity.prework.valueattrs.LabelName;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -14,7 +15,7 @@ import java.util.ArrayList;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class Attribute {
+public class ViewAttributes {
     /**
      * 中文标签（页面上显示的）
      */
@@ -24,7 +25,6 @@ public class Attribute {
      * 英文标签（代码中的）
      */
     String elabel;
-
 
     /**
      * 参数类型
@@ -58,21 +58,21 @@ public class Attribute {
      * 下拉菜单显示的参数值，
      * 如["平均值","中位数","最大值","最小值"]
      */
-    ArrayList<ChinaEngBean> value;
+    ArrayList<LabelName> value;
 
     /**
      * 能否多选
      */
     Boolean multiChoice;
 
-    public Attribute(String label, String elabel, String attrType, String regexp) {
+    public ViewAttributes(String label, String elabel, String attrType, String regexp) {
         this.label = label;
         this.elabel = elabel;
         this.attrType = attrType;
         this.regexp = regexp;
     }
 
-    public Attribute(String label, String elabel, String attrType, String min, String max, String step) {
+    public ViewAttributes(String label, String elabel, String attrType, String min, String max, String step) {
         this.label = label;
         this.elabel = elabel;
         this.attrType = attrType;
@@ -81,7 +81,7 @@ public class Attribute {
         this.step = step;
     }
 
-    public Attribute(String label, String elabel, String attrType, ArrayList<ChinaEngBean> value, Boolean multiChoice) {
+    public ViewAttributes(String label, String elabel, String attrType, ArrayList<LabelName> value, Boolean multiChoice) {
         this.label = label;
         this.elabel = elabel;
         this.attrType = attrType;

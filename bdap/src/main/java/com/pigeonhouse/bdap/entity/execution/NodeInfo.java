@@ -23,8 +23,7 @@ public class NodeInfo {
      * code序号，对应SparkCode.codeId
      */
     private String codeId;
-    @JsonIgnore
-    private String code;
+
     /**
      * 参数
      */

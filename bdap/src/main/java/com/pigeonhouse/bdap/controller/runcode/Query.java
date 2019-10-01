@@ -2,7 +2,7 @@ package com.pigeonhouse.bdap.controller.runcode;
 
 import com.pigeonhouse.bdap.entity.execution.LivySessionInfo;
 import com.pigeonhouse.bdap.service.TokenService;
-import com.pigeonhouse.bdap.service.runcode.LivyService;
+import com.pigeonhouse.bdap.dao.LivyDao;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -17,14 +17,14 @@ import javax.servlet.http.HttpServletRequest;
 public class Query {
 
     @Autowired
-    LivyService livyService;
+    LivyDao livyDao;
 
     @Autowired
     TokenService tokenService;
 
     @RequestMapping("/query/ready")
     public void ready(String filepath) {
-        LivySessionInfo info = livyService.createSession("10.105.222.90:8998");
+        LivySessionInfo info = livyDao.createSession("10.105.222.90:8998");
         String code = "val df = spark.read.format(\"csv\").option(\"header\",\"true\").load(\"hdfs:///" + filepath + "\")" + "\n"
                 + "df.createOrReplaceTempView(\"data\")";
 
@@ -33,7 +33,7 @@ public class Query {
 //    @RequestMapping("/query/sql")
 //    public void sqlQuery(String sql) {
 //        String code = "spark.sql(\"" + sql + "\").show()";
-//        livyService.postCode(code, );
+//        livyDao.postCode(code, );
 //    }
 
 
@@ -51,7 +51,7 @@ public class Query {
 
     @RequestMapping("/query/delete")
     public void delete(String id) {
-        livyService.deleteSession(id);
+        livyDao.deleteSession(id);
     }
 
 }

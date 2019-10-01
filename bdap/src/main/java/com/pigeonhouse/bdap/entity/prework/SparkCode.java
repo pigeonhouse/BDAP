@@ -1,6 +1,6 @@
 package com.pigeonhouse.bdap.entity.prework;
 
-import com.pigeonhouse.bdap.entity.prework.attributes.Attribute;
+import com.pigeonhouse.bdap.entity.prework.viewattrs.ViewAttributes;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -62,5 +62,5 @@ public class SparkCode {
      * 每个参数需要以不同的形式展现在前端供用户选择/输入/勾选
      * 这里记录了在前端如何渲染的必要信息
      */
-    ArrayList<Attribute> attributes;
+    ArrayList<ViewAttributes> viewAttributes;
 }

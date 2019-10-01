@@ -5,7 +5,7 @@ import com.pigeonhouse.bdap.entity.execution.LivySessionInfo;
 import com.pigeonhouse.bdap.entity.prework.User;
 import com.pigeonhouse.bdap.service.TokenService;
 import com.pigeonhouse.bdap.service.UserService;
-import com.pigeonhouse.bdap.service.runcode.LivyService;
+import com.pigeonhouse.bdap.dao.LivyDao;
 import com.pigeonhouse.bdap.util.response.Response;
 import com.pigeonhouse.bdap.util.response.statusimpl.LoginStatus;
 import com.pigeonhouse.bdap.util.token.PassToken;
@@ -28,7 +28,7 @@ public class UserApi {
     @Autowired
     TokenService tokenService;
     @Autowired
-    LivyService livyService;
+    LivyDao livyDao;
 
     @PassToken
     @PostMapping("/login")
@@ -43,8 +43,8 @@ public class UserApi {
                 //密码错误
                 return new Response(LoginStatus.WRONG_PASSWORD, null);
             } else {
-                String livyAddr = livyService.selectLivyServer();
-                LivySessionInfo livySessionInfo = livyService.createSession(livyAddr);
+                String livyAddr = livyDao.selectLivyServer();
+                LivySessionInfo livySessionInfo = livyDao.createSession(livyAddr);
                 Integer sessionId = livySessionInfo.getId();
                 String token = tokenService.getLoginToken(user.getUserId(),livyAddr,sessionId);
                 //成功，获取token并将其置于cookie中返回前端

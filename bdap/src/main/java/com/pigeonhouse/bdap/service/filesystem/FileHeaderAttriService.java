@@ -2,7 +2,7 @@ package com.pigeonhouse.bdap.service.filesystem;
 
 import com.pigeonhouse.bdap.dao.FileHeaderAttriDao;
 import com.pigeonhouse.bdap.entity.prework.CsvHeader;
-import com.pigeonhouse.bdap.entity.prework.attributes.HeaderAttribute;
+import com.pigeonhouse.bdap.entity.prework.valueattrs.HeaderAttribute;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -85,14 +85,14 @@ public class FileHeaderAttriService {
 
 //    public void SaveFileHeaderJSON(String json){
 //        JSONObject jsonObject = new JSONObject(json);
-//        ArrayList<HeaderAttribute> attributes = new ArrayList<>();
+//        ArrayList<HeaderAttribute> viewAttributes = new ArrayList<>();
 //        JSONArray attrHeaderSet = (JSONArray) jsonObject.get("attrHeaderSet");
 //        for(int i = 0; i < attrHeaderSet.length(); i++){
 //            JSONObject o = (JSONObject) attrHeaderSet.get(i);
 //            HeaderAttribute attribute = new HeaderAttribute((String) o.get("colName"), (String) o.get("dataType"));
-//            attributes.add(attribute);
+//            viewAttributes.add(attribute);
 //        }
-//        CsvHeader header = new CsvHeader((String) jsonObject.get("fileId"), (String) jsonObject.get("fileName"), (String) jsonObject.get("filePath"), attributes);
+//        CsvHeader header = new CsvHeader((String) jsonObject.get("fileId"), (String) jsonObject.get("fileName"), (String) jsonObject.get("filePath"), viewAttributes);
 //        System.out.println(header);
 //        fileHeaderAttriDao.saveCsvHeader(header);
 //    }

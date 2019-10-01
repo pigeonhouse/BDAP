@@ -1,4 +1,4 @@
-package com.pigeonhouse.bdap.service.runcode;
+package com.pigeonhouse.bdap.dao;
 
 import com.alibaba.fastjson.JSONObject;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -11,6 +11,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.*;
+import org.springframework.stereotype.Repository;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
@@ -23,8 +24,9 @@ import java.util.*;
  * @Author: HouWeiying
  * @Date: 2019/9/7 11:33
  */
-@Service("LivyService")
-public class LivyService {
+@Repository("LivyDao")
+public class LivyDao
+{
     private Logger logger = LoggerFactory.getLogger(HdfsService.class);
     private static ObjectMapper objectMapper = new ObjectMapper();
 
