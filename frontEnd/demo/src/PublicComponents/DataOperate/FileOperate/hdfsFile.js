@@ -11,7 +11,7 @@ class HdfsFile extends Component {
 	state = {
 		inpValu: '',
 		oppositePath:'/',
-		treeData: []
+		treeData: [],
 	}
 
 	componentWillMount() {
@@ -56,8 +56,7 @@ class HdfsFile extends Component {
 		})
 	}
 
-	handleChange = (e) => {
-		e.preventDefault();
+	handleChange = (v,label,e) => {
 		const { form, propsAPI } = this.props;
 		const { getSelected, executeCommand, update } = propsAPI;
 
@@ -81,6 +80,11 @@ class HdfsFile extends Component {
 	handleSearch = (e) =>{
 		console.log("搜索");
 	}
+
+	// handleSelect = (v,node,ex)=>{
+	// 	let value = node.props.title
+	// 	this.setState({value})
+	// }
 
 	submit = () => {
 		const init = {
@@ -137,7 +141,7 @@ class HdfsFile extends Component {
 	}
 
 	render() {
-		const { treeData } = this.state;
+		const { treeData, inpValu } = this.state;
 		const { form } = this.props;
 		const { getFieldDecorator } = form;
 		const inlineFormItemLayout = {
@@ -157,14 +161,14 @@ class HdfsFile extends Component {
 						<TreeSelect
 							showSearch
 							style={{ width: 150 }}
-							value={this.state.value}
+							value={inpValu}
 							dropdownStyle={{ maxHeight: 400, overflow: 'auto' }}
 							treeData={treeData}
 							placeholder="Please select"
 							treeDefaultExpandAll
 							onChange={this.handleChange}
-							//  loadData={this.onLoadData}
 							onSearch={this.handleSearch}
+							// onSelect = {this.handleSelect}
 						/>
 					)}
 					<Button onClick={() => this.submit()}>confirm</Button>
