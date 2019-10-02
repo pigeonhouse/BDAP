@@ -1,42 +1,35 @@
-import org.apache.spark.ml.feature.{MinMaxScaler, StandardScaler, VectorAssembler, Normalizer, MaxAbsScaler}
-import org.apache.spark.sql.{Row, SaveMode}
-import org.apache.spark.sql.types._
-import spark.implicits._
+object Normalization {
 
-val userId = "%s"
-val id = "%s"
-val aim = "%s"
-val Type = "%s"
+  val normalizationType: String = null
+  val targetCols: Array[String] = null
+  var input: DataFrame = null
 
-val aimarray = aim.split(" ")
-var df_ = df_%s
+  def main(args: Array[String]): Unit = {
 
-val assembler = new VectorAssembler().setInputCols(aimarray).setOutputCol("features")
-df_ = assembler.transform(df_)
+    import org.apache.spark.ml.feature._
+    import org.apache.spark.sql.DataFrame
 
-if(Type == "Normal"){
-  val scaler = new Normalizer().setInputCol("features").setOutputCol("NormFeatures").setP(1.0)
-  df_ = scaler.transform(df_)
-} else{
-  val scaler = Type match{
-    case "MinMax" => new MinMaxScaler().setInputCol("features").setOutputCol("MinMaxFeatures")
-    case "Standord" => new StandardScaler().setInputCol("features").setOutputCol("StardardFeatures")
-    case "MaxAbs" => new MaxAbsScaler().setInputCol("features").setOutputCol("MaxAbsFeatures")
+    val assembler = new VectorAssembler().setInputCols(targetCols).setOutputCol("features")
+    val assembled = assembler.transform(input)
+    val scaled = {
+      if (normalizationType == "Normal") {
+        val scaler = new Normalizer().setInputCol("features").setOutputCol("NormFeatures").setP(1.0)
+        scaler.transform(assembled)
+      } else {
+        val scaler = normalizationType match {
+          case "MinMax" => new MinMaxScaler().setInputCol("features").setOutputCol("MinMaxFeatures")
+          case "Standard" => new StandardScaler().setInputCol("features").setOutputCol("StandardFeatures")
+          case "MaxAbs" => new MaxAbsScaler().setInputCol("features").setOutputCol("MaxAbsFeatures")
+        }
+        val scalerModel = scaler.fit(assembled)
+        scalerModel.transform(assembled)
+      }
+    }
+
+    val output = scaled
+    output.show()
+
   }
-  val scalerModel = scaler.fit(df_)
-  df_ = scalerModel.transform(df_)
+
 }
 
-df_.write.format("parquet").mode(SaveMode.Overwrite).save(userId + "/" + id)
-
-val df_%s = df_
-
-var fin = df.limit(20).toJSON.collectAsList.toString
-
-val colname = df.columns
-val fin_ = fin.substring(1, fin.length - 1)
-val start = """{"colName":""""
-val end = "\""
-val json = colname.mkString(start,", ",end) + "}, "
-
-fin = "[" + json ++ fin_ + "]"

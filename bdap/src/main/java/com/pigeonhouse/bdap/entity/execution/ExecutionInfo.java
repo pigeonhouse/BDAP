@@ -16,7 +16,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class ExecutionInfo {
-    Integer index;
+    String id;
     String jobId;
     String resultUrl;
 }

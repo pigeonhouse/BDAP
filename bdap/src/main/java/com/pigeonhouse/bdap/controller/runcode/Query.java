@@ -3,6 +3,7 @@ package com.pigeonhouse.bdap.controller.runcode;
 import com.pigeonhouse.bdap.entity.execution.LivySessionInfo;
 import com.pigeonhouse.bdap.service.TokenService;
 import com.pigeonhouse.bdap.dao.LivyDao;
+import com.pigeonhouse.bdap.util.token.PassToken;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -49,6 +50,7 @@ public class Query {
         System.out.println(livyAddr + "/sessions/" + sessionId);
     }
 
+    @PassToken
     @RequestMapping("/query/delete")
     public void delete(String id) {
         livyDao.deleteSession(id);

@@ -1,5 +1,3 @@
-import org.apache.spark.sql.DataFrame
-
 
 def main(args: Array[String]): Unit = {
   val userId = args(0)

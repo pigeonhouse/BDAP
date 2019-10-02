@@ -17,6 +17,5 @@ import lombok.NoArgsConstructor;
 public class ValueAttributes {
     String attrName;
     String attrType;
-    String value;
-
+    Object value;
 }

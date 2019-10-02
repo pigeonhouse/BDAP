@@ -24,7 +24,7 @@ public class NodeInfo {
     /**
      * Node在整个flow里的唯一序号
      */
-    private Integer index;
+    private String id;
     /**
      * 算法名（直接对应scala文件），对应SparkCode.algorithmName
      */
@@ -33,7 +33,13 @@ public class NodeInfo {
     /**
      * 这个节点的源点Id集合
      */
-    private ArrayList<String> sourceId;
+    private ArrayList<String> sourceIdList;
+
+    /**
+     * 上下锚点个数
+     * 如：[2,1]表示两个输入，一个输出
+     */
+    private ArrayList<Integer> anchor;
 
     /**
      * 参数

@@ -21,6 +21,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 
 import java.io.*;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 
 @RunWith(SpringRunner.class)
@@ -56,15 +57,32 @@ public class BdapApplicationTests {
 
     @Test
     public void test() throws Exception{
+
+        ArrayList<Integer> anchor_01 = new ArrayList<>(Arrays.asList(0,1));
+        ArrayList<ValueAttributes> attrs_01 = new ArrayList<>();
+        attrs_01.add(new ValueAttributes("file","String","hdfs:///bdap/demoData/simpleTest.csv"));
+        NodeInfo nodeInfo_01 = new NodeInfo("abc","LoadData",null,anchor_01,attrs_01,false);
+
+        ArrayList<Integer> anchor_02 = new ArrayList<>(Arrays.asList(1,1));
+        ArrayList<ValueAttributes> attrs_02 = new ArrayList<>();
+        attrs_02.add(new ValueAttributes("targetCols","Array[String]",new ArrayList<>(Arrays.asList("age"))));
+        attrs_02.add(new ValueAttributes("normalizationType","String","MinMax"));
+        NodeInfo nodeInfo_02 = new NodeInfo("def","Normalization",new ArrayList<>(Arrays.asList("abc")),anchor_02,attrs_02,true);
+
+        ArrayList<NodeInfo> flowInfo = new ArrayList<>();
+        flowInfo.add(nodeInfo_01);
+        flowInfo.add(nodeInfo_02);
+
+        //LivySessionInfo livySessionInfo = new LivySessionInfo();
+
         LivySessionInfo livySessionInfo = livyDao.createSession("10.105.222.90:8998");
         while(!"idle".equals(livyDao.refreshSessionStatus(livySessionInfo).getState())){
             Thread.sleep(1000);
             System.out.println("starting a new session.......");
         }
-        ArrayList<ValueAttributes> attrs = new ArrayList<>();
-        attrs.add(new ValueAttributes("a","Int","3"));
-        attrs.add(new ValueAttributes("b","Int","5"));
-        sparkExecution.executeOneNode("Test",attrs,livySessionInfo);
+
+        sparkExecution.executeFlow(flowInfo,livySessionInfo);
+
     }
 
 
