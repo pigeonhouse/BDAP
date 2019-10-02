@@ -36,7 +36,7 @@ public class SparkCodeDao {
      * @return 查询的SparkCode对象
      */
     public SparkCode findByCodeId(String codeId) {
-        Query query = new Query(Criteria.where("codeId").is(codeId));
+        Query query = new Query(Criteria.where("algorithmName").is(codeId));
         SparkCode code = mongoTemplate.findOne(query, SparkCode.class);
         return code;
     }
@@ -57,7 +57,7 @@ public class SparkCodeDao {
      * @param sparkCode 更新的对象
      */
     public void updateSparkCode(SparkCode sparkCode) {
-        Query query = new Query(Criteria.where("codeId").is(sparkCode.getCodeId()));
+        Query query = new Query(Criteria.where("algorithmName").is(sparkCode.getCodeId()));
         Update update = new Update().set("label", sparkCode.getLabel()).set("elabel", sparkCode.getElabel())
                 .set("originCode", sparkCode.getOriginCode()).set("type", sparkCode.getType())
                 .set("shape", sparkCode.getShape()).set("viewAttributes", sparkCode.getViewAttributes());
@@ -72,7 +72,7 @@ public class SparkCodeDao {
      * @param codeId 删除对象的codeId
      */
     public void deleteSparkCodeById(String codeId) {
-        Query query = new Query(Criteria.where("codeId").is(codeId));
+        Query query = new Query(Criteria.where("algorithmName").is(codeId));
         mongoTemplate.remove(query, SparkCode.class);
     }
 

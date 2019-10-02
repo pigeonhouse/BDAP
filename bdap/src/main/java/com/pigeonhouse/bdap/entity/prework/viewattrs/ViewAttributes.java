@@ -17,12 +17,12 @@ import java.util.ArrayList;
 @NoArgsConstructor
 public class ViewAttributes {
     /**
-     * 中文标签（页面上显示的）
+     * 中文属性名（页面上显示的）
      */
     String label;
 
     /**
-     * 英文标签（代码中的）
+     * 英文属性名（代码中的）
      */
     String elabel;
 

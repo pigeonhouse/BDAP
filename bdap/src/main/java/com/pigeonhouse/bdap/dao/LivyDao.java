@@ -180,7 +180,6 @@ public class LivyDao
         LivySessionInfo newLivySessionInfo = new LivySessionInfo();
         try {
             JSONObject response = objectMapper.readValue(res, JSONObject.class);
-            System.out.println(response);
             newLivySessionInfo.setState(response.get("state").toString());
             newLivySessionInfo.setLivyAddr(livyAddr);
             newLivySessionInfo.setId((int)response.get("id"));

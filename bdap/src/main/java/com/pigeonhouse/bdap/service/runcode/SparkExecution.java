@@ -5,14 +5,15 @@ import com.pigeonhouse.bdap.dao.SparkCodeDao;
 import com.pigeonhouse.bdap.entity.execution.ExecutionInfo;
 import com.pigeonhouse.bdap.entity.execution.LivySessionInfo;
 import com.pigeonhouse.bdap.entity.execution.NodeInfo;
-import com.pigeonhouse.bdap.entity.prework.SparkCode;
+import com.pigeonhouse.bdap.entity.execution.ValueAttributes;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
+import java.io.BufferedReader;
+import java.io.FileInputStream;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 import java.util.UUID;
 
 /**
@@ -30,13 +31,49 @@ public class SparkExecution {
     /**
      * 给代码传入参数
      *
-     * @param codeId     Spark代码编号
+     * @param algorithmName     Spark代码编号
      * @param attributes 传入参数
      * @return 完整spark代码
      */
-    public String injectParameters(String codeId, Map<String, String> attributes) {
-        StringBuilder parameterStatements = new StringBuilder();
-        return parameterStatements.toString();
+    public String injectParameters(String algorithmName, ArrayList<ValueAttributes> attributes) {
+
+        String filePath = "src/main/resources/static/" + algorithmName + ".scala";
+        StringBuilder stringBuilder = new StringBuilder();
+        try {
+            FileInputStream inputStream = new FileInputStream(filePath);
+            BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream, "gbk"));
+            String str = null;
+            while ((str = bufferedReader.readLine()) != null) {
+                stringBuilder.append("\n").append(str);
+            }
+            inputStream.close();
+            bufferedReader.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        String originCode = stringBuilder.toString();
+
+        //取出main函数里面的代码
+        String innerCode = originCode.split("def.*\\{")[1]
+                .split("(\\})$")[0]
+                .split("(\\})$")[0];
+
+        StringBuilder attrsCodeBuilder = new StringBuilder();
+
+        for (ValueAttributes attr : attributes) {
+            String attrName = attr.getAttrName();
+            String attrType = attr.getAttrType();
+            String value = attr.getValue();
+            if ("String".equals(attrType)) {
+                value = "\"" + value + "\"";
+            }
+            attrsCodeBuilder.append("val " + attrName + ": " + attrType + " = " + value)
+                    .append("\n");
+        }
+
+        String attrsCode = attrsCodeBuilder.toString();
+
+        return attrsCode + innerCode;
     }
 
     /**
@@ -49,6 +86,13 @@ public class SparkExecution {
 //        String pre = nodeInfo.getCode();
 //        String appendSaving = "output.write.parquet(\"" + jobId + ".parquet\")";
 //        nodeInfo.setCode(pre + appendSaving + "\n");
+    }
+
+    public String executeOneNode(String algorithmName,
+                                 ArrayList<ValueAttributes> attributes,
+                                 LivySessionInfo livySessionInfo){
+        String codeToRun = injectParameters(algorithmName,attributes);
+        return livyDao.postCode(codeToRun, livySessionInfo);
     }
 
     /**
@@ -68,7 +112,7 @@ public class SparkExecution {
         for (NodeInfo nodeInfo : flowInfo) {
 
             //根据codeId在数据库中找到源码
-            codeToRun.append(sparkCodeDao.findByCodeId(nodeInfo.getCodeId())).append("\n");
+            codeToRun.append(sparkCodeDao.findByCodeId(nodeInfo.getAlgorithmName())).append("\n");
 
             //由于最后一个结点强制设为了checkpoint 所以不需要额外检查
             if (nodeInfo.getIsCheckPoint()) {
@@ -76,7 +120,7 @@ public class SparkExecution {
                 String jobId = uuid.toString().replace("-", "");
 
 
-                String resultUrl = livyDao.postCode(codeToRun.toString(),livySessionInfo);
+                String resultUrl = executeOneNode(nodeInfo.getAlgorithmName(),nodeInfo.getAttributes(),livySessionInfo);
                 codeToRun = new StringBuilder();
                 ExecutionInfo executionInfo = new ExecutionInfo(nodeInfo.getIndex(), jobId, resultUrl);
                 executionInfoList.add(executionInfo);

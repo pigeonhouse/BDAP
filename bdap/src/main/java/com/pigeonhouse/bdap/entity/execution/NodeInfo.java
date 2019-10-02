@@ -5,9 +5,15 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 
 /**
+ * ！未完成！
+ * 前端在用户连接完成拓扑图并选择完参数后
+ * 将返回一个以此对象构成的数组
+ * Note:其中已经包含了用户选择完的参数值
+ *
  * @Author: XueXiaoYue HouWeiying
  * @Date: 2019/9/7 11:18
  */
@@ -20,14 +26,15 @@ public class NodeInfo {
      */
     private Integer index;
     /**
-     * code序号，对应SparkCode.codeId
+     * code序号，对应SparkCode.algorithmName
      */
-    private String codeId;
+    private String algorithmName;
 
     /**
      * 参数
      */
-    private HashMap<String, String> attributes;
+    private ArrayList<ValueAttributes> attributes;
+    
     /**
      * 是否在此保存中间结果
      */
