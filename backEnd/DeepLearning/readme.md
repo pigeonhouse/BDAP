@@ -1,1 +1,0 @@
-Place to store scala code for deep learning

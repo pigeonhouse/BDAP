@@ -26,9 +26,14 @@ public class NodeInfo {
      */
     private Integer index;
     /**
-     * code序号，对应SparkCode.algorithmName
+     * 算法名（直接对应scala文件），对应SparkCode.algorithmName
      */
     private String algorithmName;
+
+    /**
+     * 这个节点的源点Id集合
+     */
+    private ArrayList<String> sourceId;
 
     /**
      * 参数
