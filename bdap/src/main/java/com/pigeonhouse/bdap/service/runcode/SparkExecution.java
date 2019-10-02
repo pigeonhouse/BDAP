@@ -69,9 +69,9 @@ public class SparkExecution {
         String originCode = originCodeBuilder.toString();
 
         //取出main函数里面的代码
-        String innerCode = originCode.split("def.*\\{")[1]
-                .split("(\\}|\\}\n)$")[0]
-                .split("(\\}|\\}\n)$")[0];
+        String innerCode = originCode.split("def\\smain.*\\{")[1]
+                .split("(\\}\\s*)$")[0]
+                .split("(\\}\\s*)$")[0];
 
         //---------------下面开始构造参数赋值语句---------------------
 
@@ -156,6 +156,7 @@ public class SparkExecution {
             if (nodeInfo.getIsCheckPoint()) {
 
                 //保存output
+                //待完成
                 codeToRun.append("");
 
                 //生成一个随机的jobId,用于标记这一次job
