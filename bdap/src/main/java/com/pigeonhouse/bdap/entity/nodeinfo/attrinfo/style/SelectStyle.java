@@ -21,5 +21,5 @@ public class SelectStyle {
      * 下拉菜单显示的参数值，
      * 如["平均值","中位数","最大值","最小值"]
      */
-    ArrayList<LabelName> menu;
+    LabelName[] menu;
 }

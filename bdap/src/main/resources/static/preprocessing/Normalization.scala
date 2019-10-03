@@ -9,7 +9,7 @@ object Normalization {
     import org.apache.spark.ml.feature._
 
     val assembler = new VectorAssembler().setInputCols(targetCols).setOutputCol("features")
-    val assembled = assembler.transform(input)
+   val assembled = assembler.transform(input)
     val scaled = {
       if (normalizationType == "Normal") {
         val scaler = new Normalizer().setInputCol("features").setOutputCol("NormFeatures").setP(1.0)

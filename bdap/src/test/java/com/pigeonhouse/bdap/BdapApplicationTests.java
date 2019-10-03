@@ -1,15 +1,18 @@
 package com.pigeonhouse.bdap;
 
 import com.pigeonhouse.bdap.controller.filesystem.FileHeaderAttriController;
-import com.pigeonhouse.bdap.controller.filesystem.SparkCodeController;
+import com.pigeonhouse.bdap.controller.filesystem.ModuleViewInfoController;
 import com.pigeonhouse.bdap.controller.runcode.PostCode;
 import com.pigeonhouse.bdap.dao.FileHeaderAttriDao;
 import com.pigeonhouse.bdap.dao.LivyDao;
+import com.pigeonhouse.bdap.dao.ModuleDao;
 import com.pigeonhouse.bdap.dao.UserDao;
 import com.pigeonhouse.bdap.entity.execution.LivySessionInfo;
 import com.pigeonhouse.bdap.entity.nodeinfo.LabelName;
 import com.pigeonhouse.bdap.entity.nodeinfo.NodeInfo;
 import com.pigeonhouse.bdap.entity.nodeinfo.attrinfo.AttrInfo;
+import com.pigeonhouse.bdap.entity.nodeinfo.attrinfo.style.ChooseColStyle;
+import com.pigeonhouse.bdap.entity.nodeinfo.attrinfo.style.SelectStyle;
 import com.pigeonhouse.bdap.service.filesystem.FileHeaderAttriService;
 import com.pigeonhouse.bdap.service.runcode.SparkExecution;
 import org.junit.Test;
@@ -31,7 +34,7 @@ public class BdapApplicationTests {
     LivyDao livyDao;
 
     @Autowired
-    SparkCodeController sparkCodeController;
+    ModuleViewInfoController moduleViewInfoController;
 
     @Autowired
     FileHeaderAttriDao fileHeaderAttriDao;
@@ -48,8 +51,11 @@ public class BdapApplicationTests {
     @Autowired
     PostCode postCode;
 
+    @Autowired
+    ModuleDao moduleDao;
+
     @Test
-    public void test() throws Exception {
+    public void flowTest() throws Exception {
 
         //--------------第一个节点用于读入数据-----------
 
@@ -57,7 +63,7 @@ public class BdapApplicationTests {
         attrs_01.add(new AttrInfo(new LabelName("file"), "String"
                 , "hdfs:///bdap/demoData/simpleTest.csv"));
 
-        NodeInfo nodeInfo_01 = new NodeInfo("abc", new LabelName("LoadData")
+        NodeInfo nodeInfo_01 = new NodeInfo("abc", new LabelName("LoadData"),new LabelName("data")
                 , null, new int[]{0, 1}, attrs_01, false);
 
         //-----------------接下去做测试算法--------------
@@ -69,7 +75,7 @@ public class BdapApplicationTests {
         attrs_02.add(new AttrInfo(new LabelName("normalizationType"), "String"
                 , "MinMax"));
 
-        NodeInfo nodeInfo_02 = new NodeInfo("def", new LabelName("Normalization")
+        NodeInfo nodeInfo_02 = new NodeInfo("def", new LabelName("Normalization"),new LabelName("preprocessing")
                 , new String[]{"abc"}, new int[]{1, 1}, attrs_02, true);
 
         ArrayList<NodeInfo> flowInfo = new ArrayList<>();
@@ -85,6 +91,23 @@ public class BdapApplicationTests {
         }
 
         sparkExecution.executeFlow(flowInfo, livySessionInfo);
+
+    }
+
+    @Test
+    public void addModuleTest(){
+        ArrayList<AttrInfo> attributes = new ArrayList<>();
+
+        SelectStyle selectStyle = new SelectStyle(new LabelName[]{new LabelName("Normal","Normal"),new LabelName("MinMax","MinMax"),new LabelName("Standard","Standard"),new LabelName("MaxAbs","MaxAbs")});
+        attributes.add(new AttrInfo(new LabelName("类型","normalizationType"),"String",selectStyle,null));
+
+        ChooseColStyle chooseColStyle = new ChooseColStyle(true);
+        attributes.add(new AttrInfo(new LabelName("归一化字段","targetCols"),"Array[String]",chooseColStyle,null));
+
+        NodeInfo nodeInfo = new NodeInfo(new LabelName("归一化","Normalization"),new LabelName("preprocessing","数据预处理")
+        ,new int[]{1,1},attributes);
+
+        moduleDao.saveModuleInfo(nodeInfo);
 
     }
 
@@ -144,7 +167,7 @@ public class BdapApplicationTests {
 //        map.put("moduleId", "123456");
 //        map.put("targetCol", "age");
 //        map.put("type", "average");
-//        map.put("filePath", "/test");
+//        map.put("filePath", "/flowTest");
 //
 //        String s = joinCodeService.transParam("OF001", map);
 //        System.out.println(s);

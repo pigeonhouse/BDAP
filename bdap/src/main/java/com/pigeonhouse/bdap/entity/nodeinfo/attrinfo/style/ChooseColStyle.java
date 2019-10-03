@@ -16,5 +16,5 @@ public class ChooseColStyle {
     /**
      * 能否选择多列
      */
-    Boolean multiCol;
+    Boolean multiCol ;
 }

@@ -1,57 +1,47 @@
-//package com.pigeonhouse.bdap.dao;
-//
-//import com.alibaba.fastjson.JSONObject;
-//import com.pigeonhouse.bdap.entity.nodeinfo.attrinfo.AttrInfo;
-//import org.springframework.beans.factory.annotation.Autowired;
-//import org.springframework.data.mongodb.core.MongoTemplate;
-//import org.springframework.data.mongodb.core.query.Criteria;
-//import org.springframework.data.mongodb.core.query.Query;
-//import org.springframework.data.mongodb.core.query.Update;
-//import org.springframework.stereotype.Repository;
-//
-//import java.util.ArrayList;
-//import java.util.List;
-//
-//@Repository
-//public class SparkCodeDao {
-//
-//    @Autowired
-//    private MongoTemplate mongoTemplate;
-//
-//    /**
-//     * 添加SparkCode对象到数据库
-//     *
-//     * @param sparkCode 新建对象
-//     */
-//    public void saveSparkCode(SparkCode sparkCode) {
-//        mongoTemplate.save(sparkCode);
-//    }
-//
-//    /**
-//     * 根据codeId查询数据库SparkCode对象
-//     *
-//     * @param codeId 数据库对象codeId
-//     * @return 查询的SparkCode对象
-//     */
-//    public SparkCode findByCodeId(String codeId) {
-//        Query query = new Query(Criteria.where("algorithmName").is(codeId));
-//        SparkCode code = mongoTemplate.findOne(query, SparkCode.class);
-//        return code;
-//    }
-//
-//    /**
-//     * 查询数据库所有SparkCode对象
-//     *
-//     * @return 查询结果
-//     */
-//    public List<SparkCode> findAll() {
-//        List<SparkCode> sparkCodes = mongoTemplate.find(new Query(new Criteria()), SparkCode.class);
-//        return sparkCodes;
-//    }
+package com.pigeonhouse.bdap.dao;
+
+import com.pigeonhouse.bdap.entity.nodeinfo.NodeInfo;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.mongodb.core.MongoTemplate;
+import org.springframework.data.mongodb.core.query.Criteria;
+import org.springframework.data.mongodb.core.query.Query;
+import org.springframework.stereotype.Repository;
+
+import java.util.List;
+
+@Repository
+public class ModuleDao {
+
+    @Autowired
+    private MongoTemplate mongoTemplate;
+
+    /**
+     * 添加nodeInfo对象到数据库
+     *
+     * @param nodeInfo 新建对象
+     */
+    public void saveModuleInfo(NodeInfo nodeInfo) {
+        mongoTemplate.save(nodeInfo);
+    }
+
+    /**
+     * @return 查询的NodeInfo对象
+     */
+    public NodeInfo findByELabel(String elabel) {
+        Query query = new Query(Criteria.where("elabel").is(elabel));
+        return mongoTemplate.findOne(query, NodeInfo.class);
+    }
+
+    /**
+     * @return 查询结果
+     */
+    public List<NodeInfo> findAll() {
+        return mongoTemplate.find(new Query(), NodeInfo.class);
+    }
+
 //
 //    /**
-//     * 更新数据库SparkCode对象
-//     *
+//
 //     * @param sparkCode 更新的对象
 //     */
 //    public void updateSparkCode(SparkCode sparkCode) {
@@ -75,8 +65,9 @@
 //    }
 //
 //
+//
 //    public String findByCodeIdToJson(String codeId) {
-//        String jsonString = JSONObject.toJSONString(findByCodeId(codeId));
+//        String jsonString = JSONObject.toJSONString(findByELabel(codeId));
 //        return jsonString;
 //    }
 //
@@ -90,21 +81,8 @@
 //        }
 //        return sparkCodeStrings;
 //    }
-//
-//    public void addSparkCode(String codeId, String type, String label, String elabel, String originCode, String shape) {
-//        SparkCode sparkCode = new SparkCode();
-//        sparkCode.setCodeId(codeId);
-//        sparkCode.setType(type);
-//        sparkCode.setLabel(label);
-//        sparkCode.setElabel(elabel);
-//        sparkCode.setOriginCode(originCode);
-//        sparkCode.setShape(shape);
-//        sparkCode.setViewAttributes(new ArrayList<AttrInfo>());
-//        saveSparkCode(sparkCode);
-//    }
-//
 //    public void addInputAttribute(String codeId, String label, String elabel, String regexp) {
-//        SparkCode sparkCode = findByCodeId(codeId);
+//        SparkCode sparkCode = findByELabel(codeId);
 //        ArrayList<AttrInfo> viewAttributes = sparkCode.getViewAttributes();
 //        if (viewAttributes == null) {
 //            viewAttributes = new ArrayList<AttrInfo>();
@@ -115,7 +93,7 @@
 //    }
 //
 //    public void addNumberAttribute(String codeId, String label, String elabel, String min, String max, String step) {
-//        SparkCode sparkCode = findByCodeId(codeId);
+//        SparkCode sparkCode = findByELabel(codeId);
 //        ArrayList<AttrInfo> viewAttributes = sparkCode.getViewAttributes();
 //        if (viewAttributes == null) {
 //            viewAttributes = new ArrayList<AttrInfo>();
@@ -126,7 +104,7 @@
 //    }
 //
 //    public void addSelectAttribute(String codeId, String label, String elabel, ArrayList<LabelName> value, Boolean multiChoice) {
-//        SparkCode sparkCode = findByCodeId(codeId);
+//        SparkCode sparkCode = findByELabel(codeId);
 //        ArrayList<AttrInfo> viewAttributes = sparkCode.getViewAttributes();
 //        if (viewAttributes == null) {
 //            viewAttributes = new ArrayList<AttrInfo>();
@@ -137,7 +115,7 @@
 //    }
 //
 //    public void updateOriginCode(String codeId, String originCode) {
-//        SparkCode sparkCode = findByCodeId(codeId);
+//        SparkCode sparkCode = findByELabel(codeId);
 //        sparkCode.setOriginCode(originCode);
 //        updateSparkCode(sparkCode);
 //    }
@@ -145,5 +123,5 @@
 //    public void deleteSparkCode(String codeId) {
 //        deleteSparkCodeById(codeId);
 //    }
-//
-//}
+
+}

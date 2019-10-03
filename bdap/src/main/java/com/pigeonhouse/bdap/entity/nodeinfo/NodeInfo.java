@@ -22,7 +22,7 @@ public class NodeInfo {
     /**
      * 前端随机生成的id
      */
-    private String id;
+    private String id ;
 
     /**
      * 中文标签与英文标签
@@ -75,12 +75,23 @@ public class NodeInfo {
     /**
      * 用于算法测试的构造器
      */
-    public NodeInfo(String id, LabelName labelName, String[] sourceIdList, int[] anchor, ArrayList<AttrInfo> attributes, Boolean isCheckPoint) {
+    public NodeInfo(String id, LabelName labelName, LabelName groupName, String[] sourceIdList, int[] anchor, ArrayList<AttrInfo> attributes, Boolean isCheckPoint) {
         this.id = id;
         this.labelName = labelName;
+        this.groupName = groupName;
         this.sourceIdList = sourceIdList;
         this.anchor = anchor;
         this.attributes = attributes;
         this.isCheckPoint = isCheckPoint;
+    }
+
+    /**
+     * 用于上传新模块的构造器
+     */
+    public NodeInfo(LabelName labelName, LabelName groupName, int[] anchor, ArrayList<AttrInfo> attributes) {
+        this.labelName = labelName;
+        this.groupName = groupName;
+        this.anchor = anchor;
+        this.attributes = attributes;
     }
 }

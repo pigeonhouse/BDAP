@@ -49,7 +49,8 @@ public class SparkExecution {
         String inputCode = inputCodeBuilder.append("\n").toString();
 
         //--------------取出代码文件中的代码段---------------
-        String filePath = "src/main/resources/static/" + nodeInfo.getLabelName().getElabel() + ".scala";
+        String filePath = "src/main/resources/static/" + nodeInfo.getGroupName().getElabel() +"/"
+                + nodeInfo.getLabelName().getElabel() + ".scala";
         StringBuilder originCodeBuilder = new StringBuilder();
         try {
             FileInputStream inputStream = new FileInputStream(filePath);
