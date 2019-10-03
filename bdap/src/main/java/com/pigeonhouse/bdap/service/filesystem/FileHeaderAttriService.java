@@ -1,8 +1,8 @@
 package com.pigeonhouse.bdap.service.filesystem;
 
 import com.pigeonhouse.bdap.dao.FileHeaderAttriDao;
-import com.pigeonhouse.bdap.entity.prework.CsvHeader;
-import com.pigeonhouse.bdap.entity.prework.valueattrs.HeaderAttribute;
+import com.pigeonhouse.bdap.entity.metadata.CsvHeader;
+import com.pigeonhouse.bdap.entity.metadata.HeaderAttribute;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

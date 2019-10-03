@@ -1,4 +1,4 @@
-package com.pigeonhouse.bdap.entity.prework;
+package com.pigeonhouse.bdap.entity.metadata;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

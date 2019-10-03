@@ -7,7 +7,7 @@ import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.exceptions.JWTDecodeException;
 import com.auth0.jwt.exceptions.JWTVerificationException;
 import com.auth0.jwt.interfaces.Claim;
-import com.pigeonhouse.bdap.entity.prework.User;
+import com.pigeonhouse.bdap.entity.metadata.User;
 import com.pigeonhouse.bdap.service.TokenService;
 import com.pigeonhouse.bdap.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -104,7 +104,7 @@ public class AuthenticationInterceptor implements HandlerInterceptor {
             }
 
             //刷新cookie
-            Cookie cookie = new Cookie("token", tokenService.getLoginToken(userId,livyAddr,sessionId));
+            Cookie cookie = new Cookie("token", tokenService.getLoginToken(userId, livyAddr, sessionId));
             httpServletResponse.addCookie(cookie);
             return true;
         }
