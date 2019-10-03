@@ -1,11 +1,9 @@
-package com.pigeonhouse.bdap.entity.nodeinfo.attrinfo.style;
+package com.pigeonhouse.bdap.entity.mapinfo.nodeinfo.attrinfo.style;
 
-import com.pigeonhouse.bdap.entity.nodeinfo.LabelName;
+import com.pigeonhouse.bdap.entity.mapinfo.nodeinfo.LabelName;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-
-import java.util.ArrayList;
 
 /**
  * @Author: XueXiaoYue

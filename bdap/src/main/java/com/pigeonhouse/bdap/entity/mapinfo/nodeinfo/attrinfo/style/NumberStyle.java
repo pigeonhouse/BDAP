@@ -1,4 +1,4 @@
-package com.pigeonhouse.bdap.entity.nodeinfo.attrinfo.style;
+package com.pigeonhouse.bdap.entity.mapinfo.nodeinfo.attrinfo.style;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

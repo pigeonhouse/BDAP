@@ -1,6 +1,6 @@
 package com.pigeonhouse.bdap.dao;
 
-import com.pigeonhouse.bdap.entity.nodeinfo.NodeInfo;
+import com.pigeonhouse.bdap.entity.mapinfo.nodeinfo.NodeInfo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;

@@ -20,20 +20,20 @@ import java.util.Map;
  * @Date: 2019/9/8 18:54
  */
 @RestController
-public class CheckStatus {
+public class CheckRunningStatus {
 
-    @PostMapping("/checkstatus")
-    Object checkstatus(@RequestBody ExecutionInfo executionInfo) {
+    @PostMapping("/runningstatus")
+    Object checkstatus(String resultUrl) {
         ObjectMapper objectMapper = new ObjectMapper();
         RestTemplate restTemplate = new RestTemplate();
         String output = "";
         String state = "";
         try {
             state = objectMapper.readValue(
-                    restTemplate.getForObject(executionInfo.getResultUrl(), String.class), Map.class)
+                    restTemplate.getForObject(resultUrl, String.class), Map.class)
                     .get("state").toString();
             output = objectMapper.readValue(
-                    restTemplate.getForObject(executionInfo.getResultUrl(), String.class), Map.class)
+                    restTemplate.getForObject(resultUrl, String.class), Map.class)
                     .get("output").toString();
         } catch (HttpClientErrorException e) {
             e.printStackTrace();
@@ -45,6 +45,7 @@ public class CheckStatus {
         JSONObject jsonObject = new JSONObject();
         jsonObject.put("state", state);
         jsonObject.put("output", output);
+        System.out.println(output);
         return new Response(RunningStatus.SUCCESSFUL_QUERY, jsonObject);
     }
 }

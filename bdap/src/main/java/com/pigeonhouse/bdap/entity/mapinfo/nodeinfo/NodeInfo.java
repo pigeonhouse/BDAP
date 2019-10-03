@@ -1,6 +1,6 @@
-package com.pigeonhouse.bdap.entity.nodeinfo;
+package com.pigeonhouse.bdap.entity.mapinfo.nodeinfo;
 
-import com.pigeonhouse.bdap.entity.nodeinfo.attrinfo.AttrInfo;
+import com.pigeonhouse.bdap.entity.mapinfo.nodeinfo.attrinfo.AttrInfo;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;

@@ -3,8 +3,8 @@ package com.pigeonhouse.bdap.service.runcode;
 import com.pigeonhouse.bdap.dao.LivyDao;
 import com.pigeonhouse.bdap.entity.execution.ExecutionInfo;
 import com.pigeonhouse.bdap.entity.execution.LivySessionInfo;
-import com.pigeonhouse.bdap.entity.nodeinfo.NodeInfo;
-import com.pigeonhouse.bdap.entity.nodeinfo.attrinfo.AttrInfo;
+import com.pigeonhouse.bdap.entity.mapinfo.nodeinfo.NodeInfo;
+import com.pigeonhouse.bdap.entity.mapinfo.nodeinfo.attrinfo.AttrInfo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
