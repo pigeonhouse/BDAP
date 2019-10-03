@@ -5,7 +5,6 @@ import com.pigeonhouse.bdap.controller.filesystem.SparkCodeController;
 import com.pigeonhouse.bdap.controller.runcode.PostCode;
 import com.pigeonhouse.bdap.dao.FileHeaderAttriDao;
 import com.pigeonhouse.bdap.dao.LivyDao;
-import com.pigeonhouse.bdap.dao.SparkCodeDao;
 import com.pigeonhouse.bdap.dao.UserDao;
 import com.pigeonhouse.bdap.entity.execution.LivySessionInfo;
 import com.pigeonhouse.bdap.entity.nodeinfo.LabelName;
@@ -20,7 +19,6 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
@@ -28,9 +26,6 @@ public class BdapApplicationTests {
 
     @Autowired
     UserDao userDao;
-
-    @Autowired
-    SparkCodeDao sparkCodeDao;
 
     @Autowired
     LivyDao livyDao;
@@ -65,14 +60,14 @@ public class BdapApplicationTests {
         NodeInfo nodeInfo_01 = new NodeInfo("abc", new LabelName("LoadData")
                 , null, new int[]{0, 1}, attrs_01, false);
 
-        //-----------------接下去测试算法--------------
+        //-----------------接下去做测试算法--------------
 
         ArrayList<AttrInfo> attrs_02 = new ArrayList<>();
         attrs_02.add(new AttrInfo(new LabelName("targetCols"), "Array[String]"
                 , new String[]{"age"}));
 
         attrs_02.add(new AttrInfo(new LabelName("normalizationType"), "String"
-                ,"MinMax"));
+                , "MinMax"));
 
         NodeInfo nodeInfo_02 = new NodeInfo("def", new LabelName("Normalization")
                 , new String[]{"abc"}, new int[]{1, 1}, attrs_02, true);

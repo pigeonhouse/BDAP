@@ -1,7 +1,6 @@
 package com.pigeonhouse.bdap.service.runcode;
 
 import com.pigeonhouse.bdap.dao.LivyDao;
-import com.pigeonhouse.bdap.dao.SparkCodeDao;
 import com.pigeonhouse.bdap.entity.execution.ExecutionInfo;
 import com.pigeonhouse.bdap.entity.execution.LivySessionInfo;
 import com.pigeonhouse.bdap.entity.nodeinfo.NodeInfo;
@@ -25,8 +24,6 @@ public class SparkExecution {
 
     @Autowired
     LivyDao livyDao;
-    @Autowired
-    SparkCodeDao sparkCodeDao;
 
     /**
      * 给代码传入参数

@@ -1,7 +1,6 @@
 package com.pigeonhouse.bdap.controller.runcode;
 
 import com.pigeonhouse.bdap.dao.LivyDao;
-import com.pigeonhouse.bdap.dao.SparkCodeDao;
 import com.pigeonhouse.bdap.entity.execution.LivySessionInfo;
 import com.pigeonhouse.bdap.entity.nodeinfo.NodeInfo;
 import com.pigeonhouse.bdap.service.TokenService;
@@ -26,8 +25,7 @@ public class PostCode {
 
     @Autowired
     SparkExecution sparkExecution;
-    @Autowired
-    SparkCodeDao sparkCodeDao;
+
     @Autowired
     TokenService tokenService;
     @Autowired
