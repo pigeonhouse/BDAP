@@ -117,7 +117,15 @@ public class SparkExecution {
         String id = nodeInfo.getId();
         String mappingDfCode = "\ndfMap += (\"" + id + "\" -> output)\n\n";
 
-        return inputCode + attrsCode + innerCode + mappingDfCode;
+        //------------------如果是checkPoint,保存数据-----------------
+        //保存output
+        //待完成..............
+        String saveDataCode = "";
+        if (nodeInfo.getIsCheckPoint()) {
+
+        }
+
+        return inputCode + attrsCode + innerCode + mappingDfCode + saveDataCode;
     }
 
     /**
@@ -153,29 +161,19 @@ public class SparkExecution {
             String nodeCode = generateCode(nodeInfo);
             codeToRun.append(nodeCode);
 
-            if (nodeInfo.getIsCheckPoint()) {
+            //生成一个随机的jobId,用于标记这一次job
+            UUID uuid = UUID.randomUUID();
+            String jobId = uuid.toString().replace("-", "");
 
-                //保存output
-                //待完成
-                codeToRun.append("");
+            //提交代码，得到一个url，用于前端轮询以查询这次job运行状态
+            String resultUrl = livyDao.postCode(codeToRun.toString(), livySessionInfo);
+            System.out.println("success!\n" + resultUrl);
 
-                //生成一个随机的jobId,用于标记这一次job
-                UUID uuid = UUID.randomUUID();
-                String jobId = uuid.toString().replace("-", "");
-
-                System.out.println("------------------------------");
-                System.out.println(codeToRun);
-                System.out.println("------------------------------");
-
-                //提交代码，得到一个url，用于前端轮询以查询这次job运行状态
-                String resultUrl = livyDao.postCode(codeToRun.toString(), livySessionInfo);
-                System.out.println("success!\n" + resultUrl);
-
-                //清空原先的代码，准备下一次提交
-//                codeToRun = new StringBuilder();
+            //清空原先的代码，准备下一次提交
+            codeToRun = new StringBuilder();
 //                ExecutionInfo executionInfo = new ExecutionInfo(nodeInfo.getId(), jobId, resultUrl);
 //                executionInfoList.add(executionInfo);
-            }
+
         }
         return executionInfoList;
     }

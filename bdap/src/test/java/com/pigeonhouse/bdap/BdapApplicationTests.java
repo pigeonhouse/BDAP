@@ -56,25 +56,25 @@ public class BdapApplicationTests {
     @Test
     public void test() throws Exception {
 
-        //--------------第一个节点用于读入数据
+        //--------------第一个节点用于读入数据-----------
 
         ArrayList<AttrInfo> attrs_01 = new ArrayList<>();
-        attrs_01.add(new AttrInfo(new LabelName("", "file"), "String"
-                , null, "hdfs:///bdap/demoData/simpleTest.csv"));
+        attrs_01.add(new AttrInfo(new LabelName("file"), "String"
+                , "hdfs:///bdap/demoData/simpleTest.csv"));
 
-        NodeInfo nodeInfo_01 = new NodeInfo("abc", new LabelName("", "LoadData")
+        NodeInfo nodeInfo_01 = new NodeInfo("abc", new LabelName("LoadData")
                 , null, new int[]{0, 1}, attrs_01, false);
 
-        //-----------------接下去测试算法
+        //-----------------接下去测试算法--------------
 
         ArrayList<AttrInfo> attrs_02 = new ArrayList<>();
-        attrs_02.add(new AttrInfo(new LabelName("","targetCols"), "Array[String]"
-                ,null, new String[]{"age"}));
+        attrs_02.add(new AttrInfo(new LabelName("targetCols"), "Array[String]"
+                , new String[]{"age"}));
 
-        attrs_02.add(new AttrInfo(new LabelName("","normalizationType"), "String"
-                ,null, "MinMax"));
+        attrs_02.add(new AttrInfo(new LabelName("normalizationType"), "String"
+                ,"MinMax"));
 
-        NodeInfo nodeInfo_02 = new NodeInfo("def", new LabelName("","Normalization")
+        NodeInfo nodeInfo_02 = new NodeInfo("def", new LabelName("Normalization")
                 , new String[]{"abc"}, new int[]{1, 1}, attrs_02, true);
 
         ArrayList<NodeInfo> flowInfo = new ArrayList<>();

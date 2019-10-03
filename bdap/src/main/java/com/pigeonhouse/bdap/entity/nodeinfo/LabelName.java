@@ -22,4 +22,8 @@ public class LabelName {
      * 英文标签（代码中的）
      */
     private String elabel;
+
+    public LabelName(String elabel) {
+        this.elabel = elabel;
+    }
 }

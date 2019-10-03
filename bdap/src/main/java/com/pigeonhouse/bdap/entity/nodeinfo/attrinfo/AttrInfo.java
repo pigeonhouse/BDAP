@@ -39,4 +39,10 @@ public class AttrInfo {
      * 在用户选择完参数后返回给后端的数据中该value才有值
      */
     Object value;
+
+    public AttrInfo(LabelName labelName, String valueType, Object value) {
+        this.labelName = labelName;
+        this.valueType = valueType;
+        this.value = value;
+    }
 }
