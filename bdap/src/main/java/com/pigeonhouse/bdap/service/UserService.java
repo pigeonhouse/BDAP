@@ -1,7 +1,7 @@
 package com.pigeonhouse.bdap.service;
 
 import com.pigeonhouse.bdap.dao.UserDao;
-import com.pigeonhouse.bdap.entity.prework.User;
+import com.pigeonhouse.bdap.entity.metadata.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;

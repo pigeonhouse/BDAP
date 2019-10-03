@@ -4,8 +4,8 @@ package com.pigeonhouse.bdap.service;
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.interfaces.Claim;
-import com.pigeonhouse.bdap.entity.execution.LivySessionInfo;
 import com.pigeonhouse.bdap.dao.LivyDao;
+import com.pigeonhouse.bdap.entity.execution.LivySessionInfo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -29,18 +29,18 @@ public class TokenService {
     @Autowired
     LivyDao livyDao;
 
-    public String getLoginToken(String id,String livyAddr,Integer sessionId) {
+    public String getLoginToken(String id, String livyAddr, Integer sessionId) {
         Date date = new Date(System.currentTimeMillis() + expireTime);
         return JWT.create().withAudience(id)
-                .withClaim("userId",id)
-                .withClaim("livyAddr",livyAddr)
-                .withClaim("sessionId",sessionId)
+                .withClaim("userId", id)
+                .withClaim("livyAddr", livyAddr)
+                .withClaim("sessionId", sessionId)
                 //.withExpiresAt(date)
                 .sign(Algorithm.HMAC256(id));
 
     }
 
-    public String getTokenFromRequest(HttpServletRequest request,String tokenName){
+    public String getTokenFromRequest(HttpServletRequest request, String tokenName) {
         Cookie[] cookies = request.getCookies();
         String token = null;
         if (cookies != null) {
@@ -53,16 +53,16 @@ public class TokenService {
         return token;
     }
 
-    public Claim getValueFromToken(String token, String keyName){
+    public Claim getValueFromToken(String token, String keyName) {
         Map<String, Claim> claims = JWT.decode(token).getClaims();
         return claims.get(keyName);
     }
 
-    public LivySessionInfo getLivySessionInfoFromToken(String token){
+    public LivySessionInfo getLivySessionInfoFromToken(String token) {
         String livyAddr = getValueFromToken(token, "livyAddr").asString();
         int sessionId = getValueFromToken(token, "sessionId").asInt();
 
-        return new LivySessionInfo(livyAddr, sessionId,null);
+        return new LivySessionInfo(livyAddr, sessionId, null);
     }
 
 

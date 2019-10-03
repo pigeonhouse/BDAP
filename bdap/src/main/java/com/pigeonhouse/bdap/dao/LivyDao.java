@@ -12,7 +12,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.*;
 import org.springframework.stereotype.Repository;
-import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
 import java.io.IOException;
@@ -25,8 +24,7 @@ import java.util.*;
  * @Date: 2019/9/7 11:33
  */
 @Repository("LivyDao")
-public class LivyDao
-{
+public class LivyDao {
     private Logger logger = LoggerFactory.getLogger(HdfsService.class);
     private static ObjectMapper objectMapper = new ObjectMapper();
 
@@ -182,7 +180,7 @@ public class LivyDao
             JSONObject response = objectMapper.readValue(res, JSONObject.class);
             newLivySessionInfo.setState(response.get("state").toString());
             newLivySessionInfo.setLivyAddr(livyAddr);
-            newLivySessionInfo.setId((int)response.get("id"));
+            newLivySessionInfo.setId((int) response.get("id"));
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -225,7 +223,7 @@ public class LivyDao
             JSONObject response = objectMapper.readValue(res.getBody(), JSONObject.class);
             System.out.println(response);
             livySessionInfo.setState(response.get("state").toString());
-            livySessionInfo.setId((int)response.get("id"));
+            livySessionInfo.setId((int) response.get("id"));
 
         } catch (IOException e) {
             e.printStackTrace();

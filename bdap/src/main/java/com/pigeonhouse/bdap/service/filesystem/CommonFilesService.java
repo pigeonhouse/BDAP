@@ -3,10 +3,10 @@ package com.pigeonhouse.bdap.service.filesystem;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.pigeonhouse.bdap.dao.CommonFilesDao;
-import com.pigeonhouse.bdap.entity.prework.CommonFiles;
-import com.pigeonhouse.bdap.entity.prework.CsvHeader;
-import com.pigeonhouse.bdap.entity.prework.valueattrs.FileAttribute;
-import com.pigeonhouse.bdap.entity.prework.valueattrs.HeaderAttribute;
+import com.pigeonhouse.bdap.entity.metadata.CommonFiles;
+import com.pigeonhouse.bdap.entity.metadata.CsvHeader;
+import com.pigeonhouse.bdap.entity.metadata.FileAttribute;
+import com.pigeonhouse.bdap.entity.metadata.HeaderAttribute;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

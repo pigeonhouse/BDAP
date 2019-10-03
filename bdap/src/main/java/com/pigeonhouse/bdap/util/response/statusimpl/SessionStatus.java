@@ -8,11 +8,10 @@ import com.pigeonhouse.bdap.util.response.Status;
  */
 public enum SessionStatus implements Status {
     //
-    IDLE(200,"session空闲"),
-    STARTING(400,"session正在启动中"),
-    BUSY(401,"session正在运行中"),
-    DEAD(402,"session已死亡")
-    ;
+    IDLE(200, "session空闲"),
+    STARTING(400, "session正在启动中"),
+    BUSY(401, "session正在运行中"),
+    DEAD(402, "session已死亡");
 
     SessionStatus(Integer code, String message) {
         this.code = code;

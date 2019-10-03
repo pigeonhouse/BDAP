@@ -1,11 +1,11 @@
 package com.pigeonhouse.bdap.controller;
 
 import com.alibaba.fastjson.JSONObject;
+import com.pigeonhouse.bdap.dao.LivyDao;
 import com.pigeonhouse.bdap.entity.execution.LivySessionInfo;
-import com.pigeonhouse.bdap.entity.prework.User;
+import com.pigeonhouse.bdap.entity.metadata.User;
 import com.pigeonhouse.bdap.service.TokenService;
 import com.pigeonhouse.bdap.service.UserService;
-import com.pigeonhouse.bdap.dao.LivyDao;
 import com.pigeonhouse.bdap.util.response.Response;
 import com.pigeonhouse.bdap.util.response.statusimpl.LoginStatus;
 import com.pigeonhouse.bdap.util.token.PassToken;
@@ -46,18 +46,18 @@ public class UserApi {
                 String livyAddr = livyDao.selectLivyServer();
                 LivySessionInfo livySessionInfo = livyDao.createSession(livyAddr);
                 Integer sessionId = livySessionInfo.getId();
-                String token = tokenService.getLoginToken(user.getUserId(),livyAddr,sessionId);
+                String token = tokenService.getLoginToken(user.getUserId(), livyAddr, sessionId);
                 //成功，获取token并将其置于cookie中返回前端
                 Cookie cookie = new Cookie("loginToken", token);
                 response.addCookie(cookie);
 
                 JSONObject sessionInfo = new JSONObject();
-                sessionInfo.put("livyAddr",livyAddr);
-                sessionInfo.put("sessionId",sessionId);
+                sessionInfo.put("livyAddr", livyAddr);
+                sessionInfo.put("sessionId", sessionId);
 
                 JSONObject returnJson = new JSONObject();
-                returnJson.put("userInfo",userForBase);
-                returnJson.put("sessionInfo",sessionInfo);
+                returnJson.put("userInfo", userForBase);
+                returnJson.put("sessionInfo", sessionInfo);
 
                 return new Response(LoginStatus.SUCCESS, returnJson);
             }

@@ -1,9 +1,7 @@
 package com.pigeonhouse.bdap.dao;
 
 import com.alibaba.fastjson.JSONObject;
-import com.pigeonhouse.bdap.entity.prework.SparkCode;
 import com.pigeonhouse.bdap.entity.nodeinfo.attrinfo.AttrInfo;
-import com.pigeonhouse.bdap.entity.nodeinfo.LabelName;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
@@ -75,7 +73,6 @@ public class SparkCodeDao {
         Query query = new Query(Criteria.where("algorithmName").is(codeId));
         mongoTemplate.remove(query, SparkCode.class);
     }
-
 
 
     public String findByCodeIdToJson(String codeId) {

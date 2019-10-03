@@ -22,10 +22,10 @@ public class AttrInfo {
     /**
      * 返回值对应的scala类型
      * 如：
-     *      Int
-     *      String
-     *      Array[String]
-     *      ...
+     * Int
+     * String
+     * Array[String]
+     * ...
      */
     String valueType;
 

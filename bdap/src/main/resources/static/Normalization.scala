@@ -7,7 +7,6 @@ object Normalization {
   def main(args: Array[String]): Unit = {
 
     import org.apache.spark.ml.feature._
-    import org.apache.spark.sql.DataFrame
 
     val assembler = new VectorAssembler().setInputCols(targetCols).setOutputCol("features")
     val assembled = assembler.transform(input)

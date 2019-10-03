@@ -1,10 +1,10 @@
 package com.pigeonhouse.bdap.controller.runcode;
 
+import com.pigeonhouse.bdap.dao.LivyDao;
 import com.pigeonhouse.bdap.dao.SparkCodeDao;
 import com.pigeonhouse.bdap.entity.execution.LivySessionInfo;
 import com.pigeonhouse.bdap.entity.nodeinfo.NodeInfo;
 import com.pigeonhouse.bdap.service.TokenService;
-import com.pigeonhouse.bdap.dao.LivyDao;
 import com.pigeonhouse.bdap.service.runcode.SparkExecution;
 import com.pigeonhouse.bdap.util.response.Response;
 import com.pigeonhouse.bdap.util.response.statusimpl.PostCodeStatus;
@@ -39,18 +39,18 @@ public class PostCode {
         String token = tokenService.getTokenFromRequest(request, "loginToken");
         LivySessionInfo sessionInfo = tokenService.getLivySessionInfoFromToken(token);
         LivySessionInfo newSessionInfo;
-        try{
+        try {
             newSessionInfo = livyDao.refreshSessionStatus(sessionInfo);
-        }catch (Exception e){
-            return new Response(PostCodeStatus.NOT_EXIST,null);
+        } catch (Exception e) {
+            return new Response(PostCodeStatus.NOT_EXIST, null);
         }
-        if(!"idle".equals(newSessionInfo.getState())){
-            return new Response(PostCodeStatus.SESSION_BUSY,null);
+        if (!"idle".equals(newSessionInfo.getState())) {
+            return new Response(PostCodeStatus.SESSION_BUSY, null);
         }
 
         System.out.println(flowInfo);
         // 强制保存最后一个节点
         flowInfo.get(flowInfo.size() - 1).setIsCheckPoint(true);
-        return new Response(PostCodeStatus.SUCCESS,sparkExecution.executeFlow(flowInfo, newSessionInfo));
+        return new Response(PostCodeStatus.SUCCESS, sparkExecution.executeFlow(flowInfo, newSessionInfo));
     }
 }

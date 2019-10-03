@@ -17,6 +17,5 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class ExecutionInfo {
     String id;
-    String jobId;
     String resultUrl;
 }

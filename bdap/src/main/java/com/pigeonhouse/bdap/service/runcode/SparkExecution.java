@@ -171,8 +171,8 @@ public class SparkExecution {
 
             //清空原先的代码，准备下一次提交
             codeToRun = new StringBuilder();
-//                ExecutionInfo executionInfo = new ExecutionInfo(nodeInfo.getId(), jobId, resultUrl);
-//                executionInfoList.add(executionInfo);
+            ExecutionInfo executionInfo = new ExecutionInfo(nodeInfo.getId(), resultUrl);
+            executionInfoList.add(executionInfo);
 
         }
         return executionInfoList;

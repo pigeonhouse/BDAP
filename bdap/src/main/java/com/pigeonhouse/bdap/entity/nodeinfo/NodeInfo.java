@@ -20,7 +20,7 @@ import java.util.ArrayList;
 @NoArgsConstructor
 public class NodeInfo {
     /**
-     * Node在整个flow里的唯一序号
+     * 前端随机生成的id
      */
     private String id;
 
@@ -28,6 +28,12 @@ public class NodeInfo {
      * 中文标签与英文标签
      */
     private LabelName labelName;
+
+    /**
+     * 所在类别的中文名与英文名
+     * 如("数据预处理","preprocessing")
+     */
+    private LabelName groupName;
 
     /**
      * 这个节点的源点Id集合
@@ -66,6 +72,9 @@ public class NodeInfo {
     private int y;
 
 
+    /**
+     * 用于算法测试的构造器
+     */
     public NodeInfo(String id, LabelName labelName, String[] sourceIdList, int[] anchor, ArrayList<AttrInfo> attributes, Boolean isCheckPoint) {
         this.id = id;
         this.labelName = labelName;

@@ -1,7 +1,7 @@
 package com.pigeonhouse.bdap.service.filesystem;
 
 import com.pigeonhouse.bdap.config.HdfsConfig;
-import com.pigeonhouse.bdap.entity.prework.Hdfsfile;
+import com.pigeonhouse.bdap.entity.metadata.Hdfsfile;
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.fs.*;
 import org.slf4j.Logger;

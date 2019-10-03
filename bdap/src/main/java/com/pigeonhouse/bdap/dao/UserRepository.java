@@ -1,6 +1,6 @@
 package com.pigeonhouse.bdap.dao;
 
-import com.pigeonhouse.bdap.entity.prework.User;
+import com.pigeonhouse.bdap.entity.metadata.User;
 import org.springframework.data.mongodb.repository.MongoRepository;
 
 import java.util.Optional;
