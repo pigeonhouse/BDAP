@@ -2,7 +2,7 @@ package com.pigeonhouse.bdap.controller.runcode;
 
 import com.pigeonhouse.bdap.dao.SparkCodeDao;
 import com.pigeonhouse.bdap.entity.execution.LivySessionInfo;
-import com.pigeonhouse.bdap.entity.execution.NodeInfo;
+import com.pigeonhouse.bdap.entity.nodeinfo.NodeInfo;
 import com.pigeonhouse.bdap.service.TokenService;
 import com.pigeonhouse.bdap.dao.LivyDao;
 import com.pigeonhouse.bdap.service.runcode.SparkExecution;

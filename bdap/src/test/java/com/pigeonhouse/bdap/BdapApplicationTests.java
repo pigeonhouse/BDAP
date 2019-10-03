@@ -8,9 +8,9 @@ import com.pigeonhouse.bdap.dao.LivyDao;
 import com.pigeonhouse.bdap.dao.SparkCodeDao;
 import com.pigeonhouse.bdap.dao.UserDao;
 import com.pigeonhouse.bdap.entity.execution.LivySessionInfo;
-import com.pigeonhouse.bdap.entity.execution.NodeInfo;
-
-import com.pigeonhouse.bdap.entity.execution.ValueAttributes;
+import com.pigeonhouse.bdap.entity.nodeinfo.LabelName;
+import com.pigeonhouse.bdap.entity.nodeinfo.NodeInfo;
+import com.pigeonhouse.bdap.entity.nodeinfo.attrinfo.AttrInfo;
 import com.pigeonhouse.bdap.service.filesystem.FileHeaderAttriService;
 import com.pigeonhouse.bdap.service.runcode.SparkExecution;
 import org.junit.Test;
@@ -19,10 +19,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
-import java.io.*;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashMap;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
@@ -56,18 +54,28 @@ public class BdapApplicationTests {
     PostCode postCode;
 
     @Test
-    public void test() throws Exception{
+    public void test() throws Exception {
 
-        ArrayList<Integer> anchor_01 = new ArrayList<>(Arrays.asList(0,1));
-        ArrayList<ValueAttributes> attrs_01 = new ArrayList<>();
-        attrs_01.add(new ValueAttributes("file","String","hdfs:///bdap/demoData/simpleTest.csv"));
-        NodeInfo nodeInfo_01 = new NodeInfo("abc","LoadData",null,anchor_01,attrs_01,false);
+        //--------------第一个节点用于读入数据
 
-        ArrayList<Integer> anchor_02 = new ArrayList<>(Arrays.asList(1,1));
-        ArrayList<ValueAttributes> attrs_02 = new ArrayList<>();
-        attrs_02.add(new ValueAttributes("targetCols","Array[String]",new ArrayList<>(Arrays.asList("age"))));
-        attrs_02.add(new ValueAttributes("normalizationType","String","MinMax"));
-        NodeInfo nodeInfo_02 = new NodeInfo("def","Normalization",new ArrayList<>(Arrays.asList("abc")),anchor_02,attrs_02,true);
+        ArrayList<AttrInfo> attrs_01 = new ArrayList<>();
+        attrs_01.add(new AttrInfo(new LabelName("", "file"), "String"
+                , null, "hdfs:///bdap/demoData/simpleTest.csv"));
+
+        NodeInfo nodeInfo_01 = new NodeInfo("abc", new LabelName("", "LoadData")
+                , null, new int[]{0, 1}, attrs_01, false);
+
+        //-----------------接下去测试算法
+
+        ArrayList<AttrInfo> attrs_02 = new ArrayList<>();
+        attrs_02.add(new AttrInfo(new LabelName("","targetCols"), "Array[String]"
+                ,null, new String[]{"age"}));
+
+        attrs_02.add(new AttrInfo(new LabelName("","normalizationType"), "String"
+                ,null, "MinMax"));
+
+        NodeInfo nodeInfo_02 = new NodeInfo("def", new LabelName("","Normalization")
+                , new String[]{"abc"}, new int[]{1, 1}, attrs_02, true);
 
         ArrayList<NodeInfo> flowInfo = new ArrayList<>();
         flowInfo.add(nodeInfo_01);
@@ -76,12 +84,12 @@ public class BdapApplicationTests {
         //LivySessionInfo livySessionInfo = new LivySessionInfo();
 
         LivySessionInfo livySessionInfo = livyDao.createSession("10.105.222.90:8998");
-        while(!"idle".equals(livyDao.refreshSessionStatus(livySessionInfo).getState())){
+        while (!"idle".equals(livyDao.refreshSessionStatus(livySessionInfo).getState())) {
             Thread.sleep(1000);
             System.out.println("starting a new session.......");
         }
 
-        sparkExecution.executeFlow(flowInfo,livySessionInfo);
+        sparkExecution.executeFlow(flowInfo, livySessionInfo);
 
     }
 

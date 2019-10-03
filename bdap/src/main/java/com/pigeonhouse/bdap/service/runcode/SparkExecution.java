@@ -4,8 +4,8 @@ import com.pigeonhouse.bdap.dao.LivyDao;
 import com.pigeonhouse.bdap.dao.SparkCodeDao;
 import com.pigeonhouse.bdap.entity.execution.ExecutionInfo;
 import com.pigeonhouse.bdap.entity.execution.LivySessionInfo;
-import com.pigeonhouse.bdap.entity.execution.NodeInfo;
-import com.pigeonhouse.bdap.entity.execution.ValueAttributes;
+import com.pigeonhouse.bdap.entity.nodeinfo.NodeInfo;
+import com.pigeonhouse.bdap.entity.nodeinfo.attrinfo.AttrInfo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -37,22 +37,22 @@ public class SparkExecution {
     public String generateCode(NodeInfo nodeInfo) {
 
         //--------------根据锚点判断是否需要注入输入参数的语句---------
-        ArrayList<Integer> anchor = nodeInfo.getAnchor();
-        int numberOfInput = anchor.get(0);
-        ArrayList<String> sourceIdList = nodeInfo.getSourceIdList();
+        int[] anchor = nodeInfo.getAnchor();
+        int numberOfInput = anchor[0];
+        String[] sourceIdList = nodeInfo.getSourceIdList();
         StringBuilder inputCodeBuilder = new StringBuilder();
         String inputName = "input";
         for (int i = 0; i < numberOfInput; i++) {
             if (i != 0) {
                 inputName = "input_" + i;
             }
-            inputCodeBuilder.append("val " + inputName + " = dfMap(\"" + sourceIdList.get(i) + "\")");
+            inputCodeBuilder.append("val " + inputName + " = dfMap(\"" + sourceIdList[i] + "\")");
         }
 
         String inputCode = inputCodeBuilder.append("\n").toString();
 
         //--------------取出代码文件中的代码段---------------
-        String filePath = "src/main/resources/static/" + nodeInfo.getAlgorithmName() + ".scala";
+        String filePath = "src/main/resources/static/" + nodeInfo.getLabelName().getElabel() + ".scala";
         StringBuilder originCodeBuilder = new StringBuilder();
         try {
             FileInputStream inputStream = new FileInputStream(filePath);
@@ -77,24 +77,24 @@ public class SparkExecution {
 
         StringBuilder attrsCodeBuilder = new StringBuilder();
 
-        ArrayList<ValueAttributes> attributes = nodeInfo.getAttributes();
+        ArrayList<AttrInfo> attributes = nodeInfo.getAttributes();
         if (attributes != null) {
-            for (ValueAttributes attr : attributes) {
-                String attrName = attr.getAttrName();
-                String attrType = attr.getAttrType();
+            for (AttrInfo attr : attributes) {
+                String attrName = attr.getLabelName().getElabel();
+                String attrType = attr.getValueType();
                 Object value = attr.getValue();
 
                 if ("Array[String]".equals(attrType)) {
-                    ArrayList<String> colNames = (ArrayList<String>) value;
+                    String[] colNames = (String[]) value;
                     StringBuilder colNameBuilder = new StringBuilder();
                     if (colNames != null) {
                         colNameBuilder.append("Array(");
-                        int colNamesLength = colNames.size();
+                        int colNamesLength = colNames.length;
                         for (int i = 0; i < colNamesLength; i++) {
                             if (i != 0) {
                                 colNameBuilder.append(",");
                             }
-                            colNameBuilder.append("\"" + colNames.get(i) + "\"");
+                            colNameBuilder.append("\"" + colNames[i] + "\"");
                         }
                         colNameBuilder.append(")");
                     }

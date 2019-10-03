@@ -2,8 +2,8 @@ package com.pigeonhouse.bdap.dao;
 
 import com.alibaba.fastjson.JSONObject;
 import com.pigeonhouse.bdap.entity.prework.SparkCode;
-import com.pigeonhouse.bdap.entity.prework.viewattrs.ViewAttributes;
-import com.pigeonhouse.bdap.entity.prework.valueattrs.LabelName;
+import com.pigeonhouse.bdap.entity.nodeinfo.attrinfo.AttrInfo;
+import com.pigeonhouse.bdap.entity.nodeinfo.LabelName;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
@@ -102,42 +102,42 @@ public class SparkCodeDao {
         sparkCode.setElabel(elabel);
         sparkCode.setOriginCode(originCode);
         sparkCode.setShape(shape);
-        sparkCode.setViewAttributes(new ArrayList<ViewAttributes>());
+        sparkCode.setViewAttributes(new ArrayList<AttrInfo>());
         saveSparkCode(sparkCode);
     }
 
-    public void addInputAttribute(String codeId, String label, String elabel, String regexp) {
-        SparkCode sparkCode = findByCodeId(codeId);
-        ArrayList<ViewAttributes> viewAttributes = sparkCode.getViewAttributes();
-        if (viewAttributes == null) {
-            viewAttributes = new ArrayList<ViewAttributes>();
-        }
-        viewAttributes.add(new ViewAttributes(label, elabel, "Input", regexp));
-        sparkCode.setViewAttributes(viewAttributes);
-        updateSparkCode(sparkCode);
-    }
-
-    public void addNumberAttribute(String codeId, String label, String elabel, String min, String max, String step) {
-        SparkCode sparkCode = findByCodeId(codeId);
-        ArrayList<ViewAttributes> viewAttributes = sparkCode.getViewAttributes();
-        if (viewAttributes == null) {
-            viewAttributes = new ArrayList<ViewAttributes>();
-        }
-        viewAttributes.add(new ViewAttributes(label, elabel, "Number", min, max, step));
-        sparkCode.setViewAttributes(viewAttributes);
-        updateSparkCode(sparkCode);
-    }
-
-    public void addSelectAttribute(String codeId, String label, String elabel, ArrayList<LabelName> value, Boolean multiChoice) {
-        SparkCode sparkCode = findByCodeId(codeId);
-        ArrayList<ViewAttributes> viewAttributes = sparkCode.getViewAttributes();
-        if (viewAttributes == null) {
-            viewAttributes = new ArrayList<ViewAttributes>();
-        }
-        viewAttributes.add(new ViewAttributes(label, elabel, "Select", value, multiChoice));
-        sparkCode.setViewAttributes(viewAttributes);
-        updateSparkCode(sparkCode);
-    }
+//    public void addInputAttribute(String codeId, String label, String elabel, String regexp) {
+//        SparkCode sparkCode = findByCodeId(codeId);
+//        ArrayList<AttrInfo> viewAttributes = sparkCode.getViewAttributes();
+//        if (viewAttributes == null) {
+//            viewAttributes = new ArrayList<AttrInfo>();
+//        }
+//        viewAttributes.add(new AttrInfo(label, elabel, "Input", regexp));
+//        sparkCode.setViewAttributes(viewAttributes);
+//        updateSparkCode(sparkCode);
+//    }
+//
+//    public void addNumberAttribute(String codeId, String label, String elabel, String min, String max, String step) {
+//        SparkCode sparkCode = findByCodeId(codeId);
+//        ArrayList<AttrInfo> viewAttributes = sparkCode.getViewAttributes();
+//        if (viewAttributes == null) {
+//            viewAttributes = new ArrayList<AttrInfo>();
+//        }
+//        viewAttributes.add(new AttrInfo(label, elabel, "Number", min, max, step));
+//        sparkCode.setViewAttributes(viewAttributes);
+//        updateSparkCode(sparkCode);
+//    }
+//
+//    public void addSelectAttribute(String codeId, String label, String elabel, ArrayList<LabelName> value, Boolean multiChoice) {
+//        SparkCode sparkCode = findByCodeId(codeId);
+//        ArrayList<AttrInfo> viewAttributes = sparkCode.getViewAttributes();
+//        if (viewAttributes == null) {
+//            viewAttributes = new ArrayList<AttrInfo>();
+//        }
+//        viewAttributes.add(new AttrInfo(label, elabel, "Select", value, multiChoice));
+//        sparkCode.setViewAttributes(viewAttributes);
+//        updateSparkCode(sparkCode);
+//    }
 
     public void updateOriginCode(String codeId, String originCode) {
         SparkCode sparkCode = findByCodeId(codeId);
