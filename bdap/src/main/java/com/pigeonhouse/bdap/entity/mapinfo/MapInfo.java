@@ -6,6 +6,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
 /**
@@ -15,7 +16,7 @@ import java.util.ArrayList;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class MapInfo {
+public class MapInfo implements Serializable {
     ArrayList<NodeInfo> nodes;
     ArrayList<EdgeInfo> edges;
 }

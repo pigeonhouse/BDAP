@@ -83,16 +83,16 @@ public class SparkExecution {
                 Object value = attr.getValue();
 
                 if ("Array[String]".equals(attrType)) {
-                    String[] colNames = (String[]) value;
+                    ArrayList<String> colNames = (ArrayList<String>) value;
                     StringBuilder colNameBuilder = new StringBuilder();
                     if (colNames != null) {
                         colNameBuilder.append("Array(");
-                        int colNamesLength = colNames.length;
+                        int colNamesLength = colNames.size();
                         for (int i = 0; i < colNamesLength; i++) {
                             if (i != 0) {
                                 colNameBuilder.append(",");
                             }
-                            colNameBuilder.append("\"" + colNames[i] + "\"");
+                            colNameBuilder.append("\"" + colNames.get(i) + "\"");
                         }
                         colNameBuilder.append(")");
                     }

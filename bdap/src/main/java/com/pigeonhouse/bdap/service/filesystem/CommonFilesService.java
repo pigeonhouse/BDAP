@@ -10,6 +10,8 @@ import com.pigeonhouse.bdap.entity.metadata.HeaderAttribute;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+
 /**
  * @Author XingTianYu
  * @date 2019/9/24 16:58
@@ -23,34 +25,29 @@ public class CommonFilesService {
      * 按用户Id获取常用文件列表
      * 返回:CommonFiles 对象
      */
-    public CommonFiles getFileListById(String userId) {
-        CommonFiles commonFiles = commonFilesDao.findByUserId(userId);
-        if (commonFiles != null) {
-            return commonFiles;
-        } else {
-            return null;
-        }
+    public ArrayList<FileAttribute> getFileListById(String userId) {
+        return commonFilesDao.findByUserId(userId);
+
     }
 
     /**
      * 在数据库中创建新用户的常用文件列表
      */
-    public boolean setNewUser(CommonFiles commonFiles) {
-
-        try {
-
-            CommonFiles result = commonFilesDao.findByUserId(commonFiles.getUserId());
-            if (result == null) {
-                commonFilesDao.createNewUser(commonFiles);
-                return true;
-            } else {
-                return false;
-            }
-        } catch (Exception e) {
-            System.out.println(e);
-        }
-        return false;
-    }
+//    public boolean setNewUser(CommonFiles commonFiles) {
+//
+//        try {
+//            CommonFiles result = commonFilesDao.findByUserId(commonFiles.getUserId());
+//            if (result == null) {
+//                commonFilesDao.createNewUser(commonFiles);
+//                return true;
+//            } else {
+//                return false;
+//            }
+//        } catch (Exception e) {
+//            System.out.println(e);
+//        }
+//        return false;
+//    }
 
 
     /**

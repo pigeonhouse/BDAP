@@ -9,6 +9,7 @@ import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.data.mongodb.core.query.Update;
 import org.springframework.stereotype.Repository;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Repository
@@ -32,10 +33,10 @@ public class CommonFilesDao {
      * @param userId 用户名
      * @return List<CommonFiles>
      */
-    public CommonFiles findByUserId(String userId) {
+    public ArrayList<FileAttribute> findByUserId(String userId) {
         Query query = new Query(Criteria.where("userId").is(userId));
         CommonFiles commonFiles = mongoTemplate.findOne(query, CommonFiles.class);
-        return commonFiles;
+        return commonFiles.getFileList();
     }
 
     /**

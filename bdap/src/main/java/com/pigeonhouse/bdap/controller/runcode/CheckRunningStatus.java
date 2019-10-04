@@ -23,18 +23,14 @@ import java.util.Map;
 public class CheckRunningStatus {
 
     @PostMapping("/runningstatus")
-    Object checkstatus(String resultUrl) {
+    Object checkstatus(@RequestBody ExecutionInfo executionInfo) {
         ObjectMapper objectMapper = new ObjectMapper();
         RestTemplate restTemplate = new RestTemplate();
-        String output = "";
         String state = "";
         try {
             state = objectMapper.readValue(
-                    restTemplate.getForObject(resultUrl, String.class), Map.class)
+                    restTemplate.getForObject(executionInfo.getResultUrl(), String.class), Map.class)
                     .get("state").toString();
-            output = objectMapper.readValue(
-                    restTemplate.getForObject(resultUrl, String.class), Map.class)
-                    .get("output").toString();
         } catch (HttpClientErrorException e) {
             e.printStackTrace();
             System.out.println(RunningStatus.FAIL_TO_QUERY);
@@ -44,8 +40,8 @@ public class CheckRunningStatus {
         }
         JSONObject jsonObject = new JSONObject();
         jsonObject.put("state", state);
-        jsonObject.put("output", output);
-        System.out.println(output);
+
+        System.out.println(state);
         return new Response(RunningStatus.SUCCESSFUL_QUERY, jsonObject);
     }
 }

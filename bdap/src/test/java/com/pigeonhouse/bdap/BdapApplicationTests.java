@@ -1,7 +1,7 @@
 package com.pigeonhouse.bdap;
 
 import com.pigeonhouse.bdap.controller.filesystem.FileHeaderAttriController;
-import com.pigeonhouse.bdap.controller.filesystem.ModuleViewInfoController;
+import com.pigeonhouse.bdap.controller.filesystem.ModuleInfoController;
 import com.pigeonhouse.bdap.controller.runcode.PostCode;
 import com.pigeonhouse.bdap.dao.FileHeaderAttriDao;
 import com.pigeonhouse.bdap.dao.LivyDao;
@@ -22,6 +22,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
@@ -34,7 +35,7 @@ public class BdapApplicationTests {
     LivyDao livyDao;
 
     @Autowired
-    ModuleViewInfoController moduleViewInfoController;
+    ModuleInfoController moduleInfoController;
 
     @Autowired
     FileHeaderAttriDao fileHeaderAttriDao;
@@ -70,13 +71,13 @@ public class BdapApplicationTests {
 
         ArrayList<AttrInfo> attrs_02 = new ArrayList<>();
         attrs_02.add(new AttrInfo(new LabelName("targetCols"), "Array[String]"
-                , new String[]{"age"}));
+                , new ArrayList<>(Arrays.asList("age"))));
 
         attrs_02.add(new AttrInfo(new LabelName("normalizationType"), "String"
-                , "MinMax"));
+                ,"MinMax"));
 
         NodeInfo nodeInfo_02 = new NodeInfo("def", new LabelName("Normalization"),new LabelName("preprocessing")
-                , new String[]{"abc"}, new int[]{1, 1}, attrs_02, true);
+                ,new String[]{"abc"}, new int[]{1, 1}, attrs_02, true);
 
         ArrayList<NodeInfo> flowInfo = new ArrayList<>();
         flowInfo.add(nodeInfo_01);

@@ -9,8 +9,7 @@ import com.pigeonhouse.bdap.util.response.Status;
 public enum CodeStatus implements Status {
 
     //
-    CODE_PUT_SUCCESS(200, "算法参数发送成功！");
-
+    CODE_PUT_SUCCESS(200, "成功");
     int code;
     String message;
 

@@ -18,10 +18,10 @@ public class CommonFiles {
     String cid;
     String userId;
     String userName;
-    List<FileAttribute> fileList;
+    ArrayList<FileAttribute> fileList;
 
     public CommonFiles() {
-        this.fileList = new ArrayList<FileAttribute>();
+        this.fileList = new ArrayList<>();
     }
 
 
