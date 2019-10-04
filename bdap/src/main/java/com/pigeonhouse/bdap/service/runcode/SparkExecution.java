@@ -13,7 +13,6 @@ import java.io.FileInputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.UUID;
 
 /**
  * @Author: XueXiaoYue HouWeiying
@@ -33,22 +32,25 @@ public class SparkExecution {
      */
     public String generateCode(NodeInfo nodeInfo) {
 
-        //--------------根据锚点判断是否需要注入输入参数的语句---------
+        //----------------------根据锚点判断是否需要注入输入参数的语句--------------------
         int[] anchor = nodeInfo.getAnchor();
         int numberOfInput = anchor[0];
         String[] sourceIdList = nodeInfo.getSourceIdList();
         StringBuilder inputCodeBuilder = new StringBuilder();
         String inputName = "input";
+
+        //判断有几个输入,input,input_1,input_2...以此类推
         for (int i = 0; i < numberOfInput; i++) {
             if (i != 0) {
                 inputName = "input_" + i;
             }
+            //从dfMap中取出存过的dataframe
             inputCodeBuilder.append("val " + inputName + " = dfMap(\"" + sourceIdList[i] + "\")");
         }
 
         String inputCode = inputCodeBuilder.append("\n").toString();
 
-        //--------------取出代码文件中的代码段---------------
+        //-------------------------取出代码文件中的代码段------------------------------
         String filePath = "src/main/resources/static/" + nodeInfo.getGroupName().getElabel() +"/"
                 + nodeInfo.getLabelName().getElabel() + ".scala";
         StringBuilder originCodeBuilder = new StringBuilder();
@@ -82,10 +84,12 @@ public class SparkExecution {
                 String attrType = attr.getValueType();
                 Object value = attr.getValue();
 
+                //参数为数组类型，主要用于选择字段的参数
                 if ("Array[String]".equals(attrType)) {
                     ArrayList<String> colNames = (ArrayList<String>) value;
                     StringBuilder colNameBuilder = new StringBuilder();
                     if (colNames != null) {
+                        //以Array("","")的类型写入scala
                         colNameBuilder.append("Array(");
                         int colNamesLength = colNames.size();
                         for (int i = 0; i < colNamesLength; i++) {
@@ -99,6 +103,7 @@ public class SparkExecution {
                     value = colNameBuilder.toString();
                 } else {
                     value = attr.getValue();
+                    //如果是String类型的则需要加上双引号
                     if ("String".equals(attrType)) {
                         value = "\"" + value + "\"";
                     }
@@ -158,10 +163,6 @@ public class SparkExecution {
 
             String nodeCode = generateCode(nodeInfo);
             codeToRun.append(nodeCode);
-
-            //生成一个随机的jobId,用于标记这一次job
-            UUID uuid = UUID.randomUUID();
-            String jobId = uuid.toString().replace("-", "");
 
             //提交代码，得到一个url，用于前端轮询以查询这次job运行状态
             String resultUrl = livyDao.postCode(codeToRun.toString(), livySessionInfo);

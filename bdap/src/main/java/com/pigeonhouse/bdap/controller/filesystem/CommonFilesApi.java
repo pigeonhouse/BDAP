@@ -61,36 +61,36 @@ public class CommonFilesApi {
     }
 
 
-//    /**
-//     * @return 常用数据列表JSON
-//     */
-//
-//    @PostMapping("/commonFiles/getCommonFiles")
-//    public Object getCommonFiles(HttpServletRequest request) {
-//
-//        String token = tokenService.getTokenFromRequest(request, "loginToken");
-//        String userId = tokenService.getValueFromToken(token, "userId").asString();
-//
-//        try {
-//            CommonFiles commonFiles = commonFilesService.getFileListById(userId);
-//            if (commonFiles != null) {
-//                return new Response(CommonFileStatus.FILE_GET_SUCCESS, JSONObject.toJSON(commonFiles));
-//            } else {
-//                return new Response(CommonFileStatus.USER_NOT_FOUND, null);
-//            }
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//        }
-//        return null;
-//    }
-//
-//    /**
-//     * 在常用数据表中插入新用户
-//     *
-//     * @param userId   用户ID
-//     * @param userName 用户名称
-//     * @return 错误提示信息或插入成功通知
-//     */
+    /**
+     * @return 常用数据列表JSON
+     */
+
+    @PostMapping("/commonFiles/getCommonFiles")
+    public Object getCommonFiles(HttpServletRequest request) {
+
+        String token = tokenService.getTokenFromRequest(request, "loginToken");
+        String userId = tokenService.getValueFromToken(token, "userId").asString();
+
+        try {
+            ArrayList<FileAttribute> fileList = commonFilesService.getFileListById(userId);
+            if (fileList != null) {
+                return new Response(CommonFileStatus.FILE_GET_SUCCESS, JSONObject.toJSON(fileList));
+            } else {
+                return new Response(CommonFileStatus.USER_NOT_FOUND, null);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    /**
+     * 在常用数据表中插入新用户
+     *
+     * @param userId   用户ID
+     * @param userName 用户名称
+     * @return 错误提示信息或插入成功通知
+     */
 //    @PostMapping("/commonFiles/setNewUser")
 //    public Object insertNewUser(@RequestParam(value = "userId") String userId, @RequestParam(value = "userName") String userName) {
 //        try {
@@ -110,6 +110,6 @@ public class CommonFilesApi {
 //        }
 //        return null;
 //    }
-//
+
 
 }
