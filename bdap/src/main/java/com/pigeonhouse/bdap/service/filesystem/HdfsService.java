@@ -164,7 +164,7 @@ public class HdfsService {
      */
     private String getparent(String path) {
         String[] pathlist = path.split("/");
-        if (pathlist.length == 0) {
+        if (pathlist.length== 0) {
             return "";
         } else if (pathlist.length == 1) {
             return "/";

@@ -35,21 +35,23 @@ public class CommonFilesApi {
 
 
     /**
-     * 在常用数据表中插入文件
+     * 在常用数据表中插入标注为常用数据集的文件头信息，该文件已在fileheader数据库中存有文件头
      *
-     * @param userId   用户ID
-     * @param filePath 文件路径
+     *
+     * oppositePath：文件相对路径
      * @return 错误提示信息或插入成功通知
      */
     @PostMapping("/commonFiles/setNewFile")
-    @PassToken
-    public Object insertNewFile(@RequestParam(value = "userId") String userId, @RequestParam(value = "filePath") String filePath) {
+    public Object insertNewFile(HttpServletRequest request) {
         try {
-            Boolean isExist = commonFilesService.fileExist(filePath, userId);
+            String token = tokenService.getTokenFromRequest(request, "loginToken");
+            String userId = tokenService.getValueFromToken(token, "userId").asString();
+            String oppositePath=request.getParameter("oppositePath");
+            Boolean isExist = commonFilesService.fileExist(oppositePath, userId);
             if (isExist) {
-                return new Response(CommonFileStatus.FILE_HAS_EXISTED, null);
+                return new Response(CommonFileStatus.FILE_NOT_EXISTED, null);
             } else {
-                CsvHeader csvHeader = fileHeaderAttriService.findByFilePath(filePath);
+                CsvHeader csvHeader = fileHeaderAttriService.findByFilePath(oppositePath);
                 commonFilesService.setNewFile(csvHeader, userId);
                 return new Response(CommonFileStatus.FILE_INSERT_SUCCESS, null);
             }
@@ -59,7 +61,33 @@ public class CommonFilesApi {
         }
         return null;
     }
+    /**
+     * 在常用数据表删除取消标注文件的文件头信息，该文件已在fileheader数据库中划分文件头
+     *
+     *
+     * oppositePath：文件相对路径
+     * @return 错误提示信息或插入成功通知
+     */
+    @PostMapping("/commonFiles/deleteFile")
+    public Object deleteFileFromCommonFiles(HttpServletRequest request) {
+        try {
+            String token = tokenService.getTokenFromRequest(request, "loginToken");
+            String userId = tokenService.getValueFromToken(token, "userId").asString();
+            String oppositePath=request.getParameter("oppositePath");
+            Boolean isExist = commonFilesService.fileExist(oppositePath, userId);
+            if (isExist) {
+                return new Response(CommonFileStatus.FILE_HAS_EXISTED, null);
+            } else {
+                //CsvHeader csvHeader = fileHeaderAttriService.findByFilePath(oppositePath);
+                commonFilesService.deleteFile(userId,oppositePath);
+                return new Response(CommonFileStatus.FILE_INSERT_SUCCESS, null);
+            }
 
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
 
     /**
      * @return 常用数据列表JSON
@@ -83,6 +111,7 @@ public class CommonFilesApi {
         }
         return null;
     }
+
 
     /**
      * 在常用数据表中插入新用户

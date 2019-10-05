@@ -2,6 +2,7 @@ package com.pigeonhouse.bdap.service.filesystem;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import com.pigeonhouse.bdap.config.HdfsConfig;
 import com.pigeonhouse.bdap.dao.CommonFilesDao;
 import com.pigeonhouse.bdap.entity.metadata.CommonFiles;
 import com.pigeonhouse.bdap.entity.metadata.CsvHeader;
@@ -60,6 +61,13 @@ public class CommonFilesService {
         fileAttribute.setFileColumnsInfo(csvHeader.getAttrHeaderSet());
         commonFilesDao.addNewFile(fileAttribute, userId);
     }
+/**
+* 在常用文件数据库中删除某个文件的信息
+* */
+    public void deleteFile(String userId,String oppositePath) {
+        HdfsConfig hdfsConfig=new HdfsConfig();
+       // commonFilesDao.deleteFile()
+    }
 
     /**
      * 将类的实例转化为JSON
@@ -95,9 +103,9 @@ public class CommonFilesService {
     /**
      * 判断用户的某一文件是否存在
      */
-    public boolean fileExist(String filePath, String userId) {
-        FileAttribute fileAttribute = commonFilesDao.findByFilePath(filePath, userId);
+    public boolean fileExist(String oppositePath, String userId) {
+        HdfsConfig hdfsConfig=new HdfsConfig();
+        FileAttribute fileAttribute = commonFilesDao.findByFilePath(hdfsConfig.getDefaultDirectory()+oppositePath, userId);
         return fileAttribute != null;
-
     }
 }

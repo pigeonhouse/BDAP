@@ -77,7 +77,7 @@ public class HDFSApi {
             String userId = tokenService.getValueFromToken(token, "userId").asString();
             String oppositePath = request.getParameter("oppositePath");
             String dirName = request.getParameter("dirName");
-            if (oppositePath == "/") {
+            if (oppositePath .equals( "/")) {
                 oppositePath = "";
             }
             boolean success = hdfsService.mkdir(userId + oppositePath + "/" + dirName);
@@ -88,7 +88,8 @@ public class HDFSApi {
 
             }
         } catch (Exception e) {
-            return new Response(HdfsStatus.BACKEND_ERROR, e.toString());
+            return new
+                    Response(HdfsStatus.BACKEND_ERROR, e.toString());
         }
     }
 
@@ -103,7 +104,7 @@ public class HDFSApi {
             String userId = tokenService.getValueFromToken(token, "userId").asString();
             String oppositePath = request.getParameter("oppositePath");
             String fileName = request.getParameter("fileName");
-            if (oppositePath == "/") {
+            if (oppositePath .equals( "/")) {
                 oppositePath = "";
             }
             boolean success = hdfsService.delete(userId + oppositePath + "/" + fileName);
@@ -161,7 +162,7 @@ public class HDFSApi {
     }
 
     /**
-     * 将文件上传至HDFS文件夹，并解析头文件存入数据库
+     * 将CSV文件上传至HDFS文件夹，并解析头文件存入数据库
      * 返回值:带有提示信息的JSON字符串
      * <p>
      * file    文件传输流
@@ -180,7 +181,8 @@ public class HDFSApi {
             //解析UserId
             String oppositePath = request.getParameter("oppositePath");
             boolean replace = Boolean.parseBoolean(request.getParameter("replace"));
-            char regex = request.getParameter("regex").charAt(0);
+            //char regex = request.getParameter("regex").charAt(0);
+            char regex=',';
             MultipartFile file = multipartRequest.getFile("file");
             if (file == null || file.getBytes() == null) {
                 return new Response(HdfsStatus.INVALID_INPUT, null);
@@ -247,24 +249,24 @@ public class HDFSApi {
                 {
                     return new Response(HdfsStatus.INVALID_INPUT, null);
                 } else {
-                    for (int idx = 0; idx < sample.size(); idx++) {
-                        //生成文件头信息
-                        headermap.put(header.get(idx), sample.get(idx));
+                    String status = hdfsService.upload(file, userId + oppositePath, replace);
+                    switch (status) {
+                        case "success":
+                            for (int idx = 0; idx < sample.size(); idx++) {
+                                //生成文件头信息
+                                headermap.put(header.get(idx), sample.get(idx));
+                            }
+                            HdfsConfig hdfsConfig = new HdfsConfig();
+                            //执行更新
+                            fileHeaderAttriService.saveOrUpdateFileHeader(file.getOriginalFilename(), hdfsConfig.getDefaultDirectory() + "/" + userId + "/" + file.getOriginalFilename(), headermap);
+                            return new Response(HdfsStatus.FILE_UPLOAD_SUCCESS, null);
+                        case "fileexist":
+                            return new Response(HdfsStatus.FILE_HAS_EXISTED, null);
+                        case "userinvalid":
+                            return new Response(HdfsStatus.USER_NOT_EXISTED, null);
+                        default:
+                            return null;
                     }
-                    HdfsConfig hdfsConfig = new HdfsConfig();
-                    //执行更新
-                    fileHeaderAttriService.saveOrUpdateFileHeader(file.getOriginalFilename(), hdfsConfig.getDefaultDirectory() + "/" + userId + "/" + file.getOriginalFilename(), headermap);
-                }
-                String status = hdfsService.upload(file, userId + oppositePath, replace);
-                switch (status) {
-                    case "success":
-                        return new Response(HdfsStatus.FILE_UPLOAD_SUCCESS, null);
-                    case "fileexist":
-                        return new Response(HdfsStatus.FILE_HAS_EXISTED, null);
-                    case "userinvalid":
-                        return new Response(HdfsStatus.USER_NOT_EXISTED, null);
-                    default:
-                        return null;
                 }
             }
         } catch (Exception e) {
@@ -286,7 +288,7 @@ public class HDFSApi {
             String userId = tokenService.getValueFromToken(token, "userId").asString();
             //解析UserId
             String oppositePath = request.getParameter("oppositePath");
-            if (oppositePath == "/") {
+            if (oppositePath.equals("/")) {
                 oppositePath = "";
             }
             String fileName = request.getParameter("fileName");
@@ -327,13 +329,13 @@ public class HDFSApi {
                 OutputStream os = response.getOutputStream();
                 byte[] b = new byte[4096];
                 int length;
-
                 while ((length = inputStream.read(b)) > 0) {
                     os.write(b, 0, length);
                 }
                 os.close();
                 inputStream.close();
-                return new Response(HdfsStatus.FILE_DOWNLOAD_SUCCESS, null);
+                return null;
+                //下载成功直接返回文件流,没有状态码
             } else {
                 return new Response(HdfsStatus.FILE_NOT_EXISTED, null);
             }
@@ -344,3 +346,4 @@ public class HDFSApi {
 
     }
 }
+
