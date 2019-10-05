@@ -1,5 +1,6 @@
 import React from 'react';
 import { Row, Col, Radio, Button } from 'antd';
+import Filter from '../../PublicComponents/VisualFilter';
 
 import styles from './index.less';
 
@@ -34,7 +35,7 @@ class VisualizedPanel extends React.Component {
                     <Col span={6}>
                         <Button>DataSource</Button>
                         <Button>Save</Button>
-                        <Button>Filter</Button>
+                        <Filter></Filter>
                         <Button>Summarize</Button>
                     </Col>
                 </Row>

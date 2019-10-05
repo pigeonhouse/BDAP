@@ -132,6 +132,28 @@ class LocalMode extends React.Component {
 		}
 	}
 
+	download = () => {
+		let formData = new FormData();
+		formData.append('oppositePath', '/')
+		formData.append('fileName', 'adult.csv')
+		console.log(formData)
+		const init = {
+			method: 'POST',
+			body: formData,
+			mode: 'cors',
+			headers: {
+				"Content-Type": "application/x-www-form-urlencoded;charset=utf-8"
+			},
+		}
+		fetch(
+			'https://result.eolinker.com/MSwz6fu34b763a21e1f7efa84a86a16f767a756952d0f95?uri=localhost:8888/hdfs/download', init
+		)
+			.then(response=>response.json()).then(data=>{
+				console.log(data);
+			})
+
+	}
+
 	render() {
 
 		return (
@@ -196,6 +218,13 @@ class LocalMode extends React.Component {
 						key="2"
 					>
 						<VisualizedPanel></VisualizedPanel>
+					</TabPane>
+					<TabPane
+						className={styles.leftMenu}
+						tab={<Icon type="api" className={styles.iconStyle} />}
+						key="3"
+					>
+						<Button onClick={this.download} >Download</Button>
 					</TabPane>
 				</Tabs>
 
