@@ -6,23 +6,26 @@ object Normalization {
 
   def main(args: Array[String]): Unit = {
 
+    import org.apache.spark.ml.linalg.Vector
     import org.apache.spark.ml.feature._
+    import org.apache.spark.sql.functions._
 
-    val assembler = new VectorAssembler().setInputCols(targetCols).setOutputCol("features")
-   val assembled = assembler.transform(input)
-    val scaled = {
-      if (normalizationType == "Normal") {
-        val scaler = new Normalizer().setInputCol("features").setOutputCol("NormFeatures").setP(1.0)
-        scaler.transform(assembled)
-      } else {
-        val scaler = normalizationType match {
-          case "MinMax" => new MinMaxScaler().setInputCol("features").setOutputCol("MinMaxFeatures")
-          case "Standard" => new StandardScaler().setInputCol("features").setOutputCol("StandardFeatures")
-          case "MaxAbs" => new MaxAbsScaler().setInputCol("features").setOutputCol("MaxAbsFeatures")
-        }
-        val scalerModel = scaler.fit(assembled)
-        scalerModel.transform(assembled)
+    val diviTensor = udf((v: Vector) => v(0))
+
+    var scaled = input
+
+    for(i <- 0 to targetCols.length - 1){
+      val assembler = new VectorAssembler().setInputCols(Array(targetCols(i))).setOutputCol("tensor" + targetCols(i))
+      val assembled = assembler.transform(input)
+      val scaler = normalizationType match {
+        case "MinMax" => new MinMaxScaler().setInputCol("tensor" + targetCols(i)).setOutputCol("feature_" + targetCols(i))
+        case "Standard" => new StandardScaler().setInputCol("tensor" + targetCols(i)).setOutputCol("feature_" + targetCols(i))
+        case "MaxAbs" => new MaxAbsScaler().setInputCol("tensor" + targetCols(i)).setOutputCol("feature_" + targetCols(i))
       }
+      val scalerModel = scaler.fit(assembled)
+      scaled = scalerModel.transform(assembled)
+      scaled = scaled.drop("tensor" + targetCols(i))
+      scaled = scaled.withColumn(normalizationType + targetCols(i), diviTensor(col("feature_" + targetCols(i)))).drop("feature_" + targetCols(i))
     }
 
     val output = scaled
