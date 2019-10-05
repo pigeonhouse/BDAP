@@ -1,59 +1,93 @@
-import React, { Fragment } from 'react';
-import { Row, Col, Button, Modal } from 'antd';
+import React from 'react';
+import { Button } from 'antd';
 
 import LabelSelect from './labelSelect.js';
 import OperateSelect from './operateSelect.js';
 import TagVisual from './tagVisual.js';
+import InputValue from './inputValue.js';
+
+import styles from './index.less';
 
 class Filter extends React.Component {
 
-    state = { visible: false };
-
-    showModal = () => {
-        this.setState({
-            visible: true,
-        });
+    state = {
+        label: undefined,
+        operator: undefined,
+        value: undefined,
+        isMouseEnter: false,
     };
 
-    handleOk = e => {
-        console.log(e);
+    handleAddFilter = () => {
+        const { label, operator, value } = this.state;
+        this.props.handleAddFilter(label, operator, value);
         this.setState({
-            visible: false,
-        });
-    };
+            label: undefined,
+            operator: undefined,
+            value: undefined,
+        })
+    }
 
-    handleCancel = e => {
-        console.log(e);
-        this.setState({
-            visible: false,
-        });
-    };
+    //删除Filter
+    handleDeleteTag = (index) => {
+        this.props.handleDeleteFilter(index);
+    }
+
+    handleChangeLabel = (value) => {
+        this.setState({ label: value });
+    }
+
+    handleChangeOperator = (value) => {
+        this.setState({ operator: value });
+    }
+
+    handleChangeValue = (value) => {
+        this.setState({ value });
+    }
+
+    mouseEnter = () => {
+        this.setState({ isMouseEnter: true })
+    }
+    mouseLeave = () => {
+        this.setState({ isMouseEnter: false })
+    }
 
     render() {
         return (
-            <Fragment>
-                <Button onClick={this.showModal}>
-                    Filter
-                </Button>
-                <Modal
-                    title="Filter"
-                    width={520}
-                    visible={this.state.visible}
-                    onOk={this.handleOk}
-                    onCancel={this.handleCancel}
-                    footer={null}
+            <div>
+                <div className={styles.header} >
+                    <h3>Filter</h3>
+                </div>
+                <div
+                    onMouseEnter={this.mouseEnter}
+                    onMouseLeave={this.mouseLeave}
+                    className={this.state.isMouseEnter ? styles.scrollapp : styles.unscrollapp}
                 >
-                    <Row>
-                        <Col span={12} style={{ paddingLeft:'5%', paddingRight: '5%' }} >
-                            <LabelSelect></LabelSelect>
-                            <OperateSelect></OperateSelect>
-                        </Col>
-                        <Col span={12} >
-                            <TagVisual></TagVisual>
-                        </Col>
-                    </Row>
-                </Modal>
-            </Fragment>
+                    <LabelSelect
+                        handleChangeLabel={this.handleChangeLabel}
+                        label={this.state.label}
+                    ></LabelSelect>
+                    <OperateSelect
+                        handleChangeOperator={this.handleChangeOperator}
+                        operator={this.state.operator}
+                    ></OperateSelect>
+                    <InputValue
+                        handleChangeValue={this.handleChangeValue}
+                    ></InputValue>
+                    <TagVisual
+                        handleDeleteTag={this.handleDeleteTag}
+                        filter={this.props.filter}
+                    ></TagVisual>
+                </div>
+                <div className={styles.footer} >
+                    <Button
+                        className={styles.button}
+                        onClick={this.handleAddFilter}
+                        type="primary"
+                    >
+                        添加
+                    </Button>
+                </div>
+            </div>
         );
     }
 }

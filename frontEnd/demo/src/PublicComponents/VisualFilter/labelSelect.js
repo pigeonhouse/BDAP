@@ -5,17 +5,8 @@ const { Option } = Select;
 
 class LabelSelect extends React.Component {
 
-
     onChange = (value) => {
-        console.log(`selected ${value}`);
-    }
-
-    onBlur = () => {
-        console.log('blur');
-    }
-
-    onFocus = () => {
-        console.log('focus');
+        this.props.handleChangeLabel(value);
     }
 
     onSearch = (val) => {
@@ -26,12 +17,10 @@ class LabelSelect extends React.Component {
         return (
             <Select
                 showSearch
-                style={{ width: "90%" }}
-                placeholder="Select Label"
+                style={{ width: "80%", margin: "10%", marginTop: "15px", marginBottom: "0px" }}
+                placeholder="选择列"
                 optionFilterProp="children"
                 onChange={this.onChange}
-                onFocus={this.onFocus}
-                onBlur={this.onBlur}
                 onSearch={this.onSearch}
                 filterOption={(input, option) =>
                     option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0

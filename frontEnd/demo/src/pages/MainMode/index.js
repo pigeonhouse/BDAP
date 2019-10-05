@@ -136,7 +136,6 @@ class LocalMode extends React.Component {
 		let formData = new FormData();
 		formData.append('oppositePath', '/')
 		formData.append('fileName', 'adult.csv')
-		console.log(formData)
 		const init = {
 			method: 'POST',
 			body: formData,
@@ -148,10 +147,17 @@ class LocalMode extends React.Component {
 		fetch(
 			'https://result.eolinker.com/MSwz6fu34b763a21e1f7efa84a86a16f767a756952d0f95?uri=localhost:8888/hdfs/download', init
 		)
-			.then(response=>response.json()).then(data=>{
-				console.log(data);
+			.then(response => response.blob()).then(data => {
+				//data为二进制文件
+				var reader = new FileReader();
+				reader.readAsText(data, 'utf-8');
+				//以文本方式读取文件
+				reader.onload = function (e) {
+					//转换
+					var result = reader.result
+					console.info(reader.result);
+				}
 			})
-
 	}
 
 	render() {
