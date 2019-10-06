@@ -1,10 +1,10 @@
 import React from 'react';
-import { Button } from 'antd';
+import { Button, Divider } from 'antd';
 
-import LabelSelect from './labelSelect.js';
-import OperateSelect from './operateSelect.js';
-import TagVisual from './tagVisual.js';
-import InputValue from './inputValue.js';
+import LabelSelect from './LabelSelect';
+import OperateSelect from './OperateSelect';
+import TagVisual from './TagVisual';
+import InputValue from './InputValue';
 
 import styles from './index.less';
 
@@ -65,6 +65,7 @@ class Filter extends React.Component {
                     <LabelSelect
                         handleChangeLabel={this.handleChangeLabel}
                         label={this.state.label}
+                        labelArray={this.props.labelArray}
                     ></LabelSelect>
                     <OperateSelect
                         handleChangeOperator={this.handleChangeOperator}
@@ -72,7 +73,9 @@ class Filter extends React.Component {
                     ></OperateSelect>
                     <InputValue
                         handleChangeValue={this.handleChangeValue}
+                        value={this.state.value}
                     ></InputValue>
+                    <Divider />
                     <TagVisual
                         handleDeleteTag={this.handleDeleteTag}
                         filter={this.props.filter}

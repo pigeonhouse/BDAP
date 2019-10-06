@@ -1,7 +1,6 @@
 import { Tag } from 'antd';
 import React from 'react';
 
-
 class TagVisual extends React.Component {
 
     state = {
@@ -33,7 +32,7 @@ class TagVisual extends React.Component {
                 {tag.map((item) => {
                     const tag = `${item.label}${item.operator}${item.value}`;
                     return (
-                        <div style={{ margin: "15%", marginTop: "6px", marginBottom: "6px"}} >
+                        <div style={{ margin: "15%", marginTop: "6px", marginBottom: "6px" }} >
                             <Tag
                                 closable
                                 color="blue"

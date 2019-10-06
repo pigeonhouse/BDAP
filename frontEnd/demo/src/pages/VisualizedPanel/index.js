@@ -14,6 +14,7 @@ class VisualizedPanel extends React.Component {
         filter: [],
         Summarize: [],
         dataSet: [],
+        labelArray: ['jack', 'test'],
     }
 
     handleAddFilter = (label, operator, value) => {
@@ -21,8 +22,7 @@ class VisualizedPanel extends React.Component {
         filter.push({
             label, operator, value
         })
-        this.setState({ filter })
-        console.log(filter);
+        this.setState({ filter });
 
         this.getDataSetByOperate();
     }
@@ -63,9 +63,11 @@ class VisualizedPanel extends React.Component {
                     <Col span={18}>
                         <div style={{ float: "right", marginRight: 20 }} >
                             <DataSource></DataSource>
-                            <Button>Save</Button>
                             <Button>Filter</Button>
                             <Button>Summarize</Button>
+                            <Button>Save</Button>
+                            <Button>Settings</Button>
+                            <Button>Download</Button>
                         </div>
                     </Col>
                 </Row>
@@ -95,6 +97,7 @@ class VisualizedPanel extends React.Component {
                             handleAddFilter={this.handleAddFilter}
                             handleDeleteFilter={this.handleDeleteFilter}
                             filter={this.state.filter}
+                            labelArray={this.state.labelArray}
                         ></Filter>
                     </Col>
                 </Row>

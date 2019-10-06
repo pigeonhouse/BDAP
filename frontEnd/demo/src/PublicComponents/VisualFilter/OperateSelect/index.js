@@ -13,6 +13,7 @@ class OperateSelect extends React.Component {
     render() {
         return (
             <Select
+                value={this.props.operator}
                 placeholder='选择操作符'
                 style={{ width: "80%", margin: "10%", marginTop: "15px", marginBottom: "0px" }}
                 onChange={this.handleChange}

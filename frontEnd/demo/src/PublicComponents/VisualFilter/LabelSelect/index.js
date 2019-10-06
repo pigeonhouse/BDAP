@@ -14,8 +14,10 @@ class LabelSelect extends React.Component {
     }
 
     render() {
+        const { labelArray } = this.props;
         return (
             <Select
+                value={this.props.label}
                 showSearch
                 style={{ width: "80%", margin: "10%", marginTop: "15px", marginBottom: "0px" }}
                 placeholder="选择列"
@@ -26,9 +28,11 @@ class LabelSelect extends React.Component {
                     option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
                 }
             >
-                <Option value="jack">Jack</Option>
-                <Option value="lucy">Lucy</Option>
-                <Option value="tom">Tom</Option>
+                {labelArray.map((item)=>{
+                    return(
+                        <Option value={item}>{item}</Option>
+                    );
+                })}
             </Select >
         );
     }
