@@ -2,10 +2,10 @@ package com.pigeonhouse.bdap.service.filesystem;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
-import com.pigeonhouse.bdap.entity.prework.CommonFiles;
-import com.pigeonhouse.bdap.entity.prework.Experiment;
-import com.pigeonhouse.bdap.entity.prework.attributes.FileAttribute;
-import com.pigeonhouse.bdap.entity.prework.attributes.HeaderAttribute;
+import com.pigeonhouse.bdap.entity.mapinfo.MapInfo;
+import com.pigeonhouse.bdap.entity.metadata.FileAttribute;
+
+import com.pigeonhouse.bdap.entity.metadata.HeaderAttribute;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.pigeonhouse.bdap.dao.ExperimentDao;
@@ -22,8 +22,8 @@ public class ExperimentService {
     /**
      *调用数据库操作查找拓扑示例
      * */
-    public Experiment findExperimentId(String id) {
-        Experiment experiment = experimentDao.findExperimentId(id);
+    public MapInfo findExperimentId(String id) {
+        MapInfo experiment = experimentDao.findExperimentId(id);
         return experiment;
     }
 
@@ -31,7 +31,7 @@ public class ExperimentService {
      *将拓扑示例信息转换成Json(未测试)
      * */
 
-    public JSONObject experimentToJson(Experiment experiment){
+    /**public JSONObject experimentToJson(MapInfo experiment){
         JSONObject result = new JSONObject();
         result.put("expirmentId", experiment.getExperimentId());
         JSONArray file = new JSONArray();
@@ -53,5 +53,5 @@ public class ExperimentService {
         }
         result.put("fileList", file);
         return result;
-        }
+        }*/
 }

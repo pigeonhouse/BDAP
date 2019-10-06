@@ -1,6 +1,6 @@
 package com.pigeonhouse.bdap.dao;
 
-import com.pigeonhouse.bdap.entity.prework.Experiment;
+import com.pigeonhouse.bdap.entity.mapinfo.MapInfo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
@@ -20,9 +20,9 @@ public class ExperimentDao {
     @Autowired
     private MongoTemplate mongoTemplate;
 
-    public Experiment findExperimentId(String id){
+    public MapInfo findExperimentId(String id){
         Query query = new Query(Criteria.where("experimentId").is(id));
-        Experiment experiment = mongoTemplate.findOne(query, Experiment.class);
+        MapInfo experiment = mongoTemplate.findOne(query, MapInfo.class);
         return experiment;
 }
 
