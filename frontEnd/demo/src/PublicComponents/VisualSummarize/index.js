@@ -8,7 +8,7 @@ import InputValue from './InputValue';
 
 import styles from './index.less';
 
-class Filter extends React.Component {
+class Summarize extends React.Component {
 
     state = {
         label: undefined,
@@ -23,8 +23,8 @@ class Filter extends React.Component {
             notification["error"]({
                 message: '错误',
                 description:
-                  '请填写所有项后添加条件',
-              });
+                    '请填写所有项后添加条件',
+            });
         }
         else {
             this.props.handleAddFilter(label, operator, value);
@@ -64,7 +64,7 @@ class Filter extends React.Component {
         return (
             <div>
                 <div className={styles.header} >
-                    <h3>Filter</h3>
+                    <h3>Summarize</h3>
                 </div>
                 <div
                     onMouseEnter={this.mouseEnter}
@@ -104,4 +104,4 @@ class Filter extends React.Component {
     }
 }
 
-export default Filter;
+export default Summarize;

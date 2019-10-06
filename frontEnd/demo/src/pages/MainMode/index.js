@@ -230,7 +230,7 @@ class LocalMode extends React.Component {
 						tab={<Icon type="api" className={styles.iconStyle} />}
 						key="3"
 					>
-						<Button onClick={this.download} >Download</Button>
+						{/* <Button onClick={this.download} >Download</Button> */}
 					</TabPane>
 				</Tabs>
 

@@ -3,6 +3,7 @@ import { Row, Col, Radio, Button } from 'antd';
 
 import DataSource from '../../PublicComponents/VisualDataSource';
 import Filter from '../../PublicComponents/VisualFilter';
+import Summarize from '../../PublicComponents/VIsualSummarize';
 
 import styles from './index.less';
 
@@ -10,6 +11,7 @@ class VisualizedPanel extends React.Component {
 
     state = {
         currentChart: "table",
+        rightCol: "filter",
         dataSourceName: undefined,
         filter: [],
         Summarize: [],
@@ -28,7 +30,7 @@ class VisualizedPanel extends React.Component {
     }
 
     handleDeleteFilter = (tag) => {
-        this.setState({ filter:tag });
+        this.setState({ filter: tag });
 
         this.getDataSetByOperate();
     }
@@ -55,6 +57,42 @@ class VisualizedPanel extends React.Component {
         });
     }
 
+    rightColGenerate = () => {
+        switch (this.state.rightCol) {
+            case 'filter':
+                return (
+                    <Filter
+                        handleAddFilter={this.handleAddFilter}
+                        handleDeleteFilter={this.handleDeleteFilter}
+                        filter={this.state.filter}
+                        labelArray={this.state.labelArray} />
+                )
+            case 'summarize':
+                return (
+                    <Summarize
+                        handleAddFilter={this.handleAddFilter}
+                        handleDeleteFilter={this.handleDeleteFilter}
+                        filter={this.state.filter}
+                        labelArray={this.state.labelArray} />
+                )
+            case 'settings':
+                return (
+                    <Settings
+                        currentChart={this.state.currentChart} />
+                )
+        }
+    }
+
+    handleFilter = () => {
+        this.setState({ rightCol: "filter" })
+    }
+    handleSummarize = () => {
+        this.setState({ rightCol: "summarize" })
+    }
+    handleSettings = () => {
+        this.setState({ rightCol: "settings" })
+    }
+
     render() {
         return (
             <div style={{ height: 'calc(100vh - 105px)' }} >
@@ -63,10 +101,10 @@ class VisualizedPanel extends React.Component {
                     <Col span={18}>
                         <div style={{ float: "right", marginRight: 20 }} >
                             <DataSource></DataSource>
-                            <Button>Filter</Button>
-                            <Button>Summarize</Button>
+                            <Button onClick={this.handleFilter} >Filter</Button>
+                            <Button onClick={this.handleSummarize} >Summarize</Button>
+                            <Button onClick={this.handleSettings} >Settings</Button>
                             <Button>Save</Button>
-                            <Button>Settings</Button>
                             <Button>Download</Button>
                         </div>
                     </Col>
@@ -93,12 +131,7 @@ class VisualizedPanel extends React.Component {
                         </div>
                     </Col>
                     <Col span={5} className={styles.righter} >
-                        <Filter
-                            handleAddFilter={this.handleAddFilter}
-                            handleDeleteFilter={this.handleDeleteFilter}
-                            filter={this.state.filter}
-                            labelArray={this.state.labelArray}
-                        ></Filter>
+                        {this.rightColGenerate()}
                     </Col>
                 </Row>
             </div>
