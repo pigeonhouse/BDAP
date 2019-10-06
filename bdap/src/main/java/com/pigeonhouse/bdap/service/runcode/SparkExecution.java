@@ -117,8 +117,11 @@ public class SparkExecution {
         //----------------------------------------------------
         // 接下去在代码末尾将output以前端生成的id为key，dataframe本身为value存在Map中
 
-        String id = nodeInfo.getId();
-        String mappingDfCode = "\ndfMap += (\"" + id + "\" -> output)\n\n";
+        String mappingDfCode = "";
+        if(!"machinelearning".equals(nodeInfo.getGroupName().getElabel())){
+            String id = nodeInfo.getId();
+            mappingDfCode = "\ndfMap += (\"" + id + "\" -> output)\n\n";
+        }
 
         //------------------如果是checkPoint,保存数据-----------------
         //保存output

@@ -1,37 +1,31 @@
-import org.apache.spark.ml.classification.LogisticRegression
-import org.apache.spark.ml.feature.VectorAssembler
-import org.apache.spark.sql.DataFrame
-import org.apache.spark.sql.functions.col
-import org.apache.spark.ml.evaluation.BinaryClassificationEvaluator
+object LogisticRegression {
 
-val userId = "%s"
-val id = "%s"
-val trainCol = "%s"
-val label = "%s"
-val MaxIter = %s
-val Tol = %s
-val RegParam = %s
-val ElasticNetParam = %s
-val FitIntercept = %s
+  val trainCols: Array[String] = null
+  val labelCol: String = null
+  val MaxIter: Int = null
+  val Tol: Double = null
+  val RegParam: Double = null
+  val ElasticNetParam: Double = null
+  val FitIntercept: Boolean = null
+  var input: DataFrame = null
 
-val all = trainCol + " " + label
+  def main(args: Array[String]): Unit = {
+    import org.apache.spark.ml.classification.LogisticRegression
+    import org.apache.spark.ml.feature.VectorAssembler
+    import org.apache.spark.sql.DataFrame
+    import org.apache.spark.sql.functions.col
 
-val aimarray = all.split(" ")
-val trainArray = trainCol.split(" ")
+    val aimarray = trainCols:+labelCol
 
-var df_ = df_%s
-  df_ = df_.select(aimarray.map(A => col(A)): _*)
+    var df_ = input
+    df_ = df_.select(aimarray.map(A => col(A)): _*)
 
-val assembler = new VectorAssembler().setInputCols(trainArray).setOutputCol("features_lr")
-df_ = assembler.transform(df_)
+    val assembler = new VectorAssembler().setInputCols(trainCols).setOutputCol("features_lr")
+    df_ = assembler.transform(df_)
 
-val lr = new LogisticRegression()
-  .setFeaturesCol("features_lr")
-  .setLabelCol(label)
-  .setFitIntercept(FitIntercept)
-  .setMaxIter(MaxIter)
-  .setRegParam(RegParam)
-  .setElasticNetParam(ElasticNetParam)
-  .setTol(Tol)
+    val lr = new LogisticRegression().setFeaturesCol("features_lr").setLabelCol(labelCol).setFitIntercept(FitIntercept).setMaxIter(MaxIter).setRegParam(RegParam).setElasticNetParam(ElasticNetParam).setTol(Tol)
 
-val Model_%s = lr.fit(df_)
+    val Model = lr.fit(df_)
+  }
+}
+

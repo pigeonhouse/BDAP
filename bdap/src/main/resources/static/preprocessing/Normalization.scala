@@ -16,7 +16,7 @@ object Normalization {
 
     for(i <- 0 to targetCols.length - 1){
       val assembler = new VectorAssembler().setInputCols(Array(targetCols(i))).setOutputCol("tensor" + targetCols(i))
-      val assembled = assembler.transform(input)
+      val assembled = assembler.transform(scaled)
       val scaler = normalizationType match {
         case "MinMax" => new MinMaxScaler().setInputCol("tensor" + targetCols(i)).setOutputCol("feature_" + targetCols(i))
         case "Standard" => new StandardScaler().setInputCol("tensor" + targetCols(i)).setOutputCol("feature_" + targetCols(i))
