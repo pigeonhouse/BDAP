@@ -15,4 +15,8 @@ public class LivySessionInfo implements Serializable {
     private int id;
     private String state;
 
+    public LivySessionInfo(String livyAddr, int id) {
+        this.livyAddr = livyAddr;
+        this.id = id;
+    }
 }
