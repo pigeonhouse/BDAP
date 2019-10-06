@@ -10,9 +10,7 @@ import com.pigeonhouse.bdap.util.response.Response;
 import com.pigeonhouse.bdap.util.response.statusimpl.HdfsStatus;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 
@@ -43,12 +41,20 @@ public class HDFSApi {
      * 获取文件树函数
      * 返回值:带有文件树的JSON字符串
      */
-    @PostMapping("/hdfs/getfilelist")
-    public Object getFileList(HttpServletRequest request) {
+    @RequestMapping(value="/hdfs/",method=RequestMethod.GET)
+    public Object getFileList(HttpServletRequest request)
+    {
+        return getFileList(request,"/");
+    }
+    @RequestMapping(value="/hdfs/{oppositePath}",method=RequestMethod.GET)
+    public Object getFileList(HttpServletRequest request,@PathVariable String oppositePath) {
         try {
             String token = tokenService.getTokenFromRequest(request, "loginToken");
             String userId = tokenService.getValueFromToken(token, "userId").asString();
-            String oppositePath = request.getParameter("oppositePath");
+            if (oppositePath==null)
+            {
+                oppositePath="/";
+            }
             Hdfsfile fileList = hdfsService.listFiles(userId + oppositePath, null);
             if (fileList != null) {
                 JSONObject fileListJson = new JSONObject(new LinkedHashMap());
@@ -70,12 +76,16 @@ public class HDFSApi {
      * 创建HDFS文件夹函数
      * 返回值:带有提示信息的JSON字符串
      */
-    @PostMapping("/hdfs/mkdir")
-    public Object mkdir(HttpServletRequest request) {
+    @RequestMapping(value="/hdfs/",method=RequestMethod.PUT)
+    public Object mkdir(HttpServletRequest request)
+    {
+        return mkdir(request,"/");
+    }
+    @RequestMapping(value="/hdfs/{oppositePath}", method=RequestMethod.PUT)
+    public Object mkdir(HttpServletRequest request,@PathVariable String oppositePath) {
         try {
             String token = tokenService.getTokenFromRequest(request, "loginToken");
             String userId = tokenService.getValueFromToken(token, "userId").asString();
-            String oppositePath = request.getParameter("oppositePath");
             String dirName = request.getParameter("dirName");
             if (oppositePath .equals( "/")) {
                 oppositePath = "";
@@ -97,12 +107,16 @@ public class HDFSApi {
      * 删除HDFS文件夹函数
      * 返回值:带有提示信息的JSON字符串
      */
-    @PostMapping("/hdfs/delete")
-    public Object delete(HttpServletRequest request) {
+    @RequestMapping(value="/hdfs/", method=RequestMethod.DELETE)
+    Object delete(HttpServletRequest request)
+    {
+        return delete(request,"/");
+    }
+    @RequestMapping(value="/hdfs/{oppositePath}", method=RequestMethod.DELETE)
+    public Object delete(HttpServletRequest request,@PathVariable String oppositePath) {
         try {
             String token = tokenService.getTokenFromRequest(request, "loginToken");
             String userId = tokenService.getValueFromToken(token, "userId").asString();
-            String oppositePath = request.getParameter("oppositePath");
             String fileName = request.getParameter("fileName");
             if (oppositePath .equals( "/")) {
                 oppositePath = "";
@@ -280,52 +294,27 @@ public class HDFSApi {
      * 下载文件所用函数
      * 返回值:文件流
      */
-    @PostMapping("/hdfs/download")
-    public Object download(HttpServletRequest request, HttpServletResponse response) throws IOException {
+    @GetMapping("/hdfs/download/")
+    public Object download(HttpServletRequest request,HttpServletResponse response)throws IOException {
+        return download(request, "/", response);
+    }
+    @GetMapping("/hdfs/download/{fileOppositePath}")
+    public Object download(HttpServletRequest request, @PathVariable String fileOppositePath,HttpServletResponse response) throws IOException {
         try {
             String token = tokenService.getTokenFromRequest(request, "loginToken");
             //获取含有登录信息的Token
             String userId = tokenService.getValueFromToken(token, "userId").asString();
             //解析UserId
-            String oppositePath = request.getParameter("oppositePath");
-            if (oppositePath.equals("/")) {
-                oppositePath = "";
+            if (fileOppositePath.equals("/")) {
+                fileOppositePath = "";
             }
-            String fileName = request.getParameter("fileName");
-            if (StringUtils.isEmpty(fileName)) {
+            //String fileName = request.getParameter("fileName");
+            if (StringUtils.isEmpty(fileOppositePath)) {
                 return new Response(HdfsStatus.INVALID_INPUT, null);
             }
-            InputStream inputStream = (InputStream) hdfsService.download(userId + oppositePath + "/" + fileName);
+            InputStream inputStream = (InputStream) hdfsService.download(userId + "/"+fileOppositePath);
             if (inputStream != null) {
-                String[] buf = fileName.split("\\.");
-                switch (buf[buf.length - 1]) {
-                    case "bmp":
-                        response.setContentType("image/bmp");
-                        break;
-                    case "gif":
-                        response.setContentType("image/gif");
-                        break;
-                    case "jpeg":
-                        response.setContentType("image/jpeg");
-                        break;
-                    case "jpg":
-                        response.setContentType("image/jpeg");
-                        break;
-                    case "html":
-                        response.setContentType("text/html");
-                        break;
-                    case "txt":
-                        response.setContentType("text/plain");
-                        break;
-                    case "csv":
-                        response.setContentType("text/plain");
-                        break;
-                    case "xml":
-                        response.setContentType("text/xml");
-                        break;
-                    default:
-                        break;
-                }
+
                 OutputStream os = response.getOutputStream();
                 byte[] b = new byte[4096];
                 int length;
