@@ -21,18 +21,9 @@ class FlowContextMenu extends React.Component {
 		visible: false,
 		MlEvaluteVisible: false,
 		evaluation: [[]],
-		// compareVisible: false,
 		col: [],
-		// sum: 1000,
-		// currentIndex: -1,
 		data: [],
-		// list: [],
-		// newRandomkey: 0,
-		// groupNumbers: 3,
 		visibleChartRadio: false,
-		// currentdata: [],
-	//	currentChartType: 'bar'
-		// filterDropdownVisible:false
 	}
 
 

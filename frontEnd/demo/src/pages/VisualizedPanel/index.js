@@ -4,7 +4,7 @@ import { Row, Col, Radio, Button } from 'antd';
 import DataSource from '../../PublicComponents/VisualDataSource';
 import Filter from '../../PublicComponents/VisualFilter';
 import Summarize from '../../PublicComponents/VIsualSummarize';
-
+import TableTwo from "../../PublicComponents/ExperimentList/TableTwo"
 import styles from './index.less';
 
 var echarts = require('echarts');
@@ -58,7 +58,7 @@ class VisualizedPanel extends React.Component {
     selectVisibleChart = () => {
         if(this.state.currentChart === "table"){
             return (
-                <div>fffffffffffffffffffffffffffffffffffffff</div>
+                <div><TableTwo/></div>
             );
         }
     }

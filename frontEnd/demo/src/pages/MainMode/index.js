@@ -10,7 +10,7 @@ import VisualizedPanel from '../VisualizedPanel';
 import LocalRun from "../../LocalModeComponents/RunPanel/Run";
 import PythonRun from "../../PythonModeComponents/RunPanel/Run";
 import SparkRun from "../../ClusterModeComponents/SparkRunPanel/SparkRun";
-
+import ExperimentList from "../../PublicComponents/ExperimentList/ExperimentList"
 import styles from './index.less';
 /**
  * 主界面，根据link的信息，进行不同版本的组件渲染
@@ -44,6 +44,7 @@ class LocalMode extends React.Component {
 		remind: 'false',
 		connectCtrl: false,
 		type: 'local',
+		test:"0"
 	}
 	noRemind = (key) => {
 		notification.close(key)
@@ -160,6 +161,19 @@ class LocalMode extends React.Component {
 			})
 	}
 
+	handleClickNum = () => {
+		return <ExperimentList/>
+	}
+
+	// handlePageChange=()=>{
+	// 	if(this.state.clicknum===1){
+	// 		return <ExperimentList/>
+	// 	}
+	// 	else{
+	// 		return <TableTwo/>
+	// 	}
+	// }
+
 	render() {
 
 		return (
@@ -215,7 +229,8 @@ class LocalMode extends React.Component {
 						tab={<Icon type="credit-card" className={styles.iconStyle} />}
 						key="1"
 					>
-						<ExperimentPanel type={this.state.type} />
+						<ExperimentList/>
+						{/* <ExperimentPanel type={this.state.type} /> */}
 					</TabPane>
 
 					<TabPane
