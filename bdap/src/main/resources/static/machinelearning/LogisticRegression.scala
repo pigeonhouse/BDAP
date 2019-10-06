@@ -26,6 +26,8 @@ object LogisticRegression {
     val lr = new LogisticRegression().setFeaturesCol("features_lr").setLabelCol(labelCol).setFitIntercept(FitIntercept).setMaxIter(MaxIter).setRegParam(RegParam).setElasticNetParam(ElasticNetParam).setTol(Tol)
 
     val Model = lr.fit(df_)
+
+    val output = Model
   }
 }
 

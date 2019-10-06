@@ -41,11 +41,16 @@ public class SparkExecution {
 
         //判断有几个输入,input,input_1,input_2...以此类推
         for (int i = 0; i < numberOfInput; i++) {
+
+            if(("predict").equals(nodeInfo.getGroupName().getElabel()) && i == 0){
+                continue;
+            }
+
             if (i != 0) {
                 inputName = "input_" + i;
             }
             //从dfMap中取出存过的dataframe
-            inputCodeBuilder.append("val " + inputName + " = dfMap(\"" + sourceIdList[i] + "\")");
+            inputCodeBuilder.append("val " + inputName + " = dfMap(\"" + sourceIdList[i] + "\")\n");
         }
 
         String inputCode = inputCodeBuilder.append("\n").toString();
