@@ -3,7 +3,7 @@ import { withPropsAPI } from '@src';
 
 import { changeSourceLabelArray } from './changeSourceLabelArray.js';
 import TransferSelect from './TransferSelect.js';
-import Feature from '../../DataOperate/FeatureNodeDetail/Feature';
+// import Feature from '../../DataOperate/FeatureNodeDetail/Feature';
 
 /**
  * 选择字段组件
@@ -21,7 +21,7 @@ class SelectWord extends Component {
         const { label } = labelName;
         const group = groupName.label;
 
-        if (group === 'input' || anchor[0] === 0 || label === "数据随机划分") return;
+        if (group === 'datasource' || anchor[0] === 0 || label === "数据随机划分") return;
 
         this.findLabelArray();
     }
@@ -48,8 +48,8 @@ class SelectWord extends Component {
         const currentItem = find(currentId);
 
         for (let i in edges) {
-            if ((currentItem.model.group === "ml" && edges[i].target === currentId && edges[i].targetAnchor === 1) ||
-                (currentItem.model.group !== "ml" && edges[i].target === currentId)) {
+            if ((currentItem.model.group === "machinelearning" && edges[i].target === currentId && edges[i].targetAnchor === 1) ||
+                (currentItem.model.group !== "machinelearning" && edges[i].target === currentId)) {
                 const sourceItem = find(edges[i].source);
 
                 if (sourceItem.getModel().label === "数据随机划分")
@@ -57,12 +57,12 @@ class SelectWord extends Component {
 
                 let labelArray = changeSourceLabelArray(sourceItem, sourceItem.model.labelArray);
 
-                if (group === 'ml')
+                if (group === 'machinelearning')
                     return [labelArray, labelArray] || [[], []];
                 else return labelArray || [];
             }
         }
-        if (group === 'ml')
+        if (group === 'machinelearning')
             return [[], []];
         else return [];
     }
@@ -71,8 +71,8 @@ class SelectWord extends Component {
     isLabelArrayChange = (labelArray, currentLabelArray, group) => {
         //分情况确定是否为空
         if (currentLabelArray.length === 0 ||
-            (group !== 'ml' && labelArray.length === 0) ||
-            (group === 'ml' && (labelArray[0].length === 0 || currentLabelArray[0].length === 0))) {
+            (group !== 'machinelearning' && labelArray.length === 0) ||
+            (group === 'machinelearning' && (labelArray[0].length === 0 || currentLabelArray[0].length === 0))) {
 
             const { propsAPI, item } = this.props;
             const { executeCommand, update } = propsAPI;
@@ -82,7 +82,7 @@ class SelectWord extends Component {
             this.setState({ labelArray });
             return;
         }
-        if (group === 'ml') {
+        if (group === 'machinelearning') {
             for (let column in labelArray) {
                 if (labelArray[0][column][0] !== currentLabelArray[0][column][0]) {
                     this.setState({ labelArray });
@@ -136,11 +136,11 @@ class SelectWord extends Component {
         const { label } = labelName;
         const group = groupName.label;
 
-        if (group === 'input' || anchor[0] === 0 || label === "数据随机划分") return;
+        if (group === 'datasource' || anchor[0] === 0 || label === "数据随机划分") return;
 
         const labelArray = this.state.labelArray;
 
-        if (group === 'ml') {
+        if (group === 'machinelearning') {
             return (
                 <Fragment>
                     特征列字段：
@@ -166,7 +166,7 @@ class SelectWord extends Component {
                 {this.createSelect()}
 
                 {/* 有关预处理的函数 */}
-                <Feature item={this.props.item} labelArray={this.state.labelArray} />
+                {/* <Feature item={this.props.item} labelArray={this.state.labelArray} /> */}
             </Fragment>
         );
     }

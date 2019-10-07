@@ -157,12 +157,11 @@ class LocalMode extends React.Component {
 	}
 
 	handlePageChange = () => {
-		// console.log(this.state.test);
 		if (this.state.test === "0") {
 			return <ExperimentList handleP={this.handleClickNum} />
 		}
 		else {
-			return <ExperimentPanel nodesModuleInfo={this.props.location.state.nodesModuleInfo} />
+			return <ExperimentPanel />
 		}
 	}
 

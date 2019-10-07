@@ -8,15 +8,38 @@ import FlowNodePanel from '../../PublicComponents/EditorNodePanel';
 import styles from './index.less';
 
 class ExperimentPanel extends Component {
-    render() {
-        console.log(this.props.nodesModuleInfo);
+    state = {
+        nodesModuleInfo: [],
+    }
 
+    componentWillMount() {
+        const init = {
+            method: 'GET',
+            mode: 'cors',
+            headers: {
+                "Content-Type": "application/json;charset=utf-8"
+            },
+            credentials: 'include'
+        }
+        fetch('https://result.eolinker.com/MSwz6fu34b763a21e1f7efa84a86a16f767a756952d0f95?uri=localhost:8888/module', init)
+            .then(res => {
+                if (res.status === 200) {
+                    res.json().then(res => {
+                        if (res.code === 200) {
+                            this.setState({ nodesModuleInfo: res.data });
+                        }
+                    })
+                }
+            })
+    }
+
+    render() {
         return (
             <Row type="flex" style={{ height: 'calc(100vh - 105px)' }}>
                 <Col span={4} style={{ backgroundColor: '#fff' }}>
                     <div style={{ height: 'calc(100vh - 105px)' }} span={4} className={styles.editorSidebar}
                         data-step="1" data-intro='在组件栏可以挑选想要的模块，左键单击拖拽添加至右侧画布内。' data-position='right'>
-                        <FlowNodePanel nodesModuleInfo={this.props.nodesModuleInfo} />
+                        <FlowNodePanel nodesModuleInfo={this.state.nodesModuleInfo} />
                     </div>
                 </Col>
 

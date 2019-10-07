@@ -23,7 +23,7 @@ class GetInputOutput extends React.Component {
         const { label, group } = this.props;
         if (label === 'hdfs数据') return (<HdfsFile />);
         else if (label === '本地数据') return (<UploadFile />);
-        else if (group === 'input') {
+        else if (group === 'datasource') {
             switch (label) {
                 case 'Titanic测试': case 'Titanic训练': case 'Pokemon':
                 case 'SimpleTest': case 'SimpleTrain': return (<ExampleDataUpload fileName={label} />);
