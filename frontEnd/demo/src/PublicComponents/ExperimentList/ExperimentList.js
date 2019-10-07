@@ -1,13 +1,13 @@
 import React from 'react';
-import { Table, Button, Row, Col,Modal,Card} from 'antd';
+import { Table, Button, Row, Col, Modal, Card } from 'antd';
 import LocalMode from "../../pages/MainMode"
 import TableTwo from "./TableTwo"
-
+import { Link ,Redirect} from 'react-router-dom';
+import ExperimentPanel from "../../pages/ExperimentPanel"
 class ExperimentList extends React.Component {
 
-	state={
-		dataSource:[],
-		selectTab:"1"
+	state = {
+		dataSource: [],
 	}
 
 	componentDidMount() {
@@ -50,11 +50,13 @@ class ExperimentList extends React.Component {
 			},
 		];
 		this.setState({
-			dataSource:data
+			dataSource: data
 		})
 	}
 	handleNewButton = () => {
-		 alert("你可以去创建自己的文件了，需要跳转页面");
+		 // alert("你可以去创建自己的文件了，需要跳转页面");
+		// return <Redirect to="/route" />;
+		this.props.handleP()
 	}
 	handleDeleteButton = () => {
 		alert("你确定删除吗");
@@ -62,8 +64,8 @@ class ExperimentList extends React.Component {
 	onRowClick = (record, index) => {
 		let selectKey = [index];
 		Modal.info({
-			title:"信息",
-			content:record.filename
+			title: "信息",
+			content: record.filename
 		})
 		this.setState({
 			selectedRowKeys: selectKey,
@@ -78,7 +80,7 @@ class ExperimentList extends React.Component {
 				title: 'FileName',
 				dataIndex: 'filename',
 				width: 100,
-				 render: text => <a>{text}</a>,
+				render: text => <a>{text}</a>,
 			},
 			{
 				title: 'Date',
@@ -108,7 +110,9 @@ class ExperimentList extends React.Component {
 			<div style={{ marginLeft: 20, marginTop: 20 }}>
 				<Row>
 					<Col span={12}>
-						<Button type="primary" onClick={this.handleNewButton} style={{ marginRight: 10, marginBottom: 10 }}>新建文件</Button>
+						<Button type="primary"  style={{ marginRight: 10, marginBottom: 10 }} onClick={this.handleNewButton}>
+							新建项目
+						</Button>
 						<Button type="primary" onClick={this.handleDeleteButton} style={{ marginBottom: 10 }}>删除</Button>
 						<Table
 							bordered
@@ -126,7 +130,7 @@ class ExperimentList extends React.Component {
 							dataSource={this.state.dataSource}
 							pagination={{ pageSize: 6 }} />
 					</Col>
-					<Col span={12}>col-12</Col>
+					<Col span={12}>缩略图预览</Col>
 				</Row>
 
 			</div>)

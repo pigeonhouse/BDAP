@@ -12,6 +12,7 @@ import PythonRun from "../../PythonModeComponents/RunPanel/Run";
 import SparkRun from "../../ClusterModeComponents/SparkRunPanel/SparkRun";
 import ExperimentList from "../../PublicComponents/ExperimentList/ExperimentList"
 import styles from './index.less';
+
 /**
  * 主界面，根据link的信息，进行不同版本的组件渲染
  * 已将三个版本的界面合成一个
@@ -162,17 +163,23 @@ class LocalMode extends React.Component {
 	}
 
 	handleClickNum = () => {
-		return <ExperimentList/>
+		this.setState({
+			test:"1"
+		})
 	}
-
-	// handlePageChange=()=>{
-	// 	if(this.state.clicknum===1){
-	// 		return <ExperimentList/>
-	// 	}
-	// 	else{
-	// 		return <TableTwo/>
-	// 	}
-	// }
+	handleTabClick=()=>{
+		this.setState({
+			test:"0"
+		})
+	}
+	handlePageChange=()=>{
+		if(this.state.test==="0"){
+			return <ExperimentList handleP={this.handleClickNum}/>
+		}
+		else{
+			return <ExperimentPanel type={this.state.type}/>
+		}
+	}
 
 	render() {
 
@@ -226,10 +233,11 @@ class LocalMode extends React.Component {
 					<TabPane
 						className={styles.leftMenu}
 						style={{ height: 'calc(100vh - 105px)' }}
-						tab={<Icon type="credit-card" className={styles.iconStyle} />}
+						tab={<Icon type="credit-card" className={styles.iconStyle} onClick={this.handleTabClick}/>}
 						key="1"
 					>
-						<ExperimentList/>
+						{this.handlePageChange()}
+						{/* <ExperimentList/> */}
 						{/* <ExperimentPanel type={this.state.type} /> */}
 					</TabPane>
 
@@ -245,6 +253,7 @@ class LocalMode extends React.Component {
 						tab={<Icon type="api" className={styles.iconStyle} />}
 						key="3"
 					>
+						<ExperimentPanel type={this.state.type} />
 						{/* <Button onClick={this.download} >Download</Button> */}
 					</TabPane>
 				</Tabs>

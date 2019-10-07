@@ -4,14 +4,12 @@ import { HashRouter as Router, Route } from 'react-router-dom';
 import HomePage from './pages/Home';
 import RouteMode from './pages/Route';
 import MainModePage from './pages/MainMode';
-
 ReactDOM.render(
 	<Router>
 		<div>
 			<Route path="/" exact component={HomePage} />
 			<Route path="/route" component={RouteMode} />
 			<Route path="/mainPage" component={MainModePage} />
-
 		</div>
 	</Router>,
 
