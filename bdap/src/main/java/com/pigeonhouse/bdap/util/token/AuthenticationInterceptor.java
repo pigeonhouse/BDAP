@@ -7,9 +7,9 @@ import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.exceptions.JWTDecodeException;
 import com.auth0.jwt.exceptions.JWTVerificationException;
 import com.auth0.jwt.interfaces.Claim;
+import com.pigeonhouse.bdap.dao.UserDao;
 import com.pigeonhouse.bdap.entity.metadata.User;
 import com.pigeonhouse.bdap.service.TokenService;
-import com.pigeonhouse.bdap.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.servlet.HandlerInterceptor;
@@ -29,7 +29,7 @@ import java.util.Map;
  */
 public class AuthenticationInterceptor implements HandlerInterceptor {
     @Autowired
-    UserService userService;
+    UserDao userDao;
 
     @Autowired
     TokenService tokenService;
@@ -85,7 +85,7 @@ public class AuthenticationInterceptor implements HandlerInterceptor {
             String livyAddr = claims.get("livyAddr").asString();
             Integer sessionId = claims.get("sessionId").asInt();
 
-            User user = userService.findUserById(userId);
+            User user = userDao.findByUserId(userId);
             if (user == null) {
                 json.put("msg", "用户不存在，请重新登录");
                 out = httpServletResponse.getWriter();

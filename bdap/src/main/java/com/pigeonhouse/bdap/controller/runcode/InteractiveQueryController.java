@@ -26,7 +26,7 @@ import java.util.Map;
  * @Date: 2019/9/29 10:44
  */
 @RestController
-public class Query {
+public class InteractiveQueryController {
 
     @Autowired
     LivyDao livyDao;
@@ -98,11 +98,6 @@ public class Query {
         System.out.println("finish");
     }
 
-    @PassToken
-    @RequestMapping("/query/delete")
-    public void delete(String id) {
-        livyDao.deleteSession(id);
-    }
 
 
 

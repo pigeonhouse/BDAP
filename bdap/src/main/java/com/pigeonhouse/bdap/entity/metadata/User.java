@@ -21,12 +21,10 @@ public class User {
     String userId;
     String userName;
     String password;
-    ArrayList<String> currentFile;
 
-    public User(String id, String name, String password, ArrayList<String> currentFile) {
+    public User(String id, String name, String password) {
         this.userId = id;
         this.userName = name;
         this.password = password;
-        this.currentFile = currentFile;
     }
 }

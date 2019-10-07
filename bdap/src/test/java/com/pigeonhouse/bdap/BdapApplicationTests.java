@@ -2,7 +2,7 @@ package com.pigeonhouse.bdap;
 
 import com.pigeonhouse.bdap.controller.filesystem.FileHeaderAttriController;
 import com.pigeonhouse.bdap.controller.filesystem.ModuleInfoController;
-import com.pigeonhouse.bdap.controller.runcode.PostCode;
+import com.pigeonhouse.bdap.controller.runcode.FlowChartController;
 import com.pigeonhouse.bdap.dao.FileHeaderAttriDao;
 import com.pigeonhouse.bdap.dao.LivyDao;
 import com.pigeonhouse.bdap.dao.ModuleDao;
@@ -50,7 +50,7 @@ public class BdapApplicationTests {
     SparkExecution sparkExecution;
 
     @Autowired
-    PostCode postCode;
+    FlowChartController flowChartController;
 
     @Autowired
     ModuleDao moduleDao;

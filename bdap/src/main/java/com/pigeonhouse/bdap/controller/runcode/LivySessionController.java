@@ -5,6 +5,7 @@ import com.pigeonhouse.bdap.entity.execution.LivySessionInfo;
 import com.pigeonhouse.bdap.service.TokenService;
 import com.pigeonhouse.bdap.util.response.Response;
 import com.pigeonhouse.bdap.util.response.statusimpl.SessionStatus;
+import com.pigeonhouse.bdap.util.token.PassToken;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -16,7 +17,7 @@ import javax.servlet.http.HttpServletRequest;
  * @Date: 2019/9/30 14:54
  */
 @RestController
-public class CheckSessionStatus {
+public class LivySessionController {
 
     @Autowired
     LivyDao livyDao;
@@ -37,7 +38,12 @@ public class CheckSessionStatus {
             return new Response(SessionStatus.BUSY, newSessionInfo);
         }
         return new Response(SessionStatus.DEAD, newSessionInfo);
-
-
     }
+
+    @PassToken
+    @RequestMapping("/session/delete")
+    public void delete(String id) {
+        livyDao.deleteSession(id);
+    }
+
 }
