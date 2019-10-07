@@ -32,6 +32,14 @@ public class SparkExecution {
      */
     public String generateCode(NodeInfo nodeInfo) {
 
+        //是否是输入的文件模块
+        String filePath = nodeInfo.getFilePath();
+        if (filePath!=null) {
+            String id = nodeInfo.getId();
+            return "val output = spark.read.format(\"csv\").option(\"inferSchema\", \"true\").option(\"header\", \"true\").load(\"" + filePath + "\")\n" +
+                    "dfMap += (\"" + id + "\" -> output)\n\n";
+        }
+
         //----------------------根据锚点判断是否需要注入输入参数的语句--------------------
         int[] anchor = nodeInfo.getAnchor();
         int numberOfInput = anchor[0];
@@ -42,7 +50,7 @@ public class SparkExecution {
         //判断有几个输入,input,input_1,input_2...以此类推
         for (int i = 0; i < numberOfInput; i++) {
 
-            if(("predict").equals(nodeInfo.getGroupName().getElabel()) && i == 0){
+            if (("predict").equals(nodeInfo.getGroupName().getElabel()) && i == 0) {
                 continue;
             }
 
@@ -56,11 +64,12 @@ public class SparkExecution {
         String inputCode = inputCodeBuilder.append("\n").toString();
 
         //-------------------------取出代码文件中的代码段------------------------------
-        String filePath = "src/main/resources/static/" + nodeInfo.getGroupName().getElabel() +"/"
+
+        String scalaFilePath = "src/main/resources/static/" + nodeInfo.getGroupName().getElabel() + "/"
                 + nodeInfo.getLabelName().getElabel() + ".scala";
         StringBuilder originCodeBuilder = new StringBuilder();
         try {
-            FileInputStream inputStream = new FileInputStream(filePath);
+            FileInputStream inputStream = new FileInputStream(scalaFilePath);
             BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream, "gbk"));
             String str = null;
             while ((str = bufferedReader.readLine()) != null) {
@@ -77,6 +86,7 @@ public class SparkExecution {
         String innerCode = originCode.split("def\\smain.*\\{")[1]
                 .split("(\\}\\s*)$")[0]
                 .split("(\\}\\s*)$")[0];
+
 
         //---------------下面开始构造参数赋值语句---------------------
 
@@ -123,7 +133,7 @@ public class SparkExecution {
         // 接下去在代码末尾将output以前端生成的id为key，dataframe本身为value存在Map中
 
         String mappingDfCode = "";
-        if(!"machinelearning".equals(nodeInfo.getGroupName().getElabel())){
+        if (!"machinelearning".equals(nodeInfo.getGroupName().getElabel())) {
             String id = nodeInfo.getId();
             mappingDfCode = "\ndfMap += (\"" + id + "\" -> output)\n\n";
         }

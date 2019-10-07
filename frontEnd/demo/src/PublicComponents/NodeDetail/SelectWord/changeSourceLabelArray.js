@@ -5,14 +5,14 @@
  */
 export function changeSourceLabelArray(item, sourceLabelArray) {
     let labelArray = [];
-    if (item.model.group === 'ml') {
+    if (item.model.groupName.label === 'machinelearning') {
         sourceLabelArray = sourceLabelArray[0];
     }
     for (let i in sourceLabelArray) {
         labelArray.push([sourceLabelArray[i][0], false]);
     }
     let labelarr = [];
-    switch (item.model.label) {
+    switch (item.model.labelName.label) {
         case '归一化':
             for (let i in sourceLabelArray) {
                 if (sourceLabelArray[i][1]) {

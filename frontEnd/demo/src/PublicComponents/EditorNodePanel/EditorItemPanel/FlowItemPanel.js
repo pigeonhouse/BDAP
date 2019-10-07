@@ -2,7 +2,6 @@ import React from 'react';
 import { ItemPanel, Item } from '@src';
 import { Menu, Icon } from 'antd';
 import ItemDecoration from '../ItemDecoration';
-import { clusterItem } from '../../../ClusterModeComponents/EditorItemInfo/FlowItemInfo';
 
 /**
  * 左侧下拉菜单栏，包括可操作实现的组件
@@ -50,72 +49,75 @@ Item 数据格式：
 const SubMenu = Menu.SubMenu;
 
 class FlowItemModel extends React.Component {
-	state = {
-		itemNumber: 1,
-		itemData: [],
-	}
-	componentWillMount() {
-		this.setState({
-			itemData: clusterItem
-		})
-	}
-	createItemPanel = (item) => {
-		var result = [];
-		// 判断是否有SubMenu，没有则跳过，有则加入并递归下一层SubMenu
-		if (item.hasOwnProperty("subMenu")) {
-			var subMenu;
-			for (let i in item.subMenu) {
-				subMenu = item.subMenu[i];
-				// 判断两种SubMenu样式类型，即是否有Icon，有的话用type及name表示，没有的话用title表示。
-				if (subMenu.title === undefined) {
-					result.push(
-						<SubMenu
-							key={subMenu.key}
-							title={<span><Icon type={subMenu.type} /><span>{subMenu.name}</span></span>}
-						>
-							{this.createItemPanel(subMenu)}
-						</SubMenu>);
-				}
-				else {
-					result.push(
-						<SubMenu
-							key={subMenu.key}
-							title={subMenu.title}
-						>
-							{this.createItemPanel(subMenu)}
-						</SubMenu>);
-				}
-			}
-		}
 
-		// 判断是否有MenuItem，有则加入，没有则跳过
-		if (item.hasOwnProperty("menu")) {
-			var menu;
-			for (let i in item.menu) {
-				menu = item.menu[i];
-				result.push(<Menu.Item key={i}><ItemPanel>
-					<Item
-						type={menu.type}
-						size={menu.size}
-						shape={menu.shape}
-						model={menu.model}
-					/>
-				</ItemPanel></Menu.Item>);
-			}
+	transformString = (number) => {
+		switch (number) {
+			case 0: return 'zero';
+			case 1: return 'one';
+			case 2: return 'two';
+			case 3: return 'three';
+			default: return 'zero';
+		}
+	}
+
+	switchShape = (anchor) => {
+		const head = this.transformString(anchor[0]);
+		const tail = this.transformString(anchor[1]);
+		return `${head}-${tail}`;
+	}
+
+	createItemPanel = (itemList, group) => {
+		var result = new Array();
+		if (itemList !== undefined) {
+			itemList.map((item) => {
+				if (item.groupName.elabel === group) {
+					result.push(
+						<Menu.Item key={item}><ItemPanel>
+							<Item
+								type="node"
+								size="200*40"
+								shape={this.switchShape(item.anchor)}
+								model={{
+									labelName: item.labelName,
+									groupName: item.groupName,
+									anchor: item.anchor,
+									attributes: item.attributes,
+									labelArray: [],
+									isCheckPoint: item.isCheckPoint,
+									keyConfig: {
+										color_type: '#1890FF',
+										state_icon_url: 'https://gw.alipayobjects.com/zos/rmsportal/uZVdwjJGqDooqKLKtvGA.svg',
+									}
+								}}
+							/>
+						</ItemPanel></Menu.Item>);
+				}
+			})
 		}
 		return result;
 	}
+
 	render() {
-		var itemData = this.state.itemData;
+		const itemData = this.props.moduleNodesList;
 		return (
 			<Menu
-				defaultOpenKeys={itemData.defaultOpenKeys}
-				mode={itemData.mode}
+				mode="inline"
 				style={{ maxHeight: 'calc(100vh - 105px)', width: '240px', borderRight: 0 }}
-				selectable={itemData.selectable}
+				selectable={false}
 			>
 				<ItemDecoration />
-				{this.createItemPanel(itemData)}
+				<SubMenu
+					key="preprocessing"
+					title={<span><Icon type="code" /><span>数据预处理</span></span>}
+				>
+					{this.createItemPanel(itemData, "preprocessing")}
+				</SubMenu>
+				<SubMenu
+					key="machinelearning"
+					title={<span><Icon type="calculator" /><span>机器学习</span></span>}
+				>
+					{this.createItemPanel(itemData, "machinelearning")}
+				</SubMenu>
 			</Menu>
 		);
 	}

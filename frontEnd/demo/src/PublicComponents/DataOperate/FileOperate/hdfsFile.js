@@ -1,25 +1,59 @@
 import React, { Component } from 'react';
-import { Button, TreeSelect, Form } from 'antd'
+import { Button, TreeSelect, Form ,Modal} from 'antd'
 import { withPropsAPI } from '@src';
 import { Stat } from '../DataToolFunctions/Stat'
-
+import DragM from "dragm";
 /**
  * hdfs文件上传
  */
 
+
+class BuildModalTitle extends React.Component {
+	updateTransform = transformStr => {
+	  this.modalDom.style.transform = transformStr;
+	};
+	componentDidMount() {
+	  this.modalDom = document.getElementsByClassName(
+		"ant-modal-wrap" //modal的class是ant-modal-wrap
+	  )[0];
+	}
+	render() {
+	  const { title } = this.props;
+	  return (
+		<DragM updateTransform={this.updateTransform}>
+		  <div>{title}</div>
+		</DragM>
+	  );
+	}
+  }
 class HdfsFile extends Component {
 	state = {
-		inpValu: '',
+		inpValue: '',
 		oppositePath:'/',
 		treeData: [],
+		fileModalVisible: false
 	}
-
+	showModal = () => {
+		this.setState({
+			fileModalVisible: true
+		});
+	  };
+	  handleOk = e => {
+		this.setState({
+			fileModalVisible: false
+		});
+	  };
+	  handleCancel = e => {
+		this.setState({
+			fileModalVisible: false
+		});
+	  };
 	componentWillMount() {
 		const { propsAPI } = this.props;
 		const { getSelected } = propsAPI;
 		const item = getSelected()[0];
 		const model = item.getModel();
-		const inpValu = model.attr.fileName || '';
+		const inpValu = model.labelName.label || '';
 		this.setState({ inpValu });
 
 		let formData = new FormData();
@@ -141,9 +175,10 @@ class HdfsFile extends Component {
 	}
 
 	render() {
-		const { treeData, inpValu } = this.state;
+		const { treeData, inpValue } = this.state;
 		const { form } = this.props;
 		const { getFieldDecorator } = form;
+		const title = <BuildModalTitle title="查看HDFS文件" />;
 		const inlineFormItemLayout = {
 			labelCol: {
 				sm: { span: 8 },
@@ -155,23 +190,29 @@ class HdfsFile extends Component {
 		return (
 			<Form onSubmit={this.handleChange}>
 				<Form.Item label="location" {...inlineFormItemLayout}>
-					{getFieldDecorator('attr.fileName', {
-						initialValue: this.state.inpValu
-					})(
-						<TreeSelect
-							showSearch
-							style={{ width: 150 }}
-							value={inpValu}
-							dropdownStyle={{ maxHeight: 400, overflow: 'auto' }}
-							treeData={treeData}
-							placeholder="Please select"
-							treeDefaultExpandAll
-							onChange={this.handleChange}
-							onSearch={this.handleSearch}
-							// onSelect = {this.handleSelect}
-						/>
-					)}
-					<Button onClick={() => this.submit()}>confirm</Button>
+			
+					<Button onClick={() => this.showModal()}>查看HDFS文件</Button>
+					<Modal title={title}
+          visible={this.state.fileModalVisible}
+          centered
+          onOk={this.handleOk}
+		  onCancel={this.handleCancel}
+		  footer={[
+            <Button >
+              标注为常用文件
+            </Button>,
+			<Button >
+			确定
+		  </Button>,
+		  <Button>
+			取消
+		  </Button>,
+          ]}
+        >
+          <p>{this.state.text}</p>
+          <p>Some contents...</p>
+          <p>Some contents...</p>
+        </Modal>
 				</Form.Item>
 			</Form>
 		)

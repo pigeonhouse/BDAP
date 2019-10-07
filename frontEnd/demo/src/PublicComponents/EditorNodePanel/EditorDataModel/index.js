@@ -17,28 +17,30 @@ class FlowDataModel extends React.Component {
 		var menu;
 		for (let i in item) {
 			menu = item[i];
-			result.push(<Menu.Item key={i}><ItemPanel>
-				<Item
-					type="node"
-					size="200*40"
-					shape='zero-one'
-					model={{
-						label: menu.label,
-						elabel: menu.elabel,
-						attr: {},
-						attrDetail: [],
-						Dataset: [],
-						labelArray: [],
-						length: 0,
-						anchor: [0, 1],
-						group: 'input',
-						keyConfig: {
-							color_type: '#1890FF',
-							state_icon_url: 'https://gw.alipayobjects.com/zos/rmsportal/uZVdwjJGqDooqKLKtvGA.svg',
-						}
-					}}
-				/>
-			</ItemPanel></Menu.Item>);
+			result.push(
+				<Menu.Item key={i}><ItemPanel>
+					<Item
+						type="node"
+						size="200*40"
+						shape='zero-one'
+						model={{
+							labelName: {
+								label: menu.label,
+								elabel: menu.elabel,
+							},
+							groupName: {
+								label: "数据源",
+								elabel: 'datasource',
+							},
+							anchor: [0, 1],
+							labelArray: menu.fileColumnsInfo,				
+							keyConfig: {
+								color_type: '#1890FF',
+								state_icon_url: 'https://gw.alipayobjects.com/zos/rmsportal/uZVdwjJGqDooqKLKtvGA.svg',
+							}
+						}}
+					/>
+				</ItemPanel></Menu.Item>);
 		}
 		return result;
 	}
@@ -52,7 +54,7 @@ class FlowDataModel extends React.Component {
 				selectable={false}
 			>
 				<ItemDecoration />
-				<SubMenu key="sub1" title={<span><Icon type="mail" /><span>数据源</span></span>}>					
+				<SubMenu key="sub1" title={<span><Icon type="mail" /><span>数据源</span></span>}>
 					{this.createDataPanel(itemData)}
 				</SubMenu>
 			</Menu>

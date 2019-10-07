@@ -3,7 +3,7 @@ import { withPropsAPI } from '@src';
 
 import { changeSourceLabelArray } from './changeSourceLabelArray.js';
 import TransferSelect from './TransferSelect.js';
-import Feature from '../../DataOperate/FeatureNodeDetail/Feature';
+// import Feature from '../../DataOperate/FeatureNodeDetail/Feature';
 
 /**
  * 选择字段组件
@@ -17,9 +17,11 @@ class SelectWord extends Component {
 
     //渲染时寻找上一个的labelArray，符合条件时才会渲染选择字段按钮，并且查找labelArray
     componentWillMount() {
-        const { label, anchor } = this.props.item.getModel();
+        const { labelName, anchor, groupName } = this.props.item.getModel();
+        const { label } = labelName;
+        const group = groupName.label;
 
-        if (anchor[0] == 0 || label === "数据随机划分") return;
+        if (group === 'datasource' || anchor[0] === 0 || label === "数据随机划分") return;
 
         this.findLabelArray();
     }
@@ -29,7 +31,9 @@ class SelectWord extends Component {
     // 否则labelArray结构为[选择字段的结果]
     findLabelArray = () => {
         const { item } = this.props;
-        const { group } = item.getModel();
+        const { groupName } = item.getModel();
+        //拿到groupName
+        const group = groupName.label;
         let labelArray = this.findLabelArrayFunction(item.id, group);
 
         //检查labelArray是否已更换
@@ -44,8 +48,8 @@ class SelectWord extends Component {
         const currentItem = find(currentId);
 
         for (let i in edges) {
-            if ((currentItem.model.group === "ml" && edges[i].target === currentId && edges[i].targetAnchor === 1) ||
-                (currentItem.model.group !== "ml" && edges[i].target === currentId)) {
+            if ((currentItem.model.group === "machinelearning" && edges[i].target === currentId && edges[i].targetAnchor === 1) ||
+                (currentItem.model.group !== "machinelearning" && edges[i].target === currentId)) {
                 const sourceItem = find(edges[i].source);
 
                 if (sourceItem.getModel().label === "数据随机划分")
@@ -53,12 +57,12 @@ class SelectWord extends Component {
 
                 let labelArray = changeSourceLabelArray(sourceItem, sourceItem.model.labelArray);
 
-                if (group === 'ml')
+                if (group === 'machinelearning')
                     return [labelArray, labelArray] || [[], []];
                 else return labelArray || [];
             }
         }
-        if (group === 'ml')
+        if (group === 'machinelearning')
             return [[], []];
         else return [];
     }
@@ -67,8 +71,8 @@ class SelectWord extends Component {
     isLabelArrayChange = (labelArray, currentLabelArray, group) => {
         //分情况确定是否为空
         if (currentLabelArray.length === 0 ||
-            (group !== 'ml' && labelArray.length === 0) ||
-            (group === 'ml' && (labelArray[0].length === 0 || currentLabelArray[0].length === 0))) {
+            (group !== 'machinelearning' && labelArray.length === 0) ||
+            (group === 'machinelearning' && (labelArray[0].length === 0 || currentLabelArray[0].length === 0))) {
 
             const { propsAPI, item } = this.props;
             const { executeCommand, update } = propsAPI;
@@ -78,7 +82,7 @@ class SelectWord extends Component {
             this.setState({ labelArray });
             return;
         }
-        if (group === 'ml') {
+        if (group === 'machinelearning') {
             for (let column in labelArray) {
                 if (labelArray[0][column][0] !== currentLabelArray[0][column][0]) {
                     this.setState({ labelArray });
@@ -127,13 +131,16 @@ class SelectWord extends Component {
     createSelect = () => {
         const item = this.props.item;
         const model = item.getModel();
-        const { group, anchor, label } = model;
+        const { groupName, anchor, labelName } = model;
+        //拿到label和groupName
+        const { label } = labelName;
+        const group = groupName.label;
 
-        if (anchor[0] == 0 || label === "数据随机划分") return;
+        if (group === 'datasource' || anchor[0] === 0 || label === "数据随机划分") return;
 
         const labelArray = this.state.labelArray;
 
-        if (group === 'ml') {
+        if (group === 'machinelearning') {
             return (
                 <Fragment>
                     特征列字段：
@@ -159,7 +166,7 @@ class SelectWord extends Component {
                 {this.createSelect()}
 
                 {/* 有关预处理的函数 */}
-				<Feature item={this.props.item} labelArray={this.state.labelArray}/>
+                {/* <Feature item={this.props.item} labelArray={this.state.labelArray} /> */}
             </Fragment>
         );
     }
