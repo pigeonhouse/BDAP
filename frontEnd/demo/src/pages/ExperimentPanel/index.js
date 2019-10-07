@@ -14,13 +14,13 @@ class ExperimentPanel extends Component {
                 <Col span={4} style={{ backgroundColor: '#fff' }}>
                     <div style={{ height: 'calc(100vh - 105px)' }} span={4} className={styles.editorSidebar}
                         data-step="1" data-intro='在组件栏可以挑选想要的模块，左键单击拖拽添加至右侧画布内。' data-position='right'>
-                        <FlowNodePanel type={this.props.type} />
+                        <FlowNodePanel />
                     </div>
                 </Col>
 
                 <Col span={16} className={styles.editorContent}>
                     <div className={styles.editorHd} data-step="2" data-intro='在工具栏可以进行撤销，复制，删除，成组等操作。' >
-                        <FlowToolbar type={this.props.type} />
+                        <FlowToolbar />
                     </div>
                     <Flow style={{ height: 'calc(100vh - 142px)' }}
                     />
@@ -28,7 +28,7 @@ class ExperimentPanel extends Component {
 
                 <Col span={4} className={styles.editorSidebar}>
                     <div className={styles.detailPanel} data-step="3" style={{ maxHeight: 'calc(100vh - 105px)' }} data-intro='在参数栏对你的组件进行参数配置。' data-position='left'>
-                        <FlowDetailPanel type={this.props.type} />
+                        <FlowDetailPanel />
                     </div>
                 </Col>
             </Row>

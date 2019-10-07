@@ -7,8 +7,6 @@ import ExperimentPanel from '../ExperimentPanel';
 import Model from '../../PublicComponents/ModelStore';
 import VisualizedPanel from '../VisualizedPanel';
 
-import LocalRun from "../../LocalModeComponents/RunPanel/Run";
-import PythonRun from "../../PythonModeComponents/RunPanel/Run";
 import SparkRun from "../../ClusterModeComponents/SparkRunPanel/SparkRun";
 import ExperimentList from "../../PublicComponents/ExperimentList/ExperimentList"
 import styles from './index.less';
@@ -44,7 +42,6 @@ class LocalMode extends React.Component {
 		password: '',
 		remind: 'false',
 		connectCtrl: false,
-		type: 'local',
 		test: "0"
 	}
 	noRemind = (key) => {
@@ -56,9 +53,6 @@ class LocalMode extends React.Component {
 		document.cookie = 'accountInfo' + "=" + escape(accountInfo) + ";expires=" + exp.toGMTString()
 	}
 	componentWillMount() {
-		if (this.props.location.state !== undefined) {
-			this.setState({ type: this.props.location.state.type });
-		}
 
 		let arr, reg = new RegExp("(^| )" + 'accountInfo' + "=([^;]*)(;|$)");
 		let accountInfo = ''
@@ -125,15 +119,6 @@ class LocalMode extends React.Component {
 	//   }
 	// }
 
-	//根据版本返回不同的组件
-	selectRunPanel = () => {
-		switch (this.state.type) {
-			case 'local': return <LocalRun />
-			case 'python': return <PythonRun />
-			case 'cluster': return <SparkRun />
-		}
-	}
-
 	download = () => {
 		let formData = new FormData();
 		formData.append('oppositePath', '/')
@@ -180,7 +165,7 @@ class LocalMode extends React.Component {
 			return <ExperimentList handleP={this.handleClickNum} />
 		}
 		else {
-			return <ExperimentPanel type={this.state.type} />
+			return <ExperimentPanel />
 		}
 	}
 
@@ -241,7 +226,7 @@ class LocalMode extends React.Component {
 					>
 						{this.handlePageChange()}
 						{/* <ExperimentList/> */}
-						{/* <ExperimentPanel type={this.state.type} /> */}
+						{/* <ExperimentPanel /> */}
 					</TabPane>
 
 					<TabPane
@@ -256,7 +241,7 @@ class LocalMode extends React.Component {
 						tab={<Icon type="api" className={styles.iconStyle} />}
 						key="3"
 					>
-						<ExperimentPanel type={this.state.type} />
+						<ExperimentPanel />
 						{/* <Button onClick={this.download} >Download</Button> */}
 					</TabPane>
 				</Tabs>
@@ -268,7 +253,7 @@ class LocalMode extends React.Component {
 					</Col>
 					<Col span={9}></Col>
 					<Col span={2}>
-						{this.selectRunPanel()}
+						<SparkRun />
 					</Col>
 					<Col span={9}></Col>
 					<Col span={2}>

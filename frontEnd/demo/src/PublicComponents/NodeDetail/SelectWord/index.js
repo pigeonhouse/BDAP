@@ -8,7 +8,6 @@ import Feature from '../../DataOperate/FeatureNodeDetail/Feature';
 /**
  * 选择字段组件
  * 对labelArray进行选择，即选择字段
- * @param { string } type
  */
 
 class SelectWord extends Component {
@@ -52,7 +51,7 @@ class SelectWord extends Component {
                 if (sourceItem.getModel().label === "数据随机划分")
                     return this.findLabelArrayFunction(sourceItem.id, group);
 
-                let labelArray = changeSourceLabelArray(sourceItem, sourceItem.model.labelArray, this.props.type);
+                let labelArray = changeSourceLabelArray(sourceItem, sourceItem.model.labelArray);
 
                 if (group === 'ml')
                     return [labelArray, labelArray] || [[], []];

@@ -2,8 +2,6 @@ import React from 'react';
 import { ItemPanel, Item } from '@src';
 import { Menu, Icon } from 'antd';
 import ItemDecoration from '../ItemDecoration';
-import { localItem } from '../../../LocalModeComponents/EditorItemInfo/FlowItemInfo';
-import { pythonItem } from '../../../PythonModeComponents/EditorItemInfo/FlowItemInfo';
 import { clusterItem } from '../../../ClusterModeComponents/EditorItemInfo/FlowItemInfo';
 
 /**
@@ -57,18 +55,8 @@ class FlowItemModel extends React.Component {
 		itemData: [],
 	}
 	componentWillMount() {
-		var itemInfo;
-		if (this.props.type === 'local') {
-			itemInfo = localItem;
-		}
-		else if (this.props.type === 'python') {
-			itemInfo = pythonItem;
-		}
-		else if (this.props.type === 'cluster') {
-			itemInfo = clusterItem;
-		}
 		this.setState({
-			itemData: itemInfo
+			itemData: clusterItem
 		})
 	}
 	createItemPanel = (item) => {

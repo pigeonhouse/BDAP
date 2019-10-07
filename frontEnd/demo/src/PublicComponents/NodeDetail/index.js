@@ -12,7 +12,6 @@ import styles from './index.less';
 /**
  * 右侧属性细节组件
  * 包括选择字段，参数输入，输入文件，预处理参数选择，预测集列名
- * @param {string} type
  */
 
 const { Item } = Form;
@@ -59,7 +58,7 @@ class NodeDetail extends React.Component {
 					<AttrDetail attrDetail={attrDetail} attr={attr} />
 
 					{/* 选择字段 */}
-					<SelectWord item={item} type={this.props.type} />
+					<SelectWord item={item} />
 
 					{/* 选择字段后，对于预测集列名的重命名 */}
 					<PredictLabel group={group} />

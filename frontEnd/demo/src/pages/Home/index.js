@@ -128,8 +128,6 @@ class HomePage extends React.Component {
 			return <Redirect to={{
 				pathname: '/mainPage',
 				state: {
-					type: 'cluster',
-
 				}
 			}}
 			/>
