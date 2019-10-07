@@ -16,7 +16,7 @@ class VisualizedPanel extends React.Component {
         rightCol: "filter",
         dataSourceName: undefined,
         filter: [],
-        Summarize: [],
+        summarize: [],
         dataSet: [],
         labelArray: ['jack', 'test'],
         groupLabel: undefined,
@@ -24,6 +24,22 @@ class VisualizedPanel extends React.Component {
 
     handleChangeGroupLabel = (value) => {
         this.setState({ groupLabel: value });
+    }
+
+    handleAddSummarize = (label, operator) => {
+        let summarize = this.state.summarize;
+        summarize.push({
+            label, operator
+        })
+        this.setState({ summarize });
+
+        this.getDataSetByOperate();
+    }
+
+    handleDeleteSummarize = (tag) => {
+        this.setState({ summarize: tag });
+
+        this.getDataSetByOperate();
     }
 
     handleAddFilter = (label, operator, value) => {
@@ -115,9 +131,10 @@ class VisualizedPanel extends React.Component {
                 return (
                     <Summarize
                         handleChangeGroupLabel={this.handleChangeGroupLabel}
-                        handleAddFilter={this.handleAddFilter}
-                        handleDeleteFilter={this.handleDeleteFilter}
-                        filter={this.state.filter}
+                        handleAddSummarize={this.handleAddSummarize}
+                        handleDeleteSummarize={this.handleDeleteSummarize}
+                        summarize={this.state.summarize}
+                        groupLabel={this.state.groupLabel}
                         labelArray={this.state.labelArray} />
                 )
             case 'settings':
