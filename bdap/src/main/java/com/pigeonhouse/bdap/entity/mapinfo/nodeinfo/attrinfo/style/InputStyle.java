@@ -18,4 +18,6 @@ public class InputStyle {
      * 规范输入的正则表达式
      */
     String regexp;
+
+
 }

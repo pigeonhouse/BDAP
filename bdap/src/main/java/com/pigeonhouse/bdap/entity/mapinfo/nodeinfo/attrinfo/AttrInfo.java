@@ -35,7 +35,17 @@ public class AttrInfo {
     Object style;
 
     /**
-     * Note:该value在前端第一次请求时必然是null
+     * style的类型
+     * Select
+     * Number
+     * Input
+     * ChooseCol
+     * CheckBox
+     */
+    String styleType;
+
+    /**
+     * Note:该value在前端第一次请求时表示默认值
      * 在用户选择完参数后返回给后端的数据中该value才有值
      */
     Object value;

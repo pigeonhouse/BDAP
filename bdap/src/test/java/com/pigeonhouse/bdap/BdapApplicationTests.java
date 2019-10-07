@@ -13,7 +13,7 @@ import com.pigeonhouse.bdap.entity.mapinfo.nodeinfo.attrinfo.AttrInfo;
 import com.pigeonhouse.bdap.entity.mapinfo.nodeinfo.attrinfo.style.ChooseColStyle;
 import com.pigeonhouse.bdap.entity.mapinfo.nodeinfo.attrinfo.style.SelectStyle;
 import com.pigeonhouse.bdap.service.filesystem.FileHeaderAttriService;
-import com.pigeonhouse.bdap.service.runcode.SparkExecution;
+import com.pigeonhouse.bdap.service.runcode.ExecutionService;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -43,7 +43,7 @@ public class BdapApplicationTests {
     FileHeaderAttriController fileHeaderAttriController;
 
     @Autowired
-    SparkExecution sparkExecution;
+    ExecutionService executionService;
 
     @Autowired
     FlowChartController flowChartController;
@@ -74,7 +74,7 @@ public class BdapApplicationTests {
                 ,"MinMax"));
 
         NodeInfo nodeInfo_02 = new NodeInfo("def", new LabelName("Normalization"),new LabelName("preprocessing")
-                ,new String[]{"abc"}, new int[]{1, 1}, attrs_02, true);
+                ,new String[]{"abc"}, new int[]{1, 1}, attrs_02);
 
         ArrayList<NodeInfo> flowInfo = new ArrayList<>();
         flowInfo.add(nodeInfo_01);
@@ -88,7 +88,7 @@ public class BdapApplicationTests {
             System.out.println("starting a new session.......");
         }
 
-        sparkExecution.executeFlow(flowInfo, livySessionInfo);
+        executionService.executeFlow(flowInfo, livySessionInfo);
 
     }
 
@@ -97,10 +97,10 @@ public class BdapApplicationTests {
         ArrayList<AttrInfo> attributes = new ArrayList<>();
 
         SelectStyle selectStyle = new SelectStyle(new LabelName[]{new LabelName("Normal","Normal"),new LabelName("MinMax","MinMax"),new LabelName("Standard","Standard"),new LabelName("MaxAbs","MaxAbs")});
-        attributes.add(new AttrInfo(new LabelName("类型","normalizationType"),"String",selectStyle,null));
+        attributes.add(new AttrInfo(new LabelName("类型","normalizationType"),"String",selectStyle,"Select","MinMax"));
 
-        ChooseColStyle chooseColStyle = new ChooseColStyle(true);
-        attributes.add(new AttrInfo(new LabelName("归一化字段","targetCols"),"Array[String]",chooseColStyle,null));
+        ChooseColStyle chooseColStyle = new ChooseColStyle("true");
+        attributes.add(new AttrInfo(new LabelName("归一化字段","targetCols"),"Array[String]",chooseColStyle,"ChooseCol",null));
 
         NodeInfo nodeInfo = new NodeInfo(new LabelName("归一化","Normalization"),new LabelName("preprocessing","数据预处理")
         ,new int[]{1,1},attributes);

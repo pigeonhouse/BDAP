@@ -19,7 +19,7 @@ import java.util.List;
  * @Date: 2019/9/7 11:28
  */
 @Service
-public class SparkExecution {
+public class ExecutionService {
 
     @Autowired
     LivyDao livyDao;
@@ -138,15 +138,8 @@ public class SparkExecution {
             mappingDfCode = "\ndfMap += (\"" + id + "\" -> output)\n\n";
         }
 
-        //------------------如果是checkPoint,保存数据-----------------
-        //保存output
-        //待完成..............
-        String saveDataCode = "";
-        if (nodeInfo.getIsCheckPoint()) {
 
-        }
-
-        return inputCode + attrsCode + innerCode + mappingDfCode + saveDataCode;
+        return inputCode + attrsCode + innerCode + mappingDfCode ;
     }
 
     /**
