@@ -26,4 +26,6 @@ public class NumberStyle {
      * 步长，供前端使用上调下调按钮提高用户体验。
      */
     String step;
+
+
 }

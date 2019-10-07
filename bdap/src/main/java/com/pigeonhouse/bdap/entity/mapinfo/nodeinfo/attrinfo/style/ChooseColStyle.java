@@ -15,6 +15,8 @@ import lombok.NoArgsConstructor;
 public class ChooseColStyle {
     /**
      * 能否选择多列
+     * true
+     * false
      */
-    Boolean multiCol ;
+    String multiCol ;
 }

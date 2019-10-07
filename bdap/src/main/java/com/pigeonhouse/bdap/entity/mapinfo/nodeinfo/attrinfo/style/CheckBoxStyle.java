@@ -9,12 +9,7 @@ import lombok.NoArgsConstructor;
  * @Date: 2019/10/3 15:00
  * 单选框类型
  */
-@Data
-@AllArgsConstructor
-@NoArgsConstructor
+
 public class CheckBoxStyle {
-    /**
-     * 默认是否勾选
-     */
-    Boolean defaultState;
+
 }

@@ -20,4 +20,6 @@ public class SelectStyle {
      * 如["平均值","中位数","最大值","最小值"]
      */
     LabelName[] menu;
+
+
 }

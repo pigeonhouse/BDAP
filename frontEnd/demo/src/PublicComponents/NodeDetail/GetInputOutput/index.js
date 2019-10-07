@@ -1,12 +1,8 @@
 import React, { Fragment } from 'react';
 import { withPropsAPI } from '@src';
 
-import UploadFile from '../../DataOperate/FileOperate/UploadFile';
 import HdfsFile from '../../DataOperate/FileOperate/HdfsFile';
 import ExampleDataUpload from '../../DataOperate/FileOperate/ExampleDataUpload';
-import { Stat } from '../../DataOperate/DataToolFunctions/Stat';
-
-import Papa from 'papaparse';
 
 /**
  * get输入文件
@@ -22,7 +18,6 @@ class GetInputOutput extends React.Component {
     isInputOutput() {
         const { label, group } = this.props;
         if (label === 'hdfs数据') return (<HdfsFile />);
-        else if (label === '本地数据') return (<UploadFile />);
         else if (group === 'datasource') {
             switch (label) {
                 case 'Titanic测试': case 'Titanic训练': case 'Pokemon':
@@ -46,44 +41,7 @@ class GetInputOutput extends React.Component {
                         .then((response) => {
                             if (response.status === 200) {
                                 response.json().then((respData) => {
-                                    let len = respData.length
-                                    var s = respData[0]
-                                    for (let i = 1; i < len; i++) {
-                                        s = s + "\n" + respData[i]
-                                    }
-                                    var fieldNameArray = [];
-                                    let vectorLength;
-                                    const { propsAPI } = this.props;
-                                    const { getSelected, update } = propsAPI;
-                                    var results = Papa.parse(s, { header: true, dynamicTyping: true });
-                                    fieldNameArray.push(results.meta.fields);
-                                    vectorLength = results.data.length - 1
-                                    var n = new Array();
 
-                                    for (let indexOfCols = 0; indexOfCols < fieldNameArray[0].length; indexOfCols++) {
-                                        var colName = fieldNameArray[0][indexOfCols];
-                                        var colValue = new Array();
-                                        for (let indexOfRows = 0; indexOfRows < results.data.length - 1; indexOfRows++) {
-                                            colValue.push(results.data[indexOfRows][colName])
-                                        }
-                                        n.push({ label: colName, value: colValue })
-                                    }
-                                    var STAT = new Array();
-                                    STAT = Stat(n);
-                                    let m = fieldNameArray[0].map((item) => {
-                                        return [item, false];
-                                    })
-                                    var values = {
-                                        Dataset: STAT,
-                                        labelArray: m,
-                                        length: vectorLength
-                                    }
-                                    const item = getSelected()[0];
-                                    values['keyConfig'] = JSON.parse(JSON.stringify(item.model.keyConfig));
-                                    values.keyConfig.state_icon_url = 'https://gw.alipayobjects.com/zos/rmsportal/MXXetJAxlqrbisIuZxDO.svg';
-                                    update(item, { ...values });
-                                    console.log("propsAPI")
-                                    console.log(propsAPI.save())
                                 })
                             }
                         })

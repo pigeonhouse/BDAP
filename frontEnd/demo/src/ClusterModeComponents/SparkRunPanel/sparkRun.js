@@ -1,201 +1,111 @@
 import React, { Component } from 'react'
-import { Button } from 'antd'
+import { Button, Icon, message } from 'antd'
 import { withPropsAPI } from '@src';
-import { Stat } from '../../PublicComponents/DataOperate/DataToolFunctions/Stat'
-var cur = 0
-/**
- * cluster版本的Run组件，与local不同
- */
-class SparkRun extends Component {
-	state = {
-		visible: false,
-	}
 
+import { inputdata } from '../../PublicComponents/HandleStream/streamRunner'
+import { outputdata } from '../../PublicComponents/HandleStream/streamRunner'
+import { generateStream } from '../../PublicComponents/HandleStream/generateStream'
+import { isLegal } from '../../PublicComponents/HandleStream/isLegal'
+
+/**
+ * Local版本的Run组件，点击Button后执行画布上组件对应的流程
+ */
+
+var current = 0;
+class SparkRun extends Component {
+	//点击Run按钮后，执行此函数
 	onClickButton = () => {
 		const { propsAPI } = this.props;
-		console.log(propsAPI.save())
-		const inf = propsAPI.save();
+		
+		//制作工作流保存在stream中
+		const stream = generateStream(propsAPI);
 
-		var Sourc = 0;
-		var tag = 'Input';
-		var stream = new Array();
-		var attribute = new Array();
-		var labelarray = new Array();
-		let group;
-
-
-		if (inf.hasOwnProperty('edges')) {
-			let Deg = new Array(inf.nodes.length).fill(0);
-			var sourceId = new Array(inf.nodes.length).fill(0);
-			for (let i in sourceId) {
-				sourceId[i] = new Array();
-			}
-			for (let indexE of inf.edges.keys()) {
-				Sourc = inf.edges[indexE].target;
-				let targetanchor = inf.edges[indexE].targetAnchor;
-				let source = inf.edges[indexE].source;
-				let sourceanchor = inf.edges[indexE].sourceAnchor;
-				for (let indexN of inf.nodes.keys()) {
-					if (Sourc === inf.nodes[indexN].id) {
-						Deg[indexN]++;
-						sourceId[indexN][targetanchor] = {
-							source: source,
-							sourceAnchor: sourceanchor
-						};
-					}
-				}
-			}
-			for (var k = 0; k < inf.nodes.length;) {
-				for (let indexN of inf.nodes.keys()) {
-					if (Deg[indexN] === 0) {
-						k++;
-						Deg[indexN]--;
-						Sourc = inf.nodes[indexN].id;
-						tag = inf.nodes[indexN].elabel;
-						//tag = inf.nodes[indexN].label;
-						attribute = inf.nodes[indexN].attr;
-						group = inf.nodes[indexN].group;
-						labelarray = inf.nodes[indexN].labelArray;
-
-						let labelarr = {};
-						if (group === 'ml') {
-							labelarr.train_x = new Array();
-							labelarr.train_y = new Array();
-							for (let i in labelarray[0]) {
-								if (labelarray[0][i][1] === true) {
-									labelarr.train_x.push(labelarray[0][i][0]);
-								}
-								if (labelarray[1][i][1] === true) {
-									labelarr.train_y.push(labelarray[1][i][0]);
-								}
-							}
-							labelarr.predict_x = JSON.parse(JSON.stringify(labelarr.train_x));
-							labelarr.predict_y = [attribute.predict_y];
-						}
-						else {
-							labelarr.public = new Array();
-							for (let i in labelarray) {
-								if (labelarray[i][1] === true) {
-									labelarr.public.push(labelarray[i][0]);
-								}
-							}
-						}
-
-						labelarray = JSON.parse(JSON.stringify(labelarr));
-						stream.push({
-							'id': Sourc,
-							//"label":etag,
-							"label": tag,
-							"attribute": attribute,
-							"labelArray": labelarray,
-							"sourceId": sourceId[indexN]
-						});
-						for (var i = 0; i < inf.edges.length; i++) {
-							if (Sourc === inf.edges[i].source) {
-								for (var m = 0; m < inf.nodes.length; m++) {
-									if (inf.nodes[m].id === inf.edges[i].target) {
-										Deg[m]--;
-									}
-								}
-							}
-						}
-					}
-				}
-			}
-		}
-
-		console.log('stream:')
-		console.log(stream);
-		const { update, executeCommand, find } = propsAPI;
-		const init = {
-			method: 'POST',
-			body: JSON.stringify(stream),
-			mode: 'cors',
-			headers: { 'Content-Type': 'application/json' },
-			credentials: 'include'
-		}
-		fetch(
-			'http://localhost:5000/run', init
-		)
-			.then(res => {
-				if (res.status === 200) {
-					res.json().then(res => {
-						for (let k in res) {
-							console.log(res);
-							const item = find(res[k][0]);
-							const respData = res[k][1];
-							let label = respData[0].colName.split(', ');
-							let data = respData.slice(1);
-							var Dataset = new Array();
-							for (let i in label) {
-								var oneData = {};
-								oneData['label'] = label[i];
-								oneData['value'] = new Array();
-								for (let j in data) {
-									if (data[j].hasOwnProperty(label[i])) {
-										oneData.value.push(data[j][label[i]])
-									}
-									else oneData.value.push(null)
-								}
-								Dataset.push(oneData);
-							}
-							var length = data.length;
-							var values = {
-								Dataset: Stat(Dataset),
-								length,
-							}
-							values['keyConfig'] = JSON.parse(JSON.stringify(item.model.keyConfig));
-							values.keyConfig.state_icon_url = 'https://gw.alipayobjects.com/zos/rmsportal/MXXetJAxlqrbisIuZxDO.svg';
-							update(item, { ...values });
-						}
-					})
-				}
-			})
-			.catch(e => console.log('错误:', e))
+		//按照工作流进行执行
+		this.run(stream);
 	}
 
-	intervaltest = () => {
-		setInterval(() => {
-			cur++
-			console.log("T1:" + cur)
+	//根据当前执行的标签框的label执行对应函数，并返回最终结果
+	selectFunction = (stream, all_data) => {
+	}
+
+	//改变对应此id标签框的运行状态标志，可改为运行完成或正在运行，取决于color
+	changeStatusColor = (id, color) => {
+		const { propsAPI } = this.props;
+		const { find, update, executeCommand } = propsAPI;
+		const nextitem = find(id);
+		var value = JSON.parse(JSON.stringify(nextitem.model.keyConfig));
+		value.state_icon_url = color;
+		executeCommand(() => {
+			update(nextitem, { keyConfig: { ...value } });
+		});
+	}
+
+	//真正执行所用的函数，其中包括setTimeout，每1秒执行一个标签框
+	run = (stream) => {
+		const { propsAPI } = this.props;
+		if (isLegal(propsAPI)) return;
+		setTimeout(() => {
+			if (current !== stream.length) {
+				let k = current;
+
+				//拿到当前标签框的all_data，及所有数据及属性等等
+				const all_data = inputdata(stream[k], propsAPI);
+				console.log(all_data)
+				var outcome = new Array()
+				if (stream[k].label !== '本地数据') {
+					const { find } = propsAPI;
+					const item = find(stream[k].id);
+					const group = item.model.group;
+					if (group == "feature") {
+						if (stream[k].label !== '数据随机划分') {
+							if (!all_data[0].labelArray.hasOwnProperty('public')) {
+								message.error("还没有选择字段，请在右边参数栏点击选择字段");
+								this.changeStatusColor(stream[k].id,
+									'https://gw.alipayobjects.com/zos/rmsportal/czNEJAmyDpclFaSucYWB.svg');
+								return;
+							}
+						}
+					}
+					else if (group == 'ml') {
+						if (all_data[0].labelArray.train_x.length == 0 || all_data[0].labelArray.train_y.length == 0
+							|| all_data[0].labelArray.predict_x.length == 0) {
+							message.error("还没有选择完字段，请在右边参数栏点击选择字段");
+							this.changeStatusColor(stream[k].id,
+								'https://gw.alipayobjects.com/zos/rmsportal/czNEJAmyDpclFaSucYWB.svg');
+							return 0;
+						}
+					}
+
+					//得到此标签框的执行输出
+					outcome = this.selectFunction(stream[k].label, all_data);
+
+					//将输出放入对应标签框内的Dataset
+					outputdata(stream[k].id, outcome, propsAPI);
+					console.log('----------')
+					this.changeStatusColor(stream[k].id,
+						'https://gw.alipayobjects.com/zos/rmsportal/MXXetJAxlqrbisIuZxDO.svg');
+				}
+				if (k < stream.length - 1 && stream[k + 1].label !== '本地数据') {
+					this.changeStatusColor(stream[k + 1].id,
+						'https://loading.io/spinners/palette-ring/index.rotate-palette-loader.svg');
+				}
+				current++;
+				if (current === stream.length) {
+					current = 0;
+					console.log("最终图信息")
+					console.log(propsAPI.save())
+					console.log("-------------------------------")
+					message.success("成功执行完毕!")
+				}
+				else this.run(stream);
+			}
 		}, 1000)
-		this.intervalRequest()
 	}
-
-	intervalRequest = () => {
-		if (cur < 30) {
-			setTimeout(() => {
-				//this.transmit()
-				if (cur % 5 == 0) {
-					console.log("!!!!!!!:" + cur)
-				}
-				this.intervalRequest()
-
-			}, 1000)
-		}
-	}
-	transmit = () => {
-		const init = {
-			method: 'GET',
-			mode: 'cors',
-			headers: { 'Content-Type': 'application/json' },
-		}
-		fetch(
-			'http://localhost:5000/JobRequest', init
-		)
-			.then(res => res.json())
-			.then(data => {
-				cur = data
-			})
-			.catch(e => console.log('错误:', e))
-	}
-
 	render() {
 		return (
-			<div>
-				<Button onClick={() => this.onClickButton()}>SparkRun</Button>
-				<Button onClick={() => this.intervaltest()}>intervalTest</Button>
-			</div>
+			<Button onClick={() => this.onClickButton()} style={{ border: 0, backgroundColor: '#343941', color: "#ddd", fontSize: 25 }}>
+				<Icon type="play-circle" style={{ fontSize: 25 }} />运行
+        	</Button>
 		);
 	}
 }

@@ -58,11 +58,6 @@ public class NodeInfo {
     private ArrayList<AttrInfo> attributes;
 
     /**
-     * 是否在此保存中间结果
-     */
-    private Boolean isCheckPoint = true;
-
-    /**
      * 拖动到右侧标签框的大小，默认"200*40"
      */
     private String size = "200*40";
@@ -81,14 +76,13 @@ public class NodeInfo {
     /**
      * 用于算法测试的构造器
      */
-    public NodeInfo(String id, LabelName labelName, LabelName groupName, String[] sourceIdList, int[] anchor, ArrayList<AttrInfo> attributes, Boolean isCheckPoint) {
+    public NodeInfo(String id, LabelName labelName, LabelName groupName, String[] sourceIdList, int[] anchor, ArrayList<AttrInfo> attributes) {
         this.id = id;
         this.labelName = labelName;
         this.groupName = groupName;
         this.sourceIdList = sourceIdList;
         this.anchor = anchor;
         this.attributes = attributes;
-        this.isCheckPoint = isCheckPoint;
     }
 
     /**
