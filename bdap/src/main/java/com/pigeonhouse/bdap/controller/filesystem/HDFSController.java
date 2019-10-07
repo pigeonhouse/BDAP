@@ -28,7 +28,7 @@ import java.util.*;
  * @Date: 2019/9/19 20:38
  */
 @RestController
-public class HDFSApi {
+public class HDFSController {
 
     @Autowired
     HdfsService hdfsService;
