@@ -43,6 +43,7 @@ public class SparkExecution {
         //----------------------根据锚点判断是否需要注入输入参数的语句--------------------
         int[] anchor = nodeInfo.getAnchor();
         int numberOfInput = anchor[0];
+        int numberOfOutput = anchor[1];
         String[] sourceIdList = nodeInfo.getSourceIdList();
         StringBuilder inputCodeBuilder = new StringBuilder();
         String inputName = "input";
@@ -133,9 +134,15 @@ public class SparkExecution {
         // 接下去在代码末尾将output以前端生成的id为key，dataframe本身为value存在Map中
 
         String mappingDfCode = "";
-        if (!"machinelearning".equals(nodeInfo.getGroupName().getElabel())) {
-            String id = nodeInfo.getId();
-            mappingDfCode = "\ndfMap += (\"" + id + "\" -> output)\n\n";
+        for(int i = 0; i < numberOfOutput; i++){
+            if (!"machinelearning".equals(nodeInfo.getGroupName().getElabel())) {
+                String id = nodeInfo.getId();
+                if(i == 0){
+                    mappingDfCode = "\ndfMap += (\"" + id + "\" -> output)\n\n";
+                } else{
+                    mappingDfCode = "\ndfMap += (\"" + id + "_" + i +"\" -> output_" + i + ")\n\n";
+                }
+            }
         }
 
         //------------------如果是checkPoint,保存数据-----------------

@@ -4,7 +4,7 @@ object Prediction {
   val labelCol: String = null
   val newColName = null
   var input = null
-  var input_2: DataFrame = null
+  var input_1: DataFrame = null
 
   def main(args: Array[String]): Unit = {
     import org.apache.spark.ml.classification.LogisticRegression

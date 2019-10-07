@@ -17,15 +17,14 @@ object LogisticRegression {
 
     val aimarray = trainCols:+labelCol
 
-    var df_ = input
-    df_ = df_.select(aimarray.map(A => col(A)): _*)
+    val df = input.select(aimarray.map(A => col(A)): _*)
 
     val assembler = new VectorAssembler().setInputCols(trainCols).setOutputCol("features_lr")
-    df_ = assembler.transform(df_)
+    val assembledDF = assembler.transform(df)
 
     val lr = new LogisticRegression().setFeaturesCol("features_lr").setLabelCol(labelCol).setFitIntercept(FitIntercept).setMaxIter(MaxIter).setRegParam(RegParam).setElasticNetParam(ElasticNetParam).setTol(Tol)
 
-    val Model = lr.fit(df_)
+    val Model = lr.fit(assembledDF)
 
     val output = Model
   }

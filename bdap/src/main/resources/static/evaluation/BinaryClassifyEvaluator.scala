@@ -10,8 +10,8 @@ object BinaryClassifyEvaluator {
     import org.apache.spark.ml.evaluation.BinaryClassificationEvaluator
 
     val evaluator = new BinaryClassificationEvaluator().setRawPredictionCol(predictCol).setLabelCol(labelCol).setMetricName(metricName)
-    val c = input.select(labelCol, predictCol)
-    val accuracy = evaluator.evaluate(c)
+    val df = input.select(labelCol, predictCol)
+    val accuracy = evaluator.evaluate(df)
 
     print(accuracy)
   }

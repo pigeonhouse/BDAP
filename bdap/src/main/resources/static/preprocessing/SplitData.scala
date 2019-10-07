@@ -5,14 +5,18 @@ object SplitData {
 
   def main(args: Array[String]): Unit = {
 
-    val schema = input.schema
-    val rdd = input.rdd
+    val dfSchema = input.schema
+    val inputRdd = input.rdd
 
-    val Array(trainData, testData) = rdd.randomSplit(Array(1 - ratio, ratio))
+    val Array(trainData, testData) = inputRdd.randomSplit(Array(1 - ratio, ratio))
 
-    val trainDF = spark.createDataFrame(trainData, schema)
-    val testDF = spark.createDataFrame(testData, schema)
+    val trainDF = spark.createDataFrame(trainData, dfSchema)
+    val testDF = spark.createDataFrame(testData, dfSchema)
+
     trainDF.show(100)
     testDF.show(100)
+
+    val output = trainDF
+    val output_1 = testDF
   }
 }
