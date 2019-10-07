@@ -9,12 +9,14 @@ import styles from './index.less';
 
 class ExperimentPanel extends Component {
     render() {
+        console.log(this.props.nodesModuleInfo);
+
         return (
             <Row type="flex" style={{ height: 'calc(100vh - 105px)' }}>
                 <Col span={4} style={{ backgroundColor: '#fff' }}>
                     <div style={{ height: 'calc(100vh - 105px)' }} span={4} className={styles.editorSidebar}
                         data-step="1" data-intro='在组件栏可以挑选想要的模块，左键单击拖拽添加至右侧画布内。' data-position='right'>
-                        <FlowNodePanel />
+                        <FlowNodePanel nodesModuleInfo={this.props.nodesModuleInfo} />
                     </div>
                 </Col>
 

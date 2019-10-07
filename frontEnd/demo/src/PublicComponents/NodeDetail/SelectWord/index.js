@@ -17,9 +17,9 @@ class SelectWord extends Component {
 
     //渲染时寻找上一个的labelArray，符合条件时才会渲染选择字段按钮，并且查找labelArray
     componentWillMount() {
-        const { label, anchor } = this.props.item.getModel();
+        const { label, anchor, group } = this.props.item.getModel();
 
-        if (anchor[0] == 0 || label === "数据随机划分") return;
+        if (group === 'input' || anchor[0] === 0 || label === "数据随机划分") return;
 
         this.findLabelArray();
     }
@@ -129,7 +129,7 @@ class SelectWord extends Component {
         const model = item.getModel();
         const { group, anchor, label } = model;
 
-        if (anchor[0] == 0 || label === "数据随机划分") return;
+        if (group === 'input' || anchor[0] === 0 || label === "数据随机划分") return;
 
         const labelArray = this.state.labelArray;
 

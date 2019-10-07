@@ -17,7 +17,7 @@ class HomePage extends React.Component {
 		password: '',
 		remind: '',
 		rememberPassword: false,
-		nodesModel: [],
+		nodesModuleInfo: [],
 	}
 
 	componentWillMount() {
@@ -59,6 +59,7 @@ class HomePage extends React.Component {
 		let userInfo = this.props.form.getFieldsValue();
 		this.props.form.validateFields((err, values) => {
 			if (!err) {
+
 				//将用户名及密码放入body中
 				var body = `{ "userId": ${values.username}, "password": ${values.password} }`
 				const init = {
@@ -87,7 +88,10 @@ class HomePage extends React.Component {
 										exp.setTime(exp.getTime() + Days * 24 * 60 * 60 * 1000);
 										document.cookie = 'accountInfo' + "=" + escape(accountInfo) + ";expires=" + exp.toGMTString()
 									}
-									this.setState({ redirect: true });
+									this.setState({ 
+										redirect: true,
+										nodesModuleInfo: res.data.draggableModuleInfo,
+									});
 									message.success(`${userInfo.username}, welcome`);
 								}
 								//验证失败
@@ -112,6 +116,7 @@ class HomePage extends React.Component {
 			return <Redirect to={{
 				pathname: '/mainPage',
 				state: {
+					nodesModuleInfo: this.state.nodesModuleInfo,
 				}
 			}}
 			/>

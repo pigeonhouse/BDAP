@@ -2,28 +2,8 @@
  * 记录Cluster版本的可拖拽组件框的数据格式，其格式在PublicComponents/EditorItemPanal/FlowItemPanel中介绍
  */
 export const clusterItem = {
-  defaultOpenKeys:['sub1','sub2','sub3'], mode:"inline", selectable:false, subMenu:[{
-    key:"sub1",type:"mail",name:"数据源",menu:[{
-      type:"node",
-      size:"200*40",
-      shape:'zero-one',
-      model:{
-        label: 'hdfs数据',
-        elabel:'hdfsFile',
-        attr:{},
-        attrDetail:[],
-        Dataset: [],
-        labelArray: [], 
-        length: 0,
-        anchor: [0, 1],
-        keyConfig:{
-          color_type: '#1890FF',
-          state_icon_url: 'https://gw.alipayobjects.com/zos/rmsportal/uZVdwjJGqDooqKLKtvGA.svg',
-        }
-      }       
-    }]
-  },{
-      key:"sub2",type:"mail",name:"数据预处理",menu:[{
+  defaultOpenKeys:['sub1','sub2'], mode:"inline", selectable:false, subMenu:[{
+      key:"sub1",type:"mail",name:"数据预处理",menu:[{
         type:"node",
         size:"200*40",
         shape:"one-one",
@@ -196,7 +176,7 @@ export const clusterItem = {
         }
       }]
   },{
-    key:"sub3", type:"appstore", name:"机器学习",subMenu:[{
+    key:"sub2", type:"appstore", name:"机器学习",subMenu:[{
       key:"g3",title:"回归",menu:[{
         type:"node",
         size:"200*40",
@@ -378,7 +358,7 @@ export const clusterItem = {
       }]
     }]
   },{
-    key:"sub4", type:"setting", name:"深度学习",subMenu:[{
+    key:"sub3", type:"setting", name:"深度学习",subMenu:[{
       key:"g6",title:"BigDL",menu:[{
         type:"node",
         size:"200*40",

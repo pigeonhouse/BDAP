@@ -1,5 +1,6 @@
 import React from 'react';
 import GGEditor from '@src';
+import { Redirect } from 'react-router-dom';
 import { Row, Col, Button, message, notification, Icon, Tabs } from 'antd';
 
 import { FlowContextMenu } from '../../PublicComponents/EditorContextMenu';
@@ -114,15 +115,6 @@ class LocalMode extends React.Component {
 	tabChange = (value) => {
 		this.setState({ currentTab: value })
 	}
-	
-	// handleChange=(info)=>{
-	//   if (info.file.status === 'done') {
-	//     message.success(`${info.file.name} file uploaded successfully`);
-	//     this.setState({dataTable:info.file.response})
-	//   } else if (info.file.status === 'error') {
-	//     message.error(`${info.file.name} file upload failed.`);
-	//   }
-	// }
 
 	download = () => {
 		let formData = new FormData();
@@ -170,12 +162,14 @@ class LocalMode extends React.Component {
 			return <ExperimentList handleP={this.handleClickNum} />
 		}
 		else {
-			return <ExperimentPanel />
+			return <ExperimentPanel nodesModuleInfo={this.props.location.state.nodesModuleInfo} />
 		}
 	}
 
 	render() {
-
+		if(this.props.location.state === undefined){
+			return <Redirect to='/' />
+		}
 		return (
 			<GGEditor className={styles.editor}>
 				<Row

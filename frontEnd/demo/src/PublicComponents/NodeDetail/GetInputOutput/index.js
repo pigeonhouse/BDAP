@@ -21,10 +21,10 @@ class GetInputOutput extends React.Component {
     // 如果为已提供的数据，则将数据上传至Item内，并修改Item右侧标志为已上传
     // 非以上情况则向后端请求数据，得到回传后上传至Item，并进行修改右侧标志
     isInputOutput() {
-        const { label, group, Dataset } = this.props;
+        const { label, group } = this.props;
         if (label === 'hdfs数据') return (<HdfsFile />);
         else if (label === '本地数据') return (<UploadFile />);
-        else if (Dataset.length === 0 && group === 'input') {
+        else if (group === 'input') {
             switch (label) {
                 case 'Titanic测试': case 'Titanic训练': case 'Pokemon':
                 case 'SimpleTest': case 'SimpleTrain': return (<ExampleDataUpload fileName={label} />);
