@@ -113,7 +113,7 @@ public class BdapApplicationTests {
 //    @Test
 //    public void test01() {
 //
-//        sparkCodeDao.addSparkCode("PD001", "static/Prediction.scala", "预测", "Predict", "import org.apache.spark.ml.classification.LogisticRegression\n" +
+//        sparkCodeDao.addSparkCode("PD001", "static/Predict.scala", "预测", "Predict", "import org.apache.spark.ml.classification.LogisticRegression\n" +
 //                "import org.apache.spark.ml.feature.VectorAssembler\n" +
 //                "\n" +
 //                "val userId = \"%s\"\n" +

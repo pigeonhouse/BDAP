@@ -51,7 +51,7 @@ public class ExecutionService {
         //判断有几个输入,input,input_1,input_2...以此类推
         for (int i = 0; i < numberOfInput; i++) {
 
-            if (("predict").equals(nodeInfo.getGroupName().getElabel()) && i == 0) {
+            if (("prediction").equals(nodeInfo.getGroupName().getElabel()) && i == 0) {
                 continue;
             }
 
