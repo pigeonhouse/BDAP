@@ -25,7 +25,7 @@ import java.util.ArrayList;
  * @date 2019/9/24 20:32
  */
 @RestController
-public class CommonFilesApi {
+public class CommonFilesController {
     @Autowired
     CommonFilesService commonFilesService;
     @Autowired

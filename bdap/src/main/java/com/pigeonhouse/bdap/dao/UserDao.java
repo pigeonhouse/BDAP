@@ -47,27 +47,5 @@ public class UserDao {
         return users;
     }
 
-    /**
-     * 更新数据库User对象
-     *
-     * @param user 更新的对象
-     */
-    public void updateUse(User user) {
-        Query query = new Query(Criteria.where("userId").is(user.getUserId()));
-        Update update = new Update().set("userName", user.getUserName()).set("passWord", user.getPassword()).set("currentFile", user.getCurrentFile());
-        //更新查询返回结果集的第一条
-        mongoTemplate.updateFirst(query, update, User.class);
-    }
-
-
-    /**
-     * 删除数据库User对象
-     *
-     * @param userId 删除User对象的Id
-     */
-    public void deleteUserById(String userId) {
-        Query query = new Query(Criteria.where("userId").is(userId));
-        mongoTemplate.remove(query, User.class);
-    }
 
 }

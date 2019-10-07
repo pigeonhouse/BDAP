@@ -1,40 +1,54 @@
 package com.pigeonhouse.bdap.controller;
 
 import com.alibaba.fastjson.JSONObject;
+import com.pigeonhouse.bdap.dao.CommonFilesDao;
 import com.pigeonhouse.bdap.dao.LivyDao;
+import com.pigeonhouse.bdap.dao.ModuleDao;
+import com.pigeonhouse.bdap.dao.UserDao;
 import com.pigeonhouse.bdap.entity.execution.LivySessionInfo;
+import com.pigeonhouse.bdap.entity.mapinfo.nodeinfo.NodeInfo;
+import com.pigeonhouse.bdap.entity.metadata.FileAttribute;
 import com.pigeonhouse.bdap.entity.metadata.User;
 import com.pigeonhouse.bdap.service.TokenService;
-import com.pigeonhouse.bdap.service.UserService;
 import com.pigeonhouse.bdap.util.response.Response;
+import com.pigeonhouse.bdap.util.response.statusimpl.CodeStatus;
 import com.pigeonhouse.bdap.util.response.statusimpl.LoginStatus;
 import com.pigeonhouse.bdap.util.token.PassToken;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * @Author: XueXiaoYue
  * @Date: 2019/9/7 20:38
  */
 @RestController
-public class UserApi {
+public class UserController {
     @Autowired
-    UserService userService;
+    UserDao userDao;
     @Autowired
     TokenService tokenService;
     @Autowired
     LivyDao livyDao;
+    @Autowired
+    ModuleDao moduleDao;
+    @Autowired
+    CommonFilesDao commonFilesDao;
+
 
     @PassToken
     @PostMapping("/login")
     public Object login(@RequestBody() User user, HttpServletResponse response) {
 
-        User userForBase = userService.findUserById(user.getUserId());
+        User userForBase = userDao.findByUserId(user.getUserId());
         if (userForBase == null) {
             //不存在这个用户
             return new Response(LoginStatus.NO_SUCH_USER, null);
@@ -55,13 +69,40 @@ public class UserApi {
                 sessionInfo.put("livyAddr", livyAddr);
                 sessionInfo.put("sessionId", sessionId);
 
+                ArrayList<FileAttribute> fileList = commonFilesDao.findByUserId(user.getUserId());
+                List<NodeInfo> moduleList = moduleDao.findAll();
+
+                JSONObject draggableModuleInfo = new JSONObject();
+                draggableModuleInfo.put("files",fileList);
+                draggableModuleInfo.put("nodes",moduleList);
+
                 JSONObject returnJson = new JSONObject();
                 returnJson.put("userInfo", userForBase);
                 returnJson.put("sessionInfo", sessionInfo);
+                returnJson.put("draggableModuleInfo",draggableModuleInfo);
 
                 return new Response(LoginStatus.SUCCESS, returnJson);
             }
         }
+    }
+
+    /**
+     * 获取该用户所有可拖拽模块信息
+     * @param request
+     * @return
+     */
+    @GetMapping("/module")
+    public Response moduleInfo(HttpServletRequest request) {
+        String token = tokenService.getTokenFromRequest(request, "loginToken");
+        String userId = tokenService.getValueFromToken(token, "userId").asString();
+        ArrayList<FileAttribute> fileList = commonFilesDao.findByUserId(userId);
+        List<NodeInfo> moduleList = moduleDao.findAll();
+
+        JSONObject jsonObject = new JSONObject();
+        jsonObject.put("files",fileList);
+        jsonObject.put("nodes",moduleList);
+
+        return new Response(CodeStatus.CODE_PUT_SUCCESS, jsonObject);
     }
 
 

@@ -15,7 +15,7 @@ class OperateSelect extends React.Component {
             <Select
                 value={this.props.operator}
                 placeholder='选择操作符'
-                style={{ width: "80%", margin: "10%", marginTop: "15px", marginBottom: "0px" }}
+                style={{ width: "80%", margin: "10%", marginTop: "0px", marginBottom: "0px" }}
                 onChange={this.handleChange}
             >
                 <Option value="=">等于</Option>

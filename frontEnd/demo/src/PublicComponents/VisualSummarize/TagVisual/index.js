@@ -8,8 +8,8 @@ class TagVisual extends React.Component {
     }
 
     componentWillMount() {
-        const { filter } = this.props;
-        this.setState({ tag: filter })
+        const { summarize } = this.props;
+        this.setState({ tag: summarize })
     }
 
     handleCloseDelete = (removedTag) => {

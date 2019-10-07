@@ -7,11 +7,10 @@ import ExperimentPanel from '../ExperimentPanel';
 import Model from '../../PublicComponents/ModelStore';
 import VisualizedPanel from '../VisualizedPanel';
 
-import LocalRun from "../../LocalModeComponents/RunPanel/Run";
-import PythonRun from "../../PythonModeComponents/RunPanel/Run";
 import SparkRun from "../../ClusterModeComponents/SparkRunPanel/SparkRun";
-
+import ExperimentList from "../../PublicComponents/ExperimentList/ExperimentList"
 import styles from './index.less';
+
 /**
  * 主界面，根据link的信息，进行不同版本的组件渲染
  * 已将三个版本的界面合成一个
@@ -43,8 +42,9 @@ class LocalMode extends React.Component {
 		password: '',
 		remind: 'false',
 		connectCtrl: false,
-		type: 'local',
+		test: "0"
 	}
+
 	noRemind = (key) => {
 		notification.close(key)
 		let accountInfo = this.state.username + '&' + this.state.password + '&false';
@@ -53,10 +53,8 @@ class LocalMode extends React.Component {
 		exp.setTime(exp.getTime() + Days * 24 * 60 * 60 * 1000);
 		document.cookie = 'accountInfo' + "=" + escape(accountInfo) + ";expires=" + exp.toGMTString()
 	}
+
 	componentWillMount() {
-		if (this.props.location.state !== undefined) {
-			this.setState({ type: this.props.location.state.type });
-		}
 
 		let arr, reg = new RegExp("(^| )" + 'accountInfo' + "=([^;]*)(;|$)");
 		let accountInfo = ''
@@ -86,6 +84,7 @@ class LocalMode extends React.Component {
 				})
 		}
 	}
+
 	componentDidMount() {
 		if (this.state.remind === 'true') {
 			const key = `open${Date.now()}`;
@@ -111,9 +110,11 @@ class LocalMode extends React.Component {
 			});
 		}
 	}
+
 	tabChange = (value) => {
 		this.setState({ currentTab: value })
 	}
+	
 	// handleChange=(info)=>{
 	//   if (info.file.status === 'done') {
 	//     message.success(`${info.file.name} file uploaded successfully`);
@@ -122,15 +123,6 @@ class LocalMode extends React.Component {
 	//     message.error(`${info.file.name} file upload failed.`);
 	//   }
 	// }
-
-	//根据版本返回不同的组件
-	selectRunPanel = () => {
-		switch (this.state.type) {
-			case 'local': return <LocalRun />
-			case 'python': return <PythonRun />
-			case 'cluster': return <SparkRun />
-		}
-	}
 
 	download = () => {
 		let formData = new FormData();
@@ -158,6 +150,28 @@ class LocalMode extends React.Component {
 					console.info(reader.result);
 				}
 			})
+	}
+
+	handleClickNum = () => {
+		this.setState({
+			test: "1"
+		})
+	}
+
+	handleTabClick = () => {
+		this.setState({
+			test: "0"
+		})
+	}
+
+	handlePageChange = () => {
+		// console.log(this.state.test);
+		if (this.state.test === "0") {
+			return <ExperimentList handleP={this.handleClickNum} />
+		}
+		else {
+			return <ExperimentPanel />
+		}
 	}
 
 	render() {
@@ -212,10 +226,12 @@ class LocalMode extends React.Component {
 					<TabPane
 						className={styles.leftMenu}
 						style={{ height: 'calc(100vh - 105px)' }}
-						tab={<Icon type="credit-card" className={styles.iconStyle} />}
+						tab={<Icon type="credit-card" className={styles.iconStyle} onClick={this.handleTabClick} />}
 						key="1"
 					>
-						<ExperimentPanel type={this.state.type} />
+						{this.handlePageChange()}
+						{/* <ExperimentList/> */}
+						{/* <ExperimentPanel /> */}
 					</TabPane>
 
 					<TabPane
@@ -230,6 +246,7 @@ class LocalMode extends React.Component {
 						tab={<Icon type="api" className={styles.iconStyle} />}
 						key="3"
 					>
+						<ExperimentPanel />
 						{/* <Button onClick={this.download} >Download</Button> */}
 					</TabPane>
 				</Tabs>
@@ -241,7 +258,7 @@ class LocalMode extends React.Component {
 					</Col>
 					<Col span={9}></Col>
 					<Col span={2}>
-						{this.selectRunPanel()}
+						<SparkRun />
 					</Col>
 					<Col span={9}></Col>
 					<Col span={2}>

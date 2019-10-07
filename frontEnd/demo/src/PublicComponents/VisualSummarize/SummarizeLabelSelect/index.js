@@ -3,10 +3,10 @@ import React from 'react';
 
 const { Option } = Select;
 
-class LabelSelect extends React.Component {
+class SummarizeLabelSelect extends React.Component {
 
     onChange = (value) => {
-        this.props.handleChangeGroupLabel(value);
+        this.props.handleChangeLabel(value);
     }
 
     onSearch = (val) => {
@@ -19,7 +19,7 @@ class LabelSelect extends React.Component {
             <Select
                 value={this.props.label}
                 showSearch
-                style={{ width: "80%", margin: "10%", marginTop: "24px", marginBottom: "0px" }}
+                style={{ width: "80%", margin: "10%", marginTop: "15px", marginBottom: "0px" }}
                 placeholder="请选择分组列"
                 optionFilterProp="children"
                 onChange={this.onChange}
@@ -38,4 +38,4 @@ class LabelSelect extends React.Component {
     }
 }
 
-export default LabelSelect;
+export default SummarizeLabelSelect;

@@ -4,8 +4,10 @@ import { Row, Col, Radio, Button } from 'antd';
 import DataSource from '../../PublicComponents/VisualDataSource';
 import Filter from '../../PublicComponents/VisualFilter';
 import Summarize from '../../PublicComponents/VIsualSummarize';
-
+import TableTwo from "../../PublicComponents/ExperimentList/TableTwo"
 import styles from './index.less';
+
+var echarts = require('echarts');
 
 class VisualizedPanel extends React.Component {
 
@@ -14,9 +16,30 @@ class VisualizedPanel extends React.Component {
         rightCol: "filter",
         dataSourceName: undefined,
         filter: [],
-        Summarize: [],
+        summarize: [],
         dataSet: [],
         labelArray: ['jack', 'test'],
+        groupLabel: undefined,
+    }
+
+    handleChangeGroupLabel = (value) => {
+        this.setState({ groupLabel: value });
+    }
+
+    handleAddSummarize = (label, operator) => {
+        let summarize = this.state.summarize;
+        summarize.push({
+            label, operator
+        })
+        this.setState({ summarize });
+
+        this.getDataSetByOperate();
+    }
+
+    handleDeleteSummarize = (tag) => {
+        this.setState({ summarize: tag });
+
+        this.getDataSetByOperate();
     }
 
     handleAddFilter = (label, operator, value) => {
@@ -40,15 +63,52 @@ class VisualizedPanel extends React.Component {
         console.log('test');
     }
 
-    selectVisibleChart = () => {
+    componentDidUpdate = () => {
         switch (this.state.currentChart) {
-            case "table": return (<div></div>);
-            case "line": return (<div></div>);
-            case "bar": return (<div></div>);
-            case "pie": return (<div></div>);
-            case "scatter": return (<div></div>);
-            case "funnel": return (<div></div>);
+            case "table":
+                var myChart = echarts.init(document.getElementById('main'));
+                myChart.clear();
+                return;
+            case "line": case "bar": case "pie":
+            case "scatter": case "funnel":
+                this.changeCurrentChart();
         }
+        
+    }
+
+    selectVisibleChart = () => {
+        if(this.state.currentChart === "table"){
+            return (
+                <div><TableTwo/></div>
+            );
+        }
+    }
+
+    changeCurrentChart = () => {
+        var myChart = echarts.init(document.getElementById('main'));
+
+        // 指定图表的配置项和数据
+        var option = {
+            title: {
+                text: 'ECharts 入门示例'
+            },
+            tooltip: {},
+            legend: {
+                data: ['销量']
+            },
+            xAxis: {
+                data: ["衬衫", "羊毛衫", "雪纺衫", "裤子", "高跟鞋", "袜子"]
+            },
+            yAxis: {},
+            series: [{
+                name: '销量',
+                type: 'bar',
+                data: [5, 20, 36, 10, 10, 20]
+            }]
+        };
+
+        // 使用刚指定的配置项和数据显示图表。
+        myChart.setOption(option);
     }
 
     handlechangeCurrentChart = (e) => {
@@ -70,9 +130,11 @@ class VisualizedPanel extends React.Component {
             case 'summarize':
                 return (
                     <Summarize
-                        handleAddFilter={this.handleAddFilter}
-                        handleDeleteFilter={this.handleDeleteFilter}
-                        filter={this.state.filter}
+                        handleChangeGroupLabel={this.handleChangeGroupLabel}
+                        handleAddSummarize={this.handleAddSummarize}
+                        handleDeleteSummarize={this.handleDeleteSummarize}
+                        summarize={this.state.summarize}
+                        groupLabel={this.state.groupLabel}
                         labelArray={this.state.labelArray} />
                 )
             case 'settings':
@@ -112,6 +174,7 @@ class VisualizedPanel extends React.Component {
                 <Row className={styles.visualized}>
                     <Col span={19} >
                         <div className={styles.charter}>
+                            <div id="main" style={this.state.currentChart === 'table' ? { width: 0, height: 0 } : { width: "1100px", height: 'calc(100vh - 235px)' }}></div>
                             {this.selectVisibleChart()}
                         </div>
                         <div className={styles.footer} style={{ textAlign: "center" }} >
@@ -134,7 +197,7 @@ class VisualizedPanel extends React.Component {
                         {this.rightColGenerate()}
                     </Col>
                 </Row>
-            </div>
+            </div >
         );
     }
 }

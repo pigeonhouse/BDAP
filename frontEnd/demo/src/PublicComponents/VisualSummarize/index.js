@@ -4,7 +4,7 @@ import { Button, Divider, notification } from 'antd';
 import LabelSelect from './LabelSelect';
 import OperateSelect from './OperateSelect';
 import TagVisual from './TagVisual';
-import InputValue from './InputValue';
+import SummarizeLabelSelect from './SummarizeLabelSelect';
 
 import styles from './index.less';
 
@@ -13,13 +13,12 @@ class Summarize extends React.Component {
     state = {
         label: undefined,
         operator: undefined,
-        value: undefined,
         isMouseEnter: false,
     };
 
-    handleAddFilter = () => {
-        const { label, operator, value } = this.state;
-        if (label === undefined || operator === undefined || value === undefined) {
+    handleAddSummarize = () => {
+        const { label, operator } = this.state;
+        if (label === undefined || operator === undefined) {
             notification["error"]({
                 message: '错误',
                 description:
@@ -27,18 +26,17 @@ class Summarize extends React.Component {
             });
         }
         else {
-            this.props.handleAddFilter(label, operator, value);
+            this.props.handleAddSummarize(label, operator);
             this.setState({
                 label: undefined,
                 operator: undefined,
-                value: undefined,
             })
         }
     }
 
     //删除Filter
     handleDeleteTag = (index) => {
-        this.props.handleDeleteFilter(index);
+        this.props.handleDeleteSummarize(index);
     }
 
     handleChangeLabel = (value) => {
@@ -47,10 +45,6 @@ class Summarize extends React.Component {
 
     handleChangeOperator = (value) => {
         this.setState({ operator: value });
-    }
-
-    handleChangeValue = (value) => {
-        this.setState({ value });
     }
 
     mouseEnter = () => {
@@ -72,28 +66,30 @@ class Summarize extends React.Component {
                     className={this.state.isMouseEnter ? styles.scrollapp : styles.unscrollapp}
                 >
                     <LabelSelect
-                        handleChangeLabel={this.handleChangeLabel}
-                        label={this.state.label}
+                        handleChangeGroupLabel={this.props.handleChangeGroupLabel}
+                        label={this.props.groupLabel}
                         labelArray={this.props.labelArray}
-                    ></LabelSelect>
+                    />
+                    <Divider />
                     <OperateSelect
                         handleChangeOperator={this.handleChangeOperator}
                         operator={this.state.operator}
-                    ></OperateSelect>
-                    <InputValue
-                        handleChangeValue={this.handleChangeValue}
-                        value={this.state.value}
-                    ></InputValue>
+                    />
+                    <SummarizeLabelSelect
+                        handleChangeLabel={this.handleChangeLabel}
+                        label={this.state.label}
+                        labelArray={this.props.labelArray}
+                    />
                     <Divider />
                     <TagVisual
                         handleDeleteTag={this.handleDeleteTag}
-                        filter={this.props.filter}
+                        summarize={this.props.summarize}
                     ></TagVisual>
                 </div>
                 <div className={styles.footer} >
                     <Button
                         className={styles.button}
-                        onClick={this.handleAddFilter}
+                        onClick={this.handleAddSummarize}
                         type="primary"
                     >
                         添加
