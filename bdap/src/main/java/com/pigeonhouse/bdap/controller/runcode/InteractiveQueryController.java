@@ -98,7 +98,4 @@ public class InteractiveQueryController {
         System.out.println("finish");
     }
 
-
-
-
 }
