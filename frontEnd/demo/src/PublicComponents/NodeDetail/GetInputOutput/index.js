@@ -12,7 +12,6 @@ import Papa from 'papaparse';
  * get输入文件
  * @param {String} label
  * @param {String} group
- * @param {Array} Dataset
  */
 
 class GetInputOutput extends React.Component {

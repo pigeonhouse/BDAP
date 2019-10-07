@@ -44,6 +44,7 @@
     "antd": "^3.23.4",
     "create-react-class": "^15.6.3",
     "csvtojson": "^2.0.8",
+    "dragm": "0.0.5",
     "echarts": "^4.2.1",
     "echarts-for-react": "^2.0.15-beta.0",
     "file-loader": "^3.0.1",

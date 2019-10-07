@@ -24,12 +24,16 @@ class FlowDataModel extends React.Component {
 						size="200*40"
 						shape='zero-one'
 						model={{
-							label: menu.label,
-							elabel: menu.elabel,
-							attr: {},
-							attrDetail: [],
-							labelArray: menu.fileColumnsInfo,
-							group: 'input',
+							labelName: {
+								label: menu.label,
+								elabel: menu.elabel,
+							},
+							groupName: {
+								label: "数据源",
+								elabel: 'dataSource',
+							},
+							anchor: [0, 1],
+							labelArray: menu.fileColumnsInfo,				
 							keyConfig: {
 								color_type: '#1890FF',
 								state_icon_url: 'https://gw.alipayobjects.com/zos/rmsportal/uZVdwjJGqDooqKLKtvGA.svg',

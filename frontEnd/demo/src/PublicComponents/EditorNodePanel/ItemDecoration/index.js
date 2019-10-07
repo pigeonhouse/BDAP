@@ -61,7 +61,8 @@ class ItemDecoration extends React.Component {
 								}
 							});
 							// 名称文本
-							const label = model.label;
+							const label = model.labelName.label;
+							console.log(label)
 							group.addShape('text', {
 								attrs: {
 									text: label,

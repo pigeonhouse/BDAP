@@ -25,7 +25,7 @@ class FlowNodePanel extends React.Component {
                 style={{ backgroundColor: '#fff' }}
             >
                 <ClusterFlowDataPanel  activeFileList={this.props.nodesModuleInfo.files} />
-                <FlowItemPanel moduleNodesList={this.props.nodesModuleInfo.nodes} />
+                {/* <FlowItemPanel moduleNodesList={this.props.nodesModuleInfo.nodes} /> */}
             </div>
         );
     }

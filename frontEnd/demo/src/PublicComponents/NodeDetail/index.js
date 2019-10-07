@@ -34,7 +34,9 @@ class NodeDetail extends React.Component {
 		if (!item) {
 			return null;
 		}
-		const { label, attr, group, Dataset, attrDetail } = item.getModel();
+		const { labelName, attr, groupName, attrDetail } = item.getModel();
+		const { label } = labelName;
+		const { group } = groupName.label;
 
 		return (
 			<Card
@@ -64,7 +66,7 @@ class NodeDetail extends React.Component {
 					<PredictLabel group={group} />
 
 					{/* 检测是否为输入输出Item，若是则进行相关处理 */}
-					<GetInputOutput label={label} group={group} Dataset={Dataset} />
+					<GetInputOutput label={label} group={group} />
 				</Form>
 			</Card>
 		);

@@ -53,7 +53,7 @@ class HdfsFile extends Component {
 		const { getSelected } = propsAPI;
 		const item = getSelected()[0];
 		const model = item.getModel();
-		const inpValu = model.attr.fileName || '';
+		const inpValu = model.labelName.label || '';
 		this.setState({ inpValu });
 
 		let formData = new FormData();

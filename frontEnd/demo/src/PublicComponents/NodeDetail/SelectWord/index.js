@@ -17,7 +17,9 @@ class SelectWord extends Component {
 
     //渲染时寻找上一个的labelArray，符合条件时才会渲染选择字段按钮，并且查找labelArray
     componentWillMount() {
-        const { label, anchor, group } = this.props.item.getModel();
+        const { labelName, anchor, groupName } = this.props.item.getModel();
+        const { label } = labelName;
+        const group = groupName.label;
 
         if (group === 'input' || anchor[0] === 0 || label === "数据随机划分") return;
 
@@ -29,7 +31,9 @@ class SelectWord extends Component {
     // 否则labelArray结构为[选择字段的结果]
     findLabelArray = () => {
         const { item } = this.props;
-        const { group } = item.getModel();
+        const { groupName } = item.getModel();
+        //拿到groupName
+        const group = groupName.label;
         let labelArray = this.findLabelArrayFunction(item.id, group);
 
         //检查labelArray是否已更换
@@ -127,7 +131,10 @@ class SelectWord extends Component {
     createSelect = () => {
         const item = this.props.item;
         const model = item.getModel();
-        const { group, anchor, label } = model;
+        const { groupName, anchor, labelName } = model;
+        //拿到label和groupName
+        const { label } = labelName;
+        const group = groupName.label;
 
         if (group === 'input' || anchor[0] === 0 || label === "数据随机划分") return;
 
@@ -159,7 +166,7 @@ class SelectWord extends Component {
                 {this.createSelect()}
 
                 {/* 有关预处理的函数 */}
-				<Feature item={this.props.item} labelArray={this.state.labelArray}/>
+                <Feature item={this.props.item} labelArray={this.state.labelArray} />
             </Fragment>
         );
     }
