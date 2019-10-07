@@ -21,7 +21,6 @@ import org.springframework.web.client.RestTemplate;
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.List;
 import java.util.Map;
 
 /**
@@ -73,8 +72,8 @@ public class FlowChartController {
 
         } catch (HttpClientErrorException e) {
             e.printStackTrace();
-            System.out.println(RunningStatus.FAIL_TO_QUERY);
-            return new Response(RunningStatus.FAIL_TO_QUERY, null);
+            System.out.println(RunningStatus.FAIL);
+            return new Response(RunningStatus.FAIL, null);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -82,6 +81,6 @@ public class FlowChartController {
         jsonObject.put("state", state);
 
         System.out.println(state);
-        return new Response(RunningStatus.SUCCESSFUL_QUERY, jsonObject);
+        return new Response(RunningStatus.SUCCESS, jsonObject);
     }
 }

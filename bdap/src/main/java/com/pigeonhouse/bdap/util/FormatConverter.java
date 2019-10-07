@@ -30,7 +30,10 @@ public class FormatConverter {
      */
     public static String convertToCsv(String show){
 
-        String[] splits = show.split("\\\n");
+        String pure[] = show.split("[^\\+\\|]\\n");
+
+        String[] splits = pure[pure.length-1].split("\\\n");
+
         int lengthOfSplits = splits.length;
 
         StringBuilder csvBuilder = new StringBuilder();
@@ -48,7 +51,7 @@ public class FormatConverter {
                 }
                 sb.append(elements[col]);
             }
-            csvBuilder.append(sb.toString()).append("\\n");
+            csvBuilder.append(sb.toString()).append("\n");
         }
         return csvBuilder.toString();
     }

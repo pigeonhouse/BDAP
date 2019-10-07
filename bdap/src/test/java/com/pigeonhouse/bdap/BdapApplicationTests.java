@@ -34,9 +34,6 @@ public class BdapApplicationTests {
     LivyDao livyDao;
 
     @Autowired
-    ModuleInfoController moduleInfoController;
-
-    @Autowired
     FileHeaderAttriDao fileHeaderAttriDao;
 
     @Autowired
