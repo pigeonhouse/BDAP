@@ -19,6 +19,11 @@ class VisualizedPanel extends React.Component {
         Summarize: [],
         dataSet: [],
         labelArray: ['jack', 'test'],
+        groupLabel: undefined,
+    }
+
+    handleChangeGroupLabel = (value) => {
+        this.setState({ groupLabel: value });
     }
 
     handleAddFilter = (label, operator, value) => {
@@ -109,6 +114,7 @@ class VisualizedPanel extends React.Component {
             case 'summarize':
                 return (
                     <Summarize
+                        handleChangeGroupLabel={this.handleChangeGroupLabel}
                         handleAddFilter={this.handleAddFilter}
                         handleDeleteFilter={this.handleDeleteFilter}
                         filter={this.state.filter}
@@ -151,7 +157,7 @@ class VisualizedPanel extends React.Component {
                 <Row className={styles.visualized}>
                     <Col span={19} >
                         <div className={styles.charter}>
-                            <div id="main" style={this.state.currentChart === 'table' ? { width: 0, height: 0 } : { width: '600px', height: '400px' }}></div>
+                            <div id="main" style={this.state.currentChart === 'table' ? { width: 0, height: 0 } : { width: "1100px", height: 'calc(100vh - 235px)' }}></div>
                             {this.selectVisibleChart()}
                         </div>
                         <div className={styles.footer} style={{ textAlign: "center" }} >

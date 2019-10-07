@@ -72,7 +72,7 @@ class Summarize extends React.Component {
                     className={this.state.isMouseEnter ? styles.scrollapp : styles.unscrollapp}
                 >
                     <LabelSelect
-                        handleChangeLabel={this.handleChangeLabel}
+                        handleChangeGroupLabel={this.props.handleChangeGroupLabel}
                         label={this.state.label}
                         labelArray={this.props.labelArray}
                     ></LabelSelect>

@@ -45,7 +45,7 @@ class LocalMode extends React.Component {
 		remind: 'false',
 		connectCtrl: false,
 		type: 'local',
-		test:"0"
+		test: "0"
 	}
 	noRemind = (key) => {
 		notification.close(key)
@@ -164,20 +164,23 @@ class LocalMode extends React.Component {
 
 	handleClickNum = () => {
 		this.setState({
-			test:"1"
+			test: "1"
 		})
 	}
-	handleTabClick=()=>{
+
+	handleTabClick = () => {
 		this.setState({
-			test:"0"
+			test: "0"
 		})
 	}
-	handlePageChange=()=>{
-		if(this.state.test==="0"){
-			return <ExperimentList handleP={this.handleClickNum}/>
+
+	handlePageChange = () => {
+		// console.log(this.state.test);
+		if (this.state.test === "0") {
+			return <ExperimentList handleP={this.handleClickNum} />
 		}
-		else{
-			return <ExperimentPanel type={this.state.type}/>
+		else {
+			return <ExperimentPanel type={this.state.type} />
 		}
 	}
 
@@ -233,7 +236,7 @@ class LocalMode extends React.Component {
 					<TabPane
 						className={styles.leftMenu}
 						style={{ height: 'calc(100vh - 105px)' }}
-						tab={<Icon type="credit-card" className={styles.iconStyle} onClick={this.handleTabClick}/>}
+						tab={<Icon type="credit-card" className={styles.iconStyle} onClick={this.handleTabClick} />}
 						key="1"
 					>
 						{this.handlePageChange()}

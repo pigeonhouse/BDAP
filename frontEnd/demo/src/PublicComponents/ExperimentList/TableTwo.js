@@ -121,7 +121,7 @@ class TableTwo extends React.Component {
                 // sorter: (a, b) => a.address.length - b.address.length,
                 // sortOrder: sortedInfo.columnKey === 'address' && sortedInfo.order,
             },
-         
+
         ];
         return (
             <div style={{ marginTop: 10 }}>
@@ -129,7 +129,7 @@ class TableTwo extends React.Component {
                     <Col span={2}></Col>
                     <Col span={20}>
                         <Table columns={columns} dataSource={data} onChange={this.handleChange}
-                            pagination={{ pageSize: 50 }} scroll={{ x:"110%",y: 250 }} />
+                            pagination={{ pageSize: 50 }} scroll={{ x: "110%", y: "calc(100vh - 355px)" }} />
                     </Col>
                     <Col span={2}></Col>
                 </Row>

@@ -2,7 +2,7 @@ import React from 'react';
 import { Table, Button, Row, Col, Modal, Card } from 'antd';
 import LocalMode from "../../pages/MainMode"
 import TableTwo from "./TableTwo"
-import { Link ,Redirect} from 'react-router-dom';
+import { Link, Redirect } from 'react-router-dom';
 import ExperimentPanel from "../../pages/ExperimentPanel"
 class ExperimentList extends React.Component {
 
@@ -54,7 +54,7 @@ class ExperimentList extends React.Component {
 		})
 	}
 	handleNewButton = () => {
-		 // alert("你可以去创建自己的文件了，需要跳转页面");
+		// alert("你可以去创建自己的文件了，需要跳转页面");
 		// return <Redirect to="/route" />;
 		this.props.handleP()
 	}
@@ -110,7 +110,7 @@ class ExperimentList extends React.Component {
 			<div style={{ marginLeft: 20, marginTop: 20 }}>
 				<Row>
 					<Col span={12}>
-						<Button type="primary"  style={{ marginRight: 10, marginBottom: 10 }} onClick={this.handleNewButton}>
+						<Button type="primary" style={{ marginRight: 10, marginBottom: 10 }} onClick={this.handleNewButton}>
 							新建项目
 						</Button>
 						<Button type="primary" onClick={this.handleDeleteButton} style={{ marginBottom: 10 }}>删除</Button>

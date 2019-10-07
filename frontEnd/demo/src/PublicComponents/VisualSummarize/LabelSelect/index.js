@@ -6,7 +6,7 @@ const { Option } = Select;
 class LabelSelect extends React.Component {
 
     onChange = (value) => {
-        this.props.handleChangeLabel(value);
+        this.props.handleChangeGroupLabel(value);
     }
 
     onSearch = (val) => {
@@ -20,7 +20,7 @@ class LabelSelect extends React.Component {
                 value={this.props.label}
                 showSearch
                 style={{ width: "80%", margin: "10%", marginTop: "15px", marginBottom: "0px" }}
-                placeholder="选择列"
+                placeholder="请选择分组列"
                 optionFilterProp="children"
                 onChange={this.onChange}
                 onSearch={this.onSearch}
