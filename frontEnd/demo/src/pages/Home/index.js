@@ -60,13 +60,10 @@ class HomePage extends React.Component {
 		let userInfo = this.props.form.getFieldsValue();
 		this.props.form.validateFields((err, values) => {
 			if (!err) {
-				let formData = new FormData();
-				formData.append('userId', "2017211511");
-				formData.append("password", "654321");
-
+				
 				const init = {
 					method: 'POST',
-					body: { "userId": "2017211511", "password": "654321" },
+					body: '{ "userId": "2017211511", "password": "654321" }',
 					mode: 'cors',
 					headers: {
 						"Content-Type": "application/json;charset=utf-8"

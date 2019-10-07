@@ -44,6 +44,7 @@ class LocalMode extends React.Component {
 		connectCtrl: false,
 		test: "0"
 	}
+
 	noRemind = (key) => {
 		notification.close(key)
 		let accountInfo = this.state.username + '&' + this.state.password + '&false';
@@ -52,6 +53,7 @@ class LocalMode extends React.Component {
 		exp.setTime(exp.getTime() + Days * 24 * 60 * 60 * 1000);
 		document.cookie = 'accountInfo' + "=" + escape(accountInfo) + ";expires=" + exp.toGMTString()
 	}
+
 	componentWillMount() {
 
 		let arr, reg = new RegExp("(^| )" + 'accountInfo' + "=([^;]*)(;|$)");
@@ -82,6 +84,7 @@ class LocalMode extends React.Component {
 				})
 		}
 	}
+
 	componentDidMount() {
 		if (this.state.remind === 'true') {
 			const key = `open${Date.now()}`;
@@ -107,9 +110,11 @@ class LocalMode extends React.Component {
 			});
 		}
 	}
+
 	tabChange = (value) => {
 		this.setState({ currentTab: value })
 	}
+	
 	// handleChange=(info)=>{
 	//   if (info.file.status === 'done') {
 	//     message.success(`${info.file.name} file uploaded successfully`);
