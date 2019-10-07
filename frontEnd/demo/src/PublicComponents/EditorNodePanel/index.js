@@ -1,8 +1,5 @@
 import React from 'react';
 import { FlowItemPanel } from './EditorItemPanel';
-
-import { LocalFlowDataPanel } from '../../LocalModeComponents/EditorDataPanel';
-import { PythonFlowDataPanel } from '../../PythonModeComponents/EditorDataPanel';
 import { ClusterFlowDataPanel } from '../../ClusterModeComponents/EditorDataPanel';
 
 import styles from './index.less';
