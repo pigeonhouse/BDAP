@@ -17,7 +17,6 @@ class HomePage extends React.Component {
 		password: '',
 		remind: '',
 		rememberPassword: false,
-		nodesModuleInfo: [],
 	}
 
 	componentWillMount() {
@@ -88,10 +87,7 @@ class HomePage extends React.Component {
 										exp.setTime(exp.getTime() + Days * 24 * 60 * 60 * 1000);
 										document.cookie = 'accountInfo' + "=" + escape(accountInfo) + ";expires=" + exp.toGMTString()
 									}
-									this.setState({ 
-										redirect: true,
-										nodesModuleInfo: res.data.draggableModuleInfo,
-									});
+									this.setState({ redirect: true });
 									message.success(`${userInfo.username}, welcome`);
 								}
 								//验证失败
@@ -116,10 +112,9 @@ class HomePage extends React.Component {
 			return <Redirect to={{
 				pathname: '/mainPage',
 				state: {
-					nodesModuleInfo: this.state.nodesModuleInfo,
+					success: true
 				}
-			}}
-			/>
+			}} />
 		}
 		const { getFieldDecorator } = this.props.form;
 		return (

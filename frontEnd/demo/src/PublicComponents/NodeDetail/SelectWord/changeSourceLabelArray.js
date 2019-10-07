@@ -5,7 +5,7 @@
  */
 export function changeSourceLabelArray(item, sourceLabelArray) {
     let labelArray = [];
-    if (item.model.groupName.label === 'ml') {
+    if (item.model.groupName.label === 'machinelearning') {
         sourceLabelArray = sourceLabelArray[0];
     }
     for (let i in sourceLabelArray) {
