@@ -2,25 +2,24 @@ import React from 'react';
 import { Card, Form, Input } from 'antd';
 import { withPropsAPI } from '@src';
 
-import AttrDetail from './AttrDetail';
+import Attributes from './Attributes';
 import SelectWord from './SelectWord';
-import PredictLabel from './PredictLabel';
 import GetInputOutput from './GetInputOutput';
 
 import styles from './index.less';
 
 /**
  * 右侧属性细节组件
- * 包括选择字段，参数输入，输入文件，预处理参数选择，预测集列名
+ * 包括选择字段，参数输入，输入文件，预处理参数选择
  */
 
 const { Item } = Form;
 const inlineFormItemLayout = {
 	labelCol: {
-		sm: { span: 10 },
+		sm: { span: 8 },
 	},
 	wrapperCol: {
-		sm: { span: 14 },
+		sm: { span: 16 },
 	},
 };
 
@@ -34,7 +33,7 @@ class NodeDetail extends React.Component {
 		if (!item) {
 			return null;
 		}
-		const { labelName, attr, groupName, attrDetail } = item.getModel();
+		const { labelName, groupName, attributes } = item.getModel();
 		const { label } = labelName;
 		const { group } = groupName.label;
 
@@ -56,14 +55,11 @@ class NodeDetail extends React.Component {
 						}
 					</Item>
 
-					{/* 显示attrDetail，即属性的细节，取决于标签框中的attrDetail属性*/}
-					<AttrDetail attrDetail={attrDetail} attr={attr} />
+					{/* 显示attributes，即属性的细节，取决于标签框中的attributes属性*/}
+					<Attributes attributes={attributes} />
 
 					{/* 选择字段 */}
-					<SelectWord item={item} />
-
-					{/* 选择字段后，对于预测集列名的重命名 */}
-					<PredictLabel group={group} />
+					<SelectWord item={item} attributes={attributes} />
 
 					{/* 检测是否为输入输出Item，若是则进行相关处理 */}
 					<GetInputOutput label={label} group={group} />

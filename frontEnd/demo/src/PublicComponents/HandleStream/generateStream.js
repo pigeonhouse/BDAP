@@ -5,7 +5,7 @@
 
 export function generateStream(propsAPI) {
 	const inf = propsAPI.save();
-	console.log(inf)
+	
 	var Sourc = 0;
 	var tag = 'Input';
 	var stream = new Array();
