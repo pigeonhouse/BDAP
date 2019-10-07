@@ -12,6 +12,7 @@ import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
 
 import java.io.IOException;
+import java.util.LinkedHashMap;
 import java.util.Map;
 
 
@@ -23,14 +24,15 @@ import java.util.Map;
 public class CheckRunningStatus {
 
     @PostMapping("/runningstatus")
-    Object checkstatus(@RequestBody ExecutionInfo executionInfo) {
+    Object checkstatus(String resultUrl) {
         ObjectMapper objectMapper = new ObjectMapper();
         RestTemplate restTemplate = new RestTemplate();
         String state = "";
         try {
-            state = objectMapper.readValue(
-                    restTemplate.getForObject(executionInfo.getResultUrl(), String.class), Map.class)
-                    .get("state").toString();
+            Map resultMap = objectMapper.readValue(
+                    restTemplate.getForObject(resultUrl, String.class), Map.class);
+            state = resultMap.get("state").toString();
+
         } catch (HttpClientErrorException e) {
             e.printStackTrace();
             System.out.println(RunningStatus.FAIL_TO_QUERY);
