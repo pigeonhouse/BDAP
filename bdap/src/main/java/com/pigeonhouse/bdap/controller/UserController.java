@@ -69,17 +69,10 @@ public class UserController {
                 sessionInfo.put("livyAddr", livyAddr);
                 sessionInfo.put("sessionId", sessionId);
 
-                ArrayList<FileAttribute> fileList = commonFilesDao.findByUserId(user.getUserId());
-                List<NodeInfo> moduleList = moduleDao.findAll();
-
-                JSONObject draggableModuleInfo = new JSONObject();
-                draggableModuleInfo.put("files",fileList);
-                draggableModuleInfo.put("nodes",moduleList);
-
                 JSONObject returnJson = new JSONObject();
                 returnJson.put("userInfo", userForBase);
                 returnJson.put("sessionInfo", sessionInfo);
-                returnJson.put("draggableModuleInfo",draggableModuleInfo);
+
 
                 return new Response(LoginStatus.SUCCESS, returnJson);
             }

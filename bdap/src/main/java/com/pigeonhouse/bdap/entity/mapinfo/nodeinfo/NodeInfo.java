@@ -47,6 +47,12 @@ public class NodeInfo {
     private int[] anchor;
 
     /**
+     * Note:只有文件属性的模块才具有此属性
+     * 其余模块忽略即可
+     */
+    private String filePath;
+
+    /**
      * 每一个属性的参数及值
      */
     private ArrayList<AttrInfo> attributes;

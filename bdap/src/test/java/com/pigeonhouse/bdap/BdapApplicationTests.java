@@ -56,12 +56,13 @@ public class BdapApplicationTests {
 
         //--------------第一个节点用于读入数据-----------
 
-        ArrayList<AttrInfo> attrs_01 = new ArrayList<>();
-        attrs_01.add(new AttrInfo(new LabelName("file"), "String"
-                , "hdfs:///bdap/demoData/simpleTest.csv"));
+//        ArrayList<AttrInfo> attrs_01 = new ArrayList<>();
+//        attrs_01.add(new AttrInfo(new LabelName("file"), "String"
+//                , "hdfs:///bdap/demoData/simpleTest.csv"));
 
-        NodeInfo nodeInfo_01 = new NodeInfo("abc", new LabelName("LoadData"),new LabelName("data")
-                , null, new int[]{0, 1}, attrs_01, false);
+        NodeInfo nodeInfo_01 = new NodeInfo();
+        nodeInfo_01.setFilePath("hdfs:///bdap/demoData/simpleTest.csv");
+        nodeInfo_01.setId("abc");
 
         //-----------------接下去做测试算法--------------
 
