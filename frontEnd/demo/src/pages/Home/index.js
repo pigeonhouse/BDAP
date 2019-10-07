@@ -20,7 +20,6 @@ class HomePage extends React.Component {
 		nodesModel: [],
 	}
 
-
 	componentWillMount() {
 		this.loadAccountInfo();
 	}
@@ -60,56 +59,44 @@ class HomePage extends React.Component {
 		let userInfo = this.props.form.getFieldsValue();
 		this.props.form.validateFields((err, values) => {
 			if (!err) {
-				
+				//将用户名及密码放入body中
+				var body = `{ "userId": ${values.username}, "password": ${values.password} }`
 				const init = {
 					method: 'POST',
-					body: '{ "userId": "2017211511", "password": "654321" }',
+					body: body,
 					mode: 'cors',
 					headers: {
 						"Content-Type": "application/json;charset=utf-8"
 					},
 				}
-
 				fetch('https://result.eolinker.com/MSwz6fu34b763a21e1f7efa84a86a16f767a756952d0f95?uri=localhost:8888/login', init)
-					// .then(response => response.blob()).then(data => {
-					// 	//data为二进制文件
-					// 	var reader = new FileReader();
-					// 	reader.readAsText(data, 'utf-8');
-					// 	//以文本方式读取文件
-					// 	reader.onload = function (e) {
-					// 		//转换
-					// 		var result = reader.result
-					// 		console.info(reader.result);
-					// 	}
-					// })
 					.then(res => {
 						if (res.status === 200) {
-							console.log(res);
 							res.json().then(res => {
+
+								//验证正确，则进入界面，显示已登陆
 								if (res.code === 200) {
 									console.log(res);
+									if (values.remember) {
+										let accountInfo = '';
+										if (this.state.remind === '')
+											accountInfo = values.username + '&' + values.password + '&' + 'true';
+										else accountInfo = values.username + '&' + values.password + '&' + this.state.remind;
+										let Days = 3;
+										let exp = new Date();
+										exp.setTime(exp.getTime() + Days * 24 * 60 * 60 * 1000);
+										document.cookie = 'accountInfo' + "=" + escape(accountInfo) + ";expires=" + exp.toGMTString()
+									}
+									this.setState({ redirect: true });
+									message.success(`${userInfo.username}, welcome`);
+								}
+								//验证失败
+								else {
+									alert('Password error');
 								}
 							})
 						}
 					})
-
-				// if (values.username === 'demo' && values.password === '123456') {
-				// 	if (values.remember) {
-				// 		let accountInfo = '';
-				// 		if (this.state.remind === '')
-				// 			accountInfo = values.username + '&' + values.password + '&' + 'true';
-				// 		else accountInfo = values.username + '&' + values.password + '&' + this.state.remind;
-				// 		let Days = 3;
-				// 		let exp = new Date();
-				// 		exp.setTime(exp.getTime() + Days * 24 * 60 * 60 * 1000);
-				// 		document.cookie = 'accountInfo' + "=" + escape(accountInfo) + ";expires=" + exp.toGMTString()
-				// 	}
-				// 	this.setState({ redirect: true });
-				// 	message.success(`${userInfo.username}, welcome`);
-				// }
-				// else {
-				// 	alert('Password error');
-				// }
 			}
 		})
 	}
@@ -198,7 +185,7 @@ class HomePage extends React.Component {
 										})(
 											<Input
 												prefix={<Icon type='user' style={{ color: 'rgba(0,0,0,.25)' }} />}
-												placeholder='username:demo'
+												placeholder='username:2017211511'
 											></Input>
 										)
 									}
@@ -216,7 +203,7 @@ class HomePage extends React.Component {
 										})(
 											<Input
 												prefix={<Icon type='lock' style={{ color: 'rgba(0,0,0,.25)' }} />}
-												placeholder='password:123456' type='password'
+												placeholder='password:654321' type='password'
 											></Input>
 										)
 									}
@@ -241,6 +228,5 @@ class HomePage extends React.Component {
 		);
 	}
 }
-
 
 export default Form.create()(HomePage);
