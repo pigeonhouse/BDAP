@@ -22,8 +22,8 @@ object Normalization {
         case "Standard" => new StandardScaler().setInputCol("tensor" + targetCols(i)).setOutputCol("feature_" + targetCols(i))
         case "MaxAbs" => new MaxAbsScaler().setInputCol("tensor" + targetCols(i)).setOutputCol("feature_" + targetCols(i))
       }
-      val scalerModel = scaler.fit(assembled)
-      scaled = scalerModel.transform(assembled).drop("tensor" + targetCols(i))
+      val scalerModel = scaler.fit(assembledDF)
+      scaled = scalerModel.transform(assembledDF).drop("tensor" + targetCols(i))
       scaled = scaled.withColumn(normalizationType + targetCols(i), diviTensor(col("feature_" + targetCols(i)))).drop("feature_" + targetCols(i))
     }
 

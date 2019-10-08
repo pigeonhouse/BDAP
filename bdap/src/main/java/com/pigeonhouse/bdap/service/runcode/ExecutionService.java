@@ -138,9 +138,9 @@ public class ExecutionService {
             if (!"machinelearning".equals(nodeInfo.getGroupName().getElabel())) {
                 String id = nodeInfo.getId();
                 if(i == 0){
-                    mappingDfCode = "\ndfMap += (\"" + id + "\" -> output)\n\n";
+                    mappingDfCode += "\ndfMap += (\"" + id + "\" -> output)\n\n";
                 } else{
-                    mappingDfCode = "\ndfMap += (\"" + id + "_" + i +"\" -> output_" + i + ")\n\n";
+                    mappingDfCode += "\ndfMap += (\"" + id + "_" + i +"\" -> output_" + i + ")\n\n";
                 }
             }
         }
