@@ -46,16 +46,33 @@ public class LivyDao {
     @Value("${spark.speculation}")
     boolean sparkSpeculation;
 
+    @Value("${livyAddr}")
+    String[] livyAddrList;
 
     /**
      * 根据数据库中记录的livy服务器负载情况
      * 选择一个负载最低的livy服务器
-     *
      * @return 返回该服务器地址及端口
      */
     public String selectLivyServer() {
-        //待完成
-        return "10.105.222.90:8998";
+        int minNumber = Integer.MAX_VALUE;
+        int minIndex = -1;
+        for (int i = 0; i < livyAddrList.length; i++) {
+            RestTemplate restTemplate = new RestTemplate();
+            String res = restTemplate.getForObject("http://" + livyAddrList[i] + "/sessions", String.class);
+            LinkedHashMap livySessionDescription = null;
+            try {
+                livySessionDescription = objectMapper.readValue(res, LinkedHashMap.class);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            int num = (int) livySessionDescription.get("total");
+            if (num < minNumber) {
+                minNumber = num;
+                minIndex = i;
+            }
+        }
+        return livyAddrList[minIndex];
     }
 
 
@@ -66,7 +83,6 @@ public class LivyDao {
      * @return
      */
     public String postCode(String code, LivySessionInfo livySessionInfo) {
-        //LivySessionInfo availableSession = selectAvailableSession();
         int sessionId = livySessionInfo.getId();
         String livyAddr = livySessionInfo.getLivyAddr();
         Map<String, String> map = new HashMap<>(2);
@@ -95,7 +111,7 @@ public class LivyDao {
     }
 
     public void buildClient(String livyAddr) {
-        //编程API（未完成）
+        //TODO 编程API
         try {
             LivyClient livyClient = new LivyClientBuilder().setURI(new URI(livyAddr)).build();
         } catch (IOException | URISyntaxException e) {
@@ -136,39 +152,12 @@ public class LivyDao {
 //    }
 
 
-//    /**
-//     * 获取 所有Session
-//     *
-//     * @return
-//     */
-//    public LivySessionDescription getSessionList() {
-//        RestTemplate restTemplate = new RestTemplate();
-//        String res = restTemplate.getForObject(livySessionsUrl, String.class);
-//        LivySessionDescription livySessionDescription = null;
-//        try {
-//            livySessionDescription = objectMapper.readValue(res, LivySessionDescription.class);
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        }
-//        return livySessionDescription;
-//    }
-
-
     public void deleteSession(String id) {
-//        String livyAddr = livySessionInfo.getLivyAddr();
-//        int sessionId = livySessionInfo.getId();
         RestTemplate restTemplate = new RestTemplate();
         restTemplate.delete("http://" + "10.105.222.90:8998" + "/sessions" + "/" + id);
         return;
     }
 
-    /**
-     * 获取某个Session信息（用来获取state）
-     *
-     * @param
-     * @return
-     * @throws IOException
-     */
     public LivySessionInfo refreshSessionStatus(LivySessionInfo livySessionInfo) {
         String livyAddr = livySessionInfo.getLivyAddr();
         int sessionId = livySessionInfo.getId();
@@ -191,7 +180,6 @@ public class LivyDao {
     public LivySessionInfo createSession(String livyAddr) {
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
-        // body2json
         Map<String, Object> bodyHashMap = new HashMap<>();
         Map<String, Object> confHashMap = new HashMap<>();
         bodyHashMap.put("kind", livyNewSessionKind);
@@ -230,14 +218,6 @@ public class LivyDao {
         }
 
         livySessionInfo.setLivyAddr(livyAddr);
-
-//        while (!"idle".equals(refreshSessionStatus(livyAddr,livySessionInfo.getId()).getState())) {
-//            try {
-//                Thread.sleep(1000);
-//            } catch (InterruptedException e) {
-//                e.printStackTrace();
-//            }
-//        }
 
         System.out.println(livySessionInfo);
 

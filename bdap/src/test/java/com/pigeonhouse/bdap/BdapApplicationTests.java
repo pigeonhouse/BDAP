@@ -109,6 +109,10 @@ public class BdapApplicationTests {
 
     }
 
+    @Test
+    public void testLivy(){
+        System.out.println(livyDao.selectLivyServer());
+    }
 
 //    @Test
 //    public void test01() {
