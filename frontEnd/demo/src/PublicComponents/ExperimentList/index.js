@@ -1,5 +1,5 @@
 import React from 'react';
-import { Table, Button, Row, Col, Modal, Card } from 'antd';
+import { Table, Button, Row, Col, Modal } from 'antd';
 
 class ExperimentList extends React.Component {
 

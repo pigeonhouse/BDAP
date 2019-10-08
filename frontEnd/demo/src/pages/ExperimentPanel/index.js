@@ -6,7 +6,7 @@ import { FlowToolbar } from '../../PublicComponents/EditorToolbar';
 import { FlowDetailPanel } from '../../PublicComponents/EditorDetailPanel';
 import FlowNodePanel from '../../PublicComponents/EditorNodePanel';
 import { FlowContextMenu } from '../../PublicComponents/EditorContextMenu';
-import ExperimentList from "../../PublicComponents/ExperimentList/ExperimentList"
+import ExperimentList from "../../PublicComponents/ExperimentList"
 
 import styles from './index.less';
 

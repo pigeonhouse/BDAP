@@ -1,45 +1,5 @@
 import React from 'react';
-import { Table, Button, Input, Row, Col, Icon } from 'antd';
-
-// const data = [
-//     {
-//         key: '1',
-//         name: 'John Brown',
-//         age: 32,
-//         address: 'New York No. 1 Lake Park',
-//     },
-//     {
-//         key: '2',
-//         name: 'Jim Green',
-//         age: 42,
-//         address: 'London No. 1 Lake Park',
-//     },
-//     {
-//         key: '3',
-//         name: 'Joe Black',
-//         age: 32,
-//         address: 'Sidney No. 1 Lake Park',
-//     },
-//     {
-//         key: '4',
-//         name: 'Jim Red',
-//         age: 32,
-//         address: 'London No. 2 Lake Park',
-//     },
-//     {
-//         key: '5',
-//         name: 'Jim Green',
-//         age: 32,
-//         address: 'China No. 2 Lake Park',
-//     },
-//     {
-//         key: '6',
-//         name: 'Jim Green',
-//         age: 62,
-//         address: 'China No. 2 Lake Park',
-//     },
-
-// ];
+import { Table, Row, Col } from 'antd';
 
 const data = [];
 for (let i = 0; i < 100; i++) {
