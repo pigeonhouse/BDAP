@@ -6,7 +6,7 @@ import ExperimentPanel from '../ExperimentPanel';
 import Model from '../../PublicComponents/ModelStore';
 import VisualizedPanel from '../VisualizedPanel';
 
-import SparkRun from "../../ClusterModeComponents/SparkRunPanel/SparkRun";
+import SparkRun from "../../ClusterModeComponents/SparkRunPanel";
 import styles from './index.less';
 
 /**
@@ -41,6 +41,7 @@ class LocalMode extends React.Component {
 		password: '',
 		remind: 'false',
 		connectCtrl: false,
+		running: false,
 	}
 
 	noRemind = (key) => {
@@ -156,6 +157,18 @@ class LocalMode extends React.Component {
 		})
 	}
 
+	onClickButtonRunning = () => {
+		this.setState({
+			running: true
+		})
+	}
+
+	stopRunning = () => {
+		this.setState({
+			running: false
+		})
+	}
+
 	render() {
 		if (this.props.location.state === undefined) {
 			return <Redirect to='/' />
@@ -217,6 +230,8 @@ class LocalMode extends React.Component {
 							currentTab={this.state.currentTab}
 							clickTab={this.state.clickTab}
 							handleClickEnter={this.handleClickEnter}
+							stopRunning={this.stopRunning}
+							running={this.state.running}
 						/>
 					</TabPane>
 
@@ -243,7 +258,7 @@ class LocalMode extends React.Component {
 					</Col>
 					<Col span={9}></Col>
 					<Col span={2}>
-						<SparkRun />
+						<SparkRun onClickButtonRunning={this.onClickButtonRunning} />
 					</Col>
 					<Col span={9}></Col>
 					<Col span={2}>

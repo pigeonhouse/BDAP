@@ -83,7 +83,6 @@ class FlowItemModel extends React.Component {
 									anchor: item.anchor,
 									attributes: item.attributes,
 									labelArray: [],
-									isCheckPoint: item.isCheckPoint,
 									keyConfig: {
 										color_type: '#1890FF',
 										state_icon_url: 'https://gw.alipayobjects.com/zos/rmsportal/uZVdwjJGqDooqKLKtvGA.svg',

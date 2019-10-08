@@ -1,96 +1,86 @@
 /**
- * 根据画布上模块，进行拓扑排序，生成一维数组并返回此数组
- * @param {*} propsAPI 
+ * 根据画布上模块，进行拓扑排序，生成可上传的数组
+ * @param {*} flowInfo 
  */
 
-export function generateStream(propsAPI) {
-	const inf = propsAPI.save();
-	
-	var Sourc = 0;
-	var tag = 'Input';
-	var stream = new Array();
-	var attribute = new Array();
-	var labelarray = new Array();
-	let group;
+export function generateStream(flowInfo) {
 
-	if (inf.hasOwnProperty('edges')) {
-		let Deg = new Array(inf.nodes.length).fill(0);
-		var sourceId = new Array(inf.nodes.length).fill(0);
-		for (let i in sourceId) {
-			sourceId[i] = new Array();
-		}
-		for (let indexE of inf.edges.keys()) {
-			Sourc = inf.edges[indexE].target;
-			let targetanchor = inf.edges[indexE].targetAnchor;
-			let source = inf.edges[indexE].source;
-			let sourceanchor = inf.edges[indexE].sourceAnchor;
-			for (let indexN of inf.nodes.keys()) {
-				if (Sourc === inf.nodes[indexN].id) {
-					Deg[indexN]++;
-					sourceId[indexN][targetanchor] = {
-						source: source,
-						sourceAnchor: sourceanchor
-					};
-				}
+	const { nodes, edges } = flowInfo;
+
+	// 无nodes则直接返回{}，无edges，直接返回flowInfo
+	if (nodes === undefined) return {};
+	if (edges === undefined) return JSON.parse(JSON.stringify(flowInfo));
+
+	var stream = { nodes: [], edges: [] };
+
+	// edges原封不动上传
+	stream.edges = flowInfo.edges;
+
+	// nodes改为拓扑图序列
+	let deg = new Array(nodes.length).fill(0);
+	var sourceId = new Array(nodes.length).fill(0);
+	sourceId.map((item, index)=>{
+		sourceId[index] = new Array();
+	})
+
+	// 生成入度数组
+	edges.map((edge) => {
+		const { target, targetAnchor, source, sourceAnchor } = edge;
+
+		nodes.map((node, index) => {
+			if (target === node.id) {
+				const { anchor } = node;
+				deg[index]++;
+
+				// 锚点位置需要减去入度
+				let uploadAnchor = sourceAnchor - anchor[0] + 1;
+				
+				// source与sourceAnchor合成字符串展示
+				sourceId[index][targetAnchor] = source + '_' + uploadAnchor;
 			}
-		}
-		for (var k = 0; k < inf.nodes.length;) {
-			for (let indexN of inf.nodes.keys()) {
-				if (Deg[indexN] === 0) {
-					k++;
-					Deg[indexN]--;
-					Sourc = inf.nodes[indexN].id;
-					tag = inf.nodes[indexN].label;
-					attribute = inf.nodes[indexN].attr;
-					group = inf.nodes[indexN].group;
-					labelarray = inf.nodes[indexN].labelArray;
+		})
+		
+	})
 
-					let labelarr = {};
-					if(group === 'ml'){
-						labelarr.train_x = new Array();
-						labelarr.train_y = new Array();
-						for (let i in labelarray[0]) {
-							if (labelarray[0][i][1] === true) {
-								labelarr.train_x.push(labelarray[0][i][0]);
-							}
-							if (labelarray[1][i][1] === true) {
-								labelarr.train_y.push(labelarray[1][i][0]);
-							}
-						}
-						labelarr.predict_x = JSON.parse(JSON.stringify(labelarr.train_x));
-						labelarr.predict_y = [attribute.predict_y];
-					}
-					else{
-						labelarr.public = new Array();
-						for (let i in labelarray) {
-							if (labelarray[i][1] === true) {
-								labelarr.public.push(labelarray[i][0]);
-							}
-						}
-					}
-					
-					labelarray = JSON.parse(JSON.stringify(labelarr));
-					stream.push({
-						'id': Sourc,
-						"label": tag,
-						"attribute": attribute,
-						"labelArray": labelarray,
-						"sourceId": sourceId[indexN]
+	// 构造拓扑图
+	let nodesNum = 0;
+	while (nodesNum < nodes.length) {
+		nodes.map((node, index) => {
+
+			// 当入度为0时
+			if (deg[index] === 0) {
+
+				// 将节点push到拓扑图中
+				nodesNum++;
+				deg[index]--;
+
+				const { id, labelName, groupName, anchor, attributes, size, x, y } = node;
+
+				if (groupName.label === "数据源") {
+					stream.nodes.push({
+						id, labelName, groupName, anchor, attributes, size, x, y,
+						filePath: node.filePath, sourceList: sourceId[index]
 					});
-					for (var i = 0; i < inf.edges.length; i++) {
-						if (Sourc === inf.edges[i].source) {
-							for (var m = 0; m < inf.nodes.length; m++) {
-								if (inf.nodes[m].id === inf.edges[i].target) {
-									Deg[m]--;
-								}
-							}
-						}
-					}
 				}
+				else {
+					stream.nodes.push({
+						id, labelName, groupName, anchor, attributes, size, x, y, sourceList: sourceId[index]
+					});
+				}
+
+				edges.map((edge) => {
+					if (id === edge.source) {
+						nodes.map((node, index) => {
+							if (node.id === edge.target) {
+								deg[index]--;
+							}
+						})
+					}
+				})
 			}
-		}
+		})
 	}
-	console.log('stream:')
+
 	console.log(stream);
 	return JSON.parse(JSON.stringify(stream));
 }
