@@ -34,7 +34,7 @@ public class ExecutionService {
 
         //是否是输入的文件模块
         String filePath = nodeInfo.getFilePath();
-        if (filePath != null) {
+        if (filePath!=null) {
             String id = nodeInfo.getId();
             return "val output = spark.read.format(\"csv\").option(\"inferSchema\", \"true\").option(\"header\", \"true\").load(\"" + filePath + "\")\n" +
                     "dfMap += (\"" + id + "\" -> output)\n\n";
@@ -134,15 +134,19 @@ public class ExecutionService {
         // 接下去在代码末尾将output以前端生成的id为key，dataframe本身为value存在Map中
 
         String mappingDfCode = "";
-        for (int i = 0; i < numberOfOutput; i++) {
+        for(int i = 0; i < numberOfOutput; i++){
             if (!"machinelearning".equals(nodeInfo.getGroupName().getElabel())) {
                 String id = nodeInfo.getId();
-                mappingDfCode += "\ndfMap += (\"" + id + "_" + i + "\" -> output_" + i + ")\n\n";
+                if(i == 0){
+                    mappingDfCode += "\ndfMap += (\"" + id +"_" + i + "\" -> output)\n\n";
+                } else{
+                    mappingDfCode += "\ndfMap += (\"" + id + "_" + i +"\" -> output_" + i + ")\n\n";
+                }
             }
         }
 
 
-        return inputCode + attrsCode + innerCode + mappingDfCode;
+        return inputCode + attrsCode + innerCode + mappingDfCode ;
     }
 
     /**
