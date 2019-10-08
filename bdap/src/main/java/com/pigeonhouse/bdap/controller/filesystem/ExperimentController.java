@@ -31,7 +31,7 @@ public class ExperimentController {
                 return new Response(ExperimentStatus.EXPERIMENT_SEARCH_ERROR, null);
             }
             else{
-                JSONObject JSONobject = null;//experimentService.experimentToJson(experiment);
+                JSONObject JSONobject = experimentService.experimentToJson(experiment);
                 return new Response(ExperimentStatus.EXPERIMENT_SEARCH_SUCCESS, JSONobject);
             }
         }
