@@ -35,14 +35,14 @@ class VisualizedPanel extends React.Component {
 
         this.getDataSetByOperate();
     }
-    
+
     // 删除分组方式
     handleDeleteSummarize = (tag) => {
         this.setState({ summarize: tag });
 
         this.getDataSetByOperate();
     }
-    
+
     // 增加过滤器方式
     handleAddFilter = (label, operator, value) => {
         let filter = this.state.filter;
@@ -126,7 +126,10 @@ class VisualizedPanel extends React.Component {
                 </Row>
                 <Row className={styles.visualized}>
                     <Col span={19} >
-                        <VisualChart currentChart={this.state.currentChart} ></VisualChart>
+                        <VisualChart
+                            currentChart={this.state.currentChart}
+                            dataSet={this.state.dataSet}
+                        />
                         <div className={styles.footer} style={{ textAlign: "center" }} >
                             <Radio.Group
                                 value={this.state.currentChart}

@@ -2,19 +2,27 @@ import React from 'react';
 import styles from './index.less';
 import VisualTable from './VisualTable';
 
+import { createBarChart } from './BarChart';
+import { createLineChart } from './LineChart';
+import { createPieChart } from './PieChart';
+import { createFunnelChart } from './FunnelChart';
+import { createScatterChart } from './ScatterChart';
+
 var echarts = require('echarts');
 
 class VisualChart extends React.Component {
 
     componentDidUpdate = () => {
+        var myChart = echarts.init(document.getElementById('main'));
         switch (this.props.currentChart) {
             case "table":
-                var myChart = echarts.init(document.getElementById('main'));
                 myChart.clear();
                 return;
-            case "line": case "bar": case "pie":
-            case "scatter": case "funnel":
-                this.changeCurrentChart();
+            case "line": return createLineChart(myChart, this.props.dataSet);
+            case "bar": return createBarChart(myChart, this.props.dataSet);
+            case "pie": return createPieChart(myChart, this.props.dataSet);
+            case "scatter": return createScatterChart(myChart, this.props.dataSet);
+            case "funnel": return createFunnelChart(myChart, this.props.dataSet);
         }
 
     }
@@ -22,36 +30,9 @@ class VisualChart extends React.Component {
     selectVisibleChart = () => {
         if (this.props.currentChart === "table") {
             return (
-                <div><VisualTable /></div>
+                <VisualTable />
             );
         }
-    }
-
-    changeCurrentChart = () => {
-        var myChart = echarts.init(document.getElementById('main'));
-
-        // 指定图表的配置项和数据
-        var option = {
-            title: {
-                text: 'ECharts 入门示例'
-            },
-            tooltip: {},
-            legend: {
-                data: ['销量']
-            },
-            xAxis: {
-                data: ["衬衫", "羊毛衫", "雪纺衫", "裤子", "高跟鞋", "袜子"]
-            },
-            yAxis: {},
-            series: [{
-                name: '销量',
-                type: 'bar',
-                data: [5, 20, 36, 10, 10, 20]
-            }]
-        };
-
-        // 使用刚指定的配置项和数据显示图表。
-        myChart.setOption(option);
     }
 
     render() {
