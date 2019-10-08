@@ -2,8 +2,8 @@ import React, { Component } from 'react'
 import { Button, Icon } from 'antd'
 import { withPropsAPI } from '@src';
 
-import { generateStream } from '../../PublicComponents/HandleStream/generateStream'
-import { isLegal } from '../../PublicComponents/HandleStream/isLegal'
+import { generateStream } from '../../PublicComponents/HandleStream/GenerateStream'
+import { isLegal } from '../../PublicComponents/HandleStream/IsLegal'
 
 /**
  * Local版本的Run组件，点击Button后执行画布上组件对应的流程

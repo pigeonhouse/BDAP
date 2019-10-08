@@ -12,6 +12,14 @@ const SubMenu = Menu.SubMenu;
 
 class FlowDataModel extends React.Component {
 
+	createLabelArray = (fileColumnsInfo) => {
+		var labelArray = new Array();
+		fileColumnsInfo.map((item)=>{
+			labelArray.push([item.colName, false]);
+		})
+		return labelArray;
+	}
+
 	createDataPanel = (item) => {
 		var result = [];
 		var menu;
@@ -33,7 +41,7 @@ class FlowDataModel extends React.Component {
 								elabel: 'datasource',
 							},
 							anchor: [0, 1],
-							labelArray: menu.fileColumnsInfo,				
+							labelArray: this.createLabelArray(menu.fileColumnsInfo),				
 							keyConfig: {
 								color_type: '#1890FF',
 								state_icon_url: 'https://gw.alipayobjects.com/zos/rmsportal/uZVdwjJGqDooqKLKtvGA.svg',

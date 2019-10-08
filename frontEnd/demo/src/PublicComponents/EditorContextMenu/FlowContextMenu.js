@@ -11,7 +11,7 @@ import iconfont from '../../theme/iconfont.less';
 import { withPropsAPI } from '@src';
 import GGEditor, { Flow, RegisterCommand } from '@src';
 import Download from '../DataOperate/FileOperate/Download';
-import DataPreview from './dataPreview';
+import DataPreview from './DataPreview';
 import ModelEvaluation from './ModelEvaluation';
 
 class FlowContextMenu extends React.Component {

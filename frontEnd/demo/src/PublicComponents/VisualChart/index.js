@@ -14,17 +14,15 @@ class VisualChart extends React.Component {
 
     componentDidUpdate = () => {
         var myChart = echarts.init(document.getElementById('main'));
+        myChart.clear();
         switch (this.props.currentChart) {
-            case "table":
-                myChart.clear();
-                return;
+            case "table": return;
             case "line": return createLineChart(myChart, this.props.dataSet);
             case "bar": return createBarChart(myChart, this.props.dataSet);
             case "pie": return createPieChart(myChart, this.props.dataSet);
             case "scatter": return createScatterChart(myChart, this.props.dataSet);
             case "funnel": return createFunnelChart(myChart, this.props.dataSet);
         }
-
     }
 
     selectVisibleChart = () => {

@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
-import GGEditor from '@src';
-import { Flow, withPropsAPI } from '@src';
+import GGEditor, { Flow, withPropsAPI } from '@src';
 import { Row, Col } from 'antd';
 import { FlowToolbar } from '../../PublicComponents/EditorToolbar';
 import { FlowDetailPanel } from '../../PublicComponents/EditorDetailPanel';

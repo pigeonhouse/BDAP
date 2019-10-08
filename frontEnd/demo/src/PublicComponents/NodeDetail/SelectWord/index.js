@@ -1,7 +1,7 @@
 import React, { Component, Fragment } from 'react';
 import { withPropsAPI } from '@src';
 
-import { changeSourceLabelArray } from './changeSourceLabelArray.js';
+import { changeSourceLabelArray } from './ChangeSourceLabelArray.js';
 import TransferSelect from './TransferSelect.js';
 // import Feature from '../../DataOperate/FeatureNodeDetail/Feature';
 
