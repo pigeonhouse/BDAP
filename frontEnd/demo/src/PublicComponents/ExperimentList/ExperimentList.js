@@ -1,9 +1,6 @@
 import React from 'react';
 import { Table, Button, Row, Col, Modal, Card } from 'antd';
-import LocalMode from "../../pages/MainMode"
-import TableTwo from "./TableTwo"
-import { Link, Redirect } from 'react-router-dom';
-import ExperimentPanel from "../../pages/ExperimentPanel"
+
 class ExperimentList extends React.Component {
 
 	state = {
@@ -54,9 +51,7 @@ class ExperimentList extends React.Component {
 		})
 	}
 	handleNewButton = () => {
-		// alert("你可以去创建自己的文件了，需要跳转页面");
-		// return <Redirect to="/route" />;
-		this.props.handleP()
+		this.props.handleClickEnter()
 	}
 	handleDeleteButton = () => {
 		alert("你确定删除吗");

@@ -1,5 +1,5 @@
 import React from 'react'
-import { Modal,  Icon, Collapse, Form } from 'antd';
+import { Form } from 'antd';
 import {
 	Command,
 	NodeMenu,
@@ -13,8 +13,6 @@ import GGEditor, { Flow, RegisterCommand } from '@src';
 import Download from '../DataOperate/FileOperate/Download';
 import DataPreview from './dataPreview';
 import ModelEvaluation from './ModelEvaluation';
-
-const Panel = Collapse.Panel;
 
 class FlowContextMenu extends React.Component {
 	state = {

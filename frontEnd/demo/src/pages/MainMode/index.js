@@ -1,15 +1,12 @@
 import React from 'react';
-import GGEditor from '@src';
 import { Redirect } from 'react-router-dom';
 import { Row, Col, Button, message, notification, Icon, Tabs } from 'antd';
 
-import { FlowContextMenu } from '../../PublicComponents/EditorContextMenu';
 import ExperimentPanel from '../ExperimentPanel';
 import Model from '../../PublicComponents/ModelStore';
 import VisualizedPanel from '../VisualizedPanel';
 
 import SparkRun from "../../ClusterModeComponents/SparkRunPanel/SparkRun";
-import ExperimentList from "../../PublicComponents/ExperimentList/ExperimentList"
 import styles from './index.less';
 
 /**
@@ -39,11 +36,11 @@ class LocalMode extends React.Component {
 	}
 	state = {
 		currentTab: '1',
+		clickTab: '1',
 		username: '',
 		password: '',
 		remind: 'false',
 		connectCtrl: false,
-		test: "0"
 	}
 
 	noRemind = (key) => {
@@ -113,7 +110,10 @@ class LocalMode extends React.Component {
 	}
 
 	tabChange = (value) => {
-		this.setState({ currentTab: value })
+		this.setState({
+			currentTab: value,
+			clickTab: value
+		})
 	}
 
 	download = () => {
@@ -144,33 +144,24 @@ class LocalMode extends React.Component {
 			})
 	}
 
-	handleClickNum = () => {
+	handleClickEnter = () => {
 		this.setState({
-			test: "1"
+			clickTab: "0"
 		})
 	}
 
-	handleTabClick = () => {
+	handleTabClick = (value) => {
 		this.setState({
-			test: "0"
+			clickTab: value
 		})
-	}
-
-	handlePageChange = () => {
-		if (this.state.test === "0") {
-			return <ExperimentList handleP={this.handleClickNum} />
-		}
-		else {
-			return <ExperimentPanel />
-		}
 	}
 
 	render() {
-		if(this.props.location.state === undefined){
+		if (this.props.location.state === undefined) {
 			return <Redirect to='/' />
 		}
 		return (
-			<GGEditor className={styles.editor}>
+			<div className={styles.editor}>
 				<Row
 					style={{ lineHeight: '40px', height: '40px', backgroundColor: '#343941', color: "white" }}
 				>
@@ -219,12 +210,14 @@ class LocalMode extends React.Component {
 					<TabPane
 						className={styles.leftMenu}
 						style={{ height: 'calc(100vh - 105px)' }}
-						tab={<Icon type="credit-card" className={styles.iconStyle} onClick={this.handleTabClick} />}
+						tab={<Icon type="credit-card" className={styles.iconStyle} onClick={this.handleTabClick.bind(this, '1')} />}
 						key="1"
 					>
-						{this.handlePageChange()}
-						{/* <ExperimentList/> */}
-						{/* <ExperimentPanel /> */}
+						<ExperimentPanel
+							currentTab={this.state.currentTab}
+							clickTab={this.state.clickTab}
+							handleClickEnter={this.handleClickEnter}
+						/>
 					</TabPane>
 
 					<TabPane
@@ -239,7 +232,6 @@ class LocalMode extends React.Component {
 						tab={<Icon type="api" className={styles.iconStyle} />}
 						key="3"
 					>
-						<ExperimentPanel />
 						{/* <Button onClick={this.download} >Download</Button> */}
 					</TabPane>
 				</Tabs>
@@ -258,10 +250,7 @@ class LocalMode extends React.Component {
 						<Model></Model>
 					</Col>
 				</Row>
-
-				<FlowContextMenu />
-
-			</GGEditor >
+			</div >
 		);
 	}
 }

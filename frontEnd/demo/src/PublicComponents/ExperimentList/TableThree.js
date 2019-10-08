@@ -38,7 +38,7 @@ const data = [
         age: 62,
         address: 'China No. 2 Lake Park',
     },
-   
+
 ];
 
 class TableTwo extends React.Component {
