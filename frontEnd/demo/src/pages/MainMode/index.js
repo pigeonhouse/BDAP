@@ -117,33 +117,33 @@ class LocalMode extends React.Component {
 		})
 	}
 
-	download = () => {
-		let formData = new FormData();
-		formData.append('oppositePath', '/')
-		formData.append('fileName', 'adult.csv')
-		const init = {
-			method: 'POST',
-			body: formData,
-			mode: 'cors',
-			headers: {
-				"Content-Type": "application/x-www-form-urlencoded;charset=utf-8"
-			},
-		}
-		fetch(
-			'https://result.eolinker.com/MSwz6fu34b763a21e1f7efa84a86a16f767a756952d0f95?uri=localhost:8888/hdfs/download', init
-		)
-			.then(response => response.blob()).then(data => {
-				//data为二进制文件
-				var reader = new FileReader();
-				reader.readAsText(data, 'utf-8');
-				//以文本方式读取文件
-				reader.onload = function (e) {
-					//转换
-					var result = reader.result
-					console.info(reader.result);
-				}
-			})
-	}
+	// download = () => {
+	// 	let formData = new FormData();
+	// 	formData.append('oppositePath', '/')
+	// 	formData.append('fileName', 'adult.csv')
+	// 	const init = {
+	// 		method: 'POST',
+	// 		body: formData,
+	// 		mode: 'cors',
+	// 		headers: {
+	// 			"Content-Type": "application/x-www-form-urlencoded;charset=utf-8"
+	// 		},
+	// 	}
+	// 	fetch(
+	// 		'https://result.eolinker.com/MSwz6fu34b763a21e1f7efa84a86a16f767a756952d0f95?uri=localhost:8888/hdfs/download', init
+	// 	)
+	// 		.then(response => response.blob()).then(data => {
+	// 			//data为二进制文件
+	// 			var reader = new FileReader();
+	// 			reader.readAsText(data, 'utf-8');
+	// 			//以文本方式读取文件
+	// 			reader.onload = function (e) {
+	// 				//转换
+	// 				var result = reader.result
+	// 				console.info(reader.result);
+	// 			}
+	// 		})
+	// }
 
 	handleClickEnter = () => {
 		this.setState({

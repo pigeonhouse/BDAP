@@ -37,6 +37,7 @@ class SparkRunning extends Component {
 
 		const res = await fetchTool("/flow/run", init)
 		if (res.code === 200) {
+
 			const result = res.data;
 
 			//按照工作流进行轮询
@@ -61,7 +62,7 @@ class SparkRunning extends Component {
 	//真正执行所用的函数，其中包括setTimeout，每1秒执行一个标签框
 	run = (result) => {
 		if (current < sum) {
-			setTimeout(() => {
+			setTimeout(async () => {
 				const init = {
 					method: 'POST',
 					mode: 'cors',
