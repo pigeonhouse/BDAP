@@ -63,12 +63,11 @@ public class FlowChartController {
     }
 
     @PostMapping("/flow/node/status")
-    public Response checkRunningStatus(@RequestBody String resultUrl,HttpServletRequest request) {
+    public Response checkRunningStatus(@RequestBody JSONObject resultUrlJson,HttpServletRequest request) {
         ObjectMapper objectMapper = new ObjectMapper();
         RestTemplate restTemplate = new RestTemplate();
-        System.out.println("------------------------------------");
-        System.out.println(resultUrl);
-        System.out.println("------------------------------------");
+        String resultUrl = resultUrlJson.getString("resultUrl");
+
         String state = "";
         try {
             Map resultMap = objectMapper.readValue(

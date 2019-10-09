@@ -1,9 +1,19 @@
-import { Component } from 'react';
-import { withPropsAPI } from '@src';
+import {
+	Component
+} from 'react';
+import {
+	withPropsAPI
+} from '@src';
 
-import { generateStream } from '../../PublicComponents/HandleStream/GenerateStream';
-import { fetchTool } from '../../FetchTool';
-import { isLegal } from '../../PublicComponents/HandleStream/IsLegal'
+import {
+	generateStream
+} from '../../PublicComponents/HandleStream/GenerateStream';
+import {
+	fetchTool
+} from '../../FetchTool';
+import {
+	isLegal
+} from '../../PublicComponents/HandleStream/IsLegal'
 
 var current;
 var sum;
@@ -13,7 +23,9 @@ class SparkRunning extends Component {
 
 		if (this.props.running !== true) return;
 
-		const { propsAPI } = this.props;
+		const {
+			propsAPI
+		} = this.props;
 
 		//制作工作流保存在stream中
 		const stream = generateStream(propsAPI.save());
@@ -49,13 +61,23 @@ class SparkRunning extends Component {
 
 	//改变对应此id标签框的运行状态标志，可改为运行完成或正在运行，取决于color
 	changeStatusColor = (id, color) => {
-		const { propsAPI } = this.props;
-		const { find, update, executeCommand } = propsAPI;
+		const {
+			propsAPI
+		} = this.props;
+		const {
+			find,
+			update,
+			executeCommand
+		} = propsAPI;
 		const item = find(id);
 		var value = JSON.parse(JSON.stringify(item.model.keyConfig));
 		value.state_icon_url = color;
 		executeCommand(() => {
-			update(item, { keyConfig: { ...value } });
+			update(item, {
+				keyConfig: {
+					...value
+				}
+			});
 		});
 	}
 
@@ -63,10 +85,11 @@ class SparkRunning extends Component {
 	run = (result) => {
 		if (current < sum) {
 			setTimeout(async () => {
+
 				const init = {
 					method: 'POST',
 					mode: 'cors',
-					body: result[current].resultUrl,
+					body: JSON.stringify({"resultUrl":result[current].resultUrl}) ,
 					headers: {
 						"Content-Type": "application/json;charset=utf-8"
 					},
@@ -74,6 +97,7 @@ class SparkRunning extends Component {
 				}
 
 				const res = await fetchTool("/flow/node/status", init)
+
 				if (res.code === 200) {
 					if (res.data.state === "available") {
 						this.changeStatusColor(result[current].id, 'https://gw.alipayobjects.com/zos/rmsportal/MXXetJAxlqrbisIuZxDO.svg');
@@ -86,10 +110,11 @@ class SparkRunning extends Component {
 	}
 
 	render() {
-		return (
-			<div>
-				{this.onClickButton()}
-			</div>
+		return ( <
+			div > {
+				this.onClickButton()
+			} <
+			/div>
 		);
 	}
 }
