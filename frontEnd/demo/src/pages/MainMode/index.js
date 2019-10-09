@@ -242,13 +242,6 @@ class LocalMode extends React.Component {
 					>
 						<VisualizedPanel></VisualizedPanel>
 					</TabPane>
-					<TabPane
-						className={styles.leftMenu}
-						tab={<Icon type="api" className={styles.iconStyle} />}
-						key="3"
-					>
-						{/* <Button onClick={this.download} >Download</Button> */}
-					</TabPane>
 				</Tabs>
 
 				<Row type="flex" style={{ bottom: 0, height: '65px', lineHeight: '65px', backgroundColor: '#343941' }}

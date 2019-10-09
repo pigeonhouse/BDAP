@@ -8,7 +8,7 @@ import InputValue from './InputValue';
 
 import styles from './index.less';
 
-class Filter extends React.Component {
+class Settings extends React.Component {
 
     state = {
         label: undefined,
@@ -104,4 +104,4 @@ class Filter extends React.Component {
     }
 }
 
-export default Filter;
+export default Settings;
