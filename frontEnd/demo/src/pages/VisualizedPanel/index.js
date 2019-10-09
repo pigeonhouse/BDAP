@@ -19,6 +19,12 @@ class VisualizedPanel extends React.Component {
         dataSet: [],
         labelArray: ['jack', 'test'],
         groupLabel: undefined,
+        chartStyle: {},
+    }
+
+    handleChangeChartStyle = (axis, label) => {
+        console.log(axis)
+        console.log(label)
     }
 
     //group by的label修改
@@ -128,9 +134,8 @@ class VisualizedPanel extends React.Component {
                 return (
                     <Settings
                         currentChart={this.state.currentChart}
-                        handleAddFilter={this.handleAddFilter}
-                        handleDeleteFilter={this.handleDeleteFilter}
-                        filter={this.state.filter}
+                        handleChangeChartStyle={this.handleChangeChartStyle}
+                        chartStyle={this.state.chartStyle}
                         labelArray={this.state.labelArray}
                     />
                 )
