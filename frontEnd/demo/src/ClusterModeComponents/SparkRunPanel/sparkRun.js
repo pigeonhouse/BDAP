@@ -3,6 +3,7 @@ import { withPropsAPI } from '@src';
 
 import { generateStream } from '../../PublicComponents/HandleStream/GenerateStream'
 import { isLegal } from '../../PublicComponents/HandleStream/IsLegal'
+import Cookies from 'js-cookie'
 
 var current;
 var sum;
@@ -33,11 +34,12 @@ class SparkRunning extends Component {
 			},
 			credentials: 'include'
 		}
-		fetch('https://result.eolinker.com/MSwz6fu34b763a21e1f7efa84a86a16f767a756952d0f95?uri=localhost:8888/flow/run', init)
+		fetch('http://localhost:8888/flow/run', init)
 			.then(res => {
 				if (res.status === 200) {
 					res.json().then(res => {
 						if (res.code === 200) {
+							Cookies.set("loginToken",res.token);
 							const result = res.data;
 
 							//按照工作流进行轮询
@@ -75,7 +77,7 @@ class SparkRunning extends Component {
 					},
 					credentials: 'include'
 				}
-				fetch("https://result.eolinker.com/MSwz6fu34b763a21e1f7efa84a86a16f767a756952d0f95?uri=localhost:8888/flow/node/status", init)
+				fetch("http://localhost:8888/flow/node/status", init)
 					.then(res => {
 						if (res.status === 200) {
 							res.json().then(res => {

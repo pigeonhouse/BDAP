@@ -2,6 +2,7 @@ import React from 'react';
 import { Row, Col, Card, Form, Input, Button, message, Icon, Checkbox, notification } from 'antd';
 import { Redirect } from 'react-router-dom';
 import style from './index.less';
+import Cookies from 'js-cookie'
 
 /**
  * 登陆界面
@@ -69,14 +70,14 @@ class HomePage extends React.Component {
 						"Content-Type": "application/json;charset=utf-8"
 					},
 				}
-				fetch('https://result.eolinker.com/MSwz6fu34b763a21e1f7efa84a86a16f767a756952d0f95?uri=localhost:8888/login', init)
+				fetch('http://localhost:8888/login', init)
 					.then(res => {
 						if (res.status === 200) {
 							res.json().then(res => {
-
 								//验证正确，则进入界面，显示已登陆
 								if (res.code === 200) {
-									console.log(res);
+									Cookies.set("loginToken",res.token);
+									console.log(Cookies.get("loginToken"));
 									if (values.remember) {
 										let accountInfo = '';
 										if (this.state.remind === '')
