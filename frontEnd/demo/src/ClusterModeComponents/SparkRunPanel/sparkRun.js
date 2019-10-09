@@ -1,9 +1,9 @@
 import { Component } from 'react';
 import { withPropsAPI } from '@src';
 
-import { generateStream } from '../../PublicComponents/HandleStream/GenerateStream'
+import { generateStream } from '../../PublicComponents/HandleStream/GenerateStream';
+import { fetchTool } from '../../FetchTool';
 import { isLegal } from '../../PublicComponents/HandleStream/IsLegal'
-import Cookies from 'js-cookie'
 
 var current;
 var sum;
@@ -24,7 +24,7 @@ class SparkRunning extends Component {
 		this.uploadFlowChart(stream);
 	}
 
-	uploadFlowChart = (stream) => {
+	uploadFlowChart = async (stream) => {
 		const init = {
 			method: 'POST',
 			mode: 'cors',
@@ -34,22 +34,16 @@ class SparkRunning extends Component {
 			},
 			credentials: 'include'
 		}
-		fetch('http://localhost:8888/flow/run', init)
-			.then(res => {
-				if (res.status === 200) {
-					res.json().then(res => {
-						if (res.code === 200) {
-							Cookies.set("loginToken",res.token);
-							const result = res.data;
 
-							//按照工作流进行轮询
-							this.run(result);
+		const res = await fetchTool("/flow/run", init)
+		if (res.code === 200) {
+			const result = res.data;
 
-							this.props.stopRunning();
-						}
-					})
-				}
-			})
+			//按照工作流进行轮询
+			this.run(result);
+
+			this.props.stopRunning();
+		}
 	}
 
 	//改变对应此id标签框的运行状态标志，可改为运行完成或正在运行，取决于color
@@ -77,19 +71,14 @@ class SparkRunning extends Component {
 					},
 					credentials: 'include'
 				}
-				fetch("http://localhost:8888/flow/node/status", init)
-					.then(res => {
-						if (res.status === 200) {
-							res.json().then(res => {
-								if (res.code === 200) {
-									if (res.data.state === "available") {
-										this.changeStatusColor(result[current].id, 'https://gw.alipayobjects.com/zos/rmsportal/MXXetJAxlqrbisIuZxDO.svg');
-										current++;
-									}
-								}
-							})
-						}
-					})
+
+				const res = await fetchTool("/flow/node/status", init)
+				if (res.code === 200) {
+					if (res.data.state === "available") {
+						this.changeStatusColor(result[current].id, 'https://gw.alipayobjects.com/zos/rmsportal/MXXetJAxlqrbisIuZxDO.svg');
+						current++;
+					}
+				}
 				this.run(result);
 			}, 1000)
 		}

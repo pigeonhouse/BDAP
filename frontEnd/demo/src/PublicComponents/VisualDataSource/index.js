@@ -1,8 +1,9 @@
 import React from 'react';
 import { Button } from 'antd';
+import { fetchTool } from '../../FetchTool';
 
 class DataSource extends React.Component {
-    handleChangeDataSource = () => {
+    handleChangeDataSource = async () => {
         const init = {
             method: 'POST',
             mode: 'cors',
@@ -12,18 +13,13 @@ class DataSource extends React.Component {
             },
             credentials: 'include'
         }
-        fetch('https://result.eolinker.com/MSwz6fu34b763a21e1f7efa84a86a16f767a756952d0f95?uri=localhost:8888/query/readyForData', init)
-            .then(res => {
-                if (res.status === 200) {
-                    console.log(res);
-                    res.text().then(res => {
-                        console.log(res);
-                        if (res.code === 200) {
-                            
-                        }
-                    })
-                }
-            })
+
+        const res = await fetchTool("/query/readyForData", init);
+
+        console.log(res);
+        if (res.code === 200) {
+            
+        }
     }
 
     render() {

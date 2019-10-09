@@ -1,8 +1,8 @@
 import React from 'react';
 import { Row, Col, Card, Form, Input, Button, message, Icon, Checkbox, notification } from 'antd';
 import { Redirect } from 'react-router-dom';
+import { fetchTool } from '../../FetchTool';
 import style from './index.less';
-import Cookies from 'js-cookie'
 
 /**
  * 登陆界面
@@ -55,9 +55,10 @@ class HomePage extends React.Component {
 	}
 
 	handleSubmit = (e) => {
+
 		e.preventDefault();
 		let userInfo = this.props.form.getFieldsValue();
-		this.props.form.validateFields((err, values) => {
+		this.props.form.validateFields(async (err, values) => {
 			if (!err) {
 
 				//将用户名及密码放入body中
@@ -70,34 +71,22 @@ class HomePage extends React.Component {
 						"Content-Type": "application/json;charset=utf-8"
 					},
 				}
-				fetch('http://localhost:8888/login', init)
-					.then(res => {
-						if (res.status === 200) {
-							res.json().then(res => {
-								//验证正确，则进入界面，显示已登陆
-								if (res.code === 200) {
-									Cookies.set("loginToken",res.token);
-									console.log(Cookies.get("loginToken"));
-									if (values.remember) {
-										let accountInfo = '';
-										if (this.state.remind === '')
-											accountInfo = values.username + '&' + values.password + '&' + 'true';
-										else accountInfo = values.username + '&' + values.password + '&' + this.state.remind;
-										let Days = 3;
-										let exp = new Date();
-										exp.setTime(exp.getTime() + Days * 24 * 60 * 60 * 1000);
-										document.cookie = 'accountInfo' + "=" + escape(accountInfo) + ";expires=" + exp.toGMTString()
-									}
-									this.setState({ redirect: true });
-									message.success(`${userInfo.username}, welcome`);
-								}
-								//验证失败
-								else {
-									alert('Password error');
-								}
-							})
-						}
-					})
+				const res = await fetchTool('/login', init)
+				//验证正确，则进入界面，显示已登陆
+				if (res !== undefined && res.code === 200) {
+					if (values.remember) {
+						let accountInfo = '';
+						if (this.state.remind === '')
+							accountInfo = values.username + '&' + values.password + '&' + 'true';
+						else accountInfo = values.username + '&' + values.password + '&' + this.state.remind;
+						let Days = 3;
+						let exp = new Date();
+						exp.setTime(exp.getTime() + Days * 24 * 60 * 60 * 1000);
+						document.cookie = 'accountInfo' + "=" + escape(accountInfo) + ";expires=" + exp.toGMTString()
+					}
+					this.setState({ redirect: true });
+					message.success(`${userInfo.username}, welcome`);
+				}
 			}
 		})
 	}
