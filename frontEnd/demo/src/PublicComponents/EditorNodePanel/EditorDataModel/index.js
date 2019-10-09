@@ -40,6 +40,7 @@ class FlowDataModel extends React.Component {
 								label: "数据源",
 								elabel: 'datasource',
 							},
+							filePath:menu.filePath,
 							anchor: [0, 1],
 							labelArray: this.createLabelArray(menu.fileColumnsInfo),				
 							keyConfig: {
