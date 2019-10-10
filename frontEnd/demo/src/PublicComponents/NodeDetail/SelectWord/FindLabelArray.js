@@ -12,9 +12,7 @@ export function findLabelArray(attribute, sourceColumnsInfo) {
     
     value.map((label) => {
         for(let column in sourceColumnsInfo){
-            const { colName } = sourceColumnsInfo[column];
-
-            if(colName === label){
+            if(column.colName === label){
                 labelArray.push(label);
                 return;
             }

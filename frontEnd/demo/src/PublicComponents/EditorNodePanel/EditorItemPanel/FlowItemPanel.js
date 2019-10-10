@@ -20,7 +20,6 @@ Item 数据格式：
         title：子菜单项名字
         type：子菜单Icon类型
         name：子菜单项名字
-
         内部可嵌套subMenu或menu
     }]
     menu：子项，不可展开，最小选中单位，类型为对象数组
@@ -69,10 +68,10 @@ class FlowItemModel extends React.Component {
 	createItemPanel = (itemList, group) => {
 		var result = new Array();
 		if (itemList !== undefined) {
-			itemList.map((item, index) => {
+			itemList.map((item) => {
 				if (item.groupName.elabel === group) {
 					result.push(
-						<Menu.Item key={index}><ItemPanel>
+						<Menu.Item key={item}><ItemPanel>
 							<Item
 								type="node"
 								size="200*40"
@@ -81,6 +80,7 @@ class FlowItemModel extends React.Component {
 									labelName: item.labelName,
 									groupName: item.groupName,
 									anchor: item.anchor,
+									columnsInfo: item.columnsInfo,
 									attributes: item.attributes,
 									keyConfig: {
 										color_type: '#1890FF',

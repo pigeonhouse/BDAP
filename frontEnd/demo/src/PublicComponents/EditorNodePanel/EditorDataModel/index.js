@@ -109,6 +109,14 @@ class FlowDataModel extends React.Component {
 		}
 	}
 
+	createLabelArray = (fileColumnsInfo) => {
+		var labelArray = new Array();
+		fileColumnsInfo.map((item)=>{
+			labelArray.push([item.colName, false]);
+		})
+		return labelArray;
+	}
+
 	createDataPanel = (item) => {
 		var result = [];
 		var menu;
