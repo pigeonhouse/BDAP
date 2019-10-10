@@ -28,11 +28,10 @@ class TransferSelect extends React.Component {
         const sourceColumnsInfo = findSourceColumnsInfo(item, attribute.style.sourceAnchor, propsAPI);
         const labelArray = findLabelArray(attribute, sourceColumnsInfo);
 
-        console.log(sourceColumnsInfo)
         //将labelArray转变为transfer所需的形式，分为mockData(存储标题和key值)，targetKeys(最后选中的key值)
         //将选中的labelArray放入tooltipsArray中将选中的列名展示。
         for (let column in sourceColumnsInfo) {
-            const { colName } = column;
+            const { colName } = sourceColumnsInfo[column];
             let selected = false;
 
             //若labelArray中存在colName，那么将加入targetKeys中设为已选择
@@ -62,9 +61,6 @@ class TransferSelect extends React.Component {
         let tooltipsArray = [];
         const { sourceColumnsInfo, mockData, targetKeys } = this.state;
 
-        // 这里的组合待定，需要测试如何处理本模块之前的columnsInfo
-        let columnsInfo = [];
-
         // 生成columnsInfo
         mockData.map((mock) => {
 
@@ -75,14 +71,9 @@ class TransferSelect extends React.Component {
             tooltipsArray.push(mock.title);
             labelArray.push(mock.title);
 
-            sourceColumnsInfo.map((column) => {
-                if (mock.title !== column.colName) return;
-
-                columnsInfo.push(column);
-            })
         });
 
-        this.props.changeLabelArray(labelArray, this.props.index, columnsInfo);
+        this.props.changeLabelArray(labelArray, this.props.index, sourceColumnsInfo);
         this.setState({
             visible: false,
             tooltipsArray

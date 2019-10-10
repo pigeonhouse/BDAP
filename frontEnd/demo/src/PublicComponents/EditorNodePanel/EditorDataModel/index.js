@@ -137,6 +137,7 @@ class FlowDataModel extends React.Component {
 								label: "数据源",
 								elabel: 'datasource',
 							},
+							attributes: [],
 							filePath: menu.filePath,
 							anchor: [0, 1],
 							columnsInfo: menu.fileColumnsInfo,

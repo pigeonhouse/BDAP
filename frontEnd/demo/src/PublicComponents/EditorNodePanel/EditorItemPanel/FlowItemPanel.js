@@ -68,10 +68,10 @@ class FlowItemModel extends React.Component {
 	createItemPanel = (itemList, group) => {
 		var result = new Array();
 		if (itemList !== undefined) {
-			itemList.map((item) => {
+			itemList.map((item, index) => {
 				if (item.groupName.elabel === group) {
 					result.push(
-						<Menu.Item key={item}><ItemPanel>
+						<Menu.Item key={index}><ItemPanel>
 							<Item
 								type="node"
 								size="200*40"
