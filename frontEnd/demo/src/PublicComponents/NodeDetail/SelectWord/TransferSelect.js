@@ -1,6 +1,8 @@
 import React, { Fragment } from 'react';
 import { withPropsAPI } from '@src';
 import { Button, Tooltip, Modal, Transfer, Divider } from 'antd';
+import { findSourceColumnsInfo } from './FindSourceColumnsInfo';
+import { findLabelArray } from './FindLabelArray';
 import styles from './TransferSelect.less'
 
 //只进行transfer的选择，拿到labelArray，选择后执行changLabelArray函数进行修改
@@ -13,51 +15,65 @@ class TransferSelect extends React.Component {
         preTargetKeys: [],
         tooltipsArray: [],
         tooltipVisible: false,
+        sourceColumnsInfo: [],
     }
 
     componentWillMount() {
+        const { item, attribute, propsAPI } = this.props;
         let mockData = [];
         let targetKeys = [];
         let tooltipsArray = [];
-        const { labelArray } = this.props;
+
+        // 拿到sourceColmnsInfo，再去查看attribute.value是否选中了早已更改的label，若有则删除
+        const sourceColumnsInfo = findSourceColumnsInfo(item, attribute.style.sourceAnchor, propsAPI);
+        const labelArray = findLabelArray(attribute, sourceColumnsInfo);
 
         //将labelArray转变为transfer所需的形式，分为mockData(存储标题和key值)，targetKeys(最后选中的key值)
         //将选中的labelArray放入tooltipsArray中将选中的列名展示。
-        for (let i in labelArray) {
-            mockData.push({
-                key: i.toString(),
-                title: labelArray[i][0],
-                description: labelArray[i][0],
-                chosen: labelArray[i][1]
-            });
-            if (labelArray[i][1] === true) {
-                targetKeys.push(i.toString());
-                tooltipsArray.push(labelArray[i][0]);
+        for (let column in sourceColumnsInfo) {
+            const { colName } = sourceColumnsInfo[column];
+            let selected = false;
+
+            //若labelArray中存在colName，那么将加入targetKeys中设为已选择
+            if (labelArray.includes(colName)) {
+                selected = true;
+                targetKeys.push(colName);
+                tooltipsArray.push(colName);
             }
+            mockData.push({
+                key: colName,
+                title: colName,
+                description: colName,
+                chosen: selected
+            });
         }
 
         this.setState({
             mockData,
             targetKeys,
-            tooltipsArray
+            tooltipsArray,
+            sourceColumnsInfo,
         });
     }
 
     handleOk = () => {
         let labelArray = [];
         let tooltipsArray = [];
-        const mockData = this.state.mockData;
-        const targetKeys = this.state.targetKeys;
+        const { sourceColumnsInfo, mockData, targetKeys } = this.state;
 
-        for (let i in mockData) {
-            if (targetKeys.indexOf(mockData[i].key) !== -1) {
-                labelArray.push([mockData[i].title, true]);
-                tooltipsArray.push(mockData[i].title)
-            }
-            else labelArray.push([mockData[i].title, false]);
-        }
+        // 生成columnsInfo
+        mockData.map((mock) => {
 
-        this.props.changeLabelArray(labelArray, this.props.selectLevel);
+            //不存在则返回
+            if (!targetKeys.includes(mock.key)) return;
+
+            //存在则加入labelArray及tooltipsArray，并加入columnsInfo
+            tooltipsArray.push(mock.title);
+            labelArray.push(mock.title);
+
+        });
+
+        this.props.changeLabelArray(labelArray, this.props.index, sourceColumnsInfo);
         this.setState({
             visible: false,
             tooltipsArray
@@ -101,8 +117,10 @@ class TransferSelect extends React.Component {
     }
 
     render() {
+        const { attribute } = this.props;
         return (
             <Fragment>
+                <p>{attribute.labelName.label}:</p>
                 <Tooltip
                     arrowPointAtCenter
                     visible={this.state.tooltipVisible}
