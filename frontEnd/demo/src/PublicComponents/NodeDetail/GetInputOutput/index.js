@@ -4,6 +4,8 @@ import { withPropsAPI } from '@src';
 import HdfsFile from '../../DataOperate/FileOperate/HdfsFile';
 import ExampleDataUpload from '../../DataOperate/FileOperate/ExampleDataUpload';
 
+import { fetchTool } from '../../../FetchTool';
+
 /**
  * get输入文件
  * @param {String} label
@@ -15,7 +17,7 @@ class GetInputOutput extends React.Component {
     // 如果为本地数据或HDFS数据，则返回这两种组件，分别等待上传和回传数据
     // 如果为已提供的数据，则将数据上传至Item内，并修改Item右侧标志为已上传
     // 非以上情况则向后端请求数据，得到回传后上传至Item，并进行修改右侧标志
-    isInputOutput() {
+    isInputOutput = () => {
         const { label, group } = this.props;
         if (label === 'hdfs数据') return (<HdfsFile />);
         else if (group === 'datasource') {
@@ -35,17 +37,9 @@ class GetInputOutput extends React.Component {
                             "Content-Type": "application/x-www-form-urlencoded;charset=utf-8"
                         },
                     }
-                    fetch(
-                        'http://10.105.222.92:3000/showData', init
-                    )
-                        .then((response) => {
-                            if (response.status === 200) {
-                                response.json().then((respData) => {
 
-                                })
-                            }
-                        })
-                        .catch(e => console.log('错误:', e))
+                    // const respData = await fetchTool();
+
             }
         }
     }

@@ -2,6 +2,7 @@ package com.pigeonhouse.bdap.controller.runcode;
 
 import com.pigeonhouse.bdap.dao.LivyDao;
 import com.pigeonhouse.bdap.entity.execution.LivySessionInfo;
+import com.pigeonhouse.bdap.service.ResponseService;
 import com.pigeonhouse.bdap.service.TokenService;
 import com.pigeonhouse.bdap.util.response.Response;
 import com.pigeonhouse.bdap.util.response.statusimpl.SessionStatus;
@@ -24,6 +25,9 @@ public class LivySessionController {
 
     @Autowired
     TokenService tokenService;
+    @Autowired
+    ResponseService responseService;
+
 
     @RequestMapping("/session/status")
     public Response sessionStatus(HttpServletRequest request) {
@@ -31,13 +35,13 @@ public class LivySessionController {
         LivySessionInfo livySessionInfo = tokenService.getLivySessionInfoFromToken(token);
         LivySessionInfo newSessionInfo = livyDao.refreshSessionStatus(livySessionInfo);
         if ("idle".equals(newSessionInfo.getState())) {
-            return new Response(SessionStatus.IDLE, newSessionInfo);
+            return responseService.response(SessionStatus.IDLE, newSessionInfo,request);
         } else if ("starting".equals(newSessionInfo.getState())) {
-            return new Response(SessionStatus.STARTING, newSessionInfo);
+            return responseService.response(SessionStatus.STARTING, newSessionInfo,request);
         } else if ("busy".equals(newSessionInfo.getState())) {
-            return new Response(SessionStatus.BUSY, newSessionInfo);
+            return responseService.response(SessionStatus.BUSY, newSessionInfo,request);
         }
-        return new Response(SessionStatus.DEAD, newSessionInfo);
+        return responseService.response(SessionStatus.DEAD, newSessionInfo,request);
     }
 
     @PassToken

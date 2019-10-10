@@ -5,6 +5,7 @@ import com.auth0.jwt.interfaces.Claim;
 import com.pigeonhouse.bdap.entity.metadata.CommonFiles;
 import com.pigeonhouse.bdap.entity.metadata.CsvHeader;
 import com.pigeonhouse.bdap.entity.metadata.FileAttribute;
+import com.pigeonhouse.bdap.service.ResponseService;
 import com.pigeonhouse.bdap.service.TokenService;
 import com.pigeonhouse.bdap.service.filesystem.CommonFilesService;
 import com.pigeonhouse.bdap.service.filesystem.FileHeaderAttriService;
@@ -32,6 +33,8 @@ public class CommonFilesController {
     FileHeaderAttriService fileHeaderAttriService;
     @Autowired
     TokenService tokenService;
+    @Autowired
+    ResponseService responseService;
 
 
     /**
@@ -49,11 +52,11 @@ public class CommonFilesController {
             String oppositePath=request.getParameter("oppositePath");
             Boolean isExist = commonFilesService.fileExist(oppositePath, userId);
             if (isExist) {
-                return new Response(CommonFileStatus.FILE_NOT_EXISTED, null);
+                return responseService.response(CommonFileStatus.FILE_NOT_EXISTED, null,request);
             } else {
                 CsvHeader csvHeader = fileHeaderAttriService.findByFilePath(oppositePath);
                 commonFilesService.setNewFile(csvHeader, userId);
-                return new Response(CommonFileStatus.FILE_INSERT_SUCCESS, null);
+                return responseService.response(CommonFileStatus.FILE_INSERT_SUCCESS, null,request);
             }
 
         } catch (Exception e) {
@@ -76,11 +79,11 @@ public class CommonFilesController {
             String oppositePath=request.getParameter("oppositePath");
             Boolean isExist = commonFilesService.fileExist(oppositePath, userId);
             if (isExist) {
-                return new Response(CommonFileStatus.FILE_HAS_EXISTED, null);
+                return responseService.response(CommonFileStatus.FILE_HAS_EXISTED, null,request);
             } else {
                 //CsvHeader csvHeader = fileHeaderAttriService.findByFilePath(oppositePath);
                 commonFilesService.deleteFile(userId,oppositePath);
-                return new Response(CommonFileStatus.FILE_INSERT_SUCCESS, null);
+                return responseService.response(CommonFileStatus.FILE_INSERT_SUCCESS, null,request);
             }
 
         } catch (Exception e) {
@@ -102,9 +105,9 @@ public class CommonFilesController {
         try {
             ArrayList<FileAttribute> fileList = commonFilesService.getFileListById(userId);
             if (fileList != null) {
-                return new Response(CommonFileStatus.FILE_GET_SUCCESS, JSONObject.toJSON(fileList));
+                return responseService.response(CommonFileStatus.FILE_GET_SUCCESS, JSONObject.toJSON(fileList),request);
             } else {
-                return new Response(CommonFileStatus.USER_NOT_FOUND, null);
+                return responseService.response(CommonFileStatus.USER_NOT_FOUND, null,request);
             }
         } catch (Exception e) {
             e.printStackTrace();

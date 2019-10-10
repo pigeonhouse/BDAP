@@ -37,7 +37,13 @@ public class TokenService {
                 .withClaim("sessionId", sessionId)
                 //.withExpiresAt(date)
                 .sign(Algorithm.HMAC256(id));
+    }
 
+    public String refreshToken(String token){
+        String userId = getValueFromToken(token,"userId").asString();
+        String livyAddr = getValueFromToken(token,"livyAddr").asString();
+        int sessionId = getValueFromToken(token,"sessionId").asInt();
+        return getLoginToken(userId,livyAddr,sessionId);
     }
 
     public String getTokenFromRequest(HttpServletRequest request, String tokenName) {

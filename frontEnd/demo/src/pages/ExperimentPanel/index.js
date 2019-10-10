@@ -7,7 +7,7 @@ import FlowNodePanel from '../../PublicComponents/EditorNodePanel';
 import { FlowContextMenu } from '../../PublicComponents/EditorContextMenu';
 import ExperimentList from "../../PublicComponents/ExperimentList";
 import SparkRunning from '../../ClusterModeComponents/SparkRunPanel/SparkRun';
-
+import { fetchTool } from '../../FetchTool';
 import styles from './index.less';
 
 class ExperimentPanel extends Component {
@@ -15,7 +15,7 @@ class ExperimentPanel extends Component {
         nodesModuleInfo: [],
     }
 
-    componentWillMount() {
+    async componentWillMount () {
         const init = {
             method: 'GET',
             mode: 'cors',
@@ -24,22 +24,17 @@ class ExperimentPanel extends Component {
             },
             credentials: 'include'
         }
-        fetch('https://result.eolinker.com/MSwz6fu34b763a21e1f7efa84a86a16f767a756952d0f95?uri=localhost:8888/module', init)
-            .then(res => {
-                if (res.status === 200) {
-                    res.json().then(res => {
-                        if (res.code === 200) {
-                            this.setState({ nodesModuleInfo: res.data });
-                        }
-                    })
-                }
-            })
+        const res = await fetchTool("/module", init)
+        if (res.code === 200) {
+            this.setState({ nodesModuleInfo: res.data });
+        }
     }
 
     render() {
         if (this.props.currentTab === this.props.clickTab) {
             return <ExperimentList handleClickEnter={this.props.handleClickEnter} />
         }
+        console.log(this.state.nodesModuleInfo)
         return (
             <GGEditor className={styles.editor} >
                 <Row type="flex" style={{ height: 'calc(100vh - 105px)' }}>

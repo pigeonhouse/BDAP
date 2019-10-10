@@ -34,10 +34,10 @@ public class ExecutionService {
 
         //是否是输入的文件模块
         String filePath = nodeInfo.getFilePath();
-        if (filePath!=null) {
+        if (filePath != null) {
             String id = nodeInfo.getId();
             return "val output = spark.read.format(\"csv\").option(\"inferSchema\", \"true\").option(\"header\", \"true\").load(\"" + filePath + "\")\n" +
-                    "dfMap += (\"" + id + "\" -> output)\n\n";
+                    "dfMap += (\"" + id +"_0"+ "\" -> output)\n\n";
         }
 
         //----------------------根据锚点判断是否需要注入输入参数的语句--------------------
@@ -45,6 +45,7 @@ public class ExecutionService {
         int numberOfInput = anchor[0];
         int numberOfOutput = anchor[1];
         String[] sourceIdList = nodeInfo.getSourceIdList();
+        System.out.println();
         StringBuilder inputCodeBuilder = new StringBuilder();
         String inputName = "input";
 
@@ -133,20 +134,20 @@ public class ExecutionService {
         //----------------------------------------------------
         // 接下去在代码末尾将output以前端生成的id为key，dataframe本身为value存在Map中
 
-        String mappingDfCode = "";
-        for(int i = 0; i < numberOfOutput; i++){
+        StringBuilder mappingDfCode = new StringBuilder();
+        for (int i = 0; i < numberOfOutput; i++) {
             if (!"machinelearning".equals(nodeInfo.getGroupName().getElabel())) {
                 String id = nodeInfo.getId();
-                if(i == 0){
-                    mappingDfCode += "\ndfMap += (\"" + id +"_" + i + "\" -> output)\n\n";
-                } else{
-                    mappingDfCode += "\ndfMap += (\"" + id + "_" + i +"\" -> output_" + i + ")\n\n";
+                if (i == 0) {
+                    mappingDfCode.append("\ndfMap += (\"" + id + "_" + i + "\" -> output)\n\n") ;
+                } else {
+                    mappingDfCode.append("\ndfMap += (\"" + id + "_" + i + "\" -> output_" + i + ")\n\n");
                 }
             }
         }
 
 
-        return inputCode + attrsCode + innerCode + mappingDfCode ;
+        return inputCode + attrsCode + innerCode + mappingDfCode;
     }
 
     /**

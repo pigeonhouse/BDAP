@@ -59,12 +59,12 @@ export function generateStream(flowInfo) {
 				if (groupName.label === "数据源") {
 					stream.nodes.push({
 						id, labelName, groupName, anchor, attributes, size, x, y,
-						filePath: node.filePath, sourceList: sourceId[index]
+						filePath: node.filePath, sourceIdList: sourceId[index]
 					});
 				}
 				else {
 					stream.nodes.push({
-						id, labelName, groupName, anchor, attributes, size, x, y, sourceList: sourceId[index]
+						id, labelName, groupName, anchor, attributes, size, x, y, sourceIdList: sourceId[index]
 					});
 				}
 

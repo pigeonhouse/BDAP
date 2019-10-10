@@ -2,6 +2,7 @@ package com.pigeonhouse.bdap.controller.runcode;
 
 import com.pigeonhouse.bdap.dao.LivyDao;
 import com.pigeonhouse.bdap.entity.execution.LivySessionInfo;
+import com.pigeonhouse.bdap.service.ResponseService;
 import com.pigeonhouse.bdap.service.TokenService;
 import com.pigeonhouse.bdap.service.runcode.QueryService;
 import com.pigeonhouse.bdap.util.response.Response;
@@ -27,6 +28,9 @@ public class InteractiveQueryController {
 
     @Autowired
     QueryService queryService;
+    @Autowired
+    ResponseService responseService;
+
 
 
     @RequestMapping("/query/sql")
@@ -40,9 +44,9 @@ public class InteractiveQueryController {
 
         try {
             String result = queryService.getOutput(resultUrl);
-            return new Response(RunningStatus.SUCCESS, result);
+            return responseService.response(RunningStatus.SUCCESS, result,request);
         } catch (Exception e) {
-            return new Response(RunningStatus.FAIL, null);
+            return responseService.response(RunningStatus.FAIL, null,request);
         }
     }
 
@@ -63,11 +67,11 @@ public class InteractiveQueryController {
 
         try {
             String result = queryService.getOutput(resultUrl);
-            return new Response(RunningStatus.SUCCESS, result);
+            return responseService.response(RunningStatus.SUCCESS, result,request);
         } catch (Exception e) {
             e.printStackTrace();
         }
-        return new Response(RunningStatus.FAIL, null);
+        return responseService.response(RunningStatus.FAIL, null,request);
     }
 
 }
