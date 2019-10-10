@@ -131,7 +131,7 @@ class FlowDataModel extends React.Component {
 							},
 							filePath: menu.filePath,
 							anchor: [0, 1],
-							columnsInfo: columnsInfo,
+							columnsInfo: menu.fileColumnsInfo,
 							keyConfig: {
 								color_type: '#1890FF',
 								state_icon_url: 'https://gw.alipayobjects.com/zos/rmsportal/uZVdwjJGqDooqKLKtvGA.svg',
