@@ -150,7 +150,7 @@ class VisualizedPanel extends React.Component {
     render() {
         return (
             <div style={{ height: 'calc(100vh - 105px)' }} >
-                <Row className={styles.header}>
+                <Row type="flex" className={styles.header}>
                     <Col span={6}><h2>DataSource</h2></Col>
                     <Col span={18}>
                         <div style={{ float: "right", marginRight: 20 }} >
@@ -163,7 +163,7 @@ class VisualizedPanel extends React.Component {
                         </div>
                     </Col>
                 </Row>
-                <Row className={styles.visualized}>
+                <Row type="flex" className={styles.visualized}>
                     <Col span={19} >
                         <VisualChart
                             currentChart={this.state.currentChart}

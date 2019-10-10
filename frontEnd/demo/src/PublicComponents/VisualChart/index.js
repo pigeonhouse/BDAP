@@ -36,7 +36,7 @@ class VisualChart extends React.Component {
     render() {
         return (
             <div className={styles.charter}>
-                <div id="main" style={this.props.currentChart === 'table' ? { width: 0, height: 0 } : { width: "1100px", height: 'calc(100vh - 235px)' }}></div>
+                <div id="main" style={this.props.currentChart === 'table' ? { width: 0, height: 0 } : { width: "1100px", height: '470px' }}></div>
                 {this.selectVisibleChart()}
             </div>
         );
