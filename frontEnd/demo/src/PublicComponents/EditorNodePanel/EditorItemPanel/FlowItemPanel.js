@@ -81,8 +81,8 @@ class FlowItemModel extends React.Component {
 									labelName: item.labelName,
 									groupName: item.groupName,
 									anchor: item.anchor,
-									columnsInfo: item.columnsInfo,
 									attributes: item.attributes,
+									labelArray: [],
 									keyConfig: {
 										color_type: '#1890FF',
 										state_icon_url: 'https://gw.alipayobjects.com/zos/rmsportal/uZVdwjJGqDooqKLKtvGA.svg',

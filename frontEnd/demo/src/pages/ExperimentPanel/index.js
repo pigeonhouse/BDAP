@@ -15,7 +15,7 @@ class ExperimentPanel extends Component {
         nodesModuleInfo: [],
     }
 
-    async componentWillMount() {
+    async componentWillMount () {
         const init = {
             method: 'GET',
             mode: 'cors',
@@ -32,14 +32,7 @@ class ExperimentPanel extends Component {
 
     render() {
         if (this.props.currentTab === this.props.clickTab) {
-            return <div className={styles.editor}>
-                <Row style={{ minHeight: 'calc(100vh - 105px)' }}>
-                    <ExperimentList
-                        handleClickEnter={this.props.handleClickEnter}
-                    />
-                </Row>
-            </div>
-
+            return <ExperimentList handleClickEnter={this.props.handleClickEnter} />
         }
         console.log(this.state.nodesModuleInfo)
         return (
@@ -52,7 +45,7 @@ class ExperimentPanel extends Component {
                         </div>
                     </Col>
 
-                    <Col span={15} className={styles.editorContent}>
+                    <Col span={16} className={styles.editorContent}>
                         <div className={styles.editorHd} data-step="2" data-intro='在工具栏可以进行撤销，复制，删除，成组等操作。' >
                             <FlowToolbar />
                         </div>
@@ -60,14 +53,14 @@ class ExperimentPanel extends Component {
                         />
                     </Col>
 
-                    <Col span={5} className={styles.editorSidebar}>
+                    <Col span={4} className={styles.editorSidebar}>
                         <div className={styles.detailPanel} data-step="3" style={{ maxHeight: 'calc(100vh - 105px)' }} data-intro='在参数栏对你的组件进行参数配置。' data-position='left'>
                             <FlowDetailPanel />
                         </div>
                     </Col>
                 </Row>
-                <FlowContextMenu />
-                <SparkRunning running={this.props.running} stopRunning={this.props.stopRunning} ></SparkRunning>
+				<FlowContextMenu />
+                <SparkRunning  running={this.props.running} stopRunning={this.props.stopRunning} ></SparkRunning>
             </GGEditor>
         );
     }

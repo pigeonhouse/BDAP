@@ -14,7 +14,7 @@ public enum CommonFileStatus implements Status {
     USER_NOT_FOUND(411, "未找到对应用户!"),
     FILE_HAS_EXISTED(409, "文件已存在!"),
     FILE_NOT_EXISTED(410,"文件不存在!"),
-    USER_HAS_EXISTED(408, "用户已存在!");
+    INVALID_INPUT(412, "输入非法!");
 
     Integer code;
     String message;

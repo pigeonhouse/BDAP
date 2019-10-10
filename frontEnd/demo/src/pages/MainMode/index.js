@@ -222,6 +222,7 @@ class LocalMode extends React.Component {
 				>
 					<TabPane
 						className={styles.leftMenu}
+						style={{ height: 'calc(100vh - 105px)' }}
 						tab={<Icon type="credit-card" className={styles.iconStyle} onClick={this.handleTabClick.bind(this, '1')} />}
 						key="1"
 					>
