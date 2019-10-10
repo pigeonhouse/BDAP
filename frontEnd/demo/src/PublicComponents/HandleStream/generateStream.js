@@ -54,17 +54,18 @@ export function generateStream(flowInfo) {
 				nodesNum++;
 				deg[index]--;
 
-				const { id, labelName, groupName, anchor, attributes, size, x, y } = node;
+				const { id, labelName, groupName, anchor, attributes, size, x, y, columnsInfo } = node;
 
 				if (groupName.label === "数据源") {
 					stream.nodes.push({
-						id, labelName, groupName, anchor, attributes, size, x, y,
+						id, labelName, groupName, anchor, attributes, size, x, y, columnsInfo,
 						filePath: node.filePath, sourceIdList: sourceId[index]
 					});
 				}
 				else {
 					stream.nodes.push({
-						id, labelName, groupName, anchor, attributes, size, x, y, sourceIdList: sourceId[index]
+						id, labelName, groupName, anchor, attributes, size, x, y, columnsInfo,
+						sourceIdList: sourceId[index]
 					});
 				}
 
