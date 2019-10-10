@@ -90,7 +90,13 @@ class TransferSelect extends React.Component {
     filterOption = (inputValue, option) => option.description.indexOf(inputValue) > -1
 
     handleChange = (targetKeys) => {
-        this.setState({ targetKeys });
+        const { attribute } = this.props;
+
+        if(attribute.multiCol){
+            this.setState({ targetKeys });
+        } else if(targetKeys.length <= 1){
+            this.setState({ targetKeys });
+        } 
     }
 
     handleSearch = (dir, value) => {
