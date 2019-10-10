@@ -81,7 +81,6 @@ class FlowItemModel extends React.Component {
 									labelName: item.labelName,
 									groupName: item.groupName,
 									anchor: item.anchor,
-									columnsInfo: item.columnsInfo,
 									attributes: item.attributes,
 									keyConfig: {
 										color_type: '#1890FF',
