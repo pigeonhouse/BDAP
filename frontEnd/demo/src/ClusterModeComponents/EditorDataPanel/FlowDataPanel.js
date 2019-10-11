@@ -31,6 +31,7 @@ class FlowDataPanel extends React.Component {
 					elabel: info[i].fileName,
 					filePath: info[i].filePath,
 					fileColumnsInfo: info[i].fileColumnsInfo,
+					operate:"delete"
 				})
 			}
 		}

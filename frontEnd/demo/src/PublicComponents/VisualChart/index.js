@@ -16,7 +16,7 @@ class VisualChart extends React.Component {
         var myChart = echarts.init(document.getElementById('main'));
         myChart.clear();
         switch (this.props.currentChart) {
-            case "table": return;
+            case "table": myChart.dispose(); return;
             case "line": return createLineChart(myChart, this.props.dataSet);
             case "bar": return createBarChart(myChart, this.props.dataSet);
             case "pie": return createPieChart(myChart, this.props.dataSet);
@@ -25,19 +25,13 @@ class VisualChart extends React.Component {
         }
     }
 
-    selectVisibleChart = () => {
-        if (this.props.currentChart === "table") {
-            return (
-                <VisualTable />
-            );
-        }
-    }
 
     render() {
+        const { currentChart } = this.props;
         return (
             <div className={styles.charter}>
-                <div id="main" style={this.props.currentChart === 'table' ? { width: 0, height: 0 } : { width: "1100px", height: 'calc(100vh - 235px)' }}></div>
-                {this.selectVisibleChart()}
+                <div id="main" className={currentChart === 'table' ? styles.chartHidden : styles.chartVisual}></div>
+                <div className={currentChart !== 'table' ? styles.tableHidden : styles.tableVisual}><VisualTable /></div>
             </div>
         );
     }

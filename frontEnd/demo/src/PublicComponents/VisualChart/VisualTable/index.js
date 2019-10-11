@@ -11,7 +11,7 @@ for (let i = 0; i < 100; i++) {
     });
 }
 
-class TableTwo extends React.Component {
+class VisualTable extends React.Component {
     state = {
         filteredInfo: null,
         sortedInfo: null,
@@ -84,19 +84,22 @@ class TableTwo extends React.Component {
 
         ];
         return (
-            <div style={{ marginTop: 10 }}>
+            <div style={{ paddingTop: 10 }}>
                 <Row>
                     <Col span={2}></Col>
                     <Col span={20}>
-                        <Table columns={columns} dataSource={data} onChange={this.handleChange}
-                            pagination={{ pageSize: 50 }} scroll={{ x: "110%", y: "calc(100vh - 365px)" }} />
+                        <Table columns={columns}
+                            dataSource={data}
+                            onChange={this.handleChange}
+                            pagination={{ pageSize: 50 }}
+                            scroll={{ x: "110%", y: "calc(100vh - 405px)" }}
+                        />
                     </Col>
                     <Col span={2}></Col>
                 </Row>
-
             </div>
         );
     }
 }
 
-export default TableTwo;
+export default VisualTable;

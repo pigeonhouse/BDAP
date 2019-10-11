@@ -6,7 +6,7 @@ import ExperimentPanel from '../ExperimentPanel';
 import Model from '../../PublicComponents/ModelStore';
 import VisualizedPanel from '../VisualizedPanel';
 
-import SparkRun from "../../ClusterModeComponents/SparkRunPanel/SparkRun";
+import SparkRun from "../../ClusterModeComponents/SparkRunPanel";
 import styles from './index.less';
 
 /**
@@ -41,6 +41,7 @@ class LocalMode extends React.Component {
 		password: '',
 		remind: 'false',
 		connectCtrl: false,
+		running: false,
 	}
 
 	noRemind = (key) => {
@@ -116,33 +117,33 @@ class LocalMode extends React.Component {
 		})
 	}
 
-	download = () => {
-		let formData = new FormData();
-		formData.append('oppositePath', '/')
-		formData.append('fileName', 'adult.csv')
-		const init = {
-			method: 'POST',
-			body: formData,
-			mode: 'cors',
-			headers: {
-				"Content-Type": "application/x-www-form-urlencoded;charset=utf-8"
-			},
-		}
-		fetch(
-			'https://result.eolinker.com/MSwz6fu34b763a21e1f7efa84a86a16f767a756952d0f95?uri=localhost:8888/hdfs/download', init
-		)
-			.then(response => response.blob()).then(data => {
-				//data为二进制文件
-				var reader = new FileReader();
-				reader.readAsText(data, 'utf-8');
-				//以文本方式读取文件
-				reader.onload = function (e) {
-					//转换
-					var result = reader.result
-					console.info(reader.result);
-				}
-			})
-	}
+	// download = () => {
+	// 	let formData = new FormData();
+	// 	formData.append('oppositePath', '/')
+	// 	formData.append('fileName', 'adult.csv')
+	// 	const init = {
+	// 		method: 'POST',
+	// 		body: formData,
+	// 		mode: 'cors',
+	// 		headers: {
+	// 			"Content-Type": "application/x-www-form-urlencoded;charset=utf-8"
+	// 		},
+	// 	}
+	// 	fetch(
+	// 		'https://result.eolinker.com/MSwz6fu34b763a21e1f7efa84a86a16f767a756952d0f95?uri=localhost:8888/hdfs/download', init
+	// 	)
+	// 		.then(response => response.blob()).then(data => {
+	// 			//data为二进制文件
+	// 			var reader = new FileReader();
+	// 			reader.readAsText(data, 'utf-8');
+	// 			//以文本方式读取文件
+	// 			reader.onload = function (e) {
+	// 				//转换
+	// 				var result = reader.result
+	// 				console.info(reader.result);
+	// 			}
+	// 		})
+	// }
 
 	handleClickEnter = () => {
 		this.setState({
@@ -153,6 +154,18 @@ class LocalMode extends React.Component {
 	handleTabClick = (value) => {
 		this.setState({
 			clickTab: value
+		})
+	}
+
+	onClickButtonRunning = () => {
+		this.setState({
+			running: true
+		})
+	}
+
+	stopRunning = () => {
+		this.setState({
+			running: false
 		})
 	}
 
@@ -209,7 +222,6 @@ class LocalMode extends React.Component {
 				>
 					<TabPane
 						className={styles.leftMenu}
-						style={{ height: 'calc(100vh - 105px)' }}
 						tab={<Icon type="credit-card" className={styles.iconStyle} onClick={this.handleTabClick.bind(this, '1')} />}
 						key="1"
 					>
@@ -217,6 +229,8 @@ class LocalMode extends React.Component {
 							currentTab={this.state.currentTab}
 							clickTab={this.state.clickTab}
 							handleClickEnter={this.handleClickEnter}
+							stopRunning={this.stopRunning}
+							running={this.state.running}
 						/>
 					</TabPane>
 
@@ -227,13 +241,6 @@ class LocalMode extends React.Component {
 					>
 						<VisualizedPanel></VisualizedPanel>
 					</TabPane>
-					<TabPane
-						className={styles.leftMenu}
-						tab={<Icon type="api" className={styles.iconStyle} />}
-						key="3"
-					>
-						{/* <Button onClick={this.download} >Download</Button> */}
-					</TabPane>
 				</Tabs>
 
 				<Row type="flex" style={{ bottom: 0, height: '65px', lineHeight: '65px', backgroundColor: '#343941' }}
@@ -243,7 +250,7 @@ class LocalMode extends React.Component {
 					</Col>
 					<Col span={9}></Col>
 					<Col span={2}>
-						<SparkRun />
+						<SparkRun onClickButtonRunning={this.onClickButtonRunning} />
 					</Col>
 					<Col span={9}></Col>
 					<Col span={2}>

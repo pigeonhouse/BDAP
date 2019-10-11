@@ -20,7 +20,6 @@ Item 数据格式：
         title：子菜单项名字
         type：子菜单Icon类型
         name：子菜单项名字
-
         内部可嵌套subMenu或menu
     }]
     menu：子项，不可展开，最小选中单位，类型为对象数组
@@ -69,10 +68,10 @@ class FlowItemModel extends React.Component {
 	createItemPanel = (itemList, group) => {
 		var result = new Array();
 		if (itemList !== undefined) {
-			itemList.map((item) => {
+			itemList.map((item, index) => {
 				if (item.groupName.elabel === group) {
 					result.push(
-						<Menu.Item key={item}><ItemPanel>
+						<Menu.Item key={index}><ItemPanel>
 							<Item
 								type="node"
 								size="200*40"
@@ -81,9 +80,8 @@ class FlowItemModel extends React.Component {
 									labelName: item.labelName,
 									groupName: item.groupName,
 									anchor: item.anchor,
+									columnsInfo: item.columnsInfo,
 									attributes: item.attributes,
-									labelArray: [],
-									isCheckPoint: item.isCheckPoint,
 									keyConfig: {
 										color_type: '#1890FF',
 										state_icon_url: 'https://gw.alipayobjects.com/zos/rmsportal/uZVdwjJGqDooqKLKtvGA.svg',

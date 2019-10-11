@@ -15,8 +15,7 @@ class TagVisual extends React.Component {
     handleCloseDelete = (removedTag) => {
         const tag = this.state.tag.filter(Tag => {
             if (Tag.label === removedTag.label &&
-                Tag.operator === removedTag.operator &&
-                Tag.value === removedTag.value)
+                Tag.operator === removedTag.operator)
                 return false;
             else return true;
         });
@@ -30,7 +29,7 @@ class TagVisual extends React.Component {
         return (
             <div >
                 {tag.map((item) => {
-                    const tag = `${item.label}${item.operator}${item.value}`;
+                    const tag = `${item.operator}${item.label}`;
                     return (
                         <div style={{ margin: "15%", marginTop: "6px", marginBottom: "6px" }} >
                             <Tag
@@ -39,7 +38,7 @@ class TagVisual extends React.Component {
                                 onClose={() => this.handleCloseDelete(item)}
                                 key={tag}
                             >
-                                {item.label}&nbsp;{item.operator}&nbsp;{item.value}
+                                {item.operator}&nbsp;of&nbsp;{item.label}
                             </Tag>
                         </div>
                     );

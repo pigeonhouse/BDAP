@@ -5,6 +5,7 @@ import DataSource from '../../PublicComponents/VisualDataSource';
 import Filter from '../../PublicComponents/VisualFilter';
 import Summarize from '../../PublicComponents/VisualSummarize';
 import VisualChart from '../../PublicComponents/VisualChart';
+import Settings from '../../PublicComponents/VisualChartSettings';
 import styles from './index.less';
 
 class VisualizedPanel extends React.Component {
@@ -12,17 +13,25 @@ class VisualizedPanel extends React.Component {
     state = {
         currentChart: "table",
         rightCol: "filter",
-        dataSourceName: undefined,
+        dataSourceName: 'dataTest',
         filter: [],
         summarize: [],
         dataSet: [],
         labelArray: ['jack', 'test'],
         groupLabel: undefined,
+        chartStyle: {},
+    }
+
+    handleChangeChartStyle = (axis, label) => {
+        console.log(axis)
+        console.log(label)
     }
 
     //group by的label修改
     handleChangeGroupLabel = (value) => {
         this.setState({ groupLabel: value });
+
+        this.getDataSetByOperate();
     }
 
     //增加分组方式
@@ -63,8 +72,34 @@ class VisualizedPanel extends React.Component {
 
     // 向后端发送请求，参数为sql语句，返回值为Dataset
     getDataSetByOperate = () => {
+        const { dataSourceName, filter, summarize, groupLabel } = this.state;
+        var sqlCode, label;
+        var where = '', group = '';
+
+        // 没有group by 是否可求和
+        if (groupLabel !== undefined) {
+            label = groupLabel;
+            summarize.map((item) => {
+                label += `,${item.operator}(${item.label})`;
+            })
+
+            group = ` group by ${groupLabel}`;
+        }
+        else label = '*';
+
+        if (filter.length !== 0) {
+            filter.map((item, index) => {
+                let filterString = `${item.label}${item.operator}'${item.value}'`;
+                where += index === 0 ? ' WHERE ' : ' AND ';
+                where += filterString;
+            })
+        }
+
+        sqlCode = `SELECT ${label} FROM ${dataSourceName}${where}${group}`;
+
+
         //操作，发送sql语句获取dataSet
-        console.log('test');
+        console.log(sqlCode);
     }
 
     // currentChart类型修改
@@ -98,7 +133,11 @@ class VisualizedPanel extends React.Component {
             case 'settings':
                 return (
                     <Settings
-                        currentChart={this.state.currentChart} />
+                        currentChart={this.state.currentChart}
+                        handleChangeChartStyle={this.handleChangeChartStyle}
+                        chartStyle={this.state.chartStyle}
+                        labelArray={this.state.labelArray}
+                    />
                 )
         }
     }
@@ -111,8 +150,8 @@ class VisualizedPanel extends React.Component {
     render() {
         return (
             <div style={{ height: 'calc(100vh - 105px)' }} >
-                <Row className={styles.header}>
-                    <Col span={6}>Data Visualization</Col>
+                <Row type="flex" className={styles.header}>
+                    <Col span={6}><h2>DataSource</h2></Col>
                     <Col span={18}>
                         <div style={{ float: "right", marginRight: 20 }} >
                             <DataSource></DataSource>
@@ -124,7 +163,7 @@ class VisualizedPanel extends React.Component {
                         </div>
                     </Col>
                 </Row>
-                <Row className={styles.visualized}>
+                <Row type="flex" className={styles.visualized}>
                     <Col span={19} >
                         <VisualChart
                             currentChart={this.state.currentChart}
