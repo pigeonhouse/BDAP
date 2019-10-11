@@ -2,7 +2,7 @@
 
 //'backEndTest'
 //'production'
-const mode = 'backEndTest';
+const mode = 'frontEndTest';
 
 export async function fetchTool(url, init) {
 

@@ -110,8 +110,6 @@ public class LivyDao {
         } catch (IOException | URISyntaxException e) {
             e.printStackTrace();
         }
-
-
     }
     //--------------------------------------------------------------------------
     /**
