@@ -37,14 +37,7 @@ public class LivyDao {
     int numExecutors;
     @Value("${executorCores}")
     int executorCores;
-    @Value("${spark.shuffle.reduceLocality.enabled}")
-    boolean sparkShuffleReduceLocalityEnabled;
-    @Value("${spark.shuffle.blockTransferService}")
-    String sparkShuffleBlockTransferService;
-    @Value("${spark.scheduler.minRegisteredResourcesRatio}")
-    double sparkSchedulerMinRegisteredResourcesRatio;
-    @Value("${spark.speculation}")
-    boolean sparkSpeculation;
+
 
     @Value("${livyAddr}")
     String[] livyAddrList;
@@ -198,10 +191,7 @@ public class LivyDao {
         bodyHashMap.put("jars", jarsList);
         bodyHashMap.put("numExecutors", numExecutors);
         bodyHashMap.put("executorCores", executorCores);
-        confHashMap.put("spark.shuffle.reduceLocality.enabled", sparkShuffleReduceLocalityEnabled);
-        confHashMap.put("spark.shuffle.blockTransferService", sparkShuffleBlockTransferService);
-        confHashMap.put("spark.scheduler.minRegisteredResourcesRatio", sparkSchedulerMinRegisteredResourcesRatio);
-        confHashMap.put("spark.speculation", sparkSpeculation);
+
         bodyHashMap.put("conf", confHashMap);
         String jsonBody = null;
         try {
