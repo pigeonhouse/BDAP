@@ -7,7 +7,6 @@ import com.pigeonhouse.bdap.dao.LivyDao;
 import com.pigeonhouse.bdap.entity.execution.LivySessionInfo;
 import com.pigeonhouse.bdap.entity.mapinfo.MapInfo;
 import com.pigeonhouse.bdap.entity.mapinfo.nodeinfo.NodeInfo;
-import com.pigeonhouse.bdap.service.ResponseService;
 import com.pigeonhouse.bdap.service.TokenService;
 import com.pigeonhouse.bdap.service.runcode.ExecutionService;
 import com.pigeonhouse.bdap.util.response.Response;
@@ -39,8 +38,6 @@ public class FlowChartController {
     TokenService tokenService;
     @Autowired
     LivyDao livyDao;
-    @Autowired
-    ResponseService responseService;
 
     @PostMapping(value = "/flow/run")
     public Response run(@RequestBody MapInfo mapInfo, HttpServletRequest request) {
@@ -51,23 +48,21 @@ public class FlowChartController {
         try {
             newSessionInfo = livyDao.refreshSessionStatus(sessionInfo);
         } catch (Exception e) {
-            return responseService.response(PostCodeStatus.NOT_EXIST, null,request);
+            return new Response(PostCodeStatus.NOT_EXIST, null);
         }
         if (!"idle".equals(newSessionInfo.getState())) {
-            return responseService.response(PostCodeStatus.SESSION_BUSY, null,request);
+            return new Response(PostCodeStatus.SESSION_BUSY, null);
         }
 
         ArrayList<NodeInfo> nodes = mapInfo.getNodes();
 
-        return responseService.response(PostCodeStatus.SUCCESS, executionService.executeFlow(nodes, newSessionInfo),request);
+        return new Response(PostCodeStatus.SUCCESS, executionService.executeFlow(nodes, newSessionInfo));
     }
 
     @PostMapping("/flow/node/status")
-    public Response checkRunningStatus(@RequestBody JSONObject resultUrlJson,HttpServletRequest request) {
+    public Response checkRunningStatus(String resultUrl) {
         ObjectMapper objectMapper = new ObjectMapper();
         RestTemplate restTemplate = new RestTemplate();
-        String resultUrl = resultUrlJson.getString("resultUrl");
-
         String state = "";
         try {
             Map resultMap = objectMapper.readValue(
@@ -77,7 +72,7 @@ public class FlowChartController {
         } catch (HttpClientErrorException e) {
             e.printStackTrace();
             System.out.println(RunningStatus.FAIL);
-            return responseService.response(RunningStatus.FAIL, null,request);
+            return new Response(RunningStatus.FAIL, null);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -85,7 +80,7 @@ public class FlowChartController {
         jsonObject.put("state", state);
 
         System.out.println(state);
-        return responseService.response(RunningStatus.SUCCESS, jsonObject,request);
+        return new Response(RunningStatus.SUCCESS, jsonObject);
     }
 
     @PostMapping("/flow/node/save")
@@ -97,7 +92,7 @@ public class FlowChartController {
         livyDao.postCode("dfMap(\""+nodeId+"\").write" +
                 ".csv(\"hdfs:///bdap/students/"+userId+"/"+userDefinedName+".csv\")",sessionInfo);
 
-        return responseService.response(RunningStatus.SUCCESS,null,request);
+        return new Response(RunningStatus.SUCCESS,null);
 
     }
 }

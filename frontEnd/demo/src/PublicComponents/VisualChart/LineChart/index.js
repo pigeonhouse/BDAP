@@ -1,7 +1,4 @@
 export function createLineChart(myChart, dataSet) {
-
-    console.log('lineTest');
-
     var option = {
         xAxis: {
             type: 'category',
@@ -16,6 +13,7 @@ export function createLineChart(myChart, dataSet) {
             smooth: true
         }]
     };
+
 
     // 使用刚指定的配置项和数据显示图表。
     myChart.setOption(option);

@@ -18,9 +18,10 @@ class FlowNodePanel extends React.Component {
     }
 
     render() {
+        console.log(this.props.nodesModuleInfo.nodes)
         return (
             <div
-               /* onMouseEnter={this.mouseEnter} onMouseLeave={this.mouseLeave}*/
+                onMouseEnter={this.mouseEnter} onMouseLeave={this.mouseLeave}
                 className={this.state.isMouseEnter ? styles.scrollapp : styles.unscrollapp}
                 style={{ backgroundColor: '#fff' }}
             >

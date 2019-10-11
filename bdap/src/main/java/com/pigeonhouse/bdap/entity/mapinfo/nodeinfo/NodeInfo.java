@@ -1,13 +1,11 @@
 package com.pigeonhouse.bdap.entity.mapinfo.nodeinfo;
 
 import com.pigeonhouse.bdap.entity.mapinfo.nodeinfo.attrinfo.AttrInfo;
-import com.pigeonhouse.bdap.entity.metadata.HeaderAttribute;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.util.ArrayList;
-import java.util.List;
 
 /**
  * 前端在用户连接完成拓扑图并选择完参数后
@@ -53,8 +51,6 @@ public class NodeInfo {
      * 其余模块忽略即可
      */
     private String filePath;
-
-    private List<HeaderAttribute> columnsInfo;
 
     /**
      * 每一个属性的参数及值

@@ -5,7 +5,6 @@ import com.auth0.jwt.interfaces.Claim;
 import com.pigeonhouse.bdap.entity.metadata.CommonFiles;
 import com.pigeonhouse.bdap.entity.metadata.CsvHeader;
 import com.pigeonhouse.bdap.entity.metadata.FileAttribute;
-import com.pigeonhouse.bdap.service.ResponseService;
 import com.pigeonhouse.bdap.service.TokenService;
 import com.pigeonhouse.bdap.service.filesystem.CommonFilesService;
 import com.pigeonhouse.bdap.service.filesystem.FileHeaderAttriService;
@@ -33,16 +32,13 @@ public class CommonFilesController {
     FileHeaderAttriService fileHeaderAttriService;
     @Autowired
     TokenService tokenService;
-    @Autowired
-    ResponseService responseService;
 
 
     /**
      * 在常用数据表中插入标注为常用数据集的文件头信息，该文件已在fileheader数据库中存有文件头
-     * <p>
-     * <p>
-     * oppositePath：文件相对路径
      *
+     *
+     * oppositePath：文件相对路径
      * @return 错误提示信息或插入成功通知
      */
     @PostMapping("/commonFiles/setNewFile")
@@ -50,18 +46,14 @@ public class CommonFilesController {
         try {
             String token = tokenService.getTokenFromRequest(request, "loginToken");
             String userId = tokenService.getValueFromToken(token, "userId").asString();
-            String oppositePath = request.getParameter("oppositePath");
-            if (!oppositePath.startsWith("/")) {
-                return responseService.response(CommonFileStatus.INVALID_INPUT, null, request);
-            }
+            String oppositePath=request.getParameter("oppositePath");
             Boolean isExist = commonFilesService.fileExist(oppositePath, userId);
             if (isExist) {
-                return responseService.response(CommonFileStatus.FILE_HAS_EXISTED, null,request);
+                return new Response(CommonFileStatus.FILE_NOT_EXISTED, null);
             } else {
-                CsvHeader csvHeader = fileHeaderAttriService.findByFilePath(userId + oppositePath);
-                //相对路径必须以"/"开头
+                CsvHeader csvHeader = fileHeaderAttriService.findByFilePath(oppositePath);
                 commonFilesService.setNewFile(csvHeader, userId);
-                return responseService.response(CommonFileStatus.FILE_INSERT_SUCCESS, null, request);
+                return new Response(CommonFileStatus.FILE_INSERT_SUCCESS, null);
             }
 
         } catch (Exception e) {
@@ -69,13 +61,11 @@ public class CommonFilesController {
         }
         return null;
     }
-
     /**
      * 在常用数据表删除取消标注文件的文件头信息，该文件已在fileheader数据库中划分文件头
-     * <p>
-     * <p>
-     * oppositePath：文件相对路径
      *
+     *
+     * oppositePath：文件相对路径
      * @return 错误提示信息或插入成功通知
      */
     @PostMapping("/commonFiles/deleteFile")
@@ -83,14 +73,14 @@ public class CommonFilesController {
         try {
             String token = tokenService.getTokenFromRequest(request, "loginToken");
             String userId = tokenService.getValueFromToken(token, "userId").asString();
-            String oppositePath = request.getParameter("oppositePath");
+            String oppositePath=request.getParameter("oppositePath");
             Boolean isExist = commonFilesService.fileExist(oppositePath, userId);
             if (isExist) {
-                return responseService.response(CommonFileStatus.FILE_HAS_EXISTED, null, request);
+                return new Response(CommonFileStatus.FILE_HAS_EXISTED, null);
             } else {
                 //CsvHeader csvHeader = fileHeaderAttriService.findByFilePath(oppositePath);
-                commonFilesService.deleteFile(userId, oppositePath);
-                return responseService.response(CommonFileStatus.FILE_INSERT_SUCCESS, null, request);
+                commonFilesService.deleteFile(userId,oppositePath);
+                return new Response(CommonFileStatus.FILE_INSERT_SUCCESS, null);
             }
 
         } catch (Exception e) {
@@ -112,9 +102,9 @@ public class CommonFilesController {
         try {
             ArrayList<FileAttribute> fileList = commonFilesService.getFileListById(userId);
             if (fileList != null) {
-                return responseService.response(CommonFileStatus.FILE_GET_SUCCESS, JSONObject.toJSON(fileList), request);
+                return new Response(CommonFileStatus.FILE_GET_SUCCESS, JSONObject.toJSON(fileList));
             } else {
-                return responseService.response(CommonFileStatus.USER_NOT_FOUND, null, request);
+                return new Response(CommonFileStatus.USER_NOT_FOUND, null);
             }
         } catch (Exception e) {
             e.printStackTrace();

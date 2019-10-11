@@ -18,11 +18,13 @@ class OperateSelect extends React.Component {
                 style={{ width: "80%", margin: "10%", marginTop: "0px", marginBottom: "0px" }}
                 onChange={this.handleChange}
             >
-                <Option value="sum">求和</Option>
-                <Option value="max">最大值</Option>
-                <Option value="min">最小值</Option>
-                <Option value="avg">平均值</Option>
-                <Option value="count">计数</Option>
+                <Option value="=">等于</Option>
+                <Option value="<>">不等于</Option>
+                <Option value=">">大于</Option>
+                <Option value="<">小于</Option>
+                <Option value=">=">大于等于</Option>
+                <Option value="<=">小于等于</Option>
+                <Option value="BETWEEN">在两者之间</Option>
             </Select >
         );
     }

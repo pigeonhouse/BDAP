@@ -105,7 +105,7 @@ public class CommonFilesService {
      */
     public boolean fileExist(String oppositePath, String userId) {
         HdfsConfig hdfsConfig=new HdfsConfig();
-        CommonFiles fileAttribute = commonFilesDao.findByFilePath(hdfsConfig.getDefaultDirectory()+"/"+userId+oppositePath, userId);
+        FileAttribute fileAttribute = commonFilesDao.findByFilePath(hdfsConfig.getDefaultDirectory()+oppositePath, userId);
         return fileAttribute != null;
     }
 }

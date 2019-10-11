@@ -3,10 +3,10 @@ package com.pigeonhouse.bdap.controller.filesystem;
 import com.alibaba.fastjson.JSONObject;
 import com.pigeonhouse.bdap.config.HdfsConfig;
 import com.pigeonhouse.bdap.entity.metadata.Hdfsfile;
-import com.pigeonhouse.bdap.service.ResponseService;
 import com.pigeonhouse.bdap.service.TokenService;
 import com.pigeonhouse.bdap.service.filesystem.FileHeaderAttriService;
 import com.pigeonhouse.bdap.service.filesystem.HdfsService;
+import com.pigeonhouse.bdap.util.response.Response;
 import com.pigeonhouse.bdap.util.response.statusimpl.HdfsStatus;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,25 +36,24 @@ public class HDFSController {
     FileHeaderAttriService fileHeaderAttriService;
     @Autowired
     TokenService tokenService;
-    @Autowired
-    ResponseService responseService;
 
     /**
      * 获取文件树函数
      * 返回值:带有文件树的JSON字符串
      */
-    @RequestMapping(value = "/hdfs/", method = RequestMethod.GET)
-    public Object getFileList(HttpServletRequest request) {
-        return getFileList(request, "/");
+    @RequestMapping(value="/hdfs/",method=RequestMethod.GET)
+    public Object getFileList(HttpServletRequest request)
+    {
+        return getFileList(request,"/");
     }
-
-    @RequestMapping(value = "/hdfs/{oppositePath}", method = RequestMethod.GET)
-    public Object getFileList(HttpServletRequest request, @PathVariable String oppositePath) {
+    @RequestMapping(value="/hdfs/{oppositePath}",method=RequestMethod.GET)
+    public Object getFileList(HttpServletRequest request,@PathVariable String oppositePath) {
         try {
             String token = tokenService.getTokenFromRequest(request, "loginToken");
             String userId = tokenService.getValueFromToken(token, "userId").asString();
-            if (oppositePath == null) {
-                oppositePath = "/";
+            if (oppositePath==null)
+            {
+                oppositePath="/";
             }
             Hdfsfile fileList = hdfsService.listFiles(userId + oppositePath, null);
             if (fileList != null) {
@@ -64,12 +63,12 @@ public class HDFSController {
                     fileListJson.put("fileInfo" + (idx + 1), fileJson);
                 }
 
-                return responseService.response(HdfsStatus.FILETREE_GET_SUCCESS, fileListJson, request);
+                return new Response(HdfsStatus.FILETREE_GET_SUCCESS, fileListJson);
             } else {
-                return responseService.response(HdfsStatus.USER_NOT_EXISTED, null, request);
+                return new Response(HdfsStatus.USER_NOT_EXISTED, null);
             }
         } catch (Exception e) {
-            return responseService.response(HdfsStatus.BACKEND_ERROR, e.toString(), request);
+            return new Response(HdfsStatus.BACKEND_ERROR, e.toString());
         }
     }
 
@@ -77,29 +76,30 @@ public class HDFSController {
      * 创建HDFS文件夹函数
      * 返回值:带有提示信息的JSON字符串
      */
-    @RequestMapping(value = "/hdfs/", method = RequestMethod.PUT)
-    public Object mkdir(HttpServletRequest request) {
-        return mkdir(request, "/");
+    @RequestMapping(value="/hdfs/",method=RequestMethod.PUT)
+    public Object mkdir(HttpServletRequest request)
+    {
+        return mkdir(request,"/");
     }
-
-    @RequestMapping(value = "/hdfs/{oppositePath}", method = RequestMethod.PUT)
-    public Object mkdir(HttpServletRequest request, @PathVariable String oppositePath) {
+    @RequestMapping(value="/hdfs/{oppositePath}", method=RequestMethod.PUT)
+    public Object mkdir(HttpServletRequest request,@PathVariable String oppositePath) {
         try {
             String token = tokenService.getTokenFromRequest(request, "loginToken");
             String userId = tokenService.getValueFromToken(token, "userId").asString();
             String dirName = request.getParameter("dirName");
-            if (oppositePath.equals("/")) {
+            if (oppositePath .equals( "/")) {
                 oppositePath = "";
             }
             boolean success = hdfsService.mkdir(userId + oppositePath + "/" + dirName);
             if (success) {
-                return responseService.response(HdfsStatus.DIRECTORY_CREATE_SUCCESS, null, request);
+                return new Response(HdfsStatus.DIRECTORY_CREATE_SUCCESS, null);
             } else {
-                return responseService.response(HdfsStatus.DIRECTORY_HAS_EXISTED, null, request);
+                return new Response(HdfsStatus.DIRECTORY_HAS_EXISTED, null);
 
             }
         } catch (Exception e) {
-            return responseService.response(HdfsStatus.BACKEND_ERROR, e.toString(), request);
+            return new
+                    Response(HdfsStatus.BACKEND_ERROR, e.toString());
         }
     }
 
@@ -107,30 +107,30 @@ public class HDFSController {
      * 删除HDFS文件夹函数
      * 返回值:带有提示信息的JSON字符串
      */
-    @RequestMapping(value = "/hdfs/", method = RequestMethod.DELETE)
-    Object delete(HttpServletRequest request) {
-        return delete(request, "/");
+    @RequestMapping(value="/hdfs/", method=RequestMethod.DELETE)
+    Object delete(HttpServletRequest request)
+    {
+        return delete(request,"/");
     }
-
-    @RequestMapping(value = "/hdfs/{oppositePath}", method = RequestMethod.DELETE)
-    public Object delete(HttpServletRequest request, @PathVariable String oppositePath) {
+    @RequestMapping(value="/hdfs/{oppositePath}", method=RequestMethod.DELETE)
+    public Object delete(HttpServletRequest request,@PathVariable String oppositePath) {
         try {
             String token = tokenService.getTokenFromRequest(request, "loginToken");
             String userId = tokenService.getValueFromToken(token, "userId").asString();
             String fileName = request.getParameter("fileName");
-            if (oppositePath.equals("/")) {
+            if (oppositePath .equals( "/")) {
                 oppositePath = "";
             }
             boolean success = hdfsService.delete(userId + oppositePath + "/" + fileName);
             if (success) {
-                return responseService.response(HdfsStatus.FILE_DELETE_SUCCESS, null, request);
+                return new Response(HdfsStatus.FILE_DELETE_SUCCESS, null);
             } else {
-                return responseService.response(HdfsStatus.FILE_NOT_EXISTED, null, request);
+                return new Response(HdfsStatus.FILE_NOT_EXISTED, null);
 
             }
 
         } catch (Exception e) {
-            return responseService.response(HdfsStatus.BACKEND_ERROR, e.toString(), request);
+            return new Response(HdfsStatus.BACKEND_ERROR, e.toString());
 
         }
     }
@@ -154,22 +154,22 @@ public class HDFSController {
             boolean replace = Boolean.parseBoolean(request.getParameter("replace"));
             MultipartFile file = multipartRequest.getFile("file");
             if (file == null || file.getBytes() == null) {
-                return responseService.response(HdfsStatus.INVALID_INPUT, null, request);
+                return new Response(HdfsStatus.INVALID_INPUT, null);
             } else {
                 String status = hdfsService.upload(file, userId + oppositePath, replace);
                 switch (status) {
                     case "success":
-                        return responseService.response(HdfsStatus.FILE_UPLOAD_SUCCESS, null, request);
+                        return new Response(HdfsStatus.FILE_UPLOAD_SUCCESS, null);
                     case "fileexist":
-                        return responseService.response(HdfsStatus.FILE_HAS_EXISTED, null, request);
+                        return new Response(HdfsStatus.FILE_HAS_EXISTED, null);
                     case "userinvalid":
-                        return responseService.response(HdfsStatus.USER_NOT_EXISTED, null, request);
+                        return new Response(HdfsStatus.USER_NOT_EXISTED, null);
                     default:
                         return null;
                 }
             }
         } catch (Exception e) {
-            return responseService.response(HdfsStatus.BACKEND_ERROR, e.toString(), request);
+            return new Response(HdfsStatus.BACKEND_ERROR, e.toString());
 
         }
 
@@ -196,10 +196,10 @@ public class HDFSController {
             String oppositePath = request.getParameter("oppositePath");
             boolean replace = Boolean.parseBoolean(request.getParameter("replace"));
             //char regex = request.getParameter("regex").charAt(0);
-            char regex = ',';
+            char regex=',';
             MultipartFile file = multipartRequest.getFile("file");
             if (file == null || file.getBytes() == null) {
-                return responseService.response(HdfsStatus.INVALID_INPUT, null, request);
+                return new Response(HdfsStatus.INVALID_INPUT, null);
             } else {
                 String[] type = file.getOriginalFilename().split("\\.");
                 List<String> header = new ArrayList<String>();
@@ -261,7 +261,7 @@ public class HDFSController {
                 if (sample.size() != header.size())
                 //如果数据样本或头字段有缺失，报输入非法错误
                 {
-                    return responseService.response(HdfsStatus.INVALID_INPUT, null, request);
+                    return new Response(HdfsStatus.INVALID_INPUT, null);
                 } else {
                     String status = hdfsService.upload(file, userId + oppositePath, replace);
                     switch (status) {
@@ -273,18 +273,18 @@ public class HDFSController {
                             HdfsConfig hdfsConfig = new HdfsConfig();
                             //执行更新
                             fileHeaderAttriService.saveOrUpdateFileHeader(file.getOriginalFilename(), hdfsConfig.getDefaultDirectory() + "/" + userId + "/" + file.getOriginalFilename(), headermap);
-                            return responseService.response(HdfsStatus.FILE_UPLOAD_SUCCESS, null, request);
+                            return new Response(HdfsStatus.FILE_UPLOAD_SUCCESS, null);
                         case "fileexist":
-                            return responseService.response(HdfsStatus.FILE_HAS_EXISTED, null, request);
+                            return new Response(HdfsStatus.FILE_HAS_EXISTED, null);
                         case "userinvalid":
-                            return responseService.response(HdfsStatus.USER_NOT_EXISTED, null, request);
+                            return new Response(HdfsStatus.USER_NOT_EXISTED, null);
                         default:
                             return null;
                     }
                 }
             }
         } catch (Exception e) {
-            return responseService.response(HdfsStatus.BACKEND_ERROR, e.toString(), request);
+            return new Response(HdfsStatus.BACKEND_ERROR, e.toString());
 
         }
 
@@ -295,12 +295,11 @@ public class HDFSController {
      * 返回值:文件流
      */
     @GetMapping("/hdfs/download/")
-    public Object download(HttpServletRequest request, HttpServletResponse response) throws IOException {
+    public Object download(HttpServletRequest request,HttpServletResponse response)throws IOException {
         return download(request, "/", response);
     }
-
     @GetMapping("/hdfs/download/{fileOppositePath}")
-    public Object download(HttpServletRequest request, @PathVariable String fileOppositePath, HttpServletResponse response) throws IOException {
+    public Object download(HttpServletRequest request, @PathVariable String fileOppositePath,HttpServletResponse response) throws IOException {
         try {
             String token = tokenService.getTokenFromRequest(request, "loginToken");
             //获取含有登录信息的Token
@@ -311,9 +310,9 @@ public class HDFSController {
             }
             //String fileName = request.getParameter("fileName");
             if (StringUtils.isEmpty(fileOppositePath)) {
-                return responseService.response(HdfsStatus.INVALID_INPUT, null, request);
+                return new Response(HdfsStatus.INVALID_INPUT, null);
             }
-            InputStream inputStream = (InputStream) hdfsService.download(userId + "/" + fileOppositePath);
+            InputStream inputStream = (InputStream) hdfsService.download(userId + "/"+fileOppositePath);
             if (inputStream != null) {
 
                 OutputStream os = response.getOutputStream();
@@ -327,10 +326,10 @@ public class HDFSController {
                 return null;
                 //下载成功直接返回文件流,没有状态码
             } else {
-                return responseService.response(HdfsStatus.FILE_NOT_EXISTED, null, request);
+                return new Response(HdfsStatus.FILE_NOT_EXISTED, null);
             }
         } catch (Exception e) {
-            return responseService.response(HdfsStatus.BACKEND_ERROR, e.toString(), request);
+            return new Response(HdfsStatus.BACKEND_ERROR, e.toString());
 
         }
 

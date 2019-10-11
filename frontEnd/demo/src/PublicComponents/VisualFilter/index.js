@@ -23,8 +23,8 @@ class Filter extends React.Component {
             notification["error"]({
                 message: '错误',
                 description:
-                    '请填写所有项后添加条件',
-            });
+                  '请填写所有项后添加条件',
+              });
         }
         else {
             this.props.handleAddFilter(label, operator, value);

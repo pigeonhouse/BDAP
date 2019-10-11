@@ -1,13 +1,12 @@
 import React, { Component } from 'react';
-import GGEditor, { Flow } from '@src';
+import GGEditor, { Flow, withPropsAPI } from '@src';
 import { Row, Col } from 'antd';
 import { FlowToolbar } from '../../PublicComponents/EditorToolbar';
 import { FlowDetailPanel } from '../../PublicComponents/EditorDetailPanel';
 import FlowNodePanel from '../../PublicComponents/EditorNodePanel';
 import { FlowContextMenu } from '../../PublicComponents/EditorContextMenu';
-import ExperimentList from "../../PublicComponents/ExperimentList";
-import SparkRunning from '../../ClusterModeComponents/SparkRunPanel/SparkRun';
-import { fetchTool } from '../../FetchTool';
+import ExperimentList from "../../PublicComponents/ExperimentList"
+
 import styles from './index.less';
 
 class ExperimentPanel extends Component {
@@ -15,7 +14,7 @@ class ExperimentPanel extends Component {
         nodesModuleInfo: [],
     }
 
-    async componentWillMount() {
+    componentWillMount() {
         const init = {
             method: 'GET',
             mode: 'cors',
@@ -24,24 +23,22 @@ class ExperimentPanel extends Component {
             },
             credentials: 'include'
         }
-        const res = await fetchTool("/module", init)
-        if (res.code === 200) {
-            this.setState({ nodesModuleInfo: res.data });
-        }
+        fetch('https://result.eolinker.com/MSwz6fu34b763a21e1f7efa84a86a16f767a756952d0f95?uri=localhost:8888/module', init)
+            .then(res => {
+                if (res.status === 200) {
+                    res.json().then(res => {
+                        if (res.code === 200) {
+                            this.setState({ nodesModuleInfo: res.data });
+                        }
+                    })
+                }
+            })
     }
 
     render() {
         if (this.props.currentTab === this.props.clickTab) {
-            return <div className={styles.editor}>
-                <Row style={{ minHeight: 'calc(100vh - 105px)' }}>
-                    <ExperimentList
-                        handleClickEnter={this.props.handleClickEnter}
-                    />
-                </Row>
-            </div>
-
+            return <ExperimentList handleClickEnter={this.props.handleClickEnter} />
         }
-        console.log(this.state.nodesModuleInfo)
         return (
             <GGEditor className={styles.editor} >
                 <Row type="flex" style={{ height: 'calc(100vh - 105px)' }}>
@@ -52,7 +49,7 @@ class ExperimentPanel extends Component {
                         </div>
                     </Col>
 
-                    <Col span={15} className={styles.editorContent}>
+                    <Col span={16} className={styles.editorContent}>
                         <div className={styles.editorHd} data-step="2" data-intro='在工具栏可以进行撤销，复制，删除，成组等操作。' >
                             <FlowToolbar />
                         </div>
@@ -60,17 +57,16 @@ class ExperimentPanel extends Component {
                         />
                     </Col>
 
-                    <Col span={5} className={styles.editorSidebar}>
+                    <Col span={4} className={styles.editorSidebar}>
                         <div className={styles.detailPanel} data-step="3" style={{ maxHeight: 'calc(100vh - 105px)' }} data-intro='在参数栏对你的组件进行参数配置。' data-position='left'>
                             <FlowDetailPanel />
                         </div>
                     </Col>
                 </Row>
-                <FlowContextMenu />
-                <SparkRunning running={this.props.running} stopRunning={this.props.stopRunning} ></SparkRunning>
+				<FlowContextMenu />
             </GGEditor>
         );
     }
 }
 
-export default ExperimentPanel;
+export default withPropsAPI(ExperimentPanel);
