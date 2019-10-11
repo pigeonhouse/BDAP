@@ -110,11 +110,10 @@ class SparkRunning extends Component {
 	}
 
 	render() {
-		return ( <
-			div > {
+		return ( 
+		<div > {
 				this.onClickButton()
-			} <
-			/div>
+			} </div>
 		);
 	}
 }
