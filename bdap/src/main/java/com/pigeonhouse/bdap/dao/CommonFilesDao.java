@@ -38,7 +38,24 @@ public class CommonFilesDao {
         CommonFiles commonFiles = mongoTemplate.findOne(query, CommonFiles.class);
         return commonFiles.getFileList();
     }
+    /**
+     * 在数据库中删除一条常用数据
+     *
+     * @param commonFiles 用户名
+     */
+    public void deleteFile(String userId,String oppositePath) {
 
+        try {
+            Query query = Query.query(Criteria.where("userId").is(userId)
+                    .and("fileList.filePath").is(oppositePath));
+            Update update = new Update();
+            update.unset("tags.$");
+            mongoTemplate.updateFirst(query, update, CommonFiles.class);
+        }
+        catch(Exception e){
+            System.out.println(e.toString());
+        }
+    }
     /**
      * 在数据库新增一条用户文档
      *

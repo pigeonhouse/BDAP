@@ -9,7 +9,7 @@ import com.pigeonhouse.bdap.util.response.Status;
 public enum CommonFileStatus implements Status {
     //
     FILE_INSERT_SUCCESS(200, "加入新文件成功!"),
-    USER_INSERT_SUCCESS(201, "加入新用户成功!"),
+    FILE_DELETE_SUCCESS(201, "删除文件成功!"),
     FILE_GET_SUCCESS(202, "文件列表获取成功!"),
     USER_NOT_FOUND(411, "未找到对应用户!"),
     FILE_HAS_EXISTED(409, "文件已存在!"),

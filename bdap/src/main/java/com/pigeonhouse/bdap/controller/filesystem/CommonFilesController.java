@@ -1,21 +1,15 @@
 package com.pigeonhouse.bdap.controller.filesystem;
 
 import com.alibaba.fastjson.JSONObject;
-import com.auth0.jwt.interfaces.Claim;
-import com.pigeonhouse.bdap.entity.metadata.CommonFiles;
 import com.pigeonhouse.bdap.entity.metadata.CsvHeader;
 import com.pigeonhouse.bdap.entity.metadata.FileAttribute;
 import com.pigeonhouse.bdap.service.ResponseService;
 import com.pigeonhouse.bdap.service.TokenService;
 import com.pigeonhouse.bdap.service.filesystem.CommonFilesService;
 import com.pigeonhouse.bdap.service.filesystem.FileHeaderAttriService;
-import com.pigeonhouse.bdap.util.response.Response;
 import com.pigeonhouse.bdap.util.response.statusimpl.CommonFileStatus;
-import com.pigeonhouse.bdap.util.token.PassToken;
-import org.apache.avro.data.Json;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
@@ -84,13 +78,17 @@ public class CommonFilesController {
             String token = tokenService.getTokenFromRequest(request, "loginToken");
             String userId = tokenService.getValueFromToken(token, "userId").asString();
             String oppositePath = request.getParameter("oppositePath");
+
+            if (!oppositePath.startsWith("/")) {
+                return responseService.response(CommonFileStatus.INVALID_INPUT, null, request);
+            }
             Boolean isExist = commonFilesService.fileExist(oppositePath, userId);
-            if (isExist) {
-                return responseService.response(CommonFileStatus.FILE_HAS_EXISTED, null, request);
+            if (!isExist) {
+                return responseService.response(CommonFileStatus.FILE_NOT_EXISTED, null, request);
             } else {
                 //CsvHeader csvHeader = fileHeaderAttriService.findByFilePath(oppositePath);
                 commonFilesService.deleteFile(userId, oppositePath);
-                return responseService.response(CommonFileStatus.FILE_INSERT_SUCCESS, null, request);
+                return responseService.response(CommonFileStatus.FILE_DELETE_SUCCESS, null, request);
             }
 
         } catch (Exception e) {
