@@ -24,6 +24,6 @@ object Predict {
 
     val output = predict_result
 
-    output.show(100)
+    //output.show(100)
   }
 }

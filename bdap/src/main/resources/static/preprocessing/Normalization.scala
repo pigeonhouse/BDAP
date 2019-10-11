@@ -28,7 +28,7 @@ object Normalization {
     }
 
     val output = scaled
-    output.show()
+    //output.show()
 
   }
 

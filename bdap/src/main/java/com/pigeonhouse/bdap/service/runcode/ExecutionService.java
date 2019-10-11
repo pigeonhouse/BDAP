@@ -191,8 +191,30 @@ public class ExecutionService {
             codeToRun = new StringBuilder();
             ExecutionInfo executionInfo = new ExecutionInfo(nodeInfo.getId(), resultUrl);
             executionInfoList.add(executionInfo);
-
         }
+        String resultUrl = livyDao.postCode(codeToRun.toString(), livySessionInfo);
+        System.out.println("success!\n" + resultUrl);
+        return executionInfoList;
+    }
+
+
+    /**
+     * 用于压力测试
+     * 将所有语句放在一起执行
+     * @param flowInfo
+     * @param livySessionInfo
+     * @return
+     */
+    public List<ExecutionInfo> executeFlowForTest(List<NodeInfo> flowInfo, LivySessionInfo livySessionInfo) {
+        List<ExecutionInfo> executionInfoList = new ArrayList<>();
+        StringBuilder codeToRun = new StringBuilder();
+        codeToRun.append("var dfMap: Map[String, org.apache.spark.sql.DataFrame] = Map() \n");
+        for (NodeInfo nodeInfo : flowInfo) {
+            String nodeCode = generateCode(nodeInfo);
+            codeToRun.append(nodeCode);
+        }
+        String resultUrl = livyDao.postCode(codeToRun.toString(), livySessionInfo);
+        System.out.println("success!\n" + resultUrl);
         return executionInfoList;
     }
 

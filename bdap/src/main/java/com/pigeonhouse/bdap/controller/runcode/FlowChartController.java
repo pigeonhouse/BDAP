@@ -13,6 +13,7 @@ import com.pigeonhouse.bdap.service.runcode.ExecutionService;
 import com.pigeonhouse.bdap.util.response.Response;
 import com.pigeonhouse.bdap.util.response.statusimpl.PostCodeStatus;
 import com.pigeonhouse.bdap.util.response.statusimpl.RunningStatus;
+import com.pigeonhouse.bdap.util.token.PassToken;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -42,8 +43,9 @@ public class FlowChartController {
     @Autowired
     ResponseService responseService;
 
-    @PostMapping(value = "/flow/run")
-    public Response run(@RequestBody MapInfo mapInfo, HttpServletRequest request) {
+        @PassToken
+        @PostMapping(value = "/flow/run")
+        public Response run(@RequestBody MapInfo mapInfo, HttpServletRequest request) {
 
         String token = tokenService.getTokenFromRequest(request, "loginToken");
         LivySessionInfo sessionInfo = tokenService.getLivySessionInfoFromToken(token);
@@ -99,5 +101,27 @@ public class FlowChartController {
 
         return responseService.response(RunningStatus.SUCCESS,null,request);
 
+    }
+
+
+    /**
+     * 用于进行压力测试
+     * @param mapInfo
+     * @return
+     */
+    @PassToken
+    @PostMapping(value = "/flow/run/test")
+    public Response runForTest(@RequestBody MapInfo mapInfo) {
+
+        LivySessionInfo newSessionInfo = new LivySessionInfo();
+        try {
+            newSessionInfo = livyDao.selectAvailableSessionFromFour();
+        }catch(Exception e){
+            e.printStackTrace();
+        }
+
+        ArrayList<NodeInfo> nodes = mapInfo.getNodes();
+
+        return responseService.response(PostCodeStatus.SUCCESS, executionService.executeFlowForTest(nodes, newSessionInfo),null);
     }
 }
