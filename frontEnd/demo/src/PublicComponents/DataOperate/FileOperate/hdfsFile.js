@@ -1,14 +1,12 @@
 import React, { Component } from 'react';
-import { Button, Tree, Form ,Modal} from 'antd'
+import { Button, TreeSelect, Form ,Modal} from 'antd'
 import { withPropsAPI } from '@src';
 import { Stat } from '../DataToolFunctions/Stat'
 import DragM from "dragm";
-import HdfsFileTreeModal from "./HdfsFileTreeModal";
 /**
  * hdfs文件上传
  */
 
- const { TreeNode } = Tree;
 
 class BuildModalTitle extends React.Component {
 	updateTransform = transformStr => {
@@ -190,21 +188,34 @@ class HdfsFile extends Component {
 			},
 		};
 		return (
-            <Form onSubmit={this.handleChange}>
-                <Form.Item label="location" {...inlineFormItemLayout}>
-                    <Button onClick={() => this.showModal()}>查看HDFS文件</Button>
-                </Form.Item>
-                <HdfsFileTreeModal
-                    title={title}
-                    visible={this.state.fileModalVisible}
-                    handleOk={this.handleOk}
-                    handleCancel={this.handleCancel}
-                />
-            </Form>
-		);
-					
-		
-        
+			<Form onSubmit={this.handleChange}>
+				<Form.Item label="location" {...inlineFormItemLayout}>
+			
+					<Button onClick={() => this.showModal()}>查看HDFS文件</Button>
+					<Modal title={title}
+          visible={this.state.fileModalVisible}
+          centered
+          onOk={this.handleOk}
+		  onCancel={this.handleCancel}
+		  footer={[
+            <Button >
+              标注为常用文件
+            </Button>,
+			<Button >
+			确定
+		  </Button>,
+		  <Button>
+			取消
+		  </Button>,
+          ]}
+        >
+          <p>{this.state.text}</p>
+          <p>Some contents...</p>
+          <p>Some contents...</p>
+        </Modal>
+				</Form.Item>
+			</Form>
+		)
 	}
 }
 export default Form.create()(withPropsAPI(HdfsFile));
