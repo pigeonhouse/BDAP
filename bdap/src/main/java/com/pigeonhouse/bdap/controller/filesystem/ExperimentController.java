@@ -1,7 +1,9 @@
 package com.pigeonhouse.bdap.controller.filesystem;
 
+import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.pigeonhouse.bdap.entity.mapinfo.MapInfo;
+import com.pigeonhouse.bdap.service.ResponseService;
 import com.pigeonhouse.bdap.service.filesystem.ExperimentService;
 import com.pigeonhouse.bdap.util.response.Response;
 import com.pigeonhouse.bdap.util.response.statusimpl.ExperimentStatus;
@@ -9,6 +11,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+
+import javax.servlet.http.HttpServletRequest;
 
 /**
  * Author：ZhangJiaYi
@@ -18,26 +22,27 @@ import org.springframework.web.bind.annotation.RestController;
 public class ExperimentController {
     @Autowired
     ExperimentService experimentService;
+    @Autowired
+    ResponseService responseService;
     /**
      *
      * */
     @PostMapping("/experiment/load")
 
-    public Object getFileList(@RequestParam("experimentId") String experimentId) {
+    public Object getFileList(String experimentId, HttpServletRequest request) {
         try {
             MapInfo experiment = experimentService.findExperimentId(experimentId);
             if(experiment==null)
             {
-                return new Response(ExperimentStatus.EXPERIMENT_SEARCH_ERROR, null);
+                return responseService.response(ExperimentStatus.EXPERIMENT_SEARCH_ERROR, null,request);
             }
             else{
-                JSONObject JSONobject = null;//experimentService.experimentToJson(experiment);
-                return new Response(ExperimentStatus.EXPERIMENT_SEARCH_SUCCESS, JSONobject);
+                return responseService.response(ExperimentStatus.EXPERIMENT_SEARCH_SUCCESS, JSON.toJSON(experiment),request);
             }
         }
         catch(Exception e)
         {
-            return new Response(ExperimentStatus.BACKEND_ERROR, e.toString());
+            return responseService.response(ExperimentStatus.BACKEND_ERROR, e.toString(),request);
 
         }
     }

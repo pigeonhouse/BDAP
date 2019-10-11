@@ -69,10 +69,10 @@ public class CommonFilesDao {
      * @return List<CommonFiles>
      */
 
-    public FileAttribute findByFilePath(String filepath, String userId) {
-        Query query = new Query(Criteria.where("fileList.fileName").is(filepath).and("userId").is(userId));
-        FileAttribute fileAttribute = mongoTemplate.findOne(query, FileAttribute.class);
-        return fileAttribute;
+    public CommonFiles findByFilePath(String filepath, String userId) {
+        Query query = new Query(Criteria.where("fileList.filePath").is(filepath).and("userId").is(userId));
+        CommonFiles commonFiles = mongoTemplate.findOne(query, CommonFiles.class);
+        return commonFiles;
     }
 
 }

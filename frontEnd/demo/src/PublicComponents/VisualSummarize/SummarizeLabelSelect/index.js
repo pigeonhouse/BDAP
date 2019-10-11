@@ -28,8 +28,8 @@ class SummarizeLabelSelect extends React.Component {
                     option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
                 }
             >
-                {labelArray.map((item)=>{
-                    return(
+                {labelArray.map((item) => {
+                    return (
                         <Option value={item}>{item}</Option>
                     );
                 })}
