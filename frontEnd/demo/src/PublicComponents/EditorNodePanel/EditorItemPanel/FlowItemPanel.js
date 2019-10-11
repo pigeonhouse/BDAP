@@ -100,7 +100,7 @@ class FlowItemModel extends React.Component {
 		return (
 			<Menu
 				mode="inline"
-				style={{ maxHeight: 'calc(100vh - 105px)', width: '240px', borderRight: 0 }}
+				style={{ maxHeight: 'calc(100vh - 105px)', borderRight: 0 }}
 				selectable={false}
 			>
 				<ItemDecoration />

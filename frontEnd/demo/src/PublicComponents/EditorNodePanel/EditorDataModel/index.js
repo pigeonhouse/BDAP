@@ -163,7 +163,7 @@ class FlowDataModel extends React.Component {
 			<Menu
 				defaultOpenKeys={['sub1']}
 				mode="inline"
-				style={{ maxHeight: 'calc(100vh - 105px)', width: '280px', borderRight: 0 }}
+				style={{ maxHeight: 'calc(100vh - 105px)', borderRight: 0 }}
 				selectable={true}
 				onClick={this.operateCommonFile.bind(this)}
 			>
