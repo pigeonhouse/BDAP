@@ -1,16 +1,6 @@
 import React from 'react';
 import { Table, Row, Col } from 'antd';
 
-const data = [];
-for (let i = 0; i < 100; i++) {
-    data.push({
-        key: i,
-        name: `Edward King ${i}`,
-        age: 32 + i,
-        address: `London, Park Lane no . ${i}`,
-    });
-}
-
 class VisualTable extends React.Component {
     state = {
         filteredInfo: null,
@@ -35,32 +25,33 @@ class VisualTable extends React.Component {
             },
         });
     };
-  
+
     render() {
+
+        const { labelArray, dataSet } = this.props;
+        
+        let data = [];
+        let columns = [];
+
+        dataSet.map((item, index) => {
+            data.push({
+                key: index,
+                ...item
+            });
+        })
+
+        labelArray.map((item) => {
+            columns.push({
+                title: item,
+                dataIndex: item,
+                key: item,
+            })
+        })
+
         let { sortedInfo, filteredInfo } = this.state;
         sortedInfo = sortedInfo || {};
         filteredInfo = filteredInfo || {};
-        const columns = [
-            {
-                title: 'Name',
-                dataIndex: 'name',
-                key: 'name',
-            },
-            {
-                title: 'Age',
-                dataIndex: 'age',
-                key: 'age',
-                sorter: (a, b) => a.age - b.age,
-                sortOrder: sortedInfo.columnKey === 'age' && sortedInfo.order,
-            },
-            {
-                title: 'Address',
-                dataIndex: 'address',
-                key: 'address',
-            
-            },
 
-        ];
         return (
             <div style={{ paddingTop: 10 }}>
                 <Row>

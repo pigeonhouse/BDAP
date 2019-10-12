@@ -17,9 +17,9 @@ class VisualChart extends React.Component {
         myChart.clear();
         switch (this.props.currentChart) {
             case "table": myChart.dispose(); return;
-            case "line": 
+            case "line":
                 createLineChart(myChart, this.props.dataSet);
-                window.onresize = function(){
+                window.onresize = function () {
                     myChart.resize();
                 }
             case "bar": return createBarChart(myChart, this.props.dataSet);
@@ -35,7 +35,9 @@ class VisualChart extends React.Component {
         return (
             <div className={styles.charter}>
                 <div id="main" className={currentChart === 'table' ? styles.chartHidden : styles.chartVisual}></div>
-                <div className={currentChart !== 'table' ? styles.tableHidden : styles.tableVisual}><VisualTable /></div>
+                <div className={currentChart !== 'table' ? styles.tableHidden : styles.tableVisual}>
+                    <VisualTable dataSet={this.props.dataSet || []} labelArray={this.props.labelArray || []} />
+                </div>
             </div>
         );
     }

@@ -2,6 +2,8 @@ import React from 'react';
 import { Button } from 'antd';
 import { fetchTool } from '../../FetchTool';
 
+import Papa from 'papaparse';
+
 class DataSource extends React.Component {
     handleChangeDataSource = async () => {
         const init = {
@@ -16,9 +18,14 @@ class DataSource extends React.Component {
 
         const res = await fetchTool("/query/readyForData", init);
 
-        console.log(res);
         if (res.code === 200) {
-            
+
+            // 通过papa转化
+            const results = Papa.parse(res.data, { header: true, dynamicTyping: true });
+            const fieldNameArray = results.meta.fields;
+
+            this.props.initLabelArray(fieldNameArray);
+            this.props.initDataSet(results.data, fieldNameArray.length);
         }
     }
 
