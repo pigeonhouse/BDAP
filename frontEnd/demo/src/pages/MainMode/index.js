@@ -1,11 +1,11 @@
 import React from 'react';
 import { Redirect } from 'react-router-dom';
-import { Row, Col, Button, message, notification, Icon, Tabs } from 'antd';
+import { Row, Col, Button, message, notification, Icon,Tabs } from 'antd';
 
 import ExperimentPanel from '../ExperimentPanel';
 import Model from '../../PublicComponents/ModelStore';
 import VisualizedPanel from '../VisualizedPanel';
-
+import DataUpload from "../../PublicComponents/DataUpload"
 import styles from './index.less';
 
 /**
@@ -244,6 +244,14 @@ class LocalMode extends React.Component {
 						key="2"
 					>
 						<VisualizedPanel></VisualizedPanel>
+					</TabPane>
+					<TabPane
+						className={styles.leftMenu}
+						tab={<Icon type="database" className={styles.iconStyle} />}
+						key="3"
+					>
+						<DataUpload></DataUpload>
+						{/* <VisualizedPanel></VisualizedPanel> */}
 					</TabPane>
 				</Tabs>
 

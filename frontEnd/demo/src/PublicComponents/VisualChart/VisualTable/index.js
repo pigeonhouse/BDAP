@@ -25,16 +25,7 @@ class VisualTable extends React.Component {
         });
     };
 
-    // clearFilters = () => {
-    //     this.setState({ filteredInfo: null });
-    // };
 
-    // clearAll = () => {
-    //     this.setState({
-    //         filteredInfo: null,
-    //         sortedInfo: null,
-    //     });
-    // };
 
     setAgeSort = () => {
         this.setState({
@@ -44,9 +35,7 @@ class VisualTable extends React.Component {
             },
         });
     };
-    // onInputChange = (e) => {
-    //     this.setState({ searchText: e.target.value });
-    // }
+  
     render() {
         let { sortedInfo, filteredInfo } = this.state;
         sortedInfo = sortedInfo || {};
@@ -56,12 +45,6 @@ class VisualTable extends React.Component {
                 title: 'Name',
                 dataIndex: 'name',
                 key: 'name',
-                // filters: [{ text: "select" + " " + this.state.searchText, value: this.state.searchText }],
-                // filterIcon: <Icon type="search" style={{ color: this.state.filtered ? '#108ee9' : '#aaa' }} />,
-                // filteredValue: filteredInfo.name || null,
-                // onFilter: (value, record) => record.name.includes(value),
-                // sorter: (a, b) => a.name.length - b.name.length,
-                // sortOrder: sortedInfo.columnKey === 'name' && sortedInfo.order,
             },
             {
                 title: 'Age',
@@ -74,12 +57,7 @@ class VisualTable extends React.Component {
                 title: 'Address',
                 dataIndex: 'address',
                 key: 'address',
-                // filters: [{ text: "select" + " " + this.state.searchText, value: this.state.searchText }],
-                // filterIcon: <Icon type="search" style={{ color: this.state.filtered ? '#108ee9' : '#aaa' }} />,
-                // filteredValue: filteredInfo.address || null,
-                // onFilter: (value, record) => record.address.includes(value),
-                // sorter: (a, b) => a.address.length - b.address.length,
-                // sortOrder: sortedInfo.columnKey === 'address' && sortedInfo.order,
+            
             },
 
         ];
@@ -92,7 +70,7 @@ class VisualTable extends React.Component {
                             dataSource={data}
                             onChange={this.handleChange}
                             pagination={{ pageSize: 50 }}
-                            scroll={{ x: "110%", y: "calc(100vh - 405px)" }}
+                            scroll={{ x: "110%", y: "calc(105vh - 405px)" }}
                         />
                     </Col>
                     <Col span={2}></Col>

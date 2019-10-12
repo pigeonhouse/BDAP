@@ -1,6 +1,5 @@
 import React from 'react';
-import { Table, Button, Row, Col, Modal } from 'antd';
-
+import { Table, Button, Row, Col, Modal,Upload, Icon,message } from 'antd';
 class ExperimentList extends React.Component {
 
 	state = {
@@ -68,6 +67,10 @@ class ExperimentList extends React.Component {
 		})
 
 	}
+	// getCookieValue = (name) => {
+	// 	var arr = document.cookie.match(new RegExp("(^| )" + name + "=([^;]*)(;|$)"));
+	// 	return arr;
+	// }
 	render() {
 
 		const columns = [
@@ -101,6 +104,30 @@ class ExperimentList extends React.Component {
 			selectedRowKeys
 		};
 
+		
+
+		// const props = {
+		// 	name: 'file',
+		// 	method:'UPDATE',
+		// 	action: 'localhost:8888/hdfs/',
+		// 	headers: {
+		// 	"Content-Type": 'multipart/form-data',
+		// 	"Cookies":this.getCookieValue("loginToken")
+		// 	},
+		// onChange(info) {
+		// 	  if (info.file.status !== 'uploading') {
+		// 		console.log(info.file, info.fileList);
+		// 	  }
+		// 	  if (info.file.status === 'done') {
+		// 		message.success(`${info.file.name} file uploaded successfully`);
+		// 	  } else if (info.file.status === 'error') {
+		// 		message.error(`${info.file.name} file upload failed.`);
+		// 	  }
+		// 	},
+		//   }
+
+
+
 		return (
 			<div style={{ marginLeft: 20, marginTop: 20 }}>
 				<Row>
@@ -125,7 +152,13 @@ class ExperimentList extends React.Component {
 							dataSource={this.state.dataSource}
 							pagination={{ pageSize: 6 }} />
 					</Col>
-					<Col span={12}>缩略图预览</Col>
+					<Col span={12}> 缩略图
+						{/* <Upload {...props}>
+							<Button type="primary">
+								<Icon type="upload" /> Click to Upload
+    						</Button>
+						</Upload> */}
+					</Col>
 				</Row>
 
 			</div>)
