@@ -4,7 +4,6 @@ import { withPropsAPI } from '@src';
 import { Stat } from '../DataToolFunctions/Stat';
 import { fetchTool } from '../../../FetchTool';
 import DragM from "dragm";
-
 /**
  * hdfs文件上传
  */

@@ -37,14 +37,7 @@ public class LivyDao {
     int numExecutors;
     @Value("${executorCores}")
     int executorCores;
-    @Value("${spark.shuffle.reduceLocality.enabled}")
-    boolean sparkShuffleReduceLocalityEnabled;
-    @Value("${spark.shuffle.blockTransferService}")
-    String sparkShuffleBlockTransferService;
-    @Value("${spark.scheduler.minRegisteredResourcesRatio}")
-    double sparkSchedulerMinRegisteredResourcesRatio;
-    @Value("${spark.speculation}")
-    boolean sparkSpeculation;
+
 
     @Value("${livyAddr}")
     String[] livyAddrList;
@@ -117,40 +110,49 @@ public class LivyDao {
         } catch (IOException | URISyntaxException e) {
             e.printStackTrace();
         }
-
-
     }
-//    /**
-//     * 选择空闲Session，否则创建一个
-//     *
-//     * @return
-//     */
-//    public LivySessionInfo selectAvailableSession() {
-//        LivySessionDescription livySessionDescription = getSessionList();
-//        LivySessionInfo availableSession = new LivySessionInfo();
-//        for (LivySessionInfo sessionInfo : livySessionDescription.getSessions()) {
-//            if ("idle".equals(sessionInfo.getState())) {
-//                availableSession = sessionInfo;
-//                break;
-//            }
-//            availableSession = null;
-//        }
-//        if (livySessionDescription.getTotal() == 0 || availableSession == null) {
-//            logger.info("No idle session is available. Waiting to create a new Livy Session");
-//            LivySessionInfo newSession = createSession();
-//            while (!"idle".equals(getSession(newSession.getId()).getState())) {
-//                try {
-//                    Thread.sleep(1000);
-//                } catch (InterruptedException e) {
-//                    e.printStackTrace();
-//                }
-//            }
-//            logger.info("Create A New Session." + "ID :" + newSession.getId());
-//            availableSession = newSession;
-//        }
-//        return availableSession;
-//    }
+    //--------------------------------------------------------------------------
+    /**
+     * 仅供测试时使用！！！选择空闲Session，否则创建一个
+     * @return
+     */
+    public LivySessionInfo selectAvailableSessionFromFour(){
+        try {
+            return selectAvailableSession(livyAddrList[(int)(Math.random()*4)]);
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+        return null;
+    }
+    public static LivySessionInfo selectAvailableSession(String livyAddr) throws IOException {
 
+        LinkedHashMap livySessionDescription = getSession(livyAddr);
+        LivySessionInfo availableSession = null;
+
+        System.out.println("livySessionDescription");
+
+        List<LinkedHashMap> sessionInfos = (List<LinkedHashMap>)livySessionDescription.get("sessions");
+
+        for (LinkedHashMap sessionInfo : sessionInfos) {
+            if (sessionInfo.get("state").equals("idle")) {
+                availableSession = new LivySessionInfo(livyAddr, (int)sessionInfo.get("id"));
+                System.out.println("---------got one------------");
+                System.out.println(sessionInfo);
+                break;
+            }
+        }
+        return availableSession;
+    }
+
+    public static LinkedHashMap getSession(String livyAddr) throws IOException {
+        String sessionUrl;
+        sessionUrl = "http://" + livyAddr + "/sessions";
+        RestTemplate restTemplate = new RestTemplate();
+        String res = restTemplate.getForObject(sessionUrl, String.class);
+        return objectMapper.readValue(res, LinkedHashMap.class);
+    }
+
+    //-----------------------上面的仅供测试时使用----------------------------------------
 
     public void deleteSession(String id) {
         RestTemplate restTemplate = new RestTemplate();
@@ -187,10 +189,7 @@ public class LivyDao {
         bodyHashMap.put("jars", jarsList);
         bodyHashMap.put("numExecutors", numExecutors);
         bodyHashMap.put("executorCores", executorCores);
-        confHashMap.put("spark.shuffle.reduceLocality.enabled", sparkShuffleReduceLocalityEnabled);
-        confHashMap.put("spark.shuffle.blockTransferService", sparkShuffleBlockTransferService);
-        confHashMap.put("spark.scheduler.minRegisteredResourcesRatio", sparkSchedulerMinRegisteredResourcesRatio);
-        confHashMap.put("spark.speculation", sparkSpeculation);
+
         bodyHashMap.put("conf", confHashMap);
         String jsonBody = null;
         try {

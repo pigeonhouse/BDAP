@@ -6,7 +6,6 @@ import ExperimentPanel from '../ExperimentPanel';
 import Model from '../../PublicComponents/ModelStore';
 import VisualizedPanel from '../VisualizedPanel';
 
-import SparkRun from "../../ClusterModeComponents/SparkRunPanel";
 import styles from './index.less';
 
 /**
@@ -173,22 +172,27 @@ class LocalMode extends React.Component {
 		if (this.props.location.state === undefined) {
 			return <Redirect to='/' />
 		}
+
+		//#343941  黑色
+		//#509ee3  蓝色
+		//#a88bc3  紫色
+		const backgroundColor = '#343941'
 		return (
 			<div className={styles.editor}>
 				<Row
-					style={{ lineHeight: '40px', height: '40px', backgroundColor: '#343941', color: "white" }}
+					style={{ lineHeight: '40px', height: '40px', backgroundColor: backgroundColor, color: "white" }}
 				>
 					<Col span={1}>
-						<Button style={{ border: 0, backgroundColor: '#343941', color: "#ddd" }} size="large">
+						<Button style={{ border: 0, backgroundColor: backgroundColor, color: "#ddd" }} size="large">
 							<Icon type="bars" style={{ fontSize: 20 }} />
 						</Button>
 					</Col>
 					<Col span={21}>
-						<Button style={{ border: 0, backgroundColor: '#343941', color: "#ddd", fontSize: 18, fontFamily: 'consolas' }}>BigDataPlayground Preview-Mode</Button>
+						<Button style={{ border: 0, backgroundColor: backgroundColor, color: "#ddd", fontSize: 18, fontFamily: 'consolas' }}>BigDataPlayground Preview-Mode</Button>
 					</Col>
 					<Col span={2}>
 						<a href="https://www.yuque.com/ddrid/tx7z84" target="_blank">
-							<Button style={{ border: 0, backgroundColor: '#343941', color: "#ddd", fontSize: 25 }} >
+							<Button style={{ border: 0, backgroundColor: backgroundColor, color: "#ddd", fontSize: 25 }} >
 								<Icon type="question-circle" data-step="5" data-intro="如果想要进一步了解详细的使用教程及组件介绍，请点击此处查看文档。" />
 							</Button>
 						</a>
@@ -200,7 +204,7 @@ class LocalMode extends React.Component {
 							viewBox="0 0 250 250"
 							style={{
 								fill: '#fff',
-								color: '#343941',
+								color: backgroundColor,
 								position: 'absolute',
 								top: 0,
 								border: 0,
@@ -243,14 +247,16 @@ class LocalMode extends React.Component {
 					</TabPane>
 				</Tabs>
 
-				<Row type="flex" style={{ bottom: 0, height: '65px', lineHeight: '65px', backgroundColor: '#343941' }}
+				<Row type="flex" style={{ bottom: 0, height: '65px', lineHeight: '65px', backgroundColor: backgroundColor }}
 					data-step="4" data-intro="所有配置完成后，点击'运行'按钮开始运行整个工作流。" data-position='top'
 				>
 					<Col span={2}>
 					</Col>
 					<Col span={9}></Col>
 					<Col span={2}>
-						<SparkRun onClickButtonRunning={this.onClickButtonRunning} />
+						<Button onClick={this.onClickButtonRunning} style={{ border: 0, backgroundColor: backgroundColor, color: "#ddd", fontSize: 25 }}>
+							<Icon type="play-circle" style={{ fontSize: 25 }} />运行
+        				</Button>
 					</Col>
 					<Col span={9}></Col>
 					<Col span={2}>

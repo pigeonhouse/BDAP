@@ -13,8 +13,8 @@ object SplitData {
     val trainDF = spark.createDataFrame(trainData, dfSchema)
     val testDF = spark.createDataFrame(testData, dfSchema)
 
-    trainDF.show(100)
-    testDF.show(100)
+    //trainDF.show(100)
+    //testDF.show(100)
 
     val output = trainDF
     val output_1 = testDF

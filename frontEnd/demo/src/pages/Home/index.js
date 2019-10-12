@@ -3,6 +3,7 @@ import { Row, Col, Card, Form, Input, Button, message, Icon, Checkbox, notificat
 import { Redirect } from 'react-router-dom';
 import { fetchTool } from '../../FetchTool';
 import style from './index.less';
+import { runInThisContext } from 'vm';
 
 /**
  * 登陆界面
@@ -18,6 +19,7 @@ class HomePage extends React.Component {
 		password: '',
 		remind: '',
 		rememberPassword: false,
+		iconLoading: false,
 	}
 
 	componentWillMount() {
@@ -54,8 +56,12 @@ class HomePage extends React.Component {
 		}
 	}
 
-	handleSubmit = (e) => {
+	enterLoading = () => {
+		this.setState({ iconLoading: true });
+	}
 
+	handleSubmit = (e) => {
+		
 		e.preventDefault();
 		let userInfo = this.props.form.getFieldsValue();
 		this.props.form.validateFields(async (err, values) => {
@@ -84,7 +90,10 @@ class HomePage extends React.Component {
 						exp.setTime(exp.getTime() + Days * 24 * 60 * 60 * 1000);
 						document.cookie = 'accountInfo' + "=" + escape(accountInfo) + ";expires=" + exp.toGMTString()
 					}
-					this.setState({ redirect: true });
+					this.setState({
+						redirect: true,
+						iconLoading: true,
+					});
 					message.success(`${userInfo.username}, welcome`);
 				}
 			}
@@ -207,7 +216,13 @@ class HomePage extends React.Component {
 											<Checkbox>Remember me</Checkbox>
 										)}
 									<a className={style.loginFormForgot} href="">Forgot password</a>
-									<Button type='primary' htmlType="submit" className={style.loginButton}>Log in</Button>
+									<Button
+										type='primary'
+										htmlType="submit"
+										loading={this.state.iconLoading}
+										className={style.loginButton}
+										onClick={this.enterLoading}
+									>Log in</Button>
 								</Form.Item>
 							</Form>
 						</Card>
