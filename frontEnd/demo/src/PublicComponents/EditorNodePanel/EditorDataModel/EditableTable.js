@@ -1,7 +1,7 @@
 
 import React from 'react';
 import { Table, Input, Button, Popconfirm, Form } from 'antd';
-
+import {fetchTool} from '../../../FetchTool'
 const EditableContext = React.createContext();
 
 const EditableRow = ({ form, index, ...props }) => (
@@ -17,52 +17,7 @@ class EditableCell extends React.Component {
     editing: false,
   };
 
-  toggleEdit = () => {
-    const editing = !this.state.editing;
-    this.setState({ editing }, () => {
-      if (editing) {
-        this.input.focus();
-      }
-    });
-  };
 
-  save = e => {
-    const { record, handleSave } = this.props;
-    this.form.validateFields((error, values) => {
-      if (error && error[e.currentTarget.id]) {
-        return;
-      }
-      this.toggleEdit();
-      handleSave({ ...record, ...values });
-    });
-  };
-
-  renderCell = form => {
-    this.form = form;
-    const { children, dataIndex, record, title } = this.props;
-    const { editing } = this.state;
-    return editing ? (
-      <Form.Item style={{ margin: 0 }}>
-        {form.getFieldDecorator(dataIndex, {
-          rules: [
-            {
-              required: true,
-              message: `${title} is required.`,
-            },
-          ],
-          initialValue: record[dataIndex],
-        })(<Input ref={node => (this.input = node)} onPressEnter={this.save} onBlur={this.save} />)}
-      </Form.Item>
-    ) : (
-      <div
-        className="editable-cell-value-wrap"
-        style={{ paddingRight: 24 }}
-        onClick={this.toggleEdit}
-      >
-        {children}
-      </div>
-    );
-  };
 
   render() {
     const {
@@ -71,7 +26,6 @@ class EditableCell extends React.Component {
       title,
       record,
       index,
-      handleSave,
       children,
       ...restProps
     } = this.props;
@@ -116,15 +70,47 @@ class EditableTable extends React.Component {
     ];
 
     this.state = {
-      dataSource: this.props.items
+      dataSource: this.props.items.map(r=>(r.filePath===undefined?undefined:
+        "/"+r.filePath.split("/").slice(4-r.filePath.split("/").length).join("/")),
+        r
+        )
+       
     };
+    console.log(this.state.dataSource)
   }
+  
 
-  handleDelete = key => {
+
+  
+  getCookieValue = (name) => {
+		var arr = document.cookie.match(new RegExp("(^| )" + name + "=([^;]*)(;|$)"));
+		return arr;
+	}
+  handleDelete = async(label) => {
     const dataSource = [...this.state.dataSource];
+    const filePath=dataSource.filter (r=>(r.label===label))[0].filePath
+    let formData = new FormData();
+		let cookie = this.getCookieValue("loginToken")
+		formData.append('oppositePath', filePath)
+		const init = {
+			method: 'POST',
+			body: formData,
+			mode: 'cors',
+			headers: {
+				"Cookie": cookie
+			},
+		}
     console.log(dataSource)
-    this.setState({ dataSource: dataSource.filter(
-      r=>(r.label!==key))});
+    const res = await fetchTool('/commonFiles/deleteFile', init)
+    if (res.code === 201) {
+      this.setState({ dataSource: dataSource.filter(
+        r=>(r.label!==label))});
+			message.success(res.message);
+		}
+		if (res.code === 410) {
+			message.error(res.message);
+		}
+    
   };
 
  
@@ -148,7 +134,6 @@ class EditableTable extends React.Component {
           editable: col.editable,
           dataIndex: col.dataIndex,
           title: col.title,
-          handleSave: this.handleSave,
         }),
       };
     });

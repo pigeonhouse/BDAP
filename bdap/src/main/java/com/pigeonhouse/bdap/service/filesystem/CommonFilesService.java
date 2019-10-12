@@ -66,7 +66,7 @@ public class CommonFilesService {
 * */
     public void deleteFile(String userId,String oppositePath) {
         HdfsConfig hdfsConfig=new HdfsConfig();
-       // commonFilesDao.deleteFile()
+        commonFilesDao.deleteFile(userId,hdfsConfig.getDefaultDirectory()+"/"+userId+oppositePath);
     }
 
     /**
