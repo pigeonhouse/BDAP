@@ -48,14 +48,12 @@ public class HDFSController {
         return getFileList(request, "/");
     }
 
-    @RequestMapping(value = "/hdfs/{oppositePath}", method = RequestMethod.GET)
-    public Object getFileList(HttpServletRequest request, @PathVariable String oppositePath) {
+    @RequestMapping(value = "/hdfs", method = RequestMethod.GET)
+    public Object getFileList(HttpServletRequest request, @RequestParam("oppositePath") String oppositePath) {
         try {
             String token = tokenService.getTokenFromRequest(request, "loginToken");
             String userId = tokenService.getValueFromToken(token, "userId").asString();
-            if (oppositePath == null) {
-                oppositePath = "/";
-            }
+            oppositePath=oppositePath==null?"/":oppositePath.startsWith("/")?oppositePath:"/"+oppositePath;
             Hdfsfile fileList = hdfsService.listFiles(userId + oppositePath, null);
             if (fileList != null) {
                 JSONObject fileListJson = new JSONObject(new LinkedHashMap());
@@ -151,6 +149,7 @@ public class HDFSController {
             String token = tokenService.getTokenFromRequest(request, "loginToken");
             String userId = tokenService.getValueFromToken(token, "userId").asString();
             String oppositePath = request.getParameter("oppositePath");
+            oppositePath=oppositePath==null?"/":oppositePath;
             boolean replace = Boolean.parseBoolean(request.getParameter("replace"));
             MultipartFile file = multipartRequest.getFile("file");
             if (file == null || file.getBytes() == null) {

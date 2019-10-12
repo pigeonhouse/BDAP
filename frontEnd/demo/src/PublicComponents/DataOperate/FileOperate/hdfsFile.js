@@ -4,6 +4,8 @@ import { withPropsAPI } from '@src';
 import { Stat } from '../DataToolFunctions/Stat';
 import { fetchTool } from '../../../FetchTool';
 import DragM from "dragm";
+import HdfsFileTreeModal from './HdfsFileTreeModal';
+import { async } from 'q';
 /**
  * hdfs文件上传
  */
@@ -49,7 +51,24 @@ class HdfsFile extends Component {
 			fileModalVisible: false
 		});
 	};
-	async componentWillMount() {
+	fetchfiletree=async()=>{
+		const init = {
+			method: 'GET',
+			mode: 'cors',
+			headers:{
+				"Cookies": this.getCookieValue("loginToken")
+			}
+		}
+
+		const res = await fetchTool("/hdfs/", init);
+		return res;
+
+	}
+	getCookieValue = (name) => {
+		var arr = document.cookie.match(new RegExp("(^| )" + name + "=([^;]*)(;|$)"));
+		return arr;
+	}
+	componentWillMount() {
 		const { propsAPI } = this.props;
 		const { getSelected } = propsAPI;
 		const item = getSelected()[0];
@@ -57,15 +76,7 @@ class HdfsFile extends Component {
 		const inpValu = model.labelName.label || '';
 		this.setState({ inpValu });
 
-		let formData = new FormData();
-		formData.append('oppositePath', this.state.oppositePath)
-		const init = {
-			method: 'POST',
-			body: formData,
-			mode: 'cors'
-		}
-
-		const res = await fetchTool("/hdfs/getfilelist", init);
+		const res=this.fetchfiletree;
 
 		if (res.code === 201) {
 			let treeData = res.data;
@@ -178,32 +189,27 @@ class HdfsFile extends Component {
 		};
 		return (
 			<Form onSubmit={this.handleChange}>
-				<Form.Item label="location" {...inlineFormItemLayout}>
-
-					<Button onClick={() => this.showModal()}>查看HDFS文件</Button>
-					<Modal title={title}
-						visible={this.state.fileModalVisible}
-						centered
-						onOk={this.handleOk}
-						onCancel={this.handleCancel}
-						footer={[
-							<Button >
-								标注为常用文件
-            				</Button>,
-							<Button >
-								确定
-		  					</Button>,
-							<Button>
-								取消
-		  					</Button>,
-						]}
-					>
-						<p>{this.state.text}</p>
-						<p>Some contents...</p>
-						<p>Some contents...</p>
-					</Modal>
-				</Form.Item>
-			</Form>
+			<Form.Item label="location" {...inlineFormItemLayout}>
+				<Button onClick={() => this.showModal()}>查看HDFS文件</Button>
+			</Form.Item>
+			<Modal
+                title={title}
+				visible={this.state.fileModalVisible}
+				onCancel={this.handleCancel}
+                footer={[
+                    <Button onClick={()=>
+                        this.handleOk()
+                    }>确定</Button>
+                ]}
+            >
+			<HdfsFileTreeModal
+				title={title}
+				visible={this.state.fileModalVisible}
+				handleOk={this.handleOk}
+				handleCancel={this.handleCancel}
+			/>
+			</Modal>
+		</Form>
 		)
 	}
 }
