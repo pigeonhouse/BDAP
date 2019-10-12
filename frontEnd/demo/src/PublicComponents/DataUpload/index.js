@@ -29,11 +29,9 @@ class DataUpload extends React.Component {
     render() {
         const props = {
             name: 'file',
-            method: 'UPDATE',
-            action: 'localhost:8888/hdfs/',
+            action: 'http://localhost:8888/hdfs/upload',
             headers: {
-                "Content-Type": 'multipart/form-data',
-                "Cookies": this.getCookieValue("loginToken")
+                Cookie: this.getCookieValue("loginToken")
             },
             onChange(info) {
                 if (info.file.status !== 'uploading') {
