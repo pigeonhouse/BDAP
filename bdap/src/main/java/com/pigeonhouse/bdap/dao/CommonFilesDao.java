@@ -1,5 +1,6 @@
 package com.pigeonhouse.bdap.dao;
 
+import com.mongodb.BasicDBObject;
 import com.pigeonhouse.bdap.entity.metadata.CommonFiles;
 import com.pigeonhouse.bdap.entity.metadata.FileAttribute;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -49,7 +50,9 @@ public class CommonFilesDao {
             Query query = Query.query(Criteria.where("userId").is(userId)
                     .and("fileList.filePath").is(oppositePath));
             Update update = new Update();
-            update.unset("tags.$");
+            BasicDBObject s = new BasicDBObject();
+            s.put("filePath", oppositePath);
+            update.pull("fileList",s);
             mongoTemplate.updateFirst(query, update, CommonFiles.class);
         }
         catch(Exception e){

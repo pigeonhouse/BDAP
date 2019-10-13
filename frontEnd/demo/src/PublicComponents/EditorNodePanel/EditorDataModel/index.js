@@ -5,6 +5,7 @@ import ItemDecoration from '../ItemDecoration';
 import DragM from "dragm";
 import { fetchTool } from '../../../FetchTool';
 import EditableTable from './EditableTable';
+import HdfsFileTreeModal from '../../DataOperate/FileOperate/HdfsFileTreeModal'
 /**
  * 左侧下拉菜单栏，包括可操作实现的组件
  * 整理为一个通用的组件，将关于数据源的名字数组传入即可
@@ -93,9 +94,6 @@ class FlowDataModel extends React.Component {
 			method: 'POST',
 			body: formData,
 			mode: 'cors',
-			headers: {
-				"Cookie": cookie
-			},
 		}
 		const res = await fetchTool('/commonFiles/setNewFile', init)
 		if (res.code === 200) {
@@ -185,15 +183,7 @@ class FlowDataModel extends React.Component {
 							  ]}*/
 						>
 							<p>
-								<Tree showLine defaultExpandedKeys={['0-0-0']} onSelect={this.onSelect}>
-									<TreeNode title="parent 1" key="0-0">
-										<TreeNode title="parent 1-0" key="0-0-0">
-											<TreeNode title="leaf" key="/adult.csv" />
-											<TreeNode title="leaf" key="0-0-0-1" />
-											<TreeNode title="leaf" key="0-0-0-2" />
-										</TreeNode>
-									</TreeNode>
-								</Tree>
+								<HdfsFileTreeModal/>
 							</p>
 						</Modal>
 						<Menu.Item key="delete" ><Icon type="delete" />删除常用数据集</Menu.Item>
@@ -205,7 +195,7 @@ class FlowDataModel extends React.Component {
 							footer={<Button onClick={this.deleteCommonFileCancel}>取消</Button>}
 						>
 							<p>
-								<EditableTable items={itemData} />
+								<EditableTable/>
 							</p>
 						</Modal>
 					</SubMenu>

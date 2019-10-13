@@ -13,7 +13,6 @@ class HdfsFileTreeModal extends React.Component {
         this.state = {
             // 文件树数据，格式：array<{key, title, children, isLeaf}>
             treeData: [],
-            visible:this.props.visible
         };
     }
 
@@ -93,11 +92,6 @@ class HdfsFileTreeModal extends React.Component {
             }
         });
         return treeNodeArray;
-    }
-    onSelectFile=()=>{
-        this.setState({
-            visible:false
-        })
     }
      render() {
         return (       

@@ -9,10 +9,10 @@ import com.pigeonhouse.bdap.service.filesystem.CommonFilesService;
 import com.pigeonhouse.bdap.service.filesystem.FileHeaderAttriService;
 import com.pigeonhouse.bdap.util.response.statusimpl.CommonFileStatus;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.util.ArrayList;
 
 /**
@@ -72,12 +72,12 @@ public class CommonFilesController {
      *
      * @return 错误提示信息或插入成功通知
      */
-    @PostMapping("/commonFiles/deleteFile")
-    public Object deleteFileFromCommonFiles(HttpServletRequest request) {
+    @PostMapping("/commonFiles/deleteFiles")
+    public Object deleteFileFromCommonFiles(HttpServletRequest request,@RequestParam("oppositePath") String oppositePath,HttpServletResponse response) {
         try {
+
             String token = tokenService.getTokenFromRequest(request, "loginToken");
             String userId = tokenService.getValueFromToken(token, "userId").asString();
-            String oppositePath = request.getParameter("oppositePath");
 
             if (!oppositePath.startsWith("/")) {
                 return responseService.response(CommonFileStatus.INVALID_INPUT, null, request);

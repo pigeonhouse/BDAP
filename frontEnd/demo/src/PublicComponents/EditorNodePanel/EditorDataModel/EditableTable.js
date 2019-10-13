@@ -1,6 +1,6 @@
 
 import React from 'react';
-import { Table, Input, Button, Popconfirm, Form } from 'antd';
+import { Table, Input, Button, Popconfirm, Form,message } from 'antd';
 import {fetchTool} from '../../../FetchTool'
 const EditableContext = React.createContext();
 
@@ -40,10 +40,17 @@ class EditableCell extends React.Component {
     );
   }
 }
+function filepathmap(item)
+{
+  item.filePath=item.filePath===undefined?undefined:
+        "/"+item.filePath.split("/").slice(4-item.filePath.split("/").length).join("/");
+  return item
 
+}
 class EditableTable extends React.Component {
   constructor(props) {
     super(props);
+    
     this.columns = [
       {
 				title: 'fileName',
@@ -70,10 +77,7 @@ class EditableTable extends React.Component {
     ];
 
     this.state = {
-      dataSource: this.props.items.map(r=>(r.filePath===undefined?undefined:
-        "/"+r.filePath.split("/").slice(4-r.filePath.split("/").length).join("/")),
-        r
-        )
+      dataSource: this.props.items.map(r=>(filepathmap(r)))
        
     };
     console.log(this.state.dataSource)
@@ -91,17 +95,15 @@ class EditableTable extends React.Component {
     const filePath=dataSource.filter (r=>(r.label===label))[0].filePath
     let formData = new FormData();
 		let cookie = this.getCookieValue("loginToken")
-		formData.append('oppositePath', filePath)
+		formData.append('oppositePath',filePath)
 		const init = {
 			method: 'POST',
-			body: formData,
+			body:formData,
 			mode: 'cors',
-			headers: {
-				"Cookie": cookie
-			},
+      credentials: 'include'
 		}
     console.log(dataSource)
-    const res = await fetchTool('/commonFiles/deleteFile', init)
+    const res = await fetchTool('/commonFiles/deleteFiles', init)
     if (res.code === 201) {
       this.setState({ dataSource: dataSource.filter(
         r=>(r.label!==label))});
