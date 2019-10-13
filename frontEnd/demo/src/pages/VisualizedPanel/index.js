@@ -17,6 +17,7 @@ class VisualizedPanel extends React.Component {
         currentChart: "table",
         rightCol: "filter",
         dataSourceName: 'data',
+        fileColumns: [],
         filter: [],
         summarize: [],
         dataSet: [],
@@ -27,10 +28,18 @@ class VisualizedPanel extends React.Component {
     }
 
     initLabelArray = (labelArray, labelType) => {
-        this.setState({ labelArray, labelType });
+        this.setState({ labelArray, labelType, fileColumns:labelArray });
     }
 
     initDataSet = (dataSet, length) => {
+        this.setState({ dataSet })
+    }
+
+    changeLabelArray = (labelArray, labelType) => {
+        this.setState({ labelArray, labelType });
+    }
+
+    changeDataSet = (dataSet, length) => {
         this.setState({ dataSet })
     }
 
@@ -154,8 +163,8 @@ class VisualizedPanel extends React.Component {
                 }
             }
 
-            this.initLabelArray(fieldNameArray, labelType);
-            this.initDataSet(results.data, fieldNameArray.length);
+            this.changeLabelArray(fieldNameArray, labelType);
+            this.changeDataSet(results.data, fieldNameArray.length);
         }
     }
 
@@ -175,7 +184,7 @@ class VisualizedPanel extends React.Component {
                         handleAddFilter={this.handleAddFilter}
                         handleDeleteFilter={this.handleDeleteFilter}
                         filter={this.state.filter}
-                        labelArray={this.state.labelArray} />
+                        labelArray={this.state.fileColumns} />
                 )
             case 'summarize':
                 return (
@@ -185,7 +194,7 @@ class VisualizedPanel extends React.Component {
                         handleDeleteSummarize={this.handleDeleteSummarize}
                         summarize={this.state.summarize}
                         groupLabel={this.state.groupLabel}
-                        labelArray={this.state.labelArray} />
+                        labelArray={this.state.fileColumns} />
                 )
             case 'settings':
                 return (
