@@ -1,6 +1,11 @@
 import React from "react"
-import { Upload, message, Button, Icon } from 'antd';
+import { Upload, message, Button, Icon, Row, Col, Divider } from 'antd';
 
+
+
+
+
+//可以用来测试
 // const props = {
 //     name: 'file',
 //     action: 'https://www.mocky.io/v2/5cc8019d300000980a055e76',
@@ -47,12 +52,26 @@ class DataUpload extends React.Component {
             },
         }
         return (
-            <div style ={{marginLeft:20,marginTop:20}}>
-                <Upload {...props}>
-                    <Button type="primary">
-                        <Icon type="upload" /> Click to Upload
-    		        </Button>
-                </Upload>
+            <div >
+                <Row>
+                    <Col span={12}>
+                        <Row style={{ height: 200 }}></Row>
+                        <Row>
+                            <Col span={2}></Col>
+                            <Col span={20} style={{ height: 240, overflow: "auto" }}>
+                                <Upload {...props} >
+                                    <Button>
+                                        <Icon type="upload" /> Click to Upload
+    		                        </Button>
+                                </Upload>
+                            </Col>
+                            <Col span={2}></Col>
+                        </Row>
+                    </Col>
+
+                    <Col span={12}>可以写其他</Col>
+                </Row>
+
             </div>
         )
 
