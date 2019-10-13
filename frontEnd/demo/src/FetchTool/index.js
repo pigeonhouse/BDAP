@@ -1,5 +1,6 @@
 ﻿import Cookies from 'js-cookie';
 
+//'frontEndTest'
 //'backEndTest'
 //'production'
 const mode = 'backEndTest'

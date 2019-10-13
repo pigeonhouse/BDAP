@@ -1,5 +1,6 @@
 package com.pigeonhouse.bdap.controller.runcode;
 
+import com.alibaba.fastjson.JSONObject;
 import com.pigeonhouse.bdap.dao.LivyDao;
 import com.pigeonhouse.bdap.entity.execution.LivySessionInfo;
 import com.pigeonhouse.bdap.service.ResponseService;
@@ -8,7 +9,9 @@ import com.pigeonhouse.bdap.service.runcode.QueryService;
 import com.pigeonhouse.bdap.util.response.Response;
 import com.pigeonhouse.bdap.util.response.statusimpl.RunningStatus;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
@@ -52,13 +55,14 @@ public class InteractiveQueryController {
 
 
     @RequestMapping("/query/readyForData")
-    public Response readyForData(HttpServletRequest request) {
+    public Response readyForData(@RequestBody JSONObject filePathJson, HttpServletRequest request) {
 
         String token = tokenService.getTokenFromRequest(request, "loginToken");
         LivySessionInfo livySessionInfo = tokenService.getLivySessionInfoFromToken(token);
         String userId = tokenService.getValueFromToken(token, "userId").asString();
 
-        String filePath = request.getParameter("filePath");
+        String filePath = filePathJson.getString("filePath");
+
         String readDataCode = "val df = spark.read.option(\"header\",\"true\").csv(\"hdfs:///bdap/students/" + userId + filePath + "\")\n"
                 + "df.createOrReplaceTempView(\"data\")\n"
                 + "df.show()";

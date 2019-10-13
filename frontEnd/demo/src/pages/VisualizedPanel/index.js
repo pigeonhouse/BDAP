@@ -8,18 +8,28 @@ import VisualChart from '../../PublicComponents/VisualChart';
 import Settings from '../../PublicComponents/VisualChartSettings';
 import styles from './index.less';
 
+import { fetchTool } from '../../FetchTool';
+
 class VisualizedPanel extends React.Component {
 
     state = {
         currentChart: "table",
         rightCol: "filter",
-        dataSourceName: 'dataTest',
+        dataSourceName: 'data',
         filter: [],
         summarize: [],
         dataSet: [],
-        labelArray: ['jack', 'test'],
+        labelArray: [],
         groupLabel: undefined,
         chartStyle: {},
+    }
+
+    initLabelArray = (labelArray) => {
+        this.setState({ labelArray });
+    }
+
+    initDataSet = (dataSet, length) => {
+        this.setState({ dataSet })
     }
 
     handleChangeChartStyle = (axis, label) => {
@@ -71,7 +81,7 @@ class VisualizedPanel extends React.Component {
     }
 
     // 向后端发送请求，参数为sql语句，返回值为Dataset
-    getDataSetByOperate = () => {
+    getDataSetByOperate = async () => {
         const { dataSourceName, filter, summarize, groupLabel } = this.state;
         var sqlCode, label;
         var where = '', group = '';
@@ -97,9 +107,25 @@ class VisualizedPanel extends React.Component {
 
         sqlCode = `SELECT ${label} FROM ${dataSourceName}${where}${group}`;
 
-
-        //操作，发送sql语句获取dataSet
         console.log(sqlCode);
+
+        const init = {
+            method: 'POST',
+            mode: 'cors',
+            body: 'sql=' + sqlCode,
+            headers: {
+                "Content-Type": "application/x-www-form-urlencoded;charset=utf-8"
+            },
+            credentials: 'include'
+        }
+
+        const res = await fetchTool("/query/sql", init);
+
+        if (res.code === 200) {
+
+            // 通过papa转化
+            console.log(res)
+        }
     }
 
     // currentChart类型修改
@@ -154,7 +180,10 @@ class VisualizedPanel extends React.Component {
                     <Col span={6}><h2>DataSource</h2></Col>
                     <Col span={18}>
                         <div style={{ float: "right", marginRight: 20 }} >
-                            <DataSource></DataSource>
+                            <DataSource
+                                initLabelArray={this.initLabelArray}
+                                initDataSet={this.initDataSet}
+                            ></DataSource>
                             <Button onClick={this.handleChangeRightCol.bind(this, "filter")} >Filter</Button>
                             <Button onClick={this.handleChangeRightCol.bind(this, "summarize")} >Summarize</Button>
                             <Button onClick={this.handleChangeRightCol.bind(this, "settings")} >Settings</Button>
@@ -168,6 +197,7 @@ class VisualizedPanel extends React.Component {
                         <VisualChart
                             currentChart={this.state.currentChart}
                             dataSet={this.state.dataSet}
+                            labelArray={this.state.labelArray}
                         />
                         <div className={styles.footer} style={{ textAlign: "center" }} >
                             <Radio.Group
