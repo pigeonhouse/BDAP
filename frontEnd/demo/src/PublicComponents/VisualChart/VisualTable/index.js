@@ -28,7 +28,10 @@ class VisualTable extends React.Component {
 
     render() {
 
-        const { labelArray, dataSet } = this.props;
+        let { labelArray, dataSet } = this.props;
+
+        console.log(labelArray)
+        console.log(dataSet)
         
         let data = [];
         let columns = [];

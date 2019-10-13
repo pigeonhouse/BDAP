@@ -15,7 +15,7 @@ class VisualizedPanel extends React.Component {
     state = {
         currentChart: "table",
         rightCol: "filter",
-        dataSourceName: 'dataTest',
+        dataSourceName: 'data',
         filter: [],
         summarize: [],
         dataSet: [],

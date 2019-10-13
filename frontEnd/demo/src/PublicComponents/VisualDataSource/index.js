@@ -5,13 +5,17 @@ import { fetchTool } from '../../FetchTool';
 import Papa from 'papaparse';
 
 class DataSource extends React.Component {
+    
+    
     handleChangeDataSource = async () => {
+
         const init = {
             method: 'POST',
             mode: 'cors',
-            body: 'filePath=' + '/simpleTest.csv',
+            body: JSON.stringify({"filePath":"/simpleTest.csv"}),
+ 
             headers: {
-                "Content-Type": "application/x-www-form-urlencoded;charset=utf-8"
+                "Content-Type": "application/json;charset=utf-8"
             },
             credentials: 'include'
         }

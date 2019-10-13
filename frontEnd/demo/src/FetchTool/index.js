@@ -1,8 +1,9 @@
 ﻿import Cookies from 'js-cookie';
 
+//'frontEndTest'
 //'backEndTest'
 //'production'
-const mode = 'frontEndTest'
+const mode = 'backEndTest'
 
 export async function fetchTool(url, init) {
 

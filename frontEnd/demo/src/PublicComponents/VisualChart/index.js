@@ -36,7 +36,7 @@ class VisualChart extends React.Component {
             <div className={styles.charter}>
                 <div id="main" className={currentChart === 'table' ? styles.chartHidden : styles.chartVisual}></div>
                 <div className={currentChart !== 'table' ? styles.tableHidden : styles.tableVisual}>
-                    <VisualTable dataSet={this.props.dataSet || []} labelArray={this.props.labelArray || []} />
+                    <VisualTable dataSet={this.props.dataSet} labelArray={this.props.labelArray} />
                 </div>
             </div>
         );
