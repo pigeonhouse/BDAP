@@ -26,9 +26,19 @@ class DataSource extends React.Component {
 
             // 通过papa转化
             const results = Papa.parse(res.data, { header: true, dynamicTyping: true });
+            let labelType = {};
             const fieldNameArray = results.meta.fields;
 
-            this.props.initLabelArray(fieldNameArray);
+            const result = results.data[0];
+            for(let i in result){
+                if(typeof(result[i]) === "number"){
+                    labelType[i] = "int";
+                } else {
+                    labelType[i] = "string";
+                }
+            }
+
+            this.props.initLabelArray(fieldNameArray, labelType);
             this.props.initDataSet(results.data, fieldNameArray.length);
         }
     }

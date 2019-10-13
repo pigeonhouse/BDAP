@@ -37,8 +37,8 @@ class Filter extends React.Component {
     }
 
     //删除Filter
-    handleDeleteTag = (index) => {
-        this.props.handleDeleteFilter(index);
+    handleDeleteTag = (tag) => {
+        this.props.handleDeleteFilter(tag);
     }
 
     handleChangeLabel = (value) => {

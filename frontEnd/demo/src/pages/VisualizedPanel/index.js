@@ -7,6 +7,7 @@ import Summarize from '../../PublicComponents/VisualSummarize';
 import VisualChart from '../../PublicComponents/VisualChart';
 import Settings from '../../PublicComponents/VisualChartSettings';
 import styles from './index.less';
+import Papa from 'papaparse';
 
 import { fetchTool } from '../../FetchTool';
 
@@ -20,12 +21,13 @@ class VisualizedPanel extends React.Component {
         summarize: [],
         dataSet: [],
         labelArray: [],
+        labelType: [],
         groupLabel: undefined,
         chartStyle: {},
     }
 
-    initLabelArray = (labelArray) => {
-        this.setState({ labelArray });
+    initLabelArray = (labelArray, labelType) => {
+        this.setState({ labelArray, labelType });
     }
 
     initDataSet = (dataSet, length) => {
@@ -39,50 +41,59 @@ class VisualizedPanel extends React.Component {
 
     //group by的label修改
     handleChangeGroupLabel = (value) => {
+        const { dataSourceName, filter, summarize } = this.state;
         this.setState({ groupLabel: value });
 
-        this.getDataSetByOperate();
+        this.getDataSetByOperate(dataSourceName, filter, summarize, value);
     }
 
     //增加分组方式
     handleAddSummarize = (label, operator) => {
+        const { dataSourceName, filter, groupLabel } = this.state;
+
         let summarize = this.state.summarize;
         summarize.push({
             label, operator
         })
         this.setState({ summarize });
 
-        this.getDataSetByOperate();
+        this.getDataSetByOperate( dataSourceName, filter, summarize, groupLabel );
     }
 
     // 删除分组方式
-    handleDeleteSummarize = (tag) => {
-        this.setState({ summarize: tag });
+    handleDeleteSummarize = (summarize) => {
+        const { dataSourceName, filter, groupLabel } = this.state;
 
-        this.getDataSetByOperate();
+        this.setState({ summarize });
+
+        this.getDataSetByOperate(dataSourceName, filter, summarize, groupLabel);
     }
 
     // 增加过滤器方式
     handleAddFilter = (label, operator, value) => {
+        const { dataSourceName, summarize, groupLabel } = this.state;
+
         let filter = this.state.filter;
         filter.push({
             label, operator, value
         })
         this.setState({ filter });
 
-        this.getDataSetByOperate();
+        this.getDataSetByOperate(dataSourceName, filter, summarize, groupLabel);
     }
 
     // 删除过滤器方式
-    handleDeleteFilter = (tag) => {
-        this.setState({ filter: tag });
+    handleDeleteFilter = (filter) => {
+        const { dataSourceName, summarize, groupLabel } = this.state;
 
-        this.getDataSetByOperate();
+        this.setState({ filter });
+
+        this.getDataSetByOperate(dataSourceName, filter, summarize, groupLabel);
     }
 
     // 向后端发送请求，参数为sql语句，返回值为Dataset
-    getDataSetByOperate = async () => {
-        const { dataSourceName, filter, summarize, groupLabel } = this.state;
+    getDataSetByOperate = async (dataSourceName, filter, summarize, groupLabel) => {
+
         var sqlCode, label;
         var where = '', group = '';
 
@@ -99,7 +110,13 @@ class VisualizedPanel extends React.Component {
 
         if (filter.length !== 0) {
             filter.map((item, index) => {
-                let filterString = `${item.label}${item.operator}'${item.value}'`;
+                let filterString = '';
+                if(this.state.labelType[item.label] === 'int'){
+                    filterString = `${item.label}${item.operator}${item.value}`;
+                } 
+                else if(this.state.labelType[item.label] === 'string'){
+                    filterString = `${item.label}${item.operator}'${item.value}'`;
+                }
                 where += index === 0 ? ' WHERE ' : ' AND ';
                 where += filterString;
             })
@@ -124,7 +141,21 @@ class VisualizedPanel extends React.Component {
         if (res.code === 200) {
 
             // 通过papa转化
-            console.log(res)
+            const results = Papa.parse(res.data, { header: true, dynamicTyping: true });
+            let labelType = {};
+            const fieldNameArray = results.meta.fields;
+
+            const result = results.data[0];
+            for(let i in result){
+                if(typeof(result[i]) === "number"){
+                    labelType[i] = "int";
+                } else {
+                    labelType[i] = "string";
+                }
+            }
+
+            this.initLabelArray(fieldNameArray, labelType);
+            this.initDataSet(results.data, fieldNameArray.length);
         }
     }
 
