@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import GGEditor, { Flow } from '@src';
+import GGEditor, { Flow, withPropsAPI } from '@src';
 import { Row, Col } from 'antd';
 import { FlowToolbar } from '../../PublicComponents/EditorToolbar';
 import { FlowDetailPanel } from '../../PublicComponents/EditorDetailPanel';
@@ -8,6 +8,7 @@ import { FlowContextMenu } from '../../PublicComponents/EditorContextMenu';
 import ExperimentList from "../../PublicComponents/ExperimentList";
 import SparkRunning from '../../ClusterModeComponents/SparkRunPanel/SparkRun';
 import { fetchTool } from '../../FetchTool';
+import { downloadStream } from '../../PublicComponents/HandleStream/downloadStream';
 import styles from './index.less';
 
 class ExperimentPanel extends Component {
@@ -30,6 +31,14 @@ class ExperimentPanel extends Component {
         }
     }
 
+    componentDidMount() {
+        if(this.props.currentTab !== this.props.clickTab){
+            const { propsAPI } = this.props;
+            const flowInfo = downloadStream();
+            propsAPI.read(flowInfo);
+        }
+    }
+
     render() {
         if (this.props.currentTab === this.props.clickTab) {
             return <div className={styles.editor}>
@@ -41,7 +50,6 @@ class ExperimentPanel extends Component {
             </div>
 
         }
-        console.log(this.state.nodesModuleInfo)
         return (
             <GGEditor className={styles.editor} >
                 <Row type="flex" style={{ height: 'calc(100vh - 105px)' }}>
@@ -73,4 +81,4 @@ class ExperimentPanel extends Component {
     }
 }
 
-export default ExperimentPanel;
+export default withPropsAPI(ExperimentPanel);

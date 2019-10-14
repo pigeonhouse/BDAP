@@ -82,6 +82,6 @@ export function generateStream(flowInfo) {
 		})
 	}
 
-	console.log(stream);
+	console.log(JSON.stringify(stream));
 	return JSON.parse(JSON.stringify(stream));
 }
