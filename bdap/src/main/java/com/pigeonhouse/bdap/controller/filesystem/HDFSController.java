@@ -23,7 +23,7 @@ import java.util.*;
 
 /**
  * 本文件所有Api均使用userId作为唯一性索引,在HDFS上的默认用户文件夹名称也为userId
- *
+ * HDFS文件的操作API
  * @Author: Xingtianyu
  * @Date: 2019/9/19 20:38
  */

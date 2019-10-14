@@ -1,11 +1,27 @@
 import React from 'react';
 import { Table, Button, Row, Col, Modal,Upload, Icon,message } from 'antd';
+import {fetchTool} from '../../FetchTool'
 class ExperimentList extends React.Component {
 
 	state = {
 		dataSource: [],
 	}
-
+	async fetchmodule()
+    {
+        const init = {
+            method: 'GET',
+            mode: 'cors',
+            headers: {
+                "Content-Type": "application/json;charset=utf-8"
+            },
+            credentials: 'include'
+        }
+        const res = await fetchTool("/module", init)
+        if (res.code === 200) {
+            return res.data
+		}
+	
+    }
 	componentDidMount() {
 		const data = [
 			{
@@ -49,8 +65,9 @@ class ExperimentList extends React.Component {
 			dataSource: data
 		})
 	}
-	handleNewButton = () => {
+	handleNewButton = async() => {
 		this.props.handleClickEnter()
+		this.props.data(await this.fetchmodule())
 	}
 	handleDeleteButton = () => {
 		alert("你确定删除吗");

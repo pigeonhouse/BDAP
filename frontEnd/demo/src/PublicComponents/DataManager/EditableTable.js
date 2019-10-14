@@ -1,7 +1,7 @@
 
 import React from 'react';
 import { Table, Input, Button, Popconfirm, Form,message } from 'antd';
-import {fetchTool} from '../../../FetchTool'
+import {fetchTool} from '../../FetchTool'
 const EditableContext = React.createContext();
 
 const EditableRow = ({ form, index, ...props }) => (
@@ -78,7 +78,6 @@ class EditableTable extends React.Component {
 
     this.state = {
       dataSource: this.props.items.map(r=>(filepathmap(r)))
-       
     };
     console.log(this.state.dataSource)
   }

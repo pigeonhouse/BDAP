@@ -5,7 +5,7 @@ import { Row, Col, Button, message, notification, Icon,Tabs } from 'antd';
 import ExperimentPanel from '../ExperimentPanel';
 import Model from '../../PublicComponents/ModelStore';
 import VisualizedPanel from '../VisualizedPanel';
-import DataUpload from "../../PublicComponents/DataUpload"
+import DataManager from "../../PublicComponents/DataManager"
 import styles from './index.less';
 
 /**
@@ -83,6 +83,7 @@ class LocalMode extends React.Component {
 		}
 	}
 
+	
 	componentDidMount() {
 		if (this.state.remind === 'true') {
 			const key = `open${Date.now()}`;
@@ -109,6 +110,7 @@ class LocalMode extends React.Component {
 		}
 	}
 
+	
 	tabChange = (value) => {
 		this.setState({
 			currentTab: value,
@@ -149,7 +151,7 @@ class LocalMode extends React.Component {
 			clickTab: "0"
 		})
 	}
-
+   
 	handleTabClick = (value) => {
 		this.setState({
 			clickTab: value
@@ -230,6 +232,7 @@ class LocalMode extends React.Component {
 						key="1"
 					>
 						<ExperimentPanel
+						    refresh={this.state.refresh}
 							currentTab={this.state.currentTab}
 							clickTab={this.state.clickTab}
 							handleClickEnter={this.handleClickEnter}
@@ -250,7 +253,8 @@ class LocalMode extends React.Component {
 						tab={<Icon type="database" className={styles.iconStyle} />}
 						key="3"
 					>
-						<DataUpload></DataUpload>
+						<DataManager
+						/>
 						{/* <VisualizedPanel></VisualizedPanel> */}
 					</TabPane>
 				</Tabs>

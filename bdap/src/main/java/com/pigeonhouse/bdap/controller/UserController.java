@@ -25,8 +25,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
+ *
  * @Author: XueXiaoYue
  * @Date: 2019/9/7 20:38
+ * 本Controller进行了跨层调用，调用列表功能说明如下:
+ * 1.调用UserDao访问user数据库核对登录信息
+ * 2.调用LivyDao获取livyIP地址
+ * 3.调用MoudleDao获取用户项目信息拓扑图
+ * 4.调用CommonFilesDao获取用户常用文件
  */
 @RestController
 public class UserController {

@@ -11,31 +11,29 @@ import { fetchTool } from '../../FetchTool';
 import styles from './index.less';
 
 class ExperimentPanel extends Component {
-    state = {
-        nodesModuleInfo: [],
+    constructor(props){
+        super(props)
+        this.state = {  nodesModuleInfo :[],
+            refresh:this.props.refresh
+        }
+        
     }
 
-    async componentWillMount() {
-        const init = {
-            method: 'GET',
-            mode: 'cors',
-            headers: {
-                "Content-Type": "application/json;charset=utf-8"
-            },
-            credentials: 'include'
-        }
-        const res = await fetchTool("/module", init)
-        if (res.code === 200) {
-            this.setState({ nodesModuleInfo: res.data });
-        }
+    getdata=(value)=>
+    {
+        this.setState({
+            nodesModuleInfo:value
+        })
     }
 
     render() {
+        
         if (this.props.currentTab === this.props.clickTab) {
             return <div className={styles.editor}>
                 <Row style={{ minHeight: 'calc(100vh - 105px)' }}>
                     <ExperimentList
                         handleClickEnter={this.props.handleClickEnter}
+                        data={this.getdata.bind(this)}
                     />
                 </Row>
             </div>
