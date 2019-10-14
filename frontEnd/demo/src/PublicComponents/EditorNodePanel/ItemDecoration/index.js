@@ -1,5 +1,5 @@
 import React from 'react';
-import GGEditor, { Flow, RegisterNode } from '@src';
+import GGEditor, { Flow,RegisterNode } from '@src';
 
 /**
  * FlowItemPanel中组件的风格
