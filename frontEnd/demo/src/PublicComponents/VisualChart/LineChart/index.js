@@ -1,7 +1,5 @@
 export function createLineChart(myChart, dataSet) {
 
-    console.log('lineTest');
-
     var option = {
         xAxis: {
             type: 'category',

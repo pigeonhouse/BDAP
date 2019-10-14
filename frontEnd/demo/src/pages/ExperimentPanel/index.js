@@ -7,8 +7,9 @@ import FlowNodePanel from '../../PublicComponents/EditorNodePanel';
 import { FlowContextMenu } from '../../PublicComponents/EditorContextMenu';
 import ExperimentList from "../../PublicComponents/ExperimentList";
 import SparkRunning from '../../ClusterModeComponents/SparkRunPanel/SparkRun';
+import LoadStream from '../../PublicComponents/HandleStream/LoadStream';
+
 import { fetchTool } from '../../FetchTool';
-import { downloadStream } from '../../PublicComponents/HandleStream/downloadStream';
 import styles from './index.less';
 
 class ExperimentPanel extends Component {
@@ -31,14 +32,6 @@ class ExperimentPanel extends Component {
         }
     }
 
-    componentDidMount() {
-        if(this.props.currentTab !== this.props.clickTab){
-            const { propsAPI } = this.props;
-            const flowInfo = downloadStream();
-            propsAPI.read(flowInfo);
-        }
-    }
-
     render() {
         if (this.props.currentTab === this.props.clickTab) {
             return <div className={styles.editor}>
@@ -48,7 +41,6 @@ class ExperimentPanel extends Component {
                     />
                 </Row>
             </div>
-
         }
         return (
             <GGEditor className={styles.editor} >
@@ -76,6 +68,7 @@ class ExperimentPanel extends Component {
                 </Row>
                 <FlowContextMenu />
                 <SparkRunning running={this.props.running} stopRunning={this.props.stopRunning} ></SparkRunning>
+                <LoadStream></LoadStream>
             </GGEditor>
         );
     }
