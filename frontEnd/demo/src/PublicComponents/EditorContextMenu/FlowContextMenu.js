@@ -8,8 +8,7 @@ import {
 } from '@src';
 import styles from './index.less';
 import iconfont from '../../theme/iconfont.less';
-import { withPropsAPI } from '@src';
-import GGEditor, { Flow, RegisterCommand } from '@src';
+import GGEditor, { Flow, RegisterCommand, withPropsAPI } from '@src';
 import Download from '../DataOperate/FileOperate/Download';
 import DataPreview from './DataPreview';
 import ModelEvaluation from './ModelEvaluation';
@@ -23,7 +22,6 @@ class FlowContextMenu extends React.Component {
 		data: [],
 		visibleChartRadio: false,
 	}
-
 
 	handleOk = (e) => {//处理调出页面的ok事件
 		this.setState({
@@ -57,7 +55,6 @@ class FlowContextMenu extends React.Component {
 		}
 		else alert("NOT A ML MODEL")
 	}
-
 
 	render() {
 		return (

@@ -77,9 +77,6 @@ class Download extends Component{
                     <span>下载</span>
                 </div>
             </Command>
-
-
-
         );
     }
 }

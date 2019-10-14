@@ -1,10 +1,10 @@
 import React from 'react'
-import { Modal,  Icon, Collapse, Form } from 'antd';
+import { Modal,  Icon, Collapse } from 'antd';
 import { withPropsAPI } from '@src';
 import {
 	Command,
 } from '@src';
-import styles from './index.less';
+import styles from '../index.less';
 const Panel = Collapse.Panel;
 class ModelEvaluation extends React.Component {
 	state = {

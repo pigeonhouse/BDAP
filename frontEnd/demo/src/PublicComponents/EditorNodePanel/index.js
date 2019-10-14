@@ -25,7 +25,6 @@ class FlowNodePanel extends React.Component {
         if (res.code === 200) {
             return res.data
         }
-
     }
 
     async componentWillMount() {

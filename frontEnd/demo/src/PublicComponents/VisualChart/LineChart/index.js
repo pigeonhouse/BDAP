@@ -12,7 +12,8 @@ export function createLineChart(myChart, dataSet) {
             data: [820, 932, 901, 934, 1290, 1330, 1320],
             type: 'line',
             smooth: true
-        }]
+        }],
+        color: '#c4ccd3'
     };
 
     // 使用刚指定的配置项和数据显示图表。
