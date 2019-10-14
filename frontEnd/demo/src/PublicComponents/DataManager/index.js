@@ -4,6 +4,7 @@ import DragM from "dragm";
 import { fetchTool } from '../../FetchTool';
 import EditableTable from './EditableTable';
 import HdfsFileTreeModal from '../DataOperate/FileOperate/HdfsFileTreeModal';
+import { async } from "q";
 const SubMenu = Menu.SubMenu;
 class BuildModalTitle extends React.Component {
 	updateTransform = transformStr => {
@@ -24,7 +25,7 @@ class BuildModalTitle extends React.Component {
 	}
 }
 
-
+var items=null
 class DataManager extends React.Component {
 
 
@@ -32,7 +33,8 @@ class DataManager extends React.Component {
 		addCommonFileModalVisible: false,
 		deleteCommonFileModalVisible: false,
 		fileOppositePath: ''
-	}
+    }
+    
 	/**
 	 * 添加常用文件取消键触发
 	 */
@@ -40,7 +42,22 @@ class DataManager extends React.Component {
 		this.setState({
 			addCommonFileModalVisible: false
 		})
-	}
+    }
+    async componentWillMount()
+    {
+        const init = {
+            method: 'GET',
+            mode: 'cors',
+            headers: {
+                "Content-Type": "application/json;charset=utf-8"
+            },
+            credentials: 'include'
+        }
+        const res = await fetchTool("/module", init)
+        if (res.code === 200) {
+           items=res.data.files
+    }
+    }
 	/**
 	 * 删除常用文件取消键触发
 	 */
@@ -76,22 +93,7 @@ class DataManager extends React.Component {
 				deleteCommonFileModalVisible: true
 			})
 	}
-    async fetchmodule()
-    {
-        const init = {
-            method: 'GET',
-            mode: 'cors',
-            headers: {
-                "Content-Type": "application/json;charset=utf-8"
-            },
-            credentials: 'include'
-        }
-        const res = await fetchTool("/module", init)
-        if (res.code === 200) {
-            return res.data.files
-		}
-	
-    }
+    
 	getCookieValue = (name) => {
 		var arr = document.cookie.match(new RegExp("(^| )" + name + "=([^;]*)(;|$)"));
 		return arr;
@@ -118,10 +120,9 @@ class DataManager extends React.Component {
 		}
 	}
 
-
-    render() {
+   render() {
         const addCommonFilesTitle = <BuildModalTitle title="HDFS文件列表" />;
-		const deleteCommonFilesTitle = <BuildModalTitle title="删除常用文件" />;
+        //const deleteCommonFilesTitle = <BuildModalTitle title="删除常用文件" />;
         const props = {
             name: 'file',
             action: 'http://localhost:8888/hdfs/upload',
@@ -167,28 +168,15 @@ class DataManager extends React.Component {
 							onCancel={this.addCommonFileCancel}
 							okText="标注为常用文件"
 							cancelText="取消"
-
-						/*footer={[
-						<Button onClick={() => this.setCommonFile()}>标注为常用文件</Button>
-							  ]}*/
 						>
 							<p>
 								<HdfsFileTreeModal/>
 							</p>
 						</Modal>
-						<Button key="delete" onClick={this.operateCommonFile}  ><Icon type="delete" />删除常用数据集</Button>
-						<Modal title={deleteCommonFilesTitle}
-							visible={this.state.deleteCommonFileModalVisible}
-							centered
-							width={800}
-							onCancel={this.deleteCommonFileCancel}
-							footer={<Button onClick={this.deleteCommonFileCancel}>取消</Button>}
-						>
-							<p>
-								<EditableTable items={this.fetchmodule()}/>
-							</p>
-						</Modal>
-					
+                        
+						
+						 <EditableTable item={items} />
+							
                     
                     
                     </Col>

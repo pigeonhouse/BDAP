@@ -3,6 +3,7 @@ package com.pigeonhouse.bdap.config;
 import org.apache.hadoop.conf.Configuration;
 
 /**
+ * HDFS默认文件夹设置与端口设置
  * @Author: XingTianYu
  * @Date: 2019/9/24 11:30
  */

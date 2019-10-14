@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 import javax.servlet.http.HttpServletRequest;
 
 /**
+ * 交互式查询API
  * @Author: XueXiaoYue
  * @Date: 2019/9/29 10:44
  */

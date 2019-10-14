@@ -77,12 +77,11 @@ class EditableTable extends React.Component {
     ];
 
     this.state = {
-      dataSource: this.props.items.map(r=>(filepathmap(r)))
+      dataSource: this.props.item
     };
     console.log(this.state.dataSource)
   }
   
-
 
   
   getCookieValue = (name) => {

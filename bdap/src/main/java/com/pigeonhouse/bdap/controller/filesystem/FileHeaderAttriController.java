@@ -14,6 +14,10 @@ import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
 
+/**
+ * @author 邱吉
+ * 数据头文件解析API
+ */
 @RestController
 public class FileHeaderAttriController {
 
