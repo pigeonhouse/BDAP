@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Button, TreeSelect, Form, Modal } from 'antd'
+import { Button, TreeSelect, Form, Modal,Input } from 'antd'
 import { withPropsAPI } from '@src';
 import { Stat } from '../DataToolFunctions/Stat';
 import { fetchTool } from '../../../FetchTool';
@@ -34,7 +34,8 @@ class HdfsFile extends Component {
 		inpValue: '',
 		oppositePath: '/',
 		treeData: [],
-		fileModalVisible: false
+		fileModalVisible: false,
+		fileOppositePath:""
 	}
 	showModal = () => {
 		this.setState({
@@ -64,6 +65,13 @@ class HdfsFile extends Component {
 		return res;
 
 	}
+	onSelect=(key,event)=>{
+        if(key!=[]){
+      this.setState({
+          fileOppositePath:event.node.props.dataRef.totalPath
+      });
+    }
+    }
 	getCookieValue = (name) => {
 		var arr = document.cookie.match(new RegExp("(^| )" + name + "=([^;]*)(;|$)"));
 		return arr;
@@ -189,8 +197,11 @@ class HdfsFile extends Component {
 		};
 		return (
 			<Form onSubmit={this.handleChange}>
-			<Form.Item label="location" {...inlineFormItemLayout}>
-				<Button onClick={() => this.showModal()}>查看HDFS文件</Button>
+			<Form.Item  label="文件路径:"{...inlineFormItemLayout}>
+				<Input disable={true} value={this.state.fileOppositePath} ></Input>
+			</Form.Item>
+			<Form.Item  label="文件树"{...inlineFormItemLayout}>
+				<Button onClick={() => this.showModal()}>点我查看文件树</Button>
 			</Form.Item>
 			<Modal
                 title={title}
@@ -205,8 +216,7 @@ class HdfsFile extends Component {
 			<HdfsFileTreeModal
 				title={title}
 				visible={this.state.fileModalVisible}
-				handleOk={this.handleOk}
-				handleCancel={this.handleCancel}
+				onSelect={this.onSelect}
 			/>
 			</Modal>
 		</Form>

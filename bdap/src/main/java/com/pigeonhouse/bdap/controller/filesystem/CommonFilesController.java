@@ -1,6 +1,7 @@
 package com.pigeonhouse.bdap.controller.filesystem;
 
 import com.alibaba.fastjson.JSONObject;
+import com.pigeonhouse.bdap.config.HdfsConfig;
 import com.pigeonhouse.bdap.entity.metadata.CsvHeader;
 import com.pigeonhouse.bdap.entity.metadata.FileAttribute;
 import com.pigeonhouse.bdap.service.ResponseService;
@@ -41,19 +42,17 @@ public class CommonFilesController {
      * @return 错误提示信息或插入成功通知
      */
     @PostMapping("/commonFiles/setNewFile")
-    public Object insertNewFile(HttpServletRequest request) {
+    public Object insertNewFile(HttpServletRequest request,@RequestParam("oppositePath") String oppositePath) {
         try {
             String token = tokenService.getTokenFromRequest(request, "loginToken");
             String userId = tokenService.getValueFromToken(token, "userId").asString();
-            String oppositePath = request.getParameter("oppositePath");
-            if (!oppositePath.startsWith("/")) {
-                return responseService.response(CommonFileStatus.INVALID_INPUT, null, request);
-            }
+            oppositePath=oppositePath==null?"/":oppositePath.startsWith("/")?oppositePath:"/"+oppositePath;
             Boolean isExist = commonFilesService.fileExist(oppositePath, userId);
             if (isExist) {
                 return responseService.response(CommonFileStatus.FILE_HAS_EXISTED, null,request);
             } else {
-                CsvHeader csvHeader = fileHeaderAttriService.findByFilePath(userId + oppositePath);
+                HdfsConfig hdfsConfig=new HdfsConfig();
+                CsvHeader csvHeader = fileHeaderAttriService.findByFilePath(hdfsConfig.getDefaultDirectory()+"/"+userId + oppositePath);
                 //相对路径必须以"/"开头
                 commonFilesService.setNewFile(csvHeader, userId);
                 return responseService.response(CommonFileStatus.FILE_INSERT_SUCCESS, null, request);
@@ -80,9 +79,7 @@ public class CommonFilesController {
             String token = tokenService.getTokenFromRequest(request, "loginToken");
             String userId = tokenService.getValueFromToken(token, "userId").asString();
 
-            if (!oppositePath.startsWith("/")) {
-                return responseService.response(CommonFileStatus.INVALID_INPUT, null, request);
-            }
+            oppositePath=oppositePath==null?"/":oppositePath.startsWith("/")?oppositePath:"/"+oppositePath;
             Boolean isExist = commonFilesService.fileExist(oppositePath, userId);
             if (!isExist) {
                 return responseService.response(CommonFileStatus.FILE_NOT_EXISTED, null, request);

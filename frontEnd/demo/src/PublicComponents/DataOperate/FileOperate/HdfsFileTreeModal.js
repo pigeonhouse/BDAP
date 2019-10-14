@@ -95,7 +95,7 @@ class HdfsFileTreeModal extends React.Component {
     }
      render() {
         return (       
-                <Tree loadData={this.onLoadData}>{this.renderTreeNodes(this.state.treeData)}</Tree>
+                <Tree loadData={this.onLoadData}onSelect={this.props.onSelect}>{this.renderTreeNodes(this.state.treeData)}</Tree>
         );
     }
 }

@@ -25,14 +25,14 @@ class BuildModalTitle extends React.Component {
 	}
 }
 
-var items=null
 class DataManager extends React.Component {
 
 
  state = {
 		addCommonFileModalVisible: false,
 		deleteCommonFileModalVisible: false,
-		fileOppositePath: ''
+        fileOppositePath: '',
+        items:[]
     }
     
 	/**
@@ -55,7 +55,9 @@ class DataManager extends React.Component {
         }
         const res = await fetchTool("/module", init)
         if (res.code === 200) {
-           items=res.data.files
+           this.setState({
+               items:res.data.files
+           })
     }
     }
 	/**
@@ -73,25 +75,13 @@ class DataManager extends React.Component {
 	/**
 	 * 选择树文件点击触发函数
 	 */
-	onSelect = (keys) => {
-		console.log('Trigger Select', keys[0]);
-		this.setState({
-			fileOppositePath: keys[0]
-		})
-	};
 	/**
-   * 点击导航菜单操作常用文件触发函数
+   * 操作常用文件触发函数
    */
-	operateCommonFile = e => {
-		if (e.key === "add") {
+	addCommonFile = () => {
 			this.setState({
-				addCommonFileModalVisible: true
-			})
-		}
-		if (e.key === "delete")
-			this.setState({
-				deleteCommonFileModalVisible: true
-			})
+                addCommonFileModalVisible: true
+			});
 	}
     
 	getCookieValue = (name) => {
@@ -101,31 +91,74 @@ class DataManager extends React.Component {
 	setCommonFile = async () => {
 		console.log(document.cookie)
 		let formData = new FormData();
-		let cookie = this.getCookieValue("loginToken")
 		formData.append('oppositePath', this.state.fileOppositePath)
 		const init = {
 			method: 'POST',
 			body: formData,
-			mode: 'cors',
+            mode: 'cors',
+            credentials: 'include'
 		}
 		const res = await fetchTool('/commonFiles/setNewFile', init)
 		if (res.code === 200) {
-			message.success(res.message);
+            message.success(res.message);
+            const init = {
+                method: 'GET',
+                mode: 'cors',
+                headers: {
+                    "Content-Type": "application/json;charset=utf-8"
+                },
+                credentials: 'include'
+            }
+            const result = await fetchTool("/module", init)
+            if (result.code === 200) {
+               this.setState({
+                   items:result.data.files
+               })
+        }
 		}
 		if (res.code === 409) {
 			message.error(res.message);
 		}
 		if (res.code === 412) {
 			message.error("请选择一个文件!");
-		}
+        }
+        
 	}
-
+    onSelect=(key,event)=>{
+        if(key!=[]){
+      this.setState({
+          fileOppositePath:event.node.props.dataRef.totalPath
+      });
+    }
+    }
+  handleDelete = async(filePath) => {
+    const oppositePath=filePath===undefined?undefined:
+    "/"+filePath.split("/").slice(4-filePath.split("/").length).join("/");
+    let formData = new FormData();
+		formData.append('oppositePath',oppositePath)
+		const init = {
+			method: 'POST',
+			body:formData,
+			mode: 'cors',
+      credentials: 'include'
+		}
+    const res = await fetchTool('/commonFiles/deleteFiles', init)
+    if (res.code === 201) {
+       this.setState({items:this.state.items.filter(
+        r=>(r.filePath!==filePath))});
+      message.success(res.message);
+		}
+		if (res.code === 410) {
+			message.error(res.message);
+		}
+    
+  };
    render() {
         const addCommonFilesTitle = <BuildModalTitle title="HDFS文件列表" />;
         //const deleteCommonFilesTitle = <BuildModalTitle title="删除常用文件" />;
         const props = {
             name: 'file',
-            action: 'http://localhost:8888/hdfs/upload',
+            action: 'http://localhost:8888/hdfs/uploadwithheader',
             headers: {
                 Cookie: this.getCookieValue("loginToken")
             },
@@ -160,7 +193,7 @@ class DataManager extends React.Component {
                     <Col 
                     span={12}>
                 
-						<Button key="add" onClick={this.operateCommonFile}  ><Icon type="file-add" />添加常用数据集</Button>
+						<Button onClick={this.addCommonFile}  ><Icon type="file-add" />添加常用数据集</Button>
 						<Modal title={addCommonFilesTitle}
 							visible={this.state.addCommonFileModalVisible}
 							centered
@@ -170,12 +203,14 @@ class DataManager extends React.Component {
 							cancelText="取消"
 						>
 							<p>
-								<HdfsFileTreeModal/>
+								<HdfsFileTreeModal
+                                onSelect={this.onSelect.bind(this)}
+                                />
 							</p>
 						</Modal>
                         
 						
-						 <EditableTable item={items} />
+						 <EditableTable item={this.state.items} handleDelete= {this.handleDelete} />
 							
                     
                     

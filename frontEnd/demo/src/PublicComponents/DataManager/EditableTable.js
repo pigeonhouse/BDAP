@@ -15,6 +15,7 @@ const EditableFormRow = Form.create()(EditableRow);
 class EditableCell extends React.Component {
   state = {
     editing: false,
+    
   };
 
 
@@ -40,13 +41,8 @@ class EditableCell extends React.Component {
     );
   }
 }
-function filepathmap(item)
-{
-  item.filePath=item.filePath===undefined?undefined:
-        "/"+item.filePath.split("/").slice(4-item.filePath.split("/").length).join("/");
-  return item
 
-}
+var dataSource=[]
 class EditableTable extends React.Component {
   constructor(props) {
     super(props);
@@ -54,8 +50,8 @@ class EditableTable extends React.Component {
     this.columns = [
       {
 				title: 'fileName',
-				dataIndex: 'label',
-				key: 'label',
+				dataIndex: 'fileName',
+				key: 'fileName',
 				
 			  },
 			{
@@ -68,55 +64,33 @@ class EditableTable extends React.Component {
         title: 'operate',
         dataIndex: 'operate',
         render: (text, record) =>
-          this.state.dataSource.length >= 1 ? (
-            <Popconfirm title="确定要删除吗?" onConfirm={() => this.handleDelete(record.label)}>
+            dataSource.length >= 1 ? (
+            <Popconfirm title="确定要删除吗?" onConfirm={() => this.props.handleDelete(record.filePath)}>
               <a>Delete</a>
             </Popconfirm>
           ) : null,
       },
     ];
-
-    this.state = {
-      dataSource: this.props.item
-    };
-    console.log(this.state.dataSource)
   }
   
 
-  
+  componentWillUpdate(nextProps)
+  {
+    
+     dataSource=nextProps.item
+     console.log(dataSource)
+    
+
+  }
   getCookieValue = (name) => {
 		var arr = document.cookie.match(new RegExp("(^| )" + name + "=([^;]*)(;|$)"));
 		return arr;
-	}
-  handleDelete = async(label) => {
-    const dataSource = [...this.state.dataSource];
-    const filePath=dataSource.filter (r=>(r.label===label))[0].filePath
-    let formData = new FormData();
-		let cookie = this.getCookieValue("loginToken")
-		formData.append('oppositePath',filePath)
-		const init = {
-			method: 'POST',
-			body:formData,
-			mode: 'cors',
-      credentials: 'include'
-		}
-    console.log(dataSource)
-    const res = await fetchTool('/commonFiles/deleteFiles', init)
-    if (res.code === 201) {
-      this.setState({ dataSource: dataSource.filter(
-        r=>(r.label!==label))});
-			message.success(res.message);
-		}
-		if (res.code === 410) {
-			message.error(res.message);
-		}
-    
-  };
+  }
+ 
 
  
 
   render() {
-    const { dataSource } = this.state;
     const components = {
       body: {
         row: EditableFormRow,
@@ -143,7 +117,7 @@ class EditableTable extends React.Component {
           components={components}
           rowClassName={() => 'editable-row'}
           bordered
-          dataSource={this.state.dataSource}
+          dataSource={this.props.item}
           columns={columns}
         />
       </div>
