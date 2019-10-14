@@ -10,18 +10,49 @@ import { createScatterChart } from './ScatterChart';
 
 var echarts = require('echarts');
 
+var chartBox = null, myChartSize = null, myChart = null;
+
+function chartssize(container, charts) {
+    function getStyle(el, name) {
+        if (window.getComputedStyle) {
+            return window.getComputedStyle(el, null);
+        } else {
+            return el.currentStyle;
+        }
+    }
+    var wi = getStyle(container, 'width').width;
+    var hi = getStyle(container, 'height').height;
+
+    if (charts.style.width === wi && charts.style.height === hi) return;
+    charts.style.width = wi;
+    charts.style.height = hi;
+
+    myChart.resize();
+}
+
+window.onresize = function () {
+    if (chartBox === null || myChartSize === null || myChart === null) return;
+    chartssize(chartBox, myChartSize)
+}
+
 class VisualChart extends React.Component {
 
+    componentDidMount() {
+        chartBox = document.getElementById('chartBox');
+        myChartSize = document.getElementById('main');
+        myChart = echarts.init(document.getElementById('main'));
+    }
+
     componentDidUpdate = () => {
-        var myChart = echarts.init(document.getElementById('main'));
+        myChart = echarts.init(document.getElementById('main'));
         myChart.clear();
+
+        if (this.props.currentChart !== "table") {
+            chartssize(chartBox, myChartSize);
+        }
         switch (this.props.currentChart) {
             case "table": myChart.dispose(); return;
-            case "line":
-                createLineChart(myChart, this.props.dataSet);
-                window.onresize = function () {
-                    myChart.resize();
-                }
+            case "line": return createLineChart(myChart, this.props.dataSet);
             case "bar": return createBarChart(myChart, this.props.dataSet);
             case "pie": return createPieChart(myChart, this.props.dataSet);
             case "scatter": return createScatterChart(myChart, this.props.dataSet);
@@ -29,11 +60,10 @@ class VisualChart extends React.Component {
         }
     }
 
-
     render() {
         const { currentChart } = this.props;
         return (
-            <div className={styles.charter}>
+            <div className={styles.charter} id="chartBox" >
                 <div id="main" className={currentChart === 'table' ? styles.chartHidden : styles.chartVisual}></div>
                 <div className={currentChart !== 'table' ? styles.tableHidden : styles.tableVisual}>
                     <VisualTable dataSet={this.props.dataSet} labelArray={this.props.labelArray} />

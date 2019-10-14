@@ -1,4 +1,5 @@
 export function createFunnelChart(myChart, dataSet) {
+
     var option = {
         title: {
             text: '漏斗图',
@@ -25,10 +26,8 @@ export function createFunnelChart(myChart, dataSet) {
                 type: 'funnel',
                 left: '10%',
                 top: 60,
-                //x2: 80,
                 bottom: 60,
                 width: '80%',
-                // height: {totalHeight} - y - y2,
                 min: 0,
                 max: 100,
                 minSize: '0%',

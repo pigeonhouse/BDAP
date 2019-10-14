@@ -1,6 +1,7 @@
 package com.pigeonhouse.bdap.controller.filesystem;
 
 import com.alibaba.fastjson.JSONObject;
+import com.pigeonhouse.bdap.config.HdfsConfig;
 import com.pigeonhouse.bdap.entity.metadata.CsvHeader;
 import com.pigeonhouse.bdap.entity.metadata.FileAttribute;
 import com.pigeonhouse.bdap.service.ResponseService;
@@ -9,15 +10,16 @@ import com.pigeonhouse.bdap.service.filesystem.CommonFilesService;
 import com.pigeonhouse.bdap.service.filesystem.FileHeaderAttriService;
 import com.pigeonhouse.bdap.util.response.statusimpl.CommonFileStatus;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.util.ArrayList;
 
 /**
  * @Author XingTianYu
  * @date 2019/9/24 20:32
+ * 常用文件操作相关API
  */
 @RestController
 public class CommonFilesController {
@@ -40,19 +42,17 @@ public class CommonFilesController {
      * @return 错误提示信息或插入成功通知
      */
     @PostMapping("/commonFiles/setNewFile")
-    public Object insertNewFile(HttpServletRequest request) {
+    public Object insertNewFile(HttpServletRequest request,@RequestParam("oppositePath") String oppositePath) {
         try {
             String token = tokenService.getTokenFromRequest(request, "loginToken");
             String userId = tokenService.getValueFromToken(token, "userId").asString();
-            String oppositePath = request.getParameter("oppositePath");
-            if (!oppositePath.startsWith("/")) {
-                return responseService.response(CommonFileStatus.INVALID_INPUT, null, request);
-            }
+            oppositePath=oppositePath==null?"/":oppositePath.startsWith("/")?oppositePath:"/"+oppositePath;
             Boolean isExist = commonFilesService.fileExist(oppositePath, userId);
             if (isExist) {
                 return responseService.response(CommonFileStatus.FILE_HAS_EXISTED, null,request);
             } else {
-                CsvHeader csvHeader = fileHeaderAttriService.findByFilePath(userId + oppositePath);
+                HdfsConfig hdfsConfig=new HdfsConfig();
+                CsvHeader csvHeader = fileHeaderAttriService.findByFilePath(hdfsConfig.getDefaultDirectory()+"/"+userId + oppositePath);
                 //相对路径必须以"/"开头
                 commonFilesService.setNewFile(csvHeader, userId);
                 return responseService.response(CommonFileStatus.FILE_INSERT_SUCCESS, null, request);
@@ -72,16 +72,14 @@ public class CommonFilesController {
      *
      * @return 错误提示信息或插入成功通知
      */
-    @PostMapping("/commonFiles/deleteFile")
-    public Object deleteFileFromCommonFiles(HttpServletRequest request) {
+    @PostMapping("/commonFiles/deleteFiles")
+    public Object deleteFileFromCommonFiles(HttpServletRequest request,@RequestParam("oppositePath") String oppositePath,HttpServletResponse response) {
         try {
+
             String token = tokenService.getTokenFromRequest(request, "loginToken");
             String userId = tokenService.getValueFromToken(token, "userId").asString();
-            String oppositePath = request.getParameter("oppositePath");
 
-            if (!oppositePath.startsWith("/")) {
-                return responseService.response(CommonFileStatus.INVALID_INPUT, null, request);
-            }
+            oppositePath=oppositePath==null?"/":oppositePath.startsWith("/")?oppositePath:"/"+oppositePath;
             Boolean isExist = commonFilesService.fileExist(oppositePath, userId);
             if (!isExist) {
                 return responseService.response(CommonFileStatus.FILE_NOT_EXISTED, null, request);

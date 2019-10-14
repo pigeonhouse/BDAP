@@ -17,6 +17,7 @@ import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 /**
+ * 请求拦截相关配置,防止无token访问
  * @Author: XueXiaoYue
  * @Date: 2019/9/7 20:35
  */

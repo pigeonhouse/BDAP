@@ -1,5 +1,7 @@
 import React from 'react';
-import { Table, Button, Row, Col, Modal,Upload, Icon,message } from 'antd';
+import GGEditor from '@src';
+import { Table, Button, Row, Col, Modal } from 'antd';
+import FlowMinimap from './FlowMinimap';
 class ExperimentList extends React.Component {
 
 	state = {
@@ -49,12 +51,15 @@ class ExperimentList extends React.Component {
 			dataSource: data
 		})
 	}
-	handleNewButton = () => {
+
+	handleNewButton = async () => {
 		this.props.handleClickEnter()
 	}
+
 	handleDeleteButton = () => {
 		alert("你确定删除吗");
 	}
+
 	onRowClick = (record, index) => {
 		let selectKey = [index];
 		Modal.info({
@@ -67,6 +72,7 @@ class ExperimentList extends React.Component {
 		})
 
 	}
+
 	// getCookieValue = (name) => {
 	// 	var arr = document.cookie.match(new RegExp("(^| )" + name + "=([^;]*)(;|$)"));
 	// 	return arr;
@@ -104,8 +110,6 @@ class ExperimentList extends React.Component {
 			selectedRowKeys
 		};
 
-		
-
 		// const props = {
 		// 	name: 'file',
 		// 	method:'UPDATE',
@@ -125,8 +129,6 @@ class ExperimentList extends React.Component {
 		// 	  }
 		// 	},
 		//   }
-
-
 
 		return (
 			<div style={{ marginLeft: 20, marginTop: 20 }}>
@@ -152,12 +154,10 @@ class ExperimentList extends React.Component {
 							dataSource={this.state.dataSource}
 							pagination={{ pageSize: 6 }} />
 					</Col>
-					<Col span={12}> 缩略图
-						{/* <Upload {...props}>
-							<Button type="primary">
-								<Icon type="upload" /> Click to Upload
-    						</Button>
-						</Upload> */}
+					<Col span={12}>
+						<GGEditor>
+							<FlowMinimap></FlowMinimap>
+						</GGEditor>
 					</Col>
 				</Row>
 

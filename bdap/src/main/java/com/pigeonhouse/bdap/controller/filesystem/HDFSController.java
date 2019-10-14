@@ -23,7 +23,7 @@ import java.util.*;
 
 /**
  * 本文件所有Api均使用userId作为唯一性索引,在HDFS上的默认用户文件夹名称也为userId
- *
+ * HDFS文件的操作API
  * @Author: Xingtianyu
  * @Date: 2019/9/19 20:38
  */
@@ -48,14 +48,12 @@ public class HDFSController {
         return getFileList(request, "/");
     }
 
-    @RequestMapping(value = "/hdfs/{oppositePath}", method = RequestMethod.GET)
-    public Object getFileList(HttpServletRequest request, @PathVariable String oppositePath) {
+    @RequestMapping(value = "/hdfs", method = RequestMethod.GET)
+    public Object getFileList(HttpServletRequest request, @RequestParam("oppositePath") String oppositePath) {
         try {
             String token = tokenService.getTokenFromRequest(request, "loginToken");
             String userId = tokenService.getValueFromToken(token, "userId").asString();
-            if (oppositePath == null) {
-                oppositePath = "/";
-            }
+            oppositePath=oppositePath==null?"/":oppositePath.startsWith("/")?oppositePath:"/"+oppositePath;
             Hdfsfile fileList = hdfsService.listFiles(userId + oppositePath, null);
             if (fileList != null) {
                 JSONObject fileListJson = new JSONObject(new LinkedHashMap());
@@ -151,6 +149,7 @@ public class HDFSController {
             String token = tokenService.getTokenFromRequest(request, "loginToken");
             String userId = tokenService.getValueFromToken(token, "userId").asString();
             String oppositePath = request.getParameter("oppositePath");
+            oppositePath=oppositePath==null?"/":oppositePath;
             boolean replace = Boolean.parseBoolean(request.getParameter("replace"));
             MultipartFile file = multipartRequest.getFile("file");
             if (file == null || file.getBytes() == null) {
@@ -186,15 +185,13 @@ public class HDFSController {
      */
     @PostMapping("/hdfs/uploadwithheader")
     @ResponseBody
-    public Object uploadwithheader(HttpServletRequest request) throws IOException {
+    public Object uploadwithheader(HttpServletRequest request,@RequestParam("oppositePath") String oppositePath,@RequestParam("replace") boolean replace) throws IOException {
         try {
             MultipartHttpServletRequest multipartRequest = (MultipartHttpServletRequest) request;
             String token = tokenService.getTokenFromRequest(request, "loginToken");
             //获取含有登录信息的Token
             String userId = tokenService.getValueFromToken(token, "userId").asString();
             //解析UserId
-            String oppositePath = request.getParameter("oppositePath");
-            boolean replace = Boolean.parseBoolean(request.getParameter("replace"));
             //char regex = request.getParameter("regex").charAt(0);
             char regex = ',';
             MultipartFile file = multipartRequest.getFile("file");
