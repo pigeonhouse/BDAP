@@ -3,17 +3,8 @@ import React from 'react';
 
 class TagVisual extends React.Component {
 
-    state = {
-        tag: [],
-    }
-
-    componentWillMount() {
-        const { summarize } = this.props;
-        this.setState({ tag: summarize })
-    }
-
     handleCloseDelete = (removedTag) => {
-        const tag = this.state.tag.filter(Tag => {
+        const tag = this.props.summarize.filter(Tag => {
             if (Tag.label === removedTag.label &&
                 Tag.operator === removedTag.operator)
                 return false;
@@ -25,10 +16,10 @@ class TagVisual extends React.Component {
     }
 
     render() {
-        const { tag } = this.state;
+        const { summarize } = this.props;
         return (
             <div >
-                {tag.map((item) => {
+                {summarize.map((item) => {
                     const tag = `${item.operator}${item.label}`;
                     return (
                         <div style={{ margin: "15%", marginTop: "6px", marginBottom: "6px" }} >

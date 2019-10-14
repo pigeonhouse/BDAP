@@ -35,8 +35,8 @@ class Summarize extends React.Component {
     }
 
     //删除Filter
-    handleDeleteTag = (index) => {
-        this.props.handleDeleteSummarize(index);
+    handleDeleteTag = (tag) => {
+        this.props.handleDeleteSummarize(tag);
     }
 
     handleChangeLabel = (value) => {
