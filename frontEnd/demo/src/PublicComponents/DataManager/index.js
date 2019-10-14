@@ -158,7 +158,7 @@ class DataManager extends React.Component {
         //const deleteCommonFilesTitle = <BuildModalTitle title="删除常用文件" />;
         const props = {
             name: 'file',
-            action: 'http://localhost:8888/hdfs/uploadwithheader',
+            action: 'http://localhost:8888/hdfs/upload',
             headers: {
                 Cookie: this.getCookieValue("loginToken")
             },
