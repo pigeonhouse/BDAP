@@ -91,6 +91,7 @@ class Attributes extends React.Component {
         if (!item) {
             return;
         }
+        
         var attributes = JSON.parse(JSON.stringify(item.model.attributes));
         attributes[index].value = value;
         executeCommand(() => {
@@ -106,6 +107,7 @@ class Attributes extends React.Component {
         if (!item) {
             return;
         }
+        const attributes = JSON.parse(JSON.stringify(item.model.attributes));
         attributes[index].value = e.target.checked;
         executeCommand(() => {
             update(item, { attributes });

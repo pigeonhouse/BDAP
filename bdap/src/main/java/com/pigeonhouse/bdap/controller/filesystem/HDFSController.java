@@ -211,6 +211,7 @@ public class HDFSController {
                     case "txt":
                         byte[] buf = file.getBytes();
                         String tmp = "";
+                        boolean merge=false;
                         boolean sampleread = false;
                         for (int idx = 0; idx < buf.length; idx++) {
                             if (buf[idx] == 10 && sampleread == true) {
@@ -224,17 +225,29 @@ public class HDFSController {
                                 header.add(tmp);
                                 tmp = "";
                                 sampleread = true;
-                            } else if (idx == buf.length - 1)
+                            }
+                            else if (idx == buf.length - 1)
                             //数据只有一行
                             {
                                 tmp += (char) buf[idx];
                                 sample.add(tmp);
-                            } else if (buf[idx] == (int) regex && sampleread == true)
+                            } else if (buf[idx] == (int) regex && sampleread == true&&merge==false)
                             //数据样本采集
                             {
                                 sample.add(tmp);
                                 tmp = "";
-                            } else if (buf[idx] == (int) regex && sampleread == false)
+                            }
+                            else if (buf[idx] == (int) '"'&&merge==false)
+                            {
+                                tmp += (char) buf[idx];
+                                merge=true;
+                            }
+                            else if (buf[idx] == (int) '"'&&merge==true)
+                            {
+                                tmp += (char) buf[idx];
+                                merge=false;
+                            }
+                            else if (buf[idx] == (int) regex && sampleread == false)
                             //遇到头文件分隔符，保存新数据
                             {
                                 header.add(tmp);
