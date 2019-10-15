@@ -52,7 +52,6 @@ class VisualChart extends React.Component {
         }
         switch (this.props.currentChart) {
             case "table": myChart.dispose(); return;
-            case "pie": return createPieChart(myChart, this.props.dataSet);
             case "line": return createLineChart(myChart, this.props);
             case "bar": return createBarChart(myChart, this.props);
             case "pie": return createPieChart(myChart, this.props);
