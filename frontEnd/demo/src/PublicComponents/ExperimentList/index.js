@@ -1,6 +1,6 @@
 import React from 'react';
 import GGEditor from '@src';
-import { Table, Button, Row, Col, Modal } from 'antd';
+import { Table, Button, Row, Col, Modal, message } from 'antd';
 import { fetchTool } from '../../FetchTool';
 import FlowMinimap from './FlowMinimap';
 
@@ -12,7 +12,7 @@ class ExperimentList extends React.Component {
 		dataSource: [],
 		selectedRowKeys: null,
 		minimapInfo: null,
-		experimentId: null,
+		experiment: null,
 	}
 
 	fetchModalList = async () => {
@@ -36,9 +36,47 @@ class ExperimentList extends React.Component {
 		})
 	}
 
-	fetchModalStream = async (experimentId) => {
+	fetchModalStream = async (experiment) => {
 		const init = {
 			method: 'GET',
+			mode: 'cors',
+			headers: {
+				"Content-Type": "application/x-www-form-urlencoded;charset=utf-8"
+			},
+			credentials: 'include'
+		}
+		const res = await fetchTool(`/experiments/${experiment.experimentId}`, init)
+		if (res.code === 200) {
+			return res.data
+		}
+	}
+
+	// 新建项目时第一次进入
+	handleNewButton = async () => {
+		this.props.handleClickEnter(null);
+	}
+
+	// 完成标题到id的转化
+	getExperimentByText = (text) => {
+		const { dataSource } = this.state;
+		for (let index in dataSource) {
+			const data = dataSource[index];
+			if (data.title === text) {
+				return data;
+			}
+		}
+	}
+
+	//选择项目时，点击项目名称进入
+	handleEnterModel = async (text) => {
+		const experiment = this.getExperimentByText(text);
+		this.props.handleClickEnter(experiment);
+		this.props.handleEnterModel(await this.fetchModalStream(experiment));
+	}
+
+	deleteModal = async (experimentId) => {
+		const init = {
+			method: 'DEL',
 			mode: 'cors',
 			headers: {
 				"Content-Type": "application/x-www-form-urlencoded;charset=utf-8"
@@ -51,61 +89,36 @@ class ExperimentList extends React.Component {
 		}
 	}
 
-	// 新建项目时第一次进入
-	handleNewButton = async () => {
-		this.props.handleClickEnter(null);
-	}
-
-	// 完成标题到id的转化
-	getExperimentIdByText = (text) => {
-		const { dataSource } = this.state;
-		for (let index in dataSource) {
-			const data = dataSource[index];
-			if (data.title === text) {
-				return data.experimentId;
-			}
-		}
-	}
-
-	//选择项目时，点击项目名称进入
-	handleEnterModel = async (text) => {
-		const experimentId = this.getExperimentIdByText(text);
-		this.props.handleClickEnter(handleEnterModel);
-		this.props.handleEnterModel(await this.fetchModalStream(experimentId));
-	}
-
 	// 点击删除时
 	handleDeleteButton = () => {
-		const selectTitleDelte = this.state.selectTitle;
-		const self = this;
-		if (selectTitleDelte === '') {
-			alert("删除失败，请先选择要删除的选项")
+		const selectTitleDelte = this.state.selectedRowKeys;
+
+		if (selectTitleDelte === null) {
+			message.warning("删除失败，请先选择要删除的选项");
 		}
 		else {
+			var { dataSource, experiment } = this.state;
+			dataSource.splice(selectTitleDelte[0], 1);
 			confirm({
-				title: 'Do you Want to delete this item?',
-				content: selectTitleDelte,
-				onOk() {
-					//发送selectTitleDelte
-					// message.success("删除成功")
-					self.setState({
-						//发送数据，获取列表
-						// dataSource: fetchmodule2()
-					})
-
-				}
+				title: '确定删除吗?',
+				content: selectTitleDelte[0],
+				// onOk: this.deleteModal(experiment.experimentId),
 			})
 		}
 	}
 
 	onRowClick = async (record, index) => {
-		const experimentId = this.getExperimentIdByText(record.title);
+		const experiment = this.state.experiment;
+		const nextExperiment = this.getExperimentByText(record.title);
 
-		if(this.state.experimentId === experimentId) return;
-		
+		if (experiment !== null &&
+			experiment.experimentId === nextExperiment.experimentId
+		) return;
+
 		this.setState({
+			experiment: nextExperiment,
 			selectedRowKeys: [index],
-			minimapInfo: await this.fetchModalStream(experimentId),
+			minimapInfo: await this.fetchModalStream(nextExperiment.experimentId),
 		})
 	}
 

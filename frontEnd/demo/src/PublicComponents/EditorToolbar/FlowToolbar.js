@@ -1,8 +1,9 @@
 import React from 'react';
-import { Tooltip, Divider, message, Modal, Button, Icon, Input } from 'antd';
+import { Tooltip, Divider, Modal, Button, Icon, Input } from 'antd';
 import GGEditor, { Toolbar, Command, Flow, RegisterCommand } from '@src';
 import styles from './index.less';
 import iconfont from '../../theme/iconfont.less';
+import { generateStream } from '../HandleStream/generateStream';
 import { withPropsAPI } from '@src';
 
 class FlowToolbar extends React.Component {
@@ -14,16 +15,11 @@ class FlowToolbar extends React.Component {
 	}
 
 	ShowModal = () => {
-		const modeName = this.state.inp1;
-		if (modeName === "") {
-			this.setState({
-				visible: true,
-			});
-		}
-		else {
-			//以后点击存储时，发送title及页面的流程图信息
-			console.log(modeName)
-			alert("模型存储成功")
+		const { experiment } = this.props;
+		if (experiment === null) {
+			this.setState({ visible: true });
+		} else {
+			this.handleClick();
 		}
 	}
 
@@ -40,13 +36,21 @@ class FlowToolbar extends React.Component {
 	}
 
 	handleClick = () => {
-		const { propsAPI } = this.props;
-		inf = JSON.parse(JSON.stringify(propsAPI.save()));
+		const { propsAPI, experiment } = this.props;
+		const inf = JSON.parse(JSON.stringify(propsAPI.save()));
+		const stream = generateStream(inf);
 
-		this.setState({
-			visible: false,
-		});
-		message.success("成功的存储了一个模型!");
+		if (experiment !== null) {
+			this.props.handleSaveStream(experiment, stream);
+		} else {
+			this.props.handleSaveStream({
+				title: this.state.inp1,
+				description: this.state.inp2,
+			}, stream);
+			this.setState({
+				visible: false,
+			});
+		}
 	}
 
 	handleInput1(e) {
@@ -59,7 +63,7 @@ class FlowToolbar extends React.Component {
 
 	componentWillMount() {
 		this.setState({
-			inp1: this.props.modeTitle,
+			inp1: "",
 			inp2: ""
 		});
 	}
@@ -161,7 +165,11 @@ class FlowToolbar extends React.Component {
 						<Divider type="vertical" /> */}
 						<Command name="showpicture">
 							<Tooltip title="存储" placement="bottom" overlayClassName={styles.tooltip}>
-								<Icon type="lock" onClick={() => this.ShowModal()} className={styles.commandIcon} />
+								<Icon
+									type="lock"
+									onClick={() => this.ShowModal()}
+									className={styles.commandIcon}
+								/>
 							</Tooltip>
 						</Command>
 					</Toolbar>

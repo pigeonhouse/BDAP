@@ -3,33 +3,88 @@ import GGEditor, { Flow, withPropsAPI } from '@src';
 import { Row, Col } from 'antd';
 import { FlowToolbar } from '../../PublicComponents/EditorToolbar';
 import { FlowDetailPanel } from '../../PublicComponents/EditorDetailPanel';
-import FlowNodePanel from '../../PublicComponents/EditorNodePanel';
 import { FlowContextMenu } from '../../PublicComponents/EditorContextMenu';
+import FlowNodePanel from '../../PublicComponents/EditorNodePanel';
 import ExperimentList from "../../PublicComponents/ExperimentList";
 import SparkRunning from '../../ClusterModeComponents/SparkRunPanel/SparkRun';
 import LoadStream from '../../PublicComponents/HandleStream/LoadStream';
 
+import { fetchTool } from '../../FetchTool';
 import styles from './index.less';
-
 
 class ExperimentPanel extends Component {
 
     state = {
-        refresh: this.props.refresh,
-        experimentId: null,
+        experiment: null,
+        flowInfo: null,
     }
 
     handleEnterModel = (flowInfo) => {
-        
+        this.setState({ flowInfo })
     }
 
-    handleClickEnter = (experimentId) => {
-        this.setState({ experimentId });
+    handleClickEnter = (experiment) => {
+        this.setState({ experiment });
         this.props.handleClickEnter();
     }
 
+    saveStream = async (init, url) => {
+        const res = await fetchTool(url, init);
+        if (res.code === 201) {
+            this.setState({ experiment: res.data });
+            message.success('存储成功');
+        } else {
+            message.error('存储失败');
+        }
+    }
+
+    handleSaveStream = (experiment, flowInfo) => {
+        var url = "/experiments";
+        let formData = new FormData();
+        formData.append(
+            "description",
+            JSON.stringify({
+                description: {
+                    title: experiment.title,
+                    description: experiment.description,
+                }
+            })
+        )
+        if (experiment.experimentId !== undefined) {
+            formData.append(
+                "experiment",
+                JSON.stringify({
+                    experimentId: experiment.experimentId,
+                    ...flowInfo
+                })
+            )
+        } else {
+            formData.append(
+                "experiment",
+                JSON.stringify({ ...flowInfo })
+            )
+        }
+
+        var init = {
+            method: 'PUT',
+            mode: 'cors',
+            body: formData,
+            headers: {
+                "Content-Type": "application/json;charset=utf-8"
+            },
+            credentials: 'include'
+        };
+
+        this.saveStream(init, url);
+    }
+
     render() {
-        if (this.props.currentTab === this.props.clickTab) {
+        const { currentTab, clickTab } = this.props;
+        if (currentTab === '1' && clickTab === '1') {
+            const { flowInfo, experiment } = this.state;
+            if (flowInfo !== null || experiment !== null) {
+                this.setState({ flowInfo: null, experiment: null })
+            }
             return (
                 <div className={styles.editor}>
                     <Row style={{ minHeight: 'calc(100vh - 105px)' }}>
@@ -54,7 +109,10 @@ class ExperimentPanel extends Component {
 
                     <Col span={15} className={styles.editorContent}>
                         <div className={styles.editorHd} data-step="2" data-intro='在工具栏可以进行撤销，复制，删除，成组等操作。' >
-                            <FlowToolbar modeTitle={this.state.modeTitle} />
+                            <FlowToolbar
+                                experiment={this.state.experiment}
+                                handleSaveStream={this.handleSaveStream}
+                            />
                         </div>
                         <Flow style={{ height: 'calc(100vh - 142px)' }}
                         />
@@ -68,56 +126,10 @@ class ExperimentPanel extends Component {
                 </Row>
                 <FlowContextMenu />
                 <SparkRunning running={this.props.running} stopRunning={this.props.stopRunning} ></SparkRunning>
-                <LoadStream></LoadStream>
+                <LoadStream flowInfo={this.state.flowInfo} ></LoadStream>
             </GGEditor>
         );
     }
 }
 
 export default withPropsAPI(ExperimentPanel);
-
-
-// class ExperimentPanel extends Component {
-
-//     render() {
-//         if (this.props.currentTab === this.props.clickTab) {
-//             return <div className={styles.editor}>
-//                 <Row style={{ minHeight: 'calc(100vh - 105px)' }}>
-//                     <ExperimentList handleClickEnter={this.props.handleClickEnter}
-//                     />
-//                 </Row>
-//             </div>
-//         }
-//         return (
-//             <GGEditor className={styles.editor} >
-//                 <Row type="flex" style={{ height: 'calc(100vh - 105px)' }}>
-//                     <Col span={4} style={{ backgroundColor: '#fff' }}>
-//                         <div style={{ height: 'calc(100vh - 105px)' }} span={4} className={styles.editorSidebar}
-//                             data-step="1" data-intro='在组件栏可以挑选想要的模块，左键单击拖拽添加至右侧画布内。' data-position='right'>
-//                             <FlowNodePanel />
-//                         </div>
-//                     </Col>
-
-//                     <Col span={15} className={styles.editorContent}>
-//                         <div className={styles.editorHd} data-step="2" data-intro='在工具栏可以进行撤销，复制，删除，成组等操作。' >
-//                             <FlowToolbar />
-//                         </div>
-//                         <Flow style={{ height: 'calc(100vh - 142px)' }}
-//                         />
-//                     </Col>
-
-//                     <Col span={5} className={styles.editorSidebar}>
-//                         <div className={styles.detailPanel} data-step="3" style={{ maxHeight: 'calc(100vh - 105px)' }} data-intro='在参数栏对你的组件进行参数配置。' data-position='left'>
-//                             <FlowDetailPanel />
-//                         </div>
-//                     </Col>
-//                 </Row>
-//                 <FlowContextMenu />
-//                 <SparkRunning running={this.props.running} stopRunning={this.props.stopRunning} ></SparkRunning>
-//                 <LoadStream></LoadStream>
-//             </GGEditor>
-//         );
-//     }
-// }
-
-// export default withPropsAPI(ExperimentPanel);

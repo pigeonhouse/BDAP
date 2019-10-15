@@ -1,19 +1,8 @@
-import {
-	Component
-} from 'react';
-import {
-	withPropsAPI
-} from '@src';
-
-import {
-	generateStream
-} from '../../PublicComponents/HandleStream/GenerateStream';
-import {
-	fetchTool
-} from '../../FetchTool';
-import {
-	isLegal
-} from '../../PublicComponents/HandleStream/IsLegal'
+import { Component } from 'react';
+import { withPropsAPI } from '@src';
+import { generateStream } from '../../PublicComponents/HandleStream/generateStream';
+import { fetchTool } from '../../FetchTool';
+import { isLegal } from '../../PublicComponents/HandleStream/IsLegal'
 
 var current;
 var sum;
@@ -89,7 +78,7 @@ class SparkRunning extends Component {
 				const init = {
 					method: 'POST',
 					mode: 'cors',
-					body: JSON.stringify({"resultUrl":result[current].resultUrl}) ,
+					body: JSON.stringify({ "resultUrl": result[current].resultUrl }),
 					headers: {
 						"Content-Type": "application/json;charset=utf-8"
 					},
@@ -110,10 +99,8 @@ class SparkRunning extends Component {
 	}
 
 	render() {
-		return ( 
-		<div > {
-				this.onClickButton()
-			} </div>
+		return (
+			<div > {this.onClickButton()} </div>
 		);
 	}
 }

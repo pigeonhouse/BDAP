@@ -3,13 +3,19 @@ import { withPropsAPI } from '@src';
 import { downloadStream } from './downloadStream';
 
 class LoadStream extends React.Component {
+
     loadStream = () => {
-        const { propsAPI } = this.props;
-        const flowInfo = downloadStream();
-        propsAPI.read(flowInfo);
+        const { propsAPI, flowInfo } = this.props;
+        const flow = downloadStream(flowInfo);
+        if (flow === null) return;
+        propsAPI.read(flow);
     }
 
-    componentDidMount(){
+    componentDidUpdate() {
+        this.loadStream();
+    }
+
+    componentDidMount() {
         this.loadStream();
     }
 
