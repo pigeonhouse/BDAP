@@ -84,7 +84,8 @@ class ExperimentList extends React.Component {
 			credentials: 'include'
 		}
 		const res = await fetchTool(`/experiments/${experimentId}`, init)
-		if (res.code === 200) {
+		console.log(res);
+		if (res.code === 202) {
 			return res.data
 		}
 	}
@@ -99,11 +100,8 @@ class ExperimentList extends React.Component {
 		else {
 			var { dataSource, experiment } = this.state;
 			dataSource.splice(selectTitleDelte[0], 1);
-			confirm({
-				title: '确定删除吗?',
-				content: selectTitleDelte[0],
-				// onOk: this.deleteModal(experiment.experimentId),
-			})
+			this.deleteModal(experiment.experimentId);
+			this.setState({ dataSource });
 		}
 	}
 
