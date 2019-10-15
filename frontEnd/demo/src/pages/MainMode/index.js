@@ -81,7 +81,6 @@ class LocalMode extends React.Component {
 				})
 		}
 	}
-
 	
 	componentDidMount() {
 		if (this.state.remind === 'true') {
@@ -109,7 +108,6 @@ class LocalMode extends React.Component {
 		}
 	}
 
-	
 	tabChange = (value) => {
 		this.setState({
 			currentTab: value,

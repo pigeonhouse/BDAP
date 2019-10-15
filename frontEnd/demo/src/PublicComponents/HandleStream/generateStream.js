@@ -33,7 +33,7 @@ export function generateStream(flowInfo) {
 				deg[index]++;
 
 				// 锚点位置需要减去入度
-				let uploadAnchor = sourceAnchor - anchor[0] + 1;
+				let uploadAnchor = sourceAnchor - anchor[0];
 				
 				// source与sourceAnchor合成字符串展示
 				sourceId[index][targetAnchor] = source + '_' + uploadAnchor;

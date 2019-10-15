@@ -5,84 +5,76 @@ import { fetchTool } from '../../FetchTool';
 import FlowMinimap from './FlowMinimap';
 
 const { confirm } = Modal;
-const data = [
-	{
-		title: "numberOne",
-		description: 'I LOVE REACT',
-		status: "SUCCEED"
-	}, {
-		title: "numberTwo",
-		description: 'I LOVE REACT',
-		status: "FINISH"
-	},
-	{
-		title: "numberThree",
-		description: 'I LOVE REACT',
-		status: "SUCCEED"
-	},
-]
-
 
 class ExperimentList extends React.Component {
 
-	constructor(props) {
-		super(props)
-		this.state = {
-			dataSource: [],
-			selectTitle: "",
-		}
+	state = {
+		dataSource: [],
+		selectedRowKeys: null,
+		minimapInfo: null,
+		experimentId: null,
 	}
-	async fetchmodule() {
+
+	fetchModalList = async () => {
 		const init = {
 			method: 'GET',
 			mode: 'cors',
 			headers: {
-				"Content-Type": "application/json;charset=utf-8"
+				"Content-Type": "application/x-www-form-urlencoded;charset=utf-8"
 			},
 			credentials: 'include'
 		}
-		const res = await fetchTool("/module", init)
+		const res = await fetchTool("/experiments/description", init)
 		if (res.code === 200) {
 			return res.data
 		}
 	}
 
-	async fetchmodule2() {
+	async componentWillMount() {
+		this.setState({
+			dataSource: await this.fetchModalList()
+		})
+	}
+
+	fetchModalStream = async (experimentId) => {
 		const init = {
-			method: 'POST',
+			method: 'GET',
 			mode: 'cors',
-			body: {
-				title: this.state.selectTitle
-			},
 			headers: {
-				"Content-Type": "application/json;charset=utf-8"
+				"Content-Type": "application/x-www-form-urlencoded;charset=utf-8"
 			},
 			credentials: 'include'
 		}
-		const res = await fetchTool("/module", init)
+		const res = await fetchTool(`/experiments/${experimentId}`, init)
 		if (res.code === 200) {
 			return res.data
 		}
 	}
 
-
-	componentWillMount() {
-		console.log("ExperimentList componentWillMount()")
-		this.setState({
-			// dataSource: fetchmodule()
-			//获取数据
-		})
-	}
-	componentDidMount() {
-
-		this.setState({
-			dataSource: data
-		})
-	}
+	// 新建项目时第一次进入
 	handleNewButton = async () => {
-		this.props.handleClickEnter()
-		this.props.data(await this.fetchmodule())
+		this.props.handleClickEnter(null);
 	}
+
+	// 完成标题到id的转化
+	getExperimentIdByText = (text) => {
+		const { dataSource } = this.state;
+		for (let index in dataSource) {
+			const data = dataSource[index];
+			if (data.title === text) {
+				return data.experimentId;
+			}
+		}
+	}
+
+	//选择项目时，点击项目名称进入
+	handleEnterModel = async (text) => {
+		const experimentId = this.getExperimentIdByText(text);
+		this.props.handleClickEnter(handleEnterModel);
+		this.props.handleEnterModel(await this.fetchModalStream(experimentId));
+	}
+
+	// 点击删除时
 	handleDeleteButton = () => {
 		const selectTitleDelte = this.state.selectTitle;
 		const self = this;
@@ -106,100 +98,66 @@ class ExperimentList extends React.Component {
 		}
 	}
 
-	onRowClick = (record, index) => {
-		let selectKey = [index];
-		Modal.info({
-			title: "信息",
-			content: record.title
-		})
+	onRowClick = async (record, index) => {
+		const experimentId = this.getExperimentIdByText(record.title);
+
+		if(this.state.experimentId === experimentId) return;
+		
 		this.setState({
-			selectedRowKeys: selectKey,
-			selectedItem: record,
-			selectTitle: record.title
+			selectedRowKeys: [index],
+			minimapInfo: await this.fetchModalStream(experimentId),
 		})
 	}
-	// getCookieValue = (name) => {
-	// 	var arr = document.cookie.match(new RegExp("(^| )" + name + "=([^;]*)(;|$)"));
-	// 	return arr;
-	// }
 
-	//进入页面，并将参数传递给ExperimentPanel 组件
-	handleEnterModelButton = () => {
-		this.props.handleClickEnter(),
-			this.props.handleEnterModelBtn(this.state.selectTitle)
-
-	}
 	render() {
+
+		const { dataSource } = this.state;
+		let data = new Array();
+		dataSource.map((item) => {
+			data.push({
+				title: item.title,
+				description: item.description,
+			})
+		})
 
 		const columns = [
 			{
 				title: "title",
 				dataIndex: 'title',
 				width: 100,
-				render: text => <a>{text}</a>,
+				render: text => <a onClick={this.handleEnterModel.bind(this, text)} >{text}</a>,
 			},
 			{
 				title: 'description',
 				dataIndex: 'description',
 				width: 100,
 			},
-			{
-				title: 'status',
-				dataIndex: 'status',
-				width: 100,
-			},
-			// {
-			// 	title: 'Action',
-			// 	key: 'action',
-			// 	width: 100,
-			// 	// render: () => <a>Delete</a>,
-			// },
 		]
 
-		const { selectedRowKeys } = this.state;
+		const { selectedRowKeys, minimapInfo } = this.state;
 		const rowSelection = {
 			type: "radio",
 			selectedRowKeys
 		};
 
-
-
-		// const props = {
-		// 	name: 'file',
-		// 	method:'UPDATE',
-		// 	action: 'localhost:8888/hdfs/',
-		// 	headers: {
-		// 	"Content-Type": 'multipart/form-data',
-		// 	"Cookies":this.getCookieValue("loginToken")
-		// 	},
-		// onChange(info) {
-		// 	  if (info.file.status !== 'uploading') {
-		// 		console.log(info.file, info.fileList);
-		// 	  }
-		// 	  if (info.file.status === 'done') {
-		// 		message.success(`${info.file.name} file uploaded successfully`);
-		// 	  } else if (info.file.status === 'error') {
-		// 		message.error(`${info.file.name} file upload failed.`);
-		// 	  }
-		// 	},
-		//   }
-
-
-
 		return (
 			<div style={{ marginLeft: 20, marginTop: 20 }}>
 				<Row>
 					<Col span={12}>
-						<Button type="primary" style={{ marginRight: 10, marginBottom: 10 }} onClick={this.handleNewButton}>
+						<Button
+							type="primary"
+							style={{ marginRight: 10, marginBottom: 10 }}
+							onClick={this.handleNewButton}
+						>
 							新建项目
 						</Button>
-						<Button type="primary" style={{ marginRight: 10, marginBottom: 10 }}
-							onClick={this.handleEnterModelButton}>
-							进入项目
+						<Button
+							type="primary"
+							onClick={this.handleDeleteButton}
+							style={{ marginBottom: 10 }}
+						>
+							删除
 						</Button>
-						<Button type="primary"
-							onClick={this.handleDeleteButton} style={{ marginBottom: 10 }}>
-							删除</Button>
 
 						<Table
 							bordered
@@ -210,16 +168,15 @@ class ExperimentList extends React.Component {
 								};
 							}}
 							columns={columns}
-							dataSource={this.state.dataSource}
+							dataSource={data}
 							pagination={{ pageSize: 6 }} />
 					</Col>
 					<Col span={12}>
 						<GGEditor>
-							<FlowMinimap></FlowMinimap>
+							<FlowMinimap minimapInfo={minimapInfo} ></FlowMinimap>
 						</GGEditor>
 					</Col>
 				</Row>
-
 			</div>)
 	}
 }

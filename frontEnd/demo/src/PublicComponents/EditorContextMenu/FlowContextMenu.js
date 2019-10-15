@@ -87,8 +87,8 @@ class FlowContextMenu extends React.Component {
 						</div>
 					</Command>
 					<DataPreview></DataPreview>
-					<ModelEvaluation></ModelEvaluation>
-					<Download></Download>
+					{/* <ModelEvaluation></ModelEvaluation> */}
+					{/* <Download></Download> */}
 				</NodeMenu>
 
 				<CanvasMenu>

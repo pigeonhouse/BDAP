@@ -13,56 +13,48 @@ import styles from './index.less';
 
 
 class ExperimentPanel extends Component {
-    constructor(props){
-        super(props)
-        this.state = {  
-            nodesModuleInfo :[],
-            refresh:this.props.refresh,
-            modeTitle:''
-        }  
+
+    state = {
+        refresh: this.props.refresh,
+        experimentId: null,
     }
 
-    getdata=(value)=>
-    {
-        this.setState({
-            nodesModuleInfo:value
-        })
+    handleEnterModel = (flowInfo) => {
+        
     }
-    handleEnterModelBtn=(modeTitle)=>{
-        this.setState({
-            modeTitle:modeTitle
-        })
-        //在这里去请求模型，得到数据
-        console.log("ExperimentPanel handleEnterModelBtn() "+modeTitle)
+
+    handleClickEnter = (experimentId) => {
+        this.setState({ experimentId });
+        this.props.handleClickEnter();
     }
-   
 
     render() {
-        console.log("modeTitle"+this.state.modeTitle)
         if (this.props.currentTab === this.props.clickTab) {
-            return <div className={styles.editor}>
-                <Row style={{ minHeight: 'calc(100vh - 105px)' }}>
-                    <ExperimentList
-                        handleClickEnter={this.props.handleClickEnter}
-                        handleEnterModelBtn={this.handleEnterModelBtn}
-                        data={this.getdata.bind(this)}
-                    />
-                </Row>
-            </div>
+            return (
+                <div className={styles.editor}>
+                    <Row style={{ minHeight: 'calc(100vh - 105px)' }}>
+                        <ExperimentList
+                            handleClickEnter={this.handleClickEnter}
+                            handleEnterModel={this.handleEnterModel}
+                        />
+                    </Row>
+                </div>
+            );
         }
+
         return (
             <GGEditor className={styles.editor} >
                 <Row type="flex" style={{ height: 'calc(100vh - 105px)' }}>
                     <Col span={4} style={{ backgroundColor: '#fff' }}>
                         <div style={{ height: 'calc(100vh - 105px)' }} span={4} className={styles.editorSidebar}
                             data-step="1" data-intro='在组件栏可以挑选想要的模块，左键单击拖拽添加至右侧画布内。' data-position='right'>
-                            <FlowNodePanel nodesModuleInfo={this.state.nodesModuleInfo} />
+                            <FlowNodePanel />
                         </div>
                     </Col>
 
                     <Col span={15} className={styles.editorContent}>
                         <div className={styles.editorHd} data-step="2" data-intro='在工具栏可以进行撤销，复制，删除，成组等操作。' >
-                            <FlowToolbar modeTitle={this.state.modeTitle}/>
+                            <FlowToolbar modeTitle={this.state.modeTitle} />
                         </div>
                         <Flow style={{ height: 'calc(100vh - 142px)' }}
                         />
