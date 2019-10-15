@@ -36,6 +36,7 @@ class FlowDetailPanel extends React.Component {
 
 		);
 	}
+	
 }
 
 export default FlowDetailPanel;
