@@ -1,5 +1,5 @@
 import React from "react"
-import { Upload, message, Button, Icon, Row, Col, Divider ,Menu,Modal} from 'antd';
+import { Upload, message, Button, Icon, Row, Col, Divider ,Menu,Modal,Radio} from 'antd';
 import DragM from "dragm";
 import { fetchTool } from '../../FetchTool';
 import EditableTable from './EditableTable';
@@ -32,7 +32,8 @@ class DataManager extends React.Component {
 		addCommonFileModalVisible: false,
 		deleteCommonFileModalVisible: false,
         fileOppositePath: '',
-        items:[]
+        items:[],
+        value:true
     }
     
 	/**
@@ -84,6 +85,7 @@ class DataManager extends React.Component {
 			});
 	}
     
+   
 	getCookieValue = (name) => {
 		var arr = document.cookie.match(new RegExp("(^| )" + name + "=([^;]*)(;|$)"));
 		return arr;
@@ -131,6 +133,18 @@ class DataManager extends React.Component {
       });
     }
     }
+    onChange=(value)=>{
+        this.setState({value:value})
+    }
+    getreplace=()=>
+    {
+        return this.state.replace
+    }
+    handleUploadData()
+  {
+    let d={replace:this.state.value}
+    return d;
+  }
   handleDelete = async(filePath) => {
     const oppositePath=filePath===undefined?undefined:
     "/"+filePath.split("/").slice(4-filePath.split("/").length).join("/");
@@ -154,20 +168,27 @@ class DataManager extends React.Component {
     
   };
    render() {
+
         const addCommonFilesTitle = <BuildModalTitle title="HDFS文件列表" />;
+        const data={"replace":this.state.replace}
         //const deleteCommonFilesTitle = <BuildModalTitle title="删除常用文件" />;
+        let formData = new FormData();
+		    formData.append('replace',this.state.replace)
         const props = {
             name: 'file',
-            action: 'http://localhost:8888/hdfs/upload',
-            headers: {
-                Cookie: this.getCookieValue("loginToken")
-            },
+            action: 'http://localhost:8888/hdfs/uploadwithheader',
             onChange(info) {
                 if (info.file.status !== 'uploading') {
                     console.log(info.file, info.fileList);
                 }
                 if (info.file.status === 'done') {
-                    message.success(`${info.file.name} file uploaded successfully`);
+                   
+                     if (info.file.response.code === 413)
+                     message.error(info.file.response.message);
+                     if (info.file.response.code === 200)
+                     message.success(`${info.file.name} file uploaded successfully`);
+                     if (info.file.response.code === 410)
+                      message.error("输入非法，请选择正确的CSV格式文件进行上传！");
                 } else if (info.file.status === 'error') {
                     message.error(`${info.file.name} file upload failed.`);
                 }
@@ -180,12 +201,19 @@ class DataManager extends React.Component {
                         <Row style={{ height: 200 }}></Row>
                         <Row>
                             <Col span={20} style={{ height: 240, overflow: "auto" }}>
-                                <Upload {...props} >
+                                <Upload {...props} withCredentials={true} data={()=>this.handleUploadData()}>
                                     <Button>
                                         <Icon type="upload" /> Click to Upload
     		                        </Button>
                                 </Upload>
+                                <Radio.Group onChange={this.onChange} defaultValue={true}>
+                                 <p>是否覆盖原有文件:</p>
+                                 <Radio.Button value={true}>是</Radio.Button>
+                                 <Radio.Button value={false}>否</Radio.Button>
+                            </Radio.Group>
+                            
                             </Col>
+                           
                             <Col span={2}></Col>
                         </Row>
                     </Col>

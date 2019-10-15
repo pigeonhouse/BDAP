@@ -69,36 +69,6 @@ public class CommonFilesService {
         commonFilesDao.deleteFile(userId,hdfsConfig.getDefaultDirectory()+"/"+userId+oppositePath);
     }
 
-    /**
-     * 将类的实例转化为JSON
-     */
-
-    public JSONObject commonFilesToJson(CommonFiles commonFiles) {
-        JSONObject result = new JSONObject();
-        result.put("userId", commonFiles.getUserId());
-        result.put("userName", commonFiles.getUserName());
-        JSONArray file = new JSONArray();
-        for (int FLidx = 0; FLidx < commonFiles.getFileList().size(); FLidx++) {
-
-            JSONObject fileInfo = new JSONObject();
-            FileAttribute FA = commonFiles.getFileList().get(FLidx);
-            fileInfo.put("fileName", FA.getFileName());
-            fileInfo.put("filePath", FA.getFilePath());
-            JSONArray colInfo = new JSONArray();
-            for (int cols = 0; cols < FA.getFileColumnsInfo().size(); cols++) {
-                JSONObject columnInfo = new JSONObject();
-                HeaderAttribute HA = FA.getFileColumnsInfo().get(cols);
-                columnInfo.put("colName", HA.getColName());
-                columnInfo.put("dataType", HA.getDataType());
-                colInfo.add(columnInfo);
-            }
-            fileInfo.put("fileColumnsInfo", colInfo);
-            file.add(fileInfo);
-
-        }
-        result.put("fileList", file);
-        return result;
-    }
 
     /**
      * 判断用户的某一文件是否存在

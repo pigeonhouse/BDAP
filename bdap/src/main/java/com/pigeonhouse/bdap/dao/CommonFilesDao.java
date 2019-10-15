@@ -64,10 +64,10 @@ public class CommonFilesDao {
      *
      * @param commonFiles 用户名
      */
-    public void createNewUser(CommonFiles commonFiles) {
+    /*public void createNewUser(CommonFiles commonFiles) {
         mongoTemplate.insert(commonFiles, "commonFiles");
     }
-
+*/
     /**
      * 在数据库指定用户下增加一个文件
      *

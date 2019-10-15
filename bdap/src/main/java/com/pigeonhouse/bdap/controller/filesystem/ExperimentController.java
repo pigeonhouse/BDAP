@@ -29,8 +29,7 @@ public class ExperimentController {
      *
      * */
     @PostMapping("/experiment/load")
-
-    public Object getFileList(String experimentId, HttpServletRequest request) {
+    public Object getFileList(@RequestParam("experimentId") String experimentId, HttpServletRequest request) {
         try {
             MapInfo experiment = experimentService.findExperimentId(experimentId);
             if(experiment==null)

@@ -99,7 +99,7 @@ public class CommonFilesController {
      * @return 常用数据列表JSON
      */
 
-    @PostMapping("/commonFiles/getCommonFiles")
+    @GetMapping("/commonFiles/getCommonFiles")
     public Object getCommonFiles(HttpServletRequest request) {
 
         String token = tokenService.getTokenFromRequest(request, "loginToken");

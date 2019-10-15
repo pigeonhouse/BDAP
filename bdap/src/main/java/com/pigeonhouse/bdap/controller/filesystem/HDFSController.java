@@ -185,12 +185,16 @@ public class HDFSController {
      */
     @PostMapping("/hdfs/uploadwithheader")
     @ResponseBody
-    public Object uploadwithheader(HttpServletRequest request,@RequestParam("oppositePath") String oppositePath,@RequestParam("replace") boolean replace) throws IOException {
+    public Object uploadwithheader(HttpServletRequest request) throws IOException {
         try {
             MultipartHttpServletRequest multipartRequest = (MultipartHttpServletRequest) request;
             String token = tokenService.getTokenFromRequest(request, "loginToken");
             //获取含有登录信息的Token
             String userId = tokenService.getValueFromToken(token, "userId").asString();
+            String  r=request.getParameter("replace");
+            Boolean replace=Boolean.valueOf(r);
+            String oppositePath=request.getParameter("oppositePath");
+            oppositePath=oppositePath==null?"/":oppositePath.startsWith("/")?oppositePath:"/"+oppositePath;
             //解析UserId
             //char regex = request.getParameter("regex").charAt(0);
             char regex = ',';
