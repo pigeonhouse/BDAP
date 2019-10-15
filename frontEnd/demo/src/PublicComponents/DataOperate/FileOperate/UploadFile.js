@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import { Icon, Button } from 'antd'
 import Papa from 'papaparse'
 import { withPropsAPI } from '@src';
-import { Stat } from '../DataToolFunctions/Stat';
 
 /**
  * 任意csv文件上传至Input组件中
@@ -37,14 +36,11 @@ class UploadFile extends Component {
 				n.push({ label: colName, value: colValue })
 			}
 
-			//通过Stat函数计算data的一些数据包括最大值最小值等
-			var STAT = new Array();
-			STAT = Stat(n);
 			let m = fieldNameArray[0].map((item) => {
 				return [item, false];
 			})
 			var values = {
-				Dataset: STAT,
+				Dataset: b,
 				labelArray: m,
 				length: vectorLength
 			}

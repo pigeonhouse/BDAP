@@ -52,21 +52,21 @@ class VisualChart extends React.Component {
         }
         switch (this.props.currentChart) {
             case "table": myChart.dispose(); return;
-            case "line": return createLineChart(myChart, this.props.dataSet);
-            case "bar": return createBarChart(myChart, this.props.dataSet);
-            case "pie": return createPieChart(myChart, this.props.dataSet);
-            case "scatter": return createScatterChart(myChart, this.props.dataSet);
-            case "funnel": return createFunnelChart(myChart, this.props.dataSet);
+            case "line": return createLineChart(myChart, this.props);
+            case "bar": return createBarChart(myChart, this.props);
+            case "pie": return createPieChart(myChart, this.props);
+            case "scatter": return createScatterChart(myChart, this.props);
+            case "funnel": return createFunnelChart(myChart, this.props);
         }
     }
 
     render() {
-        const { currentChart } = this.props;
+        const { currentChart, dataSet, labelArray } = this.props;
         return (
             <div className={styles.charter} id="chartBox" >
                 <div id="main" className={currentChart === 'table' ? styles.chartHidden : styles.chartVisual}></div>
                 <div className={currentChart !== 'table' ? styles.tableHidden : styles.tableVisual}>
-                    <VisualTable dataSet={this.props.dataSet} labelArray={this.props.labelArray} />
+                    <VisualTable dataSet={dataSet} labelArray={labelArray} />
                 </div>
             </div>
         );

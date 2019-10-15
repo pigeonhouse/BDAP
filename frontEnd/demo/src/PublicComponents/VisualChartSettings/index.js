@@ -5,21 +5,18 @@ import styles from './index.less';
 class Settings extends React.Component {
 
     state = {
-        x_label: undefined,
-        y_label: undefined,
         isMouseEnter: false,
     };
 
     handleChangeLabel = (axis, label) => {
-
-        if(axis === 'x'){
-            this.setState({ x_label: label })
+        let chartStyle = this.props.chartStyle;
+        if (axis === "x" || axis === "group") {
+            chartStyle.xLabel = label;
+        } else {
+            chartStyle.yLabel = label;
         }
-        else {
-            this.setState({ y_label: label })
-        }
 
-        this.props.handleChangeChartStyle(axis, label)
+        this.props.handleChangeChartStyle(chartStyle);
     }
 
     mouseEnter = () => {
@@ -30,6 +27,39 @@ class Settings extends React.Component {
     }
 
     render() {
+        const { chartSettings, currentChart, labelArray, labelType, chartStyle } = this.props;
+        if (currentChart === "table") return <div></div>;
+        let children = [];
+        const settings = chartSettings[currentChart] || {};
+
+        for (let i in Object.keys(settings)) {
+            const setting = settings[Object.keys(settings)[i]];
+            const { name, type } = setting;
+            let array = new Array();
+            let label = null;
+
+            labelArray.map((item, index) => {
+                if (labelType[index] === type) {
+                    array.push(item);
+                }
+            })
+
+            if (name === "x" || name === "group") {
+                label = chartStyle.xLabel;
+            } else {
+                label = chartStyle.yLabel;
+            }
+
+            children.push(
+                <LabelSelect
+                    handleChangeLabel={this.handleChangeLabel}
+                    axis={name}
+                    label={label}
+                    labelArray={array}
+                ></LabelSelect>
+            )
+        }
+
         return (
             <div>
                 <div className={styles.header} >
@@ -40,18 +70,7 @@ class Settings extends React.Component {
                     onMouseLeave={this.mouseLeave}
                     className={this.state.isMouseEnter ? styles.scrollapp : styles.unscrollapp}
                 >
-                    <LabelSelect
-                        handleChangeLabel={this.handleChangeLabel}
-                        axis='x'
-                        label={this.state.x_label}
-                        labelArray={this.props.labelArray}
-                    ></LabelSelect>
-                    <LabelSelect
-                        handleChangeLabel={this.handleChangeLabel}
-                        axis='y'
-                        label={this.state.y_label}
-                        labelArray={this.props.labelArray}
-                    ></LabelSelect>
+                    {children}
                 </div>
             </div>
         );

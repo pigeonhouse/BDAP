@@ -14,13 +14,13 @@ class LabelSelect extends React.Component {
     }
 
     render() {
-        const { labelArray } = this.props;
+        const { labelArray, label, axis } = this.props;
         return (
             <Select
-                value={this.props.label}
+                value={label}
                 showSearch
                 style={{ width: "80%", margin: "10%", marginTop: "15px", marginBottom: "0px" }}
-                placeholder={`请选择${this.props.axis}列`}
+                placeholder={axis}
                 optionFilterProp="children"
                 onChange={this.onChange}
                 onSearch={this.onSearch}
@@ -28,8 +28,8 @@ class LabelSelect extends React.Component {
                     option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
                 }
             >
-                {labelArray.map((item)=>{
-                    return(
+                {labelArray.map((item) => {
+                    return (
                         <Option value={item}>{item}</Option>
                     );
                 })}

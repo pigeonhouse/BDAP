@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import { withPropsAPI } from '@src';
-import { Stat } from '../DataToolFunctions/Stat';
 
 import { TitanicTest } from '../ExampleData/TitanicTest';
 import { TitanicTrain } from '../ExampleData/TitanicTrain';
@@ -41,15 +40,7 @@ class ExampleDataUpload extends Component {
             }
             n.push({ label: colName, value: colValue })
         }
-        var STAT = new Array();
-        STAT = Stat(n);
-        let m = fieldNameArray[0].map((item) => {
-            return [item, false];
-        })
         var values = {
-            Dataset: STAT,
-            labelArray: m,
-            length: vectorLength
         }
         const item = getSelected()[0];
         values['keyConfig'] = JSON.parse(JSON.stringify(item.model.keyConfig));
