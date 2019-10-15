@@ -1,7 +1,9 @@
 package com.pigeonhouse.bdap.controller.filesystem;
 
 import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
 import com.pigeonhouse.bdap.dao.ExperimentDao;
+import com.pigeonhouse.bdap.entity.mapinfo.ExperimentDescription;
 import com.pigeonhouse.bdap.entity.mapinfo.ExperimentMapInfo;
 import com.pigeonhouse.bdap.service.ResponseService;
 import com.pigeonhouse.bdap.service.TokenService;
@@ -12,6 +14,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;
+import java.util.UUID;
 
 /**
  * 用户实验操作相关API
@@ -28,25 +31,21 @@ public class ExperimentController {
     TokenService tokenService;
 
 
-    @GetMapping("/experiments/all")
-    public Response getAllExperiment(HttpServletRequest request){
+    @GetMapping("/experiments/description")
+    public Response getAllExperimentsDescription(HttpServletRequest request) {
         String token = tokenService.getTokenFromRequest(request, "loginToken");
-        String userId = tokenService.getValueFromToken(token,"userId").asString();
-        System.out.println(userId);
-        List<ExperimentMapInfo> allExperiments = experimentDao.findExperimentByUserId(userId);
-        System.out.println(allExperiments);
+        String userId = tokenService.getValueFromToken(token, "userId").asString();
+        List<ExperimentDescription> allExperiments = experimentDao.findExperimentDescriptionByUserId(userId);
         return responseService.response(ExperimentStatus.EXPERIMENT_SEARCH_SUCCESS, allExperiments, request);
     }
 
-    /**
-     *
-     */
+
     @GetMapping("/experiments/{experimentId}")
     public Object getExperimentByExperimentId(@PathVariable String experimentId, HttpServletRequest request) {
         try {
             String token = tokenService.getTokenFromRequest(request, "loginToken");
-            String userId = tokenService.getValueFromToken(token,"userId").asString();
-            ExperimentMapInfo experiment = experimentDao.findExperimentByExperimentId(experimentId,userId);
+            String userId = tokenService.getValueFromToken(token, "userId").asString();
+            ExperimentMapInfo experiment = experimentDao.findExperimentByExperimentIdAndUserId(experimentId, userId);
             if (experiment == null) {
                 return responseService.response(ExperimentStatus.EXPERIMENT_SEARCH_ERROR, null, request);
             } else {
@@ -57,14 +56,41 @@ public class ExperimentController {
         }
     }
 
-    @PostMapping("/experiments")
-    public Response uploadExperiment(@RequestBody ExperimentMapInfo experiment, HttpServletRequest request){
+    @DeleteMapping("/experiments/{experimentId}")
+    public Response deleteExperimentByExperimentId(@PathVariable String experimentId, HttpServletRequest request) {
         String token = tokenService.getTokenFromRequest(request, "loginToken");
-        String userId = tokenService.getValueFromToken(token,"userId").asString();
-        experiment.setUserId(userId);
-        experimentDao.insertExperiment(experiment);
-        return responseService.response(ExperimentStatus.EXPERIMENT_SAVE_SUCCESS, experiment, request);
+        String userId = tokenService.getValueFromToken(token, "userId").asString();
+        experimentDao.deleteExperimentByExperimentIdAndUserId(experimentId, userId);
+        return responseService.response(ExperimentStatus.EXPERIMENT_DELETE_SUCCESS, null, request);
     }
+
+    @PutMapping("/experiments")
+    public Response uploadNewExperiment(@RequestBody JSONObject descriptionAndMapInfo, HttpServletRequest request) {
+        String token = tokenService.getTokenFromRequest(request, "loginToken");
+        String userId = tokenService.getValueFromToken(token, "userId").asString();
+
+        ExperimentMapInfo experimentMapInfo = JSON.toJavaObject(descriptionAndMapInfo.getJSONObject("experiment"), ExperimentMapInfo.class);
+        ExperimentDescription experimentDescription = JSON.toJavaObject(descriptionAndMapInfo.getJSONObject("description"), ExperimentDescription.class);
+
+        // if(experimentDescription.getExperimentId() == null){
+        String experimentId = UUID.randomUUID().toString().replaceAll("-", "");
+
+        experimentMapInfo.setUserId(userId);
+        experimentMapInfo.setExperimentId(experimentId);
+
+        experimentDescription.setUserId(userId);
+        experimentDescription.setExperimentId(experimentId);
+
+        experimentDao.insertExperiment(experimentMapInfo);
+        experimentDao.insertDescription(experimentDescription);
+        return responseService.response(ExperimentStatus.EXPERIMENT_SAVE_SUCCESS, null, request);
+//        }else{
+//
+//        }
+
+    }
+
+
 
 
 }

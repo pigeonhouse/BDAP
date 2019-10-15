@@ -18,8 +18,7 @@ import java.util.ArrayList;
 @AllArgsConstructor
 @NoArgsConstructor
 public class ExperimentMapInfo implements Serializable {
-    @Id
-    String cid;
+    String experimentId;
     String userId;
     ArrayList<NodeInfo> nodes;
     ArrayList<EdgeInfo> edges;

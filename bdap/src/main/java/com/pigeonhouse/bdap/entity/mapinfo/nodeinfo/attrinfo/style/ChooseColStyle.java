@@ -19,4 +19,9 @@ public class ChooseColStyle {
      * false
      */
     String multiCol ;
+    /**
+     * 选的是哪一个锚点的字段
+     * 0/1
+     */
+    String sourceAnchor;
 }
