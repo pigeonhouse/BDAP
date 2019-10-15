@@ -5,6 +5,7 @@ import com.pigeonhouse.bdap.entity.mapinfo.nodeinfo.NodeInfo;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.data.annotation.Id;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -16,7 +17,10 @@ import java.util.ArrayList;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class MapInfo implements Serializable {
+public class ExperimentMapInfo implements Serializable {
+    @Id
+    String cid;
+    String userId;
     ArrayList<NodeInfo> nodes;
     ArrayList<EdgeInfo> edges;
 }

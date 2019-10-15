@@ -16,7 +16,8 @@ export function createBarChart(myChart, dataSet) {
             name: '销量',
             type: 'bar',
             data: [5, 20, 36, 10, 10, 20]
-        }]
+        }],
+        color:'#a88bc3'
     };
 
     // 使用刚指定的配置项和数据显示图表。
