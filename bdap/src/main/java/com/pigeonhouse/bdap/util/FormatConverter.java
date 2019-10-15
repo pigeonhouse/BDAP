@@ -53,6 +53,8 @@ public class FormatConverter {
             }
             csvBuilder.append(sb.toString()).append("\n");
         }
+        System.out.println("csvBuilder.toString()");
+        System.out.println(csvBuilder.toString());
         return csvBuilder.toString();
     }
 }

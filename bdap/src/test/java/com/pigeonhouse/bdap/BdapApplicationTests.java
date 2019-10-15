@@ -99,7 +99,7 @@ public class BdapApplicationTests {
         SelectStyle selectStyle = new SelectStyle(new LabelName[]{new LabelName("Normal","Normal"),new LabelName("MinMax","MinMax"),new LabelName("Standard","Standard"),new LabelName("MaxAbs","MaxAbs")});
         attributes.add(new AttrInfo(new LabelName("类型","normalizationType"),"String",selectStyle,"Select","MinMax"));
 
-        ChooseColStyle chooseColStyle = new ChooseColStyle("true");
+        ChooseColStyle chooseColStyle = new ChooseColStyle("true","0");
         attributes.add(new AttrInfo(new LabelName("归一化字段","targetCols"),"Array[String]",chooseColStyle,"ChooseCol",null));
 
         NodeInfo nodeInfo = new NodeInfo(new LabelName("归一化","Normalization"),new LabelName("preprocessing","数据预处理")

@@ -98,6 +98,7 @@ public class FlowChartController {
             LivySessionInfo sessionInfo = tokenService.getLivySessionInfoFromToken(token);
             String resultUrl = livyDao.postCode("dfMap(\"" + nodeId + "\").show()", sessionInfo);
             String result = queryService.getOutput(resultUrl);
+            System.out.println(result);
             return responseService.response(RunningStatus.SUCCESS, result, request);
         } catch (Exception e) {
             return responseService.response(RunningStatus.FAIL, null, request);

@@ -64,15 +64,23 @@ public class ExperimentController {
         return responseService.response(ExperimentStatus.EXPERIMENT_DELETE_SUCCESS, null, request);
     }
 
+    @PutMapping("/experiments/{experimentId}")
+    public Response updateExperiment(@RequestBody ExperimentMapInfo experimentMapInfo,
+                                      @PathVariable String experimentId, HttpServletRequest request) {
+        String token = tokenService.getTokenFromRequest(request, "loginToken");
+        String userId = tokenService.getValueFromToken(token, "userId").asString();
+        experimentDao.updateExperimentByExperimentIdAndUserId(experimentId, userId, experimentMapInfo);
+        return responseService.response(ExperimentStatus.EXPERIMENT_UPDATE_SUCCESS, null, request);
+    }
+
     @PutMapping("/experiments")
     public Response uploadNewExperiment(@RequestBody JSONObject descriptionAndMapInfo, HttpServletRequest request) {
         String token = tokenService.getTokenFromRequest(request, "loginToken");
         String userId = tokenService.getValueFromToken(token, "userId").asString();
 
         ExperimentMapInfo experimentMapInfo = JSON.toJavaObject(descriptionAndMapInfo.getJSONObject("experiment"), ExperimentMapInfo.class);
-        ExperimentDescription experimentDescription = JSON.toJavaObject(descriptionAndMapInfo.getJSONObject("description"), ExperimentDescription.class);
 
-        // if(experimentDescription.getExperimentId() == null){
+        ExperimentDescription experimentDescription = JSON.toJavaObject(descriptionAndMapInfo.getJSONObject("description"), ExperimentDescription.class);
         String experimentId = UUID.randomUUID().toString().replaceAll("-", "");
 
         experimentMapInfo.setUserId(userId);
@@ -83,14 +91,10 @@ public class ExperimentController {
 
         experimentDao.insertExperiment(experimentMapInfo);
         experimentDao.insertDescription(experimentDescription);
-        return responseService.response(ExperimentStatus.EXPERIMENT_SAVE_SUCCESS, null, request);
-//        }else{
-//
-//        }
+        return responseService.response(ExperimentStatus.EXPERIMENT_SAVE_SUCCESS, experimentId, request);
+
 
     }
-
-
 
 
 }

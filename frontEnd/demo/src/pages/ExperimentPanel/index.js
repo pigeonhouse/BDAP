@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import GGEditor, { Flow, withPropsAPI } from '@src';
-import { Row, Col } from 'antd';
+import { Row, Col, message } from 'antd';
 import { FlowToolbar } from '../../PublicComponents/EditorToolbar';
 import { FlowDetailPanel } from '../../PublicComponents/EditorDetailPanel';
 import { FlowContextMenu } from '../../PublicComponents/EditorContextMenu';
@@ -28,10 +28,12 @@ class ExperimentPanel extends Component {
         this.props.handleClickEnter();
     }
 
-    saveStream = async (init, url) => {
+    saveStream = async (init, url, experiment) => {
         const res = await fetchTool(url, init);
         if (res.code === 201) {
-            this.setState({ experiment: res.data });
+            this.setState({ experiment: {...experiment, experimentId: res.data.experimentId} });
+            message.success('存储成功');
+        } else if(res.code === 203) {
             message.success('存储成功');
         } else {
             message.error('存储失败');
@@ -39,30 +41,22 @@ class ExperimentPanel extends Component {
     }
 
     handleSaveStream = (experiment, flowInfo) => {
-        var url = "/experiments";
-        let formData = new FormData();
-        formData.append(
-            "description",
-            JSON.stringify({
+        var url = "";
+        var formData = {};
+
+        if (experiment.experimentId !== undefined) {
+            formData = JSON.stringify(flowInfo);
+
+            url = `/experiments/${experiment.experimentId}`
+        } else {
+            formData = JSON.stringify({
                 description: {
                     title: experiment.title,
                     description: experiment.description,
-                }
-            })
-        )
-        if (experiment.experimentId !== undefined) {
-            formData.append(
-                "experiment",
-                JSON.stringify({
-                    experimentId: experiment.experimentId,
-                    ...flowInfo
-                })
-            )
-        } else {
-            formData.append(
-                "experiment",
-                JSON.stringify({ ...flowInfo })
-            )
+                },
+                experiment: flowInfo
+            });
+            url = `/experiments`
         }
 
         var init = {
@@ -75,7 +69,7 @@ class ExperimentPanel extends Component {
             credentials: 'include'
         };
 
-        this.saveStream(init, url);
+        this.saveStream(init, url, experiment);
     }
 
     render() {

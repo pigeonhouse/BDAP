@@ -30,6 +30,7 @@ public class QueryService {
         LinkedHashMap<String, Object> data = (LinkedHashMap) outputMap.get("data");
         resultText = data.get("text/plain").toString();
         System.out.println(resultText);
+        System.out.println(FormatConverter.convertToCsv(resultText));
         return FormatConverter.convertToCsv(resultText);
     }
 }

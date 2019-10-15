@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
+import org.springframework.data.mongodb.core.query.Update;
 import org.springframework.stereotype.Repository;
 
 import java.util.Date;
@@ -35,12 +36,22 @@ public class ExperimentDao {
         return experiment;
     }
 
-//    public void updateExperimentByExperimentIdAndUserId(String experimentId, String userId,ExperimentMapInfo experimentMapInfo){
-//        mongoTemplate.up;
-//    }
+
+    public void updateExperimentByExperimentIdAndUserId(String experimentId, String userId,ExperimentMapInfo experimentMapInfo){
+        Update update = new Update();
+        update.set("nodes",experimentMapInfo.getNodes());
+        update.set("edges",experimentMapInfo.getEdges());
+        Query query = new Query(Criteria.where("userId").is(userId)
+                .and("experimentId").is(experimentId));
+        mongoTemplate.updateFirst(query,update,ExperimentMapInfo.class);
+
+    }
 
     public void deleteExperimentByExperimentIdAndUserId(String experimentId, String userId){
-        mongoTemplate.remove(new Query(Criteria.where("userId").is(userId).and("experimentId").is(experimentId)));
+        Query query = new Query(Criteria.where("userId").is(userId)
+                .and("experimentId").is(experimentId));
+        mongoTemplate.remove(query,ExperimentMapInfo.class);
+        mongoTemplate.remove(query,ExperimentDescription.class);
     }
 
     public void insertExperiment(ExperimentMapInfo experiment){
