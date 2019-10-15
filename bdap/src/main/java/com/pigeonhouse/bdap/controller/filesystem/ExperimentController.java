@@ -40,7 +40,6 @@ public class ExperimentController {
 
     /**
      *
-
      */
     @GetMapping("/experiments/{experimentId}")
     public Object getExperimentByExperimentId(@PathVariable String experimentId, HttpServletRequest request) {

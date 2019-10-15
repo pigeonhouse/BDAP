@@ -4,7 +4,7 @@ import DragM from "dragm";
 import { fetchTool } from '../../FetchTool';
 import EditableTable from './EditableTable';
 import HdfsFileTreeModal from '../DataOperate/FileOperate/HdfsFileTreeModal';
-import { async } from "q";
+import style from './index.less';
 const SubMenu = Menu.SubMenu;
 class BuildModalTitle extends React.Component {
 	updateTransform = transformStr => {
@@ -188,7 +188,7 @@ class DataManager extends React.Component {
                      if (info.file.response.code === 200)
                      message.success(`${info.file.name} file uploaded successfully`);
                      if (info.file.response.code === 410)
-                      message.error("输入非法，请选择正确的CSV格式文件进行上传！");
+                     message.error("输入非法，请选择正确的CSV格式文件进行上传！");
                 } else if (info.file.status === 'error') {
                     message.error(`${info.file.name} file upload failed.`);
                 }
@@ -198,18 +198,25 @@ class DataManager extends React.Component {
             <div >
                 <Row>
                     <Col span={12}>
-                        <Row style={{ height: 200 }}></Row>
+                        <Row ><b><h2 className={style.box}>&nbsp;文件下载</h2></b></Row>
+                        <Row style={{ height: 250 }}></Row>
+                        <Row ><b><h2 className={style.box}>&nbsp;文件上传</h2></b></Row>
+                        <Row style={{ height: 40 }}></Row>
                         <Row>
-                            <Col span={20} style={{ height: 240, overflow: "auto" }}>
+                            <Col offset={2} span={20} style={{ height: 240, overflow: "auto" }}>
+                                
                                 <Upload {...props} withCredentials={true} data={()=>this.handleUploadData()}>
                                     <Button>
-                                        <Icon type="upload" /> Click to Upload
+                                        <Icon type="upload" /> 将文件上传至HDFS
     		                        </Button>
                                 </Upload>
+                                <br />
                                 <Radio.Group onChange={this.onChange} defaultValue={true}>
-                                 <p>是否覆盖原有文件:</p>
+                                 <p>是否覆盖原有文件: &nbsp;
                                  <Radio.Button value={true}>是</Radio.Button>
                                  <Radio.Button value={false}>否</Radio.Button>
+                                 </p>
+                                 
                             </Radio.Group>
                             
                             </Col>
@@ -217,11 +224,16 @@ class DataManager extends React.Component {
                             <Col span={2}></Col>
                         </Row>
                     </Col>
-
-                    <Col 
-                    span={12}>
-                
-						<Button onClick={this.addCommonFile}  ><Icon type="file-add" />添加常用数据集</Button>
+                    
+                    <Col span={12}>
+                    <Row ><b><h2 className={style.box}>&nbsp;常用文件管理</h2></b></Row>
+                    <Row>
+						
+                        
+						
+						 <EditableTable item={this.state.items} handleDelete= {this.handleDelete} />
+							
+                         <Button onClick={this.addCommonFile}  ><Icon type="file-add" />添加常用数据集</Button>
 						<Modal title={addCommonFilesTitle}
 							visible={this.state.addCommonFileModalVisible}
 							centered
@@ -236,15 +248,10 @@ class DataManager extends React.Component {
                                 />
 							</p>
 						</Modal>
-                        
-						
-						 <EditableTable item={this.state.items} handleDelete= {this.handleDelete} />
-							
-                    
-                    
+                         </Row>
                     </Col>
-                </Row>
-
+                    </Row>
+                
             </div>
         )
 
