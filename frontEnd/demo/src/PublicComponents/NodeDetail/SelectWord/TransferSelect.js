@@ -92,7 +92,7 @@ class TransferSelect extends React.Component {
     handleChange = (targetKeys) => {
         const { attribute } = this.props;
 
-        if(attribute.multiCol){
+        if(attribute.style.multiCol === "true"){
             this.setState({ targetKeys });
         } else if(targetKeys.length <= 1){
             this.setState({ targetKeys });

@@ -1,19 +1,26 @@
-export function createLineChart(myChart, dataSet) {
+import { getValueFromDataSet } from '../getValueFromDataSet';
+
+export function createLineChart(myChart, props) {
+    const { dataSet, chartStyle } = props;
+    const { xLabel, yLabel, color } = chartStyle;
+    if (xLabel === undefined || yLabel === undefined) return;
 
     var option = {
         xAxis: {
+            name: xLabel,
             type: 'category',
-            data: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
+            data: getValueFromDataSet(xLabel, dataSet)
         },
         yAxis: {
+            name: yLabel,
             type: 'value'
         },
         series: [{
-            data: [820, 932, 901, 934, 1290, 1330, 1320],
+            data: getValueFromDataSet(yLabel, dataSet),
             type: 'line',
             smooth: true
         }],
-        color: '#c4ccd3'
+        color
     };
 
     // 使用刚指定的配置项和数据显示图表。

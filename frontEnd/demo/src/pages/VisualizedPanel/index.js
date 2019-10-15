@@ -6,6 +6,8 @@ import Filter from '../../PublicComponents/VisualFilter';
 import Summarize from '../../PublicComponents/VisualSummarize';
 import VisualChart from '../../PublicComponents/VisualChart';
 import Settings from '../../PublicComponents/VisualChartSettings';
+import { chartSettings } from '../../PublicComponents/VisualChart/chartSettings';
+
 import styles from './index.less';
 import Papa from 'papaparse';
 
@@ -20,11 +22,13 @@ class VisualizedPanel extends React.Component {
         fileColumns: [],
         filter: [],
         summarize: [],
-        dataSet: [],
-        labelArray: [],
-        labelType: [],
+        dataSet: [{test1:10, test2: "test2"}, {test1:30, test2: "test"}],
+        labelArray: ["test1", "test2"],
+        labelType: ["int", "string"],
         groupLabel: undefined,
-        chartStyle: {},
+        chartStyle: {
+            color: "#509ee3",
+        },
     }
 
     initLabelArray = (labelArray, labelType) => {
@@ -43,9 +47,8 @@ class VisualizedPanel extends React.Component {
         this.setState({ dataSet })
     }
 
-    handleChangeChartStyle = (axis, label) => {
-        console.log(axis)
-        console.log(label)
+    handleChangeChartStyle = (chartStyle) => {
+        this.setState({ chartStyle })
     }
 
     //group by的label修改
@@ -201,8 +204,10 @@ class VisualizedPanel extends React.Component {
                     <Settings
                         currentChart={this.state.currentChart}
                         handleChangeChartStyle={this.handleChangeChartStyle}
+                        chartSettings={chartSettings}
                         chartStyle={this.state.chartStyle}
                         labelArray={this.state.labelArray}
+                        labelType={this.state.labelType}
                     />
                 )
         }
@@ -217,7 +222,7 @@ class VisualizedPanel extends React.Component {
         return (
             <div style={{ height: 'calc(100vh - 105px)' }} >
                 <Row type="flex" className={styles.header}>
-                    <Col span={6}><h2>DataSource</h2></Col>
+                    <Col span={6} style={{ paddingLeft: "30px" }} ><h2>DataSource</h2></Col>
                     <Col span={18}>
                         <div style={{ float: "right", marginRight: 20 }} >
                             <DataSource
@@ -227,8 +232,8 @@ class VisualizedPanel extends React.Component {
                             <Button onClick={this.handleChangeRightCol.bind(this, "filter")} >Filter</Button>
                             <Button onClick={this.handleChangeRightCol.bind(this, "summarize")} >Summarize</Button>
                             <Button onClick={this.handleChangeRightCol.bind(this, "settings")} >Settings</Button>
-                            <Button>Save</Button>
-                            <Button>Download</Button>
+                            {/* <Button>Save</Button>
+                            <Button>Download</Button> */}
                         </div>
                     </Col>
                 </Row>
@@ -236,6 +241,7 @@ class VisualizedPanel extends React.Component {
                     <Col span={19} >
                         <VisualChart
                             currentChart={this.state.currentChart}
+                            chartStyle={this.state.chartStyle}
                             dataSet={this.state.dataSet}
                             labelArray={this.state.labelArray}
                         />

@@ -1,8 +1,10 @@
-export function createPieChart(myChart, dataSet) {
+import { getValueFromDataSet } from '../getValueFromDataSet';
+
+export function createPieChart(myChart, props) {
+    const { dataSet, chartStyle } = props;
+    const { xLabel, yLabel, color } = chartStyle;
     var option = {
         title: {
-            text: '某站点用户访问来源',
-            subtext: '纯属虚构',
             x: 'center'
         },
         tooltip: {
@@ -12,21 +14,15 @@ export function createPieChart(myChart, dataSet) {
         legend: {
             orient: 'vertical',
             left: 'left',
-            data: ['直接访问', '邮件营销', '联盟广告', '视频广告', '搜索引擎']
+            data: getValueFromDataSet(xLabel, dataSet)
         },
         series: [
             {
-                name: '访问来源',
+                name: xLabel,
                 type: 'pie',
                 radius: '55%',
                 center: ['50%', '60%'],
-                data: [
-                    { value: 335, name: '直接访问' },
-                    { value: 310, name: '邮件营销' },
-                    { value: 234, name: '联盟广告' },
-                    { value: 135, name: '视频广告' },
-                    { value: 1548, name: '搜索引擎' }
-                ],
+                data: getData(xLabel, yLabel, dataSet),
                 itemStyle: {
                     emphasis: {
                         shadowBlur: 10,
@@ -35,9 +31,22 @@ export function createPieChart(myChart, dataSet) {
                     }
                 }
             }
-        ]
+        ],
+        color
     };
 
     // 使用刚指定的配置项和数据显示图表。
     myChart.setOption(option);
+}
+
+function getData(xLabel, yLabel, dataSet) {
+    let value = new Array();
+    dataSet.map((data) => {
+        value.push({
+            value: data[yLabel],
+            name: data[xLabel]
+        })
+    })
+
+    return value;
 }
