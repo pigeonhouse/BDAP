@@ -1,6 +1,7 @@
 import React from 'react';
 import GGEditor from '@src';
 import { Table, Button, Row, Col, Modal } from 'antd';
+import { fetchTool } from '../../FetchTool';
 import FlowMinimap from './FlowMinimap';
 
 const { confirm } = Modal;

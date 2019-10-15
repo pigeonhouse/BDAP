@@ -4,8 +4,6 @@ import { Toolbar, Command } from '@src';
 import styles from './index.less';
 import iconfont from '../../theme/iconfont.less';
 import { withPropsAPI } from '@src';
-import store from '../../store';
-import { MODEL } from "../../store/storeType"
 
 class FlowToolbar extends React.Component {
 

@@ -3,7 +3,6 @@ import { Redirect } from 'react-router-dom';
 import { Row, Col, Button, message, notification, Icon,Tabs } from 'antd';
 
 import ExperimentPanel from '../ExperimentPanel';
-import Model from '../../PublicComponents/ModelStore';
 import VisualizedPanel from '../VisualizedPanel';
 import DataManager from "../../PublicComponents/DataManager"
 import styles from './index.less';
@@ -271,9 +270,7 @@ class LocalMode extends React.Component {
         				</Button>
 					</Col>
 					<Col span={9}></Col>
-					<Col span={2}>
-						<Model></Model>
-					</Col>
+					<Col span={2}></Col>
 				</Row>
 			</div >
 		);

@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import { withPropsAPI } from '@src';
-import { Stat } from '../DataToolFunctions/Stat';
 
 import { TitanicTest } from '../ExampleData/TitanicTest';
 import { TitanicTrain } from '../ExampleData/TitanicTrain';

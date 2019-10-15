@@ -1,11 +1,9 @@
 import React, { Component } from 'react';
 import { Button, TreeSelect, Form, Modal,Input } from 'antd'
 import { withPropsAPI } from '@src';
-import { Stat } from '../DataToolFunctions/Stat';
 import { fetchTool } from '../../../FetchTool';
 import DragM from "dragm";
 import HdfsFileTreeModal from './HdfsFileTreeModal';
-import { async } from 'q';
 /**
  * hdfs文件上传
  */
@@ -170,7 +168,7 @@ class HdfsFile extends Component {
 		}
 		const item = getSelected()[0];
 		var values = {
-			Dataset: Stat(Dataset),
+			Dataset: Dataset,
 			length,
 			labelArray: labelArray,
 
