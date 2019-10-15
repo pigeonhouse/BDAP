@@ -27,13 +27,14 @@ export function generateStream(flowInfo) {
 	edges.map((edge) => {
 		const { target, targetAnchor, source, sourceAnchor } = edge;
 
+		const anchor = findNodeBySource(source, nodes);
+
 		nodes.map((node, index) => {
 			if (target === node.id) {
-				const { anchor } = node;
 				deg[index]++;
 
 				// 锚点位置需要减去入度
-				let uploadAnchor = sourceAnchor - anchor[0];
+				let uploadAnchor = sourceAnchor - anchor;
 				
 				// source与sourceAnchor合成字符串展示
 				sourceId[index][targetAnchor] = source + '_' + uploadAnchor;
@@ -84,4 +85,14 @@ export function generateStream(flowInfo) {
 
 	console.log(stream);
 	return JSON.parse(JSON.stringify(stream));
+}
+
+function findNodeBySource(source, nodes){
+	for(let index in nodes){
+		const node = nodes[index];
+
+		if(node.id === source){
+			return node.anchor[0];
+		}
+	}
 }
