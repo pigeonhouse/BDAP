@@ -7,9 +7,10 @@ import com.pigeonhouse.bdap.util.response.Status;
  */
 
     public enum ExperimentStatus implements Status {
-
+        //
         EXPERIMENT_SEARCH_SUCCESS(200, "示例查找成功!"),
         EXPERIMENT_SEARCH_ERROR(401, "示例查找失败!"),
+        EXPERIMENT_SAVE_SUCCESS(201, "保存成功!"),
         BACKEND_ERROR(999, "后端出现算法错误,仅供调试使用,不显示给用户");
 
         Integer code;

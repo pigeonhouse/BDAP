@@ -4,7 +4,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.pigeonhouse.bdap.dao.LivyDao;
 import com.pigeonhouse.bdap.entity.execution.LivySessionInfo;
-import com.pigeonhouse.bdap.entity.mapinfo.MapInfo;
+import com.pigeonhouse.bdap.entity.mapinfo.ExperimentMapInfo;
 import com.pigeonhouse.bdap.entity.mapinfo.nodeinfo.NodeInfo;
 import com.pigeonhouse.bdap.service.ResponseService;
 import com.pigeonhouse.bdap.service.TokenService;
@@ -46,7 +46,7 @@ public class FlowChartController {
 
     @PassToken
     @PostMapping(value = "/flow/run")
-    public Response run(@RequestBody MapInfo mapInfo, HttpServletRequest request) {
+    public Response run(@RequestBody ExperimentMapInfo experimentMapInfo, HttpServletRequest request) {
 
         String token = tokenService.getTokenFromRequest(request, "loginToken");
         LivySessionInfo sessionInfo = tokenService.getLivySessionInfoFromToken(token);
@@ -60,7 +60,7 @@ public class FlowChartController {
             return responseService.response(PostCodeStatus.SESSION_BUSY, null, request);
         }
 
-        ArrayList<NodeInfo> nodes = mapInfo.getNodes();
+        ArrayList<NodeInfo> nodes = experimentMapInfo.getNodes();
 
         return responseService.response(PostCodeStatus.SUCCESS, executionService.executeFlow(nodes, newSessionInfo), request);
     }
@@ -108,12 +108,12 @@ public class FlowChartController {
     /**
      * 用于进行压力测试
      *
-     * @param mapInfo
+     * @param experimentMapInfo
      * @return
      */
     @PassToken
     @PostMapping(value = "/flow/run/test")
-    public Response runForTest(@RequestBody MapInfo mapInfo) {
+    public Response runForTest(@RequestBody ExperimentMapInfo experimentMapInfo) {
 
         LivySessionInfo newSessionInfo = new LivySessionInfo();
         try {
@@ -122,7 +122,7 @@ public class FlowChartController {
             e.printStackTrace();
         }
 
-        ArrayList<NodeInfo> nodes = mapInfo.getNodes();
+        ArrayList<NodeInfo> nodes = experimentMapInfo.getNodes();
 
         return responseService.response(PostCodeStatus.SUCCESS, executionService.executeFlowForTest(nodes, newSessionInfo), null);
     }
