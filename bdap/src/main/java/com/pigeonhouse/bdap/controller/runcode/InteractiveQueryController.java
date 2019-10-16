@@ -64,7 +64,7 @@ public class InteractiveQueryController {
 
         String filePath = filePathJson.getString("filePath");
 
-        String readDataCode = "val df = spark.read.option(\"header\",\"true\").csv(\"hdfs:///bdap/students/" + userId + filePath + "\")\n"
+        String readDataCode = "val df = spark.read.option(\"header\",\"true\").csv(\"hdfs://" + filePath + "\")\n"
                 + "df.createOrReplaceTempView(\"data\")\n";
 
         livyDao.postCode(readDataCode, livySessionInfo);

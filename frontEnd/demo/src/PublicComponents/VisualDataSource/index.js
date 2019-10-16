@@ -49,7 +49,6 @@ class DataSource extends React.Component {
     }
 
     handleChangeDataSource = async (filePath, value) => {
-        console.log(filePath)
 
         const init = {
             method: 'POST',
@@ -81,7 +80,7 @@ class DataSource extends React.Component {
             }
 
             this.props.initLabelArray(fieldNameArray, labelType);
-            this.props.initDataSet(results.data, fieldNameArray.length, value);
+            this.props.initDataSet(results.data, fieldNameArray.length);
         }
     }
 

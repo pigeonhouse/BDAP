@@ -18,13 +18,13 @@ class VisualizedPanel extends React.Component {
     state = {
         currentChart: "table",
         rightCol: "filter",
-        dataSourceName: null,
+        dataSourceName: 'data',
         fileColumns: [],
         filter: [],
         summarize: [],
-        dataSet: [{ test1: 10, test2: "test2" }, { test1: 30, test2: "test" }],
-        labelArray: ["test1", "test2"],
-        labelType: ["int", "string"],
+        dataSet: [],
+        labelArray: [],
+        labelType: [],
         groupLabel: undefined,
         chartStyle: {
             color: "#509ee3",
@@ -35,8 +35,8 @@ class VisualizedPanel extends React.Component {
         this.setState({ labelArray, labelType, fileColumns: labelArray });
     }
 
-    initDataSet = (dataSet, length, dataSourceName) => {
-        this.setState({ dataSet, dataSourceName })
+    initDataSet = (dataSet, length ) => {
+        this.setState({ dataSet })
     }
 
     changeLabelArray = (labelArray, labelType) => {
@@ -105,8 +105,6 @@ class VisualizedPanel extends React.Component {
 
     // 向后端发送请求，参数为sql语句，返回值为Dataset
     getDataSetByOperate = async (dataSourceName, filter, summarize, groupLabel) => {
-
-        if (dataSourceName === null) return;
 
         var sqlCode, label;
         var where = '', group = '';
