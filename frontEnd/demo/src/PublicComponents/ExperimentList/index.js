@@ -40,12 +40,9 @@ class ExperimentList extends React.Component {
 		const init = {
 			method: 'GET',
 			mode: 'cors',
-			headers: {
-				"Content-Type": "application/x-www-form-urlencoded;charset=utf-8"
-			},
 			credentials: 'include'
 		}
-		const res = await fetchTool(`/experiments/${experiment.experimentId}`, init)
+		const res = await fetchTool(`/experiments/${experiment}`, init)
 		if (res.code === 200) {
 			return res.data
 		}
@@ -71,12 +68,12 @@ class ExperimentList extends React.Component {
 	handleEnterModel = async (text) => {
 		const experiment = this.getExperimentByText(text);
 		this.props.handleClickEnter(experiment);
-		this.props.handleEnterModel(await this.fetchModalStream(experiment));
+		this.props.handleEnterModel(await this.fetchModalStream(experiment.experimentId));
 	}
 
 	deleteModal = async (experimentId) => {
 		const init = {
-			method: 'DEL',
+			method: 'DELETE',
 			mode: 'cors',
 			headers: {
 				"Content-Type": "application/x-www-form-urlencoded;charset=utf-8"
