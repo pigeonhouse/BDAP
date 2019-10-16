@@ -1,19 +1,60 @@
 import React from 'react';
-import { Button } from 'antd';
+import LabelSelect from './LabelSelect';
 import { fetchTool } from '../../FetchTool';
 
+import styles from './index.js';
 import Papa from 'papaparse';
 
 class DataSource extends React.Component {
-    
-    
-    handleChangeDataSource = async () => {
+
+    state = {
+        label: null,
+        labelArray: [],
+        filePath: [],
+        isMouseEnter: false,
+    };
+
+    mouseEnter = () => {
+        this.setState({ isMouseEnter: true })
+    }
+
+    mouseLeave = () => {
+        this.setState({ isMouseEnter: false })
+    }
+
+    async componentWillMount() {
+        const res = await this.fetchmodule();
+        let labelArray = new Array();
+        let filePath = new Array();
+        res.files.map((item) => {
+            labelArray.push(item.fileName);
+            filePath.push(item.filePath);
+        })
+        this.setState({ labelArray, filePath });
+    }
+
+    async fetchmodule() {
+        const init = {
+            method: 'GET',
+            mode: 'cors',
+            headers: {
+                "Content-Type": "application/json;charset=utf-8"
+            },
+            credentials: 'include'
+        }
+        const res = await fetchTool("/module", init)
+        if (res.code === 200) {
+            return res.data
+        }
+    }
+
+    handleChangeDataSource = async (filePath, value) => {
 
         const init = {
             method: 'POST',
             mode: 'cors',
-            body: JSON.stringify({"filePath":"/simpleTest.csv"}),
- 
+            body: JSON.stringify({ "filePath": filePath }),
+
             headers: {
                 "Content-Type": "application/json;charset=utf-8"
             },
@@ -21,7 +62,7 @@ class DataSource extends React.Component {
         }
 
         const res = await fetchTool("/query/readyForData", init);
-
+        console.log(res)
         if (res.code === 200) {
 
             // 通过papa转化
@@ -30,8 +71,8 @@ class DataSource extends React.Component {
             const fieldNameArray = results.meta.fields;
 
             const result = results.data[0];
-            for(let i in result){
-                if(typeof(result[i]) === "number"){
+            for (let i in result) {
+                if (typeof (result[i]) === "number") {
                     labelType[i] = "int";
                 } else {
                     labelType[i] = "string";
@@ -43,9 +84,36 @@ class DataSource extends React.Component {
         }
     }
 
+    handleChangeLabel = (value) => {
+        if (this.state.label === value) return;
+        this.setState({ label: value });
+
+        const { labelArray, filePath } = this.state;
+        for (let i in labelArray) {
+            if (labelArray[i] === value) {
+                return this.handleChangeDataSource(filePath[i], value);
+            }
+        }
+    }
+
     render() {
         return (
-            <Button onClick={this.handleChangeDataSource} >DataSource</Button>
+            <div>
+                <div className={styles.header} >
+                    <h3>DataSource</h3>
+                </div>
+                <div
+                    onMouseEnter={this.mouseEnter}
+                    onMouseLeave={this.mouseLeave}
+                    className={this.state.isMouseEnter ? styles.scrollapp : styles.unscrollapp}
+                >
+                    <LabelSelect
+                        handleChangeLabel={this.handleChangeLabel}
+                        label={this.state.label}
+                        labelArray={this.state.labelArray}
+                    ></LabelSelect>
+                </div>
+            </div>
         );
     }
 }

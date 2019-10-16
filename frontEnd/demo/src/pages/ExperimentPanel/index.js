@@ -16,11 +16,6 @@ class ExperimentPanel extends Component {
 
     state = {
         experiment: null,
-        flowInfo: null,
-    }
-
-    handleEnterModel = (flowInfo) => {
-        this.setState({ flowInfo })
     }
 
     handleClickEnter = (experiment) => {
@@ -75,16 +70,15 @@ class ExperimentPanel extends Component {
     render() {
         const { currentTab, clickTab } = this.props;
         if (currentTab === '1' && clickTab === '1') {
-            const { flowInfo, experiment } = this.state;
-            if (flowInfo !== null || experiment !== null) {
-                this.setState({ flowInfo: null, experiment: null })
+            const { experiment } = this.state;
+            if (experiment !== null) {
+                this.setState({ experiment: null })
             }
             return (
                 <div className={styles.editor}>
                     <Row style={{ minHeight: 'calc(100vh - 105px)' }}>
                         <ExperimentList
                             handleClickEnter={this.handleClickEnter}
-                            handleEnterModel={this.handleEnterModel}
                         />
                     </Row>
                 </div>
@@ -120,7 +114,7 @@ class ExperimentPanel extends Component {
                 </Row>
                 <FlowContextMenu />
                 <SparkRunning running={this.props.running} stopRunning={this.props.stopRunning} ></SparkRunning>
-                <LoadStream flowInfo={this.state.flowInfo} ></LoadStream>
+                <LoadStream experiment={this.state.experiment} ></LoadStream>
             </GGEditor>
         );
     }

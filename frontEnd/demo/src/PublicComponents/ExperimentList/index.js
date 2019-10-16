@@ -1,10 +1,8 @@
 import React from 'react';
 import GGEditor from '@src';
-import { Table, Button, Row, Col, Modal, message } from 'antd';
+import { Table, Button, Row, Col, message } from 'antd';
 import { fetchTool } from '../../FetchTool';
 import FlowMinimap from './FlowMinimap';
-
-const { confirm } = Modal;
 
 class ExperimentList extends React.Component {
 
@@ -36,18 +34,6 @@ class ExperimentList extends React.Component {
 		})
 	}
 
-	fetchModalStream = async (experiment) => {
-		const init = {
-			method: 'GET',
-			mode: 'cors',
-			credentials: 'include'
-		}
-		const res = await fetchTool(`/experiments/${experiment}`, init)
-		if (res.code === 200) {
-			return res.data
-		}
-	}
-
 	// 新建项目时第一次进入
 	handleNewButton = async () => {
 		this.props.handleClickEnter(null);
@@ -68,7 +54,6 @@ class ExperimentList extends React.Component {
 	handleEnterModel = async (text) => {
 		const experiment = this.getExperimentByText(text);
 		this.props.handleClickEnter(experiment);
-		this.props.handleEnterModel(await this.fetchModalStream(experiment.experimentId));
 	}
 
 	deleteModal = async (experimentId) => {
@@ -92,7 +77,7 @@ class ExperimentList extends React.Component {
 		const selectTitleDelte = this.state.selectedRowKeys;
 
 		if (selectTitleDelte === null) {
-			message.warning("删除失败，请先选择要删除的选项");
+			message.warning("请先选择要删除的选项");
 		}
 		else {
 			var { dataSource, experiment } = this.state;
