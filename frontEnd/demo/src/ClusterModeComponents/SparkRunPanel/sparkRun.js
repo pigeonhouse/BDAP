@@ -14,12 +14,12 @@ class SparkRunning extends Component {
 
 		const { propsAPI } = this.props;
 
-		if (propsAPI === undefined) return;
+		if (propsAPI === undefined) return this.props.stopRunning();
 
 		//制作工作流保存在stream中
 		const stream = generateStream(propsAPI.save());
 
-		if (stream.nodes === undefined || stream.edges === undefined) return;
+		if (stream.nodes === undefined) return this.props.stopRunning();
 
 		sum = stream.nodes.length || 0;
 		current = 0;

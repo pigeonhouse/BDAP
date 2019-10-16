@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { Button } from 'antd'
+import { Button, notification } from 'antd'
 
 /**
  * Local版本的Run组件，点击Button后执行画布上组件对应的流程
@@ -8,6 +8,16 @@ import { Button } from 'antd'
 class SparkRun extends Component {
 
 	enterLoading = () => {
+		if (this.props.sessionFinish === false) {
+			const args = {
+				message: 'Session',
+				description:
+					'正在创建session，请稍候',
+				key: "session"
+			};
+			notification['info'](args);
+			return;
+		}
 		this.props.onClickButtonRunning();
 	}
 

@@ -120,14 +120,6 @@ class LocalMode extends React.Component {
 	componentDidMount() {
 		if (this.state.sessionFinish === false && 
 			this.props.location.state !== undefined) {
-			const args = {
-				message: 'Session',
-				description:
-					'正在创建session，请稍候',
-				duration: 0,
-				key: "session"
-			};
-			notification['info'](args);
 			this.querySession();
 		}
 		return;
@@ -263,7 +255,7 @@ class LocalMode extends React.Component {
 						tab={<Icon type="api" className={styles.iconStyle} />}
 						key="2"
 					>
-						<VisualizedPanel></VisualizedPanel>
+						<VisualizedPanel sessionFinish={this.state.sessionFinish} ></VisualizedPanel>
 					</TabPane>
 					<TabPane
 						className={styles.leftMenu}
@@ -285,6 +277,7 @@ class LocalMode extends React.Component {
 							onClickButtonRunning={this.onClickButtonRunning}
 							currentTab={this.state.currentTab}
 							clickTab={this.state.clickTab}
+							sessionFinish={this.state.sessionFinish}
 							running={this.state.running}
 						></SparkRun>
 					</Col>

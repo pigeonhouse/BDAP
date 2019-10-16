@@ -9,7 +9,27 @@ export function generateStream(flowInfo) {
 
 	// 无nodes则直接返回{}，无edges，直接返回flowInfo
 	if (nodes === undefined) return {};
-	if (edges === undefined) return JSON.parse(JSON.stringify(flowInfo));
+	if (edges === undefined) {
+		var stream = [];
+		nodes.map((node) => {
+			const { id, labelName, groupName, anchor, attributes, size, x, y, columnsInfo } = node;
+
+			if (groupName.label === "数据源") {
+				stream.push({
+					id, labelName, groupName, anchor, attributes, size, x, y, columnsInfo,
+					filePath: node.filePath, sourceIdList: []
+				});
+			}
+			else {
+				stream.push({
+					id, labelName, groupName, anchor, attributes, size, x, y, columnsInfo,
+					sourceIdList: []
+				});
+			}
+		})
+		
+		return JSON.parse(JSON.stringify({nodes:stream}));
+	}
 
 	var stream = { nodes: [], edges: [] };
 

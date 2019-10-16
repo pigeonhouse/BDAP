@@ -1,5 +1,6 @@
 import React from 'react';
 import LabelSelect from './LabelSelect';
+import { notification } from 'antd';
 import { fetchTool } from '../../FetchTool';
 
 import styles from './index.js';
@@ -84,6 +85,16 @@ class DataSource extends React.Component {
     }
 
     handleChangeLabel = (value) => {
+        if (this.props.sessionFinish === false) {
+			const args = {
+				message: 'Session',
+				description:
+					'正在创建session，请稍候',
+				key: "session"
+			};
+			notification['info'](args);
+			return;
+		}
         if (this.props.fileName === value) return;
         this.props.changeFileName(value)
 

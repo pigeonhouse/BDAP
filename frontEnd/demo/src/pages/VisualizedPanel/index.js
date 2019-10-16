@@ -17,7 +17,7 @@ class VisualizedPanel extends React.Component {
 
     state = {
         currentChart: "table",
-        rightCol: "filter",
+        rightCol: "dataSource",
         dataSourceName: 'data',
         fileName: null,
         fileColumns: [],
@@ -230,6 +230,7 @@ class VisualizedPanel extends React.Component {
                         initDataSet={this.initDataSet}
                         changeFileName={this.changeFileName}
                         fileName={this.state.fileName}
+                        sessionFinish={this.props.sessionFinish}
                     ></DataSource>
                 );
         }
