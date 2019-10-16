@@ -18,11 +18,11 @@ class VisualizedPanel extends React.Component {
     state = {
         currentChart: "table",
         rightCol: "filter",
-        dataSourceName: 'data',
+        dataSourceName: null,
         fileColumns: [],
         filter: [],
         summarize: [],
-        dataSet: [{test1:10, test2: "test2"}, {test1:30, test2: "test"}],
+        dataSet: [{ test1: 10, test2: "test2" }, { test1: 30, test2: "test" }],
         labelArray: ["test1", "test2"],
         labelType: ["int", "string"],
         groupLabel: undefined,
@@ -32,11 +32,11 @@ class VisualizedPanel extends React.Component {
     }
 
     initLabelArray = (labelArray, labelType) => {
-        this.setState({ labelArray, labelType, fileColumns:labelArray });
+        this.setState({ labelArray, labelType, fileColumns: labelArray });
     }
 
-    initDataSet = (dataSet, length) => {
-        this.setState({ dataSet })
+    initDataSet = (dataSet, length, dataSourceName) => {
+        this.setState({ dataSet, dataSourceName })
     }
 
     changeLabelArray = (labelArray, labelType) => {
@@ -69,7 +69,7 @@ class VisualizedPanel extends React.Component {
         })
         this.setState({ summarize });
 
-        this.getDataSetByOperate( dataSourceName, filter, summarize, groupLabel );
+        this.getDataSetByOperate(dataSourceName, filter, summarize, groupLabel);
     }
 
     // 删除分组方式
@@ -106,6 +106,8 @@ class VisualizedPanel extends React.Component {
     // 向后端发送请求，参数为sql语句，返回值为Dataset
     getDataSetByOperate = async (dataSourceName, filter, summarize, groupLabel) => {
 
+        if (dataSourceName === null) return;
+
         var sqlCode, label;
         var where = '', group = '';
 
@@ -123,10 +125,10 @@ class VisualizedPanel extends React.Component {
         if (filter.length !== 0) {
             filter.map((item, index) => {
                 let filterString = '';
-                if(this.state.labelType[item.label] === 'int'){
+                if (this.state.labelType[item.label] === 'int') {
                     filterString = `${item.label}${item.operator}${item.value}`;
-                } 
-                else if(this.state.labelType[item.label] === 'string'){
+                }
+                else if (this.state.labelType[item.label] === 'string') {
                     filterString = `${item.label}${item.operator}'${item.value}'`;
                 }
                 where += index === 0 ? ' WHERE ' : ' AND ';
@@ -158,8 +160,8 @@ class VisualizedPanel extends React.Component {
             const fieldNameArray = results.meta.fields;
 
             const result = results.data[0];
-            for(let i in result){
-                if(typeof(result[i]) === "number"){
+            for (let i in result) {
+                if (typeof (result[i]) === "number") {
                     labelType[i] = "int";
                 } else {
                     labelType[i] = "string";
@@ -210,6 +212,13 @@ class VisualizedPanel extends React.Component {
                         labelType={this.state.labelType}
                     />
                 )
+            case 'dataSource':
+                return (
+                    <DataSource
+                        initLabelArray={this.initLabelArray}
+                        initDataSet={this.initDataSet}
+                    ></DataSource>
+                );
         }
     }
 
@@ -225,10 +234,7 @@ class VisualizedPanel extends React.Component {
                     <Col span={6} style={{ paddingLeft: "30px" }} ><h2>DataSource</h2></Col>
                     <Col span={18}>
                         <div style={{ float: "right", marginRight: 20 }} >
-                            <DataSource
-                                initLabelArray={this.initLabelArray}
-                                initDataSet={this.initDataSet}
-                            ></DataSource>
+                            <Button onClick={this.handleChangeRightCol.bind(this, "dataSource")} >DataSource</Button>
                             <Button onClick={this.handleChangeRightCol.bind(this, "filter")} >Filter</Button>
                             <Button onClick={this.handleChangeRightCol.bind(this, "summarize")} >Summarize</Button>
                             <Button onClick={this.handleChangeRightCol.bind(this, "settings")} >Settings</Button>
