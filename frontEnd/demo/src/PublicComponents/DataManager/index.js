@@ -146,7 +146,8 @@ class DataManager extends React.Component {
     }
     handleUploadData()
   {
-    let d={replace:this.state.value,withHeader:this.state.setheadervalue}
+    let d={replace:this.state.replacevalue,
+        withHeader:this.state.setheadervalue}
     return d;
   }
   handleDelete = async(filePath) => {
