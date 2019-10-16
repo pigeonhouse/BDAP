@@ -33,7 +33,8 @@ class DataManager extends React.Component {
 		deleteCommonFileModalVisible: false,
         fileOppositePath: '',
         items:[],
-        value:true
+        replacevalue:true,
+        setheadervalue:true
     }
     
 	/**
@@ -133,8 +134,11 @@ class DataManager extends React.Component {
       });
     }
     }
-    onChange=(value)=>{
-        this.setState({value:value})
+    onChangereplace=(value)=>{
+        this.setState({replacevalue:value})
+    }
+    onChangesetHeader=(value)=>{
+        this.setState({setheadervalue:value})
     }
     getreplace=()=>
     {
@@ -142,7 +146,7 @@ class DataManager extends React.Component {
     }
     handleUploadData()
   {
-    let d={replace:this.state.value}
+    let d={replace:this.state.value,withHeader:this.state.setheadervalue}
     return d;
   }
   handleDelete = async(filePath) => {
@@ -203,22 +207,32 @@ class DataManager extends React.Component {
                         <Row ><b><h2 className={style.box}>&nbsp;文件上传</h2></b></Row>
                         <Row style={{ height: 40 }}></Row>
                         <Row>
-                            <Col offset={2} span={20} style={{ height: 240, overflow: "auto" }}>
-                                
+                            <Col offset={2}  style={{ height: 240, overflow: "auto" }}>
+                            <Row>
                                 <Upload {...props} withCredentials={true} data={()=>this.handleUploadData()}>
                                     <Button>
                                         <Icon type="upload" /> 将文件上传至HDFS
     		                        </Button>
                                 </Upload>
                                 <br />
-                                <Radio.Group onChange={this.onChange} defaultValue={true}>
+                            </Row>
+                            <Row>
+                                <Radio.Group onChange={this.onChangereplace} defaultValue={true}>
                                  <p>是否覆盖原有文件: &nbsp;
                                  <Radio.Button value={true}>是</Radio.Button>
                                  <Radio.Button value={false}>否</Radio.Button>
                                  </p>
+                                 </Radio.Group>
+                            </Row>
+                            <Row>
+                                 <Radio.Group onChange={this.onChangesetHeader} defaultValue={true}>
+                                 <p>是否带有表头: &nbsp;
+                                 <Radio.Button value={true}>是</Radio.Button>
+                                 <Radio.Button value={false}>否</Radio.Button>
+                                 </p>
                                  
-                            </Radio.Group>
-                            
+                                </Radio.Group>
+                                </Row>
                             </Col>
                            
                             <Col span={2}></Col>

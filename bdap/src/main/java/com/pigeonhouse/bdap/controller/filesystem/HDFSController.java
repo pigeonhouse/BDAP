@@ -24,6 +24,7 @@ import java.util.*;
 /**
  * 本文件所有Api均使用userId作为唯一性索引,在HDFS上的默认用户文件夹名称也为userId
  * HDFS文件的操作API
+ *
  * @Author: Xingtianyu
  * @Date: 2019/9/19 20:38
  */
@@ -53,7 +54,7 @@ public class HDFSController {
         try {
             String token = tokenService.getTokenFromRequest(request, "loginToken");
             String userId = tokenService.getValueFromToken(token, "userId").asString();
-            oppositePath=oppositePath==null?"/":oppositePath.startsWith("/")?oppositePath:"/"+oppositePath;
+            oppositePath = oppositePath == null ? "/" : oppositePath.startsWith("/") ? oppositePath : "/" + oppositePath;
             Hdfsfile fileList = hdfsService.listFiles(userId + oppositePath, null);
             if (fileList != null) {
                 JSONObject fileListJson = new JSONObject(new LinkedHashMap());
@@ -134,47 +135,6 @@ public class HDFSController {
     }
 
     /**
-     * 将文件上传至HDFS文件夹，不解析文件头
-     *
-     * @param request HTTP请求
-     * @return :带有提示信息的JSON字符串
-     */
-    @PostMapping("/hdfs/upload")
-    @ResponseBody
-    //超大规模文件尚未通过测试，有待后续补充，已知文件超过500M浏览器会崩掉，切片功能还在写
-    //xls支持尚在开发中
-    public Object upload(HttpServletRequest request) throws IOException {
-        try {
-            MultipartHttpServletRequest multipartRequest = (MultipartHttpServletRequest) request;
-            String token = tokenService.getTokenFromRequest(request, "loginToken");
-            String userId = tokenService.getValueFromToken(token, "userId").asString();
-            String oppositePath = request.getParameter("oppositePath");
-            oppositePath=oppositePath==null?"/":oppositePath;
-            boolean replace = Boolean.parseBoolean(request.getParameter("replace"));
-            MultipartFile file = multipartRequest.getFile("file");
-            if (file == null || file.getBytes() == null) {
-                return responseService.response(HdfsStatus.INVALID_INPUT, null, request);
-            } else {
-                String status = hdfsService.upload(file, userId + oppositePath, replace);
-                switch (status) {
-                    case "success":
-                        return responseService.response(HdfsStatus.FILE_UPLOAD_SUCCESS, null, request);
-                    case "fileexist":
-                        return responseService.response(HdfsStatus.FILE_HAS_EXISTED, null, request);
-                    case "userinvalid":
-                        return responseService.response(HdfsStatus.USER_NOT_EXISTED, null, request);
-                    default:
-                        return null;
-                }
-            }
-        } catch (Exception e) {
-            return responseService.response(HdfsStatus.BACKEND_ERROR, e.toString(), request);
-
-        }
-
-    }
-
-    /**
      * 将CSV文件上传至HDFS文件夹，并解析头文件存入数据库
      * 返回值:带有提示信息的JSON字符串
      * <p>
@@ -191,10 +151,11 @@ public class HDFSController {
             String token = tokenService.getTokenFromRequest(request, "loginToken");
             //获取含有登录信息的Token
             String userId = tokenService.getValueFromToken(token, "userId").asString();
-            String  r=request.getParameter("replace");
-            Boolean replace=Boolean.valueOf(r);
-            String oppositePath=request.getParameter("oppositePath");
-            oppositePath=oppositePath==null?"/":oppositePath.startsWith("/")?oppositePath:"/"+oppositePath;
+            String r = request.getParameter("replace");
+            Boolean replace = Boolean.valueOf(r);
+            Boolean withheader = Boolean.valueOf(request.getParameter("withHeader"));
+            String oppositePath = request.getParameter("oppositePath");
+            oppositePath = oppositePath == null ? "/" : oppositePath.startsWith("/") ? oppositePath : "/" + oppositePath;
             //解析UserId
             //char regex = request.getParameter("regex").charAt(0);
             char regex = ',';
@@ -211,7 +172,7 @@ public class HDFSController {
                     case "txt":
                         byte[] buf = file.getBytes();
                         String tmp = "";
-                        boolean merge=false;
+                        boolean merge = false;
                         boolean sampleread = false;
                         for (int idx = 0; idx < buf.length; idx++) {
                             if (buf[idx] == 10 && sampleread == true) {
@@ -225,29 +186,23 @@ public class HDFSController {
                                 header.add(tmp);
                                 tmp = "";
                                 sampleread = true;
-                            }
-                            else if (idx == buf.length - 1)
+                            } else if (idx == buf.length - 1)
                             //数据只有一行
                             {
                                 tmp += (char) buf[idx];
                                 sample.add(tmp);
-                            } else if (buf[idx] == (int) regex && sampleread == true&&merge==false)
+                            } else if (buf[idx] == (int) regex && sampleread == true && merge == false)
                             //数据样本采集
                             {
                                 sample.add(tmp);
                                 tmp = "";
-                            }
-                            else if (buf[idx] == (int) '"'&&merge==false)
-                            {
+                            } else if (buf[idx] == (int) '"' && merge == false) {
                                 tmp += (char) buf[idx];
-                                merge=true;
-                            }
-                            else if (buf[idx] == (int) '"'&&merge==true)
-                            {
+                                merge = true;
+                            } else if (buf[idx] == (int) '"' && merge == true) {
                                 tmp += (char) buf[idx];
-                                merge=false;
-                            }
-                            else if (buf[idx] == (int) regex && sampleread == false)
+                                merge = false;
+                            } else if (buf[idx] == (int) regex && sampleread == false)
                             //遇到头文件分隔符，保存新数据
                             {
                                 header.add(tmp);
@@ -272,9 +227,15 @@ public class HDFSController {
                     sample.set(idx, fileHeaderAttriService.dataTypeCheck(sample.get(idx)));
                 }
                 Map<String, String> headermap = new HashMap<>(sample.size());
+                if (!withheader) {
+                    for (int i = 0; i < sample.size(); i++) {
+                        header.set(i, "column" + i + 1);
+                    }
+                }
                 if (sample.size() != header.size())
                 //如果数据样本或头字段有缺失，报输入非法错误
                 {
+
                     return responseService.response(HdfsStatus.INVALID_INPUT, null, request);
                 } else {
                     String status = hdfsService.upload(file, userId + oppositePath, replace);
