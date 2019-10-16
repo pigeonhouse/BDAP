@@ -23,6 +23,9 @@ function findColumnsInfoFunction(node, anchor, propsAPI) {
         //找到源模块，则拿到其columnsInfo，并返回
         if (edge.target === node.id && edge.targetAnchor === anchor) {
             const sourceNode = find(edge.source);
+            if (sourceNode.getModel().labelName.label === '数据划分') {
+                return findColumnsInfoFunction(sourceNode, 0, propsAPI);
+            }
             const { labelName, attributes, columnsInfo } = sourceNode.getModel();
 
             return columnsInfo || [];

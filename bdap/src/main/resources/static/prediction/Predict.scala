@@ -1,7 +1,7 @@
 object Predict {
 
   val trainCols: Array[String] = null
-  val labelCol: String = null
+  val labelCols: Array[String] = null
   val newColName = null
   var input = null
   var input_1: DataFrame = null
@@ -10,6 +10,7 @@ object Predict {
     import org.apache.spark.ml.classification.LogisticRegression
     import org.apache.spark.ml.feature.VectorAssembler
 
+    val labelCol = labelCols(0)
     val aimarray = trainCols:+labelCol
 
     var df_ = input_1

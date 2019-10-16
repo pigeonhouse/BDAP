@@ -82,6 +82,18 @@ class FlowItemModel extends React.Component {
 				>
 					{this.createItemPanel(itemData, "machinelearning")}
 				</SubMenu>
+				<SubMenu
+					key="evaluation"
+					title={<span><Icon type="calculator" /><span>评估</span></span>}
+				>
+					{this.createItemPanel(itemData, "evaluation")}
+				</SubMenu>
+				<SubMenu
+					key="prediction"
+					title={<span><Icon type="calculator" /><span>预测</span></span>}
+				>
+					{this.createItemPanel(itemData, "prediction")}
+				</SubMenu>
 			</Menu>
 		);
 	}
