@@ -1,7 +1,7 @@
 object LogisticRegression {
 
   val trainCols: Array[String] = null
-  val labelCols: Array[String] = null
+  val labelCol: String = null
   val MaxIter: Int = null
   val Tol: Double = null
   val RegParam: Double = null
@@ -15,7 +15,6 @@ object LogisticRegression {
     import org.apache.spark.sql.DataFrame
     import org.apache.spark.sql.functions.col
 
-    val labelCol = labelCols(0)
     val aimarray = trainCols:+labelCol
 
     val df = input.select(aimarray.map(A => col(A)): _*)

@@ -22,9 +22,9 @@ class VisualizedPanel extends React.Component {
         fileColumns: [],
         filter: [],
         summarize: [],
-        dataSet: [],
-        labelArray: [],
-        labelType: [],
+        dataSet: [{test1:10, test2: "test2"}, {test1:30, test2: "test"}],
+        labelArray: ["test1", "test2"],
+        labelType: ["int", "string"],
         groupLabel: undefined,
         chartStyle: {
             color: "#509ee3",
@@ -32,10 +32,10 @@ class VisualizedPanel extends React.Component {
     }
 
     initLabelArray = (labelArray, labelType) => {
-        this.setState({ labelArray, labelType, fileColumns: labelArray });
+        this.setState({ labelArray, labelType, fileColumns:labelArray });
     }
 
-    initDataSet = (dataSet, length ) => {
+    initDataSet = (dataSet, length) => {
         this.setState({ dataSet })
     }
 
@@ -69,7 +69,7 @@ class VisualizedPanel extends React.Component {
         })
         this.setState({ summarize });
 
-        this.getDataSetByOperate(dataSourceName, filter, summarize, groupLabel);
+        this.getDataSetByOperate( dataSourceName, filter, summarize, groupLabel );
     }
 
     // 删除分组方式
@@ -123,10 +123,10 @@ class VisualizedPanel extends React.Component {
         if (filter.length !== 0) {
             filter.map((item, index) => {
                 let filterString = '';
-                if (this.state.labelType[item.label] === 'int') {
+                if(this.state.labelType[item.label] === 'int'){
                     filterString = `${item.label}${item.operator}${item.value}`;
-                }
-                else if (this.state.labelType[item.label] === 'string') {
+                } 
+                else if(this.state.labelType[item.label] === 'string'){
                     filterString = `${item.label}${item.operator}'${item.value}'`;
                 }
                 where += index === 0 ? ' WHERE ' : ' AND ';
@@ -158,8 +158,8 @@ class VisualizedPanel extends React.Component {
             const fieldNameArray = results.meta.fields;
 
             const result = results.data[0];
-            for (let i in result) {
-                if (typeof (result[i]) === "number") {
+            for(let i in result){
+                if(typeof(result[i]) === "number"){
                     labelType[i] = "int";
                 } else {
                     labelType[i] = "string";
@@ -173,13 +173,6 @@ class VisualizedPanel extends React.Component {
 
     // currentChart类型修改
     handlechangeCurrentChart = (e) => {
-        if(e.target.value !== 'table'){
-            this.setState({
-                chartStyle: {
-                    color: "#509ee3",
-                },
-            })
-        }
         this.setState({
             currentChart: e.target.value,
         });
@@ -217,13 +210,6 @@ class VisualizedPanel extends React.Component {
                         labelType={this.state.labelType}
                     />
                 )
-            case 'dataSource':
-                return (
-                    <DataSource
-                        initLabelArray={this.initLabelArray}
-                        initDataSet={this.initDataSet}
-                    ></DataSource>
-                );
         }
     }
 
@@ -239,7 +225,10 @@ class VisualizedPanel extends React.Component {
                     <Col span={6} style={{ paddingLeft: "30px" }} ><h2>DataSource</h2></Col>
                     <Col span={18}>
                         <div style={{ float: "right", marginRight: 20 }} >
-                            <Button onClick={this.handleChangeRightCol.bind(this, "dataSource")} >DataSource</Button>
+                            <DataSource
+                                initLabelArray={this.initLabelArray}
+                                initDataSet={this.initDataSet}
+                            ></DataSource>
                             <Button onClick={this.handleChangeRightCol.bind(this, "filter")} >Filter</Button>
                             <Button onClick={this.handleChangeRightCol.bind(this, "summarize")} >Summarize</Button>
                             <Button onClick={this.handleChangeRightCol.bind(this, "settings")} >Settings</Button>

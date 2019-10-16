@@ -12,14 +12,12 @@ class SparkRunning extends Component {
 
 		if (this.props.running !== true) return;
 
-		const { propsAPI } = this.props;
-
-		if (propsAPI === undefined) return;
+		const {
+			propsAPI
+		} = this.props;
 
 		//制作工作流保存在stream中
 		const stream = generateStream(propsAPI.save());
-
-		if (stream.nodes === undefined || stream.edges === undefined) return;
 
 		sum = stream.nodes.length || 0;
 		current = 0;
@@ -52,8 +50,14 @@ class SparkRunning extends Component {
 
 	//改变对应此id标签框的运行状态标志，可改为运行完成或正在运行，取决于color
 	changeStatusColor = (id, color) => {
-		const { propsAPI } = this.props;
-		const { find, update, executeCommand } = propsAPI;
+		const {
+			propsAPI
+		} = this.props;
+		const {
+			find,
+			update,
+			executeCommand
+		} = propsAPI;
 		const item = find(id);
 		var value = JSON.parse(JSON.stringify(item.model.keyConfig));
 		value.state_icon_url = color;
