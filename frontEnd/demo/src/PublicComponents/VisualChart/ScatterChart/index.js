@@ -3,6 +3,7 @@ export function createScatterChart(myChart, props) {
     const { dataSet, chartStyle } = props;
     const { xLabel, yLabel, color } = chartStyle;
 
+    if(xLabel === undefined || yLabel === undefined) return;
     var option = {
         xAxis: {
             name: xLabel

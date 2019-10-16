@@ -1,10 +1,11 @@
 import React from 'react';
 import { Redirect } from 'react-router-dom';
-import { Row, Col, Button, message, notification, Icon,Tabs } from 'antd';
+import { Row, Col, Button, message, notification, Icon, Tabs } from 'antd';
 
+import SparkRun from '../../ClusterModeComponents/SparkRunPanel';
 import ExperimentPanel from '../ExperimentPanel';
 import VisualizedPanel from '../VisualizedPanel';
-import DataManager from "../../PublicComponents/DataManager"
+import DataManager from "../../PublicComponents/DataManager";
 import styles from './index.less';
 
 /**
@@ -81,7 +82,7 @@ class LocalMode extends React.Component {
 				})
 		}
 	}
-	
+
 	componentDidMount() {
 		return;
 		if (this.state.remind === 'true') {
@@ -121,7 +122,7 @@ class LocalMode extends React.Component {
 			clickTab: "0"
 		})
 	}
-   
+
 	handleTabClick = (value) => {
 		this.setState({
 			clickTab: value
@@ -202,7 +203,7 @@ class LocalMode extends React.Component {
 						key="1"
 					>
 						<ExperimentPanel
-						    refresh={this.state.refresh}
+							refresh={this.state.refresh}
 							currentTab={this.state.currentTab}
 							clickTab={this.state.clickTab}
 							handleClickEnter={this.handleClickEnter}
@@ -232,16 +233,15 @@ class LocalMode extends React.Component {
 				<Row type="flex" style={{ bottom: 0, height: '65px', lineHeight: '65px', backgroundColor: backgroundColor }}
 					data-step="4" data-intro="所有配置完成后，点击'运行'按钮开始运行整个工作流。" data-position='top'
 				>
+					<Col span={11}></Col>
 					<Col span={2}>
+						<SparkRun
+							onClickButtonRunning={this.onClickButtonRunning}
+							currentTab={this.state.currentTab}
+							clickTab={this.state.clickTab}
+						></SparkRun>
 					</Col>
-					<Col span={9}></Col>
-					<Col span={2}>
-						<Button onClick={this.onClickButtonRunning} style={{ border: 0, backgroundColor: backgroundColor, color: "#ddd", fontSize: 25 }}>
-							<Icon type="play-circle" style={{ fontSize: 25 }} />运行
-        				</Button>
-					</Col>
-					<Col span={9}></Col>
-					<Col span={2}></Col>
+					<Col span={11}></Col>
 				</Row>
 			</div >
 		);

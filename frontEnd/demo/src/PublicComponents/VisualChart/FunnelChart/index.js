@@ -3,6 +3,7 @@ import { getValueFromDataSet } from '../getValueFromDataSet';
 export function createFunnelChart(myChart, props) {
     const { dataSet, chartStyle } = props;
     const { xLabel, yLabel, color } = chartStyle;
+    if(xLabel === undefined || yLabel === undefined) return;
     var option = {
         title: {
             text: '漏斗图',
