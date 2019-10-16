@@ -175,6 +175,13 @@ class VisualizedPanel extends React.Component {
 
     // currentChart类型修改
     handlechangeCurrentChart = (e) => {
+        if(e.target.value !== 'table'){
+            this.setState({
+                chartStyle: {
+                    color: "#509ee3",
+                },
+            })
+        }
         this.setState({
             currentChart: e.target.value,
         });

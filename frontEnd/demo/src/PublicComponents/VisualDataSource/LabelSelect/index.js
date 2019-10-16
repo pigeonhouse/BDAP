@@ -14,13 +14,13 @@ class LabelSelect extends React.Component {
     }
 
     render() {
-        const { labelArray } = this.props;
+        const { labelArray, label } = this.props;
         return (
             <Select
-                value={this.props.label}
+                value={label === null ? undefined : label}
                 showSearch
                 style={{ width: "80%", margin: "10%", marginTop: "15px", marginBottom: "0px" }}
-                placeholder="选择列"
+                placeholder="选择数据源"
                 optionFilterProp="children"
                 onChange={this.onChange}
                 onSearch={this.onSearch}
