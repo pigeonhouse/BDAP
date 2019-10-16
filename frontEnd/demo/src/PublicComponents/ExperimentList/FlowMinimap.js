@@ -8,6 +8,7 @@ class FlowMinimap extends React.Component {
     render() {
         const { propsAPI, minimapInfo } = this.props;
         if(minimapInfo !== null && propsAPI !== undefined){
+            console.log(minimapInfo)
             const flowInfo = downloadStream(minimapInfo);
             propsAPI.read(flowInfo);
         }

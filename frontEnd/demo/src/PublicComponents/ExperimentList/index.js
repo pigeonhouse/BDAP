@@ -66,7 +66,6 @@ class ExperimentList extends React.Component {
 			credentials: 'include'
 		}
 		const res = await fetchTool(`/experiments/${experimentId}`, init)
-		console.log(res);
 		if (res.code === 202) {
 			return res.data
 		}
@@ -87,6 +86,22 @@ class ExperimentList extends React.Component {
 		}
 	}
 
+	fetchModalStream = async (experiment) => {
+        const init = {
+            method: 'GET',
+            mode: 'cors',
+            headers: {
+                "Content-Type": "application/x-www-form-urlencoded;charset=utf-8"
+            },
+            credentials: 'include'
+        }
+        const res = await fetchTool(`/experiments/${experiment.experimentId}`, init)
+        if (res.code === 200) {
+			console.log(res.data)
+            return res.data
+        }
+    }
+
 	onRowClick = async (record, index) => {
 		const experiment = this.state.experiment;
 		const nextExperiment = this.getExperimentByText(record.title);
@@ -98,7 +113,7 @@ class ExperimentList extends React.Component {
 		this.setState({
 			experiment: nextExperiment,
 			selectedRowKeys: [index],
-			minimapInfo: await this.fetchModalStream(nextExperiment.experimentId),
+			minimapInfo: await this.fetchModalStream(nextExperiment),
 		})
 	}
 

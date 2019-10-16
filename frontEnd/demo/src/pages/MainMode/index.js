@@ -103,21 +103,29 @@ class LocalMode extends React.Component {
 
 			if (res.code === 200) {
 				notification.close('session');
+				notification['success']({
+					key: 'session',
+					message: 'Session',
+					duration: 1,
+					description: 'session创建成功',
+				})
 				this.setState({ sessionFinish: true });
 			}
+
 			this.querySession();
 		}, 1000)
 	}
 
 
 	componentDidMount() {
-		if (this.state.sessionFinish === false) {
+		if (this.state.sessionFinish === false && 
+			this.props.location.state !== undefined) {
 			const args = {
 				message: 'Session',
 				description:
 					'正在创建session，请稍候',
 				duration: 0,
-				ket: "session"
+				key: "session"
 			};
 			notification['info'](args);
 			this.querySession();
@@ -277,6 +285,7 @@ class LocalMode extends React.Component {
 							onClickButtonRunning={this.onClickButtonRunning}
 							currentTab={this.state.currentTab}
 							clickTab={this.state.clickTab}
+							running={this.state.running}
 						></SparkRun>
 					</Col>
 					<Col span={11}></Col>

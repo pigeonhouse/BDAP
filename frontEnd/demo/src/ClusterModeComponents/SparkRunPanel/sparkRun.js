@@ -45,8 +45,6 @@ class SparkRunning extends Component {
 
 			//按照工作流进行轮询
 			this.run(result);
-
-			this.props.stopRunning();
 		}
 	}
 
@@ -91,6 +89,9 @@ class SparkRunning extends Component {
 				}
 				this.run(result);
 			}, 1000)
+		} else {
+			console.log(current, sum)
+			this.props.stopRunning();
 		}
 	}
 

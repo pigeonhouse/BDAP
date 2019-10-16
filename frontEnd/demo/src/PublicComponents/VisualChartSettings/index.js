@@ -38,10 +38,10 @@ class Settings extends React.Component {
             let array = new Array();
             let label = null;
 
-            labelArray.map((item, index) => {
-                if (labelType[index] === type) {
+            labelArray.map((item) => {
+                // if (labelType[item] === type) {
                     array.push(item);
-                }
+                // }
             })
 
             if (name === "x" || name === "group") {

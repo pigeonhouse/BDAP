@@ -7,12 +7,7 @@ import { Button } from 'antd'
 
 class SparkRun extends Component {
 
-	state = {
-		loading: false,
-	}
-
 	enterLoading = () => {
-		this.setState({ loading: true });
 		this.props.onClickButtonRunning();
 	}
 
@@ -21,7 +16,7 @@ class SparkRun extends Component {
 		if (currentTab === '1' && clickTab === '0') {
 			return (
 				<Button
-					loading={this.state.loading}
+					loading={this.props.running}
 					icon="play-circle"
 					onClick={this.enterLoading}
 					style={{ border: 0, backgroundColor: '#343941', color: "#ddd", fontSize: 25, height: "65px" }}

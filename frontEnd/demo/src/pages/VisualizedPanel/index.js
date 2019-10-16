@@ -19,6 +19,7 @@ class VisualizedPanel extends React.Component {
         currentChart: "table",
         rightCol: "filter",
         dataSourceName: 'data',
+        fileName: null,
         fileColumns: [],
         filter: [],
         summarize: [],
@@ -27,8 +28,13 @@ class VisualizedPanel extends React.Component {
         labelType: [],
         groupLabel: undefined,
         chartStyle: {
-            color: "#509ee3",
+            color:['#c23531','#2f4554', '#61a0a8', '#d48265', '#91c7ae','#749f83',  '#ca8622', '#bda29a','#6e7074', '#546570', '#c4ccd3']
+            // color: "#509ee3",
         },
+    }
+
+    changeFileName = (fileName) => {
+        this.setState({ fileName });
     }
 
     initLabelArray = (labelArray, labelType) => {
@@ -173,13 +179,13 @@ class VisualizedPanel extends React.Component {
 
     // currentChart类型修改
     handlechangeCurrentChart = (e) => {
-        if(e.target.value !== 'table'){
-            this.setState({
-                chartStyle: {
-                    color: "#509ee3",
-                },
-            })
-        }
+        // if(e.target.value !== 'table'){
+        //     this.setState({
+        //         chartStyle: {
+        //             color: "#509ee3",
+        //         },
+        //     })
+        // }
         this.setState({
             currentChart: e.target.value,
         });
@@ -222,6 +228,8 @@ class VisualizedPanel extends React.Component {
                     <DataSource
                         initLabelArray={this.initLabelArray}
                         initDataSet={this.initDataSet}
+                        changeFileName={this.changeFileName}
+                        fileName={this.state.fileName}
                     ></DataSource>
                 );
         }

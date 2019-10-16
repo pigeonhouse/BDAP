@@ -8,7 +8,6 @@ import Papa from 'papaparse';
 class DataSource extends React.Component {
 
     state = {
-        label: null,
         labelArray: [],
         filePath: [],
         isMouseEnter: false,
@@ -48,7 +47,7 @@ class DataSource extends React.Component {
         }
     }
 
-    handleChangeDataSource = async (filePath, value) => {
+    handleChangeDataSource = async (filePath) => {
 
         const init = {
             method: 'POST',
@@ -85,13 +84,13 @@ class DataSource extends React.Component {
     }
 
     handleChangeLabel = (value) => {
-        if (this.state.label === value) return;
-        this.setState({ label: value });
+        if (this.props.fileName === value) return;
+        this.props.changeFileName(value)
 
         const { labelArray, filePath } = this.state;
         for (let i in labelArray) {
             if (labelArray[i] === value) {
-                return this.handleChangeDataSource(filePath[i], value);
+                return this.handleChangeDataSource(filePath[i]);
             }
         }
     }
@@ -109,7 +108,7 @@ class DataSource extends React.Component {
                 >
                     <LabelSelect
                         handleChangeLabel={this.handleChangeLabel}
-                        label={this.state.label}
+                        label={this.props.fileName}
                         labelArray={this.state.labelArray}
                     ></LabelSelect>
                 </div>

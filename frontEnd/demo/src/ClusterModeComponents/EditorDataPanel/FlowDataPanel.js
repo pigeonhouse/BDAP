@@ -11,16 +11,6 @@ class FlowDataPanel extends React.Component {
 			elabel: 'hdfsFile',
 			filePath: undefined,
 			fileColumnsInfo: [],
-		},{
-			label: 'Titanic测试',
-			elabel: 'TitanicTestFile',
-			filePath: undefined,
-			fileColumnsInfo: [],
-		}, {
-			label: 'Titanic训练',
-			elabel: 'TitanicTrainFile',
-			filePath: undefined,
-			fileColumnsInfo: [],
 		}];
 		var activeFileList = [];
 		if (this.props.activeFileList !== undefined) {

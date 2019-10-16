@@ -7,19 +7,18 @@ export function createFunnelChart(myChart, props) {
     var option = {
         title: {
             text: '漏斗图',
-            subtext: '纯属虚构'
         },
         tooltip: {
             trigger: 'item',
             formatter: "{a} <br/>{b} : {c}%"
         },
-        toolbox: {
-            feature: {
-                dataView: { readOnly: false },
-                restore: {},
-                saveAsImage: {}
-            }
-        },
+        // toolbox: {
+        //     feature: {
+        //         dataView: { readOnly: false },
+        //         restore: {},
+        //         saveAsImage: {}
+        //     }
+        // },
         legend: {
             data: getValueFromDataSet(xLabel, dataSet),
         },
