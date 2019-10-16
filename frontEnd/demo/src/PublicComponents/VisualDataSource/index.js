@@ -63,7 +63,7 @@ class DataSource extends React.Component {
         }
 
         const res = await fetchTool("/query/readyForData", init);
-
+        console.log(res)
         if (res.code === 200) {
 
             // 通过papa转化

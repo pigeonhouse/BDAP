@@ -3,7 +3,7 @@
 //'frontEndTest'
 //'backEndTest'
 //'production'
-const mode = 'backEndTest'
+const mode = 'frontEndTest'
 
 export async function fetchTool(url, init) {
 
@@ -21,7 +21,7 @@ export async function fetchTool(url, init) {
     const res = await fetch(url, init)
     const response = await res.json();
     Cookies.set("loginToken", response.token);
+    console.log(response)
 
-    console.log(response);
     return response;
 }
