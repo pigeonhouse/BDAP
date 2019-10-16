@@ -6,6 +6,8 @@ import SparkRun from '../../ClusterModeComponents/SparkRunPanel';
 import ExperimentPanel from '../ExperimentPanel';
 import VisualizedPanel from '../VisualizedPanel';
 import DataManager from "../../PublicComponents/DataManager";
+
+import { fetchTool } from '../../FetchTool';
 import styles from './index.less';
 
 /**
@@ -33,7 +35,9 @@ class LocalMode extends React.Component {
 		}).onexit(function () {
 		}).start();
 	}
+
 	state = {
+		sessionFinish: false,
 		currentTab: '1',
 		clickTab: '1',
 		username: '',
@@ -83,7 +87,41 @@ class LocalMode extends React.Component {
 		}
 	}
 
+	querySession = () => {
+		if(this.state.sessionFinish === true) return;
+		setTimeout(async () => {
+			const init = {
+				method: 'GET',
+				mode: 'cors',
+				headers: {
+					"Content-Type": "application/json;charset=utf-8"
+				},
+				credentials: 'include'
+			}
+
+			const res = await fetchTool("/session/status", init)
+
+			if (res.code === 200) {
+				notification.close('session');
+				this.setState({ sessionFinish: true });
+			}
+			this.querySession();
+		}, 1000)
+	}
+
+
 	componentDidMount() {
+		if (this.state.sessionFinish === false) {
+			const args = {
+				message: 'Session',
+				description:
+					'正在创建session，请稍候',
+				duration: 0,
+				ket: "session"
+			};
+			notification['info'](args);
+			this.querySession();
+		}
 		return;
 		if (this.state.remind === 'true') {
 			const key = `open${Date.now()}`;
