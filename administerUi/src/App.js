@@ -1,14 +1,10 @@
 import React from 'react';
-import logo from './logo.svg';
 import './App.css';
 import ModuleAddingForm from './ModuleForm';
 
 import {
-  Input,
-  Select,
   Row,
   Col,
-  AutoComplete,
 } from 'antd';
 
 
