@@ -1,11 +1,10 @@
 package com.pigeonhouse.bdap.dao;
 
-import com.pigeonhouse.bdap.entity.metadata.User;
+import com.pigeonhouse.bdap.entity.metadata.BdapUser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
-import org.springframework.data.mongodb.core.query.Update;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -19,10 +18,10 @@ public class UserDao {
     /**
      * 添加User对象到数据库
      *
-     * @param user 新建对象
+     * @param bdapUser 新建对象
      */
-    public void saveUser(User user) {
-        mongoTemplate.save(user);
+    public void saveUser(BdapUser bdapUser) {
+        mongoTemplate.save(bdapUser);
     }
 
     /**
@@ -31,10 +30,10 @@ public class UserDao {
      * @param id 数据库对象Id
      * @return 查询的User对象
      */
-    public User findByUserId(String id) {
+    public BdapUser findByUserId(String id) {
         Query userId = new Query(Criteria.where("userId").is(id));
-        User findUser = mongoTemplate.findOne(userId, User.class);
-        return findUser;
+        BdapUser findBdapUser = mongoTemplate.findOne(userId, BdapUser.class);
+        return findBdapUser;
     }
 
     /**
@@ -42,9 +41,9 @@ public class UserDao {
      *
      * @return 查询结果
      */
-    public List<User> findAll() {
-        List<User> users = mongoTemplate.find(new Query(new Criteria()), User.class);
-        return users;
+    public List<BdapUser> findAll() {
+        List<BdapUser> bdapUsers = mongoTemplate.find(new Query(new Criteria()), BdapUser.class);
+        return bdapUsers;
     }
 
 
