@@ -6,6 +6,10 @@ object OneHotEncoder {
 
   def main(args: Array[String]): Unit = {
 
+    import org.apache.spark.sql.functions.col
+    import org.apache.spark.ml.linalg.{Vector, Vectors}
+    import org.apache.spark.ml.feature.{OneHotEncoderEstimator, StringIndexer, VectorAssembler}
+
     def Sparse2Dense(v: Vector) = {
       var array = Array(v(0))
       for(i <- 1 to v.size - 1){
