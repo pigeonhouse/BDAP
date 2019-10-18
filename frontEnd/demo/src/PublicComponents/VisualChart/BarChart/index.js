@@ -5,10 +5,7 @@ export function createBarChart(myChart, props) {
     if(xLabel === undefined || yLabel === undefined) return;
     // 指定图表的配置项和数据
     var option = {
-        title: {
-            text: '饼图'
-        },
-        tooltip: {},
+
         xAxis: {
             name:xLabel,
             data: getValueFromDataSet(xLabel, dataSet)

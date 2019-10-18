@@ -33,27 +33,26 @@ class ModuleForm extends React.Component {
 	state = {
 		confirmDirty: false,
 		autoCompleteResult: [],
-		values: [],
 	};
 
-	remove = k => {
+	removeAttribute = k => {
 		const { form } = this.props;
-		const keys = form.getFieldValue('keys');
-		if (keys.length === 1) {
+		const attributes = form.getFieldValue('attributes');
+		if (attributes.length === 1) {
 			return;
 		}
 
 		form.setFieldsValue({
-			keys: keys.filter(key => key !== k),
+			attributes: attributes.filter(attribute => attribute !== k),
 		});
 	};
 
-	add = () => {
+	addAttribute = () => {
 		const { form } = this.props;
-		const keys = form.getFieldValue('keys');
-		const nextKeys = keys.concat(id++);
+		const attributes = form.getFieldValue('attributes');
+		const nextKeys = attributes.concat(id++);
 		form.setFieldsValue({
-			keys: nextKeys,
+			attributes: nextKeys,
 		});
 	};
 
@@ -68,35 +67,39 @@ class ModuleForm extends React.Component {
 	};
 
 	render() {
-		const { getFieldDecorator } = this.props.form;
+		const { getFieldDecorator, getFieldValue } = this.props.form;
 
-		getFieldDecorator('keys', { initialValue: [] });
-		const keys = getFieldValue('keys');
-		const formItems = keys.map((k, index) => (
-			<Form.Item
-				{...(index === 0 ? formItemLayout : formItemLayoutWithOutLabel)}
-				label={index === 0 ? 'Passengers' : ''}
-				required={false}
-				key={k}
-			>
-				{getFieldDecorator(`names[${k}]`, {
-					validateTrigger: ['onChange', 'onBlur'],
-					rules: [
-						{
-							required: true,
-							whitespace: true,
-							message: "Please input passenger's name or delete this field.",
-						},
-					],
-				})(<Input placeholder="passenger name" style={{ width: '60%', marginRight: 8 }} />)}
-				{keys.length > 1 ? (
-					<Icon
+		getFieldDecorator('attributes', { initialValue: [] });
+		const attributes = getFieldValue('attributes');
+		const formItems = attributes.map((attribute, index) => (
+			<Fragment>
+
+				<Item
+					label={index === 0 ? 'Passengers' : ''}
+					required={false}
+					key={attribute}
+				>
+					{getFieldDecorator(`names[${attribute}]`, {
+						validateTrigger: ['onChange', 'onBlur'],
+						rules: [
+							{
+								required: true,
+								whitespace: true,
+								message: "Please input passenger's name or delete this field.",
+							},
+						],
+					})(<Input placeholder="passenger name" style={{ width: '60%', marginRight: 8 }} />)}
+					
+					{<Icon
 						className="dynamic-delete-button"
 						type="minus-circle-o"
-						onClick={() => this.remove(k)}
-					/>
-				) : null}
-			</Form.Item>
+						onClick={() => this.removeAttribute(attribute)}
+					/>}
+			
+				</Item>
+
+			</Fragment>
+
 		));
 
 		return (
@@ -184,8 +187,8 @@ class ModuleForm extends React.Component {
 
 						{formItems}
 
-						<Item>
-							<Button type="dashed" onClick={this.add} style={{ width: '100%' }}>
+						<Item {...tailFormItemLayout} >
+							<Button type="dashed" onClick={this.addAttribute} style={{ width: '100%' }}>
 								<Icon type="plus" /> 增加属性
               				</Button>
 						</Item>
@@ -206,15 +209,4 @@ class ModuleForm extends React.Component {
 
 const ModuleAddingForm = Form.create({ name: 'register' })(ModuleForm);
 
-//   ReactDOM.render(<WrappedRegistrationForm />, mountNode);
 export default ModuleAddingForm
-
-
-/***
-	labelName: item.labelName,
-	groupName: item.groupName,
-	anchor: item.anchor,
-	columnsInfo: item.columnsInfo,
-	attributes: item.attributes,
- *
- */
