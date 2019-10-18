@@ -15,7 +15,6 @@ object LinearSVMClassifier {
     import org.apache.spark.ml.classification.LinearSVC
 
     val labelCol = labelCols(0)
-    val aimarray = trainCols:+labelCol
 
     val metaData = input
     val assembler = new VectorAssembler().setInputCols(trainCols).setOutputCol("features_svm")
