@@ -27,32 +27,28 @@ const tailFormItemLayout = {
 	},
 };
 
-let id = 0;
-
 class ModuleForm extends React.Component {
 	state = {
 		confirmDirty: false,
 		autoCompleteResult: [],
 	};
 
-	removeAttribute = k => {
+	removeAttribute = delAttribute => {
 		const { form } = this.props;
 		const attributes = form.getFieldValue('attributes');
-		if (attributes.length === 1) {
-			return;
-		}
 
 		form.setFieldsValue({
-			attributes: attributes.filter(attribute => attribute !== k),
+			attributes: attributes.filter(attribute => attribute !== delAttribute),
 		});
 	};
 
 	addAttribute = () => {
 		const { form } = this.props;
-		const attributes = form.getFieldValue('attributes');
-		const nextKeys = attributes.concat(id++);
+		let attributes = form.getFieldValue('attributes');
+		console.log(attributes)
+		attributes.push({});
 		form.setFieldsValue({
-			attributes: nextKeys,
+			attributes
 		});
 	};
 
@@ -66,30 +62,48 @@ class ModuleForm extends React.Component {
 		});
 	};
 
+	componentWillMount() {
+
+		const { getFieldDecorator } = this.props.form;
+
+		getFieldDecorator('attributes', { initialValue: [] });
+	}
+
 	render() {
 		const { getFieldDecorator, getFieldValue } = this.props.form;
 
-		getFieldDecorator('attributes', { initialValue: [] });
 		const attributes = getFieldValue('attributes');
-		const formItems = attributes.map((attribute, index) => (
-			<Fragment>
+		const formItems = attributes.map((attribute, index) => {
+			console.log(attributes[index]);
+			return <Fragment>
 
 				<Item
-					label={index === 0 ? 'Passengers' : ''}
+					label={					
+						<span>参数属性&nbsp;
+							<Tooltip title="模块参数设置">
+								<Icon type="question-circle-o" />
+							</Tooltip>
+						</span>}
 					required={false}
 					key={attribute}
 				>
-					{getFieldDecorator(`names[${attribute}]`, {
+					{getFieldDecorator(`attributes[${Number(index)}][styleType]`, {
 						validateTrigger: ['onChange', 'onBlur'],
 						rules: [
 							{
 								required: true,
 								whitespace: true,
-								message: "Please input passenger's name or delete this field.",
+								message: "请选择属性类型",
 							},
 						],
-					})(<Input placeholder="passenger name" style={{ width: '60%', marginRight: 8 }} />)}
-					
+					})( <Select>
+							<Option value="Select">下拉菜单</Option>
+							<Option value="Input">输入框</Option>
+							<Option value="Number">数字范围</Option>
+							<Option value="CheckBox">单选框</Option>
+							<Option value="ChooseCol">选择字段</Option>
+						</Select>)}
+					{/* {this.createChildrem(attribute)} */}
 					{<Icon
 						className="dynamic-delete-button"
 						type="minus-circle-o"
@@ -99,8 +113,7 @@ class ModuleForm extends React.Component {
 				</Item>
 
 			</Fragment>
-
-		));
+		});
 
 		return (
 			<Row>
