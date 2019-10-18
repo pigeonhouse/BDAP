@@ -1,5 +1,10 @@
 import React, { Fragment } from 'react';
-import { Form, Input, Tooltip, Icon, Select, Row, Col, Button } from 'antd';
+import { Form, Input, Tooltip, Icon, Select, Row, Col, Button, Divider } from 'antd';
+import NumberStyle from './NumberStyle';
+import SelectStyle from './SelectStyle';
+import CheckBoxStyle from './CheckBoxStyle';
+import ChooseColStyle from './ChooseColStyle';
+import InputStyle from './InputStyle';
 
 const { Option } = Select;
 const { Item } = Form;
@@ -27,28 +32,29 @@ const tailFormItemLayout = {
 	},
 };
 
+let id = 0;
+
 class ModuleForm extends React.Component {
 	state = {
 		confirmDirty: false,
 		autoCompleteResult: [],
 	};
 
-	removeAttribute = delAttribute => {
+	removeAttribute = k => {
 		const { form } = this.props;
-		const attributes = form.getFieldValue('attributes');
-
+		const keys = form.getFieldValue('keys');
 		form.setFieldsValue({
-			attributes: attributes.filter(attribute => attribute !== delAttribute),
+			keys: keys.filter(key => key !== k),
 		});
 	};
 
 	addAttribute = () => {
 		const { form } = this.props;
-		let attributes = form.getFieldValue('attributes');
-		console.log(attributes)
-		attributes.push({});
+		const keys = form.getFieldValue('keys');
+		const nextKeys = keys.concat(id++);
+		console.log(keys);
 		form.setFieldsValue({
-			attributes
+			keys: nextKeys,
 		});
 	};
 
@@ -62,32 +68,29 @@ class ModuleForm extends React.Component {
 		});
 	};
 
-	componentWillMount() {
-
-		const { getFieldDecorator } = this.props.form;
-
-		getFieldDecorator('attributes', { initialValue: [] });
-	}
-
 	render() {
 		const { getFieldDecorator, getFieldValue } = this.props.form;
 
+		getFieldDecorator('keys', { initialValue: [] });
+		const keys = getFieldValue('keys');
 		const attributes = getFieldValue('attributes');
-		const formItems = attributes.map((attribute, index) => {
-			console.log(attributes[index]);
-			return <Fragment>
 
+		const formItems = keys.map((k, index) => (
+			<Fragment>
+				<Divider></Divider>
 				<Item
-					label={					
+					label={
 						<span>参数属性&nbsp;
-							<Tooltip title="模块参数设置">
+						<Tooltip title="模块参数设置">
 								<Icon type="question-circle-o" />
 							</Tooltip>
-						</span>}
+						</span>
+					}
+					{...formItemLayout}
 					required={false}
-					key={attribute}
+					key={k}
 				>
-					{getFieldDecorator(`attributes[${Number(index)}][styleType]`, {
+					{getFieldDecorator(`attributes[${index}][styleType]`, {
 						validateTrigger: ['onChange', 'onBlur'],
 						rules: [
 							{
@@ -96,32 +99,125 @@ class ModuleForm extends React.Component {
 								message: "请选择属性类型",
 							},
 						],
-					})( <Select>
-							<Option value="Select">下拉菜单</Option>
-							<Option value="Input">输入框</Option>
-							<Option value="Number">数字范围</Option>
-							<Option value="CheckBox">单选框</Option>
-							<Option value="ChooseCol">选择字段</Option>
-						</Select>)}
-					{/* {this.createChildrem(attribute)} */}
-					{<Icon
-						className="dynamic-delete-button"
-						type="minus-circle-o"
-						onClick={() => this.removeAttribute(attribute)}
-					/>}
-			
+					})(<Select>
+						<Option value="Select">下拉菜单</Option>
+						<Option value="Input">输入框</Option>
+						<Option value="Number">数字范围</Option>
+						<Option value="CheckBox">单选框</Option>
+						<Option value="ChooseCol">选择字段</Option>
+					</Select>)}
+				</Item>
+				<Item
+					label="属性中文名"
+					{...formItemLayout}
+					required={false}
+					key={k}
+				>
+					{getFieldDecorator(`attributes[${index}][labelName][label]`, {
+						validateTrigger: ['onChange', 'onBlur'],
+						rules: [
+							{
+								required: true,
+								whitespace: true,
+								message: "该属性的中文名",
+							},
+						],
+					})(<Input></Input>)}
+				</Item>
+				<Item
+					label="属性英文名"
+					{...formItemLayout}
+					required={false}
+					key={k}
+				>
+					{getFieldDecorator(`attributes[${index}][labelName][elabel]`, {
+						validateTrigger: ['onChange', 'onBlur'],
+						rules: [
+							{
+								required: true,
+								whitespace: true,
+								message: "该属性的英文名",
+							},
+						],
+					})(<Input></Input>)}
+				</Item>
+				<Item
+					label="属性类型"
+					{...formItemLayout}
+					required={false}
+					key={k}
+				>
+					{getFieldDecorator(`attributes[${index}][valueType]`, {
+						validateTrigger: ['onChange', 'onBlur'],
+						rules: [
+							{
+								required: true,
+								whitespace: true,
+								message: "该属性的类型",
+							},
+						],
+					})(<Select>
+						<Option value="String">String</Option>
+						<Option value="Boolean">Boolean</Option>
+						<Option value="Int">Int</Option>
+						<Option value="Double">Double</Option>
+						<Option value="Array[String]">Array[String]</Option>
+					</Select>)}
 				</Item>
 
+				<NumberStyle
+					id={k}
+					index={index}
+					attributes={attributes}
+					getFieldDecorator={getFieldDecorator}
+				/>
+
+				<SelectStyle
+					id={k}
+					index={index}
+					attributes={attributes}
+					getFieldDecorator={getFieldDecorator}
+					getFieldValue={getFieldValue}
+					form={this.props.form}
+				/>
+
+				<CheckBoxStyle
+					id={k}
+					index={index}
+					attributes={attributes}
+					getFieldDecorator={getFieldDecorator}
+				/>
+
+				<ChooseColStyle
+					id={k}
+					index={index}
+					attributes={attributes}
+					getFieldDecorator={getFieldDecorator}
+					getFieldValue={getFieldValue}
+				/>
+
+				<InputStyle
+					id={k}
+					index={index}
+					attributes={attributes}
+					getFieldDecorator={getFieldDecorator}
+				/>
+
+				<Icon
+					className="dynamic-delete-button"
+					type="minus-circle-o"
+					onClick={() => this.removeAttribute(k)}
+				/>
 			</Fragment>
-		});
+		));
 
 		return (
 			<Row>
 				<Col span={7} ></Col>
 				<Col span={10} >
 					<Form {...formItemLayout} onSubmit={this.handleSubmit}>
-						<Item label="模块中文名">
-							{getFieldDecorator('label', {
+						<Item label="模块中文名" {...formItemLayout} >
+							{getFieldDecorator('labelName[label]', {
 								rules: [
 									{
 										required: true,
@@ -131,8 +227,8 @@ class ModuleForm extends React.Component {
 							})(<Input />)}
 						</Item>
 
-						<Item label="模块英文名">
-							{getFieldDecorator('elabel', {
+						<Item label="模块英文名" {...formItemLayout} >
+							{getFieldDecorator('labelName[elabel]', {
 								rules: [
 									{
 										type: 'string',
@@ -147,8 +243,8 @@ class ModuleForm extends React.Component {
 							})(<Input />)}
 						</Item>
 
-						<Item label="所在分组">
-							{getFieldDecorator('groupName', {
+						<Item label="所在分组" {...formItemLayout} >
+							{getFieldDecorator('groupName[elabel]', {
 								rules: [
 									{ required: true, message: '请选择分组!' },
 								],
@@ -166,8 +262,10 @@ class ModuleForm extends React.Component {
 									<Icon type="question-circle-o" />
 								</Tooltip>
 							</span>
-						}>
-							{getFieldDecorator('anchor_top', {
+						}
+							{...formItemLayout}
+						>
+							{getFieldDecorator('anchor[0]', {
 								rules: [
 									{ required: true, message: '请选择上锚点个数!' },
 								],
@@ -185,8 +283,9 @@ class ModuleForm extends React.Component {
 									<Icon type="question-circle-o" />
 								</Tooltip>
 							</span>
-						}>
-							{getFieldDecorator('anchor_bottom', {
+						} {...formItemLayout}
+						>
+							{getFieldDecorator('anchor[1]', {
 								rules: [
 									{ required: true, message: '请选择下锚点个数!' },
 								],
