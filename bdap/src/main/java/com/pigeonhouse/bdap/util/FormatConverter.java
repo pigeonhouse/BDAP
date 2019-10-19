@@ -29,17 +29,7 @@ public class FormatConverter {
      * @return
      */
     public static String convertToCsv(String show){
-        System.out.println("-------show---------");
-        System.out.println(show);
-
         String[] pure = show.split("[^\\+\\|]+\\n");
-
-//        System.out.println("------pure[0]--------");
-//        System.out.println(pure[0]);
-//        System.out.println("------pure[1]-------");
-//        System.out.println(pure[1]);
-//        System.out.println("------pure[2]-------");
-//        System.out.println(pure[2]);
 
         String[] splits = pure[0].split("\\\n");
 
@@ -61,12 +51,10 @@ public class FormatConverter {
                     sb.append(",");
                 }
                 sb.append(elements[col]);
-                System.out.println(elements[col]);
             }
             csvBuilder.append(sb.toString()).append("\n");
         }
-        System.out.println("csvBuilder.toString()");
-        System.out.println(csvBuilder.toString());
+
         return csvBuilder.toString();
     }
 }

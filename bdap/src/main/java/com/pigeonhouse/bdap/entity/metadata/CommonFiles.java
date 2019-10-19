@@ -17,7 +17,6 @@ public class CommonFiles {
     @Id
     String cid;
     String userId;
-    String userName;
     ArrayList<FileAttribute> fileList;
 
     public CommonFiles() {

@@ -26,7 +26,7 @@ class NumberStyle extends React.Component {
                 <Row key={`${index}_0`}>
                     <Col span={6} >
                         <Item
-                            label="范围最小值"
+                            label="最小值"
                             {...formItemLayout}
                             key={`${id}_0`}
                         >
@@ -41,7 +41,7 @@ class NumberStyle extends React.Component {
                                     {
                                         required: true,
                                         whitespace: true,
-                                        message: "数字类型可选的最小值",
+                                        message: "可接受的最小值",
                                     },
                                 ],
                             })(<Input></Input>)}
@@ -49,7 +49,7 @@ class NumberStyle extends React.Component {
                     </Col>
                     <Col span={6} >
                         <Item
-                            label="范围最大值"
+                            label="最大值"
                             {...formItemLayout}
                             key={`${id}_1`}
                         >
@@ -64,7 +64,7 @@ class NumberStyle extends React.Component {
                                     {
                                         required: true,
                                         whitespace: true,
-                                        message: "数字类型可选的最大值",
+                                        message: "可接受的最大值",
                                     },
                                 ],
                             })(<Input></Input>)}
@@ -74,7 +74,7 @@ class NumberStyle extends React.Component {
                         <Item
                             label={
                                 <span>步长&nbsp;
-                                <Tooltip title="数字类型的增加长度，步长为1，则每次增加1">
+                                <Tooltip title="使用时会以上下箭头来控制数字增长与减少，例如步长设为0.1则每次按上箭头数字增加0.1">
                                         <Icon type="question-circle-o" />
                                     </Tooltip>
                                 </span>

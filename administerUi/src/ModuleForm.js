@@ -16,7 +16,7 @@ const formItemLayout = {
 	},
 	wrapperCol: {
 		xs: { span: 24 },
-		sm: { span: 16 },
+		sm: { span: 12 },
 	},
 };
 
@@ -124,6 +124,27 @@ class ModuleForm extends React.Component {
 		return jsonFormat;
 	}
 
+	onSubmit = () =>{
+		console.log(this.state.json);
+
+		fetch('http://10.105.222.93:7777/module',{
+			method:"PUT",
+			headers: {
+    		'Content-Type': 'application/json',
+			},
+			body:this.state.json
+		}).then((res)=>{
+			if (res.ok){
+				console.log("ok")
+				alert("提交成功")
+			}else{
+				alert("提交失败，请先生成json并确认后再次提交。\n如果还是不成功请联系薛啸岳。")
+			}
+  			})
+
+	}
+
+
 	render() {
 		const { getFieldDecorator, getFieldValue } = this.props.form;
 
@@ -133,13 +154,14 @@ class ModuleForm extends React.Component {
 
 		const formItems = keys.map((k, index) => {
 
-			return <Row key={k}>
+			return <Row key={k} >
 				<Divider></Divider>
-				<Col span={6} >
+				<Row type="flex" justify="space-around" align="middle">
+				<Col span={5} >
 					<Item
 						label={
-							<span>参数属性&nbsp;
-								<Tooltip title="模块参数设置">
+							<span>参数类型&nbsp;
+								<Tooltip title="希望在前端展示成什么形式？">
 									<Icon type="question-circle-o" />
 								</Tooltip>
 							</span>
@@ -153,7 +175,7 @@ class ModuleForm extends React.Component {
 								{
 									required: true,
 									whitespace: true,
-									message: "请选择属性类型",
+									message: "请选择参数类型",
 								},
 							],
 						})(<Select onChange={this.handleSelectChange.bind(this, index)} >
@@ -165,9 +187,9 @@ class ModuleForm extends React.Component {
 						</Select>)}
 					</Item>
 				</Col>
-				<Col span={6} >
+				<Col span={5} >
 					<Item
-						label="属性中文名"
+						label="参数中文名"
 						{...formItemLayout}
 						key={k + '_1'}
 					>
@@ -183,9 +205,9 @@ class ModuleForm extends React.Component {
 						})(<Input></Input>)}
 					</Item>
 				</Col>
-				<Col span={6} >
+				<Col span={5} >
 					<Item
-						label="属性英文名"
+						label="参数英文名"
 						{...formItemLayout}
 						key={`${k}_2`}
 					>
@@ -206,9 +228,15 @@ class ModuleForm extends React.Component {
 						})(<Input></Input>)}
 					</Item>
 				</Col>
-				<Col span={6} >
+				<Col span={5} >
 					<Item
-						label="属性类型"
+						label={							
+							<span>参数属性&nbsp;
+								<Tooltip title="这个参数在你的scala代码中是什么类型的？(若为选择字段，该项必须选择Array[String])">
+									<Icon type="question-circle-o" />
+								</Tooltip>
+							</span>
+						}
 						{...formItemLayout}
 						key={`${k}_3`}
 					>
@@ -218,7 +246,7 @@ class ModuleForm extends React.Component {
 								{
 									required: true,
 									whitespace: true,
-									message: "该属性的类型",
+									message: "该参数的类型",
 								},
 							],
 						})(
@@ -231,12 +259,21 @@ class ModuleForm extends React.Component {
 							</Select>
 						)}
 					</Item>
+					
 				</Col>
-				<Icon
-					className="dynamic-delete-button"
-					type="minus-circle-o"
-					onClick={() => this.removeAttribute(k)}
-				/>
+
+				<Col span={1}></Col>
+
+				<Col>
+					<Icon
+						className="dynamic-delete-button"
+						type="close"
+						onClick={() => this.removeAttribute(k)}
+					/>
+				</Col>
+
+				</Row>
+
 				<NumberStyle
 					id={`${k}_4`}
 					index={index}
@@ -302,8 +339,8 @@ class ModuleForm extends React.Component {
 		return (
 			<div style={{ paddingTop: '100px' }} >
 				<Row >
-					<Col span={3}></Col>
-					<Col span={18}>
+					<Col span={1}></Col>
+					<Col span={22}>
 						<Form onSubmit={this.handleSubmit}>
 							<Row>
 								<Col span={8}>
@@ -401,15 +438,23 @@ class ModuleForm extends React.Component {
 								</Col>
 							</Row>
 							{formItems}
+							
 							<Divider></Divider>
+							<div dangerouslySetInnerHTML={{ __html: jsonFormat }}></div>
 							<Button type="primary" htmlType="submit">
-								提交数据，生成预览
-           					</Button>
+								生成json预览
+							</Button>
+
+							<Divider></Divider>
+
+							<Button type="danger" onClick={()=>this.onSubmit()}>
+								确认无误，提交
+							</Button>
 						</Form>
-						<div dangerouslySetInnerHTML={{ __html: jsonFormat }}></div>
+						
 
 					</Col>
-					<Col span={3}></Col>
+					<Col span={1}></Col>
 				</Row>
 			</div >
 		);
