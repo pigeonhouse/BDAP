@@ -1,5 +1,5 @@
 import React, { Fragment } from 'react';
-import { Form, Select } from 'antd';
+import { Form, Select, Row, Col } from 'antd';
 
 const { Item } = Form;
 const { Option } = Select;
@@ -24,26 +24,33 @@ class CheckBoxStyle extends React.Component {
 
         if (attributes[index].styleType === 'CheckBox')
             return (
-                <Item
-                    label="默认值"
-                    {...formItemLayout}
-                    required={false}
-                    key={id}
-                >
-                    {getFieldDecorator(`attributes[${index}][value]`, {
-                        validateTrigger: ['onChange', 'onBlur'],
-                        rules: [
-                            {
-                                required: true,
-                                whitespace: true,
-                                message: "数字类型的默认值",
-                            },
-                        ],
-                    })(<Select>
-                        <Option value="true">true</Option>
-                        <Option value="false">false</Option>
-                    </Select>)}
-                </Item>
+                <Row>
+                    <Col span={8} ></Col>
+                    <Col span={8} >
+                        <Item
+                            label="默认值"
+                            {...formItemLayout}
+                            key={id}
+                        >
+                            {getFieldDecorator(`attributes[${index}][value]`, {
+                                validateTrigger: ['onChange', 'onBlur'],
+                                rules: [
+                                    {
+                                        required: true,
+                                        whitespace: true,
+                                        message: "数字类型的默认值",
+                                    },
+                                ],
+                            })(<Select>
+                                <Option value="true">true</Option>
+                                <Option value="false">false</Option>
+                            </Select>)}
+                        </Item>
+
+                    </Col>
+                    <Col span={8} ></Col>
+                </Row>
+
             );
         else return <Fragment></Fragment>
     }
