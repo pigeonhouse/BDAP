@@ -14,7 +14,7 @@ import java.util.ArrayList;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class BdapUser {
+public class User {
 
     @Id
     String cid;
@@ -22,7 +22,7 @@ public class BdapUser {
     String userName;
     String password;
 
-    public BdapUser(String id, String name, String password) {
+    public User(String id, String name, String password) {
         this.userId = id;
         this.userName = name;
         this.password = password;

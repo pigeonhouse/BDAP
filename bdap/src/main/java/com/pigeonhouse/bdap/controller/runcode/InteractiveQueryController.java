@@ -5,13 +5,13 @@ import com.pigeonhouse.bdap.dao.LivyDao;
 import com.pigeonhouse.bdap.entity.execution.LivySessionInfo;
 import com.pigeonhouse.bdap.service.ResponseService;
 import com.pigeonhouse.bdap.service.TokenService;
-import com.pigeonhouse.bdap.service.runcode.QueryService;
+import com.pigeonhouse.bdap.service.runcode.GetOutputService;
+import com.pigeonhouse.bdap.util.FormatConverter;
 import com.pigeonhouse.bdap.util.response.Response;
 import com.pigeonhouse.bdap.util.response.statusimpl.RunningStatus;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
@@ -31,7 +31,7 @@ public class InteractiveQueryController {
     TokenService tokenService;
 
     @Autowired
-    QueryService queryService;
+    GetOutputService getOutputService;
     @Autowired
     ResponseService responseService;
 
@@ -47,7 +47,7 @@ public class InteractiveQueryController {
         String resultUrl = livyDao.postCode(code, livySessionInfo);
 
         try {
-            String result = queryService.getOutput(resultUrl);
+            String result = FormatConverter.convertToCsv(getOutputService.getOutput(resultUrl));
             return responseService.response(RunningStatus.SUCCESS, result,request);
         } catch (Exception e) {
             return responseService.response(RunningStatus.FAIL, null,request);
@@ -71,7 +71,7 @@ public class InteractiveQueryController {
         String resultUrl = livyDao.postCode("df.show()\n", livySessionInfo);
 
         try {
-            String result = queryService.getOutput(resultUrl);
+            String result = getOutputService.getOutput(resultUrl);
             return responseService.response(RunningStatus.SUCCESS, result,request);
         } catch (Exception e) {
             e.printStackTrace();

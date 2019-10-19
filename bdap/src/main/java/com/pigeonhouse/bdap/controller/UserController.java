@@ -8,7 +8,7 @@ import com.pigeonhouse.bdap.dao.UserDao;
 import com.pigeonhouse.bdap.entity.execution.LivySessionInfo;
 import com.pigeonhouse.bdap.entity.mapinfo.nodeinfo.NodeInfo;
 import com.pigeonhouse.bdap.entity.metadata.FileAttribute;
-import com.pigeonhouse.bdap.entity.metadata.BdapUser;
+import com.pigeonhouse.bdap.entity.metadata.User;
 import com.pigeonhouse.bdap.service.ResponseService;
 import com.pigeonhouse.bdap.service.TokenService;
 import com.pigeonhouse.bdap.util.response.Response;
@@ -52,28 +52,28 @@ public class UserController {
 
     @PassToken
     @PostMapping("/login")
-    public Object login(@RequestBody() BdapUser bdapUser, HttpServletResponse response) {
+    public Object login(@RequestBody() User user, HttpServletResponse response) {
 
-        BdapUser bdapUserForBase = userDao.findByUserId(bdapUser.getUserId());
-        if (bdapUserForBase == null) {
+        User userForBase = userDao.findByUserId(user.getUserId());
+        if (userForBase == null) {
             //不存在这个用户
             return responseService.response(LoginStatus.NO_SUCH_USER, null,null);
         } else {
-            if (!bdapUserForBase.getPassword().equals(bdapUser.getPassword())) {
+            if (!userForBase.getPassword().equals(user.getPassword())) {
                 //密码错误
                 return responseService.response(LoginStatus.WRONG_PASSWORD, null,null);
             } else {
                 String livyAddr = livyDao.selectLivyServer();
                 LivySessionInfo livySessionInfo = livyDao.createSession(livyAddr);
                 Integer sessionId = livySessionInfo.getId();
-                String token = tokenService.getLoginToken(bdapUser.getUserId(), livyAddr, sessionId);
+                String token = tokenService.getLoginToken(user.getUserId(), livyAddr, sessionId);
 
                 JSONObject sessionInfo = new JSONObject();
                 sessionInfo.put("livyAddr", livyAddr);
                 sessionInfo.put("sessionId", sessionId);
 
                 JSONObject data = new JSONObject();
-                data.put("userInfo", bdapUserForBase);
+                data.put("userInfo", userForBase);
                 data.put("sessionInfo", sessionInfo);
 
 

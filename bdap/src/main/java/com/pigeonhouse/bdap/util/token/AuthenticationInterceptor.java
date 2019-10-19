@@ -8,7 +8,7 @@ import com.auth0.jwt.exceptions.JWTDecodeException;
 import com.auth0.jwt.exceptions.JWTVerificationException;
 import com.auth0.jwt.interfaces.Claim;
 import com.pigeonhouse.bdap.dao.UserDao;
-import com.pigeonhouse.bdap.entity.metadata.BdapUser;
+import com.pigeonhouse.bdap.entity.metadata.User;
 import com.pigeonhouse.bdap.service.TokenService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.method.HandlerMethod;
@@ -85,15 +85,15 @@ public class AuthenticationInterceptor implements HandlerInterceptor {
             String livyAddr = claims.get("livyAddr").asString();
             Integer sessionId = claims.get("sessionId").asInt();
 
-            BdapUser bdapUser = userDao.findByUserId(userId);
-            if (bdapUser == null) {
+            User user = userDao.findByUserId(userId);
+            if (user == null) {
                 json.put("msg", "用户不存在，请重新登录");
                 out = httpServletResponse.getWriter();
                 out.append(json.toJSONString());
                 return false;
             }
             // 验证 token
-            JWTVerifier jwtVerifier = JWT.require(Algorithm.HMAC256(bdapUser.getUserId())).build();
+            JWTVerifier jwtVerifier = JWT.require(Algorithm.HMAC256(user.getUserId())).build();
             try {
                 jwtVerifier.verify(token);
             } catch (JWTVerificationException e) {

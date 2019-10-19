@@ -13,7 +13,7 @@ import java.util.Map;
  * @Date: 2019/10/7 12:55
  */
 @Service
-public class QueryService {
+public class GetOutputService {
     public String getOutput(String resultUrl) throws Exception{
         ObjectMapper objectMapper = new ObjectMapper();
         RestTemplate restTemplate = new RestTemplate();
@@ -28,9 +28,7 @@ public class QueryService {
         }
         LinkedHashMap<String, Object> outputMap = (LinkedHashMap) resultMap.get("output");
         LinkedHashMap<String, Object> data = (LinkedHashMap) outputMap.get("data");
-        resultText = data.get("text/plain").toString();
-        System.out.println(resultText);
-        System.out.println(FormatConverter.convertToCsv(resultText));
-        return FormatConverter.convertToCsv(resultText);
+        return data.get("text/plain").toString();
+
     }
 }

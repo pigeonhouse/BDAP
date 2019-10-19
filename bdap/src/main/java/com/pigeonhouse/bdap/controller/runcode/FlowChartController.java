@@ -9,7 +9,8 @@ import com.pigeonhouse.bdap.entity.mapinfo.nodeinfo.NodeInfo;
 import com.pigeonhouse.bdap.service.ResponseService;
 import com.pigeonhouse.bdap.service.TokenService;
 import com.pigeonhouse.bdap.service.runcode.ExecutionService;
-import com.pigeonhouse.bdap.service.runcode.QueryService;
+import com.pigeonhouse.bdap.service.runcode.GetOutputService;
+import com.pigeonhouse.bdap.util.FormatConverter;
 import com.pigeonhouse.bdap.util.response.Response;
 import com.pigeonhouse.bdap.util.response.statusimpl.PostCodeStatus;
 import com.pigeonhouse.bdap.util.response.statusimpl.RunningStatus;
@@ -42,7 +43,7 @@ public class FlowChartController {
     @Autowired
     ResponseService responseService;
     @Autowired
-    QueryService queryService;
+    GetOutputService getOutputService;
 
     @PassToken
     @PostMapping(value = "/flow/run")
@@ -97,8 +98,7 @@ public class FlowChartController {
             String token = tokenService.getTokenFromRequest(request, "loginToken");
             LivySessionInfo sessionInfo = tokenService.getLivySessionInfoFromToken(token);
             String resultUrl = livyDao.postCode("dfMap(\"" + nodeId + "\").show()", sessionInfo);
-            String result = queryService.getOutput(resultUrl);
-            System.out.println(result);
+            String result = FormatConverter.convertToCsv(getOutputService.getOutput(resultUrl));
             return responseService.response(RunningStatus.SUCCESS, result, request);
         } catch (Exception e) {
             return responseService.response(RunningStatus.FAIL, null, request);
