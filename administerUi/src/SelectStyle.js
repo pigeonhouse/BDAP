@@ -99,23 +99,24 @@ class SelectStyle extends React.Component {
                             })(<Input></Input>)}
                         </Item>
                     </Col>
-                    <Col span={8} >
+                    <Col span={1}></Col>
+                    <Col span={7}>
                         <Icon
                             className="dynamic-delete-button"
-                            type="minus-circle-o"
+                            type="close"
                             onClick={() => this.removeSelect(k)}
                         />
                     </Col>
                 </Row>
             ))
             return (
-                <Row>
+                <Row >
                     {children}
-                    <Col span={8} >
+                    <Col span={10} >
                         <Item
                             label={
                                 <span>默认值(英文)&nbsp;
-                                <Tooltip title="输入必须为可选择值中有的">
+                                <Tooltip title="必须填可选择值中的某一个">
                                         <Icon type="question-circle-o" />
                                     </Tooltip>
                                 </span>
@@ -140,14 +141,14 @@ class SelectStyle extends React.Component {
                             })(<Input></Input>)}
                         </Item>
                     </Col>
-                    <Col span={8} >
+                    <Col span={10} >
                         <Item {...tailFormItemLayout} >
                             <Button type="dashed" onClick={this.addSelect} style={{ width: '100%' }}>
                                 <Icon type="plus" /> 增加可选择值
               			    </Button>
                         </Item>
                     </Col>
-                    <Col span={8} ></Col>
+
                 </Row>
             );
         } else {

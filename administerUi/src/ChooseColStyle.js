@@ -26,7 +26,7 @@ class ChooseColStyle extends React.Component {
             const anchor = getFieldValue('anchor');
             var children = [];
             if (anchor !== undefined && anchor[0] !== undefined) {
-                for (let i = 0; i <= Number(anchor[0]); i++) {
+                for (let i = 0; i < Number(anchor[0]); i++) {
                     children.push(
                         <Option value={`${i}`}>{i}</Option>
                     )
@@ -39,7 +39,7 @@ class ChooseColStyle extends React.Component {
                         <Item
                             label={
                                 <span>可多选&nbsp;
-                                <Tooltip title="选择字段是否选择多列？">
+                                <Tooltip title="是否可以选择多列？">
                                         <Icon type="question-circle-o" />
                                     </Tooltip>
                                 </span>
@@ -53,7 +53,7 @@ class ChooseColStyle extends React.Component {
                                     {
                                         required: true,
                                         whitespace: true,
-                                        message: "选择字段是否选择多列",
+                                        message: "是否可以选择多列？",
                                     },
                                 ],
                             })(<Select>
@@ -66,7 +66,7 @@ class ChooseColStyle extends React.Component {
                         <Item
                             label={
                                 <span>锚点源头&nbsp;
-                                <Tooltip title="选择字段从上方第几个锚点取值？需要填写上锚点个数">
+                                <Tooltip title="这个选择字段是从上方第几个输出的锚点取值？该选项需要先填写上方的上锚点个数才能够选择">
                                         <Icon type="question-circle-o" />
                                     </Tooltip>
                                 </span>

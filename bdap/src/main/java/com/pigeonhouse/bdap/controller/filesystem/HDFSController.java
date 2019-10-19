@@ -1,22 +1,27 @@
 package com.pigeonhouse.bdap.controller.filesystem;
 
+import com.alibaba.fastjson.JSONObject;
 import com.pigeonhouse.bdap.config.HdfsConfig;
 import com.pigeonhouse.bdap.dao.LivyDao;
 import com.pigeonhouse.bdap.entity.execution.LivySessionInfo;
+import com.pigeonhouse.bdap.entity.metadata.HeaderAttribute;
 import com.pigeonhouse.bdap.service.ResponseService;
 import com.pigeonhouse.bdap.service.TokenService;
 import com.pigeonhouse.bdap.service.filesystem.FileHeaderAttriService;
 import com.pigeonhouse.bdap.service.filesystem.HdfsService;
 import com.pigeonhouse.bdap.service.runcode.GetOutputService;
+import com.pigeonhouse.bdap.util.FormatConverter;
 import com.pigeonhouse.bdap.util.response.Response;
 import com.pigeonhouse.bdap.util.response.statusimpl.HdfsStatus;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.ArrayList;
 
 /**
  * 本文件所有Api均使用userId作为唯一性索引,在HDFS上的默认用户文件夹名称也为userId
@@ -41,7 +46,7 @@ public class HDFSController {
     @Autowired
     GetOutputService getOutputService;
 
-    @PutMapping("/hdfs")
+    @PostMapping("/hdfs")
     public Response upload(HttpServletRequest request) {
         try {
             MultipartHttpServletRequest multipartRequest = (MultipartHttpServletRequest) request;
@@ -51,34 +56,51 @@ public class HDFSController {
             MultipartFile file = multipartRequest.getFile("file");
             String fileName = file.getOriginalFilename();
             String[] splits = fileName.split("\\.");
-            String type = splits[splits.length - 1];
-            if (!"csv".equals(type) && !"txt".equals(type) && !"json".equals(type)) {
+            String fileType = splits[splits.length - 1];
+            if (!"csv".equals(fileType) && !"txt".equals(fileType) && !"json".equals(fileType)) {
                 return responseService.response(HdfsStatus.INVALID_INPUT, null, request);
             }
             hdfsService.upload(file, userId);
 
-            String readDataCode = "val df = spark.read.format(\""+type+"\")" +
+            String readDataCode = "val df = spark.read.format(\""+fileType+"\")" +
                     ".option(\"inferSchema\",\"true\").option(\"header\",\"true\")" +
-                    ".load(\"hdfs:///bdap/students/"+userId+"/"+fileName+"\")\n";
+                    ".load(\"hdfs:///bdap/students/"+userId+"/tmp/"+fileName+"\")";
 
             livyDao.postCode(readDataCode,livySessionInfo);
 
-            String readSchemaDDL = "println(df.schema.toDDL)\n";
+            String readSchemaDDL = "println(df.schema.toDDL)";
 
-            String resultUrl = livyDao.postCode(readSchemaDDL,livySessionInfo);
+            String schemaResultUrl = livyDao.postCode(readSchemaDDL,livySessionInfo);
 
-            String schemaDDL = getOutputService.getOutput(resultUrl);
+            String schemaDDL = getOutputService.getOutput(schemaResultUrl);
 
-            System.out.println(schemaDDL);
+            String previewDataCode = "df.show(10,false)";
+            String previewDataResultUrl = livyDao.postCode(previewDataCode,livySessionInfo);
 
-            return responseService.response(HdfsStatus.FILE_UPLOAD_SUCCESS, null, request);
+            String previewData = FormatConverter.convertToCsv(getOutputService.getOutput(previewDataResultUrl));
 
+            ArrayList<HeaderAttribute> headerAttributes = new ArrayList<>();
+            String[] ddlSplits = schemaDDL.split(",");
+            for (int i = 0; i < ddlSplits.length; i++) {
+                String[] nameAndType = ddlSplits[i].split("\\s");
+                String name = nameAndType[0].replace("`","");
+                String typeLowerCase = nameAndType[1].toLowerCase();
+                String type = typeLowerCase.substring(0, 1).toUpperCase() + typeLowerCase.substring(1);
+                headerAttributes.add(new HeaderAttribute(name,type));
+            }
+
+            JSONObject schemaAndData = new JSONObject();
+            schemaAndData.put("metaData",headerAttributes);
+            schemaAndData.put("previewData",previewData);
+
+            return responseService.response(HdfsStatus.FILE_UPLOAD_SUCCESS, schemaAndData, request);
         } catch (Exception e) {
+            e.printStackTrace();
             return responseService.response(HdfsStatus.BACKEND_ERROR, null, request);
         }
     }
 }
-//
+
 //    /**
 //     * 将CSV文件上传至HDFS文件夹，并解析头文件存入数据库
 //     * 返回值:带有提示信息的JSON字符串
