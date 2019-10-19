@@ -25,7 +25,7 @@ import java.util.*;
  */
 @Repository("LivyDao")
 public class LivyDao {
-    private Logger logger = LoggerFactory.getLogger(HdfsService.class);
+    private Logger logger = LoggerFactory.getLogger(this.getClass());
     private static ObjectMapper objectMapper = new ObjectMapper();
 
 
