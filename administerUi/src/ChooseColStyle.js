@@ -44,7 +44,7 @@ class ChooseColStyle extends React.Component {
                         }
                         {...formItemLayout}
                         required={false}
-                        key={id}
+                        key={`${id}_0`}
                     >
                         {getFieldDecorator(`attributes[${index}][style][multiCol]`, {
                             validateTrigger: ['onChange', 'onBlur'],
@@ -70,7 +70,7 @@ class ChooseColStyle extends React.Component {
                         }
                         {...formItemLayout}
                         required={false}
-                        key={id}
+                        key={`${id}_1`}
                     >
                         {getFieldDecorator(`attributes[${index}][style][sourceAnchor]`, {
                             validateTrigger: ['onChange', 'onBlur'],

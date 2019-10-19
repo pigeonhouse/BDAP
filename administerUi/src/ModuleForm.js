@@ -35,25 +35,21 @@ const tailFormItemLayout = {
 let id = 0;
 
 class ModuleForm extends React.Component {
-	state = {
-		confirmDirty: false,
-		autoCompleteResult: [],
-	};
 
 	removeAttribute = k => {
-		const { form } = this.props;
-		const keys = form.getFieldValue('keys');
-		form.setFieldsValue({
+		const { getFieldValue, setFieldsValue } = this.props.form;
+		const keys = getFieldValue('keys');
+		setFieldsValue({
 			keys: keys.filter(key => key !== k),
 		});
 	};
 
 	addAttribute = () => {
-		const { form } = this.props;
-		const keys = form.getFieldValue('keys');
+		const { getFieldValue, setFieldsValue } = this.props.form;
+		const keys = getFieldValue('keys');
 		const nextKeys = keys.concat(id++);
-		console.log(keys);
-		form.setFieldsValue({
+
+		setFieldsValue({
 			keys: nextKeys,
 		});
 	};
@@ -72,23 +68,31 @@ class ModuleForm extends React.Component {
 		const { getFieldDecorator, getFieldValue } = this.props.form;
 
 		getFieldDecorator('keys', { initialValue: [] });
+		// getFieldDecorator('attributes', { initialValue: [] });
+
 		const keys = getFieldValue('keys');
 		const attributes = getFieldValue('attributes');
 
-		const formItems = keys.map((k, index) => (
-			<Fragment>
+		const formItems = keys.map((k, index) => {
+			// getFieldDecorator(`attributes[${index}]`, { initialValue: {} });
+			// getFieldDecorator(`attributes[${index}][styleType]`, { initialValue: '' });
+			// getFieldDecorator(`attributes[${index}][labelName][label]`, { initialValue: '' });
+			// getFieldDecorator(`attributes[${index}][labelName][elabel]`, { initialValue: '' });
+			// getFieldDecorator(`attributes[${index}][valueType]`, { initialValue: '' });
+
+			return <Fragment key={k} >
 				<Divider></Divider>
 				<Item
 					label={
 						<span>参数属性&nbsp;
-						<Tooltip title="模块参数设置">
+							<Tooltip title="模块参数设置">
 								<Icon type="question-circle-o" />
 							</Tooltip>
 						</span>
 					}
 					{...formItemLayout}
 					required={false}
-					key={k}
+					key={k + '_0'}
 				>
 					{getFieldDecorator(`attributes[${index}][styleType]`, {
 						validateTrigger: ['onChange', 'onBlur'],
@@ -111,7 +115,7 @@ class ModuleForm extends React.Component {
 					label="属性中文名"
 					{...formItemLayout}
 					required={false}
-					key={k}
+					key={k + '_1'}
 				>
 					{getFieldDecorator(`attributes[${index}][labelName][label]`, {
 						validateTrigger: ['onChange', 'onBlur'],
@@ -128,7 +132,7 @@ class ModuleForm extends React.Component {
 					label="属性英文名"
 					{...formItemLayout}
 					required={false}
-					key={k}
+					key={`${k}_2`}
 				>
 					{getFieldDecorator(`attributes[${index}][labelName][elabel]`, {
 						validateTrigger: ['onChange', 'onBlur'],
@@ -145,7 +149,7 @@ class ModuleForm extends React.Component {
 					label="属性类型"
 					{...formItemLayout}
 					required={false}
-					key={k}
+					key={`${k}_3`}
 				>
 					{getFieldDecorator(`attributes[${index}][valueType]`, {
 						validateTrigger: ['onChange', 'onBlur'],
@@ -166,14 +170,14 @@ class ModuleForm extends React.Component {
 				</Item>
 
 				<NumberStyle
-					id={k}
+					id={`${k}_4`}
 					index={index}
 					attributes={attributes}
 					getFieldDecorator={getFieldDecorator}
 				/>
 
 				<SelectStyle
-					id={k}
+					id={`${k}_4`}
 					index={index}
 					attributes={attributes}
 					getFieldDecorator={getFieldDecorator}
@@ -182,14 +186,14 @@ class ModuleForm extends React.Component {
 				/>
 
 				<CheckBoxStyle
-					id={k}
+					id={`${k}_4`}
 					index={index}
 					attributes={attributes}
 					getFieldDecorator={getFieldDecorator}
 				/>
 
 				<ChooseColStyle
-					id={k}
+					id={`${k}_4`}
 					index={index}
 					attributes={attributes}
 					getFieldDecorator={getFieldDecorator}
@@ -197,7 +201,7 @@ class ModuleForm extends React.Component {
 				/>
 
 				<InputStyle
-					id={k}
+					id={`${k}_4`}
 					index={index}
 					attributes={attributes}
 					getFieldDecorator={getFieldDecorator}
@@ -209,7 +213,7 @@ class ModuleForm extends React.Component {
 					onClick={() => this.removeAttribute(k)}
 				/>
 			</Fragment>
-		));
+		});
 
 		return (
 			<Row>
@@ -299,17 +303,13 @@ class ModuleForm extends React.Component {
 
 						{formItems}
 
-						<Item {...tailFormItemLayout} >
-							<Button type="dashed" onClick={this.addAttribute} style={{ width: '100%' }}>
-								<Icon type="plus" /> 增加属性
-              				</Button>
-						</Item>
+						<Button type="dashed" onClick={this.addAttribute} style={{ width: '100%' }}>
+							<Icon type="plus" /> 增加属性
+              			</Button>
 
-						<Item {...tailFormItemLayout}>
-							<Button type="primary" htmlType="submit">
-								确认无误，提交
-           					</Button>
-						</Item>
+						<Button type="primary" htmlType="submit">
+							确认无误，提交
+           				</Button>
 					</Form>
 				</Col>
 				<Col span={7} ></Col>
