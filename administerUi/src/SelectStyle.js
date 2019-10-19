@@ -29,43 +29,38 @@ const tailFormItemLayout = {
 };
 
 let id = 0;
+let selectKeys = [];
 
 class SelectStyle extends React.Component {
+    state = {
+        selectKeys: [],
+    }
 
     removeSelect = k => {
-        const { form } = this.props;
-        const selectKeys = form.getFieldValue('selectKeys');
-        form.setFieldsValue({
-            selectKeys: selectKeys.filter(selectKeys => selectKeys !== k),
-        });
+        selectKeys = selectKeys.filter(selectKeys => selectKeys !== k);
+        this.setState({ selectKeys })
     };
 
     addSelect = () => {
-        const { form } = this.props;
-        const selectKeys = form.getFieldValue('selectKeys');
-        const nextSelectKeys = selectKeys.concat(id++);
-        form.setFieldsValue({
-            selectKeys: nextSelectKeys,
-        });
+        selectKeys = selectKeys.concat(id++);
+        this.setState({ selectKeys })
     };
 
 
     render() {
-        const { getFieldDecorator, index, attributes, getFieldValue, id } = this.props;
+        const { getFieldDecorator, index, attributes, id } = this.props;
 
         if (attributes === undefined || attributes[index] === undefined || attributes[index].styleType === undefined) return <Fragment></Fragment>
 
         if (attributes[index].styleType === 'Select') {
-            getFieldDecorator('selectKeys', { initialValue: [] });
-            const selectKeys = getFieldValue('selectKeys');
+            console.log(selectKeys)
 
             const children = selectKeys.map((k, kIndex) => (
-                <Fragment>
+                <Fragment key={k}>
                     <Item
                         label="可选值英文名"
                         {...formItemLayout}
-                        required={false}
-                        key={k}
+                        key={`${k}_0`}
                     >
                         {getFieldDecorator(`attributes[${index}][style][menu][${kIndex}][elabel]`, {
                             validateTrigger: ['onChange', 'onBlur'],
@@ -81,8 +76,7 @@ class SelectStyle extends React.Component {
                     <Item
                         label="可选值中文名"
                         {...formItemLayout}
-                        required={false}
-                        key={k}
+                        key={`${k}_1`}
                     >
                         {getFieldDecorator(`attributes[${index}][style][menu][${kIndex}][label]`, {
                             validateTrigger: ['onChange', 'onBlur'],
@@ -95,6 +89,11 @@ class SelectStyle extends React.Component {
                             ],
                         })(<Input></Input>)}
                     </Item>
+                    <Icon
+                        className="dynamic-delete-button"
+                        type="minus-circle-o"
+                        onClick={() => this.removeSelect(k)}
+                    />
                 </Fragment>
             ))
 
@@ -126,13 +125,7 @@ class SelectStyle extends React.Component {
                 </Fragment>
             );
         } else {
-            const selectKeys = getFieldValue('selectKeys');
-            if (selectKeys !== undefined && selectKeys !== []) {
-                const { form } = this.props;
-                form.setFieldsValue({
-                    selectKeys: [],
-                });
-            }
+            selectKeys = [];
             return <Fragment></Fragment>
         }
     }
