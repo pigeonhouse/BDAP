@@ -25,8 +25,8 @@ object OneHotEncoder {
     var indexedDF = metaData
     for(i <- 0 until targetCols.length){
       val indexer = new StringIndexer().setInputCol(targetCols(i)).setOutputCol(s"${targetCols(i)}Index")
-      val indexerModel = indexer.fit(metaData)
-      val indexedDF = indexerModel.transform(metaData)
+      val indexerModel = indexer.fit(indexedDF)
+      indexedDF = indexerModel.transform(indexedDF)
     }
 
     val encoder = new OneHotEncoderEstimator().setInputCols(targetCols.map(A => A + "Index")).setOutputCols(targetCols.map(A => A + "SparseVec"))

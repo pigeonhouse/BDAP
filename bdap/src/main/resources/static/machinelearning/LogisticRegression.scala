@@ -20,10 +20,10 @@ object LogisticRegression {
 
     val df = input.select(aimarray.map(A => col(A)): _*)
 
-    val assembler = new VectorAssembler().setInputCols(trainCols).setOutputCol("features_lr")
+    val assembler = new VectorAssembler().setInputCols(trainCols).setOutputCol("features_")
     val assembledDF = assembler.transform(df)
 
-    val lr = new LogisticRegression().setFeaturesCol("features_lr").setLabelCol(labelCol).setFitIntercept(FitIntercept).setMaxIter(MaxIter).setRegParam(RegParam).setElasticNetParam(ElasticNetParam).setTol(Tol)
+    val lr = new LogisticRegression().setFeaturesCol("features_").setLabelCol(labelCol).setFitIntercept(FitIntercept).setMaxIter(MaxIter).setRegParam(RegParam).setElasticNetParam(ElasticNetParam).setTol(Tol)
 
     val Model = lr.fit(assembledDF)
 

@@ -17,14 +17,14 @@ object Predict {
 
     df_ = df_.select(aimarray.map(A => col(A)): _*)
 
-    val assembler = new VectorAssembler().setInputCols(trainCols).setOutputCol("features_lr")
+    val assembler = new VectorAssembler().setInputCols(trainCols).setOutputCol("features_")
     df_ = assembler.transform(df_)
 
     val predictions = Model.transform(df_)
-    val predict_result = predictions.selectExpr("features_lr", labelCol, s"round(prediction,1) as ${newColName}")
+    val predict_result = predictions.selectExpr("features_", labelCol, s"round(prediction,1) as ${newColName}")
 
     val output = predict_result
 
-    //output.show(100)
+    output.show(100)
   }
 }
