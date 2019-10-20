@@ -68,11 +68,6 @@ class SelectStyle extends React.Component {
                                 validateTrigger: ['onChange', 'onBlur'],
                                 rules: [
                                     {
-                                        type: 'string',
-                                        pattern: /^[a-z,A-Z]+$/,
-                                        message: '请输入合法的英文名!',
-                                    },
-                                    {
                                         required: true,
                                         whitespace: true,
                                         message: "请输入可选值英文名",
@@ -127,11 +122,6 @@ class SelectStyle extends React.Component {
                             {getFieldDecorator(`attributes[${index}][value]`, {
                                 validateTrigger: ['onChange', 'onBlur'],
                                 rules: [
-                                    {
-                                        type: 'string',
-                                        pattern: /^[a-z,A-Z]+$/,
-                                        message: '请输入合法的英文名!',
-                                    },
                                     {
                                         required: true,
                                         whitespace: true,

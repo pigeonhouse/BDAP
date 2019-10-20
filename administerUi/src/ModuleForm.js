@@ -215,11 +215,6 @@ class ModuleForm extends React.Component {
 							validateTrigger: ['onChange', 'onBlur'],
 							rules: [
 								{
-									type: 'string',
-									pattern: /^[a-z,A-Z]+$/,
-									message: '请输入合法的英文名!',
-								},
-								{
 									required: true,
 									whitespace: true,
 									message: "该属性的英文名",
@@ -359,11 +354,6 @@ class ModuleForm extends React.Component {
 									<Item label="模块英文名" {...formItemLayout} >
 										{getFieldDecorator('labelName[elabel]', {
 											rules: [
-												{
-													type: 'string',
-													pattern: /^[a-z,A-Z]+$/,
-													message: '请输入合法的英文名!',
-												},
 												{
 													required: true,
 													message: '请输入模块英文名!',
