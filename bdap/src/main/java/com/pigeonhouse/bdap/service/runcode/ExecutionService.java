@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 import java.io.BufferedReader;
 import java.io.FileInputStream;
 import java.io.InputStreamReader;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -37,7 +38,7 @@ public class ExecutionService {
         if (filePath != null) {
             String id = nodeInfo.getId();
             return "val output = spark.read.format(\"csv\").option(\"inferSchema\", \"true\").option(\"header\", \"true\").load(\"" + filePath + "\")\n" +
-                    "dfMap += (\"" + id +"_0"+ "\" -> output)\n\n";
+                    "dfMap += (\"" + id + "_0" + "\" -> output)\n\n";
         }
 
         //----------------------根据锚点判断是否需要注入输入参数的语句--------------------
@@ -72,7 +73,8 @@ public class ExecutionService {
         StringBuilder originCodeBuilder = new StringBuilder();
         try {
             FileInputStream inputStream = new FileInputStream(scalaFilePath);
-            BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream, "gbk"));
+            //代码段编码改为UTF-8
+            BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream, StandardCharsets.UTF_8));
             String str = null;
             while ((str = bufferedReader.readLine()) != null) {
                 originCodeBuilder.append("\n").append(str);
@@ -139,7 +141,7 @@ public class ExecutionService {
             if (!"machinelearning".equals(nodeInfo.getGroupName().getElabel())) {
                 String id = nodeInfo.getId();
                 if (i == 0) {
-                    mappingDfCode.append("\ndfMap += (\"" + id + "_" + i + "\" -> output)\n\n") ;
+                    mappingDfCode.append("\ndfMap += (\"" + id + "_" + i + "\" -> output)\n\n");
                 } else {
                     mappingDfCode.append("\ndfMap += (\"" + id + "_" + i + "\" -> output_" + i + ")\n\n");
                 }
@@ -201,6 +203,7 @@ public class ExecutionService {
     /**
      * 用于压力测试
      * 将所有语句放在一起执行
+     *
      * @param flowInfo
      * @param livySessionInfo
      * @return
