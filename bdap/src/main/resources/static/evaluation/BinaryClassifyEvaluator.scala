@@ -18,5 +18,4 @@ object BinaryClassifyEvaluator {
     val accuracy = evaluator.evaluate(df)
     print(accuracy)
   }
-
 }
