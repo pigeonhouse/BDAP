@@ -1,16 +1,14 @@
 import React from 'react';
 import { Redirect } from 'react-router-dom';
 import { Row, Col, Button, message, notification, Icon, Tabs } from 'antd';
-import { Motion, spring } from "react-motion";
 
 import SparkRun from '../../ClusterModeComponents/SparkRunPanel';
 import ExperimentPanel from '../ExperimentPanel';
 import VisualizedPanel from '../VisualizedPanel';
 import DataManager from "../../PublicComponents/DataManager";
-import AddMenu from './AddMenu'
+
 import { fetchTool } from '../../FetchTool';
 import styles from './index.less';
-import { relative } from 'path';
 
 /**
  * 主界面，根据link的信息，进行不同版本的组件渲染
@@ -47,8 +45,6 @@ class LocalMode extends React.Component {
 		remind: 'false',
 		connectCtrl: false,
 		running: false,
-		sliderOut:false,
-		Menuvisible:'none'
 	}
 
 	noRemind = (key) => {
@@ -59,36 +55,7 @@ class LocalMode extends React.Component {
 		exp.setTime(exp.getTime() + Days * 24 * 60 * 60 * 1000);
 		document.cookie = 'accountInfo' + "=" + escape(accountInfo) + ";expires=" + exp.toGMTString()
 	}
-    setMenuVisible=()=>{
-		if(this.state.Menuvisible=='none')
-		{
-			this.setState(
-				{
-					Menuvisible:this.state.Menuvisible=='none'?'block':'none',
-				}
-			);
-		this.setSlider();
-		}
-		else
-		{
-			this.setSlider();
-			setTimeout(()=>{
-			this.setState(
-				{
-					Menuvisible:this.state.Menuvisible=='none'?'block':'none',
-				}
-			)},750
-			)
-		}
-	}
-	setSlider=()=>{
-		this.setState(
-			{
-				sliderOut: !this.state.sliderOut
-			}
-		);
-	}
-	
+
 	componentWillMount() {
 
 		let arr, reg = new RegExp("(^| )" + 'accountInfo' + "=([^;]*)(;|$)");
@@ -221,13 +188,7 @@ class LocalMode extends React.Component {
 		//#509ee3  蓝色
 		//#a88bc3  紫色
 		const backgroundColor = '#343941'
-		const offset=-500
-		const initialX = spring(this.state.sliderOut ? offset : 0, {
-			stiffness: 170,
-			damping: 35
-		  });
 		return (
-			<div style={{width:"100%"}}>
 			<div className={styles.editor}>
 				<Row
 					style={{ lineHeight: '40px', height: '40px', backgroundColor: backgroundColor, color: "white" }}
@@ -306,23 +267,11 @@ class LocalMode extends React.Component {
 						{/* <VisualizedPanel></VisualizedPanel> */}
 					</TabPane>
 				</Tabs>
-				</div >
-			<Motion style={{ x: initialX }}>
-				{({ x }) => (
-				<div style={{position:"relative",transform: `translateY(${x}px)`,zIndex:999}}>
-				<Row type="flex" style={{top: 0, height: '65px', lineHeight: '65px', backgroundColor: backgroundColor }}
+
+				<Row type="flex" style={{ bottom: 0, height: '65px', lineHeight: '65px', backgroundColor: backgroundColor }}
 					data-step="4" data-intro="所有配置完成后，点击'运行'按钮开始运行整个工作流。" data-position='top'
 				>
-					<Col span={11}>
-					
-				<Button
-					icon="plus-circle"
-					onClick={this.setMenuVisible}
-					style={{ border: 0, backgroundColor: '#343941', color: "#ddd", fontSize: 25, height: "65px",textAlign:"left "}}
-				     >
-					添加
-		        </Button>
-					</Col>
+					<Col span={11}></Col>
 					<Col span={2}>
 						<SparkRun
 							onClickButtonRunning={this.onClickButtonRunning}
@@ -334,13 +283,7 @@ class LocalMode extends React.Component {
 					</Col>
 					<Col span={11}></Col>
 				</Row>
-			    <div className={styles.bottomMenu} style={{backgroundColor:backgroundColor,display:this.state.Menuvisible}}>
-				</div>
-				</div>	
-				)}
-				</Motion>
-				</div>	
-				
+			</div >
 		);
 	}
 }

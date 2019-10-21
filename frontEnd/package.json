@@ -71,7 +71,6 @@
     "ml-svm": "^2.1.2",
     "papaparse": "^4.6.3",
     "react-html-table-to-excel": "^2.0.0",
-    "react-motion": "^0.5.2",
     "redux": "^4.0.1",
     "url-loader": "^1.1.2"
   },

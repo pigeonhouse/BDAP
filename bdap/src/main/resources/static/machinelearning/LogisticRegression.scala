@@ -27,6 +27,7 @@ object LogisticRegression {
 
     val Model = lr.fit(assembledDF)
 
+    val output = Model
   }
 }
 
