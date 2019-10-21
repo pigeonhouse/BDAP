@@ -1,6 +1,6 @@
 object OneHotEncoder {
 
-  val ifDenseVector: String = null
+  val ifDenseVector: Boolean = null
   val targetCols: Array[String] = null
   var input: DataFrame = null
 
@@ -35,7 +35,7 @@ object OneHotEncoder {
 
     for(i <- 0 until targetCols.length){
       encodedDF = encodedDF.drop(targetCols(i) + "Index")
-      if(ifDenseVector == "true"){
+      if(ifDenseVector == true){
         encodedDF = encodedDF.withColumn(targetCols(i) + "DenseVec", myUdf(col(targetCols(i) + "SparseVec"))).drop(targetCols(i) + "SparseVec")
       }
     }
