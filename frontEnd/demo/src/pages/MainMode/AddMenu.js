@@ -16,13 +16,7 @@ render()
    
     return(
     <div>
-        <Button
-					icon="plus-circle"
-					onClick={this.onClick}
-					style={{ border: 0, backgroundColor: '#343941', color: "#ddd", fontSize: 25, height: "65px",textAlign:"left "}}
-				     >
-					添加
-		</Button>
+        
         <Menu isOpen={this.state.show} width={"50%"}>
           <a id="home" className="menu-item" href="/">
             Home
