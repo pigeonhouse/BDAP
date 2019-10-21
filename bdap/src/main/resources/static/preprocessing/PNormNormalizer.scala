@@ -1,9 +1,9 @@
-object Normalizer {
+object PNormNormalizer {
 
   val lpSpace: Double = null
   val targetCols: Array[String] = null
   val input: DataFrame = null
-  val ifInfNorm: String = null
+  val ifInfNorm: Boolean = null
 
   def main(args: Array[String]): Unit = {
     import org.apache.spark.ml.feature.{VectorAssembler, Normalizer}
@@ -17,8 +17,8 @@ object Normalizer {
 
     val scaler = new Normalizer().setInputCol("tensor_").setOutputCol("feature_").setP(lpSpace)
     val scaled = {
-      if(ifInfNorm == "true"){
-        scaler.transform(assembled, normalizer.p -> Double.PositiveInfinity).drop("tensor_")
+      if(ifInfNorm == true){
+        scaler.transform(assembled, scaler.p -> Double.PositiveInfinity).drop("tensor_")
       }
       else{
         scaler.transform(assembled).drop("tensor_")
