@@ -28,7 +28,6 @@ object LinearRegression {
 
     assembledDF.show()
     val Model = lr.fit(assembledDF)
-    val output = Model
 
   }
 }

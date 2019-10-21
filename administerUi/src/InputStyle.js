@@ -56,7 +56,7 @@ class NumberStyle extends React.Component {
                             {...formItemLayout}
                             key={`${id}_1`}
                         >
-                            {getFieldDecorator(`attributes[${index}][style][value]`, {
+                            {getFieldDecorator(`attributes[${index}][value]`, {
                                 validateTrigger: ['onChange', 'onBlur'],
                                 rules: [
                                     {
