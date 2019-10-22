@@ -102,11 +102,6 @@ class HomePage extends React.Component {
 
 	render() {
 		if (this.state.redirect) {
-			notification['success']({
-				message: '进入模式选择页面',
-				description: '在这里选择使用的模式',
-				duration: 1
-			});
 			this.setState({ redirect: false })
 			return <Redirect to={{
 				pathname: '/mainPage',
