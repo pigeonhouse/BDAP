@@ -165,10 +165,8 @@ class DataManager extends React.Component {
 
     };
     render() {
-
         const addCommonFilesTitle = <BuildModalTitle title="HDFS文件列表" />;
         return (
-
             <Row>
                 <Col span={12}>
                     <Row ><b><h2 className={style.box}>&nbsp;文件下载</h2></b></Row>
