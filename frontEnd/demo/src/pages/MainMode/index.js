@@ -6,6 +6,7 @@ import { Motion, spring } from "react-motion";
 import SparkRun from '../../ClusterModeComponents/SparkRunPanel';
 import ExperimentPanel from '../ExperimentPanel';
 import VisualizedPanel from '../VisualizedPanel';
+import DataSetPanel from '../DataSetPanel';
 import DataManager from "../../PublicComponents/DataManager";
 import AddMenu from './AddMenu'
 import { fetchTool } from '../../FetchTool';
@@ -304,6 +305,13 @@ class LocalMode extends React.Component {
 						<DataManager
 						/>
 						{/* <VisualizedPanel></VisualizedPanel> */}
+					</TabPane>
+					<TabPane
+						className={styles.leftMenu}
+						tab={<Icon type="api" className={styles.iconStyle} />}
+						key="4"
+					>
+						<DataSetPanel></DataSetPanel>
 					</TabPane>
 				</Tabs>
 				</div >

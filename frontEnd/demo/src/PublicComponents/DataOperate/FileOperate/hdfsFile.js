@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Button, TreeSelect, Form, Modal,Input } from 'antd'
+import { Button, TreeSelect, Form, Modal, Input } from 'antd'
 import { withPropsAPI } from '@src';
 import { fetchTool } from '../../../FetchTool';
 import DragM from "dragm";
@@ -33,7 +33,7 @@ class HdfsFile extends Component {
 		oppositePath: '/',
 		treeData: [],
 		fileModalVisible: false,
-		fileOppositePath:""
+		fileOppositePath: ""
 	}
 	showModal = () => {
 		this.setState({
@@ -50,11 +50,11 @@ class HdfsFile extends Component {
 			fileModalVisible: false
 		});
 	};
-	fetchfiletree=async()=>{
+	fetchfiletree = async () => {
 		const init = {
 			method: 'GET',
 			mode: 'cors',
-			headers:{
+			headers: {
 				"Cookies": this.getCookieValue("loginToken")
 			}
 		}
@@ -63,13 +63,13 @@ class HdfsFile extends Component {
 		return res;
 
 	}
-	onSelect=(key,event)=>{
-        if(key!=[]){
-      this.setState({
-          fileOppositePath:event.node.props.dataRef.totalPath
-      });
-    }
-    }
+	onSelect = (key, event) => {
+		if (key != []) {
+			this.setState({
+				fileOppositePath: event.node.props.dataRef.totalPath
+			});
+		}
+	}
 	getCookieValue = (name) => {
 		var arr = document.cookie.match(new RegExp("(^| )" + name + "=([^;]*)(;|$)"));
 		return arr;
@@ -82,7 +82,7 @@ class HdfsFile extends Component {
 		const inpValu = model.labelName.label || '';
 		this.setState({ inpValu });
 
-		const res=this.fetchfiletree;
+		const res = this.fetchfiletree;
 
 		if (res.code === 201) {
 			let treeData = res.data;
@@ -195,29 +195,29 @@ class HdfsFile extends Component {
 		};
 		return (
 			<Form onSubmit={this.handleChange}>
-			<Form.Item  label="文件路径:"{...inlineFormItemLayout}>
-				<Input disable={true} value={this.state.fileOppositePath} ></Input>
-			</Form.Item>
-			<Form.Item  label="文件树"{...inlineFormItemLayout}>
-				<Button onClick={() => this.showModal()}>点我查看文件树</Button>
-			</Form.Item>
-			<Modal
-                title={title}
-				visible={this.state.fileModalVisible}
-				onCancel={this.handleCancel}
-                footer={[
-                    <Button onClick={()=>
-                        this.handleOk()
-                    }>确定</Button>
-                ]}
-            >
-			<HdfsFileTreeModal
-				title={title}
-				visible={this.state.fileModalVisible}
-				onSelect={this.onSelect}
-			/>
-			</Modal>
-		</Form>
+				<Form.Item label="文件路径:"{...inlineFormItemLayout}>
+					<Input disable={true} value={this.state.fileOppositePath} ></Input>
+				</Form.Item>
+				<Form.Item label="文件树"{...inlineFormItemLayout}>
+					<Button onClick={() => this.showModal()}>点我查看文件树</Button>
+				</Form.Item>
+				<Modal
+					title={title}
+					visible={this.state.fileModalVisible}
+					onCancel={this.handleCancel}
+					footer={[
+						<Button onClick={() =>
+							this.handleOk()
+						}>确定</Button>
+					]}
+				>
+					<HdfsFileTreeModal
+						title={title}
+						visible={this.state.fileModalVisible}
+						onSelect={this.onSelect}
+					/>
+				</Modal>
+			</Form>
 		)
 	}
 }
