@@ -10,18 +10,18 @@ object StringIndexer {
 
   val stringOrderType: String = null
 
-  val outputCol: String = null
-  //Param for output column names.
-
   def main(args: Array[String]): Unit = {
 
     import org.apache.spark.ml.feature.StringIndexer
 
     val metaData = input
 
-    val indexer = new StringIndexer().setInputCol(targetCols).setOutputCol(outputCol).setHandleInvalid(handleInvalid).setStringOrderType(stringOrderType)
+    var indexed = metaData
 
-    val indexed = indexer.fit(input).transform(input)
+    for(i <- 0 until targetCols.length){
+      val indexer = new StringIndexer().setInputCol(targetCols(i)).setOutputCol("StringIndex" + targetCols(i)).setHandleInvalid(handleInvalid).setStringOrderType(stringOrderType)
+      indexed = indexer.fit(indexed).transform(indexed)
+    }
 
     val output = indexed
 
