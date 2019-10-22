@@ -1,11 +1,28 @@
 import React, { Fragment } from 'react';
-import { Row, Col, Input, Button, Tooltip } from 'antd';
+import { Row, Col, Input, Button, Tooltip, Upload, Icon } from 'antd';
 
 import DataCard from './DataCard';
-
 import styles from './index.less';
 
 const { Search } = Input;
+const { Dragger } = Upload;
+
+const props = {
+    name: 'file',
+    multiple: true,
+    action: 'https://www.mocky.io/v2/5cc8019d300000980a055e76',
+    onChange(info) {
+        const { status } = info.file;
+        if (status !== 'uploading') {
+            console.log(info.file, info.fileList);
+        }
+        if (status === 'done') {
+            message.success(`${info.file.name} file uploaded successfully.`);
+        } else if (status === 'error') {
+            message.error(`${info.file.name} file upload failed.`);
+        }
+    },
+};
 
 class DataSetPanel extends React.Component {
     state = {
@@ -64,7 +81,18 @@ class DataSetPanel extends React.Component {
                     <Row style={{ paddingLeft: "60px", paddingRight: "60px" }} gutter={16}>
                         <DataCard></DataCard>
                         <DataCard></DataCard>
-                        <DataCard></DataCard>
+                        <Col span={8} style={{ paddingTop: 21 }} >
+                            <Tooltip placement="bottom" title="点击上传至此文件夹" >
+                                <div>
+                                    <Dragger {...props}
+                                        className={styles.uploadStyle}
+                                        style={{ maxHeight: "70px" }}
+                                    >
+                                        <Icon type="plus" />
+                                    </Dragger>
+                                </div>
+                            </Tooltip>
+                        </Col>
                     </Row>
                 </div>
             </Fragment>

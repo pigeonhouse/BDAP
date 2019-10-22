@@ -32,19 +32,19 @@ class DataCard extends React.Component {
                                     style={{ fontSize: 30 }}
                                 />
                             </Col>
-                            <Col span={10} style={{ padding: 5, fontWeight: "bold" }} >
+                            <Col span={8} style={{ padding: 1, fontWeight: "bold", fontSize: 20 }} >
                                 adult.csv
-                        </Col>
-                            <Col span={10} style={{ paddingLeft: 5 }} >
+                            </Col>
+                            <Col span={12} style={{ paddingLeft: 5 }} >
                                 {this.state.mouseEnter === true ?
-                                    <Fragment>
-                                        <Tooltip placement="bottom" title="查看元数据" >
+                                    <div style={{ float: "right" }}>
+                                        <Tooltip placement="bottom" title="预览数据" >
                                             <Button
                                                 icon="eye"
                                                 className={styles.iconStyle}
                                             />
                                         </Tooltip>
-                                        <Tooltip placement="bottom" title="预览数据" >
+                                        <Tooltip placement="bottom" title="查看元数据" >
                                             <Button
                                                 icon="profile"
                                                 className={styles.iconStyle}
@@ -62,7 +62,7 @@ class DataCard extends React.Component {
                                                 className={styles.iconStyle}
                                             />
                                         </Tooltip>
-                                    </Fragment> : null}
+                                    </div> : null}
                             </Col>
                         </Row>
                     </Card>

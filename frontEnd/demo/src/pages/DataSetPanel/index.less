@@ -17,10 +17,19 @@
 }
 
 .icon-style {
-    border      : 0;
-    font-size   : 20px;
-    padding     : 0;
-    margin-left : 3px;
+    border   : 0;
+    font-size: 20px;
+    padding  : 0;
+    width    : 28px;
+}
+
+.upload-style {
+    :global {
+        .ant-upload.ant-upload-drag {
+            height    : 70px;
+            background: #fff;
+        }
+    }
 }
 
 .cardStyle {
