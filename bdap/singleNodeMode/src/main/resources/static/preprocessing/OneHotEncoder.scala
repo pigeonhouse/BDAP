@@ -2,7 +2,9 @@ object OneHotEncoder {
 
   val ifDenseVector: Boolean = null
   val targetCols: Array[String] = null
-  var input: DataFrame = null
+  val input: DataFrame = null
+  val dropLast: Boolean = null
+  val handleInvalid: String = null
 
   def main(args: Array[String]): Unit = {
 
@@ -29,7 +31,7 @@ object OneHotEncoder {
       indexedDF = indexerModel.transform(indexedDF)
     }
 
-    val encoder = new OneHotEncoderEstimator().setInputCols(targetCols.map(A => A + "Index")).setOutputCols(targetCols.map(A => A + "SparseVec"))
+    val encoder = new OneHotEncoderEstimator().setInputCols(targetCols.map(A => A + "Index")).setOutputCols(targetCols.map(A => A + "SparseVec")).setHandleInvalid(handleInvalid).setDropLast(dropLast)
     val encoderModel = encoder.fit(indexedDF)
     var encodedDF = encoderModel.transform(indexedDF)
 
