@@ -24,6 +24,5 @@ object StringIndexer {
     }
 
     val output = indexed
-
   }
 }
