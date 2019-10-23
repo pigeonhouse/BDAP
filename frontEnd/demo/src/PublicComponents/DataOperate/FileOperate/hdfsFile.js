@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Button, TreeSelect, Form, Modal, Input } from 'antd'
+import { Button, Form, Modal, Input } from 'antd'
 import { withPropsAPI } from '@src';
 import { fetchTool } from '../../../FetchTool';
 import DragM from "dragm";
@@ -7,7 +7,6 @@ import HdfsFileTreeModal from './HdfsFileTreeModal';
 /**
  * hdfs文件上传
  */
-
 
 class BuildModalTitle extends React.Component {
 	updateTransform = transformStr => {
@@ -35,21 +34,25 @@ class HdfsFile extends Component {
 		fileModalVisible: false,
 		fileOppositePath: ""
 	}
+
 	showModal = () => {
 		this.setState({
 			fileModalVisible: true
 		});
 	};
+
 	handleOk = e => {
 		this.setState({
 			fileModalVisible: false
 		});
 	};
+
 	handleCancel = e => {
 		this.setState({
 			fileModalVisible: false
 		});
 	};
+
 	fetchfiletree = async () => {
 		const init = {
 			method: 'GET',
@@ -63,6 +66,7 @@ class HdfsFile extends Component {
 		return res;
 
 	}
+
 	onSelect = (key, event) => {
 		if (key != []) {
 			this.setState({
@@ -70,10 +74,12 @@ class HdfsFile extends Component {
 			});
 		}
 	}
+
 	getCookieValue = (name) => {
 		var arr = document.cookie.match(new RegExp("(^| )" + name + "=([^;]*)(;|$)"));
 		return arr;
 	}
+	
 	componentWillMount() {
 		const { propsAPI } = this.props;
 		const { getSelected } = propsAPI;

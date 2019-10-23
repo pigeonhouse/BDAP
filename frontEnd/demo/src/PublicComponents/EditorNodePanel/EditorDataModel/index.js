@@ -1,7 +1,9 @@
 import React from 'react';
 import { ItemPanel, Item } from '@src';
-import { Menu, Icon, Modal, Button, Tree, message, Table, Popconfirm } from 'antd';
+import { Menu, Icon } from 'antd';
 import ItemDecoration from '../ItemDecoration';
+
+import styles from './index.less';
 
 /**
  * 左侧下拉菜单栏，包括可操作实现的组件
@@ -57,16 +59,14 @@ class FlowDataModel extends React.Component {
 
 
 	render() {
-	
-		const { TreeNode, DirectoryTree } = Tree;
 		var itemData = this.props.itemData;
-
 		return (
 			<Menu
 				defaultOpenKeys={['sub1']}
 				mode="inline"
 				style={{ maxHeight: 'calc(100vh - 105px)', borderRight: 0 }}
 				selectable={false}
+				className={styles.menuArrows}
 			>
 				<ItemDecoration />
 				<SubMenu key="sub1" title={<span><Icon type="mail" /><span>数据源</span></span>}>

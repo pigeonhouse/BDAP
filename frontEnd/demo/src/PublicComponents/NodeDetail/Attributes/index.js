@@ -174,10 +174,9 @@ class Attributes extends React.Component {
                 <Item style={{ margin: 0 }} {...inlineFormItemLayout}>
                     {
                         getFieldDecorator(`attributes[${index}]`, {
-                            initialValue: item.value === false || item.value === 'false' ? false:true,
                         })(
                             <Checkbox
-                                // checked={item.value}
+                                defaultChecked={item.value === false || item.value === 'false' ? false:true}
                                 style={{ margin: 0, marginLeft: '30px' }}
                                 onChange={this.handleChangeCheckBox.bind(this, index)}
                             >

@@ -1,9 +1,8 @@
 import React from 'react';
-import { Row, Col, Card, Form, Input, Button, message, Icon, Checkbox, notification } from 'antd';
+import { Row, Col, Card, Form, Input, Button, message, Icon, Checkbox } from 'antd';
 import { Redirect } from 'react-router-dom';
 import { fetchTool } from '../../FetchTool';
 import style from './index.less';
-import { runInThisContext } from 'vm';
 
 /**
  * 登陆界面
