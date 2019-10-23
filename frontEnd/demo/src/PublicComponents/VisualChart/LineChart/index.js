@@ -1,8 +1,14 @@
 import { getValueFromDataSet } from '../getValueFromDataSet';
 
 export function createLineChart(myChart, props) {
-    const { dataSet, chartStyle } = props;
+    const { dataSet, chartStyle, loading } = props;
     const { xLabel, yLabel, color } = chartStyle;
+    if (loading === true) {
+        myChart.showLoading();
+        return;
+    } else {
+        myChart.hideLoading();
+    }
     if (xLabel === undefined || yLabel === undefined) return;
 
     var option = {

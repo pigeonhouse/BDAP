@@ -1,9 +1,14 @@
 export function createScatterChart(myChart, props) {
-
-    const { dataSet, chartStyle } = props;
+    const { dataSet, chartStyle, loading } = props;
     const { xLabel, yLabel, color } = chartStyle;
+    if (loading === true) {
+        myChart.showLoading();
+        return;
+    } else {
+        myChart.hideLoading();
+    }
 
-    if(xLabel === undefined || yLabel === undefined) return;
+    if (xLabel === undefined || yLabel === undefined) return;
     var option = {
         xAxis: {
             name: xLabel
@@ -23,7 +28,7 @@ export function createScatterChart(myChart, props) {
     myChart.setOption(option);
 }
 
-function fetData(xLabel, yLabel, dataSet){
+function fetData(xLabel, yLabel, dataSet) {
     let value = new Array();
 
     dataSet.map((data) => {

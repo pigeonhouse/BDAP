@@ -90,6 +90,7 @@ class Summarize extends React.Component {
                     <Button
                         className={styles.button}
                         onClick={this.handleAddSummarize}
+                        loading={this.props.loading}
                         type="primary"
                     >
                         添加

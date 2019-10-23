@@ -95,6 +95,7 @@ class Filter extends React.Component {
                         className={styles.button}
                         onClick={this.handleAddFilter}
                         type="primary"
+                        loading={this.props.loading}
                     >
                         添加
                     </Button>

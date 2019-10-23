@@ -15,8 +15,6 @@ class VisualTable extends React.Component {
         });
     };
 
-
-
     setAgeSort = () => {
         this.setState({
             sortedInfo: {
@@ -28,7 +26,7 @@ class VisualTable extends React.Component {
 
     render() {
 
-        let { labelArray, dataSet } = this.props;
+        let { labelArray, dataSet, loading } = this.props;
         
         let data = [];
         let columns = [];
@@ -57,7 +55,9 @@ class VisualTable extends React.Component {
                 <Row>
                     <Col span={2}></Col>
                     <Col span={20}>
-                        <Table columns={columns}
+                        <Table 
+                            columns={columns}
+                            loading={loading}
                             dataSource={data}
                             onChange={this.handleChange}
                             pagination={{ pageSize: 50 }}

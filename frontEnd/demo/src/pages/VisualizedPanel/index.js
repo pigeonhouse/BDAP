@@ -28,9 +28,10 @@ class VisualizedPanel extends React.Component {
         labelType: [],
         groupLabel: undefined,
         chartStyle: {
-            color:['#c23531','#2f4554', '#61a0a8', '#d48265', '#91c7ae','#749f83',  '#ca8622', '#bda29a','#6e7074', '#546570', '#c4ccd3']
-            // color: "#509ee3",
+            // color: ['#c23531', '#2f4554', '#61a0a8', '#d48265', '#91c7ae', '#749f83', '#ca8622', '#bda29a', '#6e7074', '#546570', '#c4ccd3']
+            color: "#509ee3",
         },
+        loading: false,
     }
 
     changeFileName = (fileName) => {
@@ -41,7 +42,7 @@ class VisualizedPanel extends React.Component {
         this.setState({ labelArray, labelType, fileColumns: labelArray });
     }
 
-    initDataSet = (dataSet, length ) => {
+    initDataSet = (dataSet, length) => {
         this.setState({ dataSet })
     }
 
@@ -111,6 +112,7 @@ class VisualizedPanel extends React.Component {
 
     // 向后端发送请求，参数为sql语句，返回值为Dataset
     getDataSetByOperate = async (dataSourceName, filter, summarize, groupLabel) => {
+        this.setState({ loading: false });
 
         var sqlCode, label;
         var where = '', group = '';
@@ -174,6 +176,7 @@ class VisualizedPanel extends React.Component {
 
             this.changeLabelArray(fieldNameArray, labelType);
             this.changeDataSet(results.data, fieldNameArray.length);
+            this.setState({ loading: false });
         }
     }
 
@@ -200,6 +203,7 @@ class VisualizedPanel extends React.Component {
                         handleAddFilter={this.handleAddFilter}
                         handleDeleteFilter={this.handleDeleteFilter}
                         filter={this.state.filter}
+                        loading={this.state.loading}
                         labelArray={this.state.fileColumns} />
                 )
             case 'summarize':
@@ -210,6 +214,7 @@ class VisualizedPanel extends React.Component {
                         handleDeleteSummarize={this.handleDeleteSummarize}
                         summarize={this.state.summarize}
                         groupLabel={this.state.groupLabel}
+                        loading={this.state.loading}
                         labelArray={this.state.fileColumns} />
                 )
             case 'settings':
@@ -220,6 +225,7 @@ class VisualizedPanel extends React.Component {
                         chartSettings={chartSettings}
                         chartStyle={this.state.chartStyle}
                         labelArray={this.state.labelArray}
+                        loading={this.state.loading}
                         labelType={this.state.labelType}
                     />
                 )
@@ -263,6 +269,7 @@ class VisualizedPanel extends React.Component {
                             currentChart={this.state.currentChart}
                             chartStyle={this.state.chartStyle}
                             dataSet={this.state.dataSet}
+                            loading={this.state.loading}
                             labelArray={this.state.labelArray}
                         />
                         <div className={styles.footer} style={{ textAlign: "center" }} >
