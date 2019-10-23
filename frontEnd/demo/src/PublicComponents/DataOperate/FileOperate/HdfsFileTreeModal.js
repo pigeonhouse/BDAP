@@ -1,6 +1,6 @@
 import React from 'react';
 import { Button, Modal, Tree } from 'antd';
-
+import {fetchTool}from "../../../FetchTool"
  const { TreeNode } = Tree;
 
  /**
@@ -25,23 +25,24 @@ class HdfsFileTreeModal extends React.Component {
      * 异步加载数据
      * @param treeNode 树节点
      */
-    onLoadData = treeNode => new Promise((resolve) => {
+    onLoadData = treeNode =>  new Promise(async (resolve) => {
         if (treeNode && treeNode.props.children) {
             resolve();
             return;
         }
+        var body=`{ "oppositePath": ${treeNode != null ? treeNode.props.dataRef.totalPath : '/'}}`
+        
         const init = {
-            method: 'GET',
+            method: 'POST',
+            body:body,
             mode: 'cors',
+            withcredentials:true,
             headers: {
-                'Content-Type': 'application/json;charset=utf-8',
-                Cookie: 'loginToken=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJsaXZ5QWRkciI6IjEwLjEwNS4yMjIuOTA6ODk5OCIsImF1ZCI6IjIwMTcyMTE1MTEiLCJzZXNzaW9uSWQiOjExMCwidXNlcklkIjoiMjAxNzIxMTUxMSJ9.2onDSv-cMXqh31MCA2tV967xU6CwrrZdNGZjZZisOrk',
+                "Content-Type": "application/json;charset=utf-8"
             },
-            credentials: 'include',
         };
-        fetch(`http://localhost:8888/hdfs?oppositePath=${treeNode != null ? treeNode.props.dataRef.totalPath : '/'}`, init).then((res) => {
-            if (res.status === 200) {
-                res.json().then((res) => {
+        const res=await fetchTool('/hdfs/', init);
+
 
                      if (res.code === 201) {
                         const data = res.data;
@@ -70,9 +71,9 @@ class HdfsFileTreeModal extends React.Component {
                             }
                         }
                     }
-                });
-            }
-        });
+             
+            
+      
         resolve();
     })
 
