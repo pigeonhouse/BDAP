@@ -25,7 +25,6 @@ object PNormNormalizer {
       }
     }
 
-
     val colNames: Array[Attribute] = {
       val numAttrs = targetCols.length
       Array.tabulate(numAttrs)(i => NumericAttribute.defaultAttr.withName("Normalizer" + targetCols(i)))

@@ -2,21 +2,27 @@ object StringIndexer {
 
   val input: DataFrame = null
 
+  val handleInvalid: String = null
+  //Param for how to handle invalid entries.
+
+  val targetCols: Array[String] = null
+  //Param for input column names.
+
+  val stringOrderType: String = null
+
   def main(args: Array[String]): Unit = {
 
     import org.apache.spark.ml.feature.StringIndexer
 
-    val df = spark.createDataFrame(
-      Seq((0, "a"), (1, "b"), (2, "c"), (3, "a"), (4, "a"), (5, "c"))
-    ).toDF("id", "category")
+    val metaData = input
 
-    val indexer = new StringIndexer()
-      .setInputCol("category")
-      .setOutputCol("categoryIndex")
+    var indexed = metaData
 
-    val indexed = indexer.fit(df).transform(df)
+    for(i <- 0 until targetCols.length){
+      val indexer = new StringIndexer().setInputCol(targetCols(i)).setOutputCol("StringIndex" + targetCols(i)).setHandleInvalid(handleInvalid).setStringOrderType(stringOrderType)
+      indexed = indexer.fit(indexed).transform(indexed)
+    }
 
     val output = indexed
-
   }
 }

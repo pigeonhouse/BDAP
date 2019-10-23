@@ -5,8 +5,8 @@ import org.apache.spark.sql.functions.col
 
 object LinearRegression {
   val input: DataFrame = null
-  val elasticNetParam: Double = 0.8
-  val fitIntercept: Boolean = false
+  val elasticNetParam: Double = null
+  val fitIntercept: Boolean = null
   val labelCols: Array[String] = null
   val trainCols: Array[String] = null
   val maxIter: Int = null

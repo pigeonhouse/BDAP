@@ -1,7 +1,7 @@
 object NaiveBayes {
 
   val input: DataFrame = null
-  val modelTypes: Array[String] = null   // 只有两种模型 "multinomial" 或 "bernoulli" ，默认为多项式
+  val modelType: String = null   // 只有两种模型 "multinomial" 或 "bernoulli" ，默认为多项式
   val smoothing: Double = null
   val trainCols: Array[String] = null
   val labelCols: Array[String] = null
@@ -14,7 +14,6 @@ object NaiveBayes {
     import org.apache.spark.ml.classification.NaiveBayes
 
     val labelCol = labelCols(0)
-    val modelType = modelTypes(0)
 
     val metaData = input
     val assembler = new VectorAssembler().setInputCols(trainCols).setOutputCol("features_")
@@ -24,6 +23,8 @@ object NaiveBayes {
     val NB = new NaiveBayes().setFeaturesCol("features_").setLabelCol(labelCol).setModelType(modelType).setSmoothing(smoothing)
 
     val Model = NB.fit(assembledDF)
+
+    val output = Model
 
   }
 }
