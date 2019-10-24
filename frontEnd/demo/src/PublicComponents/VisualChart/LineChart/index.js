@@ -1,7 +1,7 @@
 import { getValueFromDataSet } from '../getValueFromDataSet';
 
 export function createLineChart(myChart, props) {
-    const { dataSet, chartStyle, loading } = props;
+    const { dataSet, chartStyle, loading, titleText } = props;
     const { xLabel, yLabel, color } = chartStyle;
     if (loading === true) {
         myChart.showLoading();
@@ -12,6 +12,10 @@ export function createLineChart(myChart, props) {
     if (xLabel === undefined || yLabel === undefined) return;
 
     var option = {
+        title: {
+            text: titleText,
+            x: 'center'
+        },
         xAxis: {
             name: xLabel,
             type: 'category',

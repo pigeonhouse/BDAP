@@ -31,6 +31,7 @@ class VisualizedPanel extends React.Component {
             // color: ['#c23531', '#2f4554', '#61a0a8', '#d48265', '#91c7ae', '#749f83', '#ca8622', '#bda29a', '#6e7074', '#546570', '#c4ccd3']
             color: "#509ee3",
         },
+        titleText: '',
         loading: false,
     }
 
@@ -54,8 +55,8 @@ class VisualizedPanel extends React.Component {
         this.setState({ dataSet })
     }
 
-    handleChangeChartStyle = (chartStyle) => {
-        this.setState({ chartStyle })
+    handleChangeChartStyle = (chartStyle, obj = {}) => {
+        this.setState({ chartStyle, ...obj })
     }
 
     //group by的label修改
@@ -268,6 +269,7 @@ class VisualizedPanel extends React.Component {
                         <VisualChart
                             currentChart={this.state.currentChart}
                             chartStyle={this.state.chartStyle}
+                            titleText={this.state.titleText}
                             dataSet={this.state.dataSet}
                             loading={this.state.loading}
                             labelArray={this.state.labelArray}
