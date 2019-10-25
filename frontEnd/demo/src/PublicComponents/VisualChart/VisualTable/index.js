@@ -24,17 +24,19 @@ class VisualTable extends React.Component {
         });
     };
 
-    render() {
 
+
+
+    render() {
         let { labelArray, dataSet, loading } = this.props;
-        
+
         let data = [];
         let columns = [];
 
         dataSet.map((item, index) => {
             data.push({
                 key: index,
-                ...item
+                ...item,
             });
         })
 
@@ -43,6 +45,7 @@ class VisualTable extends React.Component {
                 title: item,
                 dataIndex: item,
                 key: item,
+                width:100,
             })
         })
 
@@ -51,20 +54,21 @@ class VisualTable extends React.Component {
         filteredInfo = filteredInfo || {};
 
         return (
-            <div style={{ paddingTop: 10 }}>
+            <div style={{ paddingTop: 10 }} >
                 <Row>
-                    <Col span={2}></Col>
-                    <Col span={20}>
-                        <Table 
+                    <Col span={3}></Col>
+                    <Col span={18} >
+                        <Table
                             columns={columns}
-                            loading={loading}
                             dataSource={data}
+                            bordered
+                            loading={loading}
                             onChange={this.handleChange}
                             pagination={{ pageSize: 50 }}
-                            scroll={{ x: "110%", y: "calc(105vh - 405px)" }}
+                             scroll={{ y: "calc(105vh - 405px)" ,x:"100% "}}
                         />
                     </Col>
-                    <Col span={2}></Col>
+                    <Col span={3}></Col>
                 </Row>
             </div>
         );

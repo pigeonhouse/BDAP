@@ -86,7 +86,7 @@ class ExperimentList extends React.Component {
 			const datatemp = searchData[index];
 			if (datatemp.experimentId === experimentId) {
 				searchData.splice(index, 1);
-				this.setState({searchData:searchData})
+				this.setState({ searchData: searchData })
 			}
 		}
 	}
@@ -158,7 +158,7 @@ class ExperimentList extends React.Component {
 	handelResetButton = () => {
 		this.setState({
 			searchText: "",
-		},()=>{this.onSearch()})
+		}, () => { this.onSearch() })
 	}
 	//对搜索数据的匹配
 	onSearch = () => {
@@ -226,6 +226,8 @@ class ExperimentList extends React.Component {
 				description: item.description,
 			})
 		})
+
+
 		const columns = [
 			{
 				title: "title",
@@ -247,18 +249,18 @@ class ExperimentList extends React.Component {
 		};
 
 		return (
-			<div style={{ marginLeft: 20, marginTop: 20 }}>
+			<div style={{marginTop: 50 }}>
 				<Row>
-					<Col span={12}>
+					<Col span={1}></Col>
+					<Col span={10}>
 						<Button
-							type="primary"
 							style={{ marginRight: 10, marginBottom: 10 }}
 							onClick={this.handleNewButton}
 						>
 							新建项目
 						</Button>
 						<Button
-							type="primary"
+							
 							onClick={this.handleDeleteButton}
 							style={{ marginBottom: 10 }}
 						>
@@ -277,6 +279,7 @@ class ExperimentList extends React.Component {
 							dataSource={data}
 							pagination={{ pageSize: 6 }} />
 					</Col>
+					<Col span={1}></Col>
 					<Col span={12}>
 						<GGEditor>
 							<FlowMinimap minimapInfo={minimapInfo} ></FlowMinimap>
