@@ -41,8 +41,8 @@ class LocalMode extends React.Component {
 
 	state = {
 		sessionFinish: false,
-		currentTab: '1',
-		clickTab: '1',
+		currentTab: '2',
+		clickTab: '2',
 		username: '',
 		password: '',
 		remind: 'false',
@@ -89,7 +89,7 @@ class LocalMode extends React.Component {
 			}
 		);
 	}
-	
+
 	componentWillMount() {
 
 		let arr, reg = new RegExp("(^| )" + 'accountInfo' + "=([^;]*)(;|$)");
@@ -152,7 +152,7 @@ class LocalMode extends React.Component {
 
 
 	componentDidMount() {
-		if (this.state.sessionFinish === false && 
+		if (this.state.sessionFinish === false &&
 			this.props.location.state !== undefined) {
 			this.querySession();
 		}
@@ -322,7 +322,7 @@ class LocalMode extends React.Component {
 					data-step="4" data-intro="所有配置完成后，点击'运行'按钮开始运行整个工作流。" data-position='top'
 				>
 					<Col span={11}>
-					
+
 				<Button
 					icon="plus-circle"
 					onClick={this.setMenuVisible}
@@ -344,11 +344,11 @@ class LocalMode extends React.Component {
 				</Row>
 			    <div className={styles.bottomMenu} style={{backgroundColor:backgroundColor,display:this.state.Menuvisible}}>
 				</div>
-				</div>	
+				</div>
 				)}
 				</Motion>
-				</div>	
-				
+				</div>
+
 		);
 	}
 }

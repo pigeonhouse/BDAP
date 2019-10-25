@@ -76,8 +76,6 @@ public class UserController {
                 data.put("userInfo", userForBase);
                 data.put("sessionInfo", sessionInfo);
 
-
-
                 JSONObject returnJson = new JSONObject();
                 returnJson.put("code",200);
                 returnJson.put("message","登录成功");

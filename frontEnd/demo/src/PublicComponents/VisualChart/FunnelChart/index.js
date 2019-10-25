@@ -1,7 +1,7 @@
 import { getValueFromDataSet } from '../getValueFromDataSet';
 
 export function createFunnelChart(myChart, props) {
-    const { dataSet, chartStyle, loading } = props;
+    const { dataSet, chartStyle, loading, titleText } = props;
     const { xLabel, yLabel, color } = chartStyle;
     if (loading === true) {
         myChart.showLoading();
@@ -13,7 +13,8 @@ export function createFunnelChart(myChart, props) {
     if (xLabel === undefined || yLabel === undefined) return;
     var option = {
         title: {
-            text: '漏斗图',
+            text: titleText,
+            x: 'center'
         },
         tooltip: {
             trigger: 'item',
@@ -28,6 +29,7 @@ export function createFunnelChart(myChart, props) {
         // },
         legend: {
             data: getValueFromDataSet(xLabel, dataSet),
+            x: 'left'
         },
         calculable: true,
         series: [
