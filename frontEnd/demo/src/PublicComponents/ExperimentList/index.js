@@ -16,7 +16,7 @@ class ExperimentList extends React.Component {
 		filterDropdownVisible: false,
 		searchText: '',
 		filtered: false,
-		searchData:[],
+		searchData: [],
 	}
 
 	fetchModalList = async () => {
@@ -35,12 +35,10 @@ class ExperimentList extends React.Component {
 	}
 
 	async componentWillMount() {
-		const data =  await this.fetchModalList();
-		console.log(data)
-		console.log("data!")
+		const data = await this.fetchModalList();
 		this.setState({
 			dataSource: data,
-			searchData:data,
+			searchData: data,
 		})
 	}
 
@@ -49,7 +47,7 @@ class ExperimentList extends React.Component {
 		this.props.handleClickEnter(null);
 	}
 
-	// 完成标题到id的转化
+	// 完成标题到id的转化，时而title是string 点击搜索时为json文件，但这个判断没有问题
 	getExperimentByText = (text) => {
 		const { dataSource } = this.state;
 		for (let index in dataSource) {
@@ -67,6 +65,7 @@ class ExperimentList extends React.Component {
 	}
 
 	deleteModal = async (experimentId) => {
+		console.log("deleteModal")
 		const init = {
 			method: 'DELETE',
 			mode: 'cors',
@@ -80,13 +79,14 @@ class ExperimentList extends React.Component {
 			return res.data
 		}
 	}
-	getDeleteSearchData=(experimentId)=>{
-		const searchData=this.state.searchData;
+	//当执行删除操作时，对searchData进行处理，即执行删除操作
+	getDeleteSearchData = (experimentId) => {
+		const searchData = this.state.searchData;
 		for (let index in searchData) {
 			const datatemp = searchData[index];
 			if (datatemp.experimentId === experimentId) {
-				searchData.splice(index,1);
-				this.setState({searchData})
+				searchData.splice(index, 1);
+				this.setState({searchData:searchData})
 			}
 		}
 	}
@@ -95,22 +95,20 @@ class ExperimentList extends React.Component {
 	handleDeleteButton = () => {
 		const selectTitleDelte = this.state.selectedRowKeys;
 		const self = this;
-		
+
 		if (selectTitleDelte === null) {
 			message.warning("请先选择要删除的选项");
 		}
 		else {
-			var { dataSource, experiment} = self.state;
+			var { dataSource, experiment } = self.state;
 			const titleKey = dataSource[selectTitleDelte].title;
-			console.log("titleKey");
-			console.log(JSON.stringify(titleKey));
-			const experimentId=dataSource[selectTitleDelte].experimentId;
+			const experimentId = dataSource[selectTitleDelte].experimentId;
 			confirm({
 				title: 'Do you Want to delete this item?',
 				content: titleKey,
 				onOk() {
-					self.getDeleteSearchData(experimentId);
 					dataSource.splice(selectTitleDelte[0], 1);
+					self.getDeleteSearchData(experimentId);
 					self.deleteModal(experiment.experimentId);
 					self.setState({ dataSource, selectedRowKeys: null });
 				}
@@ -135,9 +133,7 @@ class ExperimentList extends React.Component {
 	}
 
 	onRowClick = async (record, index) => {
-
 		const experiment = this.state.experiment;
-        console.log(record.title+"ll")
 		const nextExperiment = this.getExperimentByText(record.title);
 
 		if (experiment !== null &&
@@ -158,21 +154,28 @@ class ExperimentList extends React.Component {
 	onInputChange = (e) => {
 		this.setState({ searchText: e.target.value });
 	}
+	//处理重置按钮
+	handelResetButton = () => {
+		this.setState({
+			searchText: "",
+		},()=>{this.onSearch()})
+	}
+	//对搜索数据的匹配
 	onSearch = () => {
-		const {searchText} = this.state;
+		const { searchText } = this.state;
 		const data = this.state.searchData;
 		const reg = new RegExp(searchText, 'gi');
 		this.setState({
 			filterDropdownVisible: false,
 			filtered: !!searchText,
+			searchText: "",
 			dataSource: data.map((record) => {
-				 const match = record.title.match(reg);
+				const match = record.title.match(reg);
 				if (!match) {
 					return null;
 				}
 				return {
 					...record,
-					key:record.title,
 					title: (
 						<span>
 							{record.title.split(reg).map((item, i) => (
@@ -185,17 +188,22 @@ class ExperimentList extends React.Component {
 		});
 	}
 
+	//搜索页面的实现
 	getColumnSearchProps = () => ({
 		filterDropdown: (
-			<div className="custom-filter-dropdown">
+			<div style={{ padding: "8px", borderRadius: "6px", background: "#fff", boxShadow: "0 1px 5px" }}>
 				<Input
+					style={{ width: "150px" }}
 					ref={ele => this.searchInput = ele}
 					placeholder="Search name"
 					value={this.state.searchText}
 					onChange={this.onInputChange}
 					onPressEnter={this.onSearch}
 				/>
-				<Button type="primary" onClick={this.onSearch}>Search</Button>
+				<Button onClick={this.onSearch}
+					style={{ marginLeft: 10, marginTop: 10 }}>搜索</Button>
+				<Button onClick={this.handelResetButton}
+					style={{ marginLeft: 10, marginTop: 10 }}>重置</Button>
 			</div>
 		),
 		filterIcon: <Icon type="search" style={{ color: this.state.filtered ? '#108ee9' : '#aaa' }} />,
@@ -209,10 +217,9 @@ class ExperimentList extends React.Component {
 
 
 	render() {
-
 		const { dataSource } = this.state;
 		let data = new Array();
-		
+
 		dataSource.map((item) => {
 			data.push({
 				title: item.title,
@@ -223,7 +230,7 @@ class ExperimentList extends React.Component {
 			{
 				title: "title",
 				dataIndex: 'title',
-			    ...this.getColumnSearchProps(),
+				...this.getColumnSearchProps(),
 				render: text => <a onClick={this.handleEnterModel.bind(this, text)} >{text}</a>,
 			},
 			{
