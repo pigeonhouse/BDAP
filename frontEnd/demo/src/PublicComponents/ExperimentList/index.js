@@ -91,14 +91,14 @@ class ExperimentList extends React.Component {
 		}
 	}
 	//找到dataSoure的title对应的searchData的title
-	getDeleteTitle=(experimentId)=>{
+	getDeleteTitle = (experimentId) => {
 		const searchData = this.state.searchData;
 		for (let index in searchData) {
 			const datatemp = searchData[index];
 			if (datatemp.experimentId === experimentId) {
 				return datatemp.title
 			}
-		}	
+		}
 	}
 	//点击删除的处理
 	handleDeleteButton = () => {
@@ -258,10 +258,10 @@ class ExperimentList extends React.Component {
 		};
 
 		return (
-			<div style={{marginTop: 50 }}>
-				<Row>
-					<Col span={1}></Col>
-					<Col span={10}>
+			<Row style={{ height: "calc(100vh - 105px)" }} >
+				<Col span={1}></Col>
+				<Col span={11} >
+					<div style={{ height: "calc(100vh - 105px)", paddingTop: 50 }} >
 						<Button
 							style={{ marginRight: 10, marginBottom: 10 }}
 							onClick={this.handleNewButton}
@@ -269,13 +269,12 @@ class ExperimentList extends React.Component {
 							新建项目
 						</Button>
 						<Button
-							
+
 							onClick={this.handleDeleteButton}
 							style={{ marginBottom: 10 }}
 						>
 							删除
 						</Button>
-
 						<Table
 							bordered
 							rowSelection={rowSelection}
@@ -287,15 +286,17 @@ class ExperimentList extends React.Component {
 							columns={columns}
 							dataSource={data}
 							pagination={{ pageSize: 6 }} />
-					</Col>
-					<Col span={1}></Col>
-					<Col span={12}>
-						<GGEditor>
-							<FlowMinimap minimapInfo={minimapInfo} ></FlowMinimap>
-						</GGEditor>
-					</Col>
-				</Row>
-			</div>)
+					</div>
+				</Col>
+				<Col span={1} style={{ height: "calc(100vh - 105px)", borderRight: "1px solid #ececec" }}> </Col>
+				<Col span={1} ></Col>
+				<Col span={10}>
+					<GGEditor>
+						<FlowMinimap minimapInfo={minimapInfo} ></FlowMinimap>
+					</GGEditor>
+				</Col>
+			</Row>
+		)
 	}
 }
 

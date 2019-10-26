@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component, Fragment } from 'react';
 import GGEditor, { Flow, withPropsAPI } from '@src';
 import { Row, Col, message } from 'antd';
 import { FlowToolbar } from '../../PublicComponents/EditorToolbar';
@@ -26,9 +26,9 @@ class ExperimentPanel extends Component {
     saveStream = async (init, url, experiment) => {
         const res = await fetchTool(url, init);
         if (res.code === 201) {
-            this.setState({ experiment: {...experiment, experimentId: res.data.experimentId} });
+            this.setState({ experiment: { ...experiment, experimentId: res.data.experimentId } });
             message.success('存储成功');
-        } else if(res.code === 203) {
+        } else if (res.code === 203) {
             message.success('存储成功');
         } else {
             message.error('存储失败');
@@ -69,7 +69,9 @@ class ExperimentPanel extends Component {
 
     render() {
         const { currentTab, clickTab } = this.props;
-        if (currentTab === '1' && clickTab === '1') {
+        if (currentTab !== '1') return <Fragment></Fragment>;
+
+        if (clickTab === '1') {
             const { experiment } = this.state;
             if (experiment !== null) {
                 this.setState({ experiment: null })
@@ -84,7 +86,6 @@ class ExperimentPanel extends Component {
                 </div>
             );
         }
-
         return (
             <GGEditor className={styles.editor} >
                 <Row type="flex" style={{ height: 'calc(100vh - 105px)' }}>
