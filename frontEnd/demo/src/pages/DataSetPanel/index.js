@@ -24,6 +24,17 @@ class DataSetPanel extends React.Component {
     }
 
     handleClickFile = (index) => {
+        if (this.props.sessionFinish === false) {
+			const args = {
+				message: 'Session',
+				description:
+					'正在创建session，请稍候',
+				key: "session"
+			};
+			notification['info'](args);
+			return;
+        }
+        
         console.log(this.state.fileList[index]);
         this.props.handleClickEnter();
     }

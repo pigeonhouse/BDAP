@@ -21,6 +21,11 @@ class FileCard extends React.Component {
         this.setState({ mouseEnter: false });
     }
 
+    deleteFile = (e) => {
+        e.stopPropagation();
+        console.log("-----=--")
+    }
+
     render() {
         const { file } = this.props;
 
@@ -68,6 +73,7 @@ class FileCard extends React.Component {
                                             <Button
                                                 icon="delete"
                                                 className={styles.iconStyle}
+                                                onClick={this.deleteFile}
                                             />
                                         </Tooltip>
                                     </div> : null}
