@@ -39,10 +39,10 @@ const { Item } = Form;
 const Option = Select.Option;
 const inlineFormItemLayout = {
     labelCol: {
-        sm: { span: 8 },
+        sm: { span: 11 },
     },
     wrapperCol: {
-        sm: { span: 16 },
+        sm: { span: 13 },
     },
 };
 
@@ -91,7 +91,7 @@ class Attributes extends React.Component {
         if (!item) {
             return;
         }
-        
+
         var attributes = JSON.parse(JSON.stringify(item.model.attributes));
         attributes[index].value = value;
         executeCommand(() => {
@@ -120,6 +120,7 @@ class Attributes extends React.Component {
         const { getFieldDecorator } = form;
 
         if (item.styleType === 'Select') {
+            const menu = item.style.menu;
             return (
                 <Item style={{ margin: 0 }} label={item.labelName.label} {...inlineFormItemLayout}>
                     {
@@ -127,7 +128,7 @@ class Attributes extends React.Component {
                             initialValue: item.value,
                         })(
                             <Select onChange={this.handleSelectChange.bind(this, index)}>
-                                {item.style.menu.map((value) => {
+                                {menu.map((value) => {
                                     return <Option value={value.elabel}>{value.label}</Option>
                                 })}
                             </Select>
@@ -171,13 +172,12 @@ class Attributes extends React.Component {
         }
         else if (item.styleType === 'CheckBox') {
             return (
-                <Item style={{ margin: 0 }} {...inlineFormItemLayout}>
+                <Item style={{ margin: 0, textAlign: "center" }} >
                     {
                         getFieldDecorator(`attributes[${index}]`, {
                         })(
                             <Checkbox
-                                defaultChecked={item.value === false || item.value === 'false' ? false:true}
-                                style={{ margin: 0, marginLeft: '30px' }}
+                                defaultChecked={item.value === false || item.value === 'false' ? false : true}
                                 onChange={this.handleChangeCheckBox.bind(this, index)}
                             >
                                 {item.labelName.label}
