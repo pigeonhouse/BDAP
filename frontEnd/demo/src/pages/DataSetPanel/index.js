@@ -1,6 +1,8 @@
 import React, { Fragment } from 'react';
 import { Row, Col, Input, Button, Tooltip } from 'antd';
 
+import ActiveFileList from '../../PublicComponents/DataOperate/ActiveFileList';
+import UploadFile from '../../PublicComponents/DataOperate/UploadFile';
 import VisualizedPanel from '../VisualizedPanel';
 import DataSetCard from '../../PublicComponents/DataSetCard';
 import styles from './index.less';
@@ -24,6 +26,17 @@ class DataSetPanel extends React.Component {
     }
 
     handleClickFile = (index) => {
+        if (this.props.sessionFinish === false) {
+			const args = {
+				message: 'Session',
+				description:
+					'正在创建session，请稍候',
+				key: "session"
+			};
+			notification['info'](args);
+			return;
+        }
+        
         console.log(this.state.fileList[index]);
         this.props.handleClickEnter();
     }
@@ -67,24 +80,20 @@ class DataSetPanel extends React.Component {
                             </Tooltip>
                         </Col>
                         <Col span={6} style={{ paddingLeft: "20px" }} >
-                            <Tooltip placement="bottom" title="上传文件" >
-                                <Button
-                                    icon="upload"
-                                    className={styles.buttonStyle}
-                                />
-                            </Tooltip>
+
+                            {/* 上传文件 */}
+                            <UploadFile />
+
                             <Tooltip placement="bottom" title="新建文件夹" >
                                 <Button
                                     icon="folder-add"
                                     className={styles.buttonStyle}
                                 />
                             </Tooltip>
-                            <Tooltip placement="bottom" title="常用文件列表" >
-                                <Button
-                                    icon="star"
-                                    className={styles.buttonStyle}
-                                />
-                            </Tooltip>
+                            
+                            {/* 常用文件列表 */}
+                            <ActiveFileList />
+
                             <Tooltip placement="bottom" title="返回上一页" >
                                 <Button
                                     icon="left"
