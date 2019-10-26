@@ -1,6 +1,7 @@
 import React, { Fragment } from 'react';
 import { Row, Col, Input, Button, Tooltip } from 'antd';
 
+import UploadFile from '../../PublicComponents/DataOperate/UploadFile';
 import VisualizedPanel from '../VisualizedPanel';
 import DataSetCard from '../../PublicComponents/DataSetCard';
 import styles from './index.less';
@@ -78,12 +79,7 @@ class DataSetPanel extends React.Component {
                             </Tooltip>
                         </Col>
                         <Col span={6} style={{ paddingLeft: "20px" }} >
-                            <Tooltip placement="bottom" title="上传文件" >
-                                <Button
-                                    icon="upload"
-                                    className={styles.buttonStyle}
-                                />
-                            </Tooltip>
+                            <UploadFile />
                             <Tooltip placement="bottom" title="新建文件夹" >
                                 <Button
                                     icon="folder-add"

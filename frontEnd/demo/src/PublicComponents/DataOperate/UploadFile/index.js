@@ -1,5 +1,7 @@
 import React from 'react';
-import { Upload, Button, Icon, Modal, Row, Table, Input, InputNumber, Popconfirm, Form } from 'antd';
+import { Upload, Button, Icon, Modal, Table, Input, InputNumber, Popconfirm, Form, Tooltip } from 'antd';
+
+import styles from './index.less';
 
 const data = [];
 for (let i = 0; i < 100; i++) {
@@ -211,10 +213,14 @@ class UploadFile extends React.Component {
         });
 
         return (
-            <Row>
-                <Button onClick={this.showModal}>
-                    <Icon type="upload" /> 上传文件
-                </Button>
+            <div style={{ display: "inline" }} >
+                <Tooltip placement="bottom" title="上传文件" >
+                    <Button
+                        icon="upload"
+                        className={styles.buttonStyle}
+                        onClick={this.showModal}
+                    />
+                </Tooltip>
                 <Modal
                     title="上传文件"
                     visible={this.state.visible}
@@ -222,13 +228,11 @@ class UploadFile extends React.Component {
                     onCancel={this.handleCancel}
                     width="700px"
                 >
-                    <Row>
-                        <Upload {...props} withCredentials={true} data={() => this.handleUploadData()}>
-                            <Button>
-                                <Icon type="upload" /> 将文件上传至HDFS
+                    <Upload {...props} withCredentials={true} data={() => this.handleUploadData()}>
+                        <Button>
+                            <Icon type="upload" /> 将文件上传至HDFS
     		                </Button>
-                        </Upload>
-                    </Row>
+                    </Upload>
                     {/* <Row>
                         <Radio.Group onChange={this.onChangereplace} defaultValue={true}>
                             <p>是否覆盖原有文件: &nbsp;
@@ -245,7 +249,6 @@ class UploadFile extends React.Component {
                             </p>
                         </Radio.Group>
                     </Row> */}
-
                     <EditableContext.Provider value={this.props.form}>
                         <Table
                             style={{ top: 20 }}
@@ -262,7 +265,7 @@ class UploadFile extends React.Component {
                         />
                     </EditableContext.Provider>
                 </Modal>
-            </Row>
+            </div>
         );
     }
 }
