@@ -8,6 +8,12 @@ class FileFolderCard extends React.Component {
         mouseEnter: false,
     }
 
+    // 点击文件夹后进入此文件夹
+    handleClickFileFolder = () => {
+        const { index } = this.props;
+        this.props.handleClickFileFolder(index);
+    }
+
     mouseEnter = () => {
         this.setState({ mouseEnter: true });
     }
@@ -17,46 +23,30 @@ class FileFolderCard extends React.Component {
     }
 
     render() {
+        const { fileFolder } = this.props;
         return (
             <Col span={8}>
-                <Tooltip placement="bottom" title="点击进行可视化" >
+                <Tooltip placement="bottom" title="点击进入文件夹" >
                     <Card
                         className={styles.cardStyle}
                         onMouseEnter={this.mouseEnter}
                         onMouseLeave={this.mouseLeave}
+                        onClick={this.handleClickFileFolder}
                     >
                         <Row style={{ paddingLeft: 10, paddingRight: 10 }}>
                             <Col span={4} >
                                 <Icon
-                                    type="file"
+                                    type={this.state.mouseEnter ? "folder-open" : "folder"}
                                     style={{ fontSize: 30 }}
                                 />
                             </Col>
                             <Col span={8} style={{ padding: 1, fontWeight: "bold", fontSize: 20 }} >
-                                adult.csv
+                                {fileFolder.fileName}
                             </Col>
                             <Col span={12} style={{ paddingLeft: 5 }} >
                                 {this.state.mouseEnter === true ?
                                     <div style={{ float: "right" }}>
-                                        <Tooltip placement="bottom" title="预览数据" >
-                                            <Button
-                                                icon="eye"
-                                                className={styles.iconStyle}
-                                            />
-                                        </Tooltip>
-                                        <Tooltip placement="bottom" title="查看元数据" >
-                                            <Button
-                                                icon="profile"
-                                                className={styles.iconStyle}
-                                            />
-                                        </Tooltip>
-                                        <Tooltip placement="bottom" title="标记为常用文件" >
-                                            <Button
-                                                icon="star"
-                                                className={styles.iconStyle}
-                                            />
-                                        </Tooltip>
-                                        <Tooltip placement="bottom" title="删除文件或文件夹" >
+                                        <Tooltip placement="bottom" title="删除文件夹" >
                                             <Button
                                                 icon="delete"
                                                 className={styles.iconStyle}

@@ -8,6 +8,11 @@ class FileCard extends React.Component {
         mouseEnter: false,
     }
 
+    handleClickFile = () => {
+        const { index } = this.props;
+        this.props.handleClickFile(index);
+    }
+
     mouseEnter = () => {
         this.setState({ mouseEnter: true });
     }
@@ -17,6 +22,8 @@ class FileCard extends React.Component {
     }
 
     render() {
+        const { file } = this.props;
+
         return (
             <Col span={8}>
                 <Tooltip placement="bottom" title="点击进行可视化" >
@@ -24,16 +31,17 @@ class FileCard extends React.Component {
                         className={styles.cardStyle}
                         onMouseEnter={this.mouseEnter}
                         onMouseLeave={this.mouseLeave}
+                        onClick={this.handleClickFile}
                     >
                         <Row style={{ paddingLeft: 10, paddingRight: 10 }}>
                             <Col span={4} >
                                 <Icon
-                                    type={this.state.mouseEnter ? "folder-open" : "folder"}
+                                    type="file"
                                     style={{ fontSize: 30 }}
                                 />
                             </Col>
                             <Col span={8} style={{ padding: 1, fontWeight: "bold", fontSize: 20 }} >
-                                adult.csv
+                                {file.fileName}
                             </Col>
                             <Col span={12} style={{ paddingLeft: 5 }} >
                                 {this.state.mouseEnter === true ?
@@ -44,9 +52,9 @@ class FileCard extends React.Component {
                                                 className={styles.iconStyle}
                                             />
                                         </Tooltip>
-                                        <Tooltip placement="bottom" title="查看元数据" >
+                                        <Tooltip placement="bottom" title="下载数据" >
                                             <Button
-                                                icon="profile"
+                                                icon="download"
                                                 className={styles.iconStyle}
                                             />
                                         </Tooltip>
@@ -56,7 +64,7 @@ class FileCard extends React.Component {
                                                 className={styles.iconStyle}
                                             />
                                         </Tooltip>
-                                        <Tooltip placement="bottom" title="删除文件或文件夹" >
+                                        <Tooltip placement="bottom" title="删除文件" >
                                             <Button
                                                 icon="delete"
                                                 className={styles.iconStyle}

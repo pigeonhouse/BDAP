@@ -9,12 +9,25 @@ const { Search } = Input;
 class DataSetPanel extends React.Component {
     state = {
         homePath: "bdap/students/2017211511",
-        filePath: ["bdap", "student", "2017211511"],
+        filePath: ["bdap", "student", "2017211511", "/"],
         fileList: [
-            {fileName:"adult", fileFolder: true},
-            {fileName:"adult.csv", fileFolder: false, activeFile: false},
-            {fileName:"adult.csv", fileFolder: false, activeFile: true},
+            { fileName: "adult", fileFolder: true },
+            { fileName: "adult", fileFolder: true },
+            { fileName: "adult", fileFolder: true },
+            { fileName: "adult.csv", fileFolder: false, activeFile: false },
+            { fileName: "adult.csv", fileFolder: false, activeFile: true },
+            { fileName: "adult.csv", fileFolder: false, activeFile: false },
+            { fileName: "adult.csv", fileFolder: false, activeFile: false },
+            { fileName: "adult.csv", fileFolder: false, activeFile: true },
         ],
+    }
+
+    handleClickFile = (index) => {
+        console.log(this.state.fileList[index]);
+    }
+
+    handleClickFileFolder = (index) => {
+        console.log(this.state.fileList[index]);
     }
 
     handleChangePathByPathIndex = (index) => {
@@ -26,7 +39,7 @@ class DataSetPanel extends React.Component {
         return (
             <Fragment>
                 <Row className={styles.header} >
-                    <Col span={16} >
+                    <Col span={14} >
                         <h3 className={styles.headerFont} style={{ marginLeft: "50px" }} >Dataset</h3>
                         {
                             filePath.map((path, index) => {
@@ -47,7 +60,7 @@ class DataSetPanel extends React.Component {
                             />
                         </Tooltip>
                     </Col>
-                    <Col span={4} style={{ paddingLeft: "20px" }} >
+                    <Col span={6} style={{ paddingLeft: "20px" }} >
                         <Tooltip placement="bottom" title="上传文件" >
                             <Button
                                 icon="upload"
@@ -60,6 +73,18 @@ class DataSetPanel extends React.Component {
                                 className={styles.buttonStyle}
                             />
                         </Tooltip>
+                        <Tooltip placement="bottom" title="常用文件列表" >
+                            <Button
+                                icon="star"
+                                className={styles.buttonStyle}
+                            />
+                        </Tooltip>
+                        <Tooltip placement="bottom" title="返回上一页" >
+                            <Button
+                                icon="left"
+                                className={styles.buttonStyle}
+                            />
+                        </Tooltip>
                         <Tooltip placement="bottom" title="返回根目录" >
                             <Button
                                 icon="home"
@@ -69,7 +94,11 @@ class DataSetPanel extends React.Component {
                     </Col>
                 </Row>
                 <div style={{ height: "calc(100vh - 175px)" }} >
-                    <DataSetCard fileList />
+                    <DataSetCard
+                        handleClickFile={this.handleClickFile}
+                        handleClickFileFolder={this.handleClickFileFolder}
+                        fileList={fileList}
+                    />
                 </div>
             </Fragment>
         );
