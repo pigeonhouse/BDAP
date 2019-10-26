@@ -90,7 +90,16 @@ class ExperimentList extends React.Component {
 			}
 		}
 	}
-
+	//找到dataSoure的title对应的searchData的title
+	getDeleteTitle=(experimentId)=>{
+		const searchData = this.state.searchData;
+		for (let index in searchData) {
+			const datatemp = searchData[index];
+			if (datatemp.experimentId === experimentId) {
+				return datatemp.title
+			}
+		}	
+	}
 	//点击删除的处理
 	handleDeleteButton = () => {
 		const selectTitleDelte = this.state.selectedRowKeys;
@@ -101,10 +110,10 @@ class ExperimentList extends React.Component {
 		}
 		else {
 			var { dataSource, experiment } = self.state;
-			const titleKey = dataSource[selectTitleDelte].title;
 			const experimentId = dataSource[selectTitleDelte].experimentId;
+			const titleKey = self.getDeleteTitle(experimentId);
 			confirm({
-				title: 'Do you Want to delete this item?',
+				title: '确定要删除此项目？',
 				content: titleKey,
 				onOk() {
 					dataSource.splice(selectTitleDelte[0], 1);
