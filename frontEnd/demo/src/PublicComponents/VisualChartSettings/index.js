@@ -87,14 +87,14 @@ class Settings extends React.Component {
         }
 
         const colors = [
-          ['粉色', ['#9e1068', '#c41d7f', '#eb2f96', '#f759ab', '#ff85c0', '#ffadd2', '#ffd6e7', '#fff0f6']],
-          ['红色', ['#a8071a', '#cf1322', '#f5222d', '#ff4d4f', '#ff7875', '#ffa39e', '#ffccc7', '#fff1f0']],
-          ['橙色', ['#ad4e00', '#d46b08', '#fa8c16', '#ffa940', '#ffc069', '#ffd591', '#ffe7ba', '#fff7e6']],
-          ['黄色', ['#ad8b00', '#d4b106', '#fadb14', '#ffec3d', '#fff566', '#fffb8f', '#ffffb8', '#feffe6']],
-          ['绿色', ['#237804', '#389e0d', '#52c41a', '#73d13d', '#95de64', '#b7eb8f', '#d9f7be', '#f6ffed']],
-          ['青色', ['#006d75', '#08979c', '#13c2c2', '#36cfc9', '#5cdbd3', '#87e8de', '#b5f5ec', '#e6fffb']],
-          ['蓝色', ['#0050b3', '#096dd9', '#1890ff', '#40a9ff', '#69c0ff', '#91d5ff', '#bae7ff', '#e6f7ff']],
-          ['紫色', ['#391085', '#531dab', '#722ed1', '#9254de', '#b37feb', '#d3adf7', '#efdbff', '#f9f0ff']],
+          ['粉色', [ '#EE008F','#FF0099','#FF33AD','#FF55BB','#FF77C9','#FF88CF','#FF99D6','#FFAADD','#FFCCEB','#FFDDF1','#FFEEF8'],['#FF33AD']],
+          ['红色', [ '#CE0F0F','#DE1010','#EF2121','#F14141','#F46060','#F68080','#F79090','#F9B0B0','#FAC0C0','#FCCFCF','#FDDFDF'],['#EF2121']],
+          ['橙色', [ '#D65A08','#E76108','#F67219','#F87C2A','#F9863A','#FA9A5B','#FBAE7C','#FCC39D','#FCCDAD','#FDD7BD','#FDE1CE'],['#F67219']],
+          ['黄色', [ '#D6D608','#F7F709','#F8F819','#F9F93A','#F9F94B','#FAFA5B','#FAFA6B','#FBFB7C','#FCFC9D','#FDFDBD','#FDFDCE'],['#F8F819']],
+          ['绿色', [ '#07C607','#08D608','#09F709','#2AF82A','#3AF93A','#4BF94B','#5BFA5B','#7CFB7C','#9DFC9D','#BDFDBD','#CEFDCE'],['#09F709']],
+          ['青色', [ '#08ACD6','#08BAE7','#19CBF8','#19CBF8','#3AD2F9','#4BD6F9','#6BDDFA','#7CE1FB','#8CE5FB','#ADECFC','#CEF4FD'],['#19CBF8']],
+          ['蓝色', [ '#085AD6','#0861E7','#0968F7','#2A7CF8','#3A86F9','#4B90F9','#6BA4FA','#7CAEFB','#8CB9FB','#ADCDFC','#CEE1FD'],['#0968F7']],
+          ['紫色', [ '#8308D6','#8D08E7','#9E19F8','#AC3AF9','#BA5BFA','#C16BFA','#C87CFB','#CE8CFB','#D59DFC','#E3BDFD','#F1DEFE'],['#9E19F8']],
         ];
 
         return (
