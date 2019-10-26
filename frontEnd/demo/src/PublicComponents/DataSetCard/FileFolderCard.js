@@ -3,7 +3,7 @@ import { Col, Tooltip, Row, Button, Icon, Card } from 'antd';
 
 import styles from './index.less';
 
-class DataCard extends React.Component {
+class FileFolderCard extends React.Component {
     state = {
         mouseEnter: false,
     }
@@ -28,7 +28,7 @@ class DataCard extends React.Component {
                         <Row style={{ paddingLeft: 10, paddingRight: 10 }}>
                             <Col span={4} >
                                 <Icon
-                                    type={this.state.mouseEnter ? "folder-open" : "folder"}
+                                    type="file"
                                     style={{ fontSize: 30 }}
                                 />
                             </Col>
@@ -72,4 +72,4 @@ class DataCard extends React.Component {
     }
 }
 
-export default DataCard;
+export default FileFolderCard;

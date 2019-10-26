@@ -1,41 +1,42 @@
 import React, { Fragment } from 'react';
-import { Row, Col, Input, Button, Tooltip, Upload, Icon } from 'antd';
+import { Row, Col, Input, Button, Tooltip } from 'antd';
 
-import DataCard from './DataCard';
+import DataSetCard from '../../PublicComponents/DataSetCard';
 import styles from './index.less';
 
 const { Search } = Input;
-const { Dragger } = Upload;
-
-const props = {
-    name: 'file',
-    multiple: true,
-    action: 'https://www.mocky.io/v2/5cc8019d300000980a055e76',
-    onChange(info) {
-        const { status } = info.file;
-        if (status !== 'uploading') {
-            console.log(info.file, info.fileList);
-        }
-        if (status === 'done') {
-            message.success(`${info.file.name} file uploaded successfully.`);
-        } else if (status === 'error') {
-            message.error(`${info.file.name} file upload failed.`);
-        }
-    },
-};
 
 class DataSetPanel extends React.Component {
     state = {
-        filePath: "bdap/students/2017211511",
+        homePath: "bdap/students/2017211511",
+        filePath: ["bdap", "student", "2017211511"],
+        fileList: [
+            {fileName:"adult", fileFolder: true},
+            {fileName:"adult.csv", fileFolder: false, activeFile: false},
+            {fileName:"adult.csv", fileFolder: false, activeFile: true},
+        ],
+    }
+
+    handleChangePathByPathIndex = (index) => {
+        console.log(this.state.filePath[index]);
     }
 
     render() {
+        const { filePath, fileList } = this.state;
         return (
             <Fragment>
                 <Row className={styles.header} >
                     <Col span={16} >
-                        <h3 className={styles.headerFont} style={{ marginLeft: "50px" }} >Dataset&nbsp;&nbsp;>&nbsp;&nbsp;</h3>
-                        <h5 className={styles.headerFont} >{this.state.filePath}</h5>
+                        <h3 className={styles.headerFont} style={{ marginLeft: "50px" }} >Dataset</h3>
+                        {
+                            filePath.map((path, index) => {
+                                return <div style={{ display: "inline" }} >
+                                    <h5 style={{ display: "inline" }} >&nbsp;&nbsp;>&nbsp;&nbsp;
+                                    <a className={styles.aStyle} onClick={this.handleChangePathByPathIndex.bind(this, index)} >{path}</a>
+                                    </h5>
+                                </div>
+                            })
+                        }
                     </Col>
                     <Col span={4} >
                         <Tooltip placement="bottom" title="查询文件或文件夹" >
@@ -68,32 +69,7 @@ class DataSetPanel extends React.Component {
                     </Col>
                 </Row>
                 <div style={{ height: "calc(100vh - 175px)" }} >
-                    <Row style={{ paddingLeft: "60px", paddingRight: "60px" }} gutter={16}>
-                        <DataCard></DataCard>
-                        <DataCard></DataCard>
-                        <DataCard></DataCard>
-                    </Row>
-                    <Row style={{ paddingLeft: "60px", paddingRight: "60px" }} gutter={16}>
-                        <DataCard></DataCard>
-                        <DataCard></DataCard>
-                        <DataCard></DataCard>
-                    </Row>
-                    <Row style={{ paddingLeft: "60px", paddingRight: "60px" }} gutter={16}>
-                        <DataCard></DataCard>
-                        <DataCard></DataCard>
-                        <Col span={8} style={{ paddingTop: 21 }} >
-                            <Tooltip placement="bottom" title="点击上传至此文件夹" >
-                                <div>
-                                    <Dragger {...props}
-                                        className={styles.uploadStyle}
-                                        style={{ maxHeight: "70px" }}
-                                    >
-                                        <Icon type="plus" />
-                                    </Dragger>
-                                </div>
-                            </Tooltip>
-                        </Col>
-                    </Row>
+                    <DataSetCard fileList />
                 </div>
             </Fragment>
         );
