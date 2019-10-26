@@ -1,6 +1,8 @@
 package com.pigeonhouse.loginservice.controller;
 
 import com.alibaba.fastjson.JSONObject;
+import com.auth0.jwt.JWT;
+import com.auth0.jwt.algorithms.Algorithm;
 import com.pigeonhouse.loginservice.dao.UserDao;
 import com.pigeonhouse.loginservice.entity.LivySessionInfo;
 import com.pigeonhouse.loginservice.entity.User;
@@ -11,23 +13,23 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-
-import javax.servlet.http.HttpServletResponse;
+import org.springframework.web.bind.annotation.RestController;
 
 /**
  * @Author: XueXiaoYue
  * @Date: 2019/10/26 20:16
  */
+@RestController
 public class LoginController {
-    @Autowired
-    DiscoveryClient discoveryClient;
+
     @Autowired
     LivyService livyService;
+
     @Autowired
     UserDao userDao;
 
     @PostMapping("/login")
-    public ResponseEntity<JSONObject> login(@RequestBody() User user, HttpServletResponse response) {
+    public ResponseEntity<JSONObject> login(@RequestBody() User user) {
         User userForBase = userDao.findByUserId(user.getUserId());
         if (userForBase == null) {
             //用户不存在
@@ -38,8 +40,17 @@ public class LoginController {
                 return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
             } else {
                 LivySessionInfo livySessionInfo = livyService.newSession();
+
+                String userId = user.getUserId();
+                String livyAddr = livySessionInfo.getLivyAddr();
                 Integer sessionId = livySessionInfo.getId();
-                String token = tokenService.getLoginToken(user.getUserId(), livyAddr, sessionId);
+
+                String token = JWT.create().withAudience(userId)
+                        .withClaim("userId", userId)
+                        .withClaim("livyAddr", livyAddr)
+                        .withClaim("sessionId", sessionId)
+                        //.withExpiresAt(date)
+                        .sign(Algorithm.HMAC256(userId));
 
                 JSONObject sessionInfo = new JSONObject();
                 sessionInfo.put("livyAddr", livyAddr);
@@ -49,13 +60,7 @@ public class LoginController {
                 data.put("userInfo", userForBase);
                 data.put("sessionInfo", sessionInfo);
 
-                JSONObject returnJson = new JSONObject();
-                returnJson.put("code",200);
-                returnJson.put("message","登录成功");
-                returnJson.put("token",token);
-                returnJson.put("data",data);
-
-                return returnJson;
+                return ResponseEntity.ok().header("token",token).body(data);
             }
         }
     }

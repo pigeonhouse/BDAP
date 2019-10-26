@@ -52,9 +52,9 @@ public class TokenService {
         if (cookies != null) {
             for (Cookie cookie : cookies) {
                 if (tokenName.equals(cookie.getName())) {
-                    token = cookie.getValue();
-                }
+                token = cookie.getValue();
             }
+        }
         }
         return token;
     }

@@ -12,13 +12,13 @@ spring:
         health-check-interval: 10s
     gateway:
       routes:
-        - id: livy-service
-          uri: lb://livy-service
+        - id: login-service
+          uri: lb://login-service
           predicates:
-            - Path=/livy-service/**
+            - Path=/login-service/**
           filters:
             - StripPrefix=1
-            - Auth=true
+#              - Auth=true
 
 
 

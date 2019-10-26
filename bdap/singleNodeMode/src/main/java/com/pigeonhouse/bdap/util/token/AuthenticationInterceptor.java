@@ -101,7 +101,7 @@ public class AuthenticationInterceptor implements HandlerInterceptor {
                 return false;
             }
 
-            //刷新cookie
+//刷新cookie
 //            Cookie cookie = new Cookie("token", tokenService.getLoginToken(userId, livyAddr, sessionId));
 //            httpServletResponse.addCookie(cookie);
             return true;
