@@ -50,7 +50,7 @@ public class HdfsService {
     /**
      * 获取HDFS上面的某个路径下面的所有文件或目录（不包含子目录）信息
      */
-    public List<Map<String, Object>> listFiles(String path, PathFilter pathFilter) throws Exception {
+    public List<Map<String, Object>> listFiles(String path) throws Exception {
         List<Map<String, Object>> result = new ArrayList<>();
         FileSystem fileSystem = getFileSystem();
 
@@ -58,12 +58,7 @@ public class HdfsService {
             String hdfsPath = defaultHdfsUri + defaultDirectory + path;
 
             FileStatus[] statuses;
-            //根据Path过滤器查询
-            if (pathFilter != null) {
-                statuses = fileSystem.listStatus(new Path(hdfsPath), pathFilter);
-            } else {
-                statuses = fileSystem.listStatus(new Path(hdfsPath));
-            }
+            statuses = fileSystem.listStatus(new Path(hdfsPath));
 
             if (statuses != null) {
                 for (FileStatus status : statuses) {
@@ -73,7 +68,6 @@ public class HdfsService {
                     fileMap.put("isDir", status.isDirectory());
 
                     SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-                    //设置格式
                     String timeText = format.format(status.getModificationTime());
                     fileMap.put("ModificationTime", timeText);
                     result.add(fileMap);

@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
@@ -28,11 +29,12 @@ public class FileController {
     LivyService livyService;
 
     @PostMapping("/file")
-    public ResponseEntity upload(HttpServletRequest request) {
+    public ResponseEntity upload(HttpServletRequest request,
+                                 @RequestHeader("token") String token) {
         try {
-            MultipartHttpServletRequest multipartRequest = (MultipartHttpServletRequest)request;
-            LivySessionInfo livySessionInfo = TokenParser.getSessionInfoFromRequest(request);
-            String userId = TokenParser.getClaimsFromRequest(request).get("userId").asString();
+            MultipartHttpServletRequest multipartRequest = (MultipartHttpServletRequest) request;
+            LivySessionInfo livySessionInfo = TokenParser.getSessionInfoFromToken(token);
+            String userId = TokenParser.getClaimsFromToken(token).get("userId").asString();
 
             MultipartFile file = multipartRequest.getFile("file");
             String fileName = file.getOriginalFilename();
@@ -48,16 +50,16 @@ public class FileController {
                     ".option(\"inferSchema\",\"true\").option(\"header\",\"true\")" +
                     ".load(\"hdfs:///bdap/students/" + userId + "/tmp/" + fileName + "\")";
 
-            livyService.postCode(livySessionInfo,readDataCode);
+            livyService.postCode(livySessionInfo, readDataCode);
 
             String readSchemaDDL = "println(df.schema.toDDL)";
 
-            String schemaResultUrl = livyService.postCode(livySessionInfo,readSchemaDDL);
+            String schemaResultUrl = livyService.postCode(livySessionInfo, readSchemaDDL);
 
             String schemaDDL = OutputParser.getOutput(schemaResultUrl);
 
             String previewDataCode = "df.show(10,false)";
-            String previewDataResultUrl = livyService.postCode(livySessionInfo,previewDataCode);
+            String previewDataResultUrl = livyService.postCode(livySessionInfo, previewDataCode);
 
             String previewData = OutputParser.convertToCsv(OutputParser.getOutput(previewDataResultUrl));
 
@@ -81,6 +83,8 @@ public class FileController {
             return new ResponseEntity(HttpStatus.BAD_REQUEST);
         }
     }
+
+
 }
 
 
