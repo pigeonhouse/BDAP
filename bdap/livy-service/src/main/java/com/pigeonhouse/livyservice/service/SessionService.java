@@ -12,10 +12,7 @@ import org.springframework.web.client.RestTemplate;
 import java.io.IOException;
 import java.util.*;
 
-/**
- * @Author: XueXiaoYue
- * @Date: 2019/10/26 20:39
- */
+
 @Service
 public class SessionService {
     @Value("${livyNewSessionJars}")
@@ -68,7 +65,7 @@ public class SessionService {
     }
 
 
-    public String postCode(String code, LivySessionInfo livySessionInfo) {
+    public String postCode(LivySessionInfo livySessionInfo,String code) {
         int sessionId = livySessionInfo.getId();
         String livyAddr = livySessionInfo.getLivyAddr();
         Map<String, String> map = new HashMap<>(2);

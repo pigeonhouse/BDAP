@@ -12,8 +12,6 @@ import java.util.List;
 
 /**
  * Note:仅在测试时使用
- * @Author: XueXiaoYue
- * @Date: 2019/10/26 20:42
  */
 @Service
 public class StressTestingService {

@@ -8,10 +8,7 @@ import org.springframework.web.client.RestTemplate;
 import java.io.IOException;
 import java.util.LinkedHashMap;
 
-/**
- * @Author: XueXiaoYue
- * @Date: 2019/10/26 20:39
- */
+
 @Service
 public class ServerService {
     @Value("${livyAddr}")

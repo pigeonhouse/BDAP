@@ -1,6 +1,6 @@
-package com.pigeonhouse.loginservice.service;
+package com.pigeonhouse.filesystemservice.service;
 
-import com.pigeonhouse.loginservice.entity.LivySessionInfo;
+import com.pigeonhouse.filesystemservice.entity.LivySessionInfo;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;

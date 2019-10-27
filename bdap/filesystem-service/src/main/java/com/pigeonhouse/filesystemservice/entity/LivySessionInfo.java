@@ -1,4 +1,4 @@
-package com.pigeonhouse.livyservice.entity;
+package com.pigeonhouse.filesystemservice.entity;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

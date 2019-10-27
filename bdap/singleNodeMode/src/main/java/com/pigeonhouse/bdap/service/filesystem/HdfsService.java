@@ -81,7 +81,6 @@ public class HdfsService {
         if (fileSystem != null) {
             return false;
         } else {
-
             try {
                 fileSystem = getFileSystem();
                 //最终的HDFS文件目录

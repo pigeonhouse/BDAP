@@ -20,5 +20,12 @@ spring:
             - StripPrefix=1
 #              - Auth=true
 
+        - id: filesystem-service
+          uri: lb://filesystem-service
+          predicates:
+            - Path=/filesystem-service/**
+          filters:
+            - StripPrefix=1
+            - Auth=true
 
 

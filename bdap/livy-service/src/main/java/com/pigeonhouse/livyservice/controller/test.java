@@ -5,10 +5,6 @@ import org.springframework.cloud.client.discovery.DiscoveryClient;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-/**
- * @Author: XueXiaoYue
- * @Date: 2019/10/24 10:26
- */
 @RestController
 public class test {
 

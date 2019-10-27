@@ -1,4 +1,4 @@
-package com.pigeonhouse.loginservice;
+package com.pigeonhouse.filesystemservice;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -7,10 +7,10 @@ import org.springframework.cloud.openfeign.EnableFeignClients;
 
 @EnableFeignClients
 @SpringCloudApplication
-public class LoginServiceApplication {
+public class FilesystemServiceApplication {
 
     public static void main(String[] args) {
-        SpringApplication.run(LoginServiceApplication.class, args);
+        SpringApplication.run(FilesystemServiceApplication.class, args);
     }
 
 }

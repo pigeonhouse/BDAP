@@ -1,9 +1,9 @@
 server:
-  port: 2001
+  port: 4001
 spring:
   application:
     name:
-      login-service
+      filesystem-service
   data:
     mongodb:
       uri: mongodb://bdapadmin:bdapadmin@10.105.222.90:27017/bdap_info?maxPoolSize=256
@@ -14,3 +14,6 @@ spring:
       discovery:
         health-check-path: /actuator/health
         health-check-interval: 10s
+
+defaultHdfsUri: hdfs://10.105.222.90:8020
+defaultDirectory: /bdap/students
