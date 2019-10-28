@@ -1,8 +1,6 @@
 package com.pigeonhouse.filesystemservice.controller;
 
-import com.alibaba.fastjson.JSONObject;
-import com.auth0.jwt.JWT;
-import com.pigeonhouse.filesystemservice.entity.FileMetaData;
+import com.pigeonhouse.filesystemservice.entity.MetaData;
 import com.pigeonhouse.filesystemservice.entity.HeaderAttribute;
 import com.pigeonhouse.filesystemservice.entity.LivySessionInfo;
 import com.pigeonhouse.filesystemservice.service.HdfsService;
@@ -17,12 +15,10 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 
 import javax.servlet.http.HttpServletRequest;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 @RestController
-public class FileController {
+public class HdfsFilesController {
 
     @Autowired
     HdfsService hdfsService;
@@ -49,36 +45,22 @@ public class FileController {
 
             String readDataCode = "val df = spark.read.format(\"" + fileType + "\")" +
                     ".option(\"inferSchema\",\"true\").option(\"header\",\"true\")" +
-                    ".load(\"hdfs:///bdap/students/" + userId + "/tmp/" + fileName + "\")";
+                    ".load(\"hdfs:///bdap/students/" + userId + "/tmp/" + fileName + "\")\n";
 
-            livyService.postCode(livySessionInfo, readDataCode);
-
+            livyService.postCode(livySessionInfo,readDataCode);
             String readSchemaDDL = "println(df.schema.toDDL)";
-
-            String schemaResultUrl = livyService.postCode(livySessionInfo, readSchemaDDL);
-
+            String schemaResultUrl = livyService.postCode(livySessionInfo,readSchemaDDL);
             String schemaDDL = OutputParser.getOutput(schemaResultUrl);
 
-            String previewDataCode = "df.show(10,false)";
+            String previewDataCode = "df.show(20,false)";
             String previewDataResultUrl = livyService.postCode(livySessionInfo, previewDataCode);
-
             String previewData = OutputParser.convertToCsv(OutputParser.getOutput(previewDataResultUrl));
 
-            ArrayList<HeaderAttribute> headerAttributes = new ArrayList<>();
-            String[] ddlSplits = schemaDDL.split(",");
-            for (String ddl : ddlSplits) {
-                String[] nameAndType = ddl.split("\\s");
-                String name = nameAndType[0].replace("`", "");
-                String typeLowerCase = nameAndType[1].toLowerCase();
-                String type = typeLowerCase.substring(0, 1).toUpperCase() + typeLowerCase.substring(1);
-                headerAttributes.add(new HeaderAttribute(name, type));
-            }
-            FileMetaData fileMetaData = new FileMetaData();
-            fileMetaData.setHeaderAttributes(headerAttributes);
-            fileMetaData.setFileName(fileName);
-            fileMetaData.setPreviewData(previewData);
+            List<HeaderAttribute> headerAttributes = OutputParser.parseDDL(schemaDDL);
 
-            return ResponseEntity.ok(fileMetaData);
+            MetaData metaData = new MetaData(fileName, headerAttributes, previewData);
+
+            return ResponseEntity.ok(metaData);
         } catch (Exception e) {
             e.printStackTrace();
             return new ResponseEntity(HttpStatus.BAD_REQUEST);
@@ -86,34 +68,26 @@ public class FileController {
     }
 
     @PostMapping("/file/confirm")
-    public ResponseEntity uploadConfirm(@RequestBody FileMetaData modifiedMetaData
-            , @RequestHeader("token") String token) {
+    public ResponseEntity uploadConfirm(@RequestBody MetaData modifiedMetaData,
+                                        @RequestHeader("token") String token) {
         try {
             StringBuilder codeBuilder = new StringBuilder();
             codeBuilder.append("import org.apache.spark.sql.types.DataTypes\n");
             codeBuilder.append("val modifiedDf = df");
             List<HeaderAttribute> modifiedHeaders = modifiedMetaData.getHeaderAttributes();
             for (HeaderAttribute headerAttribute : modifiedHeaders) {
-                //选中了，需要确认是否修改了列名或属性
+                //选中了该列，需要确认是否修改了列名或属性
                 if (headerAttribute.isSelected()) {
                     codeBuilder.append(".withColumn(\"").append(headerAttribute.getModifiedColName());
-                    codeBuilder.append("\", $\"").append(headerAttribute.getColName());
-                    codeBuilder.append("\".cast(DataTypes.");
+                    codeBuilder.append("\", $\"").append(headerAttribute.getColName()).append("\".cast(DataTypes.");
                     String dataType = headerAttribute.getModifiedDataType();
-                    System.out.println(dataType);
-                    if ("Int".equals(dataType)) {
-                        dataType = "IntegerType";
-                    } else {
-                        dataType += "Type";
-                    }
-                    codeBuilder.append(dataType);
-                    codeBuilder.append("))");
+                    dataType = "Int".equals(dataType) ? "IntegerType" : dataType + "Type";
+                    codeBuilder.append(dataType).append("))");
                 } else {
                     //未选中，直接drop
                     codeBuilder.append(".drop(\"");
-                    System.out.println("drop:"+headerAttribute.getColName());
-                    codeBuilder.append(headerAttribute.getColName());
-                    codeBuilder.append("\")");
+                    System.out.println("drop:" + headerAttribute.getColName());
+                    codeBuilder.append(headerAttribute.getColName()).append("\")");
                 }
             }
             LivySessionInfo livySessionInfo = TokenParser.getSessionInfoFromToken(token);
@@ -121,12 +95,9 @@ public class FileController {
 
             codeBuilder.append("\nmodifiedDf.write.parquet(\"hdfs:///bdap/students/");
             codeBuilder.append(userId).append(modifiedMetaData.getPath());
-            codeBuilder.append(modifiedMetaData.getModifiedFileName());
-            codeBuilder.append("\")\n");
+            codeBuilder.append(modifiedMetaData.getModifiedFileName()).append("\")\n");
 
             livyService.postCode(livySessionInfo, codeBuilder.toString());
-
-            System.out.println("pushed");
 
             String sessionStatus = "";
             while (!"idle".equals(sessionStatus)) {
@@ -138,9 +109,7 @@ public class FileController {
         } catch (Exception e) {
             return new ResponseEntity(HttpStatus.BAD_REQUEST);
         }
-
     }
-
 }
 
 

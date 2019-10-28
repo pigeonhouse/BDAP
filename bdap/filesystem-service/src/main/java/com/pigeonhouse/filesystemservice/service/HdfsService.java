@@ -1,15 +1,19 @@
 package com.pigeonhouse.filesystemservice.service;
 
+import com.pigeonhouse.filesystemservice.entity.HeaderAttribute;
+import com.pigeonhouse.filesystemservice.entity.LivySessionInfo;
+import com.pigeonhouse.filesystemservice.entity.MetaData;
+import com.pigeonhouse.filesystemservice.util.OutputParser;
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.fs.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
-import java.io.InputStream;
 import java.text.MessageFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -23,6 +27,9 @@ public class HdfsService {
     private String defaultHdfsUri;
     @Value("${defaultDirectory}")
     private String defaultDirectory;
+
+    @Autowired
+    LivyService livyService;
 
     private Logger logger = LoggerFactory.getLogger(HdfsService.class);
     private Configuration conf;
@@ -47,9 +54,28 @@ public class HdfsService {
         }
     }
 
-    /**
-     * 获取HDFS上面的某个路径下面的所有文件或目录（不包含子目录）信息
-     */
+    public void setCommonFile(String path) throws Exception {
+        FileSystem fileSystem = getFileSystem();
+        String hdfsPath = defaultHdfsUri + defaultDirectory;
+        String splits[] = path.split("/");
+        StringBuilder dirPath = new StringBuilder();
+        for (int i = 0; i < splits.length - 1; i++) {
+            dirPath.append("/").append(splits[i]);
+            System.out.println(splits[i]);
+        }
+        System.out.println(hdfsPath+dirPath.toString()+"/."+splits[splits.length - 1]);
+        fileSystem.mkdirs(new Path(hdfsPath+dirPath.toString()+"/."+splits[splits.length - 1]));
+    }
+
+    public void cancelCommonFile(String path) throws Exception {
+        FileSystem fileSystem = getFileSystem();
+        String hdfsPath = defaultHdfsUri + defaultDirectory + path;
+
+
+    }
+
+
+
     public List<Map<String, Object>> listFiles(String path) throws Exception {
         List<Map<String, Object>> result = new ArrayList<>();
         FileSystem fileSystem = getFileSystem();
@@ -57,15 +83,26 @@ public class HdfsService {
         try {
             String hdfsPath = defaultHdfsUri + defaultDirectory + path;
 
-            FileStatus[] statuses;
-            statuses = fileSystem.listStatus(new Path(hdfsPath));
-
+            FileStatus[] statuses = fileSystem.listStatus(new Path(hdfsPath));
+            List<String> commonFileList = new ArrayList<>();
             if (statuses != null) {
+                for (FileStatus status : statuses) {
+                    String[] pathBuf = status.getPath().toString().split("/");
+                    String name = pathBuf[pathBuf.length - 1];
+                    if(name.startsWith(".")){
+                        commonFileList.add(name.replace(".",""));
+                    }
+                }
                 for (FileStatus status : statuses) {
                     Map<String, Object> fileMap = new HashMap<>(3);
                     String[] pathBuf = status.getPath().toString().split("/");
-                    fileMap.put("filename", pathBuf[pathBuf.length - 1]);
+                    String name = pathBuf[pathBuf.length - 1];
+                    if(name.startsWith(".")){
+                        continue;
+                    }
+                    fileMap.put("name", name);
                     fileMap.put("isDir", status.isDirectory());
+                    fileMap.put("isCommonFile", commonFileList.contains(name));
 
                     SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
                     String timeText = format.format(status.getModificationTime());
@@ -102,6 +139,23 @@ public class HdfsService {
         close(fs);
     }
 
+    public MetaData getMetaDataFromParquet(String userId, String path, LivySessionInfo livySessionInfo) throws Exception {
+        String[] splits = path.split("/");
+        String fileName = splits[splits.length - 1];
+
+        String readDataCode = "val df = spark.read.parquet(\"hdfs:///bdap/students/" + userId + path + "\")\n";
+        livyService.postCode(livySessionInfo, readDataCode);
+        String previewDataCode = "df.show(20,false)";
+        String previewDataResultUrl = livyService.postCode(livySessionInfo, previewDataCode);
+        String previewData = OutputParser.convertToCsv(OutputParser.getOutput(previewDataResultUrl));
+
+        String readSchemaDDL = "println(df.schema.toDDL)";
+        String schemaResultUrl = livyService.postCode(livySessionInfo, readSchemaDDL);
+        String schemaDDL = OutputParser.getOutput(schemaResultUrl);
+        List<HeaderAttribute> headerAttributes = OutputParser.parseDDL(schemaDDL);
+
+        return new MetaData(path, fileName, headerAttributes, previewData);
+    }
 
     private void close(FileSystem fileSystem) {
         if (fileSystem != null) {

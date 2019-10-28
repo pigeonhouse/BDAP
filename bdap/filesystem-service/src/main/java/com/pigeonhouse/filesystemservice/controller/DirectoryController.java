@@ -20,7 +20,6 @@ public class DirectoryController {
     public ResponseEntity ls(@RequestParam("path") String path,
                              @RequestHeader("token") String token) {
         String userId = TokenParser.getClaimsFromToken(token).get("userId").asString();
-
         try {
             return ResponseEntity.ok(hdfsService.listFiles("/" + userId + path));
         } catch (Exception e) {

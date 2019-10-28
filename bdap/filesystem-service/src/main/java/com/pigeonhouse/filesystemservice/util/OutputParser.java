@@ -1,9 +1,12 @@
 package com.pigeonhouse.filesystemservice.util;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.pigeonhouse.filesystemservice.entity.HeaderAttribute;
 import org.springframework.web.client.RestTemplate;
 
+import java.util.ArrayList;
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 
 public class OutputParser {
@@ -24,6 +27,18 @@ public class OutputParser {
         return data.get("text/plain").toString();
     }
 
+    public static List<HeaderAttribute> parseDDL(String schemaDDL){
+        ArrayList<HeaderAttribute> headerAttributes = new ArrayList<>();
+        String[] ddlSplits = schemaDDL.split(",");
+        for (String ddl : ddlSplits) {
+            String[] nameAndType = ddl.split("\\s");
+            String name = nameAndType[0].replace("`", "");
+            String typeLowerCase = nameAndType[1].toLowerCase();
+            String type = typeLowerCase.substring(0, 1).toUpperCase() + typeLowerCase.substring(1);
+            headerAttributes.add(new HeaderAttribute(name, type));
+        }
+        return headerAttributes;
+    }
 
     /**
      * 将df.show()所展示的内容转换为csv格式（逗号分割）
