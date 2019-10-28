@@ -1,6 +1,6 @@
 import React, { Fragment } from 'react';
-import { Col, Tooltip, Row, Button, Icon, Card } from 'antd';
-
+import { Col, Tooltip, Row, Button, Icon, Card, Modal } from 'antd';
+const { confirm } = Modal
 import styles from './index.less';
 
 class FileCard extends React.Component {
@@ -22,10 +22,19 @@ class FileCard extends React.Component {
     }
 
     deleteFile = (e) => {
+       
         e.stopPropagation();
-        console.log("-----=--")
+        const { index } = this.props;
+        console.log(index);
+        confirm({
+            title: '确定要删除此项目？',
+            onOk() {
+            }
+        })
     }
-
+    handleClickDownloadFile = (e) => {
+        e.stopPropagation();
+    }
     render() {
         const { file } = this.props;
 
@@ -61,6 +70,7 @@ class FileCard extends React.Component {
                                             <Button
                                                 icon="download"
                                                 className={styles.iconStyle}
+                                                onClick={this.handleClickDownloadFile}
                                             />
                                         </Tooltip>
                                         <Tooltip placement="bottom" title="标记为常用文件" >
