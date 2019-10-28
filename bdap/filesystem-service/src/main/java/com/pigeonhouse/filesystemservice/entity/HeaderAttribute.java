@@ -9,14 +9,17 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class HeaderAttribute {
 
-    /**
-     * 字段头属性名称
-     */
+
     private String colName;
+    private String modifiedColName;
 
-    /**
-     * 字段头属性类型
-     */
     private String dataType;
+    private String modifiedDataType;
 
+    private boolean selected;
+
+    public HeaderAttribute(String colName, String dataType) {
+        this.colName = colName;
+        this.dataType = dataType;
+    }
 }

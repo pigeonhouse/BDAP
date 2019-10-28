@@ -15,5 +15,4 @@ public interface LivyService {
     String sessionStatus(@RequestBody LivySessionInfo livySessionInfo);
     @PostMapping("/session/code")
     String postCode(@RequestBody LivySessionInfo livySessionInfo,@RequestParam("code")String code);
-
 }

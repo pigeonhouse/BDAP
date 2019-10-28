@@ -83,19 +83,10 @@ public class HdfsService {
         return null;
     }
 
-    public boolean delete(String path) {
+    public boolean delete(String path) throws Exception {
         String hdfsPath = defaultHdfsUri + defaultDirectory + path;
-        FileSystem fileSystem = null;
-        try {
-            fileSystem = getFileSystem();
-            return fileSystem.delete(new Path(hdfsPath), true);
-        } catch (IOException e) {
-            logger.error(MessageFormat.format("删除HDFS文件或目录失败，path:{0}", path), e);
-        } finally {
-            close(fileSystem);
-        }
-
-        return false;
+        FileSystem fileSystem = getFileSystem();
+        return fileSystem.delete(new Path(hdfsPath), true);
     }
 
 

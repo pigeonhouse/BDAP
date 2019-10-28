@@ -10,9 +10,6 @@ import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import javax.servlet.http.HttpServletRequest;
-import java.util.List;
-import java.util.Map;
 
 @RestController
 public class DirectoryController {
@@ -22,10 +19,8 @@ public class DirectoryController {
     @GetMapping("/ls")
     public ResponseEntity ls(@RequestParam("path") String path,
                              @RequestHeader("token") String token) {
-        System.out.println(token);
         String userId = TokenParser.getClaimsFromToken(token).get("userId").asString();
-        System.out.println(userId);
-        System.out.println(path);
+
         try {
             return ResponseEntity.ok(hdfsService.listFiles("/" + userId + path));
         } catch (Exception e) {
@@ -33,5 +28,10 @@ public class DirectoryController {
             return new ResponseEntity(HttpStatus.BAD_REQUEST);
         }
     }
+
+//    @GetMapping("/mkdir")
+//    public ResponseEntity mkdir(){
+//
+//    }
 
 }
