@@ -1,6 +1,5 @@
 import React, { Fragment } from 'react';
 import { Row, Col, Input, Button, Tooltip } from 'antd';
-
 import ActiveFileList from '../../PublicComponents/DataOperate/ActiveFileList';
 import UploadFile from '../../PublicComponents/DataOperate/UploadFile';
 import VisualizedPanel from '../VisualizedPanel';
@@ -12,31 +11,38 @@ const { Search } = Input;
 class DataSetPanel extends React.Component {
     state = {
         homePath: "bdap/students/2017211511",
-        filePath: ["bdap", "student", "2017211511", "/"],
+        filePath: ["2017211511",],
         fileList: [
-            { fileName: "adult", fileFolder: true },
-            { fileName: "adult", fileFolder: true },
-            { fileName: "adult", fileFolder: true },
-            { fileName: "adult.csv", fileFolder: false, activeFile: false },
-            { fileName: "adult.csv", fileFolder: false, activeFile: true },
-            { fileName: "adult.csv", fileFolder: false, activeFile: false },
-            { fileName: "adult.csv", fileFolder: false, activeFile: false },
-            { fileName: "adult.csv", fileFolder: false, activeFile: true },
+            { fileName: "adult_1", fileFolder: true },
+            { fileName: "adult_2", fileFolder: true },
+            { fileName: "adult_3", fileFolder: true },
+            { fileName: "adult1.csv", fileFolder: false, activeFile: false },
+            { fileName: "adult2.csv", fileFolder: false, activeFile: true },
+            { fileName: "adult3.csv", fileFolder: false, activeFile: false },
+            { fileName: "adult4.csv", fileFolder: false, activeFile: false },
+            { fileName: "adult5.csv", fileFolder: false, activeFile: true },
         ],
+        fileBackup:[],
     }
-
+    componentWillMount(){
+        //data应该是从后端拿到的数据
+        const data = this.state.fileList;
+        this.setState({
+            fileBackup:data
+        })
+    }
     handleClickFile = (index) => {
         if (this.props.sessionFinish === false) {
-			const args = {
-				message: 'Session',
-				description:
-					'正在创建session，请稍候',
-				key: "session"
-			};
-			notification['info'](args);
-			return;
+            const args = {
+                message: 'Session',
+                description:
+                    '正在创建session，请稍候',
+                key: "session"
+            };
+            notification['info'](args);
+            return;
         }
-        
+
         console.log(this.state.fileList[index]);
         this.props.handleClickEnter();
     }
@@ -47,6 +53,30 @@ class DataSetPanel extends React.Component {
 
     handleChangePathByPathIndex = (index) => {
         console.log(this.state.filePath[index]);
+    }
+    //返回根目录，将filePath的数据清空
+    handleClickHome = () => {
+        //从新向后端请求对应的目录的filelist文件
+        this.setState({
+            filePath:[]
+        })
+    }
+
+    //输入框的搜索
+    handleRearch = (searchText) => {
+		const filelist = this.state.fileBackup;
+		const reg = new RegExp(searchText, 'gi');
+		this.setState({
+			fileList: filelist.map((record) => {
+				const match = record.fileName.match(reg);
+				if (!match) {
+					return null;
+				}
+				return {
+					...record,
+				};
+			}).filter(record => !!record),
+        });
     }
 
     render() {
@@ -59,13 +89,13 @@ class DataSetPanel extends React.Component {
                 <Fragment>
                     <Row className={styles.header} >
                         <Col span={14} >
-                            <h3 className={styles.headerFont} style={{ marginLeft: "50px" }} >Dataset</h3>
+                            <h5 className={styles.headerFont} style={{ marginLeft: "50px" }} >.> &nbsp;&nbsp;</h5>
                             {
                                 filePath.map((path, index) => {
                                     return <div style={{ display: "inline" }} >
-                                        <h5 style={{ display: "inline" }} >&nbsp;&nbsp;>&nbsp;&nbsp;
+                                        <h5 style={{ display: "inline" }} >
                                         <a className={styles.aStyle} onClick={this.handleChangePathByPathIndex.bind(this, index)} >{path}</a>
-                                        </h5>
+                                        &nbsp;&nbsp;>&nbsp;&nbsp;</h5>
                                     </div>
                                 })
                             }
@@ -74,8 +104,9 @@ class DataSetPanel extends React.Component {
                             <Tooltip placement="bottom" title="查询文件或文件夹" >
                                 <Search
                                     placeholder="请输入文件名"
-                                    onSearch={value => console.log(value)}
+                                    onSearch={this.handleRearch}
                                     style={{ width: "100%", marginTop: "5px" }}
+                                    enterButton
                                 />
                             </Tooltip>
                         </Col>
@@ -90,7 +121,7 @@ class DataSetPanel extends React.Component {
                                     className={styles.buttonStyle}
                                 />
                             </Tooltip>
-                            
+
                             {/* 常用文件列表 */}
                             <ActiveFileList />
 
@@ -104,6 +135,7 @@ class DataSetPanel extends React.Component {
                                 <Button
                                     icon="home"
                                     className={styles.buttonStyle}
+                                    onClick={this.handleClickHome}
                                 />
                             </Tooltip>
                         </Col>

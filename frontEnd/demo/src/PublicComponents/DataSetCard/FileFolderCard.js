@@ -1,6 +1,6 @@
 import React, { Fragment } from 'react';
-import { Col, Tooltip, Row, Button, Icon, Card } from 'antd';
-
+import { Col, Tooltip, Row, Button, Icon, Card,Modal } from 'antd';
+const { confirm } = Modal
 import styles from './index.less';
 
 class FileFolderCard extends React.Component {
@@ -20,6 +20,16 @@ class FileFolderCard extends React.Component {
 
     mouseLeave = () => {
         this.setState({ mouseEnter: false });
+    }
+    deleteFolderFile = (e) => {
+        const { index } = this.props;
+        e.stopPropagation();
+        confirm({
+            title: '确定要删除此项目？',
+            content:index,
+            onOk() {
+            }
+        })
     }
 
     render() {
@@ -50,6 +60,7 @@ class FileFolderCard extends React.Component {
                                             <Button
                                                 icon="delete"
                                                 className={styles.iconStyle}
+                                                onClick={this.deleteFolderFile}
                                             />
                                         </Tooltip>
                                     </div> : null}
