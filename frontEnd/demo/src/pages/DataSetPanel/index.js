@@ -8,27 +8,29 @@ import styles from './index.less';
 
 const { Search } = Input;
 
+
+const data =[
+    { fileName: "adult_1", fileFolder: true },
+    { fileName: "adult_2", fileFolder: true },
+    { fileName: "adult_3", fileFolder: true },
+    { fileName: "adult1.csv", fileFolder: false, activeFile: false },
+    { fileName: "adult2.csv", fileFolder: false, activeFile: true },
+    { fileName: "adult3.csv", fileFolder: false, activeFile: false },
+    { fileName: "adult4.csv", fileFolder: false, activeFile: false },
+    { fileName: "adult5.csv", fileFolder: false, activeFile: true },
+]
 class DataSetPanel extends React.Component {
     state = {
         homePath: "bdap/students/2017211511",
         filePath: ["2017211511",],
-        fileList: [
-            { fileName: "adult_1", fileFolder: true },
-            { fileName: "adult_2", fileFolder: true },
-            { fileName: "adult_3", fileFolder: true },
-            { fileName: "adult1.csv", fileFolder: false, activeFile: false },
-            { fileName: "adult2.csv", fileFolder: false, activeFile: true },
-            { fileName: "adult3.csv", fileFolder: false, activeFile: false },
-            { fileName: "adult4.csv", fileFolder: false, activeFile: false },
-            { fileName: "adult5.csv", fileFolder: false, activeFile: true },
-        ],
+        fileList:[],
         fileBackup:[],
     }
     componentWillMount(){
         //data应该是从后端拿到的数据
-        const data = this.state.fileList;
         this.setState({
-            fileBackup:data
+            fileBackup:data,
+            fileList:data.map(r=>r),
         })
     }
     handleClickFile = (index) => {
@@ -61,9 +63,26 @@ class DataSetPanel extends React.Component {
             filePath:[]
         })
     }
-
+    //文件删除的操作，此时需要向后端传递数据，只完成了前端的逻辑处理
+    handleDeleteFile=(index)=>{
+        const {fileList,fileBackup}=this.state;
+        const fileTemp=fileList[index];
+		for (let indextemp in fileBackup) {
+            const datatemp = fileBackup[indextemp];
+			if (datatemp.fileName === fileTemp.fileName&&datatemp.fileFolder===fileTemp.fileFolder) {
+                fileList.splice(index,1);
+                fileBackup.splice(indextemp,1);
+                this.setState({
+                    fileBackup,
+                    fileList,
+                })
+            }
+		}
+    }
+   
     //输入框的搜索
     handleRearch = (searchText) => {
+        console.log("handleRearch")
 		const filelist = this.state.fileBackup;
 		const reg = new RegExp(searchText, 'gi');
 		this.setState({
@@ -76,7 +95,7 @@ class DataSetPanel extends React.Component {
 					...record,
 				};
 			}).filter(record => !!record),
-        });
+        }); 
     }
 
     render() {
@@ -145,6 +164,7 @@ class DataSetPanel extends React.Component {
                             handleClickFile={this.handleClickFile}
                             handleClickFileFolder={this.handleClickFileFolder}
                             fileList={fileList}
+                            handleDeleteFile={this.handleDeleteFile}
                         />
                     </div>
                 </Fragment>

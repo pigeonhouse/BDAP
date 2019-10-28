@@ -38,7 +38,7 @@ class ExperimentList extends React.Component {
 		const data = await this.fetchModalList();
 		this.setState({
 			dataSource: data,
-			searchData: data,
+			searchData: data.map(r=>r),
 		})
 	}
 

@@ -22,12 +22,14 @@ class FileFolderCard extends React.Component {
         this.setState({ mouseEnter: false });
     }
     deleteFolderFile = (e) => {
-        const { index } = this.props;
+        const { index,fileFolder } = this.props;
+        const self=this;
         e.stopPropagation();
         confirm({
             title: '确定要删除此项目？',
-            content:index,
+            content:fileFolder.fileName,
             onOk() {
+                self.props.handleDeleteFile(index)
             }
         })
     }
