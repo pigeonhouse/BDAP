@@ -20,20 +20,25 @@ class FileCard extends React.Component {
     mouseLeave = () => {
         this.setState({ mouseEnter: false });
     }
-
+    //handleDeleteFile是传递过来的，为了将index传给父组件
     deleteFile = (e) => {
-       
+        const { index,file} = this.props;
+        const self=this;
         e.stopPropagation();
-        const { index } = this.props;
-        console.log(index);
         confirm({
             title: '确定要删除此项目？',
+            content: file.fileName,
             onOk() {
+                self.props.handleDeleteFile(index)
             }
         })
     }
+
+    //此处应该写文件下载，但还没有完成
     handleClickDownloadFile = (e) => {
         e.stopPropagation();
+        const {file} = this.props;
+        alert(file.fileName)
     }
     render() {
         const { file } = this.props;
