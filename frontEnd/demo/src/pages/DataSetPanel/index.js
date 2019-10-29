@@ -9,8 +9,7 @@ import { number } from 'prop-types';
 
 const { Search } = Input;
 
-
-const data =[
+const data = [
     { fileName: "adult_1", fileFolder: true },
     { fileName: "adult_2", fileFolder: true },
     { fileName: "adult_3", fileFolder: true },
@@ -24,16 +23,18 @@ class DataSetPanel extends React.Component {
     state = {
         homePath: "bdap/students/2017211511",
         filePath: ["2017211511"],
-        fileList:[],
-        fileBackup:[],
+        fileList: [],
+        fileBackup: [],
     }
-    componentWillMount(){
+
+    componentWillMount() {
         //data应该是从后端拿到的数据
         this.setState({
-            fileBackup:data,
-            fileList:data.map(r=>r),
+            fileBackup: data,
+            fileList: data.map(r => r),
         })
     }
+
     handleClickFile = (index) => {
         if (this.props.sessionFinish === false) {
             const args = {
@@ -52,9 +53,9 @@ class DataSetPanel extends React.Component {
 
     handleClickFileFolder = (index) => {
         //这里放入向后端请求的的子文件夹内数据
-        const Name=this.state.fileList[index].fileName;
-        const dataDir =[
-            
+        const Name = this.state.fileList[index].fileName;
+        const dataDir = [
+
             { fileName: "adult_2", fileFolder: true },
             { fileName: "adult_3", fileFolder: true },
             { fileName: "adult1.csv", fileFolder: false, activeFile: false },
@@ -64,17 +65,17 @@ class DataSetPanel extends React.Component {
             { fileName: "adult5.csv", fileFolder: false, activeFile: true },
         ]
         this.setState({
-            fileList:dataDir.map(r=>r),
-            filePath:this.state.filePath.concat(Name)
+            fileList: dataDir.map(r => r),
+            filePath: this.state.filePath.concat(Name)
         });
         console.log(this.state.fileList);
         console.log(this.state.filePath);
     }
 
     handleChangePathByPathIndex = (index) => {
-       //这里放入向后端请求的的子文件夹内数据
-        const dataDir =[
-            
+        //这里放入向后端请求的的子文件夹内数据
+        const dataDir = [
+
             { fileName: "adult_2", fileFolder: true },
             { fileName: "adult_3", fileFolder: true },
             { fileName: "adult1.csv", fileFolder: false, activeFile: false },
@@ -83,54 +84,56 @@ class DataSetPanel extends React.Component {
             { fileName: "adult4.csv", fileFolder: false, activeFile: false },
             { fileName: "adult5.csv", fileFolder: false, activeFile: true },
         ]
-        const newfilePath=this.state.filePath.filter((path,idx)=>idx<=index).map(r=>r);
+        const newfilePath = this.state.filePath.filter((path, idx) => idx <= index).map(r => r);
         this.setState({
-            fileList:dataDir.map(r=>r),
-            filePath:newfilePath
+            fileList: dataDir.map(r => r),
+            filePath: newfilePath
         });
         console.log(this.state.fileList);
         console.log(this.state.filePath);
     }
+
     //返回根目录，将filePath的数据清空
     handleClickHome = () => {
         //从新向后端请求对应的目录的filelist文件
         this.setState({
-            filePath:[]
+            filePath: []
         })
     }
+
     //文件删除的操作，此时需要向后端传递数据，只完成了前端的逻辑处理
-    handleDeleteFile=(index)=>{
-        const {fileList,fileBackup}=this.state;
-        const fileTemp=fileList[index];
-		for (let indextemp in fileBackup) {
+    handleDeleteFile = (index) => {
+        const { fileList, fileBackup } = this.state;
+        const fileTemp = fileList[index];
+        for (let indextemp in fileBackup) {
             const datatemp = fileBackup[indextemp];
-			if (datatemp.fileName === fileTemp.fileName&&datatemp.fileFolder===fileTemp.fileFolder) {
-                fileList.splice(index,1);
-                fileBackup.splice(indextemp,1);
+            if (datatemp.fileName === fileTemp.fileName && datatemp.fileFolder === fileTemp.fileFolder) {
+                fileList.splice(index, 1);
+                fileBackup.splice(indextemp, 1);
                 this.setState({
                     fileBackup,
                     fileList,
                 })
             }
-		}
+        }
     }
-   
+
     //输入框的搜索
     handleRearch = (searchText) => {
         console.log("handleRearch")
-		const filelist = this.state.fileBackup;
-		const reg = new RegExp(searchText, 'gi');
-		this.setState({
-			fileList: filelist.map((record) => {
-				const match = record.fileName.match(reg);
-				if (!match) {
-					return null;
-				}
-				return {
-					...record,
-				};
-			}).filter(record => !!record),
-        }); 
+        const filelist = this.state.fileBackup;
+        const reg = new RegExp(searchText, 'gi');
+        this.setState({
+            fileList: filelist.map((record) => {
+                const match = record.fileName.match(reg);
+                if (!match) {
+                    return null;
+                }
+                return {
+                    ...record,
+                };
+            }).filter(record => !!record),
+        });
     }
 
     render() {
@@ -138,20 +141,20 @@ class DataSetPanel extends React.Component {
         if (currentTab !== "2") return <Fragment></Fragment>;
 
         if (clickTab === "2") {
-            const {  fileList } = this.state;
+            const { fileList } = this.state;
             console.log(this.state);
-            const filePath=this.state.filePath;
+            const filePath = this.state.filePath;
             return (
                 <Fragment>
                     <Row className={styles.header} >
                         <Col span={14} >
-                            <h5 className={styles.headerFont} style={{ marginLeft: "50px" }} >.> &nbsp;&nbsp;</h5>
+                            <h3 className={styles.headerFont} style={{ marginLeft: "30px" }} >DataSet&nbsp;&nbsp;&nbsp;&nbsp;</h3>
                             {
                                 filePath.map((path, index) => {
                                     return <div style={{ display: "inline" }} >
                                         <h5 style={{ display: "inline" }} >
-                                        <a className={styles.aStyle} onClick={this.handleChangePathByPathIndex.bind(this,index)} >{path}</a>
-                                        &nbsp;&nbsp;>&nbsp;&nbsp;</h5>
+                                            <a className={styles.aStyle} onClick={this.handleChangePathByPathIndex.bind(this, index)} >{path}</a>
+                                            &nbsp;&nbsp;>&nbsp;&nbsp;</h5>
                                     </div>
                                 })
                             }

@@ -1,16 +1,11 @@
 import React from 'react';
-import { Upload, Button, Icon, Modal, Table, Input, InputNumber, Popconfirm, Form, Tooltip } from 'antd';
+import {
+    Upload, Button, Icon, Modal, Table, Input,
+    InputNumber, Popconfirm, Form, Tooltip, Row, Col
+} from 'antd';
 
+import FileTree from './FileTree';
 import styles from './index.less';
-
-const data = [];
-for (let i = 0; i < 100; i++) {
-    data.push({
-        key: i.toString(),
-        name: `Edrward ${i}`,
-        type: `London Park no. ${i}`,
-    });
-}
 
 const EditableContext = React.createContext();
 
@@ -53,7 +48,7 @@ class EditableCell extends React.Component {
 class UploadFile extends React.Component {
     constructor(props) {
         super(props);
-        this.state = { data, editingKey: '', visible: false };
+        this.state = { data: [{ key: '0', name: "00", type: "44" }], editingKey: '', visible: false };
         this.columns = [
             {
                 title: 'name',
@@ -80,18 +75,22 @@ class UploadFile extends React.Component {
                                     <a
                                         onClick={() => this.save(form, record.key)}
                                         style={{ marginRight: 8 }}
+                                        className={styles.Astyle}
                                     >
-                                        Save
+                                        保存
                                     </a>
                                 )}
                             </EditableContext.Consumer>
                             <Popconfirm title="确认取消?" onConfirm={() => this.cancel(record.key)}>
-                                <a>Cancel</a>
+                                <a className={styles.Astyle} >取消</a>
                             </Popconfirm>
                         </span>
                     ) : (
-                            <a disabled={editingKey !== ''} onClick={() => this.edit(record.key)}>
-                                Edit
+                            <a
+                                disabled={editingKey !== ''}
+                                className={styles.Astyle}
+                                onClick={() => this.edit(record.key)}>
+                                编辑
                             </a>
                         );
                 },
@@ -106,34 +105,16 @@ class UploadFile extends React.Component {
     };
 
     handleOk = e => {
-        console.log(e);
         this.setState({
             visible: false,
         });
     };
 
     handleCancel = e => {
-        console.log(e);
         this.setState({
             visible: false,
         });
     };
-
-    handleUploadData() {
-        let d = {
-            replace: this.state.replacevalue,
-            withHeader: this.state.setheadervalue
-        }
-        return d;
-    }
-
-    onChangereplace = (value) => {
-        this.setState({ replacevalue: value })
-    }
-
-    onChangesetHeader = (value) => {
-        this.setState({ setheadervalue: value })
-    }
 
     isEditing = record => record.key === this.state.editingKey;
 
@@ -167,11 +148,12 @@ class UploadFile extends React.Component {
     }
 
     render() {
-        let formData = new FormData();
-        formData.append('replace', this.state.replace)
         const props = {
             name: 'file',
-            action: 'http://localhost:8888/hdfs/uploadwithheader',
+            action: 'https://result.eolinker.com/MSwz6fu34b763a21e1f7efa84a86a16f767a756952d0f95?uri=localhost:1001/filesystem-service/file',
+            headers:{
+                "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJsaXZ5QWRkciI6IjEwLjEwNS4yMjIuOTA6ODk5OCIsImF1ZCI6IjIwMTcyMTE1MTEiLCJzZXNzaW9uSWQiOjk3LCJ1c2VySWQiOiIyMDE3MjExNTExIn0.QpSpOUcQXYtMraZCQp4eWuMH624glPu8tKUNyJe3hnU",
+            },
             onChange(info) {
                 if (info.file.status !== 'uploading') {
                     console.log(info.file, info.fileList);
@@ -221,34 +203,43 @@ class UploadFile extends React.Component {
                         onClick={this.showModal}
                     />
                 </Tooltip>
+
                 <Modal
                     title="上传文件"
                     visible={this.state.visible}
                     onOk={this.handleOk}
                     onCancel={this.handleCancel}
-                    width="700px"
+                    width="1200px"
                 >
-                    <Upload {...props} withCredentials={true} data={() => this.handleUploadData()}>
-                        <Button>
-                            <Icon type="upload" /> 将文件上传至HDFS
-    		                </Button>
-                    </Upload>
-                    {/* <Row>
-                        <Radio.Group onChange={this.onChangereplace} defaultValue={true}>
-                            <p>是否覆盖原有文件: &nbsp;
-                                  <Radio.Button value={true}>是</Radio.Button>
-                                <Radio.Button value={false}>否</Radio.Button>
-                            </p>
-                        </Radio.Group>
-                    </Row>
                     <Row>
-                        <Radio.Group onChange={this.onChangesetHeader} defaultValue={true}>
-                            <p>是否带有表头: &nbsp;
-                                  <Radio.Button value={true}>是</Radio.Button>
-                                <Radio.Button value={false}>否</Radio.Button>
-                            </p>
-                        </Radio.Group>
-                    </Row> */}
+                        <Col span={14} >
+                            <Row>
+                                <Col span={1}></Col>
+                                <Col span={3} style={{ padding: 5 }} >
+                                    <p style={{ right: 10 }} >
+                                        文件路径:
+                                    </p>
+                                </Col>
+                                <Col span={20} ><FileTree /></Col>
+                            </Row>
+                        </Col>
+                        <Col span={7} >
+                            <Row>
+                                <Col span={2}></Col>
+                                <Col span={5} style={{ padding: 5 }} >文件名:</Col>
+                                <Col span={16} ><Input></Input></Col>
+                                <Col span={1}></Col>
+                            </Row>
+                        </Col>
+                        <Col span={3} >
+                            <Upload {...props} withCredentials={true} data={{ file: "/" }}>
+                                <Button>
+                                    <Icon type="upload" /> 选择文件
+    		                    </Button>
+                            </Upload>
+                        </Col>
+                    </Row>
+
                     <EditableContext.Provider value={this.props.form}>
                         <Table
                             style={{ top: 20 }}
