@@ -5,6 +5,7 @@ import UploadFile from '../../PublicComponents/DataOperate/UploadFile';
 import VisualizedPanel from '../VisualizedPanel';
 import DataSetCard from '../../PublicComponents/DataSetCard';
 import styles from './index.less';
+import { number } from 'prop-types';
 
 const { Search } = Input;
 
@@ -22,7 +23,7 @@ const data =[
 class DataSetPanel extends React.Component {
     state = {
         homePath: "bdap/students/2017211511",
-        filePath: ["2017211511",],
+        filePath: ["2017211511"],
         fileList:[],
         fileBackup:[],
     }
@@ -50,11 +51,45 @@ class DataSetPanel extends React.Component {
     }
 
     handleClickFileFolder = (index) => {
-        console.log(this.state.fileList[index]);
+        //这里放入向后端请求的的子文件夹内数据
+        const Name=this.state.fileList[index].fileName;
+        const dataDir =[
+            
+            { fileName: "adult_2", fileFolder: true },
+            { fileName: "adult_3", fileFolder: true },
+            { fileName: "adult1.csv", fileFolder: false, activeFile: false },
+            { fileName: "adult2.csv", fileFolder: false, activeFile: true },
+            { fileName: "adult3.csv", fileFolder: false, activeFile: false },
+            { fileName: "adult4.csv", fileFolder: false, activeFile: false },
+            { fileName: "adult5.csv", fileFolder: false, activeFile: true },
+        ]
+        this.setState({
+            fileList:dataDir.map(r=>r),
+            filePath:this.state.filePath.concat(Name)
+        });
+        console.log(this.state.fileList);
+        console.log(this.state.filePath);
     }
 
     handleChangePathByPathIndex = (index) => {
-        console.log(this.state.filePath[index]);
+       //这里放入向后端请求的的子文件夹内数据
+        const dataDir =[
+            
+            { fileName: "adult_2", fileFolder: true },
+            { fileName: "adult_3", fileFolder: true },
+            { fileName: "adult1.csv", fileFolder: false, activeFile: false },
+            { fileName: "adult2.csv", fileFolder: false, activeFile: true },
+            { fileName: "adult3.csv", fileFolder: false, activeFile: false },
+            { fileName: "adult4.csv", fileFolder: false, activeFile: false },
+            { fileName: "adult5.csv", fileFolder: false, activeFile: true },
+        ]
+        const newfilePath=this.state.filePath.filter((path,idx)=>idx<=index).map(r=>r);
+        this.setState({
+            fileList:dataDir.map(r=>r),
+            filePath:newfilePath
+        });
+        console.log(this.state.fileList);
+        console.log(this.state.filePath);
     }
     //返回根目录，将filePath的数据清空
     handleClickHome = () => {
@@ -103,7 +138,9 @@ class DataSetPanel extends React.Component {
         if (currentTab !== "2") return <Fragment></Fragment>;
 
         if (clickTab === "2") {
-            const { filePath, fileList } = this.state;
+            const {  fileList } = this.state;
+            console.log(this.state);
+            const filePath=this.state.filePath;
             return (
                 <Fragment>
                     <Row className={styles.header} >
@@ -113,7 +150,7 @@ class DataSetPanel extends React.Component {
                                 filePath.map((path, index) => {
                                     return <div style={{ display: "inline" }} >
                                         <h5 style={{ display: "inline" }} >
-                                        <a className={styles.aStyle} onClick={this.handleChangePathByPathIndex.bind(this, index)} >{path}</a>
+                                        <a className={styles.aStyle} onClick={this.handleChangePathByPathIndex.bind(this,index)} >{path}</a>
                                         &nbsp;&nbsp;>&nbsp;&nbsp;</h5>
                                     </div>
                                 })
