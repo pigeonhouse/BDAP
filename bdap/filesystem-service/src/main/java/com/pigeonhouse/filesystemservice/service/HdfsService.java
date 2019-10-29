@@ -4,6 +4,7 @@ import com.pigeonhouse.filesystemservice.entity.HeaderAttribute;
 import com.pigeonhouse.filesystemservice.entity.LivySessionInfo;
 import com.pigeonhouse.filesystemservice.entity.MetaData;
 import com.pigeonhouse.filesystemservice.util.OutputParser;
+import com.pigeonhouse.filesystemservice.util.PathParser;
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.fs.*;
 import org.slf4j.Logger;
@@ -32,98 +33,91 @@ public class HdfsService {
     LivyService livyService;
 
     private Logger logger = LoggerFactory.getLogger(HdfsService.class);
-    private Configuration conf;
 
     private FileSystem getFileSystem() throws IOException {
-        conf = new Configuration();
+        Configuration conf = new Configuration();
         conf.set("dfs.client.use.datanode.hostname", "true");
         conf.set("fs.defaultFS", defaultHdfsUri);
         return FileSystem.get(conf);
     }
 
-    public boolean mkdir(String path) throws Exception {
-        FileSystem fileSystem = getFileSystem();
-        try {
-            String hdfsPath = defaultHdfsUri + defaultDirectory + path;
-            return fileSystem.mkdirs(new Path(hdfsPath));
-        } catch (IOException e) {
-            logger.error(MessageFormat.format("创建HDFS目录失败，path:{0}", path), e);
-            return false;
-        } finally {
-            close(fileSystem);
-        }
+    private String getHdfsPath(String path) {
+        String hdfsPath = defaultHdfsUri + defaultDirectory;
+        return hdfsPath + path;
     }
 
+    /**
+     * #name 标志该目录下存在一个叫name的文件夹
+     */
+    public void mkdir(String path) throws Exception {
+        FileSystem fileSystem = getFileSystem();
+        String dirPath = PathParser.getDirPath(path);
+        String name = PathParser.getName(path);
+        fileSystem.mkdirs(new Path(getHdfsPath(dirPath) + "/#" + name));
+        fileSystem.mkdirs(new Path(getHdfsPath(path)));
+    }
+
+    /**
+     * .common 标志该目录下存在一个叫common的文件是常用文件
+     */
     public void setCommonFile(String path) throws Exception {
         FileSystem fileSystem = getFileSystem();
-        String hdfsPath = defaultHdfsUri + defaultDirectory;
-        String splits[] = path.split("/");
-        StringBuilder dirPath = new StringBuilder();
-        for (int i = 0; i < splits.length - 1; i++) {
-            dirPath.append("/").append(splits[i]);
-            System.out.println(splits[i]);
-        }
-        System.out.println(hdfsPath+dirPath.toString()+"/."+splits[splits.length - 1]);
-        fileSystem.mkdirs(new Path(hdfsPath+dirPath.toString()+"/."+splits[splits.length - 1]));
+        String dirPath = PathParser.getDirPath(path);
+        String name = PathParser.getName(path);
+        fileSystem.mkdirs(new Path(getHdfsPath(dirPath) + "/." + name));
     }
 
     public void cancelCommonFile(String path) throws Exception {
-        FileSystem fileSystem = getFileSystem();
-        String hdfsPath = defaultHdfsUri + defaultDirectory + path;
-
-
+        String dirPath = PathParser.getDirPath(path);
+        String name = PathParser.getName(path);
+        delete(dirPath + "/." + name);
     }
-
 
 
     public List<Map<String, Object>> listFiles(String path) throws Exception {
         List<Map<String, Object>> result = new ArrayList<>();
         FileSystem fileSystem = getFileSystem();
 
-        try {
-            String hdfsPath = defaultHdfsUri + defaultDirectory + path;
+        String hdfsPath = getHdfsPath(path);
+        System.out.println(hdfsPath);
+        FileStatus[] statuses = fileSystem.listStatus(new Path(hdfsPath));
+        List<String> commonFileList = new ArrayList<>();
+        List<String> dirList = new ArrayList<>();
 
-            FileStatus[] statuses = fileSystem.listStatus(new Path(hdfsPath));
-            List<String> commonFileList = new ArrayList<>();
-            if (statuses != null) {
-                for (FileStatus status : statuses) {
-                    String[] pathBuf = status.getPath().toString().split("/");
-                    String name = pathBuf[pathBuf.length - 1];
-                    if(name.startsWith(".")){
-                        commonFileList.add(name.replace(".",""));
-                    }
-                }
-                for (FileStatus status : statuses) {
-                    Map<String, Object> fileMap = new HashMap<>(3);
-                    String[] pathBuf = status.getPath().toString().split("/");
-                    String name = pathBuf[pathBuf.length - 1];
-                    if(name.startsWith(".")){
-                        continue;
-                    }
-                    fileMap.put("name", name);
-                    fileMap.put("isDir", status.isDirectory());
-                    fileMap.put("isCommonFile", commonFileList.contains(name));
-
-                    SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-                    String timeText = format.format(status.getModificationTime());
-                    fileMap.put("ModificationTime", timeText);
-                    result.add(fileMap);
-
-                }
-                return result;
+        for (FileStatus status : statuses) {
+            String[] pathBuf = status.getPath().toString().split("/");
+            String name = pathBuf[pathBuf.length - 1];
+            if (name.startsWith(".")) {
+                commonFileList.add(name.replace(".", ""));
             }
-        } catch (IOException e) {
-            logger.error(MessageFormat.format("获取HDFS上面的某个路径下面的所有文件失败，path:{0}", path), e);
-        } finally {
-            close(fileSystem);
+            if (name.startsWith("#")) {
+                dirList.add(name.replace("#", ""));
+            }
         }
-        return null;
+        for (FileStatus status : statuses) {
+            Map<String, Object> fileMap = new HashMap<>(3);
+            String[] pathBuf = status.getPath().toString().split("/");
+            String name = pathBuf[pathBuf.length - 1];
+            if (name.startsWith(".") || name.startsWith("#")) {
+                continue;
+            }
+            fileMap.put("name", name);
+            fileMap.put("isDir", dirList.contains(name));
+            fileMap.put("isCommonFile", commonFileList.contains(name));
+
+            SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+            String timeText = format.format(status.getModificationTime());
+            fileMap.put("ModificationTime", timeText);
+            result.add(fileMap);
+
+        }
+        return result;
+
     }
 
-    public boolean delete(String path) throws Exception {
-        String hdfsPath = defaultHdfsUri + defaultDirectory + path;
+    public void delete(String path) throws Exception {
         FileSystem fileSystem = getFileSystem();
-        return fileSystem.delete(new Path(hdfsPath), true);
+        fileSystem.delete(new Path(getHdfsPath(path)), true);
     }
 
 
@@ -139,11 +133,12 @@ public class HdfsService {
         close(fs);
     }
 
-    public MetaData getMetaDataFromParquet(String userId, String path, LivySessionInfo livySessionInfo) throws Exception {
+    public MetaData getMetaDataFromOrc(String userId, String path, LivySessionInfo livySessionInfo) throws
+            Exception {
         String[] splits = path.split("/");
         String fileName = splits[splits.length - 1];
-
-        String readDataCode = "val df = spark.read.parquet(\"hdfs:///bdap/students/" + userId + path + "\")\n";
+        String dirPath = PathParser.getDirPath(path);
+        String readDataCode = "val df = spark.read.orc(\"hdfs:///bdap/students/" + userId + path + "\")\n";
         livyService.postCode(livySessionInfo, readDataCode);
         String previewDataCode = "df.show(20,false)";
         String previewDataResultUrl = livyService.postCode(livySessionInfo, previewDataCode);
@@ -154,7 +149,7 @@ public class HdfsService {
         String schemaDDL = OutputParser.getOutput(schemaResultUrl);
         List<HeaderAttribute> headerAttributes = OutputParser.parseDDL(schemaDDL);
 
-        return new MetaData(path, fileName, headerAttributes, previewData);
+        return new MetaData(dirPath, fileName, headerAttributes, previewData);
     }
 
     private void close(FileSystem fileSystem) {

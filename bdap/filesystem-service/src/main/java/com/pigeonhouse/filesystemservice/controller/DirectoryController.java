@@ -28,9 +28,18 @@ public class DirectoryController {
         }
     }
 
-//    @GetMapping("/mkdir")
-//    public ResponseEntity mkdir(){
-//
-//    }
+    @GetMapping("/mkdir")
+    public ResponseEntity mkdir(@RequestParam("path") String path,
+                                @RequestHeader("token") String token){
+        String userId = TokenParser.getClaimsFromToken(token).get("userId").asString();
+        try {
+            System.out.println("/" + userId + path);
+            hdfsService.mkdir("/" + userId + path);
+            return new ResponseEntity(HttpStatus.OK);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new ResponseEntity(HttpStatus.BAD_REQUEST);
+        }
+    }
 
 }
