@@ -1,41 +1,47 @@
 import React, { Fragment } from 'react';
-import { Row, Col, Input, Button, Tooltip } from 'antd';
+import { Row, Col, Input, Button, Tooltip, Modal } from 'antd';
 import ActiveFileList from '../../PublicComponents/DataOperate/ActiveFileList';
 import UploadFile from '../../PublicComponents/DataOperate/UploadFile';
 import VisualizedPanel from '../VisualizedPanel';
 import DataSetCard from '../../PublicComponents/DataSetCard';
 import styles from './index.less';
-import { number } from 'prop-types';
+
+import { fetchToolTest } from '../../FetchTool/FetchToolTest';
 
 const { Search } = Input;
 
-const data = [
-    { fileName: "adult_1", fileFolder: true },
-    { fileName: "adult_2", fileFolder: true },
-    { fileName: "adult_3", fileFolder: true },
-    { fileName: "adult1.csv", fileFolder: false, activeFile: false },
-    { fileName: "adult2.csv", fileFolder: false, activeFile: true },
-    { fileName: "adult3.csv", fileFolder: false, activeFile: false },
-    { fileName: "adult4.csv", fileFolder: false, activeFile: false },
-    { fileName: "adult5.csv", fileFolder: false, activeFile: true },
-]
 class DataSetPanel extends React.Component {
     state = {
-        homePath: "bdap/students/2017211511",
-        filePath: ["2017211511"],
+        filePath: [],
         fileList: [],
         fileBackup: [],
+        isCommonly: false,
     }
 
-    componentWillMount() {
-        //data应该是从后端拿到的数据
+    getFileListByPath = async (path) => {
+        const init = {
+            method: 'GET',
+            mode: 'cors',
+            headers: {
+                "Content-Type": "application/json;charset=utf-8"
+            },
+        };
+        const url = `/filesystem-service/ls&path=${path}`;
+
+        return await fetchToolTest(url, init);
+    }
+
+    async componentWillMount() {
+        const res = await this.getFileListByPath('/');
+
         this.setState({
-            fileBackup: data,
-            fileList: data.map(r => r),
+            fileBackup: res || [],
+            fileList: res || [],
         })
     }
 
     handleClickFile = (index) => {
+        console.log(index)
         if (this.props.sessionFinish === false) {
             const args = {
                 message: 'Session',
@@ -84,6 +90,7 @@ class DataSetPanel extends React.Component {
             { fileName: "adult4.csv", fileFolder: false, activeFile: false },
             { fileName: "adult5.csv", fileFolder: false, activeFile: true },
         ]
+        //路径更新
         const newfilePath = this.state.filePath.filter((path, idx) => idx <= index).map(r => r);
         this.setState({
             fileList: dataDir.map(r => r),
@@ -136,8 +143,100 @@ class DataSetPanel extends React.Component {
         });
     }
 
+    getStartFileList = () => {
+        // 演示用的
+        console.log("获取常用文件数据")
+        const resFile = [
+            { fileName: "adult1.csv", fileFolder: false, activeFile: false },
+            { fileName: "adult2.csv", fileFolder: false, activeFile: true },
+            { fileName: "adult3.csv", fileFolder: false, activeFile: false },
+            { fileName: "adult4.csv", fileFolder: false, activeFile: false },
+            { fileName: "adult5.csv", fileFolder: false, activeFile: true },
+        ]
+        this.setState({ fileList: resFile, isCommonly: true, filePath: ["常用文件列表"] })
+
+        // 正式用的
+        // const init = {
+        // 	method: 'GET',
+        // 	mode: 'cors',
+        // 	body: JSON.stringify(stream),
+        // 	headers: {
+        // 		"Content-Type": "application/json;charset=utf-8"
+        // 	},
+        // }
+        // const res = await fetchTool("/getFileList", init)
+        // if (res.code === 200) {
+        //    this.setState({fileList: res.data})
+        // }
+
+
+
+    }
+
+
+    onBack = () => {
+        const resFile = [
+            { fileName: "adult_1", fileFolder: true },
+            { fileName: "adult_2", fileFolder: true },
+            { fileName: "adult_3", fileFolder: true },
+            { fileName: "adult1.csv", fileFolder: false, activeFile: false },
+            { fileName: "adult2.csv", fileFolder: false, activeFile: true },
+            { fileName: "adult3.csv", fileFolder: false, activeFile: false },
+            { fileName: "adult4.csv", fileFolder: false, activeFile: false },
+            { fileName: "adult5.csv", fileFolder: false, activeFile: true },
+        ]
+        this.setState({ fileList: resFile, isCommonly: false, filePath: [] })
+    }
+
+    getFileList = () => {
+        // 演示用的
+        const active = this.state.fileList[3].activeFile;
+        const afileList = [
+            { fileName: "adult_1", fileFolder: true },
+            { fileName: "adult_2", fileFolder: true },
+            { fileName: "adult_3", fileFolder: true },
+            { fileName: "adult1.csv", fileFolder: false, activeFile: true },
+            { fileName: "adult2.csv", fileFolder: false, activeFile: true },
+            { fileName: "adult3.csv", fileFolder: false, activeFile: false },
+            { fileName: "adult4.csv", fileFolder: false, activeFile: false },
+            { fileName: "adult5.csv", fileFolder: false, activeFile: true }
+        ]
+        const bfileList = [
+            { fileName: "adult_1", fileFolder: true },
+            { fileName: "adult_2", fileFolder: true },
+            { fileName: "adult_3", fileFolder: true },
+            { fileName: "adult1.csv", fileFolder: false, activeFile: false },
+            { fileName: "adult2.csv", fileFolder: false, activeFile: true },
+            { fileName: "adult3.csv", fileFolder: false, activeFile: false },
+            { fileName: "adult4.csv", fileFolder: false, activeFile: false },
+            { fileName: "adult5.csv", fileFolder: false, activeFile: true }
+        ]
+        const fileList = active ? bfileList : afileList
+        console.log(active)
+        console.log(fileList)
+        this.setState({ fileList })
+
+
+        // 正式用的
+        // const init = {
+        // 	method: 'GET',
+        // 	mode: 'cors',
+        // 	body: JSON.stringify(stream),
+        // 	headers: {
+        // 		"Content-Type": "application/json;charset=utf-8"
+        // 	},
+        // }
+        // const res = await fetchTool("/getFileList", init)
+        // if (res.code === 200) {
+        //    this.setState({fileList: res.data})
+        // }
+
+
+    }
+
     render() {
         const { currentTab, clickTab } = this.props;
+        const { isCommonly } = this.state;
         if (currentTab !== "2") return <Fragment></Fragment>;
 
         if (clickTab === "2") {
@@ -148,7 +247,7 @@ class DataSetPanel extends React.Component {
                 <Fragment>
                     <Row className={styles.header} >
                         <Col span={14} >
-                            <h3 className={styles.headerFont} style={{ marginLeft: "30px" }} >DataSet&nbsp;&nbsp;&nbsp;&nbsp;</h3>
+                            <h5 className={styles.headerFont} style={{ marginLeft: "50px" }} >.> &nbsp;&nbsp;</h5>
                             {
                                 filePath.map((path, index) => {
                                     return <div style={{ display: "inline" }} >
@@ -178,16 +277,26 @@ class DataSetPanel extends React.Component {
                                 <Button
                                     icon="folder-add"
                                     className={styles.buttonStyle}
+                                    onClick={this.setNewDirVisible}
                                 />
+                                <Modal
+                                    onOk={this.setNewDirOperate}
+                                    onCancel={this.setNewDirVisible}
+                                >
+                                </Modal>
                             </Tooltip>
 
                             {/* 常用文件列表 */}
-                            <ActiveFileList />
+                            <ActiveFileList
+                                getStartFileList={this.getStartFileList}
+                                isCommonly={isCommonly}
+                            />
 
                             <Tooltip placement="bottom" title="返回上一页" >
                                 <Button
                                     icon="left"
                                     className={styles.buttonStyle}
+                                    onClick={this.onBack}
                                 />
                             </Tooltip>
                             <Tooltip placement="bottom" title="返回根目录" >
@@ -203,8 +312,10 @@ class DataSetPanel extends React.Component {
                         <DataSetCard
                             handleClickFile={this.handleClickFile}
                             handleClickFileFolder={this.handleClickFileFolder}
+                            getFileList={this.getFileList}
                             fileList={fileList}
                             handleDeleteFile={this.handleDeleteFile}
+                            filePath={filePath}
                         />
                     </div>
                 </Fragment>
