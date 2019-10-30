@@ -25,12 +25,8 @@ const props = {
 
 class DataSetCard extends React.Component {
 
-    // handleDeleteFile=(index)=>{
-    //     console.log(index);
-    // }
-
     render() {
-        const { fileList, handleDeleteFile, filePath, getFileList} = this.props;
+        const { fileList, handleDeleteFile, filePath, getFileList } = this.props;
         var children = new Array();
 
         // 生成fileList对应的文件夹，且最后为上传文件，
@@ -40,12 +36,12 @@ class DataSetCard extends React.Component {
 
                 // 分情况生成file及fileFolder，upLoad
                 if (fileList.length > count + colCount) {
-                    if (fileList[count + colCount].fileFolder === false) {
+                    if (fileList[count + colCount].isDir === false) {
                         colChildren.push(
                             <FileCard
                                 file={fileList[count + colCount]}
-                                filePath={filePath} 
-                                getFileList={this.props.getFileList}          
+                                filePath={filePath}
+                                getFileList={this.props.getFileList}
                                 handleClickFile={this.props.handleClickFile}
                                 index={count + colCount}
                                 handleDeleteFile={handleDeleteFile}

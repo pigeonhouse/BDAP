@@ -21,14 +21,15 @@ class FileCard extends React.Component {
     mouseLeave = () => {
         this.setState({ mouseEnter: false });
     }
+
     //handleDeleteFile是传递过来的，为了将index传给父组件
     deleteFile = (e) => {
-        const { index,file} = this.props;
-        const self=this;
+        const { index, file } = this.props;
+        const self = this;
         e.stopPropagation();
         confirm({
             title: '确定要删除此项目？',
-            content: file.fileName,
+            content: file.name,
             onOk() {
                 self.props.handleDeleteFile(index)
             }
@@ -38,28 +39,28 @@ class FileCard extends React.Component {
     //此处应该写文件下载，但还没有完成
     handleClickDownloadFile = (e) => {
         e.stopPropagation();
-        const {file} = this.props;
+        const { file } = this.props;
         alert(file.fileName)
     }
 
     handleClickStart = (e) => {
         e.stopPropagation();
-        const {file, filePath} = this.props;
-        const path =`${filePath[0]}/${file.fileName}`;
+        const { file, filePath } = this.props;
+        const path = `${filePath[0]}/${file.fileName}`;
         // const init = {
-		// 	method: 'POST',
-		// 	mode: 'cors',
-		// 	body: JSON.stringify(stream),
-		// 	headers: {
-		// 		"Content-Type": "application/json;charset=utf-8"
-		// 	},
-		// 	params: {
+        // 	method: 'POST',
+        // 	mode: 'cors',
+        // 	body: JSON.stringify(stream),
+        // 	headers: {
+        // 		"Content-Type": "application/json;charset=utf-8"
+        // 	},
+        // 	params: {
         //         path: path,
         //         file: file,
         //     }
-		// }
+        // }
         // const res = await fetchTool("/collection", init)
-		// if (res.code === 200) {
+        // if (res.code === 200) {
         //    this.message.success("操作成功")
         //    this.props.getFileList()
         // }
@@ -68,7 +69,7 @@ class FileCard extends React.Component {
 
     render() {
         const { file } = this.props;
-        const style = file.activeFile ? {color: '#1890ff'} : {color: '#ccc'}
+        const style = file.activeFile ? { color: '#1890ff' } : { color: '#ccc' }
 
         return (
             <Col span={8}>
@@ -87,7 +88,7 @@ class FileCard extends React.Component {
                                 />
                             </Col>
                             <Col span={8} style={{ padding: 1, fontWeight: "bold", fontSize: 20 }} >
-                                {file.fileName}
+                                {file.name}
                             </Col>
                             <Col span={12} style={{ paddingLeft: 5 }} >
                                 {this.state.mouseEnter === true ?
@@ -107,11 +108,10 @@ class FileCard extends React.Component {
                                         </Tooltip>
                                         <Tooltip placement="bottom" title="标记为常用文件" >
                                             <Button
+                                                icon="star"
                                                 className={styles.iconStyle}
                                                 onClick={this.handleClickStart}
-                                            >
-                                              <Icon type="star" style={style}/>
-                                            </Button>
+                                            />
                                         </Tooltip>
                                         <Tooltip placement="bottom" title="删除文件" >
                                             <Button

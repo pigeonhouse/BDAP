@@ -1,5 +1,5 @@
 import React, { Fragment } from 'react';
-import { Col, Tooltip, Row, Button, Icon, Card,Modal } from 'antd';
+import { Col, Tooltip, Row, Button, Icon, Card, Modal } from 'antd';
 const { confirm } = Modal
 import styles from './index.less';
 
@@ -22,12 +22,12 @@ class FileFolderCard extends React.Component {
         this.setState({ mouseEnter: false });
     }
     deleteFolderFile = (e) => {
-        const { index,fileFolder } = this.props;
-        const self=this;
+        const { index, fileFolder } = this.props;
+        const self = this;
         e.stopPropagation();
         confirm({
             title: '确定要删除此项目？',
-            content:fileFolder.fileName,
+            content: fileFolder.name,
             onOk() {
                 self.props.handleDeleteFile(index)
             }
@@ -53,7 +53,7 @@ class FileFolderCard extends React.Component {
                                 />
                             </Col>
                             <Col span={8} style={{ padding: 1, fontWeight: "bold", fontSize: 20 }} >
-                                {fileFolder.fileName}
+                                {fileFolder.name}
                             </Col>
                             <Col span={12} style={{ paddingLeft: 5 }} >
                                 {this.state.mouseEnter === true ?
