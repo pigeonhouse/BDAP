@@ -28,8 +28,8 @@ class FileCard extends React.Component {
         const self = this;
         e.stopPropagation();
         confirm({
-            title: '确定要删除此项目？',
-            content: file.name,
+            title: '确定要删除此文件？',
+            content: file.fileName,
             onOk() {
                 self.props.handleDeleteFile(index)
             }
@@ -88,7 +88,7 @@ class FileCard extends React.Component {
                                 />
                             </Col>
                             <Col span={8} style={{ padding: 1, fontWeight: "bold", fontSize: 20 }} >
-                                {file.name}
+                                {file.fileName}
                             </Col>
                             <Col span={12} style={{ paddingLeft: 5 }} >
                                 {this.state.mouseEnter === true ?

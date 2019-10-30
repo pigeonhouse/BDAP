@@ -26,8 +26,8 @@ class FileFolderCard extends React.Component {
         const self = this;
         e.stopPropagation();
         confirm({
-            title: '确定要删除此项目？',
-            content: fileFolder.name,
+            title: '确定要删除此文件夹？',
+            content: fileFolder.fileName,
             onOk() {
                 self.props.handleDeleteFile(index)
             }
@@ -53,7 +53,7 @@ class FileFolderCard extends React.Component {
                                 />
                             </Col>
                             <Col span={8} style={{ padding: 1, fontWeight: "bold", fontSize: 20 }} >
-                                {fileFolder.name}
+                                {fileFolder.fileName}
                             </Col>
                             <Col span={12} style={{ paddingLeft: 5 }} >
                                 {this.state.mouseEnter === true ?

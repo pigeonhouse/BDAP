@@ -41,7 +41,7 @@ class DataSetCard extends React.Component {
                             <FileCard
                                 file={fileList[count + colCount]}
                                 filePath={filePath}
-                                getFileList={this.props.getFileList}
+                                getFileList={getFileList}
                                 handleClickFile={this.props.handleClickFile}
                                 index={count + colCount}
                                 handleDeleteFile={handleDeleteFile}
