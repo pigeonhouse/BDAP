@@ -149,10 +149,10 @@ class DataSetPanel extends React.Component {
         { fileName: "adult4.csv", fileFolder: false, activeFile: false },
         { fileName: "adult5.csv", fileFolder: false, activeFile: true },
       ]
-      this.setState({fileList: resFile, isCommonly: true})
+      this.setState({fileList: resFile, isCommonly: true, filePath:["常用文件列表"]})
 
-      // 正式用的
-       // const init = {
+        // 正式用的
+        // const init = {
 		// 	method: 'GET',
 		// 	mode: 'cors',
 		// 	body: JSON.stringify(stream),
@@ -181,7 +181,7 @@ class DataSetPanel extends React.Component {
             { fileName: "adult4.csv", fileFolder: false, activeFile: false },
             { fileName: "adult5.csv", fileFolder: false, activeFile: true },
           ]
-          this.setState({fileList: resFile, isCommonly: false})
+          this.setState({fileList: resFile, isCommonly: false, filePath:[]})
     }
 
     getFileList = () => {
