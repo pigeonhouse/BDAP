@@ -22,10 +22,12 @@ const data =[
 ]
 class DataSetPanel extends React.Component {
     state = {
-        homePath: "bdap/students/2017211511",
-        filePath: [],
-        fileList:[],
+        homePath: "bdap/students/",//用户根目录
+        filePath: [],//文件路径存储数组
+        fileList:[],//文件列表
         fileBackup:[],
+        NewDirVisible:false,//新建文件夹Modal控制显示隐藏
+        dirName:""//新建文件夹名称
     }
     componentWillMount(){
         //data应该是从后端拿到的数据
@@ -33,6 +35,34 @@ class DataSetPanel extends React.Component {
             fileBackup:data,
             fileList:data.map(r=>r),
         })
+    }
+    //新建文件夹Modal控制显示隐藏
+    setNewDirVisible=()=>{
+        this.setState({
+            NewDirVisible:!this.state.NewDirVisible
+        });
+    }
+    //新建文件夹Modal点击确定触发
+    setNewDirOperate=()=>{
+        //后端请求新建文件夹
+        //if 返回码正确
+        this.setState({
+         fileList:this.state.fileList.concat({fileName:this.state.dirName,fileFolder:true}),
+         fileBackup:this.state.fileBackup.concat({fileName:this.state.dirName,fileFolder:true})
+        })
+        //message("新建文件夹成功")
+        //else
+        //message("错误信息")
+        this.setNewDirVisible();
+
+    }
+    //新建文件夹Modal输入框变更控制
+    onChangeDirValue=e=>{
+        this.setState({
+            dirName:e.target.value
+        })
+        
+        console.log(this.state.dirName);
     }
     handleClickFile = (index) => {
         if (this.props.sessionFinish === false) {
@@ -140,7 +170,6 @@ class DataSetPanel extends React.Component {
 
         if (clickTab === "2") {
             const {  fileList } = this.state;
-            console.log(this.state);
             const filePath=this.state.filePath;
             return (
                 <Fragment>
@@ -179,10 +208,14 @@ class DataSetPanel extends React.Component {
                                     onClick={this.setNewDirVisible}
                                 />
                                 <Modal
+                                title="新建文件夹"
                                 onOk={this.setNewDirOperate}
                                 onCancel={this.setNewDirVisible}
+                                visible={this.state.NewDirVisible}
                                 >
-                            
+                               <p> <Input addonBefore="文件夹名" placeholder="请输入文件夹名" value={this.state.dirName} onChange={this.onChangeDirValue}
+                               
+                               /></p>
                                 </Modal>
                             </Tooltip>
 

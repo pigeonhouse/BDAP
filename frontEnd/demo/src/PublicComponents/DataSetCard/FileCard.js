@@ -82,6 +82,7 @@ class FileCard extends React.Component {
                                             <Button
                                                 icon="star"
                                                 className={styles.iconStyle}
+                                            
                                             />
                                         </Tooltip>
                                         <Tooltip placement="bottom" title="删除文件" >
