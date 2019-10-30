@@ -3,6 +3,7 @@ import { Upload, Button, Icon, Modal, Input, Tooltip, Row, Col } from 'antd';
 
 import FileTree from './FileTree';
 import DataTable from './DataTable';
+import EditorTable from './EditorTable';
 import styles from './index.less';
 
 class UploadFile extends React.Component {
@@ -66,7 +67,7 @@ class UploadFile extends React.Component {
                     visible={this.state.visible}
                     onOk={this.handleOk}
                     onCancel={this.handleCancel}
-                    width="1200px"
+                    width="1300px"
                 >
                     <Row>
                         <Col span={14} >
@@ -96,7 +97,15 @@ class UploadFile extends React.Component {
                             </Upload>
                         </Col>
                     </Row>
-                    <DataTable></DataTable>
+                    <Row>
+                        <Col span={8} >
+                            <EditorTable></EditorTable>
+                        </Col>
+                        <Col span={1} ></Col>
+                        <Col span={15} >
+                            <DataTable></DataTable>
+                        </Col>
+                    </Row>
                 </Modal>
             </div>
         );
