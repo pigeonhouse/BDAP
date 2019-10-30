@@ -18,12 +18,19 @@ spring:
             - Path=/login-service/**
           filters:
             - StripPrefix=1
-#              - Auth=true
 
         - id: filesystem-service
           uri: lb://filesystem-service
           predicates:
             - Path=/filesystem-service/**
+          filters:
+            - StripPrefix=1
+            - Auth=true
+
+        - id: experiment-service
+          uri: lb://experiment-service
+          predicates:
+            - Path=/experiment-service/**
           filters:
             - StripPrefix=1
             - Auth=true

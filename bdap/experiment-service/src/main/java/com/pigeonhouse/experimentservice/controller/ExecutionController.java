@@ -5,7 +5,10 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.pigeonhouse.experimentservice.entity.ExperimentMapInfo;
 import com.pigeonhouse.experimentservice.entity.LivySessionInfo;
 import com.pigeonhouse.experimentservice.entity.nodeinfo.NodeInfo;
+import com.pigeonhouse.experimentservice.service.ExecutionService;
+import com.pigeonhouse.experimentservice.service.LivyService;
 import com.pigeonhouse.experimentservice.util.TokenParser;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -20,6 +23,11 @@ import java.util.Map;
 @RestController
 public class ExecutionController {
 
+    @Autowired
+    ExecutionService executionService;
+    @Autowired
+    LivyService livyService;
+
     @PostMapping(value = "/flow/run")
     public ResponseEntity run(@RequestBody ExperimentMapInfo experimentMapInfo,
                               @RequestHeader("token") String token) {
@@ -29,20 +37,33 @@ public class ExecutionController {
         ArrayList<NodeInfo> nodes = experimentMapInfo.getNodes();
 
         return ResponseEntity.ok(executionService.executeFlow(nodes, sessionInfo));
-}
+    }
 
     @GetMapping("/flow/node/status")
-    public ResponseEntity checkRunningStatus(@RequestParam("resultUrl") String resultUrl,) {
+    public ResponseEntity checkRunningStatus(@RequestParam("resultUrl") String resultUrl) {
         try {
             Map resultMap = new ObjectMapper().readValue(
                     new RestTemplate().getForObject(resultUrl, String.class), Map.class);
             String state = resultMap.get("state").toString();
             return ResponseEntity.ok(state);
-        } catch (HttpClientErrorException e) {
+        } catch (Exception e) {
             e.printStackTrace();
             return new ResponseEntity(HttpStatus.BAD_REQUEST);
-        } catch (IOException e) {
-            e.printStackTrace();
         }
     }
+
+
+    @GetMapping("/flow/node/data/{nodeId}")
+    public ResponseEntity showNodeResult(@PathVariable String nodeId,
+                                         @RequestHeader("token")String token) {
+        try {
+            LivySessionInfo sessionInfo = TokenParser.getSessionInfoFromToken(token);
+            livyService.postCode(sessionInfo,"val df = dfMap(\"" + nodeId + "\")\n");
+            String result = livyService.getCsv(sessionInfo,100);
+            return ResponseEntity.ok(result);
+        } catch (Exception e) {
+            return new ResponseEntity(HttpStatus.BAD_REQUEST);
+        }
+    }
+
 }

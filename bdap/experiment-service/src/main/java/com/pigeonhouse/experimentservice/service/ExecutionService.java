@@ -1,10 +1,9 @@
-package com.pigeonhouse.bdap.service.runcode;
+package com.pigeonhouse.experimentservice.service;
 
-import com.pigeonhouse.bdap.dao.LivyDao;
-import com.pigeonhouse.bdap.entity.execution.ExecutionInfo;
-import com.pigeonhouse.bdap.entity.execution.LivySessionInfo;
-import com.pigeonhouse.bdap.entity.mapinfo.nodeinfo.NodeInfo;
-import com.pigeonhouse.bdap.entity.mapinfo.nodeinfo.attrinfo.AttrInfo;
+import com.pigeonhouse.experimentservice.entity.LivySessionInfo;
+import com.pigeonhouse.experimentservice.entity.nodeinfo.ExecutionInfo;
+import com.pigeonhouse.experimentservice.entity.nodeinfo.NodeInfo;
+import com.pigeonhouse.experimentservice.entity.nodeinfo.attrinfo.AttrInfo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -15,15 +14,11 @@ import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * @Author: XueXiaoYue HouWeiying
- * @Date: 2019/9/7 11:28
- */
 @Service
 public class ExecutionService {
 
     @Autowired
-    LivyDao livyDao;
+    LivyService livyService;
 
     /**
      * 给代码传入参数
@@ -173,7 +168,7 @@ public class ExecutionService {
             codeToRun.append(nodeCode);
 
             //提交代码，得到一个url，用于前端轮询以查询这次job运行状态
-            String resultUrl = livyDao.postCode(codeToRun.toString(), livySessionInfo);
+            String resultUrl = livyService.postCode(livySessionInfo,codeToRun.toString());
             System.out.println("success!\n" + resultUrl);
 
             //清空原先的代码，准备下一次提交
@@ -181,7 +176,7 @@ public class ExecutionService {
             ExecutionInfo executionInfo = new ExecutionInfo(nodeInfo.getId(), resultUrl);
             executionInfoList.add(executionInfo);
         }
-        String resultUrl = livyDao.postCode(codeToRun.toString(), livySessionInfo);
+        String resultUrl = livyService.postCode(livySessionInfo,codeToRun.toString());
         System.out.println("success!\n" + resultUrl);
         return executionInfoList;
     }
@@ -203,7 +198,7 @@ public class ExecutionService {
             String nodeCode = generateCode(nodeInfo);
             codeToRun.append(nodeCode);
         }
-        String resultUrl = livyDao.postCode(codeToRun.toString(), livySessionInfo);
+        String resultUrl = livyService.postCode(livySessionInfo,codeToRun.toString());
         System.out.println("success!\n" + resultUrl);
         return executionInfoList;
     }

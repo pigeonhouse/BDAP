@@ -1,7 +1,7 @@
 package com.pigeonhouse.experimentservice.entity.nodeinfo;
 
+import com.pigeonhouse.experimentservice.entity.FileAttr.HeaderAttribute;
 import com.pigeonhouse.experimentservice.entity.nodeinfo.attrinfo.AttrInfo;
-import com.pigeonhouse.experimentservice.entity.metadata.HeaderAttribute;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;

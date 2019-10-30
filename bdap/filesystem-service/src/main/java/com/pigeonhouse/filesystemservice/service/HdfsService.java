@@ -99,7 +99,7 @@ public class HdfsService {
             if (name.startsWith(".") || name.startsWith("#")) {
                 continue;
             }
-            fileMap.put("name", name);
+            fileMap.put("fileName", name);
             fileMap.put("isDir", dirList.contains(name));
             fileMap.put("isCommonFile", commonFileList.contains(name));
 
