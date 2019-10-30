@@ -24,9 +24,6 @@ class VisualTable extends React.Component {
         });
     };
 
-
-
-
     render() {
         let { labelArray, dataSet, loading } = this.props;
 
@@ -45,7 +42,7 @@ class VisualTable extends React.Component {
                 title: item,
                 dataIndex: item,
                 key: item,
-                width:100,
+                width: 100,
             })
         })
 
@@ -65,7 +62,7 @@ class VisualTable extends React.Component {
                             loading={loading}
                             onChange={this.handleChange}
                             pagination={{ pageSize: 50 }}
-                             scroll={{ y: "calc(105vh - 405px)" ,x:"100% "}}
+                            scroll={{ y: "calc(105vh - 405px)", x: "110%" }}
                         />
                     </Col>
                     <Col span={3}></Col>

@@ -86,6 +86,7 @@ class DataTable extends React.Component {
             {
                 title: 'operation',
                 dataIndex: 'operation',
+                width: 100,
                 render: (text, record) =>
                     this.state.dataSource.length >= 1 ? (
                         <Popconfirm title="确定删除?" onConfirm={() => this.handleDelete(record.key)}>
@@ -94,18 +95,16 @@ class DataTable extends React.Component {
                     ) : null,
             },
             {
-                title: 'name',
-                dataIndex: 'name',
-                width: '30%',
+                title: 'label',
+                dataIndex: 'label',
+                width: 100,
                 editable: true,
             },
             {
-                title: 'age',
-                dataIndex: 'age',
-            },
-            {
-                title: 'address',
-                dataIndex: 'address',
+                title: 'type',
+                dataIndex: 'type',
+                width: 100,
+                editable: true,
             },
         ];
 
@@ -114,14 +113,12 @@ class DataTable extends React.Component {
                 {
                     key: '0',
                     name: 'Edward King 0',
-                    age: '32',
-                    address: 'London, Park Lane no. 0',
+                    type: '32',
                 },
                 {
                     key: '1',
                     name: 'Edward King 1',
-                    age: '32',
-                    address: 'London, Park Lane no. 1',
+                    type: '32',
                 },
             ],
             count: 2,
@@ -152,7 +149,20 @@ class DataTable extends React.Component {
                 cell: EditableCell,
             },
         };
-        const columns = this.columns.map(col => {
+
+        var editorColumns = this.columns;
+
+        if (editorColumns.length < 13) {
+            for (let i = 1; i <= 10; i++) {
+                editorColumns.push({
+                    title: (i + 2).toString(),
+                    dataIndex: i.toString(),
+                    width: 150,
+                })
+            }
+        }
+
+        const columns = editorColumns.map(col => {
             if (!col.editable) {
                 return col;
             }
@@ -167,13 +177,14 @@ class DataTable extends React.Component {
                 }),
             };
         });
+
         return (
             <Table
                 components={components}
-                rowClassName={() => 'editable-row'}
                 bordered
                 dataSource={dataSource}
                 columns={columns}
+                scroll={{ y: "calc(105vh - 405px)", x: "1800px" }}
             />
         );
     }
