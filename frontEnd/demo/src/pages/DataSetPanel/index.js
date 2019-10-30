@@ -23,7 +23,7 @@ const data =[
 class DataSetPanel extends React.Component {
     state = {
         homePath: "bdap/students/2017211511",
-        filePath: ["2017211511"],
+        filePath: [],
         fileList:[],
         fileBackup:[],
     }
