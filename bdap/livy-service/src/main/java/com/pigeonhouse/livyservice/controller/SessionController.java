@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.HttpServletRequest;
 import java.util.Map;
 
+
 @RestController
 public class SessionController {
 
@@ -24,7 +25,6 @@ public class SessionController {
     ServerService serverService;
     @Autowired
     SessionService sessionService;
-
 
     @GetMapping("/session")
     public LivySessionInfo newSession() {

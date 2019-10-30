@@ -5,7 +5,6 @@ import com.pigeonhouse.filesystemservice.entity.HeaderAttribute;
 import com.pigeonhouse.filesystemservice.entity.LivySessionInfo;
 import com.pigeonhouse.filesystemservice.service.HdfsService;
 import com.pigeonhouse.filesystemservice.service.LivyService;
-import com.pigeonhouse.filesystemservice.util.OutputParser;
 import com.pigeonhouse.filesystemservice.util.TokenParser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -48,15 +47,9 @@ public class HdfsFilesController {
                     ".load(\"hdfs:///bdap/students/" + userId + "/..tmp/" + fileName + "\")\n";
 
             livyService.postCode(livySessionInfo,readDataCode);
-            String readSchemaDDL = "println(df.schema.toDDL)";
-            String schemaResultUrl = livyService.postCode(livySessionInfo,readSchemaDDL);
-            String schemaDDL = OutputParser.getOutput(schemaResultUrl);
+            List<HeaderAttribute> headerAttributes = livyService.getSchema(livySessionInfo);
 
-            String previewDataCode = "df.show(20,false)";
-            String previewDataResultUrl = livyService.postCode(livySessionInfo, previewDataCode);
-            String previewData = OutputParser.convertToCsv(OutputParser.getOutput(previewDataResultUrl));
-
-            List<HeaderAttribute> headerAttributes = OutputParser.parseDDL(schemaDDL);
+            String previewData = livyService.getCsv(livySessionInfo,20);
 
             MetaData metaData = new MetaData(fileName, headerAttributes, previewData);
 
@@ -110,6 +103,8 @@ public class HdfsFilesController {
             return new ResponseEntity(HttpStatus.BAD_REQUEST);
         }
     }
+
+    //TODO 删除文件/文件夹/常用文件需要分别判断
 
     @DeleteMapping("/")
     public ResponseEntity delete(@RequestParam("path") String path,

@@ -1,7 +1,7 @@
-package com.pigeonhouse.filesystemservice.util;
+package com.pigeonhouse.livyservice.util;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.pigeonhouse.filesystemservice.entity.HeaderAttribute;
+import com.pigeonhouse.livyservice.entity.HeaderAttribute;
 import org.springframework.web.client.RestTemplate;
 
 import java.util.ArrayList;
