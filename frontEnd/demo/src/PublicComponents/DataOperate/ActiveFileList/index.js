@@ -1,23 +1,23 @@
 import React from 'react';
-import { Button, Tooltip } from 'antd';
+import { Button, Tooltip, Icon } from 'antd';
 
 import styles from './index.less';
 
 class ActiveFileList extends React.Component {
-
-    handleShowActiveFileList = () => {
-        console.log("-----");
-    }
     
     render() {
+        const { isCommonly } = this.props;
+        const style = isCommonly ? {color: '#1890ff'} : {color: '#ccc'}
+
         return (
             <div style={{ display: "inline" }} >
                 <Tooltip placement="bottom" title="常用文件列表" >
                     <Button
-                        icon="star"
                         className={styles.buttonStyle}
-                        onClick={this.handleShowActiveFileList}
-                    />
+                        onClick={this.props.getStartFileList}
+                    >
+                        <Icon type="star" style={style}/>
+                    </Button>
                 </Tooltip>
             </div>
         );

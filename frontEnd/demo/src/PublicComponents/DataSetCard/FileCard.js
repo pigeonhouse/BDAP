@@ -1,6 +1,7 @@
 import React, { Fragment } from 'react';
-import { Col, Tooltip, Row, Button, Icon, Card, Modal } from 'antd';
+import { Col, Tooltip, Row, Button, Icon, Card, Modal, message } from 'antd';
 const { confirm } = Modal
+import { fetchTool } from './../../FetchTool';
 import styles from './index.less';
 
 class FileCard extends React.Component {
@@ -40,8 +41,34 @@ class FileCard extends React.Component {
         const {file} = this.props;
         alert(file.fileName)
     }
+
+    handleClickStart = (e) => {
+        e.stopPropagation();
+        const {file, filePath} = this.props;
+        const path =`${filePath[0]}/${file.fileName}`;
+        // const init = {
+		// 	method: 'POST',
+		// 	mode: 'cors',
+		// 	body: JSON.stringify(stream),
+		// 	headers: {
+		// 		"Content-Type": "application/json;charset=utf-8"
+		// 	},
+		// 	params: {
+        //         path: path,
+        //         file: file,
+        //     }
+		// }
+        // const res = await fetchTool("/collection", init)
+		// if (res.code === 200) {
+        //    this.message.success("操作成功")
+        //    this.props.getFileList()
+        // }
+        this.props.getFileList()
+    }
+
     render() {
         const { file } = this.props;
+        const style = file.activeFile ? {color: '#1890ff'} : {color: '#ccc'}
 
         return (
             <Col span={8}>
@@ -80,9 +107,11 @@ class FileCard extends React.Component {
                                         </Tooltip>
                                         <Tooltip placement="bottom" title="标记为常用文件" >
                                             <Button
-                                                icon="star"
                                                 className={styles.iconStyle}
-                                            />
+                                                onClick={this.handleClickStart}
+                                            >
+                                              <Icon type="star" style={style}/>
+                                            </Button>
                                         </Tooltip>
                                         <Tooltip placement="bottom" title="删除文件" >
                                             <Button
