@@ -41,11 +41,11 @@ public class HdfsFilesController {
             if (!"csv".equals(fileType) && !"txt".equals(fileType) && !"json".equals(fileType)) {
                 return new ResponseEntity(HttpStatus.BAD_REQUEST);
             }
-            hdfsService.upload(file, "/" + userId + "/tmp");
+            hdfsService.upload(file, "/" + userId + "/..tmp");
 
             String readDataCode = "val df = spark.read.format(\"" + fileType + "\")" +
                     ".option(\"inferSchema\",\"true\").option(\"header\",\"true\")" +
-                    ".load(\"hdfs:///bdap/students/" + userId + "/tmp/" + fileName + "\")\n";
+                    ".load(\"hdfs:///bdap/students/" + userId + "/..tmp/" + fileName + "\")\n";
 
             livyService.postCode(livySessionInfo,readDataCode);
             String readSchemaDDL = "println(df.schema.toDDL)";
@@ -93,7 +93,7 @@ public class HdfsFilesController {
             LivySessionInfo livySessionInfo = TokenParser.getSessionInfoFromToken(token);
             String userId = TokenParser.getClaimsFromToken(token).get("userId").asString();
 
-            codeBuilder.append("\nmodifiedDf.write.parquet(\"hdfs:///bdap/students/");
+            codeBuilder.append("\nmodifiedDf.write.orc(\"hdfs:///bdap/students/");
             codeBuilder.append(userId).append(modifiedMetaData.getPath());
             codeBuilder.append(modifiedMetaData.getModifiedFileName()).append("\")\n");
 
@@ -104,9 +104,22 @@ public class HdfsFilesController {
                 sessionStatus = livyService.sessionStatus(livySessionInfo);
                 Thread.sleep(500);
             }
-            hdfsService.delete("/" + userId + "/tmp/" + modifiedMetaData.getFileName());
+            hdfsService.delete("/" + userId + "/..tmp/" + modifiedMetaData.getFileName());
             return new ResponseEntity(HttpStatus.OK);
         } catch (Exception e) {
+            return new ResponseEntity(HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @DeleteMapping("/")
+    public ResponseEntity delete(@RequestParam("path") String path,
+                                 @RequestHeader("token") String token){
+        try{
+            String userId = TokenParser.getClaimsFromToken(token).get("userId").asString();
+            hdfsService.delete("/" + userId + path);
+            return new ResponseEntity(HttpStatus.OK);
+        }catch (Exception e){
+            e.printStackTrace();
             return new ResponseEntity(HttpStatus.BAD_REQUEST);
         }
     }

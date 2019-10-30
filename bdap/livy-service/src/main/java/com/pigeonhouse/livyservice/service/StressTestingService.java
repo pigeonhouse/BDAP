@@ -31,9 +31,6 @@ public class StressTestingService {
 
         LinkedHashMap livySessionDescription = getSession(livyAddr);
         LivySessionInfo availableSession = null;
-
-        System.out.println("livySessionDescription");
-
         List<LinkedHashMap> sessionInfos = (List<LinkedHashMap>) livySessionDescription.get("sessions");
 
         for (LinkedHashMap sessionInfo : sessionInfos) {

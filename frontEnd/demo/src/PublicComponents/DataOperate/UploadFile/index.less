@@ -5,3 +5,39 @@
     margin-left: 8px;
     height     : 40px;
 }
+
+.Astyle {
+    color           : #1890ff;
+    text-decoration : none;
+    background-color: transparent
+}
+
+.Astyle:hover {
+    color          : #007bff;
+    text-decoration: underline
+}
+
+.Astyle:not([href]):not([tabindex]) {
+    text-decoration: none
+}
+
+.Astyle:not([href]):not([tabindex]):focus,
+.Astyle:not([href]):not([tabindex]):hover {
+    color          : #007bff;
+    text-decoration: none
+}
+
+.Astyle:not([href]):not([tabindex]):focus {
+    outline: 0
+}
+
+.editableCellValueWrap {
+    padding: 5px 12px;
+    cursor : pointer;
+}
+
+.editableCellValueWrap:hover {
+    border       : 1px solid #d9d9d9;
+    border-radius: 4px;
+    padding      : 4px 11px;
+}

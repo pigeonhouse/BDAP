@@ -1,5 +1,5 @@
 import React, { Fragment } from 'react';
-import { Row, Col, Input, Button, Tooltip } from 'antd';
+import { Row, Col, Input, Button, Tooltip, Modal } from 'antd';
 import ActiveFileList from '../../PublicComponents/DataOperate/ActiveFileList';
 import UploadFile from '../../PublicComponents/DataOperate/UploadFile';
 import VisualizedPanel from '../VisualizedPanel';
@@ -83,6 +83,7 @@ class DataSetPanel extends React.Component {
             { fileName: "adult4.csv", fileFolder: false, activeFile: false },
             { fileName: "adult5.csv", fileFolder: false, activeFile: true },
         ]
+        //路径更新
         const newfilePath=this.state.filePath.filter((path,idx)=>idx<=index).map(r=>r);
         this.setState({
             fileList:dataDir.map(r=>r),
@@ -175,7 +176,14 @@ class DataSetPanel extends React.Component {
                                 <Button
                                     icon="folder-add"
                                     className={styles.buttonStyle}
+                                    onClick={this.setNewDirVisible}
                                 />
+                                <Modal
+                                onOk={this.setNewDirOperate}
+                                onCancel={this.setNewDirVisible}
+                                >
+                            
+                                </Modal>
                             </Tooltip>
 
                             {/* 常用文件列表 */}
