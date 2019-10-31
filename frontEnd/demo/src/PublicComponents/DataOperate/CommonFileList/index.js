@@ -7,7 +7,7 @@ class CommonFileList extends React.Component {
 
     render() {
         const { isCommonly } = this.props;
-        const style = isCommonly ? { color: '#1890ff' } : { color: '#ccc' }
+        const style = isCommonly ? { color: '#1890ff' } : null;
 
         return (
             <div style={{ display: "inline" }} >

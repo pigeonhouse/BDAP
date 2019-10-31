@@ -1,7 +1,6 @@
 import React from 'react';
 import { Col, Tooltip, Row, Button, Icon, Card } from 'antd';
 
-import { fetchTool } from './../../FetchTool';
 import DeleteFile from '../DataOperate/DeleteFile';
 import StarCommonFile from '../DataOperate/StarCommonFile';
 import styles from './index.less';
@@ -33,7 +32,7 @@ class FileCard extends React.Component {
     }
 
     render() {
-        const { file, index, handleDeleteFile } = this.props;
+        const { file, index, handleDeleteFile, handleCancelStar, handleSelectStar } = this.props;
 
         return (
             <Col span={8}>
@@ -71,6 +70,9 @@ class FileCard extends React.Component {
                                             />
                                         </Tooltip>
                                         <StarCommonFile
+                                            handleCancelStar={handleCancelStar}
+                                            handleSelectStar={handleSelectStar}
+                                            index={index}
                                             file={file}
                                         />
                                         <DeleteFile

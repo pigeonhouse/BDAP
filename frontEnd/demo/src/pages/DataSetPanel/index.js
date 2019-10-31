@@ -50,6 +50,7 @@ class DataSetPanel extends React.Component {
         })
     }
 
+    // 点击文件，跳转到可视化界面
     handleClickFile = (index) => {
         if (this.props.sessionFinish === false) {
             const args = {
@@ -66,12 +67,13 @@ class DataSetPanel extends React.Component {
         this.props.handleClickEnter();
     }
 
+    // 点击文件夹，跳转到文件夹下
     handleClickFileFolder = async (index) => {
         //这里放入向后端请求的的子文件夹内数据
         const fileName = this.state.fileList[index].fileName;
         const filePath = this.state.filePath;
         const path = this.getPathByFilePath(filePath);
-        const dataDir = await this.getFileListByPath(path || '/');
+        const dataDir = await this.getFileListByPath(path + '/' + fileName);
 
         this.setState({
             fileList: dataDir.map(r => r),
@@ -79,6 +81,7 @@ class DataSetPanel extends React.Component {
         });
     }
 
+    // 点击路径上的文件夹，跳转到该文件夹下
     handleChangePathByPathIndex = async (index) => {
         const { isCommonly } = this.state;
         if (isCommonly === true) return;
@@ -112,8 +115,9 @@ class DataSetPanel extends React.Component {
     handleDeleteFile = async (index) => {
         const { fileList, fileBackup, filePath } = this.state;
 
+        const { fileName } = fileList[index];
         const path = this.getPathByFilePath(filePath);
-        const url = `/filesystem-service&path=${path}`;
+        const url = `/filesystem-service&path=${path + '/' + fileName}`;
         const init = {
             method: 'DELETE',
             mode: 'cors',
@@ -126,17 +130,11 @@ class DataSetPanel extends React.Component {
 
         if (response.status === 200) {
             const fileTemp = fileList[index];
-            for (let indextemp in fileBackup) {
-                const datatemp = fileBackup[indextemp];
-                if (datatemp.fileName === fileTemp.fileName && datatemp.isDir === fileTemp.isDir) {
-                    fileList.splice(index, 1);
-                    fileBackup.splice(indextemp, 1);
-                    this.setState({
-                        fileBackup,
-                        fileList,
-                    })
-                }
-            }
+            const indexBackup = this.getFileBackupIndex(fileTemp);
+            fileList.splice(index, 1);
+            fileBackup.splice(indexBackup, 1);
+
+            this.setState({ fileBackup, fileList });
         }
     }
 
@@ -157,6 +155,7 @@ class DataSetPanel extends React.Component {
         });
     }
 
+    // 获取常用文件列表
     getStarFileList = async () => {
         const init = {
             method: 'GET',
@@ -168,10 +167,99 @@ class DataSetPanel extends React.Component {
         const response = await fetchTool("/filesystem-service/common-files", init);
         const resFile = await response.json();
         this.setState({
+            filePath: ['常用文件列表'],
             fileList: resFile,
             fileBackup: JSON.parse(JSON.stringify(resFile)),
             isCommonly: true
         })
+    }
+
+    getFileBackupIndex = (fileTemp) => {
+        const { fileBackup } = this.state;
+        for (let indexTemp in fileBackup) {
+            const dataTemp = fileBackup[indexTemp];
+            if (dataTemp.fileName !== fileTemp.fileName || dataTemp.isDir !== fileTemp.isDir) continue;
+
+            if (this.state.isCommonly) {
+                if (fileTemp.path === dataTemp.path) return indexTemp;
+                else continue;
+            }
+            else return indexTemp;
+        }
+    }
+
+    // 取消此文件的常用文件
+    handleCancelStar = async (index) => {
+        const { fileList, filePath, fileBackup } = this.state;
+        const { fileName, path } = fileList[index];
+
+        // 取消常用文件
+        var starFilePath = '';
+        if (path === undefined) {
+            starFilePath = this.getPathByFilePath(filePath);
+        } else {
+            starFilePath = path;
+        }
+        const init = {
+            method: 'GET',
+            mode: 'cors',
+            headers: {
+                "Content-Type": "application/json;charset=utf-8"
+            },
+        }
+        const url = `/filesystem-service/common-files/cancel&path=${starFilePath + '/' + fileName}`;
+
+        const response = await fetchTool(url, init);
+
+        // 得到请求后实现
+        if (response.status === 200) {
+            const fileTemp = fileList[index];
+            const indexBackup = this.getFileBackupIndex(fileTemp);
+
+            if (this.state.isCommonly) {
+                fileList.splice(index, 1);
+                fileBackup.splice(indexBackup, 1);
+            } else {
+                fileList[index].inCommonFile = true;
+                fileBackup[indexBackup].inCommonFile = true;
+            }
+
+            this.setState({ fileList, fileBackup });
+        }
+    }
+
+    // 选择此文件为常用文件
+    handleSelectStar = async (index) => {
+        const { fileList, filePath, fileBackup } = this.state;
+        const { fileName, path } = fileList[index];
+
+        // 请求设置为常用文件
+        var starFilePath = '';
+        if (path === undefined) {
+            starFilePath = this.getPathByFilePath(filePath);
+        } else {
+            starFilePath = path;
+        }
+        const init = {
+            method: 'GET',
+            mode: 'cors',
+            headers: {
+                "Content-Type": "application/json;charset=utf-8"
+            },
+        }
+        const url = `/filesystem-service/common-files/set&path=${starFilePath + '/' + fileName}`;
+
+        const response = await fetchTool(url, init);
+
+        // 得到请求后实现
+        if (response.status === 200) {
+            const fileTemp = fileList[index];
+            const indexBackup = this.getFileBackupIndex(fileTemp);
+            fileList[index].inCommonFile = true;
+            fileBackup[indexBackup].inCommonFile = true;
+
+            this.setState({ fileList, fileBackup });
+        }
     }
 
     onBack = () => {
@@ -188,29 +276,6 @@ class DataSetPanel extends React.Component {
         this.setState({ fileList: resFile, isCommonly: false, filePath: [] })
     }
 
-    getFileList = () => {
-        // 演示用的
-        const active = this.state.fileList[3].activeFile;
-
-        const fileList = active ? bfileList : afileList
-        console.log(active)
-        console.log(fileList)
-        this.setState({ fileList })
-
-        // 正式用的
-        // const init = {
-        // 	method: 'GET',
-        // 	mode: 'cors',
-        // 	body: JSON.stringify(stream),
-        // 	headers: {
-        // 		"Content-Type": "application/json;charset=utf-8"
-        // 	},
-        // }
-        // const res = await fetchTool("/getFileList", init)
-        // if (res.code === 200) {
-        //    this.setState({fileList: res.data})
-        // }
-    }
 
     render() {
         const { currentTab, clickTab } = this.props;
@@ -309,9 +374,10 @@ class DataSetPanel extends React.Component {
                         <DataSetCard
                             handleClickFile={this.handleClickFile}
                             handleClickFileFolder={this.handleClickFileFolder}
-                            getFileList={this.getFileList}
-                            fileList={fileList}
+                            handleCancelStar={this.handleCancelStar}
+                            handleSelectStar={this.handleSelectStar}
                             handleDeleteFile={this.handleDeleteFile}
+                            fileList={fileList}
                             filePath={filePath}
                             isCommonly={isCommonly}
                         />

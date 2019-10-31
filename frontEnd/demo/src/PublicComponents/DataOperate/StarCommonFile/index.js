@@ -7,17 +7,19 @@ class StarCommonFile extends React.Component {
 
     handleClickStar = (e) => {
         e.stopPropagation();
-        
-        const { file, isCommonly } = this.props;
 
-        if(isCommonly)
+        const { file, handleCancelStar, handleSelectStar, index } = this.props;
 
-        this.props.getFileList();
+        if (file.isCommonFile) {
+            handleCancelStar(index);
+        } else {
+            handleSelectStar(index);
+        }
     }
 
     render() {
-        const { file, isCommonly } = this.props;
-        const style = file.isCommonFile ? { color: 'rgba(0,0,0,0.65)' } : { color: '#ccc' };
+        const { file } = this.props;
+        const style = file.isCommonFile ? { color: '#1890ff' } : null;
 
         return (
             <Tooltip placement="bottom" title="标记为常用文件" >
