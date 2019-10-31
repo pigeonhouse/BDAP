@@ -43,10 +43,8 @@ class FlowNodePanel extends React.Component {
             },
             credentials: 'include'
         }
-        const res = await fetchTool("/module", init)
-        if (res.code === 200) {
-            return res.data
-        }
+        return await fetchTool("/module", init);
+
     }
     async componentWillMount() {
         this.setState({ nodesModuleInfo: await this.fetchmodule() });

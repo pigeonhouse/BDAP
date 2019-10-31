@@ -28,17 +28,15 @@ class ExperimentList extends React.Component {
 			},
 			credentials: 'include'
 		}
-		const res = await fetchTool("/experiments/description", init)
-		if (res.code === 200) {
-			return res.data
-		}
+		const response = await fetchTool("/experiment-service/experiments/description", init);
+		return await response.json();
 	}
 
 	async componentWillMount() {
 		const data = await this.fetchModalList();
 		this.setState({
 			dataSource: data,
-			searchData: data.map(r=>r),
+			searchData: data.map(r => r),
 		})
 	}
 
@@ -74,10 +72,9 @@ class ExperimentList extends React.Component {
 			},
 			credentials: 'include'
 		}
-		const res = await fetchTool(`/experiments/${experimentId}`, init)
-		if (res.code === 202) {
-			return res.data
-		}
+
+		const response = await fetchTool(`/experiment-service/experiments/${experimentId}`, init);
+		return await response.json();
 	}
 	//当执行删除操作时，对searchData进行处理，即执行删除操作
 	getDeleteSearchData = (experimentId) => {
@@ -134,11 +131,10 @@ class ExperimentList extends React.Component {
 			},
 			credentials: 'include'
 		}
-		const res = await fetchTool(`/experiments/${experiment.experimentId}`, init)
-		if (res.code === 200) {
-			console.log(res.data)
-			return res.data
-		}
+
+		const response = await fetchTool(`/experiment-service/experiments/${experiment.experimentId}`, init)
+		
+		return await response.json();
 	}
 
 	onRowClick = async (record, index) => {
