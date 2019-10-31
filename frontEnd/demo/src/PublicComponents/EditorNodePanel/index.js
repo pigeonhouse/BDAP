@@ -24,6 +24,7 @@ class FlowNodePanel extends React.Component {
     state = {
         isMouseEnter: false,
         nodesModuleInfo: [],
+        commonFileList: [],
     }
 
     resize = () => {
@@ -43,11 +44,30 @@ class FlowNodePanel extends React.Component {
             },
             credentials: 'include'
         }
-        return await fetchTool("/module", init);
+        const response = await fetchTool("/experiment-service/module", init);
 
+        return await response.json();
     }
+
+    async fetchCommonFiles() {
+        const init = {
+            method: 'GET',
+            mode: 'cors',
+            headers: {
+                "Content-Type": "application/json;charset=utf-8"
+            },
+            credentials: 'include'
+        }
+        const response = await fetchTool("/filesystem-service/common-files", init);
+
+        return await response.json();
+    }
+
     async componentWillMount() {
-        this.setState({ nodesModuleInfo: await this.fetchmodule() });
+        this.setState({
+            nodesModuleInfo: await this.fetchmodule(),
+            commonFileList: await this.fetchCommonFiles(),
+        });
         this.screenChange();
     }
 
@@ -65,7 +85,7 @@ class FlowNodePanel extends React.Component {
     }
 
     render() {
-        const { nodesModuleInfo } = this.state;
+        const { nodesModuleInfo, commonFileList } = this.state;
         return (
             <div
                 onMouseEnter={this.mouseEnter} onMouseLeave={this.mouseLeave}
@@ -74,8 +94,8 @@ class FlowNodePanel extends React.Component {
                 id="menuDiv"
             >
                 <div id="flowItem">
-                    <ClusterFlowDataPanel activeFileList={nodesModuleInfo.files} />
-                    <FlowItemPanel moduleNodesList={nodesModuleInfo.nodes} />
+                    <ClusterFlowDataPanel activeFileList={commonFileList} />
+                    <FlowItemPanel moduleNodesList={nodesModuleInfo} />
                 </div>
             </div>
         );

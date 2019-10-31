@@ -19,8 +19,8 @@ class FlowDataPanel extends React.Component {
 				activeFileList.push({
 					label: info[i].fileName,
 					elabel: info[i].fileName,
-					filePath: info[i].filePath,
-					fileColumnsInfo: info[i].fileColumnsInfo,
+					filePath: info[i].path,
+					fileColumnsInfo: info[i].headerAttributes,
 					operate:"delete"
 				})
 			}
