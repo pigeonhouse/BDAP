@@ -126,14 +126,15 @@ class LocalMode extends React.Component {
 				method: 'GET',
 				mode: 'cors',
 				headers: {
-					"Content-Type": "application/json;charset=utf-8"
+					"Content-Type": "application/x-www-form-urlencoded;charset=utf-8"
 				},
 				credentials: 'include'
 			}
 
-			const res = await fetchTool("/session/status", init)
+			const response = await fetchTool("/experiment-service/session/status", init);
+			const res = await response.text();
 
-			if (res.code === 200) {
+			if (res === "idle") {
 				notification.close('session');
 				notification['success']({
 					key: 'session',

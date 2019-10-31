@@ -1,10 +1,10 @@
 import React, { Fragment } from 'react';
 import { Col, Tooltip, Row, Button, Icon, Card, Modal, message } from 'antd';
 const { confirm } = Modal
-import { fetchTool } from './../../FetchTool';
-import styles from './index.less';
 
-class FileCard extends React.Component {
+import styles from './CommonFileCard.less';
+
+class CommonFileCard extends React.Component {
     state = {
         mouseEnter: false,
     }
@@ -84,13 +84,18 @@ class FileCard extends React.Component {
                             <Col span={4} >
                                 <Icon
                                     type="file"
-                                    style={{ fontSize: 30 }}
+                                    style={{ fontSize: 30, marginTop: 10 }}
                                 />
                             </Col>
-                            <Col span={8} style={{ padding: 1, fontWeight: "bold", fontSize: 20 }} >
-                                {file.fileName}
+                            <Col span={8}  >
+                                <div style={{ fontWeight: "bold", fontSize: 20 }} >
+                                    {file.fileName}
+                                </div>
+                                <div style={{ fontSize: 16, color: '#666' }} >
+                                    {file.path}{file.fileName}
+                                </div>
                             </Col>
-                            <Col span={12} style={{ paddingLeft: 5 }} >
+                            <Col span={12} style={{ paddingLeft: 5, marginTop: 10 }} >
                                 {this.state.mouseEnter === true ?
                                     <div style={{ float: "right" }}>
                                         <Tooltip placement="bottom" title="预览数据" >
@@ -130,4 +135,4 @@ class FileCard extends React.Component {
     }
 }
 
-export default FileCard;
+export default CommonFileCard;

@@ -60,7 +60,7 @@ class HomePage extends React.Component {
 	}
 
 	handleSubmit = (e) => {
-		
+
 		e.preventDefault();
 		let userInfo = this.props.form.getFieldsValue();
 		this.props.form.validateFields(async (err, values) => {
@@ -76,9 +76,11 @@ class HomePage extends React.Component {
 						"Content-Type": "application/json;charset=utf-8"
 					},
 				}
-				const res = await fetchTool('/login', init)
+				const response = await fetchTool('/login-service/login', init);
+				const res = await response.json();
+
 				//验证正确，则进入界面，显示已登陆
-				if (res !== undefined && res.code === 200) {
+				if (res !== undefined) {
 					if (values.remember) {
 						let accountInfo = '';
 						if (this.state.remind === '')

@@ -4,10 +4,10 @@ import { Button, Tooltip, Icon } from 'antd';
 import styles from './index.less';
 
 class ActiveFileList extends React.Component {
-    
+
     render() {
         const { isCommonly } = this.props;
-        const style = isCommonly ? {color: '#1890ff'} : {color: '#ccc'}
+        const style = isCommonly ? { color: '#1890ff' } : { color: '#ccc' }
 
         return (
             <div style={{ display: "inline" }} >
@@ -16,7 +16,7 @@ class ActiveFileList extends React.Component {
                         className={styles.buttonStyle}
                         onClick={this.props.getStartFileList}
                     >
-                        <Icon type="star" style={style}/>
+                        <Icon type="star" style={style} />
                     </Button>
                 </Tooltip>
             </div>

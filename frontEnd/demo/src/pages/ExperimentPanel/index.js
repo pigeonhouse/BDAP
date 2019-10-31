@@ -24,11 +24,11 @@ class ExperimentPanel extends Component {
     }
 
     saveStream = async (init, url, experiment) => {
-        const res = await fetchTool(url, init);
-        if (res.code === 201) {
-            this.setState({ experiment: { ...experiment, experimentId: res.data.experimentId } });
+        const response = await fetchTool(url, init);
+        if (response.status === 201) {
+            this.setState({ experiment: { ...experiment, experimentId: await response.text() } });
             message.success('存储成功');
-        } else if (res.code === 203) {
+        } else if (response.status === 203) {
             message.success('存储成功');
         } else {
             message.error('存储失败');
