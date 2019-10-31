@@ -28,7 +28,7 @@ public class ExecutionController {
     @Autowired
     LivyService livyService;
 
-    @PostMapping(value = "/flow/run")
+    @PostMapping("/flow/run")
     public ResponseEntity run(@RequestBody ExperimentMapInfo experimentMapInfo,
                               @RequestHeader("token") String token) {
 
@@ -55,15 +55,20 @@ public class ExecutionController {
 
     @GetMapping("/flow/node/data/{nodeId}")
     public ResponseEntity showNodeResult(@PathVariable String nodeId,
-                                         @RequestHeader("token")String token) {
-        try {
-            LivySessionInfo sessionInfo = TokenParser.getSessionInfoFromToken(token);
-            livyService.postCode(sessionInfo,"val df = dfMap(\"" + nodeId + "\")\n");
-            String result = livyService.getCsv(sessionInfo,100);
-            return ResponseEntity.ok(result);
-        } catch (Exception e) {
-            return new ResponseEntity(HttpStatus.BAD_REQUEST);
-        }
+                                         @RequestHeader("token") String token) {
+
+        LivySessionInfo sessionInfo = TokenParser.getSessionInfoFromToken(token);
+        livyService.postCode(sessionInfo, "val df = dfMap(\"" + nodeId + "\")\n");
+        String result = livyService.getCsv(sessionInfo, 100);
+        return ResponseEntity.ok(result);
+
+    }
+
+    @GetMapping("/session/status")
+    public ResponseEntity sessionStatus(@RequestHeader("token") String token) {
+        LivySessionInfo sessionInfo = TokenParser.getSessionInfoFromToken(token);
+        String status = livyService.sessionStatus(sessionInfo);
+        return ResponseEntity.ok(status);
     }
 
 }
