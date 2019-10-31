@@ -11,17 +11,9 @@ import java.util.List;
 @NoArgsConstructor
 public class MetaData {
     String fileName;
-    String modifiedFileName;
     String path;
     List<HeaderAttribute> headerAttributes;
     String previewData;
-
-    public MetaData(String path, String fileName, List<HeaderAttribute> headerAttributes, String previewData) {
-        this.fileName = fileName;
-        this.path = path;
-        this.headerAttributes = headerAttributes;
-        this.previewData = previewData;
-    }
 
     public MetaData(String fileName, List<HeaderAttribute> headerAttributes, String previewData) {
         this.fileName = fileName;

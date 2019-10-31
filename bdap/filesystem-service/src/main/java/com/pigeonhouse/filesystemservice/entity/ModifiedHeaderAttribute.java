@@ -5,14 +5,14 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Data
+@AllArgsConstructor
 @NoArgsConstructor
-public class HeaderAttribute {
-
+public class ModifiedHeaderAttribute {
     private String colName;
-    private String dataType;
+    private String modifiedColName;
 
-    public HeaderAttribute(String colName, String dataType) {
-        this.colName = colName;
-        this.dataType = dataType;
-    }
+    private String dataType;
+    private String modifiedDataType;
+
+    private boolean selected;
 }

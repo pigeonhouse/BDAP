@@ -16,8 +16,8 @@ public interface LivyService {
     @PostMapping("/session/code")
     String postCode(@RequestBody LivySessionInfo livySessionInfo,@RequestParam("code")String code);
 
-    @GetMapping("/output/schema")
+    @PostMapping("/output/schema")
     List<HeaderAttribute> getSchema(@RequestBody LivySessionInfo livySessionInfo);
-    @GetMapping("/output/csv")
+    @PostMapping("/output/csv")
     String getCsv(@RequestBody LivySessionInfo livySessionInfo, @RequestParam("numOfRowsToShow")int numOfRowsToShow);
 }

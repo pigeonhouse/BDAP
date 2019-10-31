@@ -5,10 +5,7 @@ import com.pigeonhouse.livyservice.entity.LivySessionInfo;
 import com.pigeonhouse.livyservice.service.SessionService;
 import com.pigeonhouse.livyservice.util.OutputParser;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.xml.ws.RespectBinding;
 import java.util.List;
@@ -19,7 +16,7 @@ public class OutputController {
     @Autowired
     SessionService sessionService;
 
-    @GetMapping("/output/schema")
+    @PostMapping("/output/schema")
     public List<HeaderAttribute> getSchema(@RequestBody LivySessionInfo livySessionInfo) {
         try {
             String readSchemaDDL = "println(df.schema.toDDL)";
@@ -33,7 +30,7 @@ public class OutputController {
     }
 
 
-    @GetMapping("/output/csv")
+    @PostMapping("/output/csv")
     public String getCsv(@RequestBody LivySessionInfo livySessionInfo,
                          @RequestParam("numOfRowsToShow") int numOfRowsToShow) {
         try {

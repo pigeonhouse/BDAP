@@ -131,8 +131,7 @@ public class HdfsService {
         close(fs);
     }
 
-    public MetaData getMetaDataFromOrc(String userId, String path, LivySessionInfo livySessionInfo) throws
-            Exception {
+    public MetaData getMetaDataFromOrc(String userId, String path, LivySessionInfo livySessionInfo)  {
         String[] splits = path.split("/");
         String fileName = splits[splits.length - 1];
         String dirPath = PathParser.getDirPath(path);
@@ -143,7 +142,7 @@ public class HdfsService {
 
         List<HeaderAttribute> headerAttributes = livyService.getSchema(livySessionInfo);
 
-        return new MetaData(dirPath, fileName, headerAttributes, previewData);
+        return new MetaData(fileName,dirPath, headerAttributes, previewData);
     }
 
     private void close(FileSystem fileSystem) {

@@ -32,7 +32,7 @@ public class ExecutionService {
         String filePath = nodeInfo.getFilePath();
         if (filePath != null) {
             String id = nodeInfo.getId();
-            return "val output = spark.read.format(\"csv\").option(\"inferSchema\", \"true\").option(\"header\", \"true\").load(\"" + filePath + "\")\n" +
+            return "val output = spark.read.orc(\"" + filePath + "\")\n" +
                     "dfMap += (\"" + id + "_0" + "\" -> output)\n\n";
         }
 
