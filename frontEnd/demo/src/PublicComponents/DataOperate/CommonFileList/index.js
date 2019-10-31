@@ -3,7 +3,7 @@ import { Button, Tooltip, Icon } from 'antd';
 
 import styles from './index.less';
 
-class ActiveFileList extends React.Component {
+class CommonFileList extends React.Component {
 
     render() {
         const { isCommonly } = this.props;
@@ -14,7 +14,7 @@ class ActiveFileList extends React.Component {
                 <Tooltip placement="bottom" title="常用文件列表" >
                     <Button
                         className={styles.buttonStyle}
-                        onClick={this.props.getStartFileList}
+                        onClick={this.props.getStarFileList}
                     >
                         <Icon type="star" style={style} />
                     </Button>
@@ -24,6 +24,6 @@ class ActiveFileList extends React.Component {
     }
 }
 
-export default ActiveFileList;
+export default CommonFileList;
 
 

@@ -1,8 +1,11 @@
-import React, { Fragment } from 'react';
-import { Col, Tooltip, Row, Button, Icon, Card, Modal, message } from 'antd';
-const { confirm } = Modal
+import React from 'react';
+import { Col, Tooltip, Row, Button, Icon, Card } from 'antd';
+
 import { fetchTool } from './../../FetchTool';
+import DeleteFile from '../DataOperate/DeleteFile';
+import StarCommonFile from '../DataOperate/StarCommonFile';
 import styles from './index.less';
+
 
 class FileCard extends React.Component {
     state = {
@@ -22,20 +25,6 @@ class FileCard extends React.Component {
         this.setState({ mouseEnter: false });
     }
 
-    //handleDeleteFile是传递过来的，为了将index传给父组件
-    deleteFile = (e) => {
-        const { index, file } = this.props;
-        const self = this;
-        e.stopPropagation();
-        confirm({
-            title: '确定要删除此文件？',
-            content: file.fileName,
-            onOk() {
-                self.props.handleDeleteFile(index)
-            }
-        })
-    }
-
     //此处应该写文件下载，但还没有完成
     handleClickDownloadFile = (e) => {
         e.stopPropagation();
@@ -43,33 +32,8 @@ class FileCard extends React.Component {
         alert(file.fileName)
     }
 
-    handleClickStart = (e) => {
-        e.stopPropagation();
-        const { file, filePath } = this.props;
-        const path = `${filePath[0]}/${file.fileName}`;
-        // const init = {
-        // 	method: 'POST',
-        // 	mode: 'cors',
-        // 	body: JSON.stringify(stream),
-        // 	headers: {
-        // 		"Content-Type": "application/json;charset=utf-8"
-        // 	},
-        // 	params: {
-        //         path: path,
-        //         file: file,
-        //     }
-        // }
-        // const res = await fetchTool("/collection", init)
-        // if (res.code === 200) {
-        //    this.message.success("操作成功")
-        //    this.props.getFileList()
-        // }
-        this.props.getFileList()
-    }
-
     render() {
-        const { file } = this.props;
-        const style = file.activeFile ? { color: '#1890ff' } : { color: '#ccc' }
+        const { file, index, handleDeleteFile } = this.props;
 
         return (
             <Col span={8}>
@@ -106,20 +70,14 @@ class FileCard extends React.Component {
                                                 onClick={this.handleClickDownloadFile}
                                             />
                                         </Tooltip>
-                                        <Tooltip placement="bottom" title="标记为常用文件" >
-                                            <Button
-                                                icon="star"
-                                                className={styles.iconStyle}
-                                                onClick={this.handleClickStart}
-                                            />
-                                        </Tooltip>
-                                        <Tooltip placement="bottom" title="删除文件" >
-                                            <Button
-                                                icon="delete"
-                                                className={styles.iconStyle}
-                                                onClick={this.deleteFile}
-                                            />
-                                        </Tooltip>
+                                        <StarCommonFile
+                                            file={file}
+                                        />
+                                        <DeleteFile
+                                            handleDeleteFile={handleDeleteFile}
+                                            index={index}
+                                            file={file}
+                                        />
                                     </div> : null}
                             </Col>
                         </Row>
