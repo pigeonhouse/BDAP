@@ -169,11 +169,15 @@ class DataTable extends React.Component {
         });
         return (
             <Table
+                header="数据预览"
                 components={components}
-                rowClassName={() => 'editable-row'}
                 bordered
                 dataSource={dataSource}
                 columns={columns}
+                pagination={{
+                    position: 'none'
+                }}
+                scroll={{ y: "calc(105vh - 405px)", x: "1000px" }}
             />
         );
     }

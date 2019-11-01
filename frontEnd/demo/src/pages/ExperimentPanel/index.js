@@ -24,11 +24,16 @@ class ExperimentPanel extends Component {
     }
 
     saveStream = async (init, url, experiment) => {
-        const res = await fetchTool(url, init);
-        if (res.code === 201) {
-            this.setState({ experiment: { ...experiment, experimentId: res.data.experimentId } });
-            message.success('存储成功');
-        } else if (res.code === 203) {
+        const response = await fetchTool(url, init);
+
+        if (response.status === 200) {
+            this.setState({
+                experiment: {
+                    title: experiment.title,
+                    description: experiment.description,
+                    experimentId: await response.text()
+                }
+            });
             message.success('存储成功');
         } else {
             message.error('存储失败');
@@ -36,23 +41,15 @@ class ExperimentPanel extends Component {
     }
 
     handleSaveStream = (experiment, flowInfo) => {
-        var url = "";
         var formData = {};
-
-        if (experiment.experimentId !== undefined) {
-            formData = JSON.stringify(flowInfo);
-
-            url = `/experiments/${experiment.experimentId}`
-        } else {
-            formData = JSON.stringify({
-                description: {
-                    title: experiment.title,
-                    description: experiment.description,
-                },
-                experiment: flowInfo
-            });
-            url = `/experiments`
-        }
+        formData = JSON.stringify({
+            description: {
+                title: experiment.title,
+                description: experiment.description,
+            },
+            experiment: flowInfo
+        });
+        const url = '/experiment-service/experiments';
 
         var init = {
             method: 'PUT',

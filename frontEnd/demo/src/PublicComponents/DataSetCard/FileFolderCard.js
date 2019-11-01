@@ -1,7 +1,8 @@
-import React, { Fragment } from 'react';
-import { Col, Tooltip, Row, Button, Icon, Card,Modal } from 'antd';
-const { confirm } = Modal
+import React from 'react';
+import { Col, Tooltip, Row, Icon, Card } from 'antd';
 import styles from './index.less';
+
+import DeleteFile from '../DataOperate/DeleteFile';
 
 class FileFolderCard extends React.Component {
     state = {
@@ -21,21 +22,9 @@ class FileFolderCard extends React.Component {
     mouseLeave = () => {
         this.setState({ mouseEnter: false });
     }
-    deleteFolderFile = (e) => {
-        const { index,fileFolder } = this.props;
-        const self=this;
-        e.stopPropagation();
-        confirm({
-            title: '确定要删除此项目？',
-            content:fileFolder.fileName,
-            onOk() {
-                self.props.handleDeleteFile(index)
-            }
-        })
-    }
 
     render() {
-        const { fileFolder } = this.props;
+        const { fileFolder, handleDeleteFile, index } = this.props;
         return (
             <Col span={8}>
                 <Tooltip placement="bottom" title="点击进入文件夹" >
@@ -58,13 +47,11 @@ class FileFolderCard extends React.Component {
                             <Col span={12} style={{ paddingLeft: 5 }} >
                                 {this.state.mouseEnter === true ?
                                     <div style={{ float: "right" }}>
-                                        <Tooltip placement="bottom" title="删除文件夹" >
-                                            <Button
-                                                icon="delete"
-                                                className={styles.iconStyle}
-                                                onClick={this.deleteFolderFile}
-                                            />
-                                        </Tooltip>
+                                        <DeleteFile
+                                            handleDeleteFile={handleDeleteFile}
+                                            index={index}
+                                            file={fileFolder}
+                                        />
                                     </div> : null}
                             </Col>
                         </Row>

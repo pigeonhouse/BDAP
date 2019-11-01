@@ -2,7 +2,7 @@ import { Component } from 'react';
 import { withPropsAPI } from '@src';
 import { generateStream } from '../../PublicComponents/HandleStream/generateStream';
 import { fetchTool } from '../../FetchTool';
-import { isLegal } from '../../PublicComponents/HandleStream/IsLegal'
+import { isLegal } from '../../PublicComponents/HandleStream/IsLegal';
 
 var current;
 var sum;
@@ -38,10 +38,9 @@ class SparkRunning extends Component {
 			credentials: 'include'
 		}
 
-		const res = await fetchTool("/flow/run", init)
-		if (res.code === 200) {
-
-			const result = res.data;
+		const response = await fetchTool("/experiment-service/flow/run", init)
+		if (response.status === 200) {
+			const result = await response.json();
 
 			//按照工作流进行轮询
 			this.run(result);
@@ -79,10 +78,11 @@ class SparkRunning extends Component {
 					credentials: 'include'
 				}
 
-				const res = await fetchTool("/flow/node/status", init)
+				const response = await fetchTool("/experiment-service/flow/node/status", init)
 
-				if (res.code === 200) {
-					if (res.data.state === "available") {
+				if (response.status === 200) {
+					const res = await response.text();
+					if (res === "available") {
 						this.changeStatusColor(result[current].id, 'https://gw.alipayobjects.com/zos/rmsportal/MXXetJAxlqrbisIuZxDO.svg');
 						current++;
 					}

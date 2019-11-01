@@ -3,7 +3,6 @@ package com.pigeonhouse.filesystemservice.service;
 import com.pigeonhouse.filesystemservice.entity.HeaderAttribute;
 import com.pigeonhouse.filesystemservice.entity.LivySessionInfo;
 import com.pigeonhouse.filesystemservice.entity.MetaData;
-import com.pigeonhouse.filesystemservice.util.OutputParser;
 import com.pigeonhouse.filesystemservice.util.PathParser;
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.fs.*;
@@ -15,7 +14,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
-import java.text.MessageFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -101,7 +99,7 @@ public class HdfsService {
             if (name.startsWith(".") || name.startsWith("#")) {
                 continue;
             }
-            fileMap.put("name", name);
+            fileMap.put("fileName", name);
             fileMap.put("isDir", dirList.contains(name));
             fileMap.put("isCommonFile", commonFileList.contains(name));
 
@@ -133,23 +131,18 @@ public class HdfsService {
         close(fs);
     }
 
-    public MetaData getMetaDataFromOrc(String userId, String path, LivySessionInfo livySessionInfo) throws
-            Exception {
+    public MetaData getMetaDataFromOrc(String userId, String path, LivySessionInfo livySessionInfo)  {
         String[] splits = path.split("/");
         String fileName = splits[splits.length - 1];
         String dirPath = PathParser.getDirPath(path);
         String readDataCode = "val df = spark.read.orc(\"hdfs:///bdap/students/" + userId + path + "\")\n";
         livyService.postCode(livySessionInfo, readDataCode);
-        String previewDataCode = "df.show(20,false)";
-        String previewDataResultUrl = livyService.postCode(livySessionInfo, previewDataCode);
-        String previewData = OutputParser.convertToCsv(OutputParser.getOutput(previewDataResultUrl));
 
-        String readSchemaDDL = "println(df.schema.toDDL)";
-        String schemaResultUrl = livyService.postCode(livySessionInfo, readSchemaDDL);
-        String schemaDDL = OutputParser.getOutput(schemaResultUrl);
-        List<HeaderAttribute> headerAttributes = OutputParser.parseDDL(schemaDDL);
+        String previewData = livyService.getCsv(livySessionInfo,20);
 
-        return new MetaData(dirPath, fileName, headerAttributes, previewData);
+        List<HeaderAttribute> headerAttributes = livyService.getSchema(livySessionInfo);
+
+        return new MetaData(fileName,dirPath, headerAttributes, previewData);
     }
 
     private void close(FileSystem fileSystem) {
