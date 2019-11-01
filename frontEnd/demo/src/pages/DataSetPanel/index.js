@@ -26,6 +26,7 @@ class DataSetPanel extends React.Component {
             NewDirVisible: !this.state.NewDirVisible
         });
     }
+
     //新建文件夹Modal点击确定触发
     setNewDirOperate = () => {
         //后端请求新建文件夹
@@ -40,6 +41,7 @@ class DataSetPanel extends React.Component {
         this.setNewDirVisible();
 
     }
+
     //新建文件夹Modal输入框变更控制
     onChangeDirValue = e => {
         this.setState({
@@ -296,6 +298,11 @@ class DataSetPanel extends React.Component {
         }
     }
 
+    // 上传文件后，将文件加入列表
+    handleUploadFile = (file) => {
+        console.log(file);
+    }
+
     onBack = () => {
         const resFile = [
             { fileName: "adult_1", fileFolder: true },
@@ -375,7 +382,9 @@ class DataSetPanel extends React.Component {
                         <Col span={5} style={{ paddingLeft: "20px" }} >
 
                             {/* 上传文件 */}
-                            <UploadFile />
+                            <UploadFile 
+                                handleUploadFile={this.handleUploadFile}
+                            />
 
                             <Tooltip placement="bottom" title="新建文件夹" >
                                 <Button

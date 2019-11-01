@@ -20,7 +20,6 @@ export async function fetchTool(url, init) {
     }
 
     const res = await fetch(url, init);
-    console.log(res)
 
     if (res.status === 200) {
         if (token === '') {

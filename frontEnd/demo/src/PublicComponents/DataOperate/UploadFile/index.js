@@ -5,9 +5,14 @@ import FileTree from './FileTree';
 import EditorTable from './EditorTable';
 import DataTable from './DataTable';
 import styles from './index.less';
+import Papa from 'papaparse';
 
 class UploadFile extends React.Component {
-    state = { visible: false };
+    state = {
+        visible: false,
+        uploading: false,
+        path: null,
+    };
 
     showModal = () => {
         this.setState({
@@ -27,7 +32,24 @@ class UploadFile extends React.Component {
         });
     };
 
+    handleChangeHeaders = (data) => {
+        const { headerAttributes } = this.state;
+        data.map((item, index) => {
+            headerAttributes[index].modifiedColName = item.name;
+            headerAttributes[index].modifiedDataType = item.type;
+        })
+        this.setState({ headerAttributes });
+        console.log(headerAttributes)
+    }
+
+    handleChangeFileName = (e) => {
+        this.setState({ modifiedFileName: e.target.value });
+    }
+
     render() {
+        const self = this;
+        const { modifiedFileName, previewData, headerAttributes } = this.state;
+
         const props = {
             name: 'file',
             action: 'https://result.eolinker.com/MSwz6fu34b763a21e1f7efa84a86a16f767a756952d0f95?uri=localhost:1001/filesystem-service/file',
@@ -36,7 +58,16 @@ class UploadFile extends React.Component {
             },
             onChange(info) {
                 if (info.file.status !== 'uploading') {
-                    console.log(info.file);
+                    const response = info.file.response;
+                    console.log(response);
+                    const results = Papa.parse(response.previewData, { header: true, dynamicTyping: true });
+
+                    self.setState({
+                        modifiedFileName: response.fileName,
+                        fileName: response.fileName,
+                        headerAttributes: response.headerAttributes,
+                        previewData: results.data[0]
+                    });
                 }
                 if (info.file.status === 'done') {
 
@@ -86,7 +117,13 @@ class UploadFile extends React.Component {
                             <Row>
                                 <Col span={2}></Col>
                                 <Col span={5} style={{ padding: 5 }} >文件名:</Col>
-                                <Col span={16} ><Input></Input></Col>
+                                <Col span={16} >
+                                    <Input
+                                        placeholder="请输入文件名"
+                                        value={modifiedFileName}
+                                        onChange={this.handleChangeFileName}
+                                    ></Input>
+                                </Col>
                                 <Col span={1}></Col>
                             </Row>
                         </Col>
@@ -100,11 +137,14 @@ class UploadFile extends React.Component {
                     </Row>
                     <Row>
                         <Col span={8} >
-                            <EditorTable></EditorTable>
+                            <EditorTable
+                                headerAttributes={headerAttributes}
+                                handleChangeHeaders={this.handleChangeHeaders}
+                            />
                         </Col>
                         <Col span={1} ></Col>
                         <Col span={15} >
-                            <DataTable></DataTable>
+                            <DataTable previewData={previewData} />
                         </Col>
                     </Row>
                 </Modal>
