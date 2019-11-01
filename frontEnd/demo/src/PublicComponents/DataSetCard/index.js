@@ -48,6 +48,8 @@ class DataSetCard extends React.Component {
                                 handleClickFile={this.props.handleClickFile}
                                 index={count + colCount}
                                 handleDeleteFile={handleDeleteFile}
+                                handleSelectStar={this.props.handleSelectStar}
+                                handleCancelStar={this.props.handleCancelStar}
                             ></CommonFileCard>
                         )
                     } else {
@@ -66,6 +68,8 @@ class DataSetCard extends React.Component {
                                 handleClickFile={this.props.handleClickFile}
                                 index={count + colCount}
                                 handleDeleteFile={handleDeleteFile}
+                                handleSelectStar={this.props.handleSelectStar}
+                                handleCancelStar={this.props.handleCancelStar}
                             ></FileCard>
                         )
                     } else {

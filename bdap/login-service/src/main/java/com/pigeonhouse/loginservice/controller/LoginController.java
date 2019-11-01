@@ -59,8 +59,9 @@ public class LoginController {
                 JSONObject data = new JSONObject();
                 data.put("userInfo", userForBase);
                 data.put("sessionInfo", sessionInfo);
+                data.put("token",token);
 
-                return ResponseEntity.ok().header("token",token).body(data);
+                return ResponseEntity.ok().body(data);
             }
         }
     }

@@ -37,20 +37,19 @@ class VisualizedPanel extends React.Component {
     async componentWillMount() {
         const { filePath } = this.props;
         const init = {
-            method: 'POST',
+            method: 'GET',
             mode: 'cors',
-            body: JSON.stringify({ "filePath": filePath }),
-
             headers: {
                 "Content-Type": "application/json;charset=utf-8"
             },
             credentials: 'include'
         }
-        const url = '/experiment-service/query/readyForData';
+        const url = `/experiment-service/query/readyForData?filePath=/iris`;
         const response = await fetchTool(url, init);
 
         if (response.status === 200) {
-            const res = await response.json();
+            const res = await response.text();
+            console.log(res)
 
             // 通过papa转化
             const results = Papa.parse(res, { header: true, dynamicTyping: true });
@@ -192,7 +191,7 @@ class VisualizedPanel extends React.Component {
         const response = await fetchTool("/experiment-service/query/sql", init);
 
         if (response.status === 200) {
-            const res = await response.json();
+            const res = await response.text();
 
             // 通过papa转化
             const results = Papa.parse(res, { header: true, dynamicTyping: true });

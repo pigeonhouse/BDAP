@@ -40,8 +40,8 @@ class LocalMode extends React.Component {
 
 	state = {
 		sessionFinish: false,
-		currentTab: '1',
-		clickTab: '1',
+		currentTab: '2',
+		clickTab: '2',
 		username: '',
 		password: '',
 		remind: 'false',

@@ -13,7 +13,7 @@ public class InteractiveQueryController {
     @Autowired
     LivyService livyService;
 
-    @RequestMapping("/query/sql")
+    @GetMapping("/query/sql")
     public ResponseEntity sqlQuery(@RequestParam("sql") String sql,
                                    @RequestHeader("token") String token) {
         LivySessionInfo sessionInfo = TokenParser.getSessionInfoFromToken(token);
@@ -25,7 +25,7 @@ public class InteractiveQueryController {
     }
 
 
-    @RequestMapping("/query/readyForData")
+    @GetMapping("/query/readyForData")
     public ResponseEntity readyForData(@RequestParam("filePath") String filePath,
                                        @RequestHeader("token")String token) {
         LivySessionInfo sessionInfo = TokenParser.getSessionInfoFromToken(token);

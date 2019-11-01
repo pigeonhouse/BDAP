@@ -12,14 +12,41 @@ const { Search } = Input;
 
 class DataSetPanel extends React.Component {
     state = {
-        homePath: "bdap/students/",//用户根目录
-        filePath: [],//文件路径存储数组
-        fileList:[],//文件列表
-        fileBackup:[],
-        NewDirVisible:false,//新建文件夹Modal控制显示隐藏
-        dirName:"",
-        isCommonly: false,//新建文件夹名称
-       
+        filePath: [],
+        fileList: [],
+        fileBackup: [],
+        isCommonly: false,
+        NewDirVisible: false,//新建文件夹Modal控制显示隐藏
+        dirName: "",
+    }
+
+    //新建文件夹Modal控制显示隐藏
+    setNewDirVisible = () => {
+        this.setState({
+            NewDirVisible: !this.state.NewDirVisible
+        });
+    }
+    //新建文件夹Modal点击确定触发
+    setNewDirOperate = () => {
+        //后端请求新建文件夹
+        //if 返回码正确
+        this.setState({
+            fileList: this.state.fileList.concat({ fileName: this.state.dirName, fileFolder: true }),
+            fileBackup: this.state.fileBackup.concat({ fileName: this.state.dirName, fileFolder: true })
+        })
+        //message("新建文件夹成功")
+        //else
+        //message("错误信息")
+        this.setNewDirVisible();
+
+    }
+    //新建文件夹Modal输入框变更控制
+    onChangeDirValue = e => {
+        this.setState({
+            dirName: e.target.value
+        })
+
+        console.log(this.state.dirName);
     }
 
     getPathByFilePath = (filePath) => {
@@ -38,11 +65,12 @@ class DataSetPanel extends React.Component {
                 "Content-Type": "application/json;charset=utf-8"
             },
         };
-        const url = `/filesystem-service/ls&path=${path}`;
+        const url = `/filesystem-service/ls?path=${path}`;
 
         const response = await fetchTool(url, init);
-
-        return await response.json();
+        if (response.status === 200) {
+            return await response.json();
+        }
     }
 
     async componentWillMount() {
@@ -52,34 +80,6 @@ class DataSetPanel extends React.Component {
             fileBackup: JSON.parse(JSON.stringify(res || [])),
             fileList: res || [],
         })
-    }
-    //新建文件夹Modal控制显示隐藏
-    setNewDirVisible=()=>{
-        this.setState({
-            NewDirVisible:!this.state.NewDirVisible
-        });
-    }
-    //新建文件夹Modal点击确定触发
-    setNewDirOperate=()=>{
-        //后端请求新建文件夹
-        //if 返回码正确
-        this.setState({
-         fileList:this.state.fileList.concat({fileName:this.state.dirName,fileFolder:true}),
-         fileBackup:this.state.fileBackup.concat({fileName:this.state.dirName,fileFolder:true})
-        })
-        //message("新建文件夹成功")
-        //else
-        //message("错误信息")
-        this.setNewDirVisible();
-
-    }
-    //新建文件夹Modal输入框变更控制
-    onChangeDirValue=e=>{
-        this.setState({
-            dirName:e.target.value
-        })
-        
-        console.log(this.state.dirName);
     }
 
     // 点击文件，跳转到可视化界面
@@ -196,7 +196,7 @@ class DataSetPanel extends React.Component {
                 "Content-Type": "application/json;charset=utf-8"
             },
         }
-        const response = await fetchTool("/filesystem-service/common-files", init);
+        const response = await fetchTool("/filesystem-service/ls/common", init);
         const resFile = await response.json();
         this.setState({
             filePath: ['常用文件列表'],
@@ -239,12 +239,12 @@ class DataSetPanel extends React.Component {
                 "Content-Type": "application/json;charset=utf-8"
             },
         }
-        const url = `/filesystem-service/common-files/cancel&path=${starFilePath + '/' + fileName}`;
+        const url = `/filesystem-service/common-files/cancel?path=${starFilePath + '/' + fileName}`;
 
         const response = await fetchTool(url, init);
 
         // 得到请求后实现
-        if (response.status === 200) {
+        if (response && response.status === 200) {
             const fileTemp = fileList[index];
             const indexBackup = this.getFileBackupIndex(fileTemp);
 
@@ -252,8 +252,8 @@ class DataSetPanel extends React.Component {
                 fileList.splice(index, 1);
                 fileBackup.splice(indexBackup, 1);
             } else {
-                fileList[index].inCommonFile = true;
-                fileBackup[indexBackup].inCommonFile = true;
+                fileList[index].isCommonFile = false;
+                fileBackup[indexBackup].isCommonFile = false;
             }
 
             this.setState({ fileList, fileBackup });
@@ -279,16 +279,18 @@ class DataSetPanel extends React.Component {
                 "Content-Type": "application/json;charset=utf-8"
             },
         }
-        const url = `/filesystem-service/common-files/set&path=${starFilePath + '/' + fileName}`;
+        const url = `/filesystem-service/common-files/set?path=${starFilePath + '/' + fileName}`;
 
         const response = await fetchTool(url, init);
+        console.log(response);
 
         // 得到请求后实现
-        if (response.status === 200) {
+        if (response && response.status === 200) {
             const fileTemp = fileList[index];
             const indexBackup = this.getFileBackupIndex(fileTemp);
-            fileList[index].inCommonFile = true;
-            fileBackup[indexBackup].inCommonFile = true;
+            fileList[index].isCommonFile = true;
+            fileBackup[indexBackup].isCommonFile = true;
+            console.log(fileList, fileBackup)
 
             this.setState({ fileList, fileBackup });
         }
@@ -360,7 +362,7 @@ class DataSetPanel extends React.Component {
                                 </Col>
                             </Row>
                         </Col>
-                        <Col span={4} >
+                        <Col span={3} >
                             <Tooltip placement="bottom" title="查询文件或文件夹" >
                                 <Search
                                     placeholder="请输入文件名"
@@ -370,7 +372,7 @@ class DataSetPanel extends React.Component {
                                 />
                             </Tooltip>
                         </Col>
-                        <Col span={4} style={{ paddingLeft: "20px" }} >
+                        <Col span={5} style={{ paddingLeft: "20px" }} >
 
                             {/* 上传文件 */}
                             <UploadFile />
@@ -382,14 +384,19 @@ class DataSetPanel extends React.Component {
                                     onClick={this.setNewDirVisible}
                                 />
                                 <Modal
-                                title="新建文件夹"
-                                onOk={this.setNewDirOperate}
-                                onCancel={this.setNewDirVisible}
-                                visible={this.state.NewDirVisible}
+                                    title="新建文件夹"
+                                    onOk={this.setNewDirOperate}
+                                    onCancel={this.setNewDirVisible}
+                                    visible={this.state.NewDirVisible}
                                 >
-                               <p> <Input addonBefore="文件夹名" placeholder="请输入文件夹名" value={this.state.dirName} onChange={this.onChangeDirValue}
-                               
-                               /></p>
+                                    <p>
+                                        <Input
+                                            addonBefore="文件夹名"
+                                            placeholder="请输入文件夹名"
+                                            value={this.state.dirName}
+                                            onChange={this.onChangeDirValue}
+                                        />
+                                    </p>
                                 </Modal>
                             </Tooltip>
 

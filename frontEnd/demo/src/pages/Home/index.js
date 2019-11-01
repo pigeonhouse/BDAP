@@ -76,8 +76,7 @@ class HomePage extends React.Component {
 						"Content-Type": "application/json;charset=utf-8"
 					},
 				}
-				const response = await fetchTool('/login-service/login', init);
-				const res = await response.json();
+				const res = await fetchTool('/login-service/login', init);
 
 				//验证正确，则进入界面，显示已登陆
 				if (res !== undefined) {
