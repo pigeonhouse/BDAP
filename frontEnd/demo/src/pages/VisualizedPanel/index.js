@@ -44,7 +44,7 @@ class VisualizedPanel extends React.Component {
             },
             credentials: 'include'
         }
-        const url = `/experiment-service/query/readyForData?filePath=/iris`;
+        const url = `/experiment-service/query/readyForData?filePath=${filePath}`;
         const response = await fetchTool(url, init);
 
         if (response.status === 200) {

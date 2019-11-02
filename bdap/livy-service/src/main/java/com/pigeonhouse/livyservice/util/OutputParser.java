@@ -82,7 +82,11 @@ public class OutputParser {
                 if (col != 1) {
                     sb.append(",");
                 }
-                sb.append(elements[col]);
+                String trimed = elements[col].trim();
+                if (trimed.contains(",")) {
+                    trimed = "\"" + trimed + "\"";
+                }
+                sb.append(trimed);
             }
             csvBuilder.append(sb.toString()).append("\n");
         }

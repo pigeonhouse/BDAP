@@ -214,9 +214,14 @@ class LocalMode extends React.Component {
 		})
 	}
 
+	handleSignout = () => {
+		this.setState({ token: undefined });
+		Cookies.remove("token");
+	}
+
 	render() {
 		const token = Cookies.get('token');
-		if (this.props.location.state === undefined && token === undefined) {
+		if (token === undefined) {
 			return <Redirect to='/' />
 		}
 
@@ -240,16 +245,20 @@ class LocalMode extends React.Component {
 								<Icon type="bars" style={{ fontSize: 20 }} />
 							</Button>
 						</Col>
-						<Col span={21}>
+						<Col span={20}>
 							<Button style={{ border: 0, backgroundColor: backgroundColor, color: "#ddd", fontSize: 18, fontFamily: 'consolas' }}>BigDataPlayground Preview-Mode</Button>
 						</Col>
-						<Col span={2}>
+						<Col span={1}>
 							<a href="https://www.yuque.com/ddrid/tx7z84" target="_blank">
 								<Button style={{ border: 0, backgroundColor: backgroundColor, color: "#ddd", fontSize: 25 }} >
 									<Icon type="question-circle" data-step="5" data-intro="如果想要进一步了解详细的使用教程及组件介绍，请点击此处查看文档。" />
 								</Button>
 							</a>
 						</Col>
+						<Col span={1}>
+							<Button onClick={this.handleSignout}>退出</Button>
+						</Col>
+						<Col span={1}></Col>
 						<a href="https://github.com/pigeonhouse/BigDataPlayground" target="_blank" className={styles.githubCorner} aria-label="View source on GitHub">
 							<svg
 								width="45"
@@ -320,7 +329,6 @@ class LocalMode extends React.Component {
 								data-step="4" data-intro="所有配置完成后，点击'运行'按钮开始运行整个工作流。" data-position='top'
 							>
 								<Col span={11}>
-
 									<Button
 										icon="plus-circle"
 										onClick={this.setMenuVisible}

@@ -135,7 +135,7 @@ class UploadFile extends React.Component {
                         modifiedFileName: modifiedName,
                         fileName: response.fileName,
                         headerAttributes: response.headerAttributes,
-                        previewData: results.data[0]
+                        previewData: results.data
                     });
                 }
                 if (info.file.status === 'done') {

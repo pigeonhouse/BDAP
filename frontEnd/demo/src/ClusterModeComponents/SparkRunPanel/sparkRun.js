@@ -70,16 +70,17 @@ class SparkRunning extends Component {
 			setTimeout(async () => {
 
 				const init = {
-					method: 'POST',
+					method: 'GET',
 					mode: 'cors',
-					body: JSON.stringify({ "resultUrl": result[current].resultUrl }),
 					headers: {
 						"Content-Type": "application/json;charset=utf-8"
 					},
 					credentials: 'include'
 				}
 
-				const response = await fetchTool("/experiment-service/flow/node/status", init)
+				const url = `/experiment-service/flow/node/status?resultUrl=${result[current].resultUrl}`;
+
+				const response = await fetchTool(url, init)
 
 				if (response.status === 200) {
 					const res = await response.text();

@@ -5,6 +5,7 @@ import TablePreview from './TablePreview';
 import { fetchTool } from '../../../FetchTool';
 import ChartPreview from './ChartPreview';
 
+import VisualizedPanel from '../../../pages/VisualizedPanel';
 import styles from '../index.less';
 import Papa from 'papaparse';
 
@@ -18,6 +19,8 @@ class DataPreview extends Component {
 		labelArray: [],
 		dataSet: [],
 		labelType: {},
+		fileName: null,
+		path: null,
 	}
 
 	getData = async () => {
@@ -53,9 +56,9 @@ class DataPreview extends Component {
 				}
 			}
 
-			this.setState({ 
-				labelArray:fieldNameArray,
-				dataSet:results.data,
+			this.setState({
+				labelArray: fieldNameArray,
+				dataSet: results.data,
 				labelType
 			})
 		}
@@ -82,16 +85,23 @@ class DataPreview extends Component {
 	}
 
 	showModal = () => { //让数据预览页面显示的函数
+		const { propsAPI } = this.props;
+		const { getSelected } = propsAPI;
+		const item = getSelected()[0];
+		const { path, fileName } = item.getModel();
+		this.setState({ path, fileName })
+
 		this.setState({
 			visible: true,
 			newRandomkey: (this.state.newRandomkey + 1) % 10
 		});
 
-		this.getData();
+		// this.getData();
 	}
 
 	render() {
 		const { dataSet, labelArray, newRandomkey, visible } = this.state;
+		const { path, fileName } = this.state;
 		return (
 			<div>
 				<Command name="showpicture">
@@ -109,7 +119,8 @@ class DataPreview extends Component {
 					onOk={this.handleOk}
 					onCancel={this.handleCancel}
 				>
-					<TablePreview labelArray={labelArray} dataSet={dataSet} ></TablePreview>
+					<VisualizedPanel filePath={`${path}/${fileName}`} />
+					{/* <TablePreview labelArray={labelArray} dataSet={dataSet} ></TablePreview> */}
 				</Modal>
 			</div>
 		);
