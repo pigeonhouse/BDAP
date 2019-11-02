@@ -127,6 +127,7 @@ class DataSetPanel extends React.Component {
 
         this.setState({
             fileList: dataDir.map(r => r),
+            fileBackup: dataDir.map(r => r),
             filePath: newfilePath
         });
     }
@@ -151,7 +152,7 @@ class DataSetPanel extends React.Component {
 
         const { fileName } = fileList[index];
         const path = this.getPathByFilePath(filePath);
-        const url = `/filesystem-service&path=${path + '/' + fileName}`;
+        const url = `/filesystem-service?path=${path + '/' + fileName}`;
         const init = {
             method: 'DELETE',
             mode: 'cors',
@@ -299,8 +300,14 @@ class DataSetPanel extends React.Component {
     }
 
     // 上传文件后，将文件加入列表
-    handleUploadFile = (file) => {
-        console.log(file);
+    handleUploadFile = async () => {
+        const path = this.getPathByFilePath(this.state.filePath);
+        const dataDir = await this.getFileListByPath(path || '/');
+
+        this.setState({
+            fileList: dataDir.map(r => r),
+            fileBackup: dataDir.map(r => r),
+        });
     }
 
     onBack = () => {

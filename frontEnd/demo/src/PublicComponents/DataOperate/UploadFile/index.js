@@ -1,6 +1,7 @@
 import React from 'react';
-import { Upload, Button, Icon, Modal, Input, Tooltip, Row, Col } from 'antd';
+import { Upload, Button, Icon, Modal, Input, Tooltip, Row, Col, message } from 'antd';
 
+import { fetchTool, token } from '../../../FetchTool';
 import FileTree from './FileTree';
 import EditorTable from './EditorTable';
 import DataTable from './DataTable';
@@ -12,6 +13,11 @@ class UploadFile extends React.Component {
         visible: false,
         uploading: false,
         path: null,
+        confirmLoading: false,
+        headerAttributes: null,
+        fileName: null,
+        modifiedFileName: null,
+        previewData: null,
     };
 
     showModal = () => {
@@ -20,15 +26,56 @@ class UploadFile extends React.Component {
         });
     };
 
-    handleOk = e => {
+    handleOk = async e => {
         this.setState({
-            visible: false,
+            confirmLoading: true,
         });
+
+        const { fileName, modifiedFileName, headerAttributes } = this.state;
+        const data = {
+            fileName,
+            modifiedFileName,
+            path: '/',
+            headerAttributes,
+            previewData: ""
+        }
+        const init = {
+            method: 'POST',
+            mode: 'cors',
+            body: JSON.stringify(data),
+            headers: {
+                "Content-Type": "application/json;charset=utf-8"
+            },
+        };
+        const url = '/filesystem-service/file/confirm';
+
+        const response = await fetchTool(url, init);
+        if (response.status === 200) {
+            message.success('上传成功');
+            this.setState({
+                visible: false,
+                uploading: false,
+                path: null,
+                confirmLoading: false,
+                headerAttributes: null,
+                previewData: null,
+                modifiedFileName: null,
+                fileName: null,
+            });
+            this.props.handleUploadFile();
+        }
     };
 
     handleCancel = e => {
         this.setState({
             visible: false,
+            uploading: false,
+            path: null,
+            confirmLoading: false,
+            headerAttributes: null,
+            previewData: null,
+            modifiedFileName: null,
+            fileName: null,
         });
     };
 
@@ -39,7 +86,14 @@ class UploadFile extends React.Component {
             headerAttributes[index].modifiedDataType = item.type;
         })
         this.setState({ headerAttributes });
-        console.log(headerAttributes)
+    }
+
+    handleChangeSelect = (selectedRowKeys) => {
+        var { headerAttributes } = this.state;
+        selectedRowKeys.map((key) => {
+            headerAttributes[Number(key)].selected = true;
+        })
+        this.setState({ headerAttributes });
     }
 
     handleChangeFileName = (e) => {
@@ -48,18 +102,23 @@ class UploadFile extends React.Component {
 
     render() {
         const self = this;
-        const { modifiedFileName, previewData, headerAttributes } = this.state;
+        const { modifiedFileName, previewData, headerAttributes, confirmLoading } = this.state;
 
         const props = {
             name: 'file',
-            action: 'https://result.eolinker.com/MSwz6fu34b763a21e1f7efa84a86a16f767a756952d0f95?uri=localhost:1001/filesystem-service/file',
+            action: 'http://localhost:1001/filesystem-service/file',
             headers: {
-                "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJsaXZ5QWRkciI6IjEwLjEwNS4yMjIuOTA6ODk5OCIsImF1ZCI6IjIwMTcyMTE1MTEiLCJzZXNzaW9uSWQiOjk3LCJ1c2VySWQiOiIyMDE3MjExNTExIn0.QpSpOUcQXYtMraZCQp4eWuMH624glPu8tKUNyJe3hnU",
+                "token": token,
             },
             onChange(info) {
-                if (info.file.status !== 'uploading') {
+                if (info.file.status === 'done') {
                     const response = info.file.response;
-                    console.log(response);
+                    const { headerAttributes } = response;
+                    for (let header in headerAttributes) {
+                        headerAttributes[header].selected = false;
+                        headerAttributes[header].modifiedColName = headerAttributes[header].colName;
+                        headerAttributes[header].modifiedDataType = headerAttributes[header].dataType;
+                    }
                     const results = Papa.parse(response.previewData, { header: true, dynamicTyping: true });
 
                     self.setState({
@@ -99,6 +158,10 @@ class UploadFile extends React.Component {
                     visible={this.state.visible}
                     onOk={this.handleOk}
                     onCancel={this.handleCancel}
+                    cancelText="取消"
+                    okText="确定上传"
+                    confirmLoading={confirmLoading}
+                    destroyOnClose={true}
                     width="1300px"
                 >
                     <Row>
@@ -136,14 +199,15 @@ class UploadFile extends React.Component {
                         </Col>
                     </Row>
                     <Row>
-                        <Col span={8} >
+                        <Col span={10} >
                             <EditorTable
                                 headerAttributes={headerAttributes}
                                 handleChangeHeaders={this.handleChangeHeaders}
+                                handleChangeSelect={this.handleChangeSelect}
                             />
                         </Col>
                         <Col span={1} ></Col>
-                        <Col span={15} >
+                        <Col span={13} >
                             <DataTable previewData={previewData} />
                         </Col>
                     </Row>

@@ -3,6 +3,7 @@ package com.pigeonhouse.experimentservice.controller;
 import com.pigeonhouse.experimentservice.entity.LivySessionInfo;
 import com.pigeonhouse.experimentservice.service.LivyService;
 import com.pigeonhouse.experimentservice.util.TokenParser;
+import jdk.nashorn.internal.parser.Token;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -29,8 +30,8 @@ public class InteractiveQueryController {
     public ResponseEntity readyForData(@RequestParam("filePath") String filePath,
                                        @RequestHeader("token")String token) {
         LivySessionInfo sessionInfo = TokenParser.getSessionInfoFromToken(token);
-
-        String readDataCode = "val df = spark.read.orc(\"hdfs://" + filePath + "\")\n"
+        String userId = TokenParser.getClaimsFromToken(token).get("userId").asString();
+        String readDataCode = "val df = spark.read.orc(\"hdfs:///bdap/students/"+ userId + filePath + "\")\n"
                 + "df.createOrReplaceTempView(\"data\")\n";
 
         livyService.postCode(sessionInfo,readDataCode);

@@ -63,7 +63,7 @@ class EditorTable extends React.Component {
             {
                 title: 'type',
                 dataIndex: 'type',
-                width: 150,
+                width: 120,
                 editable: true,
             },
             {
@@ -112,7 +112,7 @@ class EditorTable extends React.Component {
     }
 
     generateData = (headerAttributes) => {
-        if (headerAttributes === undefined) return;
+        if (headerAttributes === null) return;
 
         var data = [];
         headerAttributes.map((column, index) => {
@@ -161,7 +161,8 @@ class EditorTable extends React.Component {
 
     render() {
         const { headerAttributes } = this.props;
-        if (headerAttributes === undefined) return <Fragment />;
+        const self = this;
+        if (headerAttributes === null) return <Fragment />;
 
         const components = {
             body: {
@@ -171,7 +172,7 @@ class EditorTable extends React.Component {
 
         const rowSelection = {
             onChange: (selectedRowKeys, selectedRows) => {
-                console.log(`selectedRowKeys: ${selectedRowKeys}`, 'selectedRows: ', selectedRows);
+                self.props.handleChangeSelect(selectedRowKeys);
             },
             getCheckboxProps: record => ({
                 disabled: record.name === 'Disabled User',
@@ -208,6 +209,7 @@ class EditorTable extends React.Component {
             }
 
         });
+
         return (
             <EditableContext.Provider value={this.props.form}>
                 <Table
@@ -221,7 +223,7 @@ class EditorTable extends React.Component {
                     pagination={{
                         position: 'none'
                     }}
-                    scroll={{ y: "calc(105vh - 405px)", x: "400px" }}
+                    scroll={{ y: "calc(105vh - 405px)", x: "450px" }}
                 />
             </EditableContext.Provider>
         );

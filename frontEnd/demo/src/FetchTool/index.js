@@ -4,7 +4,7 @@
 //'backEndTest'
 //'production'
 const mode = 'backEndTest';
-var token = '';
+export var token = '';
 
 export async function fetchTool(url, init) {
     init.headers["token"] = token;
