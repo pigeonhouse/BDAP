@@ -36,6 +36,7 @@ class VisualizedPanel extends React.Component {
 
     async componentWillMount() {
         const { filePath } = this.props;
+        if (filePath === undefined) return;
         const init = {
             method: 'GET',
             mode: 'cors',
