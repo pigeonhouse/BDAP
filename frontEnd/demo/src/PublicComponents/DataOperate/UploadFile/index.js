@@ -1,7 +1,7 @@
 import React from 'react';
 import { Upload, Button, Icon, Modal, Input, Tooltip, Row, Col, message } from 'antd';
 
-import { fetchTool } from '../../../FetchTool';
+import { fetchTool, mode } from '../../../FetchTool';
 import FileTree from './FileTree';
 import EditorTable from './EditorTable';
 import DataTable from './DataTable';
@@ -110,7 +110,8 @@ class UploadFile extends React.Component {
 
         const props = {
             name: 'file',
-            action: 'http://localhost:1001/filesystem-service/file',
+            action: mode === 'backEndTest'?'http://localhost:1001/filesystem-service/file':
+            'https://result.eolinker.com/MSwz6fu34b763a21e1f7efa84a86a16f767a756952d0f95?uri=localhost:1001/filesystem-service/file',
             headers: {
                 "token": Cookies.get('token'),
             },

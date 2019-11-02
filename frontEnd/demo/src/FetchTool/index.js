@@ -3,14 +3,22 @@
 //'frontEndTest'
 //'backEndTest'
 //'production'
-const mode = 'backEndTest';
+export const mode = 'frontEndTest';
 
 export async function fetchTool(url, init) {
     const token = Cookies.get('token')
     init.headers["token"] = token;
 
     if (mode === 'frontEndTest') {
-        url = "https://result.eolinker.com/MSwz6fu34b763a21e1f7efa84a86a16f767a756952d0f95?uri=localhost:1001" + url;
+        var newUrl = '';
+        for (let i = 0; i < url.length; i++) {
+            if (url[i] === '?') {
+                newUrl += '&';
+            } else {
+                newUrl += url[i];
+            }
+        }
+        url = "https://result.eolinker.com/MSwz6fu34b763a21e1f7efa84a86a16f767a756952d0f95?uri=localhost:1001" + newUrl;
     } else if (mode === 'backEndTest') {
         url = "http://localhost:1001" + url;
     } else if (mode === "production") {
