@@ -63,7 +63,6 @@ class ExperimentList extends React.Component {
 	}
 
 	deleteModal = async (experimentId) => {
-		console.log("deleteModal")
 		const init = {
 			method: 'DELETE',
 			mode: 'cors',
@@ -133,7 +132,7 @@ class ExperimentList extends React.Component {
 		}
 
 		const response = await fetchTool(`/experiment-service/experiments/${experiment.experimentId}`, init)
-		
+
 		return await response.json();
 	}
 
@@ -281,7 +280,9 @@ class ExperimentList extends React.Component {
 							}}
 							columns={columns}
 							dataSource={data}
-							pagination={{ pageSize: 6 }} />
+							scroll={{ y: "calc(105vh - 405px)" }}
+						// pagination={{ pageSize: 6 }} 
+						/>
 					</div>
 				</Col>
 				<Col span={1} style={{ height: "calc(100vh - 105px)", borderRight: "1px solid #ececec" }}> </Col>

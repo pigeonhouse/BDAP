@@ -2,7 +2,7 @@ import React from 'react';
 import { Upload, Button, Icon, Modal, Input, Tooltip, Row, Col, message } from 'antd';
 
 import { fetchTool, mode } from '../../../FetchTool';
-import FileTree from './FileTree';
+import FileTree from '../FileTree';
 import EditorTable from './EditorTable';
 import DataTable from './DataTable';
 import styles from './index.less';
@@ -63,7 +63,7 @@ class UploadFile extends React.Component {
                 modifiedFileName: null,
                 fileName: null,
             });
-            this.props.handleUploadFile();
+            this.props.handleUpdateFileList();
         }
     };
 
