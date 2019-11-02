@@ -1,12 +1,13 @@
 import React from 'react';
 import { Upload, Button, Icon, Modal, Input, Tooltip, Row, Col, message } from 'antd';
 
-import { fetchTool, token } from '../../../FetchTool';
+import { fetchTool } from '../../../FetchTool';
 import FileTree from './FileTree';
 import EditorTable from './EditorTable';
 import DataTable from './DataTable';
 import styles from './index.less';
 import Papa from 'papaparse';
+import Cookies from 'js-cookie';
 
 class UploadFile extends React.Component {
     state = {
@@ -90,6 +91,9 @@ class UploadFile extends React.Component {
 
     handleChangeSelect = (selectedRowKeys) => {
         var { headerAttributes } = this.state;
+        headerAttributes.map((header, index) => {
+            headerAttributes[index].selected = false;
+        })
         selectedRowKeys.map((key) => {
             headerAttributes[Number(key)].selected = true;
         })
@@ -108,21 +112,26 @@ class UploadFile extends React.Component {
             name: 'file',
             action: 'http://localhost:1001/filesystem-service/file',
             headers: {
-                "token": token,
+                "token": Cookies.get('token'),
             },
             onChange(info) {
                 if (info.file.status === 'done') {
                     const response = info.file.response;
                     const { headerAttributes } = response;
                     for (let header in headerAttributes) {
-                        headerAttributes[header].selected = false;
+                        headerAttributes[header].selected = true;
                         headerAttributes[header].modifiedColName = headerAttributes[header].colName;
                         headerAttributes[header].modifiedDataType = headerAttributes[header].dataType;
                     }
                     const results = Papa.parse(response.previewData, { header: true, dynamicTyping: true });
 
+                    let splits = response.fileName.split('.')
+                    let modifiedName = ""
+                    for(let i = 0; i < splits.length - 1; i++){
+                        modifiedName += splits[i];
+                    }
                     self.setState({
-                        modifiedFileName: response.fileName,
+                        modifiedFileName: modifiedName,
                         fileName: response.fileName,
                         headerAttributes: response.headerAttributes,
                         previewData: results.data[0]
@@ -208,7 +217,10 @@ class UploadFile extends React.Component {
                         </Col>
                         <Col span={1} ></Col>
                         <Col span={13} >
-                            <DataTable previewData={previewData} />
+                            <DataTable
+                                previewData={previewData}
+                                headerAttributes={headerAttributes}
+                            />
                         </Col>
                     </Row>
                 </Modal>

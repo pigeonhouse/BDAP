@@ -33,10 +33,11 @@ public class ExecutionController {
                               @RequestHeader("token") String token) {
 
         LivySessionInfo sessionInfo = TokenParser.getSessionInfoFromToken(token);
+        String userId = TokenParser.getClaimsFromToken(token).get("userId").asString();
 
         ArrayList<NodeInfo> nodes = experimentMapInfo.getNodes();
 
-        return ResponseEntity.ok(executionService.executeFlow(nodes, sessionInfo));
+        return ResponseEntity.ok(executionService.executeFlow(nodes, sessionInfo,userId));
     }
 
     @GetMapping("/flow/node/status")

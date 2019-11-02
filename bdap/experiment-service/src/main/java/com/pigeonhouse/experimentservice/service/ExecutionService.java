@@ -6,9 +6,11 @@ import com.pigeonhouse.experimentservice.entity.nodeinfo.NodeInfo;
 import com.pigeonhouse.experimentservice.entity.nodeinfo.attrinfo.AttrInfo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.util.ClassUtils;
 
 import java.io.BufferedReader;
 import java.io.FileInputStream;
+import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
@@ -26,13 +28,14 @@ public class ExecutionService {
      * @param nodeInfo
      * @return 完整spark代码
      */
-    public String generateCode(NodeInfo nodeInfo) {
+    public String generateCode(NodeInfo nodeInfo, String userId) {
 
         //是否是输入的文件模块
         String filePath = nodeInfo.getFilePath();
+        String fileName = nodeInfo.getLabelName().getLabel();
         if (filePath != null) {
             String id = nodeInfo.getId();
-            return "val output = spark.read.orc(\"" + filePath + "\")\n" +
+            return "val output = spark.read.orc(\"hdfs:///bdap/students/" + userId + filePath + fileName + "\")\n" +
                     "dfMap += (\"" + id + "_0" + "\" -> output)\n\n";
         }
 
@@ -60,14 +63,13 @@ public class ExecutionService {
         }
 
         String inputCode = inputCodeBuilder.append("\n").toString();
-
         //-------------------------取出代码文件中的代码段------------------------------
-
-        String scalaFilePath = "src/main/resources/static/" + nodeInfo.getGroupName().getElabel() + "/"
-                + nodeInfo.getLabelName().getElabel() + ".scala";
+//        String scalaFilePath = "../../../../../resources/static/" + nodeInfo.getGroupName().getElabel() + "/"
+//                + nodeInfo.getLabelName().getElabel() ;
         StringBuilder originCodeBuilder = new StringBuilder();
         try {
-            FileInputStream inputStream = new FileInputStream(scalaFilePath);
+            InputStream inputStream = this.getClass().getResourceAsStream("/static/"+nodeInfo.getGroupName().getElabel() + "/"
+                    + nodeInfo.getLabelName().getElabel() + ".scala");
             //代码段编码改为UTF-8
             BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream, StandardCharsets.UTF_8));
             String str = null;
@@ -158,17 +160,17 @@ public class ExecutionService {
      * @param flowInfo
      * @return
      */
-    public List<ExecutionInfo> executeFlow(List<NodeInfo> flowInfo, LivySessionInfo livySessionInfo) {
+    public List<ExecutionInfo> executeFlow(List<NodeInfo> flowInfo, LivySessionInfo livySessionInfo, String userId) {
         List<ExecutionInfo> executionInfoList = new ArrayList<>();
         StringBuilder codeToRun = new StringBuilder();
         codeToRun.append("var dfMap: Map[String, org.apache.spark.sql.DataFrame] = Map() \n");
         for (NodeInfo nodeInfo : flowInfo) {
-
-            String nodeCode = generateCode(nodeInfo);
+            System.out.println(nodeInfo);
+            String nodeCode = generateCode(nodeInfo, userId);
             codeToRun.append(nodeCode);
 
             //提交代码，得到一个url，用于前端轮询以查询这次job运行状态
-            String resultUrl = livyService.postCode(livySessionInfo,codeToRun.toString());
+            String resultUrl = livyService.postCode(livySessionInfo, codeToRun.toString());
             System.out.println("success!\n" + resultUrl);
 
             //清空原先的代码，准备下一次提交
@@ -176,7 +178,7 @@ public class ExecutionService {
             ExecutionInfo executionInfo = new ExecutionInfo(nodeInfo.getId(), resultUrl);
             executionInfoList.add(executionInfo);
         }
-        String resultUrl = livyService.postCode(livySessionInfo,codeToRun.toString());
+        String resultUrl = livyService.postCode(livySessionInfo, codeToRun.toString());
         System.out.println("success!\n" + resultUrl);
         return executionInfoList;
     }
@@ -190,15 +192,15 @@ public class ExecutionService {
      * @param livySessionInfo
      * @return
      */
-    public List<ExecutionInfo> executeFlowForTest(List<NodeInfo> flowInfo, LivySessionInfo livySessionInfo) {
+    public List<ExecutionInfo> executeFlowForTest(List<NodeInfo> flowInfo, LivySessionInfo livySessionInfo, String userId) {
         List<ExecutionInfo> executionInfoList = new ArrayList<>();
         StringBuilder codeToRun = new StringBuilder();
         codeToRun.append("var dfMap: Map[String, org.apache.spark.sql.DataFrame] = Map() \n");
         for (NodeInfo nodeInfo : flowInfo) {
-            String nodeCode = generateCode(nodeInfo);
+            String nodeCode = generateCode(nodeInfo,userId);
             codeToRun.append(nodeCode);
         }
-        String resultUrl = livyService.postCode(livySessionInfo,codeToRun.toString());
+        String resultUrl = livyService.postCode(livySessionInfo, codeToRun.toString());
         System.out.println("success!\n" + resultUrl);
         return executionInfoList;
     }

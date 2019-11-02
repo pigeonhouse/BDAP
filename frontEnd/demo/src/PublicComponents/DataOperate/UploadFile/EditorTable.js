@@ -170,7 +170,15 @@ class EditorTable extends React.Component {
             },
         };
 
+        const selectedRowKeys = new Array();
+        headerAttributes.map((header, index) => {
+            if (header.selected === true) {
+                selectedRowKeys.push(index.toString());
+            }
+        })
+
         const rowSelection = {
+            selectedRowKeys,
             onChange: (selectedRowKeys, selectedRows) => {
                 self.props.handleChangeSelect(selectedRowKeys);
             },

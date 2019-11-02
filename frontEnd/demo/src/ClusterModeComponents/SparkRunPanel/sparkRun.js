@@ -39,6 +39,7 @@ class SparkRunning extends Component {
 		}
 
 		const response = await fetchTool("/experiment-service/flow/run", init)
+		console.log(response)
 		if (response.status === 200) {
 			const result = await response.json();
 

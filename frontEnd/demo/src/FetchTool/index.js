@@ -4,9 +4,9 @@
 //'backEndTest'
 //'production'
 const mode = 'backEndTest';
-export var token = '';
 
 export async function fetchTool(url, init) {
+    const token = Cookies.get('token')
     init.headers["token"] = token;
 
     if (mode === 'frontEndTest') {
@@ -20,15 +20,16 @@ export async function fetchTool(url, init) {
     }
 
     const res = await fetch(url, init);
+    console.log(res)
 
     if (res.status === 200) {
-        if (token === '') {
+        if (token === undefined) {
             const response = await res.json();
-            token = response.token;
+            if (response.token !== undefined) {
+                Cookies.set("token", response.token);
+            }
             return response;
         }
-        // Cookies.set("loginToken", res.token);
         return res;
     }
-    // else return await res.text();
 }

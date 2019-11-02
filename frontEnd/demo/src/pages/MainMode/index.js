@@ -6,7 +6,7 @@ import { Motion, spring } from "react-motion";
 import SparkRun from '../../ClusterModeComponents/SparkRunPanel';
 import ExperimentPanel from '../ExperimentPanel';
 import DataSetPanel from '../DataSetPanel';
-import DataManager from "../../PublicComponents/DataManager";
+import Cookies from 'js-cookie';
 import AddMenu from './AddMenu'
 import { fetchTool } from '../../FetchTool';
 import styles from './index.less';
@@ -17,7 +17,8 @@ import { relative } from 'path';
  * 已将三个版本的界面合成一个
  */
 const TabPane = Tabs.TabPane;
-var IntroJs = require('intro.js')
+var IntroJs = require('intro.js');
+
 class LocalMode extends React.Component {
 	Intro = (key) => {
 		notification.close(key)
@@ -39,12 +40,12 @@ class LocalMode extends React.Component {
 	}
 
 	state = {
-		sessionFinish: false,
-		currentTab: '2',
-		clickTab: '2',
+		currentTab: '1',
+		clickTab: '1',
 		username: '',
 		password: '',
 		remind: 'false',
+		sessionFinish: Cookies.get('token') === undefined ? false : true,
 		connectCtrl: false,
 		running: false,
 		sliderOut: false,
@@ -59,6 +60,7 @@ class LocalMode extends React.Component {
 		exp.setTime(exp.getTime() + Days * 24 * 60 * 60 * 1000);
 		document.cookie = 'accountInfo' + "=" + escape(accountInfo) + ";expires=" + exp.toGMTString()
 	}
+
 	setMenuVisible = () => {
 		if (this.state.Menuvisible == 'none') {
 			this.setState(
@@ -80,6 +82,7 @@ class LocalMode extends React.Component {
 			)
 		}
 	}
+
 	setSlider = () => {
 		this.setState(
 			{
@@ -89,7 +92,6 @@ class LocalMode extends React.Component {
 	}
 
 	componentWillMount() {
-
 		let arr, reg = new RegExp("(^| )" + 'accountInfo' + "=([^;]*)(;|$)");
 		let accountInfo = ''
 
@@ -213,7 +215,8 @@ class LocalMode extends React.Component {
 	}
 
 	render() {
-		if (this.props.location.state === undefined) {
+		const token = Cookies.get('token');
+		if (this.props.location.state === undefined && token === undefined) {
 			return <Redirect to='/' />
 		}
 
