@@ -1,5 +1,5 @@
 import React from 'react';
-import { Table, Row, Col } from 'antd';
+import { Table, Row, Col, Tooltip } from 'antd';
 
 class VisualTable extends React.Component {
     state = {
@@ -45,9 +45,24 @@ class VisualTable extends React.Component {
                 title: item,
                 dataIndex: item,
                 key: item,
-                width: 100,
+                width: 120,
+                onCell: () => {
+                    return {
+                        style: {
+                            minWidth: 120,
+                            maxWidth: 120,
+                            overflow: 'hidden',
+                            whiteSpace: 'nowrap',
+                            textOverflow: 'ellipsis',
+                            cursor: 'pointer'
+                        }
+                    }
+                },
+                render: (text) => <Tooltip placement="topLeft" title={text}>{text}</Tooltip>
             })
         })
+
+        const width = 120 * columns.length;
 
         let { sortedInfo, filteredInfo } = this.state;
         sortedInfo = sortedInfo || {};
@@ -65,7 +80,7 @@ class VisualTable extends React.Component {
                             loading={loading}
                             onChange={this.handleChange}
                             pagination={{ pageSize: 50 }}
-                            scroll={{ y: "calc(105vh - 405px)", x: "100% " }}
+                            scroll={{ y: "calc(105vh - 405px)", x: `${width}px` }}
                         />
                     </Col>
                     <Col span={3}></Col>

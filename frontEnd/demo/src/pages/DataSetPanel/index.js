@@ -17,6 +17,7 @@ class DataSetPanel extends React.Component {
         fileList: [],
         fileBackup: [],
         isCommonly: false,
+        dataPreviewPath: undefined,
     }
 
     getPathByFilePath = (filePath) => {
@@ -65,7 +66,12 @@ class DataSetPanel extends React.Component {
             return;
         }
 
-        console.log(this.state.fileList[index]);
+        const { fileList, filePath } = this.state;
+        const path = this.getPathByFilePath(filePath);
+
+        this.setState({
+            dataPreviewPath: path + '/' + fileList[index].fileName,
+        })
         this.props.handleClickEnter();
     }
 
@@ -119,8 +125,15 @@ class DataSetPanel extends React.Component {
         const { fileList, fileBackup, filePath } = this.state;
 
         const { fileName } = fileList[index];
-        const path = this.getPathByFilePath(filePath);
+
+        var path = '';
+        if (fileList[index].path === undefined) {
+            path = this.getPathByFilePath(filePath);
+        } else {
+            path = fileList[index].path === '/' ? '' : fileList[index].path;
+        }
         const url = `/filesystem-service?path=${path + '/' + fileName}`;
+        console.log(url)
         const init = {
             method: 'DELETE',
             mode: 'cors',
@@ -357,7 +370,7 @@ class DataSetPanel extends React.Component {
                         <Col span={5} style={{ paddingLeft: "20px" }} >
 
                             {/* 上传文件 */}
-                            <UploadFile 
+                            <UploadFile
                                 handleUpdateFileList={this.handleUpdateFileList}
                             />
 
@@ -395,7 +408,8 @@ class DataSetPanel extends React.Component {
                 </Fragment>
             );
         } else {
-            return <VisualizedPanel></VisualizedPanel>;
+            const { dataPreviewPath } = this.state;
+            return <VisualizedPanel filePath={dataPreviewPath} />;
         }
     }
 }

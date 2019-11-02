@@ -50,7 +50,6 @@ class VisualizedPanel extends React.Component {
 
         if (response.status === 200) {
             const res = await response.text();
-            console.log(res)
 
             // 通过papa转化
             const results = Papa.parse(res, { header: true, dynamicTyping: true });

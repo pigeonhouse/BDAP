@@ -1,5 +1,6 @@
 package com.pigeonhouse.filesystemservice.controller;
 
+import com.pigeonhouse.filesystemservice.dao.CommonFilesDao;
 import com.pigeonhouse.filesystemservice.entity.*;
 import com.pigeonhouse.filesystemservice.service.HdfsService;
 import com.pigeonhouse.filesystemservice.service.LivyService;
@@ -21,6 +22,8 @@ public class HdfsFilesController {
     HdfsService hdfsService;
     @Autowired
     LivyService livyService;
+    @Autowired
+    CommonFilesDao commonFilesDao;
 
     @PostMapping("/file")
     public ResponseEntity upload(HttpServletRequest request,
@@ -102,14 +105,13 @@ public class HdfsFilesController {
         }
     }
 
-    //TODO 删除文件/文件夹/常用文件需要分别判断
-
     @DeleteMapping("/")
     public ResponseEntity delete(@RequestParam("path") String path,
                                  @RequestHeader("token") String token){
         try{
             String userId = TokenParser.getClaimsFromToken(token).get("userId").asString();
             hdfsService.delete("/" + userId + path);
+            commonFilesDao.deleteMetaData(path,userId);
             return new ResponseEntity(HttpStatus.OK);
         }catch (Exception e){
             e.printStackTrace();

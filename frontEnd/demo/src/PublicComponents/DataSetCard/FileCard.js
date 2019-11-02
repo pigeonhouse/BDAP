@@ -33,6 +33,7 @@ class FileCard extends React.Component {
     }
 
     render() {
+        const { mouseEnter } = this.state;
         const { file, index, handleDeleteFile, handleCancelStar, handleSelectStar } = this.props;
 
         return (
@@ -55,28 +56,27 @@ class FileCard extends React.Component {
                                 {file.fileName}
                             </Col>
                             <Col span={12} style={{ paddingLeft: 5 }} >
-                                {this.state.mouseEnter === true ?
-                                    <div style={{ float: "right" }}>
-                                        <DataPreview />
-                                        <Tooltip placement="bottom" title="下载数据" >
-                                            <Button
-                                                icon="download"
-                                                className={styles.iconStyle}
-                                                onClick={this.handleClickDownloadFile}
-                                            />
-                                        </Tooltip>
-                                        <StarCommonFile
-                                            handleCancelStar={handleCancelStar}
-                                            handleSelectStar={handleSelectStar}
-                                            index={index}
-                                            file={file}
+                                <div style={{ float: "right" }}>
+                                    <DataPreview />
+                                    <Tooltip placement="bottom" title="下载数据" >
+                                        <Button
+                                            icon="download"
+                                            className={styles.iconStyle}
+                                            onClick={this.handleClickDownloadFile}
                                         />
-                                        <DeleteFile
-                                            handleDeleteFile={handleDeleteFile}
-                                            index={index}
-                                            file={file}
-                                        />
-                                    </div> : null}
+                                    </Tooltip>
+                                    <StarCommonFile
+                                        handleCancelStar={handleCancelStar}
+                                        handleSelectStar={handleSelectStar}
+                                        index={index}
+                                        file={file}
+                                    />
+                                    <DeleteFile
+                                        handleDeleteFile={handleDeleteFile}
+                                        index={index}
+                                        file={file}
+                                    />
+                                </div>
                             </Col>
                         </Row>
                     </Card>
