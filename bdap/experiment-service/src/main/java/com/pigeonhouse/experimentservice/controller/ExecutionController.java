@@ -59,7 +59,9 @@ public class ExecutionController {
                                          @RequestHeader("token") String token) {
 
         LivySessionInfo sessionInfo = TokenParser.getSessionInfoFromToken(token);
-        livyService.postCode(sessionInfo, "val df = dfMap(\"" + nodeId + "\")\n");
+        String userId = TokenParser.getClaimsFromToken(token).get("userId").asString();
+
+        livyService.postCode(sessionInfo, "val df = dfMap(\"" + nodeId + "\")\n",userId);
         String result = livyService.getCsv(sessionInfo, 100);
         return ResponseEntity.ok(result);
 

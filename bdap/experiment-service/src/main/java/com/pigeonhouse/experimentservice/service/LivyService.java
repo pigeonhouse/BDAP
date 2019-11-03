@@ -17,7 +17,7 @@ public interface LivyService {
     @PostMapping("/session/status")
     String sessionStatus(@RequestBody LivySessionInfo livySessionInfo);
     @PostMapping("/session/code")
-    String postCode(@RequestBody LivySessionInfo livySessionInfo, @RequestParam("code") String code);
+    String postCode(@RequestBody LivySessionInfo livySessionInfo, @RequestParam("code") String code,@RequestParam("userId")String userId);
 
     @GetMapping("/output/schema")
     List<HeaderAttribute> getSchema(@RequestBody LivySessionInfo livySessionInfo);

@@ -66,9 +66,16 @@ class DataSetPanel extends React.Component {
             return;
         }
 
-        const { fileList, filePath } = this.state;
-        const path = this.getPathByFilePath(filePath);
+        const { fileList, filePath, isCommonly } = this.state;
+        var path = '';
 
+        if (isCommonly === true) {
+            path = fileList[index].path === '/' ? '' : fileList[index].path;
+        }
+        else {
+            path = this.getPathByFilePath(filePath);
+        }
+        
         this.setState({
             dataPreviewPath: path + '/' + fileList[index].fileName,
         })

@@ -217,11 +217,13 @@ class LocalMode extends React.Component {
 	handleSignout = () => {
 		this.setState({ token: undefined });
 		Cookies.remove("token");
+		Cookies.remove("refreshToken");
 	}
 
 	render() {
 		const token = Cookies.get('token');
-		if (token === undefined) {
+		const refreshToken = Cookies.get('refreshToken');
+		if (token === undefined && refreshToken === undefined) {
 			return <Redirect to='/' />
 		}
 

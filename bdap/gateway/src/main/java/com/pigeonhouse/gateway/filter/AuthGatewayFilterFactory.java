@@ -1,7 +1,10 @@
 package com.pigeonhouse.gateway.filter;
 
 import com.auth0.jwt.JWT;
+import com.auth0.jwt.JWTVerifier;
+import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.exceptions.JWTDecodeException;
+import com.auth0.jwt.exceptions.JWTVerificationException;
 import com.auth0.jwt.interfaces.Claim;
 import org.springframework.cloud.gateway.filter.GatewayFilter;
 import org.springframework.cloud.gateway.filter.factory.AbstractGatewayFilterFactory;
@@ -31,11 +34,12 @@ public class AuthGatewayFilterFactory extends AbstractGatewayFilterFactory<AuthG
             }
             try {
                 String userId = JWT.decode(token).getAudience().get(0);
-                Map<String, Claim> claims = JWT.decode(token).getClaims();
+                JWTVerifier jwtVerifier = JWT.require(Algorithm.HMAC256(userId)).build();
+                jwtVerifier.verify(token);
                 return chain.filter(exchange);
-            } catch (JWTDecodeException j) {
+            } catch (Exception e) {
                 ServerHttpResponse response = exchange.getResponse();
-                response.setStatusCode(HttpStatus.BAD_REQUEST);
+                response.setStatusCode(HttpStatus.UNAUTHORIZED);
                 return response.setComplete();
             }
         };

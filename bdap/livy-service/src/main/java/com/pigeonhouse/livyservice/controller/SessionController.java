@@ -1,19 +1,12 @@
 package com.pigeonhouse.livyservice.controller;
 
-import com.auth0.jwt.JWT;
-import com.auth0.jwt.interfaces.Claim;
+import com.pigeonhouse.livyservice.dao.TokenDao;
 import com.pigeonhouse.livyservice.entity.LivySessionInfo;
 import com.pigeonhouse.livyservice.service.ServerService;
 import com.pigeonhouse.livyservice.service.SessionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cloud.client.discovery.DiscoveryClient;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-
-import javax.servlet.http.HttpServletRequest;
-import java.util.Map;
 
 
 @RestController
@@ -25,6 +18,8 @@ public class SessionController {
     ServerService serverService;
     @Autowired
     SessionService sessionService;
+    @Autowired
+    TokenDao tokenDao;
 
     @GetMapping("/session")
     public LivySessionInfo newSession() {
@@ -39,9 +34,10 @@ public class SessionController {
     }
 
     @PostMapping("/session/code")
-    public String postCode(@RequestBody LivySessionInfo livySessionInfo,@RequestParam("code")String code) {
+    public String postCode(@RequestBody LivySessionInfo livySessionInfo,
+                           @RequestParam("code")String code,
+                           @RequestParam("userId")String userId) {
+        tokenDao.updateRefreshToken(userId);
         return sessionService.postCode(livySessionInfo,code);
     }
-
-
 }

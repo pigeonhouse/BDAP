@@ -170,7 +170,7 @@ public class ExecutionService {
             codeToRun.append(nodeCode);
 
             //提交代码，得到一个url，用于前端轮询以查询这次job运行状态
-            String resultUrl = livyService.postCode(livySessionInfo, codeToRun.toString());
+            String resultUrl = livyService.postCode(livySessionInfo, codeToRun.toString(),userId);
             System.out.println("success!\n" + resultUrl);
 
             //清空原先的代码，准备下一次提交
@@ -178,7 +178,7 @@ public class ExecutionService {
             ExecutionInfo executionInfo = new ExecutionInfo(nodeInfo.getId(), resultUrl);
             executionInfoList.add(executionInfo);
         }
-        String resultUrl = livyService.postCode(livySessionInfo, codeToRun.toString());
+        String resultUrl = livyService.postCode(livySessionInfo, codeToRun.toString(),userId);
         System.out.println("success!\n" + resultUrl);
         return executionInfoList;
     }
@@ -200,7 +200,7 @@ public class ExecutionService {
             String nodeCode = generateCode(nodeInfo,userId);
             codeToRun.append(nodeCode);
         }
-        String resultUrl = livyService.postCode(livySessionInfo, codeToRun.toString());
+        String resultUrl = livyService.postCode(livySessionInfo, codeToRun.toString(),userId);
         System.out.println("success!\n" + resultUrl);
         return executionInfoList;
     }

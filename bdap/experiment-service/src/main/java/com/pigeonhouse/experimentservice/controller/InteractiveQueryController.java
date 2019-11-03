@@ -18,9 +18,10 @@ public class InteractiveQueryController {
     public ResponseEntity sqlQuery(@RequestParam("sql") String sql,
                                    @RequestHeader("token") String token) {
         LivySessionInfo sessionInfo = TokenParser.getSessionInfoFromToken(token);
+        String userId = TokenParser.getClaimsFromToken(token).get("userId").asString();
 
         String code = "val df = spark.sql(\"" + sql + "\")";
-        livyService.postCode(sessionInfo, code);
+        livyService.postCode(sessionInfo, code,userId);
         String result = livyService.getCsv(sessionInfo,100);
         return ResponseEntity.ok(result);
     }
@@ -34,7 +35,7 @@ public class InteractiveQueryController {
         String readDataCode = "val df = spark.read.orc(\"hdfs:///bdap/students/"+ userId + filePath + "\")\n"
                 + "df.createOrReplaceTempView(\"data\")\n";
 
-        livyService.postCode(sessionInfo,readDataCode);
+        livyService.postCode(sessionInfo,readDataCode,userId);
         String result = livyService.getCsv(sessionInfo,100);
         return ResponseEntity.ok(result);
 

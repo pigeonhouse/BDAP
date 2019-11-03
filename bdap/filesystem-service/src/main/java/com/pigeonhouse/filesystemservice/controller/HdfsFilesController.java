@@ -47,7 +47,7 @@ public class HdfsFilesController {
                     ".option(\"inferSchema\",\"true\").option(\"header\",\"true\")" +
                     ".load(\"hdfs:///bdap/students/" + userId + "/..tmp/" + fileName + "\")\n";
 
-            livyService.postCode(livySessionInfo,readDataCode);
+            livyService.postCode(livySessionInfo,readDataCode,userId);
             List<HeaderAttribute> headerAttributes = livyService.getSchema(livySessionInfo);
 
             String previewData = livyService.getCsv(livySessionInfo,20);
@@ -91,7 +91,7 @@ public class HdfsFilesController {
             codeBuilder.append(userId).append(modifiedMetaData.getPath());
             codeBuilder.append(modifiedMetaData.getModifiedFileName()).append("\")\n");
 
-            livyService.postCode(livySessionInfo, codeBuilder.toString());
+            livyService.postCode(livySessionInfo, codeBuilder.toString(),userId);
 
             String sessionStatus = "";
             while (!"idle".equals(sessionStatus)) {

@@ -144,7 +144,7 @@ public class HdfsService {
         String fileName = splits[splits.length - 1];
         String dirPath = PathParser.getDirPath(path);
         String readDataCode = "val df = spark.read.orc(\"hdfs:///bdap/students/" + userId + path + "\")\n";
-        livyService.postCode(livySessionInfo, readDataCode);
+        livyService.postCode(livySessionInfo, readDataCode,userId);
 
         String previewData = livyService.getCsv(livySessionInfo,20);
 
