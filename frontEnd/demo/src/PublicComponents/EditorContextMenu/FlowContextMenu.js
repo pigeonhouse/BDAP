@@ -74,6 +74,7 @@ class FlowContextMenu extends React.Component {
 					/>
 				</GGEditor>
 				<NodeMenu>
+				    
 					<Command name="copy">
 						<div className={styles.item}>
 							<i className={`${iconfont.iconfont} ${iconfont.iconCopyO}`} />
@@ -86,8 +87,9 @@ class FlowContextMenu extends React.Component {
 							<span>删除</span>
 						</div>
 					</Command>
+				
 					<DataPreview></DataPreview>
-					{/* <ModelEvaluation></ModelEvaluation> */}
+				    <ModelEvaluation></ModelEvaluation> 
 					{/* <Download></Download> */}
 				</NodeMenu>
 
