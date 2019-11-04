@@ -31,7 +31,7 @@ public class OutputParser {
         ArrayList<HeaderAttribute> headerAttributes = new ArrayList<>();
         String[] ddlSplits = schemaDDL.split(",");
         for (String ddl : ddlSplits) {
-            String[] nameAndType = ddl.split("\\s");
+            String[] nameAndType = ddl.split("`\\s");
             String name = nameAndType[0].replace("`", "");
             String typeLowerCase = nameAndType[1].toLowerCase();
             String type = typeLowerCase.substring(0, 1).toUpperCase() + typeLowerCase.substring(1);
