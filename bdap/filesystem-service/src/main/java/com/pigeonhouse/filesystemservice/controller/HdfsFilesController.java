@@ -74,7 +74,7 @@ public class HdfsFilesController {
                 if (headerAttribute.isSelected()) {
                     codeBuilder.append(".withColumn(\"").append(headerAttribute.getModifiedColName());
                     codeBuilder.append("\", $\"").append(headerAttribute.getColName()).append("\".cast(DataTypes.");
-                    String dataType = headerAttribute.getModifiedDataType();
+                    String dataType = headerAttribute.getModifiedDataType().trim();
                     dataType = "Int".equals(dataType) ? "IntegerType" : dataType + "Type";
                     codeBuilder.append(dataType).append("))");
                 } else {
