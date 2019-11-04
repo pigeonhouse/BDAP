@@ -1,6 +1,7 @@
 import React from 'react';
 import { Col, Tooltip, Row, Button, Icon, Card } from 'antd';
 
+import DataPreview from '../DataOperate/DataPreview';
 import DeleteFile from '../DataOperate/DeleteFile';
 import StarCommonFile from '../DataOperate/StarCommonFile';
 import styles from './index.less';
@@ -32,6 +33,7 @@ class FileCard extends React.Component {
     }
 
     render() {
+        const { mouseEnter } = this.state;
         const { file, index, handleDeleteFile, handleCancelStar, handleSelectStar } = this.props;
 
         return (
@@ -54,33 +56,27 @@ class FileCard extends React.Component {
                                 {file.fileName}
                             </Col>
                             <Col span={12} style={{ paddingLeft: 5 }} >
-                                {this.state.mouseEnter === true ?
-                                    <div style={{ float: "right" }}>
-                                        <Tooltip placement="bottom" title="预览数据" >
-                                            <Button
-                                                icon="eye"
-                                                className={styles.iconStyle}
-                                            />
-                                        </Tooltip>
-                                        <Tooltip placement="bottom" title="下载数据" >
-                                            <Button
-                                                icon="download"
-                                                className={styles.iconStyle}
-                                                onClick={this.handleClickDownloadFile}
-                                            />
-                                        </Tooltip>
-                                        <StarCommonFile
-                                            handleCancelStar={handleCancelStar}
-                                            handleSelectStar={handleSelectStar}
-                                            index={index}
-                                            file={file}
+                                <div style={{ float: "right" }}>
+                                    <DataPreview />
+                                    <Tooltip placement="bottom" title="下载数据" >
+                                        <Button
+                                            icon="download"
+                                            className={styles.iconStyle}
+                                            onClick={this.handleClickDownloadFile}
                                         />
-                                        <DeleteFile
-                                            handleDeleteFile={handleDeleteFile}
-                                            index={index}
-                                            file={file}
-                                        />
-                                    </div> : null}
+                                    </Tooltip>
+                                    <StarCommonFile
+                                        handleCancelStar={handleCancelStar}
+                                        handleSelectStar={handleSelectStar}
+                                        index={index}
+                                        file={file}
+                                    />
+                                    <DeleteFile
+                                        handleDeleteFile={handleDeleteFile}
+                                        index={index}
+                                        file={file}
+                                    />
+                                </div>
                             </Col>
                         </Row>
                     </Card>

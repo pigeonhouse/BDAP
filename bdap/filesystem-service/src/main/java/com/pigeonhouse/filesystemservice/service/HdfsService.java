@@ -116,14 +116,22 @@ public class HdfsService {
     public void delete(String path) throws Exception {
         FileSystem fileSystem = getFileSystem();
         fileSystem.delete(new Path(getHdfsPath(path)), true);
+        Path commonFileNote = new Path(getHdfsPath(PathParser.getDirPath(path)+"/."+PathParser.getName(path)));
+        Path dirNote = new Path(getHdfsPath(PathParser.getDirPath(path)+"/#"+PathParser.getName(path)));
+        System.out.println(commonFileNote.toString());
+        System.out.println(dirNote.toString());
+        if(fileSystem.exists(commonFileNote)){
+            fileSystem.delete(commonFileNote,true);
+        }
+        if(fileSystem.exists(dirNote)){
+            fileSystem.delete(dirNote,true);
+        }
     }
 
 
     public void upload(MultipartFile file, String path) throws IOException {
         String fileName = file.getOriginalFilename();
         FileSystem fs = getFileSystem();
-        System.out.println("path:");
-        System.out.println(defaultHdfsUri + defaultDirectory + path + "/" + fileName);
         Path newPath = new Path(defaultHdfsUri + defaultDirectory + path + "/" + fileName);
         FSDataOutputStream outputStream = fs.create(newPath);
         outputStream.write(file.getBytes());
@@ -136,7 +144,7 @@ public class HdfsService {
         String fileName = splits[splits.length - 1];
         String dirPath = PathParser.getDirPath(path);
         String readDataCode = "val df = spark.read.orc(\"hdfs:///bdap/students/" + userId + path + "\")\n";
-        livyService.postCode(livySessionInfo, readDataCode);
+        livyService.postCode(livySessionInfo, readDataCode,userId);
 
         String previewData = livyService.getCsv(livySessionInfo,20);
 

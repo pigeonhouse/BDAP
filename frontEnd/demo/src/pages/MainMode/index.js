@@ -6,7 +6,7 @@ import { Motion, spring } from "react-motion";
 import SparkRun from '../../ClusterModeComponents/SparkRunPanel';
 import ExperimentPanel from '../ExperimentPanel';
 import DataSetPanel from '../DataSetPanel';
-import DataManager from "../../PublicComponents/DataManager";
+import Cookies from 'js-cookie';
 import AddMenu from './AddMenu'
 import { fetchTool } from '../../FetchTool';
 import styles from './index.less';
@@ -17,7 +17,8 @@ import { relative } from 'path';
  * 已将三个版本的界面合成一个
  */
 const TabPane = Tabs.TabPane;
-var IntroJs = require('intro.js')
+var IntroJs = require('intro.js');
+
 class LocalMode extends React.Component {
 	Intro = (key) => {
 		notification.close(key)
@@ -39,12 +40,12 @@ class LocalMode extends React.Component {
 	}
 
 	state = {
-		sessionFinish: false,
 		currentTab: '1',
 		clickTab: '1',
 		username: '',
 		password: '',
 		remind: 'false',
+		sessionFinish: Cookies.get('token') === undefined ? false : true,
 		connectCtrl: false,
 		running: false,
 		sliderOut: false,
@@ -59,6 +60,7 @@ class LocalMode extends React.Component {
 		exp.setTime(exp.getTime() + Days * 24 * 60 * 60 * 1000);
 		document.cookie = 'accountInfo' + "=" + escape(accountInfo) + ";expires=" + exp.toGMTString()
 	}
+
 	setMenuVisible = () => {
 		if (this.state.Menuvisible == 'none') {
 			this.setState(
@@ -80,6 +82,7 @@ class LocalMode extends React.Component {
 			)
 		}
 	}
+
 	setSlider = () => {
 		this.setState(
 			{
@@ -89,7 +92,6 @@ class LocalMode extends React.Component {
 	}
 
 	componentWillMount() {
-
 		let arr, reg = new RegExp("(^| )" + 'accountInfo' + "=([^;]*)(;|$)");
 		let accountInfo = ''
 
@@ -212,8 +214,16 @@ class LocalMode extends React.Component {
 		})
 	}
 
+	handleSignout = () => {
+		this.setState({ token: undefined });
+		Cookies.remove("token");
+		Cookies.remove("refreshToken");
+	}
+
 	render() {
-		if (this.props.location.state === undefined) {
+		const token = Cookies.get('token');
+		const refreshToken = Cookies.get('refreshToken');
+		if (token === undefined && refreshToken === undefined) {
 			return <Redirect to='/' />
 		}
 
@@ -237,16 +247,20 @@ class LocalMode extends React.Component {
 								<Icon type="bars" style={{ fontSize: 20 }} />
 							</Button>
 						</Col>
-						<Col span={21}>
+						<Col span={20}>
 							<Button style={{ border: 0, backgroundColor: backgroundColor, color: "#ddd", fontSize: 18, fontFamily: 'consolas' }}>BigDataPlayground Preview-Mode</Button>
 						</Col>
-						<Col span={2}>
+						<Col span={1}>
 							<a href="https://www.yuque.com/ddrid/tx7z84" target="_blank">
 								<Button style={{ border: 0, backgroundColor: backgroundColor, color: "#ddd", fontSize: 25 }} >
 									<Icon type="question-circle" data-step="5" data-intro="如果想要进一步了解详细的使用教程及组件介绍，请点击此处查看文档。" />
 								</Button>
 							</a>
 						</Col>
+						<Col span={1}>
+							<Button onClick={this.handleSignout}>退出</Button>
+						</Col>
+						<Col span={1}></Col>
 						<a href="https://github.com/pigeonhouse/BigDataPlayground" target="_blank" className={styles.githubCorner} aria-label="View source on GitHub">
 							<svg
 								width="45"
@@ -317,7 +331,6 @@ class LocalMode extends React.Component {
 								data-step="4" data-intro="所有配置完成后，点击'运行'按钮开始运行整个工作流。" data-position='top'
 							>
 								<Col span={11}>
-
 									<Button
 										icon="plus-circle"
 										onClick={this.setMenuVisible}

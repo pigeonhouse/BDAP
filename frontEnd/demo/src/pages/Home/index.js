@@ -2,6 +2,7 @@ import React from 'react';
 import { Row, Col, Card, Form, Input, Button, message, Icon, Checkbox } from 'antd';
 import { Redirect } from 'react-router-dom';
 import { fetchTool } from '../../FetchTool';
+import Cookies from 'js-cookie';
 import style from './index.less';
 
 /**
@@ -60,7 +61,6 @@ class HomePage extends React.Component {
 	}
 
 	handleSubmit = (e) => {
-
 		e.preventDefault();
 		let userInfo = this.props.form.getFieldsValue();
 		this.props.form.validateFields(async (err, values) => {
@@ -76,8 +76,7 @@ class HomePage extends React.Component {
 						"Content-Type": "application/json;charset=utf-8"
 					},
 				}
-				const response = await fetchTool('/login-service/login', init);
-				const res = await response.json();
+				const res = await fetchTool('/login-service/login', init);
 
 				//验证正确，则进入界面，显示已登陆
 				if (res !== undefined) {
@@ -102,7 +101,8 @@ class HomePage extends React.Component {
 	}
 
 	render() {
-		if (this.state.redirect) {
+		const token = Cookies.get('token');
+		if (this.state.redirect || token !== undefined) {
 			this.setState({ redirect: false })
 			return <Redirect to={{
 				pathname: '/mainPage',

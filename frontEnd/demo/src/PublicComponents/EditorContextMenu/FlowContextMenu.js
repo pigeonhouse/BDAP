@@ -87,7 +87,7 @@ class FlowContextMenu extends React.Component {
 							<span>删除</span>
 						</div>
 					</Command>
-				
+				·
 					<DataPreview></DataPreview>
 				    <ModelEvaluation></ModelEvaluation> 
 					{/* <Download></Download> */}

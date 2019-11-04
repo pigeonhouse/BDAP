@@ -27,13 +27,8 @@ class ExperimentPanel extends Component {
         const response = await fetchTool(url, init);
 
         if (response.status === 200) {
-            this.setState({
-                experiment: {
-                    title: experiment.title,
-                    description: experiment.description,
-                    experimentId: await response.text()
-                }
-            });
+            this.setState({ experiment });
+
             message.success('存储成功');
         } else {
             message.error('存储失败');
@@ -42,14 +37,12 @@ class ExperimentPanel extends Component {
 
     handleSaveStream = (experiment, flowInfo) => {
         var formData = {};
+        const url = '/experiment-service/experiments';
+
         formData = JSON.stringify({
-            description: {
-                title: experiment.title,
-                description: experiment.description,
-            },
+            description: experiment,
             experiment: flowInfo
         });
-        const url = '/experiment-service/experiments';
 
         var init = {
             method: 'PUT',

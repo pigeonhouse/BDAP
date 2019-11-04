@@ -9,10 +9,7 @@ import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
-/**
- * @Author: XueXiaoYue
- * @Date: 2019/10/26 20:14
- */
+
 @Repository
 public class UserDao {
 

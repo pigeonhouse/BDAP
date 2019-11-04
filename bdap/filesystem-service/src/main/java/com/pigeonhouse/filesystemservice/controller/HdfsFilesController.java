@@ -1,5 +1,6 @@
 package com.pigeonhouse.filesystemservice.controller;
 
+import com.pigeonhouse.filesystemservice.dao.CommonFilesDao;
 import com.pigeonhouse.filesystemservice.entity.*;
 import com.pigeonhouse.filesystemservice.service.HdfsService;
 import com.pigeonhouse.filesystemservice.service.LivyService;
@@ -21,6 +22,8 @@ public class HdfsFilesController {
     HdfsService hdfsService;
     @Autowired
     LivyService livyService;
+    @Autowired
+    CommonFilesDao commonFilesDao;
 
     @PostMapping("/file")
     public ResponseEntity upload(HttpServletRequest request,
@@ -44,7 +47,7 @@ public class HdfsFilesController {
                     ".option(\"inferSchema\",\"true\").option(\"header\",\"true\")" +
                     ".load(\"hdfs:///bdap/students/" + userId + "/..tmp/" + fileName + "\")\n";
 
-            livyService.postCode(livySessionInfo,readDataCode);
+            livyService.postCode(livySessionInfo,readDataCode,userId);
             List<HeaderAttribute> headerAttributes = livyService.getSchema(livySessionInfo);
 
             String previewData = livyService.getCsv(livySessionInfo,20);
@@ -71,7 +74,7 @@ public class HdfsFilesController {
                 if (headerAttribute.isSelected()) {
                     codeBuilder.append(".withColumn(\"").append(headerAttribute.getModifiedColName());
                     codeBuilder.append("\", $\"").append(headerAttribute.getColName()).append("\".cast(DataTypes.");
-                    String dataType = headerAttribute.getModifiedDataType();
+                    String dataType = headerAttribute.getModifiedDataType().trim();
                     dataType = "Int".equals(dataType) ? "IntegerType" : dataType + "Type";
                     codeBuilder.append(dataType).append("))");
                 } else {
@@ -88,7 +91,7 @@ public class HdfsFilesController {
             codeBuilder.append(userId).append(modifiedMetaData.getPath());
             codeBuilder.append(modifiedMetaData.getModifiedFileName()).append("\")\n");
 
-            livyService.postCode(livySessionInfo, codeBuilder.toString());
+            livyService.postCode(livySessionInfo, codeBuilder.toString(),userId);
 
             String sessionStatus = "";
             while (!"idle".equals(sessionStatus)) {
@@ -102,14 +105,13 @@ public class HdfsFilesController {
         }
     }
 
-    //TODO 删除文件/文件夹/常用文件需要分别判断
-
     @DeleteMapping("/")
     public ResponseEntity delete(@RequestParam("path") String path,
                                  @RequestHeader("token") String token){
         try{
             String userId = TokenParser.getClaimsFromToken(token).get("userId").asString();
             hdfsService.delete("/" + userId + path);
+            commonFilesDao.deleteMetaData(path,userId);
             return new ResponseEntity(HttpStatus.OK);
         }catch (Exception e){
             e.printStackTrace();

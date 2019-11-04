@@ -35,6 +35,19 @@ class FlowToolbar extends React.Component {
 		});
 	}
 
+	generateUUID = () => {
+		var d = new Date().getTime();
+		if (window.performance && typeof window.performance.now === "function") {
+			d += performance.now(); //use high-precision timer if available
+		}
+		var uuid = 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
+			var r = (d + Math.random() * 16) % 16 | 0;
+			d = Math.floor(d / 16);
+			return (c == 'x' ? r : (r & 0x3 | 0x8)).toString(16);
+		});
+		return uuid;
+	}
+
 	handleClick = () => {
 		const { propsAPI, experiment } = this.props;
 		const inf = JSON.parse(JSON.stringify(propsAPI.save()));
@@ -43,10 +56,14 @@ class FlowToolbar extends React.Component {
 		if (experiment !== null) {
 			this.props.handleSaveStream(experiment, stream);
 		} else {
+			const uuid = this.generateUUID();
+			console.log(uuid)
 			this.props.handleSaveStream({
 				title: this.state.inp1,
 				description: this.state.inp2,
+				experimentId: uuid
 			}, stream);
+
 			this.setState({
 				visible: false,
 			});
@@ -69,7 +86,6 @@ class FlowToolbar extends React.Component {
 	}
 
 	render() {
-
 		return (
 			<div>
 				<div>

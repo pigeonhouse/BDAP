@@ -48,14 +48,15 @@ public class StorageController {
         return new ResponseEntity(HttpStatus.OK);
     }
 
-    @PutMapping("/experiments/{experimentId}")
-    public ResponseEntity updateExperiment(@RequestBody ExperimentMapInfo experimentMapInfo,
-                                           @PathVariable String experimentId,
-                                           @RequestHeader("token") String token) {
-        String userId = TokenParser.getClaimsFromToken(token).get("userId").asString();
-        experimentDao.updateExperimentByExperimentIdAndUserId(experimentId, userId, experimentMapInfo);
-        return new ResponseEntity(HttpStatus.OK);
-    }
+//    @PutMapping("/experiments/{experimentId}")
+//    public ResponseEntity updateExperiment(@RequestBody ExperimentMapInfo experimentMapInfo,
+//                                           @PathVariable String experimentId,
+//                                           @RequestHeader("token") String token) {
+//        System.out.println("update");
+//        String userId = TokenParser.getClaimsFromToken(token).get("userId").asString();
+//        experimentDao.updateExperimentByExperimentIdAndUserId(experimentId, userId, experimentMapInfo);
+//        return new ResponseEntity(HttpStatus.OK);
+//    }
 
     @PutMapping("/experiments")
     public ResponseEntity uploadNewExperiment(@RequestBody JSONObject descriptionAndMapInfo,
@@ -64,16 +65,20 @@ public class StorageController {
         ExperimentMapInfo experimentMapInfo = JSON.toJavaObject(descriptionAndMapInfo.getJSONObject("experiment"), ExperimentMapInfo.class);
 
         ExperimentDescription experimentDescription = JSON.toJavaObject(descriptionAndMapInfo.getJSONObject("description"), ExperimentDescription.class);
-        String experimentId = UUID.randomUUID().toString().replaceAll("-", "");
-
-        experimentMapInfo.setUserId(userId);
+        String experimentId = experimentDescription.getExperimentId();
         experimentMapInfo.setExperimentId(experimentId);
 
         experimentDescription.setUserId(userId);
-        experimentDescription.setExperimentId(experimentId);
+        experimentMapInfo.setUserId(userId);
 
-        experimentDao.insertExperiment(experimentMapInfo);
-        experimentDao.insertDescription(experimentDescription);
-        return ResponseEntity.ok(experimentId);
+        ExperimentMapInfo experiment = experimentDao.findExperimentByExperimentIdAndUserId(experimentId, userId);
+        if(experiment == null){
+            experimentMapInfo.setUserId(userId);
+            experimentDao.insertExperiment(experimentMapInfo);
+            experimentDao.insertDescription(experimentDescription);
+        }else{
+            experimentDao.updateExperimentByExperimentIdAndUserId(experimentId, userId, experimentMapInfo);
+        }
+        return new ResponseEntity(HttpStatus.OK);
     }
 }
