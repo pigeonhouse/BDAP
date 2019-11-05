@@ -142,7 +142,7 @@ class Attributes extends React.Component {
                     {
                         getFieldDecorator(`attributes[${index}]`, {
                             rules: [{
-                                required: false,
+                                required: true,
                                 pattern: new RegExp('^[a-z]+.?[a-z]*', "g"),
                                 message: '请输入正确格式'
                             }],
@@ -184,6 +184,20 @@ class Attributes extends React.Component {
                             </Checkbox>)
                     }
                 </Item >
+            );
+        }
+        else if (item.styleType === 'NewColumn') {
+            return (
+                <Item style={{ margin: 0 }} label={item.labelName.label} {...inlineFormItemLayout}>
+                    {
+                        getFieldDecorator(`attributes[${index}]`, {
+                            rules: [{
+                                required: true,
+                            }],
+                            initialValue: item.value,
+                        })(<Input style={{ margin: 0 }} onBlur={this.handleInputSubmit.bind(this, index)} />)
+                    }
+                </Item>
             );
         }
     }

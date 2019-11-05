@@ -14,9 +14,9 @@ function findColumnsInfoFunction(node, anchor, propsAPI) {
     const { find, save } = propsAPI;
     const { edges } = save();
 
-    if(edges === undefined) return [];
+    if (edges === undefined) return [];
 
-    for(let i in edges){
+    for (let i in edges) {
 
         const edge = edges[i];
 
@@ -26,9 +26,29 @@ function findColumnsInfoFunction(node, anchor, propsAPI) {
             if (sourceNode.getModel().labelName.label === '数据划分') {
                 return findColumnsInfoFunction(sourceNode, 0, propsAPI);
             }
-            const { labelName, attributes, columnsInfo } = sourceNode.getModel();
+            let { labelName, attributes, columnsInfo } = sourceNode.getModel();
+            columnsInfo = columnsInfo || [];
+            attributes = attributes || [];
 
-            return columnsInfo || [];
+            if (columnsInfo.length === 0) return [];
+
+            var columns = columnsInfo.map((column) => {
+                return {
+                    colName: column.colName,
+                    dataType: column.dataType
+                }
+            })
+
+            attributes.map((attribute) => {
+                if (attribute.styleType === 'NewColumn') {
+                    columns.push({
+                        colName: attribute.value,
+                        dataType: attribute.style.newColType
+                    })
+                }
+            })
+
+            return columns;
         }
     }
 
