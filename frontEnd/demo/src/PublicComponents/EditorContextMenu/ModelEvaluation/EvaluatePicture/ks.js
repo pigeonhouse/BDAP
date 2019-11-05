@@ -1,15 +1,13 @@
-//获取Roc结果数据的函数
-
-
-
-export function RocSet(myChart, props){
+export function KSSet(myChart, props){
     const { chartStyle, loading, titleText } = props;
     const { xLabel, yLabel, color } = chartStyle;
-    var Rocdata=[];
+    var KSdata1=[];
+    var KSdata2=[];
 //测试用数据
 for(var i=0;i<1;i+=0.05)
 {
-    Rocdata.push([i,Math.sqrt(i)]);
+    KSdata1.push([i,Math.sqrt(i)]);
+    KSdata2.push([i,i*i]);
 }
     if (loading === true) {
         myChart.showLoading();
@@ -20,7 +18,6 @@ for(var i=0;i<1;i+=0.05)
     if (xLabel === undefined || yLabel === undefined) return;
 
     var option = {
-       
         xAxis: {
             name: xLabel,
             type: 'value',
@@ -31,11 +28,25 @@ for(var i=0;i<1;i+=0.05)
             type: 'value'
         },
         series: [{
-            data:Rocdata,
+            data:KSdata1,
             type: 'line',
-            smooth: true
+            smooth: true,
+            itemStyle:{
+                normal:{
+                    color:"#1eb2b5"
+                }
+        }
+        },
+        {
+            data:KSdata2,
+            type: 'line',
+            smooth: true,
+            itemStyle:{
+                normal:{
+                    color:"#9F79EE"
+                }
+        }
         }],
-        color
     };
 
     // 使用刚指定的配置项和数据显示图表。
