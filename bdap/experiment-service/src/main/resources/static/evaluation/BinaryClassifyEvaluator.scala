@@ -30,8 +30,8 @@ object BinaryClassifyEvaluator {
     var rocList: util.List[Any] = new util.ArrayList[Any]()
     roc.collect().foreach{c => {
       var rocMap = new util.HashMap[String, Double]()
-      rocMap.put("FPR", c._1);
-      rocMap.put("TPR", c._2);
+      rocMap.put("FPR", c._1)
+      rocMap.put("TPR", c._2)
       rocList.add(rocMap)
       }
     }
@@ -40,8 +40,8 @@ object BinaryClassifyEvaluator {
     var prcList: util.List[Any] = new util.ArrayList[Any]()
     prc.collect().foreach{c => {
       var prcMap = new util.HashMap[String, Double]()
-      prcMap.put("Recall", c._1);
-      prcMap.put("Precision", c._2);
+      prcMap.put("Recall", c._1)
+      prcMap.put("Precision", c._2)
       prcList.add(prcMap)
       }
     }
@@ -50,8 +50,8 @@ object BinaryClassifyEvaluator {
     var f1ScoreList: util.List[Any] = new util.ArrayList[Any]()
     f1Score.collect().foreach{c => {
       var f1ScoreMap = new util.HashMap[String, Double]()
-      f1ScoreMap.put("Threshold", c._1);
-      f1ScoreMap.put("F-score", c._2);
+      f1ScoreMap.put("Threshold", c._1)
+      f1ScoreMap.put("F-score", c._2)
       f1ScoreList.add(f1ScoreMap)
       }
     }
