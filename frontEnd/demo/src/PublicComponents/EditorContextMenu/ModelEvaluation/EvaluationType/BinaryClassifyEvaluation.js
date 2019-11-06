@@ -17,11 +17,13 @@ var prop={
 	loading:loading,
 	titleText:titleText
 };
+//图列表
 const panes = [
     { title: 'ROC曲线图', key: 'roc' },
     { title: 'KS曲线图', key: 'ks' },
   ];
-  const dataSource = [
+//右表表中数据
+const dataSource = [
     {
       key: '1',
       name: 'F1Score',
@@ -38,7 +40,7 @@ const panes = [
       value: 0.8
     },
   ];
-  
+  //右表表项
   const columns = [
     {
       title: '评价指标',
@@ -62,17 +64,18 @@ class BinaryEvaluation extends React.Component{
         }
         
       }
-    
+    //标签页变换处理
       onChange = activeKey => {
         this.setState({ activeKey });
       };
+      //设置默认标签页图表
       componentDidMount(){
         
         console.log(document.getElementById(panes[0].key));
         myChart=echarts.init(document.getElementById(panes[0].key));
         return RocSet(myChart,prop);
     }
-    
+    //切换标签页更换图
     componentDidUpdate(){
     if(this.props.visible==true)
     {
