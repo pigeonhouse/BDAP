@@ -35,8 +35,8 @@ class VisualizedPanel extends React.Component {
     }
 
     async componentWillMount() {
-        const { filePath } = this.props;
-        if (filePath === undefined) return;
+        const { url } = this.props;
+        if (url === null || url === undefined) return;
         const init = {
             method: 'GET',
             mode: 'cors',
@@ -45,7 +45,6 @@ class VisualizedPanel extends React.Component {
             },
             credentials: 'include'
         }
-        const url = `/experiment-service/query/readyForData?filePath=${filePath}`;
         const response = await fetchTool(url, init);
 
         if (response.status === 200) {

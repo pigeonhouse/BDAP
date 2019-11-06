@@ -17,7 +17,7 @@ class DataSetPanel extends React.Component {
         fileList: [],
         fileBackup: [],
         isCommonly: false,
-        dataPreviewPath: undefined,
+        dataPreviewUrl: null,
     }
 
     getPathByFilePath = (filePath) => {
@@ -75,9 +75,9 @@ class DataSetPanel extends React.Component {
         else {
             path = this.getPathByFilePath(filePath);
         }
-        
+
         this.setState({
-            dataPreviewPath: path + '/' + fileList[index].fileName,
+            dataPreviewUrl: `/experiment-service/query/readyForData?filePath=${path}/${fileList[index].fileName}`,
         })
         this.props.handleClickEnter();
     }
@@ -379,6 +379,8 @@ class DataSetPanel extends React.Component {
                             {/* 上传文件 */}
                             <UploadFile
                                 handleUpdateFileList={this.handleUpdateFileList}
+                                filePath={filePath}
+                                type="global"
                             />
 
                             {/* 新建文件夹 */}
@@ -415,8 +417,8 @@ class DataSetPanel extends React.Component {
                 </Fragment>
             );
         } else {
-            const { dataPreviewPath } = this.state;
-            return <VisualizedPanel filePath={dataPreviewPath} />;
+            const { dataPreviewUrl } = this.state;
+            return <VisualizedPanel url={dataPreviewUrl} />;
         }
     }
 }

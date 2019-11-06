@@ -8,9 +8,9 @@ import styles from '../index.less';
 class DataPreview extends Component {
 	state = {
 		visible: false,
-		path: null,
 		fileName: null,
 		newRandomkey: 0,
+		url: null,
 	}
 
 	handleOk = (e) => {//处理调出页面的ok事件
@@ -29,11 +29,11 @@ class DataPreview extends Component {
 		const { propsAPI } = this.props;
 		const { getSelected } = propsAPI;
 		const item = getSelected()[0];
-		const { filePath, labelName } = item.getModel();
+		const { labelName } = item.getModel();
 		const label = labelName.label;
 
 		this.setState({
-			path: filePath,
+			url: `/experiment-service/flow/node/data/${item.id}_0`,
 			fileName: label,
 			visible: true,
 			newRandomkey: (this.state.newRandomkey + 1) % 10,
@@ -41,17 +41,7 @@ class DataPreview extends Component {
 	}
 
 	render() {
-		const { newRandomkey, visible } = this.state;
-		const { path, fileName } = this.state;
-
-		var filePath = undefined;
-		if (path !== null && fileName !== null) {
-			if (path === '/') {
-				filePath = `/${fileName}`;
-			} else {
-				filePath = `${path}/${fileName}`;
-			}
-		}
+		const { newRandomkey, visible, url } = this.state;
 
 		return (
 			<div>
@@ -70,7 +60,7 @@ class DataPreview extends Component {
 					onOk={this.handleOk}
 					onCancel={this.handleCancel}
 				>
-					<VisualizedPanel filePath={filePath} />
+					<VisualizedPanel url={url} />
 				</Modal>
 			</div>
 		);

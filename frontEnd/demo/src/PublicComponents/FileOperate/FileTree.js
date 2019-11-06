@@ -1,34 +1,65 @@
 import { TreeSelect } from 'antd';
 import React from 'react';
 
+import { fetchTool } from '../../FetchTool';
+
 const { TreeNode } = TreeSelect;
 
 class FileTree extends React.Component {
     state = {
         value: undefined,
-        treeData: [
-            { title: 'Expand to load', key: '0', value: 'Expand to load' },
-            { title: 'Expand to load', key: '1', value: 'Expand to load' },
-            { title: 'Tree Node', key: '2', value: 'Expand to load', isLeaf: true },
-        ],
+        treeData: [],
     };
 
+    componentWillMount() {
+        this.setState({
+            treeData: this.props.treeData
+        })
+    }
+
     onLoadData = treeNode =>
-        new Promise(resolve => {
+        new Promise(async resolve => {
             if (treeNode.props.children) {
                 resolve();
                 return;
             }
-            setTimeout(() => {
-                treeNode.props.dataRef.children = [
-                    { title: 'Child Node', key: `${treeNode.props.eventKey}-0`, value: 'Child Node' },
-                    { title: 'Node', key: `${treeNode.props.eventKey}-1`, value: 'Node', isLeaf: true },
-                ];
+            const init = {
+                method: 'GET',
+                mode: 'cors',
+                headers: {
+                    "Content-Type": "application/json;charset=utf-8"
+                },
+            };
+            const url = `/filesystem-service/ls?path=${treeNode.props.value}`;
+
+            const response = await fetchTool(url, init);
+            if (response.status === 200) {
+                const treeData = await response.json() || [];
+                treeNode.props.dataRef.children = [];
+
+                treeData.map((data, index) => {
+                    if (data.isDir !== true) return;
+
+                    if (treeNode.props.value === '/') {
+                        treeNode.props.dataRef.children.push({
+                            title: data.fileName,
+                            key: `${treeNode.props.eventKey}-${index}`,
+                            value: `${treeNode.props.value}${data.fileName}`
+                        })
+                    } else {
+                        treeNode.props.dataRef.children.push({
+                            title: data.fileName,
+                            key: `${treeNode.props.eventKey}-${index}`,
+                            value: `${treeNode.props.value}/${data.fileName}`
+                        })
+                    }
+                })
+
                 this.setState({
                     treeData: [...this.state.treeData],
                 });
                 resolve();
-            }, 1000);
+            }
         });
 
     renderTreeNodes = data =>
@@ -45,6 +76,7 @@ class FileTree extends React.Component {
 
     onChange = (value) => {
         this.setState({ value });
+        this.props.handleSelectPath(value);
     };
 
     render() {
@@ -56,7 +88,6 @@ class FileTree extends React.Component {
                 value={this.state.value}
                 dropdownStyle={{ maxHeight: 400, overflow: 'auto' }}
                 placeholder="请选择路径"
-                treeDefaultExpandAll
                 onChange={this.onChange}
                 loadData={this.onLoadData}
             >

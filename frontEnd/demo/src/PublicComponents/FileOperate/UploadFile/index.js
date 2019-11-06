@@ -19,24 +19,71 @@ class UploadFile extends React.Component {
         fileName: null,
         modifiedFileName: null,
         previewData: null,
+        treeData: null,
     };
 
+    createTreeData = (filePath, index, parentPath, parentKey) => {
+        const children = [{
+            title: filePath[index],
+            key: `${parentKey}-${index}0`,
+            value: `${parentPath}/${filePath[index]}`
+        }];
+
+        if (filePath.length !== index + 1) {
+            children.children = this.createTreeData(filePath, index + 1, children[0].value, children[0].key);
+        }
+
+        return children;
+    }
+
     showModal = () => {
-        this.setState({
-            visible: true,
-        });
+        const filePath = this.props.filePath || [];
+        const { type } = this.props;
+        var path = '';
+        var treeData = [{
+            title: '根目录', key: '0', value: '/'
+        }];
+
+        if (type === 'global') {
+            this.setState({
+                path: '/',
+                treeData,
+                visible: true
+            });
+        }
+        else if (type === 'current') {
+
+            // path构造
+            filePath.map((item) => {
+                path += '/' + item;
+            });
+            if (filePath.length === 0 || filePath[0] === '常用文件列表') {
+                path = '/';
+            }
+
+            // treeData构造
+            if (filePath.length !== 0 && filePath[0] !== '常用文件列表') {
+                treeData[0].children = this.createTreeData(filePath, 0, '', '0');
+            }
+
+            this.setState({ path, treeData, visible: true });
+        }
     };
+
+    handleSelectPath = (value) => {
+        this.setState({ path: value });
+    }
 
     handleOk = async e => {
         this.setState({
             confirmLoading: true,
         });
 
-        const { fileName, modifiedFileName, headerAttributes } = this.state;
+        const { fileName, modifiedFileName, headerAttributes, path } = this.state;
         const data = {
             fileName,
             modifiedFileName,
-            path: '/',
+            path: path || '/',
             headerAttributes,
             previewData: ""
         }
@@ -110,8 +157,8 @@ class UploadFile extends React.Component {
 
         const props = {
             name: 'file',
-            action: mode === 'backEndTest'?'http://localhost:1001/filesystem-service/file':
-            'https://result.eolinker.com/MSwz6fu34b763a21e1f7efa84a86a16f767a756952d0f95?uri=localhost:1001/filesystem-service/file',
+            action: mode === 'backEndTest' ? 'http://localhost:1001/filesystem-service/file' :
+                'https://result.eolinker.com/MSwz6fu34b763a21e1f7efa84a86a16f767a756952d0f95?uri=localhost:1001/filesystem-service/file',
             headers: {
                 "token": Cookies.get('token'),
             },
@@ -128,7 +175,7 @@ class UploadFile extends React.Component {
 
                     let splits = response.fileName.split('.')
                     let modifiedName = ""
-                    for(let i = 0; i < splits.length - 1; i++){
+                    for (let i = 0; i < splits.length - 1; i++) {
                         modifiedName += splits[i];
                     }
                     self.setState({
@@ -183,7 +230,12 @@ class UploadFile extends React.Component {
                                         文件路径:
                                     </p>
                                 </Col>
-                                <Col span={20} ><FileTree /></Col>
+                                <Col span={20} >
+                                    <FileTree
+                                        treeData={this.state.treeData}
+                                        handleSelectPath={this.handleSelectPath}
+                                    />
+                                </Col>
                             </Row>
                         </Col>
                         <Col span={7} >
