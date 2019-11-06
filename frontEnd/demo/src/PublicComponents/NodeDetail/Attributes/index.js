@@ -143,7 +143,8 @@ class Attributes extends React.Component {
                         getFieldDecorator(`attributes[${index}]`, {
                             rules: [{
                                 required: true,
-                                pattern: new RegExp('^[a-z]+.?[a-z]*', "g"),
+                                // pattern: new RegExp('^[a-z]+.?[a-z]*', "g"),
+                                pattern: new RegExp(item.style.regexp),
                                 message: '请输入正确格式'
                             }],
                             initialValue: item.value,
