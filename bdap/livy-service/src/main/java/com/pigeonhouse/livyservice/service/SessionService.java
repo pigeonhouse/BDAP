@@ -30,7 +30,7 @@ public class SessionService {
         Map<String, Object> bodyHashMap = new HashMap<>();
         Map<String, Object> confHashMap = new HashMap<>();
         bodyHashMap.put("kind", livyNewSessionKind);
-        List<String> jarsList = Arrays.asList(livyNewSessionJars.split(","));
+        List<String> jarsList = Arrays.asList(livyNewSessionJars.split("\\s*,\\s*"));
         bodyHashMap.put("jars", jarsList);
         bodyHashMap.put("numExecutors", numExecutors);
         bodyHashMap.put("executorCores", executorCores);
