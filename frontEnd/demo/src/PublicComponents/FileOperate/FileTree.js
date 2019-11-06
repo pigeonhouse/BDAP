@@ -40,19 +40,11 @@ class FileTree extends React.Component {
                 treeData.map((data, index) => {
                     if (data.isDir !== true) return;
 
-                    if (treeNode.props.value === '/') {
-                        treeNode.props.dataRef.children.push({
-                            title: data.fileName,
-                            key: `${treeNode.props.eventKey}-${index}`,
-                            value: `${treeNode.props.value}${data.fileName}`
-                        })
-                    } else {
-                        treeNode.props.dataRef.children.push({
-                            title: data.fileName,
-                            key: `${treeNode.props.eventKey}-${index}`,
-                            value: `${treeNode.props.value}/${data.fileName}`
-                        })
-                    }
+                    treeNode.props.dataRef.children.push({
+                        title: data.fileName,
+                        key: `${treeNode.props.eventKey}-${index}`,
+                        value: `${treeNode.props.value}${data.fileName}/`
+                    })
                 })
 
                 this.setState({
