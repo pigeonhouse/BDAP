@@ -68,7 +68,7 @@ public class ExecutionService {
 
         //-------------------------取出代码文件中的代码段------------------------------
 
-        String scalaFilePath = "src/main/resources/static/" + nodeInfo.getGroupName().getElabel() + "/"
+        String scalaFilePath = "singleNodeMode/src/main/resources/static/" + nodeInfo.getGroupName().getElabel() + "/"
                 + nodeInfo.getLabelName().getElabel() + ".scala";
         StringBuilder originCodeBuilder = new StringBuilder();
         try {

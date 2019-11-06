@@ -14,6 +14,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 @Service
@@ -84,6 +85,8 @@ public class ExecutionService {
         String originCode = originCodeBuilder.toString();
 
         //取出main函数里面的代码
+        System.out.println(Arrays.toString(originCode.split("def\\smain.*\\{")));
+
         String innerCode = originCode.split("def\\smain.*\\{")[1]
                 .split("(\\}\\s*)$")[0]
                 .split("(\\}\\s*)$")[0];

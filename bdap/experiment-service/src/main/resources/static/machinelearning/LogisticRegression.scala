@@ -23,7 +23,7 @@ object LogisticRegression {
     val assembler = new VectorAssembler().setInputCols(trainCols).setOutputCol("features_")
     val assembledDF = assembler.transform(df)
 
-    val lr = new LogisticRegression().setFeaturesCol("features_").setLabelCol(labelCol).setFitIntercept(FitIntercept).setMaxIter(MaxIter).setRegParam(RegParam).setElasticNetParam(ElasticNetParam).setTol(Tol)
+    val lr = new LogisticRegression().setFeaturesCol("features_").setLabelCol(labelCol).setFitIntercept(FitIntercept).setMaxIter(MaxIter).setRegParam(RegParam).setElasticNetParam(ElasticNetParam).setTol(Tol).setProbabilityCol("probability")
 
     val Model = lr.fit(assembledDF)
 
