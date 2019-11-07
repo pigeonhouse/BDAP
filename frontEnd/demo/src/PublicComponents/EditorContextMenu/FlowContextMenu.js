@@ -1,5 +1,4 @@
-import React from 'react'
-import { Form } from 'antd';
+import React, { Fragment } from 'react'
 import {
 	Command,
 	NodeMenu,
@@ -14,49 +13,19 @@ import DataPreview from './DataPreview';
 import ModelEvaluation from './ModelEvaluation';
 
 class FlowContextMenu extends React.Component {
-	state = {
-		visible: false,
-		MlEvaluteVisible: false,
-		evaluation: [[]],
-		col: [],
-		data: [],
-		visibleChartRadio: false,
-	}
-
-	handleOk = (e) => {//处理调出页面的ok事件
-		this.setState({
-			visible: false,
-			MlEvaluteVisible: false,
-			visibleChartRadio: false,
-			col: [],
-			data: []
-		});
-	}
-
-	handleCancel = (e) => {//处理调出页面的cancel事件
-		this.setState({
-			visible: false,
-			MlEvaluteVisible: false,
-			visibleChartRadio: false,
-			col: [],
-			data: []
-		});
-	}
 
 	modelEvaluation = () => {//模型评估
 		const { propsAPI } = this.props;
-		const { getSelected } = propsAPI;
+		const { getSelected, save } = propsAPI;
+		console.log(getSelected, save());
+		if (propsAPI === undefined) return <Fragment></Fragment>
 		const item = getSelected()[0];
-		const currentNode = item.getModel();
-		if (currentNode.group == "ml" && currentNode.evaluation) {
-			var ev = currentNode.evaluation;
-			this.setState({ evaluation: ev })
-			this.setState({ MlEvaluteVisible: true })
-		}
-		else alert("NOT A ML MODEL")
+		const { groupName } = item.getModel();
+		return groupName.elabel === 'evaluation' ? <ModelEvaluation></ModelEvaluation> : null;
 	}
 
 	render() {
+
 		return (
 			<ContextMenu className={styles.contextMenu}>
 				<GGEditor style={{ width: 0, height: 0 }}>
@@ -74,7 +43,6 @@ class FlowContextMenu extends React.Component {
 					/>
 				</GGEditor>
 				<NodeMenu>
-				    
 					<Command name="copy">
 						<div className={styles.item}>
 							<i className={`${iconfont.iconfont} ${iconfont.iconCopyO}`} />
@@ -87,10 +55,9 @@ class FlowContextMenu extends React.Component {
 							<span>删除</span>
 						</div>
 					</Command>
-				
 					<DataPreview></DataPreview>
-				    <ModelEvaluation></ModelEvaluation> 
-					{/* <Download></Download> */}
+					<ModelEvaluation></ModelEvaluation>
+					{/* {this.modelEvaluation()} */}
 				</NodeMenu>
 
 				<CanvasMenu>
@@ -118,4 +85,4 @@ class FlowContextMenu extends React.Component {
 		);
 	}
 }
-export default Form.create()(withPropsAPI(FlowContextMenu));
+export default withPropsAPI(FlowContextMenu);

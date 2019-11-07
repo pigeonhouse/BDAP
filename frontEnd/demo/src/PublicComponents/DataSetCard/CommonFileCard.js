@@ -35,6 +35,7 @@ class CommonFileCard extends React.Component {
     render() {
         const { file, index, handleDeleteFile, handleCancelStar, handleSelectStar } = this.props;
 
+        console.log(file)
         return (
             <Col span={8}>
                 <Tooltip placement="bottom" title="点击进行可视化" >

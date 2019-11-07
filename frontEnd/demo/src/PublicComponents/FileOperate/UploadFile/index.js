@@ -26,7 +26,7 @@ class UploadFile extends React.Component {
         const children = [{
             title: filePath[index],
             key: `${parentKey}-${index}0`,
-            value: `${parentPath}/${filePath[index]}`
+            value: `${parentPath}${filePath[index]}/`
         }];
 
         if (filePath.length !== index + 1) {
@@ -39,7 +39,7 @@ class UploadFile extends React.Component {
     showModal = () => {
         const filePath = this.props.filePath || [];
         const { type } = this.props;
-        var path = '';
+        var path = '/';
         var treeData = [{
             title: '根目录', key: '0', value: '/'
         }];
@@ -55,7 +55,7 @@ class UploadFile extends React.Component {
 
             // path构造
             filePath.map((item) => {
-                path += '/' + item;
+                path += item + '/';
             });
             if (filePath.length === 0 || filePath[0] === '常用文件列表') {
                 path = '/';

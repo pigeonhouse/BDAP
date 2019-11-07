@@ -63,7 +63,7 @@ object BinaryClassifyEvaluator {
     jsonObject.put("ROC", rocList)
     jsonObject.put("PRC", prcList)
     jsonObject.put("f1Score", f1ScoreList)
-    val jsonString = jsonObject.toJSONString
+    val evaluationResult = jsonObject.toJSONString
     println(jsonString)
 
   }

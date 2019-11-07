@@ -23,4 +23,6 @@ public interface LivyService {
     List<HeaderAttribute> getSchema(@RequestBody LivySessionInfo livySessionInfo);
     @GetMapping("/output/csv")
     String getCsv(@RequestBody LivySessionInfo livySessionInfo, @RequestParam("numOfRowsToShow") int numOfRowsToShow);
+    @PostMapping("/output/evaluation")
+    String getEvaluationResult(@RequestBody LivySessionInfo livySessionInfo);
 }

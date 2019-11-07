@@ -4,8 +4,9 @@ public class PathParser {
     public static String getDirPath(String path){
         String[] splits = path.split("/");
         StringBuilder dirPath = new StringBuilder();
-        for (int i = 0; i < splits.length - 1; i++) {
-            dirPath.append("/").append(splits[i]);
+        dirPath.append("/");
+        for (int i = 1; i < splits.length - 1; i++) {
+            dirPath.append(splits[i]).append("/");
         }
         return dirPath.toString();
     }
