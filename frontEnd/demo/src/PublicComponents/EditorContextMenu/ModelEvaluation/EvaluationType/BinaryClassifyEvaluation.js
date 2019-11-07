@@ -24,20 +24,20 @@ class BinaryEvaluation extends React.Component {
 		const panes = new Array();
 
 		keys.map(key => {
-			if (Object.prototype.toString.call(evaluationInfo[key]) == '[object Array]') {
+			if (Object.prototype.toString.call(evaluationInfo[key]) === '[object Object]') {
 				panes.push({ title: `${key}曲线图`, key });
 			}
 		})
 
-		this.setState({ panes, activeKey: panes[0].key });
+		if (panes.length === 0) {
+			this.setState({ panes });
+		} else this.setState({ panes, activeKey: panes[0].key });
 	}
 
 	//设置默认标签页图表
 	componentDidMount() {
 		const { evaluationInfo, loading } = this.props;
 		const { panes } = this.state;
-
-		console.log(document.getElementById(panes[0].key));
 
 		myChart = echarts.init(document.getElementById(panes[0].key));
 		SingleLineSet(myChart, evaluationInfo[panes[0].key], loading);

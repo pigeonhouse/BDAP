@@ -6,25 +6,21 @@ export function SingleLineSet(myChart, evaluationInfo, loading) {
         myChart.hideLoading();
     }
 
-    const labels = Object.keys(evaluationInfo[0]);
-    console.log(evaluationInfo)
-    console.log(labels)
-
     var option = {
         xAxis: {
-            name: labels[0],
+            name: evaluationInfo.xlabel,
             type: 'value',
             nameLocation: 'middle',
-            nameGap: 20
+            nameGap: 20,
         },
         yAxis: {
-            name: labels[1],
+            name: evaluationInfo.ylabel,
             type: 'value',
             nameLocation: 'end',
             nameGap: 20
         },
         series: [{
-            data: evaluationInfo,
+            data: evaluationInfo.value,
             type: 'line',
             smooth: true
         }],
