@@ -13,19 +13,21 @@ class ModelEvaluation extends React.Component {
 		visible: false,
 		mode: null,
 		evaluationInfo: [],
+		loading: true,
 	}
 
 	showModal = async () => {
 		const { propsAPI } = this.props;
 		const { getSelected } = propsAPI;
 		const item = getSelected()[0];
-
 		const currentNode = item.getModel();
-		if (currentNode.keyConfig.state_icon_url == "https://gw.alipayobjects.com/zos/rmsportal/uZVdwjJGqDooqKLKtvGA.svg") {
-			alert("该组件未执行，请执行后再进行模型评估！");
-			return;
-		}
-		else if (currentNode.groupName.elabel == "evaluation") {
+
+		// if (currentNode.keyConfig.state_icon_url == "https://gw.alipayobjects.com/zos/rmsportal/uZVdwjJGqDooqKLKtvGA.svg") {
+		// 	alert("该组件未执行，请执行后再进行模型评估！");
+		// 	return;
+		// }
+		// else 
+		if (currentNode.groupName.elabel == "evaluation") {
 			const url = `/experiment-service/flow/node/evaluation/${item.id}_0`;
 			const init = {
 				method: 'GET',
@@ -37,20 +39,23 @@ class ModelEvaluation extends React.Component {
 			}
 			const response = await fetchTool(url, init);
 			if (response.status === 200) {
+				const evaluationInfo = await response.json();
+				console.log(await evaluationInfo)
 				this.setState({
 					mode: currentNode.labelName.label,
 					visible: true,
-					evaluationInfo: await response.json(),
+					evaluationInfo,
+					loading: false,
 				});
 			}
-		}
-		else alert("该组件非模型评估组件，无法进行模型评估！");
+		} else alert("该组件非模型评估组件，无法进行模型评估！");
 	}
 
 	//处理调出页面的ok事件
 	handleOk = (e) => {
 		this.setState({
 			visible: false,
+			loading: true,
 		});
 	}
 
@@ -58,11 +63,12 @@ class ModelEvaluation extends React.Component {
 	handleCancel = (e) => {
 		this.setState({
 			visible: false,
+			loading: true,
 		});
 	}
 
 	render() {
-		const { visible, evaluationInfo } = this.state;
+		const { visible, evaluationInfo, loading } = this.state;
 		return (
 			<div>
 				<Command name="showpicture">
@@ -79,11 +85,16 @@ class ModelEvaluation extends React.Component {
 					width={700}
 				>
 					{(() => {
-						switch (this.state.mode) {
-							case "二元评估":
-								return <BinaryEvaluation evaluationInfo={evaluationInfo} />
-							case "多分类评估":
-								return <MultiClassifyEvaluation evaluationInfo={evaluationInfo} />
+						if (visible) {
+							switch (this.state.mode) {
+								case "二元评估":
+									return <BinaryEvaluation
+										evaluationInfo={evaluationInfo}
+										loading={loading}
+									/>
+								case "多分类评估":
+									return <MultiClassifyEvaluation evaluationInfo={evaluationInfo} />
+							}
 						}
 					})()}
 				</Modal>

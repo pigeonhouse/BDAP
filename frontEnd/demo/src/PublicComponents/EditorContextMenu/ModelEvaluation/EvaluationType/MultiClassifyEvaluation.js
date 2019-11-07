@@ -5,7 +5,6 @@ const { TabPane } = Tabs;
 //图列表清单
 const panes = [
 	{ title: '混淆矩阵表', key: 'Confusion Matrix' },
-
 ];
 
 //右表数据
@@ -106,8 +105,8 @@ for (var i = 0; i < Class.length; i++) {
 		name: Class[i]
 	}
 	for (let j = 0; j < Class.length; j++)
-		tmp[Class[j]] = rowdata[i][j].toFixed(2)
-	console.log(tmp)
+		tmp[Class[j]] = rowdata[i][j].toFixed(2);
+		
 	data.push(tmp)
 }
 class MultiClassifyEvaluation extends React.Component {

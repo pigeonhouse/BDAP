@@ -1,36 +1,42 @@
-//获取Roc结果数据的函数
-
-export function RocSet(myChart, props) {
-    const { chartStyle, loading, titleText } = props;
-    const { xLabel, yLabel, color } = chartStyle;
-    var Rocdata = [];
-
-    //测试用数据
-    for (var i = 0; i < 1; i += 0.05) {
-        Rocdata.push([i, Math.sqrt(i)]);
+export function FscoreSet(myChart, props)
+{
+    const { loading,data } = props;
+    var style={
+        xLabel:"Threshold",
+        yLabel:"F-score",
+        color:"#509ee3"
+    };
+    const { xLabel, yLabel, color } = style;
+    var Fscoredata=[];
+//测试用数据
+data.map(
+    r=>{
+        Fscoredata.push([r.Threshold,r.F_score])
     }
-
+)
     if (loading === true) {
         myChart.showLoading();
         return;
     } else {
         myChart.hideLoading();
     }
-
     if (xLabel === undefined || yLabel === undefined) return;
 
     var option = {
         xAxis: {
             name: xLabel,
             type: 'value',
-
+            nameLocation:'middle',
+            nameGap:20
         },
         yAxis: {
             name: yLabel,
-            type: 'value'
+            type: 'value',
+            nameLocation:'end',
+            nameGap:20
         },
         series: [{
-            data: Rocdata,
+            data:Fscoredata,
             type: 'line',
             smooth: true
         }],

@@ -36,13 +36,14 @@ public class CommonFilesDao {
     public void deleteMetaData(String path, String userId){
         String dirPath = PathParser.getDirPath(path);
         String fileName = PathParser.getName(path);
-        System.out.println(dirPath);
-        System.out.println(fileName);
         List<MetaData> fileList = (List)findCommonFilesByUserId(userId);
         List<MetaData> newFileList = new ArrayList<>();
         for(MetaData metaData : fileList){
-            if(!fileName.equals(metaData.getFileName()) || !dirPath.equals(metaData.getPath())){
-                newFileList.add(metaData);
+            //若删除的是文件夹，则把该文件夹下所有常用文件清除
+            if(!metaData.getPath().startsWith(path)) {
+                if (!fileName.equals(metaData.getFileName()) || !dirPath.equals(metaData.getPath())) {
+                    newFileList.add(metaData);
+                }
             }
         }
         Query query = new Query();
