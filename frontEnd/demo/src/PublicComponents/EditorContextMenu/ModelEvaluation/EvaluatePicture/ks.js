@@ -1,14 +1,14 @@
-export function KSSet(myChart, props){
+export function KSSet(myChart, props) {
     const { chartStyle, loading, titleText } = props;
     const { xLabel, yLabel, color } = chartStyle;
-    var KSdata1=[];
-    var KSdata2=[];
-//测试用数据
-for(var i=0;i<1;i+=0.05)
-{
-    KSdata1.push([i,Math.sqrt(i)]);
-    KSdata2.push([i,i*i]);
-}
+    var KSdata1 = [];
+    var KSdata2 = [];
+    
+    //测试用数据
+    for (var i = 0; i < 1; i += 0.05) {
+        KSdata1.push([i, Math.sqrt(i)]);
+        KSdata2.push([i, i * i]);
+    }
     if (loading === true) {
         myChart.showLoading();
         return;
@@ -21,31 +21,31 @@ for(var i=0;i<1;i+=0.05)
         xAxis: {
             name: xLabel,
             type: 'value',
-           
+
         },
         yAxis: {
             name: yLabel,
             type: 'value'
         },
         series: [{
-            data:KSdata1,
+            data: KSdata1,
             type: 'line',
             smooth: true,
-            itemStyle:{
-                normal:{
-                    color:"#1eb2b5"
+            itemStyle: {
+                normal: {
+                    color: "#1eb2b5"
                 }
-        }
+            }
         },
         {
-            data:KSdata2,
+            data: KSdata2,
             type: 'line',
             smooth: true,
-            itemStyle:{
-                normal:{
-                    color:"#9F79EE"
+            itemStyle: {
+                normal: {
+                    color: "#9F79EE"
                 }
-        }
+            }
         }],
     };
 
