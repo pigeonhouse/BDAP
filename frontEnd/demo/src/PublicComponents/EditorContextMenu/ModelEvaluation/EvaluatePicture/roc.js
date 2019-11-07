@@ -11,7 +11,6 @@ export function RocSet(myChart, props){
     };
     const { xLabel, yLabel, color } = style;
     var Rocdata=[];
-//测试用数据
 data.map(
     r=>{
         Rocdata.push([r.FPR,r.TPR])
