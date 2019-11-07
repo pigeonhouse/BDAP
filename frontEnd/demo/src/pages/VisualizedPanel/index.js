@@ -228,15 +228,19 @@ class VisualizedPanel extends React.Component {
 
     // 右侧参数栏生成
     rightColGenerate = () => {
-        switch (this.state.rightCol) {
+        const { height } = this.props;
+        const { rightCol, filter, loading, fileColumns,
+            summarize, groupLabel, chartStyle, labelArray, labelType } = this.state;
+        switch (rightCol) {
             case 'filter':
                 return (
                     <Filter
                         handleAddFilter={this.handleAddFilter}
                         handleDeleteFilter={this.handleDeleteFilter}
-                        filter={this.state.filter}
-                        loading={this.state.loading}
-                        labelArray={this.state.fileColumns} />
+                        filter={filter}
+                        loading={loading}
+                        height={height}
+                        labelArray={fileColumns} />
                 )
             case 'summarize':
                 return (
@@ -244,10 +248,11 @@ class VisualizedPanel extends React.Component {
                         handleChangeGroupLabel={this.handleChangeGroupLabel}
                         handleAddSummarize={this.handleAddSummarize}
                         handleDeleteSummarize={this.handleDeleteSummarize}
-                        summarize={this.state.summarize}
-                        groupLabel={this.state.groupLabel}
-                        loading={this.state.loading}
-                        labelArray={this.state.fileColumns} />
+                        summarize={summarize}
+                        groupLabel={groupLabel}
+                        height={height}
+                        loading={loading}
+                        labelArray={fileColumns} />
                 )
             case 'settings':
                 return (
@@ -255,10 +260,11 @@ class VisualizedPanel extends React.Component {
                         currentChart={this.state.currentChart}
                         handleChangeChartStyle={this.handleChangeChartStyle}
                         chartSettings={chartSettings}
-                        chartStyle={this.state.chartStyle}
-                        labelArray={this.state.labelArray}
-                        loading={this.state.loading}
-                        labelType={this.state.labelType}
+                        chartStyle={chartStyle}
+                        labelArray={labelArray}
+                        height={height}
+                        loading={loading}
+                        labelType={labelType}
                     />
                 )
         }
@@ -270,8 +276,10 @@ class VisualizedPanel extends React.Component {
     }
 
     render() {
+        const { height } = this.props;
+        const { currentChart, chartStyle, titleText, dataSet, loading, labelArray } = this.state;
         return (
-            <div style={{ height: 'calc(100vh - 105px)' }} >
+            <div style={{ height: `calc(100vh - ${height}px)` }} >
                 <Row type="flex" className={styles.header}>
                     <Col span={6} style={{ paddingLeft: "30px" }} ><h2>DataSource</h2></Col>
                     <Col span={18}>
@@ -284,21 +292,22 @@ class VisualizedPanel extends React.Component {
                         </div>
                     </Col>
                 </Row>
-                <Row type="flex" className={styles.visualized}>
+                <Row type="flex" style={{ height: `calc(100vh - ${height + 40}px)` }} >
                     <Col span={19} >
                         <VisualChart
-                            currentChart={this.state.currentChart}
-                            chartStyle={this.state.chartStyle}
-                            titleText={this.state.titleText}
-                            dataSet={this.state.dataSet}
-                            loading={this.state.loading}
-                            labelArray={this.state.labelArray}
+                            currentChart={currentChart}
+                            chartStyle={chartStyle}
+                            titleText={titleText}
+                            dataSet={dataSet}
+                            loading={loading}
+                            labelArray={labelArray}
+                            height={height}
                         />
                         <div className={styles.footer}
                             style={{ textAlign: "center", borderTop: "1px solid #ececec", paddingTop: 10 }}
                         >
                             <Radio.Group
-                                value={this.state.currentChart}
+                                value={currentChart}
                                 buttonStyle="solid"
                                 className={styles.radioButton}
                                 onChange={this.handlechangeCurrentChart}
@@ -312,7 +321,7 @@ class VisualizedPanel extends React.Component {
                             </Radio.Group>
                         </div>
                     </Col>
-                    <Col span={5} className={styles.righter} >
+                    <Col span={5} className={styles.righter} style={{ height: `calc(100vh - ${height + 40}px)` }} >
                         {this.rightColGenerate()}
                     </Col>
                 </Row>

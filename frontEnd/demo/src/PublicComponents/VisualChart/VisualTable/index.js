@@ -80,7 +80,7 @@ class VisualTable extends React.Component {
                             loading={loading}
                             onChange={this.handleChange}
                             pagination={{ pageSize: 50 }}
-                            scroll={{ y: "calc(105vh - 405px)", x: `${width}px` }}
+                            scroll={{ y: `calc(100vh - ${this.props.height + 270}px)`, x: `${width}px` }}
                         />
                     </Col>
                     <Col span={3}></Col>

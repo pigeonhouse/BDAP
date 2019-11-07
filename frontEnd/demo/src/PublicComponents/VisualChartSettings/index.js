@@ -103,6 +103,7 @@ class Settings extends React.Component {
 					<h3>Settings</h3>
 				</div>
 				<div
+                    style={{ height: `calc(100vh - ${this.props.height + 80}px)` }}
 					onMouseEnter={this.mouseEnter}
 					onMouseLeave={this.mouseLeave}
 					className={this.state.isMouseEnter ? styles.scrollapp : styles.unscrollapp}

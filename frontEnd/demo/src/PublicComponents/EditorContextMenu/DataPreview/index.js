@@ -60,7 +60,9 @@ class DataPreview extends Component {
 					onOk={this.handleOk}
 					onCancel={this.handleCancel}
 				>
-					<VisualizedPanel url={url} />
+					<div style={{ height: 'calc(100vh - 225px)', }} >
+						<VisualizedPanel url={url} height={225} />
+					</div>
 				</Modal>
 			</div>
 		);

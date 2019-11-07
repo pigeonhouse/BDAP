@@ -8,7 +8,6 @@ class DataPreview extends React.Component {
 
     state = {
         visible: false,
-
     }
 
     handleCancel = () => {

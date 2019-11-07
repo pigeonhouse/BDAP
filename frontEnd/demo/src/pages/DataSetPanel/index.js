@@ -418,7 +418,11 @@ class DataSetPanel extends React.Component {
             );
         } else {
             const { dataPreviewUrl } = this.state;
-            return <VisualizedPanel url={dataPreviewUrl} />;
+            return (
+                <div style={{ paddingTop: 25 }}>
+                    <VisualizedPanel url={dataPreviewUrl} height={130} />
+                </div>
+            );
         }
     }
 }
