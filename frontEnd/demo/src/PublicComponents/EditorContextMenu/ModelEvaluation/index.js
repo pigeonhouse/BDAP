@@ -85,7 +85,7 @@ class ModelEvaluation extends React.Component {
 	 					 return <BinaryEvaluation visible={this.state.MlEvaluteVisible} data={this.state.data}/>
 						 
 						 case "多分类评估":
-						 return <MultiClassifyEvaluation visible={this.state.MlEvaluteVisible} data={this.state.data}/>
+						 return <MultiClassifyEvaluation visible={this.state.MlEvaluteVisible}/>
 					
 		  
 	 

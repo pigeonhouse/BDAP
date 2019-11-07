@@ -23,10 +23,10 @@ data.map(
     } else {
         myChart.hideLoading();
     }
+
     if (xLabel === undefined || yLabel === undefined) return;
 
     var option = {
-       
         xAxis: {
             name: xLabel,
             type: 'value',
@@ -40,7 +40,7 @@ data.map(
             nameGap:20
         },
         series: [{
-            data:Rocdata,
+            data: Rocdata,
             type: 'line',
             smooth: true
         }],
