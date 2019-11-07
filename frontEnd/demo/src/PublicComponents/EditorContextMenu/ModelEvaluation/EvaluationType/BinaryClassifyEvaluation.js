@@ -1,58 +1,28 @@
 import React from "react";
 import {   RocSet     }from "../EvaluatePicture/roc";
 import { Tabs,Table } from "antd";
-import { KSSet } from "../EvaluatePicture/ks.JS";
+import { PRCSet } from "../EvaluatePicture/prc";
+import{FscoreSet} from "../EvaluatePicture/Fscore"
 const { TabPane } = Tabs;
 var echarts=require("echarts");
 var loading=false;
-var style={
-	xLabel:"TP",
-	yLabel:"FP",
-	color:"#509ee3"
-};
+
 var myChart=null;
-var titleText="title";
-var prop={
-	chartStyle:style,
-	loading:loading,
-	titleText:titleText
-};
+
+
 //图列表
 const panes = [
     { title: 'ROC曲线图', key: 'roc' },
-    { title: 'KS曲线图', key: 'ks' },
+    { title: 'PRC曲线图', key: 'prc' },
+    { title: 'F值图', key: 'f-score' }
   ];
+//取到的返回结果
+
+
+
+
 //右表表中数据
-const dataSource = [
-    {
-      key: '1',
-      name: 'F1Score',
-      value: 0.7
-    },
-    {
-      key: '2',
-      name: 'RMSE',
-      value: 0.556
-    },
-    {
-      key: '3',
-      name: 'AUC',
-      value: 0.8
-    },
-  ];
-  //右表表项
-  const columns = [
-    {
-      title: '评价指标',
-      dataIndex: 'name',
-      key: 'name',
-    },
-    {
-      title: '值',
-      dataIndex: 'value',
-      key: 'value',
-    },
-  ];
+
 class BinaryEvaluation extends React.Component{
     
     constructor(props){
@@ -60,7 +30,8 @@ class BinaryEvaluation extends React.Component{
         
         this.state = {
           visible:props.visible,
-          activeKey:panes[0].key
+          activeKey:panes[0].key,
+          data:props.data
         }
         
       }
@@ -73,7 +44,10 @@ class BinaryEvaluation extends React.Component{
         
         console.log(document.getElementById(panes[0].key));
         myChart=echarts.init(document.getElementById(panes[0].key));
-        return RocSet(myChart,prop);
+        return RocSet(myChart,{
+          loading:loading,
+          data:this.state.data.ROC
+        });
     }
     //切换标签页更换图
     componentDidUpdate(){
@@ -84,23 +58,68 @@ class BinaryEvaluation extends React.Component{
         myChart=echarts.init(document.getElementById(this.state.activeKey));
         switch(this.state.activeKey)
         {
-          case "roc":RocSet(myChart,prop);break;
-         case "ks":KSSet(myChart,prop);break;
+          case "roc":RocSet(myChart,{
+            loading:loading,
+            data:this.state.data.ROC
+          });break;
+          case "prc": PRCSet(myChart,{
+          loading:loading,
+          data:this.state.data.PRC
+        });break;
+          case "f-score":FscoreSet(myChart,{
+            loading:loading,
+            data:this.state.data.f1Score
+          });break;
         }
     }
     }
     render(){
+      const data=this.state.data;
+      var dataSource=[];
+      var columns=[];
+      if(data!=[])
+      {
+       dataSource = [
+        {
+          key: '1',
+          name: 'auPRC',
+          value: data.auPRC
+        },
+        {
+          key: '2',
+          name: '准确率',
+          value: data.auROC
+        },
+        
+      ];
+      //右表表项
+      columns = [
+        {
+          title: '评价指标',
+          dataIndex: 'name',
+          key: 'name',
+        },
+        {
+          title: '值',
+          dataIndex: 'value',
+          key: 'value',
+        },
+      ];
+    }
         return(
+          
+          
            <div >
             <Tabs onChange={this.onChange}
             activeKey={this.state.activeKey}type="card" style={{height:"100%",width:"100%"}}>
                 {panes.map(pane => ( 
             <TabPane tab={pane.title} key={pane.key} >
              <div  >
-                 <div id={pane.key} style={{height:"300px",width:"60%",float:"left"}}></div>
-                 <div  style={{top:"40px",height:"300px",width:"40%",float:"left"}}>
+                 <div id={pane.key} style={{height:"300px",width:"55%",float:"left"}}></div>
+                 <div  style={{top:"40px",height:"300px",width:"40%",float:"right"}}>
                  <Table bordered dataSource={dataSource} columns={columns} />
             </div>
+            
 
 			</div>
             </TabPane>))}		

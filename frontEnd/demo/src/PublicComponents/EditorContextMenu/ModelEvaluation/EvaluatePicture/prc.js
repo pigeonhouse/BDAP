@@ -1,20 +1,16 @@
-//获取Roc结果数据的函数
-
-
-
-export function RocSet(myChart, props){
-    const {  loading, data } = props;
+export function PRCSet(myChart, props){
+    const { loading,data } = props;
     var style={
-        xLabel:"FP",
-        yLabel:"TP",
+        xLabel:"recall",
+        yLabel:"precision",
         color:"#509ee3"
     };
     const { xLabel, yLabel, color } = style;
-    var Rocdata=[];
+    var PRCdata=[];
 //测试用数据
 data.map(
     r=>{
-        Rocdata.push([r.FPR,r.TPR])
+        PRCdata.push([r.Precision,r.Recall])
     }
 )
     if (loading === true) {
@@ -26,7 +22,6 @@ data.map(
     if (xLabel === undefined || yLabel === undefined) return;
 
     var option = {
-       
         xAxis: {
             name: xLabel,
             type: 'value',
@@ -40,7 +35,7 @@ data.map(
             nameGap:20
         },
         series: [{
-            data:Rocdata,
+            data:PRCdata,
             type: 'line',
             smooth: true
         }],
