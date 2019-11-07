@@ -21,9 +21,9 @@ class DataSetPanel extends React.Component {
     }
 
     getPathByFilePath = (filePath) => {
-        var path = '';
+        var path = '/';
         filePath.map((item) => {
-            path += '/' + item;
+            path += item + '/';
         })
         return path;
     }
@@ -70,14 +70,14 @@ class DataSetPanel extends React.Component {
         var path = '';
 
         if (isCommonly === true) {
-            path = fileList[index].path === '/' ? '' : fileList[index].path;
+            path = fileList[index].path;
         }
         else {
             path = this.getPathByFilePath(filePath);
         }
 
         this.setState({
-            dataPreviewUrl: `/experiment-service/query/readyForData?filePath=${path}/${fileList[index].fileName}`,
+            dataPreviewUrl: `/experiment-service/query/readyForData?filePath=${path}${fileList[index].fileName}`,
         })
         this.props.handleClickEnter();
     }
@@ -88,7 +88,7 @@ class DataSetPanel extends React.Component {
         const fileName = this.state.fileList[index].fileName;
         const filePath = this.state.filePath;
         const path = this.getPathByFilePath(filePath);
-        const dataDir = await this.getFileListByPath(path + '/' + fileName);
+        const dataDir = await this.getFileListByPath(path + fileName);
 
         this.setState({
             fileList: dataDir.map(r => r),
@@ -137,9 +137,9 @@ class DataSetPanel extends React.Component {
         if (fileList[index].path === undefined) {
             path = this.getPathByFilePath(filePath);
         } else {
-            path = fileList[index].path === '/' ? '' : fileList[index].path;
+            path = fileList[index].path;
         }
-        const url = `/filesystem-service?path=${path + '/' + fileName}`;
+        const url = `/filesystem-service?path=${path + fileName}`;
         console.log(url)
         const init = {
             method: 'DELETE',
@@ -230,7 +230,7 @@ class DataSetPanel extends React.Component {
                 "Content-Type": "application/json;charset=utf-8"
             },
         }
-        const url = `/filesystem-service/common-files/cancel?path=${starFilePath + '/' + fileName}`;
+        const url = `/filesystem-service/common-files/cancel?path=${starFilePath + fileName}`;
 
         const response = await fetchTool(url, init);
 
@@ -270,7 +270,7 @@ class DataSetPanel extends React.Component {
                 "Content-Type": "application/json;charset=utf-8"
             },
         }
-        const url = `/filesystem-service/common-files/set?path=${starFilePath + '/' + fileName}`;
+        const url = `/filesystem-service/common-files/set?path=${starFilePath + fileName}`;
 
         const response = await fetchTool(url, init);
         console.log(response);

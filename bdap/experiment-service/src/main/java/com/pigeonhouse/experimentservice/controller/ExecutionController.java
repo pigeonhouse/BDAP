@@ -64,7 +64,18 @@ public class ExecutionController {
         livyService.postCode(sessionInfo, "val df = dfMap(\"" + nodeId + "\")\n",userId);
         String result = livyService.getCsv(sessionInfo, 100);
         return ResponseEntity.ok(result);
+    }
 
+    @GetMapping("/flow/node/evaluation/{nodeId}")
+    public ResponseEntity showEvaluationResult(@PathVariable String nodeId,
+                                         @RequestHeader("token") String token) {
+
+        LivySessionInfo sessionInfo = TokenParser.getSessionInfoFromToken(token);
+        String userId = TokenParser.getClaimsFromToken(token).get("userId").asString();
+
+        livyService.postCode(sessionInfo, "val evaluationResult = evaluationMap(\"" + nodeId + "\")\n",userId);
+        String result = livyService.getEvaluationResult(sessionInfo);
+        return ResponseEntity.ok(result);
     }
 
     @GetMapping("/session/status")

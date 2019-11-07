@@ -16,6 +16,19 @@ public class OutputController {
     @Autowired
     SessionService sessionService;
 
+
+    @PostMapping("/output/evaluation")
+    public String getEvaluationResult(@RequestBody LivySessionInfo livySessionInfo) {
+        try {
+            String readEvaluationResult = "println(evaluationResult)";
+            String evaluationResultUrl = sessionService.postCode(livySessionInfo, readEvaluationResult);
+            return OutputParser.getOutput(evaluationResultUrl);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
     @PostMapping("/output/schema")
     public List<HeaderAttribute> getSchema(@RequestBody LivySessionInfo livySessionInfo) {
         try {

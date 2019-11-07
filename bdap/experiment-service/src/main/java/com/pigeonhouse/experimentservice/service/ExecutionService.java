@@ -148,6 +148,12 @@ public class ExecutionService {
             }
         }
 
+        //把评估结果加入evaluationMap
+        if ("evaluation".equals(nodeInfo.getGroupName().getElabel())){
+            String id = nodeInfo.getId();
+            mappingDfCode.append("evaluationMap += (\"" + id + "_0\" -> evaluationResult)\n");
+        }
+
 
         return inputCode + attrsCode + innerCode + mappingDfCode;
     }
@@ -167,6 +173,7 @@ public class ExecutionService {
         List<ExecutionInfo> executionInfoList = new ArrayList<>();
         StringBuilder codeToRun = new StringBuilder();
         codeToRun.append("var dfMap: Map[String, org.apache.spark.sql.DataFrame] = Map() \n");
+        codeToRun.append("var evaluationMap: Map[String, String] = Map()\n");
         for (NodeInfo nodeInfo : flowInfo) {
             System.out.println(nodeInfo);
             String nodeCode = generateCode(nodeInfo, userId);
