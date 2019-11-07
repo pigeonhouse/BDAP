@@ -51,7 +51,7 @@ object BinaryClassifyEvaluator {
     f1Score.collect().foreach{c => {
       var f1ScoreMap = new util.HashMap[String, Double]()
       f1ScoreMap.put("Threshold", c._1)
-      f1ScoreMap.put("F-score", c._2)
+      f1ScoreMap.put("F_score", c._2)
       f1ScoreList.add(f1ScoreMap)
       }
     }
