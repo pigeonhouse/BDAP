@@ -22,7 +22,8 @@ export function SingleLineSet(myChart, evaluationInfo, loading) {
         series: [{
             data: evaluationInfo.value,
             type: 'line',
-            smooth: true
+            smooth: true,
+            symbol: 'none'
         }],
         color:"#509ee3",
     };

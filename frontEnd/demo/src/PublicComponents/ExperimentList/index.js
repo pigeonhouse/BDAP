@@ -236,12 +236,14 @@ class ExperimentList extends React.Component {
 			{
 				title: "title",
 				dataIndex: 'title',
+				width: 150,
 				...this.getColumnSearchProps(),
 				render: text => <a onClick={this.handleEnterModel.bind(this, text)} >{text}</a>,
 			},
 			{
 				title: 'description',
 				dataIndex: 'description',
+				width: 250,
 			},
 		]
 
@@ -280,8 +282,10 @@ class ExperimentList extends React.Component {
 							}}
 							columns={columns}
 							dataSource={data}
-							scroll={{ y: "calc(105vh - 405px)" }}
-						// pagination={{ pageSize: 6 }} 
+							scroll={{ y: "calc(105vh - 405px)", x: '430px' }}
+							pagination={{
+								position: 'none'
+							}}
 						/>
 					</div>
 				</Col>
