@@ -12,6 +12,7 @@ import { fetchTool } from '../../FetchTool';
 const { Search } = Input;
 
 class DataSetPanel extends React.Component {
+
     state = {
         filePath: [],
         fileList: [],
@@ -313,6 +314,73 @@ class DataSetPanel extends React.Component {
         this.setState({ fileList: resFile, isCommonly: false, filePath: [] })
     }
 
+    _handleDownloadFile = async (index) => {
+        const { fileList, filePath } = this.state;
+        const { fileName } = fileList[index];
+        return null;
+
+        var path = '';
+        if (fileList[index].path === undefined) {
+            path = this.getPathByFilePath(filePath);
+        } else {
+            path = fileList[index].path;
+        }
+
+        const url = `/filesystem-service?path=${path + fileName}`;
+        const init = {
+            method: 'DELETE',
+            mode: 'cors',
+            headers: {
+                "Content-Type": "application/json;charset=utf-8"
+            },
+        }
+        const response = await fetchTool(url, init);
+
+        if (response.status === 200) {
+            if (group === 'ml') {
+                allData = allData[1];
+                labelArray = labelArray[1];
+            }
+            var fieldNameArray = new Array();
+            var newData = new Array();
+            for (let i in labelArray) {
+                fieldNameArray.push(labelArray[i][0]);
+            }
+            for (let i in allData[0].value) {
+                var row = new Array();
+                for (let j in allData) {
+                    row.push(allData[j].value[i]);
+                }
+                newData.push(row);
+            }
+            var csv = Papa.unparse({
+                "fields": fieldNameArray,
+                "data": newData
+            });
+            this.downFile(csv);
+        }
+    }
+
+    get handleDownloadFile() {
+        return this._handleDownloadFile;
+    }
+    set handleDownloadFile(value) {
+        this._handleDownloadFile = value;
+    }
+
+    //提供下载
+    downFile = (list) => {
+        var elementA = document.createElement('a');
+        elementA.download = "Dataset.csv";
+        elementA.style.display = 'none';
+        var blob = new Blob([list], {
+            type: "text/csv;charset=" + 'utf-8' + ";"
+        });
+        elementA.href = URL.createObjectURL(blob);
+        document.body.appendChild(elementA);
+        elementA.click();
+        document.body.removeChild(elementA);
+    }
 
     render() {
         const { currentTab, clickTab } = this.props;
@@ -410,6 +478,7 @@ class DataSetPanel extends React.Component {
                             handleCancelStar={this.handleCancelStar}
                             handleSelectStar={this.handleSelectStar}
                             handleDeleteFile={this.handleDeleteFile}
+                            handleDownloadFile={this.handleDownloadFile}
                             fileList={fileList}
                             filePath={filePath}
                             isCommonly={isCommonly}

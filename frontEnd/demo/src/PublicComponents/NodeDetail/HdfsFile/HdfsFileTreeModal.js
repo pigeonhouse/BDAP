@@ -1,6 +1,7 @@
 import React from 'react';
 import { Tree } from 'antd';
-import { fetchTool } from "../../../FetchTool"
+import { fetchTool } from "../../../FetchTool";
+
 const { TreeNode } = Tree;
 
 /**

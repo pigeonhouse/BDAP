@@ -1,11 +1,11 @@
 import React from 'react';
-import { Col, Tooltip, Row, Button, Icon, Card } from 'antd';
+import { Col, Tooltip, Row, Icon, Card } from 'antd';
 
 import DataPreview from '../DataOperate/DataPreview';
 import DeleteFile from '../DataOperate/DeleteFile';
+import DownloadFile from '../DataOperate/DownloadFile';
 import StarCommonFile from '../DataOperate/StarCommonFile';
 import styles from './CommonFileCard.less';
-
 
 class CommonFileCard extends React.Component {
     state = {
@@ -64,13 +64,10 @@ class CommonFileCard extends React.Component {
                                 {this.state.mouseEnter === true ?
                                     <div style={{ float: "right" }}>
                                         <DataPreview />
-                                        <Tooltip placement="bottom" title="下载数据" >
-                                            <Button
-                                                icon="download"
-                                                className={styles.iconStyle}
-                                                onClick={this.handleClickDownloadFile}
-                                            />
-                                        </Tooltip>
+                                        <DownloadFile
+                                            index={index}
+                                            handleDownloadFile={handleDownloadFile}
+                                        />
                                         <StarCommonFile
                                             handleCancelStar={handleCancelStar}
                                             handleSelectStar={handleSelectStar}

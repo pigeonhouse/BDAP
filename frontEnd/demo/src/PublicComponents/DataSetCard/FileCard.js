@@ -1,11 +1,11 @@
 import React from 'react';
-import { Col, Tooltip, Row, Button, Icon, Card } from 'antd';
+import { Col, Tooltip, Row, Icon, Card } from 'antd';
 
+import DownloadFile from '../DataOperate/DownloadFile';
 import DataPreview from '../DataOperate/DataPreview';
 import DeleteFile from '../DataOperate/DeleteFile';
 import StarCommonFile from '../DataOperate/StarCommonFile';
 import styles from './index.less';
-
 
 class FileCard extends React.Component {
     state = {
@@ -25,16 +25,9 @@ class FileCard extends React.Component {
         this.setState({ mouseEnter: false });
     }
 
-    //此处应该写文件下载，但还没有完成
-    handleClickDownloadFile = (e) => {
-        e.stopPropagation();
-        const { file } = this.props;
-        alert(file.fileName)
-    }
-
     render() {
         const { mouseEnter } = this.state;
-        const { file, index, handleDeleteFile, handleCancelStar, handleSelectStar } = this.props;
+        const { file, index, handleDeleteFile, handleCancelStar, handleSelectStar, handleDownloadFile } = this.props;
 
         return (
             <Col span={8}>
@@ -58,13 +51,10 @@ class FileCard extends React.Component {
                             <Col span={12} style={{ paddingLeft: 5 }} >
                                 <div style={{ float: "right" }}>
                                     <DataPreview />
-                                    <Tooltip placement="bottom" title="下载数据" >
-                                        <Button
-                                            icon="download"
-                                            className={styles.iconStyle}
-                                            onClick={this.handleClickDownloadFile}
-                                        />
-                                    </Tooltip>
+                                    <DownloadFile 
+                                        index={index}
+                                        handleDownloadFile={handleDownloadFile}
+                                    />
                                     <StarCommonFile
                                         handleCancelStar={handleCancelStar}
                                         handleSelectStar={handleSelectStar}

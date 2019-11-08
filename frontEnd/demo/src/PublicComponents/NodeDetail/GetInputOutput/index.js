@@ -1,10 +1,8 @@
 import React, { Fragment } from 'react';
 import { withPropsAPI } from '@src';
 
-import HdfsFile from '../../DataOperate/FileOperate/HdfsFile';
-import ExampleDataUpload from '../../DataOperate/FileOperate/ExampleDataUpload';
-
-import { fetchTool } from '../../../FetchTool';
+import HdfsFile from '../HdfsFile';
+import ExampleDataUpload from '../ExampleDataUpload';
 
 /**
  * get输入文件

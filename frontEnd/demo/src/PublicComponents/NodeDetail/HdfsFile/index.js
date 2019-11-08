@@ -79,7 +79,7 @@ class HdfsFile extends Component {
 		var arr = document.cookie.match(new RegExp("(^| )" + name + "=([^;]*)(;|$)"));
 		return arr;
 	}
-	
+
 	componentWillMount() {
 		const { propsAPI } = this.props;
 		const { getSelected } = propsAPI;

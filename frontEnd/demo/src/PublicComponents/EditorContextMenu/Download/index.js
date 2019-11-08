@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
 import { Icon, message } from 'antd'
-import { withPropsAPI } from '@src'
+import { withPropsAPI, Command } from '@src'
 import Papa from 'papaparse'
-import { Command } from '@src';
-import styles from '../../EditorContextMenu/index.less';
+
+import styles from '../index.less';
 
 /**
  * 下载文件

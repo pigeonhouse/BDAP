@@ -1,11 +1,11 @@
 import React, { Component } from 'react';
 import { withPropsAPI } from '@src';
 
-import { TitanicTest } from '../ExampleData/TitanicTest';
-import { TitanicTrain } from '../ExampleData/TitanicTrain';
-import { Pokemon } from '../ExampleData/Pokemon';
-import { SimpleTest } from '../ExampleData/SimpleTest';
-import { SimpleTrain } from '../ExampleData/SimpleTrain';
+import { TitanicTest } from './TitanicTest';
+import { TitanicTrain } from './TitanicTrain';
+import { Pokemon } from './Pokemon';
+import { SimpleTest } from './SimpleTest';
+import { SimpleTrain } from './SimpleTrain';
 
 /**
  * 上传文件

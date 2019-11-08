@@ -1,5 +1,8 @@
 import React, { Fragment } from 'react'
-import {
+import GGEditor, {
+	Flow,
+	RegisterCommand,
+	withPropsAPI,
 	Command,
 	NodeMenu,
 	CanvasMenu,
@@ -7,8 +10,7 @@ import {
 } from '@src';
 import styles from './index.less';
 import iconfont from '../../theme/iconfont.less';
-import GGEditor, { Flow, RegisterCommand, withPropsAPI } from '@src';
-import Download from '../DataOperate/FileOperate/Download';
+import Download from './Download';
 import DataPreview from './DataPreview';
 import ModelEvaluation from './ModelEvaluation';
 
