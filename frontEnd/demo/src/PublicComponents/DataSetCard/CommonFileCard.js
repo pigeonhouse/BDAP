@@ -25,15 +25,8 @@ class CommonFileCard extends React.Component {
         this.setState({ mouseEnter: false });
     }
 
-    //此处应该写文件下载，但还没有完成
-    handleClickDownloadFile = (e) => {
-        e.stopPropagation();
-        const { file } = this.props;
-        alert(file.fileName)
-    }
-
     render() {
-        const { file, index, handleDeleteFile, handleCancelStar, handleSelectStar } = this.props;
+        const { file, index, handleDeleteFile, handleCancelStar, handleSelectStar, handleDownloadFile } = this.props;
 
         console.log(file)
         return (

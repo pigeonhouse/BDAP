@@ -22,7 +22,7 @@ function itemScrollMatch() {
 class FlowNodePanel extends React.Component {
 
     state = {
-        isMouseEnter: false,
+        isMouseEnter: true,
         nodesModuleInfo: [],
         commonFileList: [],
     }
@@ -75,6 +75,10 @@ class FlowNodePanel extends React.Component {
         window.addEventListener('resize', this.resize);
     }
 
+    componentWillUpdate() {
+        itemScrollMatch();
+    }
+
     mouseEnter = () => {
         this.setState({ isMouseEnter: true })
         itemScrollMatch();
@@ -85,12 +89,14 @@ class FlowNodePanel extends React.Component {
     }
 
     render() {
-        const { nodesModuleInfo, commonFileList } = this.state;
+        const { nodesModuleInfo, commonFileList, isMouseEnter } = this.state;
+        console.log(isMouseEnter)
+
         return (
             <div
                 onMouseEnter={this.mouseEnter} onMouseLeave={this.mouseLeave}
-                className={this.state.isMouseEnter ? styles.scrollapp : styles.unscrollapp}
-                style={{ backgroundColor: '#fff' }}
+                className={isMouseEnter ? styles.scrollapp : styles.unscrollapp}
+                style={{ backgroundColor: '#fff', overflowX: "hidden" }}
                 id="menuDiv"
             >
                 <div id="flowItem">
