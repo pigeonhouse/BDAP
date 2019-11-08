@@ -131,7 +131,7 @@ class DataSetPanel extends React.Component {
     handleDeleteFile = async (index) => {
         const { fileList, fileBackup, filePath } = this.state;
 
-        const { fileName } = fileList[index];
+        const { fileName, isDir } = fileList[index];
 
         var path = '';
         if (fileList[index].path === undefined) {
@@ -139,8 +139,9 @@ class DataSetPanel extends React.Component {
         } else {
             path = fileList[index].path;
         }
-        const url = `/filesystem-service?path=${path + fileName}`;
-        console.log(url)
+        var url = `/filesystem-service?path=${path + fileName}`;
+        if (isDir === true) url += '/';
+
         const init = {
             method: 'DELETE',
             mode: 'cors',

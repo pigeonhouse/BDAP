@@ -8,22 +8,46 @@ class DataPreview extends React.Component {
 
     state = {
         visible: false,
+        loading: false,
     }
 
-    handleCancel = () => {
-        this.setState({ visible: false });
-    }
-
-    handleShowData = (e) => {
+    handleCancel = e => {
         e.stopPropagation();
-        this.setState({ visible: true });
+        this.setState({
+            visible: false,
+            loading: false,
+        });
+    }
+
+    handleOk = e => {
+        e.stopPropagation();
+        this.setState({
+            visible: false,
+            loading: false,
+        });
+    }
+
+    handleShowData = e => {
+        e.stopPropagation();
+        this.setState({
+            visible: true,
+            loading: true,
+        });
+    }
+
+    handleStop = e => {
+        e.stopPropagation();
+    }
+
+    stopLoading = () => {
+        this.setState({ loading: false });
     }
 
     render() {
-        const { visible } = this.state;
+        const { visible, loading } = this.state;
 
         return (
-            <div style={{ display: "inline" }}>
+            <div onClick={this.handleStop} style={{ display: "inline" }}>
                 <Tooltip placement="bottom" title="预览数据" >
                     <Button
                         icon="eye"
@@ -33,13 +57,15 @@ class DataPreview extends React.Component {
                 </Tooltip>
                 <Modal
                     title="数据预览"
-                    onOk={this.handleCancel}
+                    onOk={this.handleOk}
                     onCancel={this.handleCancel}
                     visible={visible}
                     destroyOnClose={true}
                 >
                     <DataTable
-
+                        loading={loading}
+                        visible={visible}
+                        stopLoading={this.stopLoading}
                     />
                 </Modal>
             </div>

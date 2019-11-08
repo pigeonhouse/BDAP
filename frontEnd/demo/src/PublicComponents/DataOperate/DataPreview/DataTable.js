@@ -1,24 +1,46 @@
-import React, { Fragment } from 'react';
+import React from 'react';
 import { Table } from 'antd';
 
+import { fetchTool } from '../../../FetchTool';
+
 class DataTable extends React.Component {
-    render() {
-        return <Fragment />
-        const { previewData, headerAttributes } = this.props;
-        if (headerAttributes === null) {
-            return <Fragment />
+
+    state = {
+        dataSource: [],
+        columns: [],
+        width: 0,
+    }
+
+    async componentWillReceiveProps(nextProps) {
+        const { visible, loading } = nextProps;
+        if (visible === true && loading === true) {
+            const init = {
+
+            }
+            const url = '';
+
+            const response = await fetchTool(url, init);
+            if (response.status === 200) {
+                const res = await response.json();
+
+                nextProps.stopLoading();
+            }
         }
+    }
 
-        var width = 100 * headerAttributes.length;
-        // 转化为数组
-        const datas = previewData.length === undefined ? [previewData] : previewData;
-
+    transformData = () => {
         var dataSource = datas.map((data, index) => {
             return {
                 ...data,
                 key: index.toString(),
             }
         });
+
+        var width = 100 * headerAttributes.length;
+        // 转化为数组
+        const datas = previewData.length === undefined ? [previewData] : previewData;
+
+
         var columns = new Array();
 
         headerAttributes.map(header => {
@@ -30,16 +52,23 @@ class DataTable extends React.Component {
                 });
             }
         });
+    }
+
+    render() {
+        const { loading } = this.props;
+        const { columns, dataSource, width } = this.state;
+
         return (
             <Table
                 header="数据预览"
                 bordered
                 dataSource={dataSource}
                 columns={columns}
+                loading={loading}
                 pagination={{
                     position: 'none'
                 }}
-                scroll={{ y: "calc(105vh - 405px)", x: `${width}px` }}
+                scroll={{ y: "calc(105vh - 405px)", x: width === 0 ? '100%' : `${width}px` }}
             />
         );
     }
