@@ -20,6 +20,7 @@ class UploadFile extends React.Component {
         modifiedFileName: null,
         previewData: null,
         treeData: null,
+        defaultValue: '/'
     };
 
     createTreeData = (filePath, index, parentPath, parentKey) => {
@@ -30,7 +31,9 @@ class UploadFile extends React.Component {
         }];
 
         if (filePath.length !== index + 1) {
-            children.children = this.createTreeData(filePath, index + 1, children[0].value, children[0].key);
+            children[0].children = this.createTreeData(filePath, index + 1, children[0].value, children[0].key);
+        } else if (filePath.length === index + 1) {
+            this.setState({ defaultValue: children[0].value });
         }
 
         return children;
@@ -46,24 +49,20 @@ class UploadFile extends React.Component {
 
         if (type === 'global') {
             this.setState({
-                path: '/',
+                path,
                 treeData,
                 visible: true
             });
         }
         else if (type === 'current') {
-
             // path构造
             filePath.map((item) => {
                 path += item + '/';
             });
-            if (filePath.length === 0 || filePath[0] === '常用文件列表') {
-                path = '/';
-            }
 
             // treeData构造
             if (filePath.length !== 0 && filePath[0] !== '常用文件列表') {
-                treeData[0].children = this.createTreeData(filePath, 0, '', '0');
+                treeData[0].children = this.createTreeData(filePath, 0, '/', '0');
             }
 
             this.setState({ path, treeData, visible: true });
@@ -232,6 +231,7 @@ class UploadFile extends React.Component {
                                 </Col>
                                 <Col span={20} >
                                     <FileTree
+                                        defaultValue={this.state.defaultValue}
                                         treeData={this.state.treeData}
                                         handleSelectPath={this.handleSelectPath}
                                     />

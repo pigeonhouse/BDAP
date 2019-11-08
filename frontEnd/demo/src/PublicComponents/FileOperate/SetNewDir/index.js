@@ -12,20 +12,56 @@ class SetNewDir extends React.Component {
         dirName: null,
         confirmLoading: false,
         path: null,
+        treeData: null,
+        defaultValue: '/',
+    }
+
+    createTreeData = (filePath, index, parentPath, parentKey) => {
+        const children = [{
+            title: filePath[index],
+            key: `${parentKey}-${index}0`,
+            value: `${parentPath}${filePath[index]}/`
+        }];
+
+        if (filePath.length !== index + 1) {
+            children[0].children = this.createTreeData(filePath, index + 1, children[0].value, children[0].key);
+        } else if (filePath.length === index + 1) {
+            this.setState({ defaultValue: children[0].value });
+        }
+
+        return children;
     }
 
     showModal = () => {
-        const path = '/';
-        const treeData = [{
+        const filePath = this.props.filePath || [];
+        const { type } = this.props;
+        var path = '/';
+        var treeData = [{
             title: '根目录', key: '0', value: '/'
         }];
 
-        this.setState({
-            path,
-            treeData,
-            visible: true,
-            confirmLoading: false,
-        });
+        if (type === 'global') {
+            this.setState({
+                path,
+                treeData,
+                visible: true,
+                confirmLoading: false
+            });
+        }
+        else if (type === 'current') {
+
+            // path构造
+            filePath.map((item) => {
+                path += item + '/';
+            });
+
+            // treeData构造
+            if (filePath.length !== 0 && filePath[0] !== '常用文件列表') {
+                treeData[0].children = this.createTreeData(filePath, 0, '/', '0');
+            }
+
+            this.setState({ path, treeData, visible: true, confirmLoading: false, });
+        }
     }
 
     handleSelectPath = (value) => {
@@ -43,9 +79,7 @@ class SetNewDir extends React.Component {
         }
         var { path, dirName } = this.state;
 
-        if (path === '/') path = '';
-
-        const url = `/filesystem-service/mkdir?path=${path}/${dirName}`;
+        const url = `/filesystem-service/mkdir?path=${path}${dirName}/`;
 
         const response = await fetchTool(url, init);
         if (response.status === 200) {
@@ -74,7 +108,7 @@ class SetNewDir extends React.Component {
     }
 
     render() {
-        const { visible, dirName, confirmLoading } = this.state;
+        const { visible, dirName, confirmLoading, defaultValue, treeData } = this.state;
         return (
             <Tooltip placement="bottom" title="新建文件夹" >
                 <Button
@@ -93,7 +127,8 @@ class SetNewDir extends React.Component {
                     destroyOnClose={true}
                 >
                     <FileTree
-                        treeData={this.state.treeData}
+                        defaultValue={defaultValue}
+                        treeData={treeData}
                         handleSelectPath={this.handleSelectPath}
                     />
                     <Input

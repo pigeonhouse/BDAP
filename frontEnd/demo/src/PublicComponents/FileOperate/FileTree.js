@@ -12,8 +12,10 @@ class FileTree extends React.Component {
     };
 
     componentWillMount() {
+        const { defaultValue } = this.props;
         this.setState({
-            treeData: this.props.treeData
+            treeData: this.props.treeData,
+            value: defaultValue,
         })
     }
 
@@ -73,13 +75,14 @@ class FileTree extends React.Component {
 
     render() {
         const { treeData } = this.state;
+        
         return (
             <TreeSelect
                 allowClear
+                placeholder="请选择路径"
                 style={{ width: "100%" }}
                 value={this.state.value}
                 dropdownStyle={{ maxHeight: 400, overflow: 'auto' }}
-                placeholder="请选择路径"
                 onChange={this.onChange}
                 loadData={this.onLoadData}
             >

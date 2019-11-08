@@ -317,7 +317,6 @@ class DataSetPanel extends React.Component {
     _handleDownloadFile = async (index) => {
         const { fileList, filePath } = this.state;
         const { fileName } = fileList[index];
-        return null;
 
         var path = '';
         if (fileList[index].path === undefined) {
@@ -326,9 +325,9 @@ class DataSetPanel extends React.Component {
             path = fileList[index].path;
         }
 
-        const url = `/filesystem-service?path=${path + fileName}`;
+        const url = `/experiment-service/query/readyForData?filePath=${path + fileName}`;
         const init = {
-            method: 'DELETE',
+            method: 'GET',
             mode: 'cors',
             headers: {
                 "Content-Type": "application/json;charset=utf-8"
@@ -337,27 +336,8 @@ class DataSetPanel extends React.Component {
         const response = await fetchTool(url, init);
 
         if (response.status === 200) {
-            if (group === 'ml') {
-                allData = allData[1];
-                labelArray = labelArray[1];
-            }
-            var fieldNameArray = new Array();
-            var newData = new Array();
-            for (let i in labelArray) {
-                fieldNameArray.push(labelArray[i][0]);
-            }
-            for (let i in allData[0].value) {
-                var row = new Array();
-                for (let j in allData) {
-                    row.push(allData[j].value[i]);
-                }
-                newData.push(row);
-            }
-            var csv = Papa.unparse({
-                "fields": fieldNameArray,
-                "data": newData
-            });
-            this.downFile(csv);
+            const data = await response.text();
+            this.downFile(data);
         }
     }
 
@@ -368,7 +348,6 @@ class DataSetPanel extends React.Component {
         this._handleDownloadFile = value;
     }
 
-    //提供下载
     downFile = (list) => {
         var elementA = document.createElement('a');
         elementA.download = "Dataset.csv";
@@ -449,12 +428,14 @@ class DataSetPanel extends React.Component {
                             <UploadFile
                                 handleUpdateFileList={this.handleUpdateFileList}
                                 filePath={filePath}
-                                type="global"
+                                type="current"
                             />
 
                             {/* 新建文件夹 */}
                             <SetNewDir
                                 handleUpdateFileList={this.handleUpdateFileList}
+                                filePath={filePath}
+                                type="current"
                             />
 
                             {/* 常用文件列表 */}
