@@ -83,7 +83,9 @@ public class OutputParser {
                     sb.append(",");
                 }
                 String trimed = elements[col].trim();
-                if (trimed.contains(",")) {
+
+                if (trimed.contains(",") || trimed.contains("\"")) {
+                    trimed = trimed.replace("\"","\"\"");
                     trimed = "\"" + trimed + "\"";
                 }
                 sb.append(trimed);

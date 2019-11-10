@@ -65,8 +65,7 @@ public class ExecutionService {
 
         String inputCode = inputCodeBuilder.append("\n").toString();
         //-------------------------取出代码文件中的代码段------------------------------
-//        String scalaFilePath = "../../../../../resources/static/" + nodeInfo.getGroupName().getElabel() + "/"
-//                + nodeInfo.getLabelName().getElabel() ;
+
         StringBuilder originCodeBuilder = new StringBuilder();
         try {
             InputStream inputStream = this.getClass().getResourceAsStream("/static/"+nodeInfo.getGroupName().getElabel() + "/"

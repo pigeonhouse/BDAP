@@ -44,7 +44,7 @@ public class HdfsFilesController {
             hdfsService.upload(file, "/" + userId + "/..tmp");
 
             String readDataCode = "val df = spark.read.format(\"" + fileType + "\")" +
-                    ".option(\"inferSchema\",\"true\").option(\"header\",\"true\")" +
+                    ".option(\"inferSchema\",\"true\").option(\"header\",\"true\").option(\"escape\",\"\\\"\")" +
                     ".load(\"hdfs:///bdap/students/" + userId + "/..tmp/" + fileName + "\")\n";
 
             livyService.postCode(livySessionInfo,readDataCode,userId);
