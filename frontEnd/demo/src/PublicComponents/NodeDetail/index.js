@@ -16,10 +16,10 @@ import styles from './index.less';
 const { Item } = Form;
 const inlineFormItemLayout = {
 	labelCol: {
-		sm: { span: 8 },
+		sm: { span: 11 },
 	},
 	wrapperCol: {
-		sm: { span: 16 },
+		sm: { span: 13 },
 	},
 };
 

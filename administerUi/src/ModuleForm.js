@@ -5,6 +5,7 @@ import SelectStyle from './SelectStyle';
 import CheckBoxStyle from './CheckBoxStyle';
 import ChooseColStyle from './ChooseColStyle';
 import InputStyle from './InputStyle';
+import NewColumnStyle from './NewColumnStyle';
 
 const { Option } = Select;
 const { Item } = Form;
@@ -73,7 +74,8 @@ class ModuleForm extends React.Component {
 		let attributes = new Array();
 		if (attr === undefined) return attributes;
 		attr.map((attribute) => {
-			if (attribute.styleType === 'Select' || attribute.styleType === 'Number' || attribute.styleType === 'Input') {
+			if (attribute.styleType === 'Select' || attribute.styleType === 'Number' || 
+			attribute.styleType === 'Input' || attribute.styleType === 'NewColumn') {
 				attributes.push({
 					labelName: attribute.labelName,
 					valueType: attribute.valueType,
@@ -124,24 +126,23 @@ class ModuleForm extends React.Component {
 		return jsonFormat;
 	}
 
-	onSubmit = () =>{
+	onSubmit = () => {
 		console.log(this.state.json);
 
-		fetch('http://10.105.222.93:7777/module',{
-			method:"PUT",
+		fetch('http://10.105.222.93:7777/module', {
+			method: "PUT",
 			headers: {
-    		'Content-Type': 'application/json',
+				'Content-Type': 'application/json',
 			},
-			body:this.state.json
-		}).then((res)=>{
-			if (res.ok){
+			body: this.state.json
+		}).then((res) => {
+			if (res.ok) {
 				console.log("ok")
 				alert("提交成功")
-			}else{
+			} else {
 				alert("提交失败，请先生成json并确认后再次提交。\n如果还是不成功请联系薛啸岳。")
 			}
-  			})
-
+		})
 	}
 
 
@@ -157,121 +158,114 @@ class ModuleForm extends React.Component {
 			return <Row key={k} >
 				<Divider></Divider>
 				<Row type="flex" justify="space-around" align="middle">
-				<Col span={5} >
-					<Item
-						label={
-							<span>参数类型&nbsp;
+					<Col span={5} >
+						<Item
+							label={
+								<span>参数类型&nbsp;
 								<Tooltip title="希望在前端展示成什么形式？">
-									<Icon type="question-circle-o" />
-								</Tooltip>
-							</span>
-						}
-						{...formItemLayout}
-						key={k + '_0'}
-					>
-						{getFieldDecorator(`attributes[${index}][styleType]`, {
-							validateTrigger: ['onChange', 'onBlur'],
-							rules: [
-								{
-									required: true,
-									whitespace: true,
-									message: "请选择参数类型",
-								},
-							],
-						})(<Select onChange={this.handleSelectChange.bind(this, index)} >
-							<Option value="Select">下拉菜单</Option>
-							<Option value="Input">输入框</Option>
-							<Option value="Number">数字范围</Option>
-							<Option value="CheckBox">单选框</Option>
-							<Option value="ChooseCol">选择字段</Option>
-						</Select>)}
-					</Item>
-				</Col>
-				<Col span={5} >
-					<Item
-						label="参数中文名"
-						{...formItemLayout}
-						key={k + '_1'}
-					>
-						{getFieldDecorator(`attributes[${index}][labelName][label]`, {
-							validateTrigger: ['onChange', 'onBlur'],
-							rules: [
-								{
-									required: true,
-									whitespace: true,
-									message: "该属性的中文名",
-								},
-							],
-						})(<Input></Input>)}
-					</Item>
-				</Col>
-				<Col span={5} >
-					<Item
-						label="参数英文名"
-						{...formItemLayout}
-						key={`${k}_2`}
-					>
-						{getFieldDecorator(`attributes[${index}][labelName][elabel]`, {
-							validateTrigger: ['onChange', 'onBlur'],
-							rules: [
-								{
-									type: 'string',
-									pattern: /^[a-z,A-Z]+$/,
-									message: '请输入合法的英文名!',
-								},
-								{
-									required: true,
-									whitespace: true,
-									message: "该属性的英文名",
-								},
-							],
-						})(<Input></Input>)}
-					</Item>
-				</Col>
-				<Col span={5} >
-					<Item
-						label={							
-							<span>参数属性&nbsp;
+										<Icon type="question-circle-o" />
+									</Tooltip>
+								</span>
+							}
+							{...formItemLayout}
+							key={k + '_0'}
+						>
+							{getFieldDecorator(`attributes[${index}][styleType]`, {
+								validateTrigger: ['onChange', 'onBlur'],
+								rules: [
+									{
+										required: true,
+										whitespace: true,
+										message: "请选择参数类型",
+									},
+								],
+							})(<Select onChange={this.handleSelectChange.bind(this, index)} >
+								<Option value="Select">下拉菜单</Option>
+								<Option value="Input">输入框</Option>
+								<Option value="Number">数字范围</Option>
+								<Option value="CheckBox">单选框</Option>
+								<Option value="ChooseCol">选择字段</Option>
+								<Option value="NewColumn">新增列</Option>
+							</Select>)}
+						</Item>
+					</Col>
+					<Col span={5} >
+						<Item
+							label="参数中文名"
+							{...formItemLayout}
+							key={k + '_1'}
+						>
+							{getFieldDecorator(`attributes[${index}][labelName][label]`, {
+								validateTrigger: ['onChange', 'onBlur'],
+								rules: [
+									{
+										required: true,
+										whitespace: true,
+										message: "该属性的中文名",
+									},
+								],
+							})(<Input></Input>)}
+						</Item>
+					</Col>
+					<Col span={5} >
+						<Item
+							label="参数英文名"
+							{...formItemLayout}
+							key={`${k}_2`}
+						>
+							{getFieldDecorator(`attributes[${index}][labelName][elabel]`, {
+								validateTrigger: ['onChange', 'onBlur'],
+								rules: [
+									{
+										required: true,
+										whitespace: true,
+										message: "该属性的英文名",
+									},
+								],
+							})(<Input></Input>)}
+						</Item>
+					</Col>
+					<Col span={5} >
+						<Item
+							label={
+								<span>参数属性&nbsp;
 								<Tooltip title="这个参数在你的scala代码中是什么类型的？(若为选择字段，该项必须选择Array[String])">
-									<Icon type="question-circle-o" />
-								</Tooltip>
-							</span>
-						}
-						{...formItemLayout}
-						key={`${k}_3`}
-					>
-						{getFieldDecorator(`attributes[${index}][valueType]`, {
-							validateTrigger: ['onChange', 'onBlur'],
-							rules: [
-								{
-									required: true,
-									whitespace: true,
-									message: "该参数的类型",
-								},
-							],
-						})(
-							<Select>
-								<Option value="String">String</Option>
-								<Option value="Boolean">Boolean</Option>
-								<Option value="Int">Int</Option>
-								<Option value="Double">Double</Option>
-								<Option value="Array[String]">Array[String]</Option>
-							</Select>
-						)}
-					</Item>
-					
-				</Col>
-
-				<Col span={1}></Col>
-
-				<Col>
-					<Icon
-						className="dynamic-delete-button"
-						type="close"
-						onClick={() => this.removeAttribute(k)}
-					/>
-				</Col>
-
+										<Icon type="question-circle-o" />
+									</Tooltip>
+								</span>
+							}
+							{...formItemLayout}
+							key={`${k}_3`}
+						>
+							{getFieldDecorator(`attributes[${index}][valueType]`, {
+								validateTrigger: ['onChange', 'onBlur'],
+								rules: [
+									{
+										required: true,
+										whitespace: true,
+										message: "该参数的类型",
+									},
+								],
+							})(
+								<Select>
+									<Option value="String">String</Option>
+									<Option value="Boolean">Boolean</Option>
+									<Option value="Int">Int</Option>
+									<Option value="Double">Double</Option>
+									<Option value="Array[String]">Array[String]</Option>
+									<Option value="Vector">Vector</Option>
+								</Select>
+							)}
+						</Item>
+					</Col>
+					<Col span={1}></Col>
+					<Col>
+						<Icon
+							className="dynamic-delete-button"
+							type="close"
+							onClick={() => this.removeAttribute(k)}
+						/>
+					</Col>
 				</Row>
 
 				<NumberStyle
@@ -306,6 +300,13 @@ class ModuleForm extends React.Component {
 				/>
 
 				<InputStyle
+					id={`${k}_4`}
+					index={index}
+					attributes={attributes}
+					getFieldDecorator={getFieldDecorator}
+				/>
+
+				<NewColumnStyle
 					id={`${k}_4`}
 					index={index}
 					attributes={attributes}
@@ -359,11 +360,6 @@ class ModuleForm extends React.Component {
 									<Item label="模块英文名" {...formItemLayout} >
 										{getFieldDecorator('labelName[elabel]', {
 											rules: [
-												{
-													type: 'string',
-													pattern: /^[a-z,A-Z]+$/,
-													message: '请输入合法的英文名!',
-												},
 												{
 													required: true,
 													message: '请输入模块英文名!',
@@ -438,7 +434,7 @@ class ModuleForm extends React.Component {
 								</Col>
 							</Row>
 							{formItems}
-							
+
 							<Divider></Divider>
 							<div dangerouslySetInnerHTML={{ __html: jsonFormat }}></div>
 							<Button type="primary" htmlType="submit">
@@ -447,11 +443,11 @@ class ModuleForm extends React.Component {
 
 							<Divider></Divider>
 
-							<Button type="danger" onClick={()=>this.onSubmit()}>
+							<Button type="danger" onClick={() => this.onSubmit()}>
 								确认无误，提交
 							</Button>
 						</Form>
-						
+
 
 					</Col>
 					<Col span={1}></Col>

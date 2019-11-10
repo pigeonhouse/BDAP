@@ -1,0 +1,85 @@
+import React from 'react';
+import { Col, Tooltip, Row, Icon, Card } from 'antd';
+
+import DataPreview from '../DataOperate/DataPreview';
+import DeleteFile from '../DataOperate/DeleteFile';
+import DownloadFile from '../DataOperate/DownloadFile';
+import StarCommonFile from '../DataOperate/StarCommonFile';
+import styles from './CommonFileCard.less';
+
+class CommonFileCard extends React.Component {
+    state = {
+        mouseEnter: false,
+    }
+
+    handleClickFile = () => {
+        const { index } = this.props;
+        this.props.handleClickFile(index);
+    }
+
+    mouseEnter = () => {
+        this.setState({ mouseEnter: true });
+    }
+
+    mouseLeave = () => {
+        this.setState({ mouseEnter: false });
+    }
+
+    render() {
+        const { file, index, handleDeleteFile, handleCancelStar, handleSelectStar, handleDownloadFile } = this.props;
+
+        console.log(file)
+        return (
+            <Col span={8}>
+                <Tooltip placement="bottom" title="点击进行可视化" >
+                    <Card
+                        className={styles.cardStyle}
+                        onMouseEnter={this.mouseEnter}
+                        onMouseLeave={this.mouseLeave}
+                        onClick={this.handleClickFile}
+                    >
+                        <Row style={{ paddingLeft: 10, paddingRight: 10 }}>
+                            <Col span={4} >
+                                <Icon
+                                    type="file"
+                                    style={{ fontSize: 30, marginTop: 10 }}
+                                />
+                            </Col>
+                            <Col span={8}  >
+                                <div style={{ fontWeight: "bold", fontSize: 20 }} >
+                                    {file.fileName}
+                                </div>
+                                <div style={{ fontSize: 16, color: '#666' }} >
+                                    {file.path}{file.fileName}
+                                </div>
+                            </Col>
+                            <Col span={12} style={{ paddingLeft: 5, marginTop: 10 }} >
+                                {this.state.mouseEnter === true ?
+                                    <div style={{ float: "right" }}>
+                                        <DataPreview />
+                                        <DownloadFile
+                                            index={index}
+                                            handleDownloadFile={handleDownloadFile}
+                                        />
+                                        <StarCommonFile
+                                            handleCancelStar={handleCancelStar}
+                                            handleSelectStar={handleSelectStar}
+                                            index={index}
+                                            file={file}
+                                        />
+                                        <DeleteFile
+                                            handleDeleteFile={handleDeleteFile}
+                                            index={index}
+                                            file={file}
+                                        />
+                                    </div> : null}
+                            </Col>
+                        </Row>
+                    </Card>
+                </Tooltip>
+            </Col>
+        );
+    }
+}
+
+export default CommonFileCard;

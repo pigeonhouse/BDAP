@@ -5,11 +5,34 @@ import { fetchTool } from '../../FetchTool';
 
 import styles from './index.less';
 
+function itemScrollMatch() {
+    var flowItem = document.getElementById('flowItem');
+    var menuDiv = document.getElementById('menuDiv');
+    if (flowItem === null || menuDiv === null) return;
+    var style;
+
+    if (window.getComputedStyle) {
+        style = window.getComputedStyle(menuDiv, null);
+    } else {
+        style = menuDiv.currentStyle;
+    }
+    flowItem.style.width = style.width;
+}
+
 class FlowNodePanel extends React.Component {
 
     state = {
-        isMouseEnter: false,
+        isMouseEnter: true,
         nodesModuleInfo: [],
+        commonFileList: [],
+    }
+
+    resize = () => {
+        itemScrollMatch();
+    }
+
+    componentWillUnmount() {
+        window.removeEventListener('resize', this.resize);
     }
 
     async fetchmodule() {
@@ -21,18 +44,44 @@ class FlowNodePanel extends React.Component {
             },
             credentials: 'include'
         }
-        const res = await fetchTool("/module", init)
-        if (res.code === 200) {
-            return res.data
+        const response = await fetchTool("/experiment-service/module", init);
+
+        return await response.json();
+    }
+
+    async fetchCommonFiles() {
+        const init = {
+            method: 'GET',
+            mode: 'cors',
+            headers: {
+                "Content-Type": "application/json;charset=utf-8"
+            },
+            credentials: 'include'
         }
+        const response = await fetchTool("/filesystem-service/common-files", init);
+
+        return await response.json();
     }
 
     async componentWillMount() {
-        this.setState({ nodesModuleInfo: await this.fetchmodule() });
+        this.setState({
+            nodesModuleInfo: await this.fetchmodule(),
+            commonFileList: await this.fetchCommonFiles(),
+        });
+        this.screenChange();
+    }
+
+    screenChange() {
+        window.addEventListener('resize', this.resize);
+    }
+
+    componentWillUpdate() {
+        itemScrollMatch();
     }
 
     mouseEnter = () => {
         this.setState({ isMouseEnter: true })
+        itemScrollMatch();
     }
 
     mouseLeave = () => {
@@ -40,15 +89,20 @@ class FlowNodePanel extends React.Component {
     }
 
     render() {
-        const { nodesModuleInfo } = this.state;
+        const { nodesModuleInfo, commonFileList, isMouseEnter } = this.state;
+        console.log(isMouseEnter)
+
         return (
             <div
                 onMouseEnter={this.mouseEnter} onMouseLeave={this.mouseLeave}
-                className={this.state.isMouseEnter ? styles.scrollapp : styles.unscrollapp}
-                style={{ backgroundColor: '#fff' }}
+                className={isMouseEnter ? styles.scrollapp : styles.unscrollapp}
+                style={{ backgroundColor: '#fff', overflowX: "hidden" }}
+                id="menuDiv"
             >
-                <ClusterFlowDataPanel activeFileList={nodesModuleInfo.files} />
-                <FlowItemPanel moduleNodesList={nodesModuleInfo.nodes} />
+                <div id="flowItem">
+                    <ClusterFlowDataPanel activeFileList={commonFileList} />
+                    <FlowItemPanel moduleNodesList={nodesModuleInfo} />
+                </div>
             </div>
         );
     }

@@ -61,12 +61,20 @@ class VisualChart extends React.Component {
     }
 
     render() {
-        const { currentChart, dataSet, labelArray } = this.props;
+        const { currentChart, dataSet, labelArray, height, loading } = this.props;
         return (
-            <div className={styles.charter} id="chartBox" >
+            <div style={{ height: `calc(100vh - ${height + 110}px)` }} id="chartBox" >
                 <div id="main" className={currentChart === 'table' ? styles.chartHidden : styles.chartVisual}></div>
-                <div className={currentChart !== 'table' ? styles.tableHidden : styles.tableVisual}>
-                    <VisualTable dataSet={dataSet} labelArray={labelArray} />
+                <div
+                    className={currentChart !== 'table' ? styles.tableHidden : null}
+                    style={{ height: `calc(100vh - ${height + 120}px)` }}
+                >
+                    <VisualTable
+                        dataSet={dataSet}
+                        loading={loading}
+                        labelArray={labelArray}
+                        height={height}
+                    />
                 </div>
             </div>
         );

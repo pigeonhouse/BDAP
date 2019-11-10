@@ -1,6 +1,11 @@
 #主目录
 .idea
-#backEnd_new/
+#bdap/
+bdap/target
+bdap/.project
+bdap/.factorypath
+bdap/.classpath
+bdap/.settings
 #frontEnd/
 frontEnd/.DS_Store
 .DS_Store
@@ -20,3 +25,5 @@ bdap/src/main/.DS_Store
 bdap/src/main/java/.DS_Store
 bdap/src/main/java/com/.DS_Store
 bdap/src/main/java/com/pigeonhouse/.DS_Store
+
+

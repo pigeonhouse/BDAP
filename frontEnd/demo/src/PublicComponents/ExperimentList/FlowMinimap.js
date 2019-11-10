@@ -7,19 +7,20 @@ class FlowMinimap extends React.Component {
 
     render() {
         const { propsAPI, minimapInfo } = this.props;
-        if(minimapInfo !== null && propsAPI !== undefined){
-            console.log(minimapInfo)
+        if (minimapInfo !== null && propsAPI !== undefined) {
             const flowInfo = downloadStream(minimapInfo);
             propsAPI.read(flowInfo);
         }
 
         return (
-            <div>
+            <div style={{ paddingTop: 50 }} >
                 <div style={{ width: 0, height: 0 }}>
                     <FlowNodePanel nodesModuleInfo={[]}></FlowNodePanel>
                 </div>
                 <Flow style={{ height: 0 }} ></Flow>
-                <Minimap width={500} height={500} />
+                <div style={{ width: "500px", height: "500px" }} >
+                    <Minimap width={500} height={500} />
+                </div>
             </div>
         );
     }

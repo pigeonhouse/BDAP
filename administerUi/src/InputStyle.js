@@ -14,7 +14,7 @@ const formItemLayout = {
     },
 };
 
-class NumberStyle extends React.Component {
+class InputStyle extends React.Component {
 
     render() {
         const { getFieldDecorator, index, id, attributes } = this.props;
@@ -56,7 +56,7 @@ class NumberStyle extends React.Component {
                             {...formItemLayout}
                             key={`${id}_1`}
                         >
-                            {getFieldDecorator(`attributes[${index}][style][value]`, {
+                            {getFieldDecorator(`attributes[${index}][value]`, {
                                 validateTrigger: ['onChange', 'onBlur'],
                                 rules: [
                                     {
@@ -75,4 +75,4 @@ class NumberStyle extends React.Component {
     }
 }
 
-export default NumberStyle;
+export default InputStyle;

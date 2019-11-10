@@ -14,16 +14,15 @@ class LoadStream extends React.Component {
             },
             credentials: 'include'
         }
-        const res = await fetchTool(`/experiments/${experiment.experimentId}`, init)
-        if (res.code === 200) {
-            return res.data
-        }
+        const response = await fetchTool(`/experiment-service/experiments/${experiment.experimentId}`, init)
+
+        return await response.json();
     }
 
     loadStream = async () => {
         const { propsAPI, experiment } = this.props;
         if (experiment === null) return;
-        
+
         const flowInfo = await this.fetchModalStream(experiment);
         const flow = downloadStream(flowInfo);
         if (flow === null) return;

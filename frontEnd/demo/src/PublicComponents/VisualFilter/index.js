@@ -61,12 +61,14 @@ class Filter extends React.Component {
     }
 
     render() {
+        const { height } = this.props;
         return (
             <div>
-                <div className={styles.header} >
+                <div className={styles.header}  >
                     <h3>Filter</h3>
                 </div>
                 <div
+                    style={{ height: `calc(100vh - ${height + 130}px)` }}
                     onMouseEnter={this.mouseEnter}
                     onMouseLeave={this.mouseLeave}
                     className={this.state.isMouseEnter ? styles.scrollapp : styles.unscrollapp}
@@ -95,6 +97,7 @@ class Filter extends React.Component {
                         className={styles.button}
                         onClick={this.handleAddFilter}
                         type="primary"
+                        loading={this.props.loading}
                     >
                         添加
                     </Button>
