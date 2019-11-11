@@ -11,6 +11,7 @@ import AddMenu from './AddMenu'
 import { fetchTool } from '../../FetchTool';
 import styles from './index.less';
 import { relative } from 'path';
+import NetworkPanel from '../Network';
 
 /**
  * 主界面，根据link的信息，进行不同版本的组件渲染
@@ -319,6 +320,32 @@ class LocalMode extends React.Component {
 								currentTab={this.state.currentTab}
 								clickTab={this.state.clickTab}
 								sessionFinish={this.state.sessionFinish}
+								handleClickEnter={this.handleClickEnter}
+							/>
+						</TabPane>
+						<TabPane
+							className={styles.leftMenu}
+							tab={<Icon
+								type="user"
+								className={styles.iconStyle}
+								onClick={this.handleTabClick.bind(this, '2')}
+							/>}
+							key="3"
+						>
+							
+						</TabPane>
+						<TabPane
+							className={styles.leftMenu}
+							tab={<Icon
+								type="global"
+								className={styles.iconStyle}
+								onClick={this.handleTabClick.bind(this, '2')}
+							/>}
+							key="4"
+						>
+							<NetworkPanel
+								currentTab={this.state.currentTab}
+								clickTab={this.state.clickTab}
 								handleClickEnter={this.handleClickEnter}
 							/>
 						</TabPane>
