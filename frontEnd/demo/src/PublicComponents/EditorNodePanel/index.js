@@ -1,5 +1,6 @@
 import React from 'react';
 import { FlowItemPanel } from './EditorItemPanel';
+import { FlowModelPanel } from './EditorModelPanel';
 import { ClusterFlowDataPanel } from '../../ClusterModeComponents/EditorDataPanel';
 import { fetchTool } from '../../FetchTool';
 
@@ -19,12 +20,22 @@ function itemScrollMatch() {
     flowItem.style.width = style.width;
 }
 
+const init = {
+    method: 'GET',
+    mode: 'cors',
+    headers: {
+        "Content-Type": "application/json;charset=utf-8"
+    },
+    credentials: 'include'
+}
+
 class FlowNodePanel extends React.Component {
 
     state = {
         isMouseEnter: true,
-        nodesModuleInfo: [],
-        commonFileList: [],
+        nodesModuleInfo: new Array(),
+        commonFileList: new Array(),
+        modelList: new Array()
     }
 
     resize = () => {
@@ -36,30 +47,17 @@ class FlowNodePanel extends React.Component {
     }
 
     async fetchmodule() {
-        const init = {
-            method: 'GET',
-            mode: 'cors',
-            headers: {
-                "Content-Type": "application/json;charset=utf-8"
-            },
-            credentials: 'include'
-        }
         const response = await fetchTool("/experiment-service/module", init);
-
         return await response.json();
     }
 
     async fetchCommonFiles() {
-        const init = {
-            method: 'GET',
-            mode: 'cors',
-            headers: {
-                "Content-Type": "application/json;charset=utf-8"
-            },
-            credentials: 'include'
-        }
         const response = await fetchTool("/filesystem-service/common-files", init);
-
+        return await response.json();
+    }    
+    
+    async fetchModels() {
+        const response = await fetchTool("/filesystem-service/common-files", init);
         return await response.json();
     }
 
@@ -67,6 +65,7 @@ class FlowNodePanel extends React.Component {
         this.setState({
             nodesModuleInfo: await this.fetchmodule(),
             commonFileList: await this.fetchCommonFiles(),
+            modelList: await this.fetchModels(),
         });
         this.screenChange();
     }
@@ -89,8 +88,7 @@ class FlowNodePanel extends React.Component {
     }
 
     render() {
-        const { nodesModuleInfo, commonFileList, isMouseEnter } = this.state;
-        console.log(isMouseEnter)
+        const { nodesModuleInfo, commonFileList, isMouseEnter, modelList } = this.state;
 
         return (
             <div
@@ -100,7 +98,8 @@ class FlowNodePanel extends React.Component {
                 id="menuDiv"
             >
                 <div id="flowItem">
-                    <ClusterFlowDataPanel activeFileList={commonFileList} />
+                    <FlowModelPanel modelList={modelList} />
+                    <ClusterFlowDataPanel commonFileList={commonFileList} />
                     <FlowItemPanel moduleNodesList={nodesModuleInfo} />
                 </div>
             </div>

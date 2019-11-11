@@ -42,6 +42,11 @@ public class NodeInfo {
     private int[] anchor;
 
     /**
+     * 新增列的类型及属性
+     */
+    private List<NewCol> newCols;
+
+    /**
      * Note:只有文件属性的模块才具有此属性
      * 其余模块忽略即可
      */

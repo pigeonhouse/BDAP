@@ -11,14 +11,14 @@ import styles from './index.less';
 */
 const SubMenu = Menu.SubMenu;
 
-class FlowDataModel extends React.Component {
+class FlowModelPanel extends React.Component {
 
-	createDataPanel = (fileModel) => {
-		var fileModelPanel = new Array();
+	createModelPanel = (modelList) => {
+		var modelListPanel = new Array();
 
-		for (let i in fileModel) {
-			const { label, elabel, filePath, fileColumnsInfo } = fileModel[i];
-			fileModelPanel.push(
+		for (let i in modelList) {
+			const { label, elabel, filePath, fileColumnsInfo } = modelList[i];
+			modelListPanel.push(
 				<Menu.Item key={i}><ItemPanel>
 					<Item
 						type="node"
@@ -44,28 +44,28 @@ class FlowDataModel extends React.Component {
 				</ItemPanel></Menu.Item>);
 		}
 
-		return fileModelPanel;
+		return modelListPanel;
 	}
 
 
 	render() {
-		const { fileModel } = this.props;
+		const { modelList } = this.props;
 
 		return (
 			<Menu
-				defaultOpenKeys={['sub1']}
+				defaultOpenKeys={['modelList']}
 				mode="inline"
 				style={{ maxHeight: 'calc(100vh - 105px)', borderRight: 0 }}
 				selectable={false}
 				className={styles.menuArrows}
 			>
 				<ItemDecoration />
-				<SubMenu key="sub1" title={<span><Icon type="mail" /><span>数据源</span></span>}>
-					{this.createDataPanel(fileModel)}
+				<SubMenu key="modelList" title={<span><Icon type="mail" /><span>模型</span></span>}>
+					{this.createDataPanel(modelList)}
 				</SubMenu>
 			</Menu>
 		);
 	}
 }
 
-export default FlowDataModel;
+export default FlowModelPanel;

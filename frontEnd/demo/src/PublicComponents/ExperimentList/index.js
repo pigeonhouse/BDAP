@@ -283,9 +283,7 @@ class ExperimentList extends React.Component {
 							columns={columns}
 							dataSource={data}
 							scroll={{ y: "calc(105vh - 405px)", x: '430px' }}
-							pagination={{
-								position: 'none'
-							}}
+                            pagination={false}							
 						/>
 					</div>
 				</Col>

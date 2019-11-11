@@ -24,9 +24,6 @@ class VisualTable extends React.Component {
         });
     };
 
-
-
-
     render() {
         let { labelArray, dataSet, loading } = this.props;
 
@@ -79,7 +76,7 @@ class VisualTable extends React.Component {
                             bordered
                             loading={loading}
                             onChange={this.handleChange}
-                            pagination={{ pageSize: 50 }}
+                            pagination={false}
                             scroll={{ y: `calc(100vh - ${this.props.height + 270}px)`, x: `${width}px` }}
                         />
                     </Col>
