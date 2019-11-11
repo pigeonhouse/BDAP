@@ -1,29 +1,35 @@
-export function downloadStream(flowInfo) {
-    if (flowInfo === undefined || flowInfo === null) return null;
+export function downloadStream(nodesList) {
+    if (nodesList === undefined || nodesList === null) return null;
 
     let nodes = new Array();
-    flowInfo.nodes.map((item, index) => {
-        const { anchor, attributes, columnsInfo, groupName, id, labelName, size, x, y, filePath } = item;
-        let node = {
-            anchor, attributes, columnsInfo, groupName, id, labelName, size, index,
-            x:Number(x),
-            y:Number(y),
+
+    nodesList.map((node, index) => {
+        const { x, y, anchor, filePath } = node;
+
+        delete node.sourceIdList;
+
+        var addAttributes = {
             keyConfig: {
                 color_type: "#1890FF",
                 state_icon_url: "https://gw.alipayobjects.com/zos/rmsportal/uZVdwjJGqDooqKLKtvGA.svg"
             },
-            type: "node",
+            x: Number(x),
+            y: Number(y),
+            type: 'node',
             shape: getShapebyAnchor(anchor),
+            index,
         }
+
         if (filePath !== undefined) {
-            node["filePath"] = filePath;
+            addAttributes.filePath = filePath;
         }
-        nodes.push(node);
+
+        nodes.push({...node, ...addAttributes});
     })
 
     console.log(nodes)
 
-    return { nodes, edges: flowInfo.edges };
+    return nodes;
 }
 
 function getShapebyAnchor(anchor) {

@@ -228,9 +228,7 @@ class EditorTable extends React.Component {
                     components={components}
                     dataSource={this.state.data}
                     columns={columns}
-                    pagination={{
-                        position: 'none'
-                    }}
+                    pagination={false}
                     scroll={{ y: "calc(105vh - 405px)", x: "450px" }}
                 />
             </EditableContext.Provider>

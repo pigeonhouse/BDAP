@@ -1,36 +1,6 @@
 import React, { Fragment } from 'react';
 import { withPropsAPI } from '@src';
 import { Form, Input, Select, InputNumber, Checkbox } from 'antd';
-
-/* 显示attrDetail，即属性的细节，取决于标签框中的attrDetail属性，目前有三种格式：
-    1.为Select即选择模式 例：
-    attrDetail:[{
-        elabel:'type',    英文标签
-        label:'填充值', 	中文标签
-        type:'Select', 		此attr类型
-        evalue:['average', 'median', 'max', 'min'],  选择值的英文名
-        value:['平均值', '中位数', '最大值', '最小值']  选择值对应的中文名
-    }]
-    2.为Input即输入模式，根据输入的正则式判定输入是否正确，例：
-    attrDetail:[{
-        elabel:'type',
-        label:'填充值', 
-        type:'Input', 
-        regexp:'^[0-9]+.?[0-9]*'  正则式
-        
-    }]
-    3.Number专门为数字类型，有上下限范围，且有步长step，例：
-    attrDetail:[{
-        elabel:'type',
-        label:'填充值', 
-        type:'Number', 
-        min:0,
-        max:100,
-        step:2 即每次增加2步长
-    }]
-
-    最后会修改attr中与elabel相同的键的值，此键可事先不设定默认值，attrDetail也可不写
-*/
 /**
  * @param {class} attributes
  */
@@ -162,9 +132,7 @@ class Attributes extends React.Component {
                         })(
                             <InputNumber
                                 style={{ margin: 0 }}
-                                min={item.style.min}
-                                max={item.style.max}
-                                step={item.style.step}
+                                {...item.style}
                                 onChange={this.handleChangeNumber.bind(this, index)}
                             />)
                     }
@@ -187,34 +155,16 @@ class Attributes extends React.Component {
                 </Item >
             );
         }
-        else if (item.styleType === 'NewColumn') {
-            return (
-                <Item style={{ margin: 0 }} label={item.labelName.label} {...inlineFormItemLayout}>
-                    {
-                        getFieldDecorator(`attributes[${index}]`, {
-                            rules: [{
-                                required: true,
-                            }],
-                            initialValue: item.value,
-                        })(<Input style={{ margin: 0 }} onBlur={this.handleInputSubmit.bind(this, index)} />)
-                    }
-                </Item>
-            );
-        }
     }
 
     render() {
-        const { attributes } = this.props;
-        if (attributes === undefined) {
-            return null;
-        }
+        const attributes = this.props.attributes || [];
 
         return (
             <Fragment>
-                {
-                    attributes.map((item, index) => {
-                        return this.generateAttributes(item, index);
-                    })}
+                {attributes.map((item, index) => {
+                    return this.generateAttributes(item, index);
+                })}
             </Fragment>
         );
     }

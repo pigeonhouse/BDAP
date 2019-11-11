@@ -39,15 +39,6 @@ function findColumnsInfoFunction(node, anchor, propsAPI) {
                 }
             })
 
-            attributes.map((attribute) => {
-                if (attribute.styleType === 'NewColumn') {
-                    columns.push({
-                        colName: attribute.value,
-                        dataType: attribute.style.newColType
-                    })
-                }
-            })
-
             return columns;
         }
     }
