@@ -27,7 +27,7 @@ function findColumnsInfoFunction(node, anchor, propsAPI) {
                 return findColumnsInfoFunction(sourceNode, 0, propsAPI);
             }
             let { labelName, attributes, columnsInfo, newCols } = sourceNode.getModel();
-            columnsInfo = columnsInfo || [];
+            columnsInfo = JSON.parse(JSON.stringify(columnsInfo)) || [];
             attributes = attributes || [];
             newCols = newCols || [];
 
@@ -48,7 +48,7 @@ function findColumnsInfoFunction(node, anchor, propsAPI) {
                         const labelArray = attribute.value || [];
                         labelArray.map((label) => {
                             columnsInfo.push({
-                                colName: label,
+                                colName: value + label,
                                 dataType: null
                             })
                         })
