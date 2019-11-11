@@ -58,7 +58,6 @@ class NewCols extends React.Component {
 
     render() {
         const newCols = this.props.newCols || [];
-        console.log(newCols)
 
         return (
             <Fragment>

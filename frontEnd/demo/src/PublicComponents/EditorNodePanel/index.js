@@ -1,5 +1,6 @@
 import React from 'react';
 import { FlowItemPanel } from './EditorItemPanel';
+import { FlowModelPanel } from './EditorModelPanel';
 import { ClusterFlowDataPanel } from '../../ClusterModeComponents/EditorDataPanel';
 import { fetchTool } from '../../FetchTool';
 
@@ -34,6 +35,7 @@ class FlowNodePanel extends React.Component {
         isMouseEnter: true,
         nodesModuleInfo: new Array(),
         commonFileList: new Array(),
+        modelList: new Array()
     }
 
     resize = () => {
@@ -51,7 +53,11 @@ class FlowNodePanel extends React.Component {
 
     async fetchCommonFiles() {
         const response = await fetchTool("/filesystem-service/common-files", init);
-
+        return await response.json();
+    }    
+    
+    async fetchModels() {
+        const response = await fetchTool("/filesystem-service/common-files", init);
         return await response.json();
     }
 
@@ -59,6 +65,7 @@ class FlowNodePanel extends React.Component {
         this.setState({
             nodesModuleInfo: await this.fetchmodule(),
             commonFileList: await this.fetchCommonFiles(),
+            modelList: await this.fetchModels(),
         });
         this.screenChange();
     }
@@ -81,7 +88,7 @@ class FlowNodePanel extends React.Component {
     }
 
     render() {
-        const { nodesModuleInfo, commonFileList, isMouseEnter } = this.state;
+        const { nodesModuleInfo, commonFileList, isMouseEnter, modelList } = this.state;
 
         return (
             <div
@@ -91,6 +98,7 @@ class FlowNodePanel extends React.Component {
                 id="menuDiv"
             >
                 <div id="flowItem">
+                    <FlowModelPanel modelList={modelList} />
                     <ClusterFlowDataPanel commonFileList={commonFileList} />
                     <FlowItemPanel moduleNodesList={nodesModuleInfo} />
                 </div>

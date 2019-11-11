@@ -38,8 +38,6 @@ class NodeDetail extends React.Component {
 		const { label } = labelName;
 		const { group } = groupName.label;
 
-        console.log(newCols)
-
 		return (
 			<Card
 				type="inner"

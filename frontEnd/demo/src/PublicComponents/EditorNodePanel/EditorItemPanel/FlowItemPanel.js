@@ -63,7 +63,6 @@ class FlowItemModel extends React.Component {
 
 	render() {
 		const { moduleNodesList } = this.props;
-		console.log(moduleNodesList)
 
 		return (
 			<Menu
