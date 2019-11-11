@@ -57,6 +57,14 @@ class ExperimentPanel extends Component {
         this.saveStream(init, url, experiment);
     }
 
+    onRef = (ref) => {
+        this.child = ref;
+    }
+
+    addModel = () => {
+        this.child.addModel();
+    }
+
     render() {
         const { currentTab, clickTab } = this.props;
         if (currentTab !== '1') return <Fragment></Fragment>;
@@ -69,9 +77,7 @@ class ExperimentPanel extends Component {
             return (
                 <div className={styles.editor}>
                     <Row style={{ minHeight: 'calc(100vh - 105px)' }}>
-                        <ExperimentList
-                            handleClickEnter={this.handleClickEnter}
-                        />
+                        <ExperimentList handleClickEnter={this.handleClickEnter}/>
                     </Row>
                 </div>
             );
@@ -82,7 +88,7 @@ class ExperimentPanel extends Component {
                     <Col span={4} style={{ backgroundColor: '#fff' }}>
                         <div style={{ height: 'calc(100vh - 105px)' }} span={4} className={styles.editorSidebar}
                             data-step="1" data-intro='在组件栏可以挑选想要的模块，左键单击拖拽添加至右侧画布内。' data-position='right'>
-                            <FlowNodePanel />
+                            <FlowNodePanel onRef={this.onRef} />
                         </div>
                     </Col>
 
@@ -91,6 +97,7 @@ class ExperimentPanel extends Component {
                             <FlowToolbar
                                 experiment={this.state.experiment}
                                 handleSaveStream={this.handleSaveStream}
+                                addModel={this.addModel}
                             />
                         </div>
                         <Flow style={{ height: 'calc(100vh - 142px)' }}

@@ -13,6 +13,7 @@ import iconfont from '../../theme/iconfont.less';
 import Download from './Download';
 import DataPreview from './DataPreview';
 import ModelEvaluation from './ModelEvaluation';
+import ModelSaving from './ModelSaving';
 
 class FlowContextMenu extends React.Component {
 
@@ -33,7 +34,29 @@ class FlowContextMenu extends React.Component {
 				<GGEditor style={{ width: 0, height: 0 }}>
 					<Flow />
 					<RegisterCommand
-						name="showpicture"
+						name="dataPreview"
+						config={
+							{
+								queue: true,
+								enable(editor) {
+									return true;
+								},
+							}
+						}
+					/>
+					<RegisterCommand
+						name="modelEvaluation"
+						config={
+							{
+								queue: true,
+								enable(editor) {
+									return true;
+								},
+							}
+						}
+					/>
+					<RegisterCommand
+						name="saveModel"
 						config={
 							{
 								queue: true,
@@ -59,6 +82,7 @@ class FlowContextMenu extends React.Component {
 					</Command>
 					<DataPreview></DataPreview>
 					<ModelEvaluation></ModelEvaluation>
+					<ModelSaving addModel={this.props.addModel} ></ModelSaving>
 					{/* {this.modelEvaluation()} */}
 				</NodeMenu>
 

@@ -46,7 +46,7 @@ class NodeDetail extends React.Component {
 				style={{ paddingRight: 0 }}
 				className={styles.scrollapp}
 			>
-				<Form onSubmit={this.handleSubmit}>
+				<Form>
 					{/**显示label：{label}*/}
 					<Item style={{ margin: 0 }} label="label" {...inlineFormItemLayout}>
 						{

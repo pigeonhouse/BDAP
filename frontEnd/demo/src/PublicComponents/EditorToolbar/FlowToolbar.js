@@ -57,7 +57,7 @@ class FlowToolbar extends React.Component {
 			this.props.handleSaveStream(experiment, stream);
 		} else {
 			const uuid = this.generateUUID();
-			console.log(uuid)
+
 			this.props.handleSaveStream({
 				title: this.state.inp1,
 				description: this.state.inp2,
@@ -93,7 +93,7 @@ class FlowToolbar extends React.Component {
 						<GGEditor style={{ width: 0, height: 0 }}>
 							<Flow />
 							<RegisterCommand
-								name="showpicture"
+								name="save"
 								config={
 									{
 										queue: true,
@@ -162,24 +162,7 @@ class FlowToolbar extends React.Component {
 								<i className={`${iconfont.iconfont} ${iconfont.iconToFront}`} />
 							</Tooltip>
 						</Command>
-						{/* <Divider type="vertical" />
-						<Command name="multiSelect">
-							<Tooltip title="多选" placement="bottom" overlayClassName={styles.tooltip}>
-								<i className={`${iconfont.iconfont} ${iconfont.iconSelect}`} />
-							</Tooltip>
-						</Command>
-						<Command name="addGroup">
-							<Tooltip title="成组" placement="bottom" overlayClassName={styles.tooltip}>
-								<i className={`${iconfont.iconfont} ${iconfont.iconGroup}`} />
-							</Tooltip>
-						</Command>
-						<Command name="unGroup">
-							<Tooltip title="解组" placement="bottom" overlayClassName={styles.tooltip}>
-								<i className={`${iconfont.iconfont} ${iconfont.iconUngroup}`} />
-							</Tooltip>
-						</Command>
-						<Divider type="vertical" /> */}
-						<Command name="showpicture">
+						<Command name="save">
 							<Tooltip title="存储" placement="bottom" overlayClassName={styles.tooltip}>
 								<Icon
 									type="lock"

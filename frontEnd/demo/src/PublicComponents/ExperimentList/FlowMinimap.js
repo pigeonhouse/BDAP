@@ -1,5 +1,6 @@
 import React from 'react';
 import { Minimap, withPropsAPI, Flow } from '@src';
+import ItemDecoration from '../EditorNodePanel/ItemDecoration';
 import FlowNodePanel from '../EditorNodePanel'
 import { downloadStream } from '../../PublicComponents/HandleStream/downloadStream';
 
@@ -17,9 +18,7 @@ class FlowMinimap extends React.Component {
 
         return (
             <div style={{ paddingTop: 50 }} >
-                <div style={{ width: 0, height: 0 }}>
-                    <FlowNodePanel nodesModuleInfo={[]}></FlowNodePanel>
-                </div>
+                <ItemDecoration />
                 <Flow style={{ height: 0 }} ></Flow>
                 <div style={{ width: "500px", height: "500px" }} >
                     <Minimap width={500} height={500} />

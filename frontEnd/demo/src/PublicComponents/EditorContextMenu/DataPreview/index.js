@@ -45,7 +45,7 @@ class DataPreview extends Component {
 
 		return (
 			<div>
-				<Command name="showpicture">
+				<Command name="dataPreview">
 					<div className={styles.item} onClick={this.showModal}>
 						<Icon type="form" />
 						<span>数据预览</span>

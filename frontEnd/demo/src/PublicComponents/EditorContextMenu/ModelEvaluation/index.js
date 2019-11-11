@@ -71,7 +71,7 @@ class ModelEvaluation extends React.Component {
 		const { visible, evaluationInfo, loading } = this.state;
 		return (
 			<div>
-				<Command name="showpicture">
+				<Command name="modelEvaluation">
 					<div className={styles.item} onClick={this.showModal}>
 						<Icon type="form" />
 						<span>评估结果</span>

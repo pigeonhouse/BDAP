@@ -131,7 +131,7 @@ class Attributes extends React.Component {
                             initialValue: item.value,
                         })(
                             <InputNumber
-                                style={{ margin: 0 }}
+                                style={{ margin: 0, width: '100%' }}
                                 {...item.style}
                                 onChange={this.handleChangeNumber.bind(this, index)}
                             />)

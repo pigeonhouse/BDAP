@@ -33,10 +33,7 @@ class FlowModelPanel extends React.Component {
 								label: "已保存的模型",
 								elabel: 'savedModel',
 							},
-							attributes: new Array(),
-							newCols: new Array(),
 							anchor: [0, 1],
-							columnsInfo: new Array(),
 							keyConfig: {
 								color_type: '#1890FF',
 								state_icon_url: 'https://gw.alipayobjects.com/zos/rmsportal/uZVdwjJGqDooqKLKtvGA.svg',

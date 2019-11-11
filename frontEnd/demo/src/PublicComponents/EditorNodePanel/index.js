@@ -54,10 +54,10 @@ class FlowNodePanel extends React.Component {
     async fetchCommonFiles() {
         const response = await fetchTool("/filesystem-service/common-files", init);
         return await response.json();
-    }    
-    
+    }
+
     async fetchModels() {
-        const response = await fetchTool("/filesystem-service/common-files", init);
+        const response = await fetchTool("/filesystem-service/model", init);
         return await response.json();
     }
 
@@ -68,6 +68,10 @@ class FlowNodePanel extends React.Component {
             modelList: await this.fetchModels(),
         });
         this.screenChange();
+    }
+
+    componentDidMount() {
+        this.props.onRef(this);
     }
 
     screenChange() {
@@ -85,6 +89,12 @@ class FlowNodePanel extends React.Component {
 
     mouseLeave = () => {
         this.setState({ isMouseEnter: false })
+    }
+
+    addModel = async () => {
+        this.setState({
+            modelList: await this.fetchModels(),
+        });
     }
 
     render() {

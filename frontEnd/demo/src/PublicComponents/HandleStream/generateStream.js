@@ -13,6 +13,8 @@ export function generateStream(flowInfo) {
 		var stream = new Array();
 
 		nodes.map((node) => {
+			delete node.keyConfig;
+
 			stream.push({ ...node, sourceIdList: [] });
 		})
 
@@ -64,6 +66,7 @@ export function generateStream(flowInfo) {
 				nodesNum++;
 				deg[index]--;
 
+				delete node.keyConfig;
 				stream.nodes.push({ ...node, sourceIdList: sourceId[index] });
 
 				edges.map((edge) => {
