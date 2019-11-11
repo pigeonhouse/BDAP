@@ -16,6 +16,7 @@ export function downloadStream(nodesList) {
             x: Number(x),
             y: Number(y),
             type: 'node',
+            size: "200*40",
             shape: getShapebyAnchor(anchor),
             index,
         }

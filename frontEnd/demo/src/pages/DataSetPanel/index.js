@@ -10,6 +10,13 @@ import styles from './index.less';
 import { fetchTool } from '../../FetchTool';
 
 const { Search } = Input;
+const init = {
+    method: 'GET',
+    mode: 'cors',
+    headers: {
+        "Content-Type": "application/json;charset=utf-8"
+    },
+};
 
 class DataSetPanel extends React.Component {
 
@@ -30,13 +37,6 @@ class DataSetPanel extends React.Component {
     }
 
     getFileListByPath = async (path) => {
-        const init = {
-            method: 'GET',
-            mode: 'cors',
-            headers: {
-                "Content-Type": "application/json;charset=utf-8"
-            },
-        };
         const url = `/filesystem-service/ls?path=${path}`;
 
         const response = await fetchTool(url, init);
@@ -182,13 +182,6 @@ class DataSetPanel extends React.Component {
 
     // 获取常用文件列表
     getStarFileList = async () => {
-        const init = {
-            method: 'GET',
-            mode: 'cors',
-            headers: {
-                "Content-Type": "application/json;charset=utf-8"
-            },
-        }
         const response = await fetchTool("/filesystem-service/ls/common", init);
         const resFile = await response.json();
         this.setState({
@@ -225,13 +218,7 @@ class DataSetPanel extends React.Component {
         } else {
             starFilePath = path;
         }
-        const init = {
-            method: 'GET',
-            mode: 'cors',
-            headers: {
-                "Content-Type": "application/json;charset=utf-8"
-            },
-        }
+
         const url = `/filesystem-service/common-files/cancel?path=${starFilePath + fileName}`;
 
         const response = await fetchTool(url, init);
@@ -265,13 +252,7 @@ class DataSetPanel extends React.Component {
         } else {
             starFilePath = path;
         }
-        const init = {
-            method: 'GET',
-            mode: 'cors',
-            headers: {
-                "Content-Type": "application/json;charset=utf-8"
-            },
-        }
+ 
         const url = `/filesystem-service/common-files/set?path=${starFilePath + fileName}`;
 
         const response = await fetchTool(url, init);
@@ -326,13 +307,7 @@ class DataSetPanel extends React.Component {
         }
 
         const url = `/experiment-service/query/readyForData?filePath=${path + fileName}`;
-        const init = {
-            method: 'GET',
-            mode: 'cors',
-            headers: {
-                "Content-Type": "application/json;charset=utf-8"
-            },
-        }
+
         const response = await fetchTool(url, init);
 
         if (response.status === 200) {

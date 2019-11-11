@@ -14,6 +14,7 @@ export function generateStream(flowInfo) {
 
 		nodes.map((node) => {
 			delete node.keyConfig;
+			delete node.size;
 
 			stream.push({ ...node, sourceIdList: [] });
 		})
@@ -67,6 +68,7 @@ export function generateStream(flowInfo) {
 				deg[index]--;
 
 				delete node.keyConfig;
+				delete node.size;
 				stream.nodes.push({ ...node, sourceIdList: sourceId[index] });
 
 				edges.map((edge) => {
