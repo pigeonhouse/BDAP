@@ -1,6 +1,7 @@
 import React from "react"
 import { Row, Col,Tabs, Table } from "antd";
 import { Button } from "antd/lib/radio";
+import styles from "./index.less"
 const { TabPane } = Tabs;
 const dataSource = [
     {
@@ -71,18 +72,18 @@ render()
      
        <Row>
          <Col offset={2} span={3}>
-         <div style={{height:"100px"}}>
+         <div className={styles.text}>
             点信息上传选项
          </div>
-         <div style={{height:"100px"}}>
+         <div className={styles.text}>
             边信息上传选项
          </div>
-         <div style={{height:"100px"}}>
+         <div className={styles.text}>
             统计信息上传选项
          </div>
          </Col>
          <Col span={6}>
-            <div style={{paddingTop:"21px"}}>
+            <div style={{height:"240px",border:"1px solid",textAlign:"center"}}>
               数据展示
                 </div>
          </Col>
@@ -94,8 +95,16 @@ render()
      </Row>
      
      <Row span={2} style={{height:"60px"}}>
-        <Button>开始导入</Button>
-        <Button>确定</Button>
+         <Col span={13}>
+         </Col>
+         <Col span={3}>
+         <Button style={{width:"140px",height:"40px",fontSize:25}} >开始导入</Button>
+         </Col>
+         <Col>
+         <Button style={{width:"100px",height:"40px",fontSize:25}}>确定</Button>
+         </Col>
+       
+       
      </Row>
     </div>
     )
