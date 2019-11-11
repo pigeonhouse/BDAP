@@ -92,7 +92,6 @@ class SparkRunning extends Component {
 				this.run(result);
 			}, 1000)
 		} else {
-			console.log(current, sum)
 			this.props.stopRunning();
 		}
 	}

@@ -5,6 +5,7 @@ object OneHotEncoder {
   val input: DataFrame = null
   val dropLast: Boolean = null
   val handleInvalid: String = null
+  val prefix: String = null
 
   def main(args: Array[String]): Unit = {
 
@@ -31,14 +32,14 @@ object OneHotEncoder {
       indexedDF = indexerModel.transform(indexedDF)
     }
 
-    val encoder = new OneHotEncoderEstimator().setInputCols(targetCols.map(A => A + "Index")).setOutputCols(targetCols.map(A => A + "SparseVec")).setHandleInvalid(handleInvalid).setDropLast(dropLast)
+    val encoder = new OneHotEncoderEstimator().setInputCols(targetCols.map(A => A + "Index")).setOutputCols(targetCols.map(A => prefix + A + "SparseVec")).setHandleInvalid(handleInvalid).setDropLast(dropLast)
     val encoderModel = encoder.fit(indexedDF)
     var encodedDF = encoderModel.transform(indexedDF)
 
     for(i <- 0 until targetCols.length){
       encodedDF = encodedDF.drop(targetCols(i) + "Index")
       if(ifDenseVector == true){
-        encodedDF = encodedDF.withColumn(targetCols(i) + "DenseVec", myUdf(col(targetCols(i) + "SparseVec"))).drop(targetCols(i) + "SparseVec")
+        encodedDF = encodedDF.withColumn(prefix + targetCols(i) + "DenseVec", myUdf(col(prefix + targetCols(i) + "SparseVec"))).drop(prefix + targetCols(i) + "SparseVec")
       }
     }
 

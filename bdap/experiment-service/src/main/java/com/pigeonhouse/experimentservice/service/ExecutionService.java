@@ -29,7 +29,7 @@ public class ExecutionService {
      * @param nodeInfo
      * @return 完整spark代码
      */
-    public String generateCode(NodeInfo nodeInfo, String userId) {
+    public String generateCode(NodeInfo nodeInfo, String userId, String modelType) {
 
         //是否是输入的文件模块
         String filePath = nodeInfo.getFilePath();
@@ -53,6 +53,8 @@ public class ExecutionService {
         for (int i = 0; i < numberOfInput; i++) {
 
             if (("prediction").equals(nodeInfo.getGroupName().getElabel()) && i == 0) {
+                inputName = "Model";
+                inputCodeBuilder.append("val " + inputName + ": " + modelType + "Model = modelMap(\"" + sourceIdList[i] + "\").asInstanceOf["+ modelType +"Model]\n");
                 continue;
             }
 
@@ -144,6 +146,9 @@ public class ExecutionService {
                 } else {
                     mappingDfCode.append("\ndfMap += (\"" + id + "_" + i + "\" -> output_" + i + ")\n\n");
                 }
+            } else {
+                String id = nodeInfo.getId();
+                mappingDfCode.append("modelMap += (\"").append(id).append("_").append(i).append("\" -> Model) \n");
             }
         }
 
@@ -173,9 +178,16 @@ public class ExecutionService {
         StringBuilder codeToRun = new StringBuilder();
         codeToRun.append("var dfMap: Map[String, org.apache.spark.sql.DataFrame] = Map() \n");
         codeToRun.append("var evaluationMap: Map[String, String] = Map()\n");
+        codeToRun.append("var modelMap: Map[String, Any] = Map() \n");
+        String modelType = null;
         for (NodeInfo nodeInfo : flowInfo) {
             System.out.println(nodeInfo);
-            String nodeCode = generateCode(nodeInfo, userId);
+
+            if(("machinelearning").equals(nodeInfo.getGroupName().getElabel())){
+                modelType = nodeInfo.getLabelName().getElabel();
+            }
+
+            String nodeCode = generateCode(nodeInfo, userId, modelType);
             codeToRun.append(nodeCode);
 
             //提交代码，得到一个url，用于前端轮询以查询这次job运行状态
@@ -205,8 +217,14 @@ public class ExecutionService {
         List<ExecutionInfo> executionInfoList = new ArrayList<>();
         StringBuilder codeToRun = new StringBuilder();
         codeToRun.append("var dfMap: Map[String, org.apache.spark.sql.DataFrame] = Map() \n");
+        String modelType = null;
         for (NodeInfo nodeInfo : flowInfo) {
-            String nodeCode = generateCode(nodeInfo,userId);
+
+            if(("machinelearning").equals(nodeInfo.getGroupName().getElabel())){
+                modelType = nodeInfo.getLabelName().getElabel();
+            }
+
+            String nodeCode = generateCode(nodeInfo, userId, modelType);
             codeToRun.append(nodeCode);
         }
         String resultUrl = livyService.postCode(livySessionInfo, codeToRun.toString(),userId);

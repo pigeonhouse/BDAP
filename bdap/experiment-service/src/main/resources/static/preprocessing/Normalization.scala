@@ -2,6 +2,7 @@ object Normalization {
 
   val normalizationType: String = null
   val targetCols: Array[String] = null
+  val prefix = null
   var input: DataFrame = null
 
   def main(args: Array[String]): Unit = {
@@ -24,11 +25,10 @@ object Normalization {
       }
       val scalerModel = scaler.fit(assembledDF)
       scaled = scalerModel.transform(assembledDF).drop("tensor" + targetCols(i))
-      scaled = scaled.withColumn(normalizationType + targetCols(i), diviTensor(col("feature_" + targetCols(i)))).drop("feature_" + targetCols(i))
+      scaled = scaled.withColumn(prefix + targetCols(i), diviTensor(col("feature_" + targetCols(i)))).drop("feature_" + targetCols(i))
     }
 
     val output = scaled
-    //output.show()
 
   }
 

@@ -19,12 +19,21 @@ function itemScrollMatch() {
     flowItem.style.width = style.width;
 }
 
+const init = {
+    method: 'GET',
+    mode: 'cors',
+    headers: {
+        "Content-Type": "application/json;charset=utf-8"
+    },
+    credentials: 'include'
+}
+
 class FlowNodePanel extends React.Component {
 
     state = {
         isMouseEnter: true,
-        nodesModuleInfo: [],
-        commonFileList: [],
+        nodesModuleInfo: new Array(),
+        commonFileList: new Array(),
     }
 
     resize = () => {
@@ -36,28 +45,11 @@ class FlowNodePanel extends React.Component {
     }
 
     async fetchmodule() {
-        const init = {
-            method: 'GET',
-            mode: 'cors',
-            headers: {
-                "Content-Type": "application/json;charset=utf-8"
-            },
-            credentials: 'include'
-        }
         const response = await fetchTool("/experiment-service/module", init);
-
         return await response.json();
     }
 
     async fetchCommonFiles() {
-        const init = {
-            method: 'GET',
-            mode: 'cors',
-            headers: {
-                "Content-Type": "application/json;charset=utf-8"
-            },
-            credentials: 'include'
-        }
         const response = await fetchTool("/filesystem-service/common-files", init);
 
         return await response.json();
@@ -90,7 +82,6 @@ class FlowNodePanel extends React.Component {
 
     render() {
         const { nodesModuleInfo, commonFileList, isMouseEnter } = this.state;
-        console.log(isMouseEnter)
 
         return (
             <div
@@ -100,7 +91,7 @@ class FlowNodePanel extends React.Component {
                 id="menuDiv"
             >
                 <div id="flowItem">
-                    <ClusterFlowDataPanel activeFileList={commonFileList} />
+                    <ClusterFlowDataPanel commonFileList={commonFileList} />
                     <FlowItemPanel moduleNodesList={nodesModuleInfo} />
                 </div>
             </div>

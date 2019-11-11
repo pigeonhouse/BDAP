@@ -4,6 +4,7 @@ object PNormNormalizer {
   val targetCols: Array[String] = null
   val input: DataFrame = null
   val ifInfNorm: Boolean = null
+  val prefix: String = null
 
   def main(args: Array[String]): Unit = {
     import org.apache.spark.ml.feature.{VectorAssembler, Normalizer}
@@ -27,7 +28,7 @@ object PNormNormalizer {
 
     val colNames: Array[Attribute] = {
       val numAttrs = targetCols.length
-      Array.tabulate(numAttrs)(i => NumericAttribute.defaultAttr.withName("Normalizer" + targetCols(i)))
+      Array.tabulate(numAttrs)(i => NumericAttribute.defaultAttr.withName(prefix + targetCols(i)))
     }
 
     val fieldCols = colNames.zipWithIndex.map(x => {
