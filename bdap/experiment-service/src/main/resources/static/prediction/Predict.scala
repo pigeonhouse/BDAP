@@ -1,7 +1,6 @@
 object Predict {
 
   val trainCols: Array[String] = null
-//  val labelCols: Array[String] = null
   val newColName = null
   var input = null
   var input_1: DataFrame = null

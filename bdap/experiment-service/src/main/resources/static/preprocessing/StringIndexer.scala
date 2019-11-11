@@ -8,6 +8,8 @@ object StringIndexer {
   val targetCols: Array[String] = null
   //Param for input column names.
 
+  val prefix: String = null
+
   val stringOrderType: String = null
 
   def main(args: Array[String]): Unit = {
@@ -19,7 +21,7 @@ object StringIndexer {
     var indexed = metaData
 
     for(i <- 0 until targetCols.length){
-      val indexer = new StringIndexer().setInputCol(targetCols(i)).setOutputCol("StringIndex" + targetCols(i)).setHandleInvalid(handleInvalid).setStringOrderType(stringOrderType)
+      val indexer = new StringIndexer().setInputCol(targetCols(i)).setOutputCol(prefix + targetCols(i)).setHandleInvalid(handleInvalid).setStringOrderType(stringOrderType)
       indexed = indexer.fit(indexed).transform(indexed)
     }
 

@@ -27,7 +27,6 @@ object BinaryClassifyEvaluator {
 
     val auROC = metrics.areaUnderROC
 
-
     def getVisualInfo(tupleList: RDD[(Double, Double)], xlabel: String, ylabel: String): JSONObject = {
       val valueList: util.List[Any] = new util.ArrayList[Any]
       tupleList.collect().foreach(t => {

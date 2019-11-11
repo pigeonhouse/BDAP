@@ -11,6 +11,7 @@ object LogisticRegression {
 
   def main(args: Array[String]): Unit = {
     import org.apache.spark.ml.classification.LogisticRegression
+    import org.apache.spark.ml.classification.LogisticRegressionModel
     import org.apache.spark.ml.feature.VectorAssembler
     import org.apache.spark.sql.DataFrame
     import org.apache.spark.sql.functions.col

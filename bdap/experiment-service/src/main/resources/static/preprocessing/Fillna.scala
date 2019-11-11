@@ -80,7 +80,7 @@ object Fillna {
     }
 
     val output = df_
-//    output.show(20)
+    output.show(100)
 
   }
 }
