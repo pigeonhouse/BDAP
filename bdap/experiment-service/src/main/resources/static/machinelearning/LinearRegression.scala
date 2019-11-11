@@ -16,6 +16,7 @@ object LinearRegression {
   def main(args: Array[String]): Unit = {
     import org.apache.spark.ml.feature.VectorAssembler
     import org.apache.spark.ml.regression.LinearRegression
+    import org.apache.spark.ml.regression.LinearRegressionModel
     import org.apache.spark.sql.{DataFrame, SparkSession}
     import org.apache.spark.sql.functions.col
     val labelCol = labelCols(0)

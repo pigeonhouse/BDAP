@@ -12,6 +12,7 @@ object NaiveBayes {
     import org.apache.spark.sql.DataFrame
     import org.apache.spark.sql.functions.col
     import org.apache.spark.ml.classification.NaiveBayes
+    import org.apache.spark.ml.classification.NaiveBayesModel
 
     val labelCol = labelCols(0)
 
@@ -20,7 +21,7 @@ object NaiveBayes {
     val assembledDF = assembler.transform(metaData)
 
     // 训练bayes模型
-    val NB = new NaiveBayes().setFeaturesCol("features_").setLabelCol(labelCol).setModelType(modelType).setSmoothing(smoothing)
+    val NB = new NaiveBayes().setFeaturesCol("features_").setLabelCol(labelCol).setModelType(modelType).setSmoothing(smoothing).setProbabilityCol("probability")
 
     val Model = NB.fit(assembledDF)
 

@@ -9,6 +9,7 @@ object KMeans {
 
   def main(args: Array[String]): Unit = {
     import org.apache.spark.ml.clustering.KMeans
+    import org.apache.spark.ml.clustering.KMeansModel
     import org.apache.spark.ml.linalg.Vector
     import org.apache.spark.ml.evaluation.ClusteringEvaluator
     import org.apache.spark.ml.feature.VectorAssembler

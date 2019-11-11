@@ -1,4 +1,4 @@
-object DecisionTreeClassifier {
+object DecisionTreeClassification {
 
   val trainCols: Array[String] = null
   val labelCols: Array[String] = null
@@ -21,7 +21,7 @@ object DecisionTreeClassifier {
     val assembler = new VectorAssembler().setInputCols(trainCols).setOutputCol("features_")
     val assembled = assembler.transform(metaData)
 
-    val DTClassifier = new DecisionTreeClassifier().setFeaturesCol("features_").setLabelCol(labelCols(0)).setImpurity(impurity).setMaxBins(maxBins).setMaxDepth(maxDepth).setMinInfoGain(minInfoGain).setMinInstancesPerNode(minInstancesPerNode).setSeed(seed)
+    val DTClassifier = new DecisionTreeClassifier().setFeaturesCol("features_").setLabelCol(labelCols(0)).setImpurity(impurity).setMaxBins(maxBins).setMaxDepth(maxDepth).setMinInfoGain(minInfoGain).setMinInstancesPerNode(minInstancesPerNode).setSeed(seed).setProbabilityCol("probability")
     val Model = DTClassifier.fit(assembled)
 
     val dtModel = Model.asInstanceOf[DecisionTreeClassificationModel].toDebugString

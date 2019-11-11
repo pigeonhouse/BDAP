@@ -1,4 +1,4 @@
-object LinearSVMClassifier {
+object LinearSVC {
 
   val trainCols: Array[String] = null
   val labelCols: Array[String] = null
@@ -13,6 +13,7 @@ object LinearSVMClassifier {
     import org.apache.spark.sql.DataFrame
     import org.apache.spark.sql.functions.col
     import org.apache.spark.ml.classification.LinearSVC
+    import org.apache.spark.ml.classification.LinearSVCModel
 
     val labelCol = labelCols(0)
 
