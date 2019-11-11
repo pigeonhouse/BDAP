@@ -186,7 +186,6 @@ public class ExecutionService {
             if(("machinelearning").equals(nodeInfo.getGroupName().getElabel())){
                 modelType = nodeInfo.getLabelName().getElabel();
             }
-
             String nodeCode = generateCode(nodeInfo, userId, modelType);
             codeToRun.append(nodeCode);
 
