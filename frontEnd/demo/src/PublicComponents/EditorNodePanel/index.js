@@ -98,8 +98,8 @@ class FlowNodePanel extends React.Component {
                 id="menuDiv"
             >
                 <div id="flowItem">
-                    <FlowModelPanel modelList={modelList} />
                     <ClusterFlowDataPanel commonFileList={commonFileList} />
+                    <FlowModelPanel modelList={modelList} />
                     <FlowItemPanel moduleNodesList={nodesModuleInfo} />
                 </div>
             </div>
