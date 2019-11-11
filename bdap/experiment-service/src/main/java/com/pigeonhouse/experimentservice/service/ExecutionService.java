@@ -13,9 +13,7 @@ import java.io.FileInputStream;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import java.util.*;
 
 @Service
 public class ExecutionService {
@@ -54,7 +52,7 @@ public class ExecutionService {
 
             if (("prediction").equals(nodeInfo.getGroupName().getElabel()) && i == 0) {
                 inputName = "Model";
-                inputCodeBuilder.append("val " + inputName + ": " + modelType + "Model = modelMap(\"" + sourceIdList[i] + "\").asInstanceOf["+ modelType +"Model]\n");
+                inputCodeBuilder.append("val " + inputName + ": " + modelType + "Model = modelMap(\"" + sourceIdList[i] + "\")._2.asInstanceOf["+ modelType +"Model]\n");
                 continue;
             }
 
@@ -148,7 +146,7 @@ public class ExecutionService {
                 }
             } else {
                 String id = nodeInfo.getId();
-                mappingDfCode.append("modelMap += (\"").append(id).append("_").append(i).append("\" -> Model) \n");
+                mappingDfCode.append("modelMap += (\"").append(id).append("_").append(i).append("\" -> (\"" + nodeInfo.getLabelName().getElabel() + "Model\" , Model)) \n");
             }
         }
 
@@ -178,16 +176,22 @@ public class ExecutionService {
         StringBuilder codeToRun = new StringBuilder();
         codeToRun.append("var dfMap: Map[String, org.apache.spark.sql.DataFrame] = Map() \n");
         codeToRun.append("var evaluationMap: Map[String, String] = Map()\n");
-        codeToRun.append("var modelMap: Map[String, Any] = Map() \n");
-        String modelType = null;
+        codeToRun.append("var modelMap: Map[String, (String, Any)] = Map() \n");
+        Map<String, String> modelType = new HashMap<>();
         for (NodeInfo nodeInfo : flowInfo) {
             System.out.println(nodeInfo);
+            String nodeCode = null;
 
             if(("machinelearning").equals(nodeInfo.getGroupName().getElabel())){
-                modelType = nodeInfo.getLabelName().getElabel();
+                modelType.put(nodeInfo.getId() + "_0", nodeInfo.getLabelName().getElabel());
             }
 
-            String nodeCode = generateCode(nodeInfo, userId, modelType);
+            if (("prediction").equals(nodeInfo.getGroupName().getElabel())){
+                nodeCode = generateCode(nodeInfo, userId, modelType.get(nodeInfo.getSourceIdList()[0]));
+            } else{
+                nodeCode = generateCode(nodeInfo, userId, null);
+            }
+
             codeToRun.append(nodeCode);
 
             //提交代码，得到一个url，用于前端轮询以查询这次job运行状态
