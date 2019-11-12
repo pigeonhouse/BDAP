@@ -6,7 +6,7 @@ import styles from './index.less';
 class CommonFileList extends React.Component {
 
     // 获取常用文件列表
-    getStarFileList = () => {
+    getStarFileList = async () => {
         const { updateAttributes, handleUpdateCommonFileList } = this.props;
 
         const attributes = {
@@ -14,7 +14,7 @@ class CommonFileList extends React.Component {
             status: 'common',
         }
 
-        updateAttributes(attributes);
+        await updateAttributes(attributes);
         handleUpdateCommonFileList();
     }
 

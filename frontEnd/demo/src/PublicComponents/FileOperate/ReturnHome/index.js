@@ -6,14 +6,14 @@ import styles from './index.less';
 class ReturnHome extends React.Component {
 
     //返回根目录，将filePath的数据清空,status改为normal
-    handleClickHome = () => {
+    handleClickHome = async () => {
         const { handleUpdateFileList, updateAttributes } = this.props;
 
         const attributes = {
             filePath: [],
             status: 'normal'
         }
-        updateAttributes(attributes);
+        await updateAttributes(attributes);
         handleUpdateFileList();
     }
 

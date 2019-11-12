@@ -64,8 +64,8 @@ class DataSetPanel extends React.Component {
     }
 
     // 修改父组件的值
-    updateAttributes = (attributes) => {
-        this.setState({ ...attributes });
+    updateAttributes = async (attributes) => {
+        await this.setState({ ...attributes });
     }
 
     // 根据filePath，返回string类型path

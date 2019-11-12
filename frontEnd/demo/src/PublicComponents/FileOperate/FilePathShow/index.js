@@ -3,7 +3,7 @@ import React, { Fragment } from 'react';
 class FilePathShow extends React.Component {
 
     // 点击路径上的文件夹，跳转到该文件夹下
-    handleChangePathByPathIndex = (index) => {
+    handleChangePathByPathIndex = async (index) => {
         const { status, filePath, handleUpdateFileList, updateAttributes } = this.props;
         if (status !== 'normal') return;
 
@@ -15,7 +15,7 @@ class FilePathShow extends React.Component {
         };
 
         // 更新父组件的属性
-        updateAttributes(attributes);
+        await updateAttributes(attributes);
         handleUpdateFileList();
     }
 

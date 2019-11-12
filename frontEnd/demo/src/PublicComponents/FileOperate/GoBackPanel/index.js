@@ -14,7 +14,7 @@ class GoBackPanel extends React.Component {
         }
     }
 
-    onGoBack = () => {
+    onGoBack = async () => {
         const { handleUpdateFileList, updateAttributes, filePath, status } = this.props;
 
         var attributes = {};
@@ -32,7 +32,7 @@ class GoBackPanel extends React.Component {
             }
         }
 
-        updateAttributes(attributes);
+        await updateAttributes(attributes);
         handleUpdateFileList();
     }
 

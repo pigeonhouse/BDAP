@@ -18,7 +18,7 @@ class FileFolderCard extends React.Component {
             filePath: filePath.concat(fileFolder.fileName)
         };
 
-        updateAttributes(attributes);
+        await updateAttributes(attributes);
         handleUpdateFileList();
     }
 

@@ -22,7 +22,7 @@ class SearchFile extends React.Component {
         }
 
         this.setState({ value: searchText });
-        updateFileList(fileBackup, searchText);
+        this.updateFileList(fileBackup, searchText);
     }
 
     // 更新父组件的FileList
@@ -46,6 +46,10 @@ class SearchFile extends React.Component {
         updateAttributes(attributes);
     }
 
+    inputChange = (e) => {
+        this.setState({ value: e.target.value });
+    }
+
     componentDidMount() {
         this.props.onRef(this);
     }
@@ -55,7 +59,7 @@ class SearchFile extends React.Component {
         this.setState({
             fileBackup: fileList
         })
-        updateFileList(fileList, this.state.value);
+        this.updateFileList(fileList, this.state.value);
     }
 
     componentWillReceiveProps(nextProps) {
@@ -70,6 +74,7 @@ class SearchFile extends React.Component {
                 <Search
                     placeholder="请输入文件名"
                     onSearch={this.handleRearch}
+                    onChange={this.inputChange}
                     value={this.state.value}
                     style={{ width: "100%", marginTop: "35px" }}
                     enterButton
