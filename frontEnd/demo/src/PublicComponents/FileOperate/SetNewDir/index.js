@@ -34,7 +34,7 @@ class SetNewDir extends React.Component {
 
     showModal = () => {
         const filePath = this.props.filePath || [];
-        const { type } = this.props;
+        const { type, status } = this.props;
         var path = '/';
         var treeData = [{
             title: '根目录', key: '0', value: '/'
@@ -50,13 +50,13 @@ class SetNewDir extends React.Component {
         }
         else if (type === 'current') {
 
-            // path构造
-            filePath.map((item) => {
-                path += item + '/';
-            });
+            if (filePath.length !== 0 && status !== 'normal') {
 
-            // treeData构造
-            if (filePath.length !== 0 && filePath[0] !== '常用文件列表') {
+                // path构造
+                filePath.map((item) => {
+                    path += item + '/';
+                });
+
                 treeData[0].children = this.createTreeData(filePath, 0, '/', '0');
             }
 

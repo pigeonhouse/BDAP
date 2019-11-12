@@ -3,6 +3,15 @@ import { Tooltip, Button } from 'antd';
 
 import styles from './index.less';
 
+import { fetchTool } from '../../../FetchTool';
+const init = {
+    method: 'GET',
+    mode: 'cors',
+    headers: {
+        "Content-Type": "application/json;charset=utf-8"
+    },
+};
+
 class DownloadFile extends React.Component {
 
     _handleDownloadFile = async (e) => {

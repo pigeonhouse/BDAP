@@ -42,7 +42,7 @@ class UploadFile extends React.Component {
 
     showModal = () => {
         const filePath = this.props.filePath || [];
-        const { type } = this.props;
+        const { type, status } = this.props;
         var path = '/';
         var treeData = [{
             title: '根目录', key: '0', value: '/'
@@ -56,13 +56,13 @@ class UploadFile extends React.Component {
             });
         }
         else if (type === 'current') {
-            // path构造
-            filePath.map((item) => {
-                path += item + '/';
-            });
 
-            // treeData构造
-            if (filePath.length !== 0 && filePath[0] !== '常用文件列表') {
+            if (filePath.length !== 0 && status === 'normal') {
+                // path构造
+                filePath.map((item) => {
+                    path += item + '/';
+                });
+
                 treeData[0].children = this.createTreeData(filePath, 0, '/', '0');
             }
 
@@ -87,6 +87,7 @@ class UploadFile extends React.Component {
             headerAttributes,
             previewData: ""
         }
+
         const init = {
             method: 'POST',
             mode: 'cors',

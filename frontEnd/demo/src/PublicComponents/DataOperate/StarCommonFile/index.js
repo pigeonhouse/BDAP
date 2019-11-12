@@ -3,6 +3,8 @@ import { Tooltip, Button } from 'antd';
 
 import styles from './index.less';
 
+import { fetchTool } from '../../../FetchTool';
+
 const init = {
     method: 'GET',
     mode: 'cors',

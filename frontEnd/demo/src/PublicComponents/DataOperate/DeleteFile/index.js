@@ -2,6 +2,7 @@ import React from 'react';
 import { Tooltip, Button, Modal } from 'antd';
 
 import styles from './index.less';
+import { fetchTool } from '../../../FetchTool';
 
 const { confirm } = Modal;
 const init = {
@@ -35,7 +36,7 @@ class DeleteFile extends React.Component {
             title: file.isDir ? '确定要删除此文件夹？' : '确定要删除此文件？',
             content: file.fileName,
             onOk() {
-                self.props.handleDeleteFile();
+                self.handleDeleteFile();
             }
         })
     }

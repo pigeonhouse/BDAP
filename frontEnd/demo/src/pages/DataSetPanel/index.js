@@ -124,7 +124,6 @@ class DataSetPanel extends React.Component {
     // 更新文件列表
     handleUpdateFileList = async () => {
         const { filePath, status } = this.state;
-        console.log(filePath)
         if (status === 'common') return this.handleUpdateCommonFileList();
 
         const path = this.getPathByFilePath(filePath);
@@ -186,12 +185,14 @@ class DataSetPanel extends React.Component {
                                 handleUpdateFileList={this.handleUpdateFileList}
                                 filePath={filePath}
                                 type="current"
+                                status={status}
                             />
 
                             {/* 新建文件夹 */}
                             <SetNewDir
                                 handleUpdateFileList={this.handleUpdateFileList}
                                 filePath={filePath}
+                                status={status}
                                 type="current"
                             />
 
