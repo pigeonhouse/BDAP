@@ -2,7 +2,7 @@ import React, { Fragment } from 'react';
 import { Icon, Upload, Row, Col, Tooltip } from 'antd';
 import FileCard from './FileCard';
 import FileFolderCard from './FileFolderCard';
-import CommonFileCard from './CommonFileCard';
+import FileCardWithPath from './FileCardWithPath';
 
 import styles from './index.less';
 
@@ -27,7 +27,7 @@ const props = {
 class DataSetCard extends React.Component {
 
     render() {
-        const { fileList, handleDeleteFile, filePath, getFileList, isCommonly } = this.props;
+        const { fileList, filePathUpload, status, handleUpdateFileList, updateAttributes, filePath, handleClickFile } = this.props;
         var children = new Array();
 
         // 生成fileList对应的文件夹，且最后为上传文件，
@@ -36,22 +36,18 @@ class DataSetCard extends React.Component {
             for (let colCount = 0; colCount < 3; colCount++) {
 
                 // 分情况生成file及fileFolder，upLoad
-                if (isCommonly === true) {
+                if (status === 'common') {
 
                     // 当为常用文件列表时
                     if (fileList.length > count + colCount) {
                         colChildren.push(
-                            <CommonFileCard
+                            <FileCardWithPath
                                 file={fileList[count + colCount]}
-                                filePath={filePath}
-                                getFileList={getFileList}
-                                handleClickFile={this.props.handleClickFile}
-                                index={count + colCount}
-                                handleDeleteFile={handleDeleteFile}
-                                handleSelectStar={this.props.handleSelectStar}
-                                handleCancelStar={this.props.handleCancelStar}
-                                handleDownloadFile={this.props.handleDownloadFile}
-                            ></CommonFileCard>
+                                filePathUpload={filePathUpload}
+                                status={status}
+                                handleClickFile={handleClickFile}
+                                handleUpdateFileList={handleUpdateFileList}
+                            ></FileCardWithPath>
                         )
                     } else {
                         colChildren.push(
@@ -64,23 +60,20 @@ class DataSetCard extends React.Component {
                         colChildren.push(
                             <FileCard
                                 file={fileList[count + colCount]}
-                                filePath={filePath}
-                                getFileList={getFileList}
-                                handleClickFile={this.props.handleClickFile}
-                                index={count + colCount}
-                                handleDeleteFile={handleDeleteFile}
-                                handleSelectStar={this.props.handleSelectStar}
-                                handleCancelStar={this.props.handleCancelStar}
-                                handleDownloadFile={this.props.handleDownloadFile}
+                                filePathUpload={filePathUpload}
+                                status={status}
+                                handleClickFile={handleClickFile}
+                                handleUpdateFileList={handleUpdateFileList}
                             ></FileCard>
                         )
                     } else {
                         colChildren.push(
                             <FileFolderCard
-                                handleClickFileFolder={this.props.handleClickFileFolder}
                                 fileFolder={fileList[count + colCount]}
-                                index={count + colCount}
-                                handleDeleteFile={handleDeleteFile}
+                                filePathUpload={filePathUpload}
+                                filePath={filePath}
+                                updateAttributes={updateAttributes}
+                                handleUpdateFileList={handleUpdateFileList}
                             ></FileFolderCard>
                         )
                     }

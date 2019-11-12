@@ -1,5 +1,10 @@
 import React, { Fragment } from 'react';
-import { Row, Col, Input, Button, Tooltip } from 'antd';
+import { Row, Col } from 'antd';
+
+import FilePathShow from '../../PublicComponents/FileOperate/FilePathShow';
+import ReturnHome from '../../PublicComponents/FileOperate/ReturnHome';
+import GoBackPanel from '../../PublicComponents/FileOperate/GoBackPanel';
+import SearchFile from '../../PublicComponents/FileOperate/SearchFile';
 import CommonFileList from '../../PublicComponents/FileOperate/CommonFileList';
 import UploadFile from '../../PublicComponents/FileOperate/UploadFile';
 import SetNewDir from '../../PublicComponents/FileOperate/SetNewDir';
@@ -9,7 +14,6 @@ import styles from './index.less';
 
 import { fetchTool } from '../../FetchTool';
 
-const { Search } = Input;
 const init = {
     method: 'GET',
     mode: 'cors',
@@ -20,42 +24,23 @@ const init = {
 
 class DataSetPanel extends React.Component {
 
+    /**
+     * filePath: 左上角展示文件路径
+     * filePathUpload：上传时直接使用的路径
+     * fileList: 当前路径下，页面显示的文件或文件夹列表
+     * status: 当前界面的状态，分为四个：normal，common，search，visiual
+     * dataPreviewUrl：可视化界面进入时的url
+     */
     state = {
         filePath: [],
+        filePathUpload: null,
         fileList: [],
-        fileBackup: [],
-        isCommonly: false,
+        status: 'normal',
         dataPreviewUrl: null,
     }
 
-    getPathByFilePath = (filePath) => {
-        var path = '/';
-        filePath.map((item) => {
-            path += item + '/';
-        })
-        return path;
-    }
-
-    getFileListByPath = async (path) => {
-        const url = `/filesystem-service/ls?path=${path}`;
-
-        const response = await fetchTool(url, init);
-        if (response.status === 200) {
-            return await response.json();
-        }
-    }
-
-    async componentWillMount() {
-        const res = await this.getFileListByPath('/');
-
-        this.setState({
-            fileBackup: JSON.parse(JSON.stringify(res || [])),
-            fileList: res || [],
-        })
-    }
-
     // 点击文件，跳转到可视化界面
-    handleClickFile = (index) => {
+    handleClickFile = (file) => {
         if (this.props.sessionFinish === false) {
             const args = {
                 message: 'Session',
@@ -67,267 +52,89 @@ class DataSetPanel extends React.Component {
             return;
         }
 
-        const { fileList, filePath, isCommonly } = this.state;
-        var path = '';
-
-        if (isCommonly === true) {
-            path = fileList[index].path;
-        }
-        else {
-            path = this.getPathByFilePath(filePath);
-        }
+        const { filePathUpload } = this.state;
+        const { fileName, path } = file;
+        const filePath = path === undefined ? filePathUpload : path;
 
         this.setState({
-            dataPreviewUrl: `/experiment-service/query/readyForData?filePath=${path}${fileList[index].fileName}`,
+            dataPreviewUrl: `/experiment-service/query/readyForData?filePath=${filePath}${fileName}`,
         })
+
         this.props.handleClickEnter();
     }
 
-    // 点击文件夹，跳转到文件夹下
-    handleClickFileFolder = async (index) => {
-        //这里放入向后端请求的的子文件夹内数据
-        const fileName = this.state.fileList[index].fileName;
-        const filePath = this.state.filePath;
-        const path = this.getPathByFilePath(filePath);
-        const dataDir = await this.getFileListByPath(path + fileName);
-
-        this.setState({
-            fileList: dataDir.map(r => r),
-            filePath: filePath.concat(fileName)
-        });
+    // 修改父组件的值
+    updateAttributes = (attributes) => {
+        this.setState({ ...attributes });
     }
 
-    // 点击路径上的文件夹，跳转到该文件夹下
-    handleChangePathByPathIndex = async (index) => {
-        const { isCommonly } = this.state;
-        if (isCommonly === true) return;
-
-        // 新路径
-        const newfilePath = this.state.filePath.filter((path, idx) => idx <= index).map(r => r);
-        const path = this.getPathByFilePath(newfilePath);
-        const dataDir = await this.getFileListByPath(path || '/');
-
-        this.setState({
-            fileList: dataDir.map(r => r),
-            fileBackup: dataDir.map(r => r),
-            filePath: newfilePath
-        });
-    }
-
-    //返回根目录，将filePath的数据清空
-    handleClickHome = async () => {
-        if (this.state.filePath.length === 0) return;
-        //从新向后端请求对应的目录的filelist文件
-        const res = await this.getFileListByPath('/');
-
-        this.setState({
-            isCommonly: false,
-            filePath: [],
-            fileBackup: JSON.parse(JSON.stringify(res || [])),
-            fileList: res || [],
+    // 根据filePath，返回string类型path
+    getPathByFilePath = (filePath) => {
+        var path = '/';
+        filePath.map((item) => {
+            path += item + '/';
         })
+        return path;
     }
 
-    //文件删除的操作，此时需要向后端传递数据，只完成了前端的逻辑处理
-    handleDeleteFile = async (index) => {
-        const { fileList, fileBackup, filePath } = this.state;
-
-        const { fileName, isDir } = fileList[index];
-
-        var path = '';
-        if (fileList[index].path === undefined) {
-            path = this.getPathByFilePath(filePath);
-        } else {
-            path = fileList[index].path;
-        }
-        var url = `/filesystem-service?path=${path + fileName}`;
-        if (isDir === true) url += '/';
-
-        const init = {
-            method: 'DELETE',
-            mode: 'cors',
-            headers: {
-                "Content-Type": "application/json;charset=utf-8"
-            },
-        }
+    // 根据path向后端请求拿到fileList
+    getFileListByPath = async (path) => {
+        const url = `/filesystem-service/ls?path=${path}`;
 
         const response = await fetchTool(url, init);
+        if (response.status === 200) {
+            return await response.json();
+        }
+    }
+
+    async componentWillMount() {
+        const response = await this.getFileListByPath('/');
+
+        const attributes = {
+            fileBackup: JSON.parse(JSON.stringify(response || [])),
+            fileList: response || [],
+            filePathUpload: '/'
+        }
+
+        this.updateAttributes(attributes);
+    }
+
+    // 当前页面显示常用文件时，更新CoomonFileList
+    handleUpdateCommonFileList = async () => {
+        const response = await fetchTool("/filesystem-service/ls/common", init);
 
         if (response.status === 200) {
-            const fileTemp = fileList[index];
-            const indexBackup = this.getFileBackupIndex(fileTemp);
-            fileList.splice(index, 1);
-            fileBackup.splice(indexBackup, 1);
+            const fileList = await response.json();
 
-            this.setState({ fileBackup, fileList });
+            const attributes = { fileList };
+
+            this.updateAttributes(attributes);
         }
     }
 
-    //输入框的搜索
-    handleRearch = (searchText) => {
-        const filelist = this.state.fileBackup;
-        const reg = new RegExp(searchText, 'gi');
-        this.setState({
-            fileList: filelist.map((record) => {
-                const match = record.fileName.match(reg);
-                if (!match) {
-                    return null;
-                }
-                return {
-                    ...record,
-                };
-            }).filter(record => !!record),
-        });
+    // 当前页面显示为搜索文件时，更新FileBackup
+    handleUpdateSearchFileBackup = (fileList) => {
+        this.child.updateFileBackup(fileList);
     }
 
-    // 获取常用文件列表
-    getStarFileList = async () => {
-        const response = await fetchTool("/filesystem-service/ls/common", init);
-        const resFile = await response.json();
-        this.setState({
-            filePath: ['常用文件列表'],
-            fileList: resFile,
-            fileBackup: JSON.parse(JSON.stringify(resFile)),
-            isCommonly: true
-        })
-    }
-
-    getFileBackupIndex = (fileTemp) => {
-        const { fileBackup } = this.state;
-        for (let indexTemp in fileBackup) {
-            const dataTemp = fileBackup[indexTemp];
-            if (dataTemp.fileName !== fileTemp.fileName || dataTemp.isDir !== fileTemp.isDir) continue;
-
-            if (this.state.isCommonly) {
-                if (fileTemp.path === dataTemp.path) return indexTemp;
-                else continue;
-            }
-            else return indexTemp;
-        }
-    }
-
-    // 取消此文件的常用文件
-    handleCancelStar = async (index) => {
-        const { fileList, filePath, fileBackup } = this.state;
-        const { fileName, path } = fileList[index];
-
-        // 取消常用文件
-        var starFilePath = '';
-        if (path === undefined) {
-            starFilePath = this.getPathByFilePath(filePath);
-        } else {
-            starFilePath = path;
-        }
-
-        const url = `/filesystem-service/common-files/cancel?path=${starFilePath + fileName}`;
-
-        const response = await fetchTool(url, init);
-
-        // 得到请求后实现
-        if (response && response.status === 200) {
-            const fileTemp = fileList[index];
-            const indexBackup = this.getFileBackupIndex(fileTemp);
-
-            if (this.state.isCommonly) {
-                fileList.splice(index, 1);
-                fileBackup.splice(indexBackup, 1);
-            } else {
-                fileList[index].isCommonFile = false;
-                fileBackup[indexBackup].isCommonFile = false;
-            }
-
-            this.setState({ fileList, fileBackup });
-        }
-    }
-
-    // 选择此文件为常用文件
-    handleSelectStar = async (index) => {
-        const { fileList, filePath, fileBackup } = this.state;
-        const { fileName, path } = fileList[index];
-
-        // 请求设置为常用文件
-        var starFilePath = '';
-        if (path === undefined) {
-            starFilePath = this.getPathByFilePath(filePath);
-        } else {
-            starFilePath = path;
-        }
- 
-        const url = `/filesystem-service/common-files/set?path=${starFilePath + fileName}`;
-
-        const response = await fetchTool(url, init);
-        console.log(response);
-
-        // 得到请求后实现
-        if (response && response.status === 200) {
-            const fileTemp = fileList[index];
-            const indexBackup = this.getFileBackupIndex(fileTemp);
-            fileList[index].isCommonFile = true;
-            fileBackup[indexBackup].isCommonFile = true;
-            console.log(fileList, fileBackup)
-
-            this.setState({ fileList, fileBackup });
-        }
+    onRef = (ref) => {
+        this.child = ref;
     }
 
     // 更新文件列表
     handleUpdateFileList = async () => {
-        const path = this.getPathByFilePath(this.state.filePath);
-        const dataDir = await this.getFileListByPath(path || '/');
+        const { filePath, status } = this.state;
+        console.log(filePath)
+        if (status === 'common') return this.handleUpdateCommonFileList();
+
+        const path = this.getPathByFilePath(filePath);
+        const dataDir = await this.getFileListByPath(path);
 
         this.setState({
-            fileList: dataDir.map(r => r),
-            fileBackup: dataDir.map(r => r),
+            fileList: dataDir,
+            filePathUpload: path
         });
-    }
-
-    onBack = async () => {
-        const { filePath} = this.state;
-        filePath.pop();
-        this.setState({filePath});
-        this.handleUpdateFileList();
-        
-    }
-
-    _handleDownloadFile = async (index) => {
-        const { fileList, filePath } = this.state;
-        const { fileName } = fileList[index];
-
-        var path = '';
-        if (fileList[index].path === undefined) {
-            path = this.getPathByFilePath(filePath);
-        } else {
-            path = fileList[index].path;
-        }
-
-        const url = `/experiment-service/query/readyForData?filePath=${path + fileName}`;
-
-        const response = await fetchTool(url, init);
-
-        if (response.status === 200) {
-            const data = await response.text();
-            this.downFile(data);
-        }
-    }
-
-    get handleDownloadFile() {
-        return this._handleDownloadFile;
-    }
-    set handleDownloadFile(value) {
-        this._handleDownloadFile = value;
-    }
-
-    downFile = (list) => {
-        var elementA = document.createElement('a');
-        elementA.download = "Dataset.csv";
-        elementA.style.display = 'none';
-        var blob = new Blob([list], {
-            type: "text/csv;charset=" + 'utf-8' + ";"
-        });
-        elementA.href = URL.createObjectURL(blob);
-        document.body.appendChild(elementA);
-        elementA.click();
-        document.body.removeChild(elementA);
+        if (status === 'search') return this.handleUpdateSearchFileBackup(dataDir);
     }
 
     render() {
@@ -336,60 +143,41 @@ class DataSetPanel extends React.Component {
         if (currentTab !== "2") return <Fragment></Fragment>;
 
         if (clickTab === "2") {
-            const { fileList, filePath, isCommonly } = this.state;
+            const { fileList, filePath, status, filePathUpload } = this.state;
             return (
                 <Fragment>
                     <Row className={styles.header} >
                         <Col span={16} >
                             <Row>
                                 <Col span={4} style={{ paddingTop: 20 }} >
-                                    <h2 className={styles.headerFont}
-                                    >DataSet</h2>
+                                    <h2 className={styles.headerFont} >DataSet</h2>
                                 </Col>
                                 <Col span={1} >
-                                    <Tooltip placement="bottom" title="返回上一页" >
-                                        <Button
-                                            icon="arrow-left"
-                                            shape="circle"
-                                            style={{
-                                                marginTop: 20,
-                                                fontSize: 30,
-                                                padding: 0,
-                                                border: 0
-                                            }}
-                                            onClick={this.onBack}
-                                        />
-                                    </Tooltip>
+                                    <GoBackPanel
+                                        filePath={filePath}
+                                        status={status}
+                                        updateAttributes={this.updateAttributes}
+                                        handleUpdateFileList={this.handleUpdateFileList}
+                                    />
                                 </Col>
                                 <Col span={19} style={{ paddingTop: 30, paddingLeft: 10 }} >
-                                    {
-                                        filePath.map((path, index) => {
-                                            if (index === '0') {
-                                                return <div style={{ display: "inline" }} >
-                                                    <h5 style={{ display: "inline" }} >
-                                                        <a onClick={this.handleChangePathByPathIndex.bind(this, index)} >{path}</a>
-                                                    </h5>
-                                                </div>
-                                            } else return <div style={{ display: "inline" }} >
-                                                <h5 style={{ display: "inline" }} >
-                                                    &nbsp;&nbsp;/&nbsp;&nbsp;
-                                                    <a onClick={this.handleChangePathByPathIndex.bind(this, index)} >{path}</a>
-                                                </h5>
-                                            </div>
-                                        })
-                                    }
+                                    {/* 文件路径展示的组件 */}
+                                    <FilePathShow
+                                        updateAttributes={this.updateAttributes}
+                                        handleUpdateFileList={this.handleUpdateFileList}
+                                        filePath={filePath}
+                                        status={status}
+                                    />
                                 </Col>
                             </Row>
                         </Col>
                         <Col span={3} >
-                            <Tooltip placement="bottom" title="查询文件或文件夹" >
-                                <Search
-                                    placeholder="请输入文件名"
-                                    onSearch={this.handleRearch}
-                                    style={{ width: "100%", marginTop: "35px" }}
-                                    enterButton
-                                />
-                            </Tooltip>
+                            <SearchFile
+                                onRef={this.onRef}
+                                updateAttributes={this.updateAttributes}
+                                status={status}
+                                fileList={fileList}
+                            />
                         </Col>
                         <Col span={5} style={{ paddingLeft: "20px" }} >
 
@@ -409,38 +197,36 @@ class DataSetPanel extends React.Component {
 
                             {/* 常用文件列表 */}
                             <CommonFileList
-                                getStarFileList={this.getStarFileList}
-                                isCommonly={isCommonly}
+                                handleUpdateCommonFileList={this.handleUpdateCommonFileList}
+                                updateAttributes={this.updateAttributes}
+                                status={status}
                             />
-                            <Tooltip placement="bottom" title="返回根目录" >
-                                <Button
-                                    icon="home"
-                                    className={styles.buttonStyle}
-                                    onClick={this.handleClickHome}
-                                />
-                            </Tooltip>
+
+                            {/* 返回根目录 */}
+                            <ReturnHome
+                                updateAttributes={this.updateAttributes}
+                                handleUpdateFileList={this.handleUpdateFileList}
+                            />
                         </Col>
                     </Row>
                     <div style={{ height: "calc(100vh - 185px)" }} >
                         <DataSetCard
+                            handleUpdateFileList={this.handleUpdateFileList}
+                            updateAttributes={this.updateAttributes}
                             handleClickFile={this.handleClickFile}
-                            handleClickFileFolder={this.handleClickFileFolder}
-                            handleCancelStar={this.handleCancelStar}
-                            handleSelectStar={this.handleSelectStar}
-                            handleDeleteFile={this.handleDeleteFile}
-                            handleDownloadFile={this.handleDownloadFile}
                             fileList={fileList}
+                            filePathUpload={filePathUpload}
+                            status={status}
                             filePath={filePath}
-                            isCommonly={isCommonly}
                         />
                     </div>
                 </Fragment>
             );
         } else {
-            const { dataPreviewUrl } = this.state;
+            const { status, dataPreviewUrl } = this.state;
             return (
                 <div style={{ paddingTop: 25 }}>
-                    <VisualizedPanel url={dataPreviewUrl} height={130} />
+                    <VisualizedPanel url={status === 'visiual' ? dataPreviewUrl : null} height={130} />
                 </div>
             );
         }

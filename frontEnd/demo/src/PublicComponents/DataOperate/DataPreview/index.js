@@ -3,19 +3,20 @@ import { Button, Tooltip, Modal } from 'antd';
 
 import DataTable from './DataTable';
 import styles from './index.less';
+import { fetchTool } from '../../../FetchTool';
 
 class DataPreview extends React.Component {
 
     state = {
         visible: false,
-        loading: false,
+        loading: true,
     }
 
     handleCancel = e => {
         e.stopPropagation();
         this.setState({
             visible: false,
-            loading: false,
+            loading: true,
         });
     }
 
@@ -23,24 +24,33 @@ class DataPreview extends React.Component {
         e.stopPropagation();
         this.setState({
             visible: false,
-            loading: false,
-        });
-    }
-
-    handleShowData = e => {
-        e.stopPropagation();
-        this.setState({
-            visible: true,
             loading: true,
         });
     }
 
-    handleStop = e => {
+    handleShowData = async e => {
         e.stopPropagation();
+        this.setState({
+            visible: true,
+        });
+
+        const { status, file, filePathUpload } = this.props;
+
+        const url = ``;
+
+        const response = await fetchTool(url, init);
+
+        if (response.status === 200) {
+            const res = await response.json();
+
+            this.setState({
+                loading: false,
+            })
+        }
     }
 
-    stopLoading = () => {
-        this.setState({ loading: false });
+    handleStop = e => {
+        e.stopPropagation();
     }
 
     render() {
@@ -62,11 +72,9 @@ class DataPreview extends React.Component {
                     visible={visible}
                     destroyOnClose={true}
                 >
-                    <DataTable
+                    {/* <DataTable
                         loading={loading}
-                        visible={visible}
-                        stopLoading={this.stopLoading}
-                    />
+                    /> */}
                 </Modal>
             </div>
         );

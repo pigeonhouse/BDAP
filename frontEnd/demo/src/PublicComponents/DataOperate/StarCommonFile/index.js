@@ -3,17 +3,37 @@ import { Tooltip, Button } from 'antd';
 
 import styles from './index.less';
 
+const init = {
+    method: 'GET',
+    mode: 'cors',
+    headers: {
+        "Content-Type": "application/json;charset=utf-8"
+    },
+};
+
 class StarCommonFile extends React.Component {
 
-    handleClickStar = (e) => {
+    handleClickStar = async (e) => {
         e.stopPropagation();
-
-        const { file, handleCancelStar, handleSelectStar, index } = this.props;
+        const { file, filePathUpload, status } = this.props;
+        var operate = '';
 
         if (file.isCommonFile) {
-            handleCancelStar(index);
+            operate = 'cancel';
         } else {
-            handleSelectStar(index);
+            operate = 'set';
+        }
+
+        const { path, fileName } = file;
+
+        var starFilePath = path === undefined ? filePathUpload : path;
+
+        const url = `/filesystem-service/common-files/${operate}?path=${starFilePath + fileName}`;
+
+        const response = await fetchTool(url, init);
+        // 得到请求后实现
+        if (response && response.status === 200) {
+            this.props.handleUpdateFileList();
         }
     }
 

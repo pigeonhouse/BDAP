@@ -13,8 +13,8 @@ class FileCard extends React.Component {
     }
 
     handleClickFile = () => {
-        const { index } = this.props;
-        this.props.handleClickFile(index);
+        const { file } = this.props;
+        this.props.handleClickFile(file);
     }
 
     mouseEnter = () => {
@@ -27,7 +27,7 @@ class FileCard extends React.Component {
 
     render() {
         const { mouseEnter } = this.state;
-        const { file, index, handleDeleteFile, handleCancelStar, handleSelectStar, handleDownloadFile } = this.props;
+        const { file, filePathUpload, status, handleUpdateFileList } = this.props;
 
         return (
             <Col span={8}>
@@ -50,20 +50,33 @@ class FileCard extends React.Component {
                             </Col>
                             <Col span={12} style={{ paddingLeft: 5 }} >
                                 <div style={{ float: "right" }}>
-                                    <DataPreview />
-                                    <DownloadFile 
-                                        index={index}
-                                        handleDownloadFile={handleDownloadFile}
+
+                                    {/* 数据预览 */}
+                                    <DataPreview
+                                        file={file}
+                                        filePathUpload={filePathUpload}
+                                        status={status}
                                     />
+
+                                    {/* 数据下载 */}
+                                    <DownloadFile
+                                        file={file}
+                                        filePathUpload={filePathUpload}
+                                        status={status}
+                                    />
+
+                                    {/* 设置为常用文件 */}
                                     <StarCommonFile
-                                        handleCancelStar={handleCancelStar}
-                                        handleSelectStar={handleSelectStar}
-                                        index={index}
+                                        handleUpdateFileList={handleUpdateFileList}
+                                        status={status}
+                                        filePathUpload={filePathUpload}
                                         file={file}
                                     />
+
+                                    {/* 删除文件或文件夹 */}
                                     <DeleteFile
-                                        handleDeleteFile={handleDeleteFile}
-                                        index={index}
+                                        handleUpdateFileList={handleUpdateFileList}
+                                        filePathUpload={filePathUpload}
                                         file={file}
                                     />
                                 </div>

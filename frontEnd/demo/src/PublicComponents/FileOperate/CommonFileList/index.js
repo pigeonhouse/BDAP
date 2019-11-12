@@ -5,16 +5,29 @@ import styles from './index.less';
 
 class CommonFileList extends React.Component {
 
+    // 获取常用文件列表
+    getStarFileList = () => {
+        const { updateAttributes, handleUpdateCommonFileList } = this.props;
+
+        const attributes = {
+            filePath: ['常用文件列表'],
+            status: 'common',
+        }
+
+        updateAttributes(attributes);
+        handleUpdateCommonFileList();
+    }
+
     render() {
-        const { isCommonly } = this.props;
-        const style = isCommonly ? { color: '#1890ff' } : null;
+        const { status } = this.props;
+        const style = status === 'common' ? { color: '#1890ff' } : null;
 
         return (
             <div style={{ display: "inline" }} >
                 <Tooltip placement="bottom" title="常用文件列表" >
                     <Button
                         className={styles.buttonStyle}
-                        onClick={this.props.getStarFileList}
+                        onClick={this.getStarFileList}
                     >
                         <Icon type="star" style={style} />
                     </Button>

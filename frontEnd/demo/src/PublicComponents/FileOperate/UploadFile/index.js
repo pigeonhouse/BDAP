@@ -23,6 +23,7 @@ class UploadFile extends React.Component {
         defaultValue: '/'
     };
 
+    // 创建treeData
     createTreeData = (filePath, index, parentPath, parentKey) => {
         const children = [{
             title: filePath[index],

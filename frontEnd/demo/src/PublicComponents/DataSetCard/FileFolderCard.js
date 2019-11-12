@@ -9,10 +9,17 @@ class FileFolderCard extends React.Component {
         mouseEnter: false,
     }
 
-    // 点击文件夹后进入此文件夹
-    handleClickFileFolder = () => {
-        const { index } = this.props;
-        this.props.handleClickFileFolder(index);
+    // 点击文件夹，跳转到文件夹下
+    handleClickFileFolder = async () => {
+        //这里放入向后端请求的的子文件夹内数据
+        const { filePath, fileFolder, updateAttributes, handleUpdateFileList } = this.props;
+
+        const attributes = {
+            filePath: filePath.concat(fileFolder.fileName)
+        };
+
+        updateAttributes(attributes);
+        handleUpdateFileList();
     }
 
     mouseEnter = () => {
@@ -24,7 +31,8 @@ class FileFolderCard extends React.Component {
     }
 
     render() {
-        const { fileFolder, handleDeleteFile, index } = this.props;
+        const { fileFolder, filePathUpload, handleUpdateFileList } = this.props;
+
         return (
             <Col span={8}>
                 <Tooltip placement="bottom" title="点击进入文件夹" >
@@ -48,8 +56,8 @@ class FileFolderCard extends React.Component {
                                 {this.state.mouseEnter === true ?
                                     <div style={{ float: "right" }}>
                                         <DeleteFile
-                                            handleDeleteFile={handleDeleteFile}
-                                            index={index}
+                                            handleUpdateFileList={handleUpdateFileList}
+                                            filePathUpload={filePathUpload}
                                             file={fileFolder}
                                         />
                                     </div> : null}

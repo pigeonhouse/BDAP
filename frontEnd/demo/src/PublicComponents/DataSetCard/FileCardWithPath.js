@@ -5,16 +5,16 @@ import DataPreview from '../DataOperate/DataPreview';
 import DeleteFile from '../DataOperate/DeleteFile';
 import DownloadFile from '../DataOperate/DownloadFile';
 import StarCommonFile from '../DataOperate/StarCommonFile';
-import styles from './CommonFileCard.less';
+import styles from './FileCardWithPath.less';
 
-class CommonFileCard extends React.Component {
+class FileCardWithPath extends React.Component {
     state = {
         mouseEnter: false,
     }
 
     handleClickFile = () => {
-        const { index } = this.props;
-        this.props.handleClickFile(index);
+        const { file } = this.props;
+        this.props.handleClickFile(file);
     }
 
     mouseEnter = () => {
@@ -26,9 +26,8 @@ class CommonFileCard extends React.Component {
     }
 
     render() {
-        const { file, index, handleDeleteFile, handleCancelStar, handleSelectStar, handleDownloadFile } = this.props;
+        const { file, filePathUpload, status, handleUpdateFileList } = this.props;
 
-        console.log(file)
         return (
             <Col span={8}>
                 <Tooltip placement="bottom" title="点击进行可视化" >
@@ -56,20 +55,33 @@ class CommonFileCard extends React.Component {
                             <Col span={12} style={{ paddingLeft: 5, marginTop: 10 }} >
                                 {this.state.mouseEnter === true ?
                                     <div style={{ float: "right" }}>
-                                        <DataPreview />
-                                        <DownloadFile
-                                            index={index}
-                                            handleDownloadFile={handleDownloadFile}
+
+                                        {/* 数据预览 */}
+                                        <DataPreview
+                                            file={file}
+                                            filePathUpload={filePathUpload}
+                                            status={status}
                                         />
+
+                                        {/* 数据下载 */}
+                                        <DownloadFile
+                                            file={file}
+                                            filePathUpload={filePathUpload}
+                                            status={status}
+                                        />
+
+                                        {/* 设置为常用文件 */}
                                         <StarCommonFile
-                                            handleCancelStar={handleCancelStar}
-                                            handleSelectStar={handleSelectStar}
-                                            index={index}
+                                            handleUpdateFileList={handleUpdateFileList}
+                                            status={status}
+                                            filePathUpload={filePathUpload}
                                             file={file}
                                         />
+
+                                        {/* 删除文件或文件夹 */}
                                         <DeleteFile
-                                            handleDeleteFile={handleDeleteFile}
-                                            index={index}
+                                            handleUpdateFileList={handleUpdateFileList}
+                                            filePathUpload={filePathUpload}
                                             file={file}
                                         />
                                     </div> : null}
@@ -82,4 +94,4 @@ class CommonFileCard extends React.Component {
     }
 }
 
-export default CommonFileCard;
+export default FileCardWithPath;
