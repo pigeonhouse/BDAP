@@ -31,8 +31,6 @@ class FlowDataModel extends React.Component {
 								elabel: 'datasource',
 							},
 							filePath,
-							attributes: new Array(),
-							newCols: new Array(),
 							anchor: [0, 1],
 							columnsInfo: fileColumnsInfo,
 							keyConfig: {

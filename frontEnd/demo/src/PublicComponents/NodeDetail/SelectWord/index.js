@@ -26,7 +26,9 @@ class SelectWord extends Component {
     }
 
     render() {
-        const { attributes, item } = this.props;
+        const { item } = this.props;
+        const attributes = this.props.attributes || [];
+        
         return (
             <Fragment>
                 {attributes.map((attribute, index) => {

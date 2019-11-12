@@ -17,7 +17,7 @@ class FlowModelPanel extends React.Component {
 		var modelListPanel = new Array();
 
 		for (let i in modelList) {
-			const { name } = modelList[i];
+			const { name, modelId, elabel } = modelList[i];
 			modelListPanel.push(
 				<Menu.Item key={i}><ItemPanel>
 					<Item
@@ -25,14 +25,15 @@ class FlowModelPanel extends React.Component {
 						size="200*40"
 						shape='zero-one'
 						model={{
-							labelName: { 
+							labelName:{
 								label: name,
-								elabel: null
+								elabel
 							},
-							groupName: {
-								label: "已保存的模型",
-								elabel: 'savedModel',
+							groupName:{
+								label: '已保存的模型',
+								elabel: 'savedModel'
 							},
+							modelId,
 							anchor: [0, 1],
 							keyConfig: {
 								color_type: '#1890FF',

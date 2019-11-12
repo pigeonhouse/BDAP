@@ -1,7 +1,6 @@
 import React from 'react';
 import { Minimap, withPropsAPI, Flow } from '@src';
 import ItemDecoration from '../EditorNodePanel/ItemDecoration';
-import FlowNodePanel from '../EditorNodePanel'
 import { downloadStream } from '../../PublicComponents/HandleStream/downloadStream';
 
 class FlowMinimap extends React.Component {

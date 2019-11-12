@@ -81,8 +81,8 @@ class FlowContextMenu extends React.Component {
 						</div>
 					</Command>
 					<DataPreview></DataPreview>
-					<ModelEvaluation></ModelEvaluation>
 					<ModelSaving addModel={this.props.addModel} ></ModelSaving>
+					<ModelEvaluation></ModelEvaluation>
 					{/* {this.modelEvaluation()} */}
 				</NodeMenu>
 

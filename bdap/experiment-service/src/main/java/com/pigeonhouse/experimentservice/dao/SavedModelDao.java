@@ -1,8 +1,6 @@
 package com.pigeonhouse.experimentservice.dao;
 
-import com.pigeonhouse.experimentservice.entity.ExperimentDescription;
 import com.pigeonhouse.experimentservice.entity.SavedModel;
-import com.pigeonhouse.experimentservice.entity.nodeinfo.NodeInfo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;

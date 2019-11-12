@@ -1,4 +1,4 @@
-package com.pigeonhouse.experimentservice.entity;
+package com.pigeonhouse.experimentservice.entity.experiment;
 
 import com.pigeonhouse.experimentservice.entity.edgeinfo.EdgeInfo;
 import com.pigeonhouse.experimentservice.entity.nodeinfo.NodeInfo;

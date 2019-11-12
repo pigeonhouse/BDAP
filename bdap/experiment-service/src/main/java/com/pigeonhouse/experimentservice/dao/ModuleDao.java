@@ -1,5 +1,6 @@
 package com.pigeonhouse.experimentservice.dao;
 
+import com.pigeonhouse.experimentservice.entity.nodeinfo.AlgorithmNodeInfo;
 import com.pigeonhouse.experimentservice.entity.nodeinfo.NodeInfo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.MongoTemplate;
@@ -26,8 +27,8 @@ public class ModuleDao {
     }
 
 
-    public List<NodeInfo> findAll() {
-        return mongoTemplate.find(new Query(), NodeInfo.class);
+    public List<AlgorithmNodeInfo> findAll() {
+        return mongoTemplate.find(new Query(), AlgorithmNodeInfo.class,"nodeInfo");
     }
 
 }

@@ -1,8 +1,8 @@
 package com.pigeonhouse.experimentservice.dao;
 
 
-import com.pigeonhouse.experimentservice.entity.ExperimentDescription;
-import com.pigeonhouse.experimentservice.entity.ExperimentMapInfo;
+import com.pigeonhouse.experimentservice.entity.experiment.ExperimentDescription;
+import com.pigeonhouse.experimentservice.entity.experiment.ExperimentMapInfo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
@@ -21,17 +21,14 @@ public class ExperimentDao {
 
     public List<ExperimentDescription> findExperimentDescriptionByUserId(String userId){
         Query query = new Query(Criteria.where("userId").is(userId));
-        List<ExperimentDescription> experiments = mongoTemplate.find(query, ExperimentDescription.class);
-        return experiments;
+        return mongoTemplate.find(query, ExperimentDescription.class);
 }
 
     public ExperimentMapInfo findExperimentByExperimentIdAndUserId(String experimentId, String userId){
         Query query = new Query(Criteria.where("userId").is(userId)
         .and("experimentId").is(experimentId));
-        ExperimentMapInfo experiment = mongoTemplate.findOne(query,ExperimentMapInfo.class);
-        return experiment;
+        return mongoTemplate.findOne(query,ExperimentMapInfo.class);
     }
-
 
     public void updateExperimentByExperimentIdAndUserId(String experimentId, String userId,ExperimentMapInfo experimentMapInfo){
         Update update = new Update();
@@ -40,7 +37,6 @@ public class ExperimentDao {
         Query query = new Query(Criteria.where("userId").is(userId)
                 .and("experimentId").is(experimentId));
         mongoTemplate.updateFirst(query,update,ExperimentMapInfo.class);
-
     }
 
     public void deleteExperimentByExperimentIdAndUserId(String experimentId, String userId){
@@ -50,12 +46,12 @@ public class ExperimentDao {
         mongoTemplate.remove(query,ExperimentDescription.class);
     }
 
-    public void insertExperiment(ExperimentMapInfo experiment){
-        mongoTemplate.insert(experiment);
+    public void saveExperiment(ExperimentMapInfo experiment){
+        mongoTemplate.save(experiment);
     }
 
-    public void insertDescription(ExperimentDescription description){
-        mongoTemplate.insert(description);
+    public void saveDescription(ExperimentDescription description){
+        mongoTemplate.save(description);
     }
 
 }

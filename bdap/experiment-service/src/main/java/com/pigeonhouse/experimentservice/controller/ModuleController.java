@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.pigeonhouse.experimentservice.dao.ModuleDao;
 import com.pigeonhouse.experimentservice.dao.SavedModelDao;
 import com.pigeonhouse.experimentservice.entity.SavedModel;
+import com.pigeonhouse.experimentservice.entity.nodeinfo.AlgorithmNodeInfo;
 import com.pigeonhouse.experimentservice.entity.nodeinfo.NodeInfo;
 import com.pigeonhouse.experimentservice.util.TokenParser;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,7 +25,7 @@ public class ModuleController {
 
     @GetMapping("/module")
     public ResponseEntity moduleInfo() {
-        List<NodeInfo> moduleList = moduleDao.findAll();
+        List<AlgorithmNodeInfo> moduleList = moduleDao.findAll();
         return ResponseEntity.ok(moduleList);
     }
 

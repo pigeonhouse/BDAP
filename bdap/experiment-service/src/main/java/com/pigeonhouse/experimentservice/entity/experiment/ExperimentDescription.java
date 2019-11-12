@@ -1,4 +1,4 @@
-package com.pigeonhouse.experimentservice.entity;
+package com.pigeonhouse.experimentservice.entity.experiment;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

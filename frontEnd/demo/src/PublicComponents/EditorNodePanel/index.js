@@ -57,7 +57,7 @@ class FlowNodePanel extends React.Component {
     }
 
     async fetchModels() {
-        const response = await fetchTool("/filesystem-service/model", init);
+        const response = await fetchTool("/experiment-service/model", init);
         return await response.json();
     }
 

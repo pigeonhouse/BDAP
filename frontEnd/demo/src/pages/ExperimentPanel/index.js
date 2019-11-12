@@ -97,7 +97,6 @@ class ExperimentPanel extends Component {
                             <FlowToolbar
                                 experiment={this.state.experiment}
                                 handleSaveStream={this.handleSaveStream}
-                                addModel={this.addModel}
                             />
                         </div>
                         <Flow style={{ height: 'calc(100vh - 142px)' }}
@@ -110,7 +109,7 @@ class ExperimentPanel extends Component {
                         </div>
                     </Col>
                 </Row>
-                <FlowContextMenu />
+                <FlowContextMenu addModel={this.addModel} />
                 <SparkRunning running={this.props.running} stopRunning={this.props.stopRunning} ></SparkRunning>
                 <LoadStream experiment={this.state.experiment} ></LoadStream>
             </GGEditor>

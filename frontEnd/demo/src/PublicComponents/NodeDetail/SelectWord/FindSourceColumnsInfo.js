@@ -27,7 +27,7 @@ function findColumnsInfoFunction(node, anchor, propsAPI) {
                 return findColumnsInfoFunction(sourceNode, 0, propsAPI);
             }
             let { labelName, attributes, columnsInfo, newCols } = sourceNode.getModel();
-            columnsInfo = JSON.parse(JSON.stringify(columnsInfo)) || [];
+            columnsInfo = JSON.parse(JSON.stringify(columnsInfo || []));
             attributes = attributes || [];
             newCols = newCols || [];
 

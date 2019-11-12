@@ -31,7 +31,7 @@ class SparkRunning extends Component {
 		const init = {
 			method: 'POST',
 			mode: 'cors',
-			body: JSON.stringify(stream),
+			body: JSON.stringify({ nodes: stream.nodes }),
 			headers: {
 				"Content-Type": "application/json;charset=utf-8"
 			},

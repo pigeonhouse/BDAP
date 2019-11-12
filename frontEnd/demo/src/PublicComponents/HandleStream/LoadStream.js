@@ -25,6 +25,7 @@ class LoadStream extends React.Component {
         if (experiment === null) return;
 
         const flowInfo = await this.fetchModalStream(experiment);
+        console.log(flowInfo)
         const { nodes, edges } = flowInfo;
         const flow = { edges, nodes: downloadStream(nodes) };
         

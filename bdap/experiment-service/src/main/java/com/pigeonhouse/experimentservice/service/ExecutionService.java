@@ -1,15 +1,15 @@
 package com.pigeonhouse.experimentservice.service;
 
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONObject;
 import com.pigeonhouse.experimentservice.entity.LivySessionInfo;
-import com.pigeonhouse.experimentservice.entity.nodeinfo.ExecutionInfo;
-import com.pigeonhouse.experimentservice.entity.nodeinfo.NodeInfo;
+import com.pigeonhouse.experimentservice.entity.nodeinfo.*;
 import com.pigeonhouse.experimentservice.entity.nodeinfo.attrinfo.AttrInfo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.util.ClassUtils;
 
 import java.io.BufferedReader;
-import java.io.FileInputStream;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
@@ -21,58 +21,55 @@ public class ExecutionService {
     @Autowired
     LivyService livyService;
 
-    /**
-     * 给代码传入参数
-     *
-     * @param nodeInfo
-     * @return 完整spark代码
-     */
-    public String generateCode(NodeInfo nodeInfo, String userId, String modelType) {
-
-        //是否是输入的文件模块
+    private String generateDataSourceCode(DataSourceNodeInfo nodeInfo, String userId) {
         String filePath = nodeInfo.getFilePath();
         String fileName = nodeInfo.getLabelName().getLabel();
-        if (filePath != null) {
-            String id = nodeInfo.getId();
-            return "val output = spark.read.orc(\"hdfs:///bdap/students/" + userId + filePath + fileName + "\")\n" +
-                    "dfMap += (\"" + id + "_0" + "\" -> output)\n\n";
-        }
+        String id = nodeInfo.getId();
+        return "val output = spark.read.orc(\"hdfs:///bdap/students/" + userId + filePath + fileName + "\")\n" +
+                "dfMap += (\"" + id + "_0" + "\" -> output)\n\n";
+    }
 
-        //----------------------根据锚点判断是否需要注入输入参数的语句--------------------
+    private String generateSavedModelCode(SavedModelNodeInfo nodeInfo, String userId) {
+        String id = nodeInfo.getId();
+        String modelType = nodeInfo.getLabelName().getElabel();
+        return "val Model = " + modelType + "Model.load(\"hdfs:///bdap/students/" + userId + "/savedModels/" + nodeInfo.getModelId() + "\")\n" +
+                "modelMap += (\"" + id + "_0\" -> (\"" + modelType + "Model\" , Model)) \n";
+    }
+
+    private String getInputCodeForPrediction(AlgorithmNodeInfo nodeInfo, String modelType) {
+        String[] sourceIdList = nodeInfo.getSourceIdList();
+        return "val Model: " + modelType + "Model = modelMap(\"" + sourceIdList[0] + "\")._2.asInstanceOf[" + modelType + "Model]\n" +
+                "val input = Model\n" +
+                "val input_1 = dfMap(\"" + sourceIdList[1] + "\")\n";
+    }
+
+    private String getInputCode(AlgorithmNodeInfo nodeInfo) {
         int[] anchor = nodeInfo.getAnchor();
         int numberOfInput = anchor[0];
-        int numberOfOutput = anchor[1];
+
         String[] sourceIdList = nodeInfo.getSourceIdList();
-        System.out.println();
         StringBuilder inputCodeBuilder = new StringBuilder();
         String inputName = "input";
 
         //判断有几个输入,input,input_1,input_2...以此类推
         for (int i = 0; i < numberOfInput; i++) {
-
-            if (("prediction").equals(nodeInfo.getGroupName().getElabel()) && i == 0) {
-                inputName = "Model";
-                inputCodeBuilder.append("val " + inputName + ": " + modelType + "Model = modelMap(\"" + sourceIdList[i] + "\")._2.asInstanceOf["+ modelType +"Model]\n");
-                continue;
-            }
-
             if (i != 0) {
                 inputName = "input_" + i;
             }
             //从dfMap中取出存过的dataframe
             inputCodeBuilder.append("val " + inputName + " = dfMap(\"" + sourceIdList[i] + "\")\n");
         }
+        return inputCodeBuilder.toString() + "\n";
+    }
 
-        String inputCode = inputCodeBuilder.append("\n").toString();
-        //-------------------------取出代码文件中的代码段------------------------------
-
+    private String getInnerCode(AlgorithmNodeInfo nodeInfo) {
         StringBuilder originCodeBuilder = new StringBuilder();
         try {
-            InputStream inputStream = this.getClass().getResourceAsStream("/static/"+nodeInfo.getGroupName().getElabel() + "/"
+            InputStream inputStream = this.getClass().getResourceAsStream("/static/" + nodeInfo.getGroupName().getElabel() + "/"
                     + nodeInfo.getLabelName().getElabel() + ".scala");
             //代码段编码改为UTF-8
             BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream, StandardCharsets.UTF_8));
-            String str = null;
+            String str;
             while ((str = bufferedReader.readLine()) != null) {
                 originCodeBuilder.append("\n").append(str);
             }
@@ -83,16 +80,14 @@ public class ExecutionService {
         }
         String originCode = originCodeBuilder.toString();
 
-        //取出main函数里面的代码
-        System.out.println(Arrays.toString(originCode.split("def\\smain.*\\{")));
-
         String innerCode = originCode.split("def\\smain.*\\{")[1]
                 .split("(\\}\\s*)$")[0]
                 .split("(\\}\\s*)$")[0];
 
+        return innerCode + "\n";
+    }
 
-        //---------------下面开始构造参数赋值语句---------------------
-
+    private String getAttrsCode(AlgorithmNodeInfo nodeInfo) {
         StringBuilder attrsCodeBuilder = new StringBuilder();
 
         ArrayList<AttrInfo> attributes = nodeInfo.getAttributes();
@@ -104,7 +99,7 @@ public class ExecutionService {
 
                 //参数为数组类型，主要用于选择字段的参数
                 if ("Array[String]".equals(attrType)) {
-                    ArrayList<String> colNames = (ArrayList<String>) value;
+                    JSONArray colNames = (JSONArray) value;
                     StringBuilder colNameBuilder = new StringBuilder();
                     if (colNames != null) {
                         //以Array("","")的类型写入scala
@@ -130,110 +125,126 @@ public class ExecutionService {
                         .append("\n");
             }
         }
-        String attrsCode = attrsCodeBuilder.toString();
-
-        //----------------------------------------------------
-        // 接下去在代码末尾将output以前端生成的id为key，dataframe本身为value存在Map中
-
-        StringBuilder mappingDfCode = new StringBuilder();
-        for (int i = 0; i < numberOfOutput; i++) {
-            if (!"machinelearning".equals(nodeInfo.getGroupName().getElabel())) {
-                String id = nodeInfo.getId();
-                if (i == 0) {
-                    mappingDfCode.append("\ndfMap += (\"" + id + "_" + i + "\" -> output)\n\n");
-                } else {
-                    mappingDfCode.append("\ndfMap += (\"" + id + "_" + i + "\" -> output_" + i + ")\n\n");
-                }
-            } else {
-                String id = nodeInfo.getId();
-                mappingDfCode.append("modelMap += (\"").append(id).append("_").append(i).append("\" -> (\"" + nodeInfo.getLabelName().getElabel() + "Model\" , Model)) \n");
-            }
-        }
-
-        //把评估结果加入evaluationMap
-        if ("evaluation".equals(nodeInfo.getGroupName().getElabel())){
-            String id = nodeInfo.getId();
-            mappingDfCode.append("evaluationMap += (\"" + id + "_0\" -> evaluationResult)\n");
-        }
-
-
-        return inputCode + attrsCode + innerCode + mappingDfCode;
+        return attrsCodeBuilder.toString() + "\n";
     }
 
-    /**
-     * 执行所有节点
-     * 初始化代码
-     * for 节点：节点集
-     * 从数据库拿出代码填入参数
-     * 代码拼接
-     * 传参需要上下节点的信息
-     *
-     * @param flowInfo
-     * @return
-     */
-    public List<ExecutionInfo> executeFlow(List<NodeInfo> flowInfo, LivySessionInfo livySessionInfo, String userId) {
+    private String getOutPutCodeForML(AlgorithmNodeInfo nodeInfo) {
+        String id = nodeInfo.getId();
+        return "modelMap += (\"" + id + "_0\" -> (\"" + nodeInfo.getLabelName().getElabel() + "Model\" , Model)) \n";
+    }
+
+    private String getOutPutCodeForEvaluation(AlgorithmNodeInfo nodeInfo) {
+        String id = nodeInfo.getId();
+        return "evaluationMap += (\"" + id + "_0\" -> evaluationResult)\n";
+    }
+
+    private String getOutPutCode(AlgorithmNodeInfo nodeInfo) {
+        int[] anchor = nodeInfo.getAnchor();
+        int numberOfOutput = anchor[1];
+        StringBuilder outputCode = new StringBuilder();
+        String id = nodeInfo.getId();
+        for (int i = 0; i < numberOfOutput; i++) {
+            outputCode.append("\ndfMap += (\"" + id + "_" + i + "\" -> output" + (i == 0 ? "" : ("_" + i)) + " )\n\n");
+        }
+        return outputCode.toString() + "\n";
+    }
+
+    private String generateCode(AlgorithmNodeInfo nodeInfo, List<NodeInfo> flowInfo) {
+
+        String inputCode = "";
+        if ("prediction".equals(nodeInfo.getGroupName().getElabel())) {
+            String modelType = "";
+            for (NodeInfo anotherNode : flowInfo) {
+                if ((anotherNode.getId()+"_0").equals(nodeInfo.getSourceIdList()[0])) {
+                    modelType = anotherNode.getLabelName().getElabel();
+                }
+            }
+            inputCode = getInputCodeForPrediction(nodeInfo, modelType);
+        } else {
+            inputCode = getInputCode(nodeInfo);
+        }
+
+        String innerCode = getInnerCode(nodeInfo);
+        String attrsCode = getAttrsCode(nodeInfo);
+        String outputCode;
+        if ("machinelearning".equals(nodeInfo.getGroupName().getElabel())) {
+            outputCode = getOutPutCodeForML(nodeInfo);
+        } else if ("evaluation".equals(nodeInfo.getGroupName().getElabel())) {
+            outputCode = getOutPutCodeForEvaluation(nodeInfo);
+        } else {
+            outputCode = getOutPutCode(nodeInfo);
+        }
+        return inputCode + attrsCode + innerCode + outputCode;
+    }
+
+    public List<ExecutionInfo> executeFlow(JSONArray flowInfo, LivySessionInfo livySessionInfo, String userId) {
         List<ExecutionInfo> executionInfoList = new ArrayList<>();
         StringBuilder codeToRun = new StringBuilder();
         codeToRun.append("var dfMap: Map[String, org.apache.spark.sql.DataFrame] = Map() \n");
         codeToRun.append("var evaluationMap: Map[String, String] = Map()\n");
         codeToRun.append("var modelMap: Map[String, (String, Any)] = Map() \n");
-        Map<String, String> modelType = new HashMap<>();
-        for (NodeInfo nodeInfo : flowInfo) {
-            System.out.println(nodeInfo);
-            String nodeCode = null;
+        List<NodeInfo> flow = new ArrayList<>();
+        for (Object nodeInfo : flowInfo) {
+            JSONObject node = (JSONObject) nodeInfo;
+            JSONObject groupName = (JSONObject)node.get("groupName");
+            String type = groupName.get("elabel").toString();
+            NodeInfo curNode;
+            String nodeCode;
 
-            if(("machinelearning").equals(nodeInfo.getGroupName().getElabel())){
-                modelType.put(nodeInfo.getId() + "_0", nodeInfo.getLabelName().getElabel());
-            }
-
-            if (("prediction").equals(nodeInfo.getGroupName().getElabel())){
-                nodeCode = generateCode(nodeInfo, userId, modelType.get(nodeInfo.getSourceIdList()[0]));
-            } else{
-                nodeCode = generateCode(nodeInfo, userId, null);
+            flow.add(JSON.toJavaObject(node,NodeInfo.class));
+            if("datasource".equals(type)){
+                curNode = JSON.toJavaObject(node,DataSourceNodeInfo.class);
+                nodeCode = generateDataSourceCode((DataSourceNodeInfo) curNode, userId);
+            }else if("savedModel".equals(type)){
+                curNode = JSON.toJavaObject(node,SavedModelNodeInfo.class);
+                nodeCode = generateSavedModelCode((SavedModelNodeInfo) curNode, userId);
+            }else{
+                curNode = JSON.toJavaObject(node,AlgorithmNodeInfo.class);
+                nodeCode = generateCode((AlgorithmNodeInfo) curNode, flow);
             }
 
             codeToRun.append(nodeCode);
 
             //提交代码，得到一个url，用于前端轮询以查询这次job运行状态
-            String resultUrl = livyService.postCode(livySessionInfo, codeToRun.toString(),userId);
+            String resultUrl = livyService.postCode(livySessionInfo, codeToRun.toString(), userId);
             System.out.println("success!\n" + resultUrl);
 
             //清空原先的代码，准备下一次提交
             codeToRun = new StringBuilder();
-            ExecutionInfo executionInfo = new ExecutionInfo(nodeInfo.getId(), resultUrl);
+            ExecutionInfo executionInfo = new ExecutionInfo(curNode.getId(), resultUrl);
             executionInfoList.add(executionInfo);
         }
-        String resultUrl = livyService.postCode(livySessionInfo, codeToRun.toString(),userId);
+        String resultUrl = livyService.postCode(livySessionInfo, codeToRun.toString(), userId);
         System.out.println("success!\n" + resultUrl);
         return executionInfoList;
     }
 
-
-    /**
-     * 用于压力测试
-     * 将所有语句放在一起执行
-     *
-     * @param flowInfo
-     * @param livySessionInfo
-     * @return
-     */
-    public List<ExecutionInfo> executeFlowForTest(List<NodeInfo> flowInfo, LivySessionInfo livySessionInfo, String userId) {
-        List<ExecutionInfo> executionInfoList = new ArrayList<>();
-        StringBuilder codeToRun = new StringBuilder();
-        codeToRun.append("var dfMap: Map[String, org.apache.spark.sql.DataFrame] = Map() \n");
-        String modelType = null;
-        for (NodeInfo nodeInfo : flowInfo) {
-
-            if(("machinelearning").equals(nodeInfo.getGroupName().getElabel())){
-                modelType = nodeInfo.getLabelName().getElabel();
-            }
-
-            String nodeCode = generateCode(nodeInfo, userId, modelType);
-            codeToRun.append(nodeCode);
-        }
-        String resultUrl = livyService.postCode(livySessionInfo, codeToRun.toString(),userId);
-        System.out.println("success!\n" + resultUrl);
-        return executionInfoList;
-    }
+//
+//    /**
+//     * 用于压力测试
+//     * 将所有语句放在一起执行
+//     *
+//     * @param flowInfo
+//     * @param livySessionInfo
+//     * @return
+//     */
+//    public List<ExecutionInfo> executeFlowForTest(List<NodeInfo> flowInfo, LivySessionInfo livySessionInfo, String userId) {
+//        List<ExecutionInfo> executionInfoList = new ArrayList<>();
+//        StringBuilder codeToRun = new StringBuilder();
+//        codeToRun.append("var dfMap: Map[String, org.apache.spark.sql.DataFrame] = Map() \n");
+//        String modelType = null;
+//        for (NodeInfo nodeInfo : flowInfo) {
+//
+//            if (("machinelearning").equals(nodeInfo.getGroupName().getElabel())) {
+//                modelType = nodeInfo.getLabelName().getElabel();
+//            }
+//
+//            String nodeCode = generateCode(nodeInfo, userId, modelType);
+//            codeToRun.append(nodeCode);
+//        }
+//        String resultUrl = livyService.postCode(livySessionInfo, codeToRun.toString(), userId);
+//        System.out.println("success!\n" + resultUrl);
+//        return executionInfoList;
+//    }
 
 }

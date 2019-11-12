@@ -4,9 +4,8 @@ export function downloadStream(nodesList) {
     let nodes = new Array();
 
     nodesList.map((node, index) => {
-        const { x, y, anchor, filePath } = node;
-
-        delete node.sourceIdList;
+        var { x, y, anchor } = node;
+        anchor = anchor || [0, 1];
 
         var addAttributes = {
             keyConfig: {
@@ -21,11 +20,11 @@ export function downloadStream(nodesList) {
             index,
         }
 
-        if (filePath !== undefined) {
-            addAttributes.filePath = filePath;
+        if (node.anchor === undefined) {
+            addAttributes.anchor = anchor;
         }
 
-        nodes.push({...node, ...addAttributes});
+        nodes.push({ ...node, ...addAttributes });
     })
 
     console.log(nodes)

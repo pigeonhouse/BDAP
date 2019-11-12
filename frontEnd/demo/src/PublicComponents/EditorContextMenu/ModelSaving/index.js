@@ -54,7 +54,7 @@ class ModelSaving extends Component {
             },
             credentials: 'include'
         }
-        const url = `/flow/node/model/${item.id}`;
+        const url = `/experiment-service/flow/node/model/${item.id}`;
         const response = await fetchTool(url, init);
 
         if (response.status === 200) {
