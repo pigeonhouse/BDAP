@@ -281,18 +281,12 @@ class DataSetPanel extends React.Component {
         });
     }
 
-    onBack = () => {
-        const resFile = [
-            { fileName: "adult_1", fileFolder: true },
-            { fileName: "adult_2", fileFolder: true },
-            { fileName: "adult_3", fileFolder: true },
-            { fileName: "adult1.csv", fileFolder: false, activeFile: false },
-            { fileName: "adult2.csv", fileFolder: false, activeFile: true },
-            { fileName: "adult3.csv", fileFolder: false, activeFile: false },
-            { fileName: "adult4.csv", fileFolder: false, activeFile: false },
-            { fileName: "adult5.csv", fileFolder: false, activeFile: true },
-        ]
-        this.setState({ fileList: resFile, isCommonly: false, filePath: [] })
+    onBack = async () => {
+        const { filePath} = this.state;
+        filePath.pop();
+        this.setState({filePath});
+        this.handleUpdateFileList();
+        
     }
 
     _handleDownloadFile = async (index) => {
