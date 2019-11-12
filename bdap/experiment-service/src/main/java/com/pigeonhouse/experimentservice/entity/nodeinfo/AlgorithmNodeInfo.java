@@ -31,5 +31,5 @@ public class AlgorithmNodeInfo extends NodeInfo {
      */
     private ArrayList<AttrInfo> attributes;
 
-
+    private LabelName algorithmType;
 }

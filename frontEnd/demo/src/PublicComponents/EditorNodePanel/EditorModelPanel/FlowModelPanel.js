@@ -17,7 +17,11 @@ class FlowModelPanel extends React.Component {
 		var modelListPanel = new Array();
 
 		for (let i in modelList) {
-			const { name, modelId, elabel } = modelList[i];
+			const model = JSON.parse(JSON.stringify(modelList[i]));
+			const { name, elabel } = modelList[i];
+			delete model.name;
+			delete model.elabel;
+
 			modelListPanel.push(
 				<Menu.Item key={i}><ItemPanel>
 					<Item
@@ -33,7 +37,7 @@ class FlowModelPanel extends React.Component {
 								label: '已保存的模型',
 								elabel: 'savedModel'
 							},
-							modelId,
+							...model,
 							anchor: [0, 1],
 							keyConfig: {
 								color_type: '#1890FF',

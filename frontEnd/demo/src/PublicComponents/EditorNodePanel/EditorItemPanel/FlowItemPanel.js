@@ -30,12 +30,13 @@ class FlowItemModel extends React.Component {
 		return `${head}-${tail}`;
 	}
 
-	createItemPanel = (itemList, group) => {
+	createItemPanel = (itemList, group, name) => {
 		var nodesModel = new Array();
 		itemList = itemList || [];
 
 		itemList.map((item, index) => {
-			if (item.groupName.elabel !== group) return;
+		
+			if (item[name] === null || item[name].elabel !== group) return;
 
 			delete item.id;
 			delete item.sourceIdList;
@@ -76,25 +77,42 @@ class FlowItemModel extends React.Component {
 					key="preprocessing"
 					title={<span><Icon type="code" /><span>数据预处理</span></span>}
 				>
-					{this.createItemPanel(moduleNodesList, "preprocessing")}
+					{this.createItemPanel(moduleNodesList, "preprocessing", "groupName")}
 				</SubMenu>
 				<SubMenu
 					key="machinelearning"
 					title={<span><Icon type="calculator" /><span>机器学习</span></span>}
 				>
-					{this.createItemPanel(moduleNodesList, "machinelearning")}
+					<SubMenu
+						key="classification"
+						title={<span><Icon type="calculator" /><span>分类</span></span>}
+					>
+						{this.createItemPanel(moduleNodesList, "classification", "algorithmType")}
+					</SubMenu>
+					<SubMenu
+						key="regression"
+						title={<span><Icon type="calculator" /><span>回归</span></span>}
+					>
+						{this.createItemPanel(moduleNodesList, "regression", "algorithmType")}
+					</SubMenu>
+					<SubMenu
+						key="clustering"
+						title={<span><Icon type="calculator" /><span>聚类</span></span>}
+					>
+						{this.createItemPanel(moduleNodesList, "clustering", "algorithmType")}
+					</SubMenu>
 				</SubMenu>
 				<SubMenu
 					key="evaluation"
 					title={<span><Icon type="calculator" /><span>评估</span></span>}
 				>
-					{this.createItemPanel(moduleNodesList, "evaluation")}
+					{this.createItemPanel(moduleNodesList, "evaluation", "groupName")}
 				</SubMenu>
 				<SubMenu
 					key="prediction"
 					title={<span><Icon type="calculator" /><span>预测</span></span>}
 				>
-					{this.createItemPanel(moduleNodesList, "prediction")}
+					{this.createItemPanel(moduleNodesList, "prediction", "groupName")}
 				</SubMenu>
 			</Menu>
 		);

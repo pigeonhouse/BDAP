@@ -58,16 +58,6 @@ public class StorageController {
         return new ResponseEntity(HttpStatus.OK);
     }
 
-//    @PutMapping("/experiments/{experimentId}")
-//    public ResponseEntity updateExperiment(@RequestBody ExperimentMapInfo experimentMapInfo,
-//                                           @PathVariable String experimentId,
-//                                           @RequestHeader("token") String token) {
-//        System.out.println("update");
-//        String userId = TokenParser.getClaimsFromToken(token).get("userId").asString();
-//        experimentDao.updateExperimentByExperimentIdAndUserId(experimentId, userId, experimentMapInfo);
-//        return new ResponseEntity(HttpStatus.OK);
-//    }
-
     @PutMapping("/experiments")
     public ResponseEntity uploadNewExperiment(@RequestBody JSONObject descriptionAndMapInfo,
                                               @RequestHeader("token") String token) {

@@ -14,4 +14,5 @@ public class SavedModel  implements Serializable {
     String userId;
     String name;
     String elabel;
+    String algorithmType;
 }

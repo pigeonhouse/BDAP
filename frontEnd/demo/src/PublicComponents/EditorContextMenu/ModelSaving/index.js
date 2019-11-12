@@ -47,7 +47,8 @@ class ModelSaving extends Component {
             body: JSON.stringify({
                 modelId: this.generateUUID(),
                 name: value,
-                elabel: item.getModel().labelName.elabel
+                elabel: item.getModel().labelName.elabel,
+                algorithmType: item.getModel().algorithmType.elabel
             }),
             headers: {
                 "Content-Type": "application/json;charset=utf-8"
