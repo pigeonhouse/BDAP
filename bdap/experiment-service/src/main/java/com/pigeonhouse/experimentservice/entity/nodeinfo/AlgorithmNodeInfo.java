@@ -5,12 +5,13 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class AlgorithmNodeInfo extends NodeInfo {
+public class AlgorithmNodeInfo extends NodeInfo implements Serializable {
     /**
      * 这个节点的源点Id集合
      */

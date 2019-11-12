@@ -5,11 +5,13 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.io.Serializable;
+
 
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class SelectStyle {
+public class SelectStyle implements Serializable {
 
     /**
      * 下拉菜单显示的参数值，

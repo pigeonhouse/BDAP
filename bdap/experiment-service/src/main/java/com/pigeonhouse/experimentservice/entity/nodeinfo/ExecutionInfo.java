@@ -4,6 +4,8 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.io.Serializable;
+
 /**
  * 在前端提交工作流后
  * 给前端返回此对象组成的数组
@@ -15,7 +17,7 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class ExecutionInfo {
+public class ExecutionInfo implements Serializable {
     String id;
     String resultUrl;
 }

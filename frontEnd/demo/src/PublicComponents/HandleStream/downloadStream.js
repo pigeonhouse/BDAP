@@ -2,6 +2,7 @@ export function downloadStream(nodesList) {
     if (nodesList === undefined || nodesList === null) return null;
 
     let nodes = new Array();
+    console.log(nodesList)
 
     nodesList.map((node, index) => {
         var { x, y, anchor } = node;
