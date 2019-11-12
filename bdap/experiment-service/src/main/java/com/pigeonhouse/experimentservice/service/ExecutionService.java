@@ -91,7 +91,18 @@ public class ExecutionService {
     private String getAttrsCode(AlgorithmNodeInfo nodeInfo) {
         StringBuilder attrsCodeBuilder = new StringBuilder();
 
+        if(nodeInfo.getNewCols() != null) {
+            if (("prefix").equals(nodeInfo.getNewCols().get(0).getMode())) {
+                attrsCodeBuilder.append("val prefix: String = \"" + nodeInfo.getNewCols().get(0).getValue() + "\"\n");
+            } else {
+                for (NewCol newCol : nodeInfo.getNewCols()) {
+                    attrsCodeBuilder.append("val newCol: String = \"" + newCol.getValue() + "\"\n");
+                }
+            }
+        }
+
         ArrayList<AttrInfo> attributes = nodeInfo.getAttributes();
+
         if (attributes != null) {
             for (AttrInfo attr : attributes) {
                 String attrName = attr.getLabelName().getElabel();

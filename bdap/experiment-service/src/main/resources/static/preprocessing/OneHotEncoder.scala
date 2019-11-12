@@ -32,14 +32,15 @@ object OneHotEncoder {
       indexedDF = indexerModel.transform(indexedDF)
     }
 
-    val encoder = new OneHotEncoderEstimator().setInputCols(targetCols.map(A => A + "Index")).setOutputCols(targetCols.map(A => prefix + A + "SparseVec")).setHandleInvalid(handleInvalid).setDropLast(dropLast)
+    val encoder = new OneHotEncoderEstimator().setInputCols(targetCols.map(A => A + "Index")).setOutputCols(targetCols.map(A => prefix + A)).setHandleInvalid(handleInvalid).setDropLast(dropLast)
     val encoderModel = encoder.fit(indexedDF)
     var encodedDF = encoderModel.transform(indexedDF)
 
     for(i <- 0 until targetCols.length){
       encodedDF = encodedDF.drop(targetCols(i) + "Index")
       if(ifDenseVector == true){
-        encodedDF = encodedDF.withColumn(prefix + targetCols(i) + "DenseVec", myUdf(col(prefix + targetCols(i) + "SparseVec"))).drop(prefix + targetCols(i) + "SparseVec")
+        encodedDF = encodedDF.withColumn(prefix + targetCols(i) + "_", myUdf(col(prefix + targetCols(i)))).drop(prefix + targetCols(i))
+        encodedDF = encodedDF.withColumnRenamed(prefix + targetCols(i) + "_", prefix + targetCols(i))
       }
     }
 

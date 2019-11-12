@@ -11,18 +11,23 @@ object QuantileDiscretizer {
   val relativeError: Double = null
   //Relative error (see documentation for org.apache.spark.sql.DataFrameStatFunctions.approxQuantile for description) Must be in the range [0, 1].
 
-  val newColName: String = null
-
   val input: DataFrame = null
+
+  val prefix: String = null
 
   def main(args: Array[String]): Unit = {
     import org.apache.spark.ml.feature.QuantileDiscretizer
     import org.apache.spark.sql.DataFrame
-    val qd = new QuantileDiscretizer().setHandleInvalid(handleInvalid).setInputCol(inputCols(0)).setOutputCol(newColName).setNumBuckets(numBuckets)
-    val Model = qd.fit(input)
 
-    val df = Model.transform(input)
-    df.show(100)
-    val output = df
+    val metaData = input
+
+    var discretized = metaData
+
+    for(i <- 0 until inputCols.length) {
+      val qd = new QuantileDiscretizer().setHandleInvalid(handleInvalid).setInputCol(inputCols(i)).setOutputCol(prefix + inputCols(i)).setNumBuckets(numBuckets)
+      val Model = qd.fit(discretized)
+      discretized = Model.transform(discretized)
+    }
+    val output = discretized
   }
 }
