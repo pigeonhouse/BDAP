@@ -96,7 +96,7 @@ public class HdfsService {
             Map<String, Object> fileMap = new HashMap<>(3);
             String[] pathBuf = status.getPath().toString().split("/");
             String name = pathBuf[pathBuf.length - 1];
-            if (name.startsWith(".") || name.startsWith("#")) {
+            if (name.startsWith(".") || name.startsWith("#") || "savedModels".equals(name)) {
                 continue;
             }
             fileMap.put("fileName", name);

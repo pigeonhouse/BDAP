@@ -8,7 +8,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class SavedModelNodeInfo extends NodeInfo{
-    String modelId;
-    String name;
-
+    private String modelId;
+    private String name;
+    private String algorithmType;
 }

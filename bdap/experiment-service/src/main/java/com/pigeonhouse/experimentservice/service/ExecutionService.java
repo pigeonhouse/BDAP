@@ -32,7 +32,8 @@ public class ExecutionService {
     private String generateSavedModelCode(SavedModelNodeInfo nodeInfo, String userId) {
         String id = nodeInfo.getId();
         String modelType = nodeInfo.getLabelName().getElabel();
-        return "val Model = " + modelType + "Model.load(\"hdfs:///bdap/students/" + userId + "/savedModels/" + nodeInfo.getModelId() + "\")\n" +
+        return "import org.apache.spark.ml." + nodeInfo.getAlgorithmType() + "." + modelType + "Model\n" +
+                "val Model = " + modelType + "Model.load(\"hdfs:///bdap/students/" + userId + "/savedModels/" + nodeInfo.getModelId() + "\")\n" +
                 "modelMap += (\"" + id + "_0\" -> (\"" + modelType + "Model\" , Model)) \n";
     }
 
@@ -130,7 +131,9 @@ public class ExecutionService {
 
     private String getOutPutCodeForML(AlgorithmNodeInfo nodeInfo) {
         String id = nodeInfo.getId();
-        return "modelMap += (\"" + id + "_0\" -> (\"" + nodeInfo.getLabelName().getElabel() + "Model\" , Model)) \n";
+        //为保存做准备，在算法里就不用再引model的库了
+        return "import org.apache.spark.ml." + nodeInfo.getAlgorithmType().getElabel() + "." + nodeInfo.getLabelName().getElabel() + "Model\n" +
+                "modelMap += (\"" + id + "_0\" -> (\"" + nodeInfo.getLabelName().getElabel() + "Model\" , Model)) \n";
     }
 
     private String getOutPutCodeForEvaluation(AlgorithmNodeInfo nodeInfo) {
@@ -155,7 +158,7 @@ public class ExecutionService {
         if ("prediction".equals(nodeInfo.getGroupName().getElabel())) {
             String modelType = "";
             for (NodeInfo anotherNode : flowInfo) {
-                if ((anotherNode.getId()+"_0").equals(nodeInfo.getSourceIdList()[0])) {
+                if ((anotherNode.getId() + "_0").equals(nodeInfo.getSourceIdList()[0])) {
                     modelType = anotherNode.getLabelName().getElabel();
                 }
             }
@@ -186,20 +189,20 @@ public class ExecutionService {
         List<NodeInfo> flow = new ArrayList<>();
         for (Object nodeInfo : flowInfo) {
             JSONObject node = (JSONObject) nodeInfo;
-            JSONObject groupName = (JSONObject)node.get("groupName");
+            JSONObject groupName = (JSONObject) node.get("groupName");
             String type = groupName.get("elabel").toString();
             NodeInfo curNode;
             String nodeCode;
 
-            flow.add(JSON.toJavaObject(node,NodeInfo.class));
-            if("datasource".equals(type)){
-                curNode = JSON.toJavaObject(node,DataSourceNodeInfo.class);
+            flow.add(JSON.toJavaObject(node, NodeInfo.class));
+            if ("datasource".equals(type)) {
+                curNode = JSON.toJavaObject(node, DataSourceNodeInfo.class);
                 nodeCode = generateDataSourceCode((DataSourceNodeInfo) curNode, userId);
-            }else if("savedModel".equals(type)){
-                curNode = JSON.toJavaObject(node,SavedModelNodeInfo.class);
+            } else if ("savedModel".equals(type)) {
+                curNode = JSON.toJavaObject(node, SavedModelNodeInfo.class);
                 nodeCode = generateSavedModelCode((SavedModelNodeInfo) curNode, userId);
-            }else{
-                curNode = JSON.toJavaObject(node,AlgorithmNodeInfo.class);
+            } else {
+                curNode = JSON.toJavaObject(node, AlgorithmNodeInfo.class);
                 nodeCode = generateCode((AlgorithmNodeInfo) curNode, flow);
             }
 
