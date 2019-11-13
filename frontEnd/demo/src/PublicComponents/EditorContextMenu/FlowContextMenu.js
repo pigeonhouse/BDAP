@@ -17,17 +17,17 @@ import ModelSaving from './ModelSaving';
 
 class FlowContextMenu extends React.Component {
 
-	modelEvaluation = () => {//模型评估
+	modelEvaluation = () => {
 		const { propsAPI } = this.props;
-		const { getSelected, save } = propsAPI;
-		console.log(getSelected, save());
-		if (propsAPI === undefined) return <Fragment></Fragment>
+		const { getSelected } = propsAPI;
 		const item = getSelected()[0];
+		if (item === undefined) return false;
 		const { groupName } = item.getModel();
-		return groupName.elabel === 'evaluation' ? <ModelEvaluation></ModelEvaluation> : null;
+		return groupName.elabel === 'evaluation' ? true : false;
 	}
 
 	render() {
+		const self = this;
 
 		return (
 			<ContextMenu className={styles.contextMenu}>
@@ -50,7 +50,7 @@ class FlowContextMenu extends React.Component {
 							{
 								queue: true,
 								enable(editor) {
-									return true;
+									return self.modelEvaluation();
 								},
 							}
 						}
