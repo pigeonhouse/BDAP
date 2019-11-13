@@ -42,9 +42,10 @@ class StarCommonFile extends React.Component {
     render() {
         const { file } = this.props;
         const style = file.isCommonFile ? { color: '#1890ff' } : null;
+        const text = file.isCommonFile ? '取消常用文件' : '标记为常用文件';
 
         return (
-            <Tooltip placement="bottom" title="标记为常用文件" >
+            <Tooltip placement="bottom" title={text} >
                 <Button
                     icon="star"
                     className={styles.iconStyle}
