@@ -36,7 +36,7 @@ public class InteractiveQueryController {
                 + "df.createOrReplaceTempView(\"data\")\n";
 
         livyService.postCode(sessionInfo,readDataCode,userId);
-        String result = livyService.getCsv(sessionInfo,100);
+        String result = livyService.getCsv(sessionInfo,Integer.MAX_VALUE);
         return ResponseEntity.ok(result);
 
     }

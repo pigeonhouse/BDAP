@@ -31,7 +31,7 @@ class BinaryEvaluation extends React.Component {
 			if (Object.prototype.toString.call(evaluationInfo[key]) === '[object Object]') {
 				panes.push({ title: `${key}曲线图`, key });
 			} else {
-				statistic.push(<div>{key}:&nbsp;&nbsp;{evaluationInfo[key]}</div>);
+				statistic.push({ title: key, value: evaluationInfo[key] });
 			}
 		})
 

@@ -32,7 +32,7 @@ const init = {
 class FlowNodePanel extends React.Component {
 
     state = {
-        isMouseEnter: true,
+        isMouseEnter: false,
         nodesModuleInfo: new Array(),
         commonFileList: new Array(),
         modelList: new Array()

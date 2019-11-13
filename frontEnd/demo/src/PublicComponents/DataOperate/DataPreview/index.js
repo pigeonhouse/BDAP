@@ -4,12 +4,23 @@ import { Button, Tooltip, Modal } from 'antd';
 import DataTable from './DataTable';
 import styles from './index.less';
 import { fetchTool } from '../../../FetchTool';
+import Papa from 'papaparse';
+
+const init = {
+    method: 'GET',
+    mode: 'cors',
+    headers: {
+        "Content-Type": "application/json;charset=utf-8"
+    },
+};
 
 class DataPreview extends React.Component {
 
     state = {
         visible: false,
         loading: true,
+        fieldNameArray: [],
+        result: [],
     }
 
     handleCancel = e => {
@@ -34,16 +45,24 @@ class DataPreview extends React.Component {
             visible: true,
         });
 
-        const { status, file, filePathUpload } = this.props;
+        const { status, filePathUpload, file } = this.props;
+        const { fileName, path } = file;
+        const filePath = path === undefined ? filePathUpload + fileName : path;
 
-        const url = ``;
+        const url = `/experiment-service/query/readyForData?filePath=${filePath}`;
 
         const response = await fetchTool(url, init);
 
-        if (response.status === 200) {
-            const res = await response.json();
+        if (response && response.status === 200) {
+            const data = await response.text();
 
+            const results = Papa.parse(data, { header: true, dynamicTyping: true });
+            const fieldNameArray = results.meta.fields;
+            const result = results.data;
+            
             this.setState({
+                fieldNameArray,
+                result,
                 loading: false,
             })
         }
@@ -54,7 +73,7 @@ class DataPreview extends React.Component {
     }
 
     render() {
-        const { visible, loading } = this.state;
+        const { visible, loading, result, fieldNameArray } = this.state;
 
         return (
             <div onClick={this.handleStop} style={{ display: "inline" }}>
@@ -71,10 +90,13 @@ class DataPreview extends React.Component {
                     onCancel={this.handleCancel}
                     visible={visible}
                     destroyOnClose={true}
+                    width={1000}
                 >
-                    {/* <DataTable
+                    <DataTable
                         loading={loading}
-                    /> */}
+                        fieldNameArray={fieldNameArray}
+                        result={result}
+                    />
                 </Modal>
             </div>
         );

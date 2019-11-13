@@ -1,5 +1,5 @@
 import React, { Fragment } from 'react';
-import { Icon, Upload, Row, Col, Tooltip } from 'antd';
+import { Icon, Upload, Row, Col, Tooltip, Spin } from 'antd';
 import FileCard from './FileCard';
 import FileFolderCard from './FileFolderCard';
 import FileCardWithPath from './FileCardWithPath';
@@ -101,9 +101,12 @@ class DataSetCard extends React.Component {
             }
 
             children.push(
-                <Row style={{ paddingLeft: "60px", paddingRight: "60px" }} gutter={16}>
-                    {colChildren}
-                </Row>
+                <Spin spinning={this.props.loading}>
+                    <Row style={{ paddingLeft: "60px", paddingRight: "60px" }} gutter={16}>
+                        {colChildren}
+                    </Row>
+                </Spin>
+
             )
         }
 
