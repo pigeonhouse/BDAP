@@ -4,6 +4,13 @@ import React from 'react';
 import { fetchTool } from '../../FetchTool';
 
 const { TreeNode } = TreeSelect;
+const init = {
+    method: 'GET',
+    mode: 'cors',
+    headers: {
+        "Content-Type": "application/json;charset=utf-8"
+    },
+};
 
 class FileTree extends React.Component {
     state = {
@@ -21,18 +28,12 @@ class FileTree extends React.Component {
 
     onLoadData = treeNode =>
         new Promise(async resolve => {
-            if (treeNode.props.children) {
-                resolve();
-                return;
-            }
-            const init = {
-                method: 'GET',
-                mode: 'cors',
-                headers: {
-                    "Content-Type": "application/json;charset=utf-8"
-                },
-            };
-            const url = `/filesystem-service/ls?path=${treeNode.props.value}`;
+            // if (treeNode.props.children) {
+            //     resolve();
+            //     return;
+            // }
+
+            const url = `/filesystem-service/ls?path=/${treeNode.props.value}`;
 
             const response = await fetchTool(url, init);
             if (response.status === 200) {
@@ -69,19 +70,20 @@ class FileTree extends React.Component {
         });
 
     onChange = (value) => {
+        value = '/' + value;
         this.setState({ value });
         this.props.handleSelectPath(value);
     };
 
     render() {
-        const { treeData } = this.state;
-        
+        const { treeData, value } = this.state;
+
         return (
             <TreeSelect
                 allowClear
                 placeholder="请选择路径"
                 style={{ width: "100%" }}
-                value={this.state.value}
+                value={value}
                 dropdownStyle={{ maxHeight: 400, overflow: 'auto' }}
                 onChange={this.onChange}
                 loadData={this.onLoadData}

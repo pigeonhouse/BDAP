@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Fragment } from 'react';
 import { Col, Tooltip, Row, Icon, Card } from 'antd';
 
 import DownloadFile from '../DataOperate/DownloadFile';
@@ -52,33 +52,39 @@ class FileCard extends React.Component {
                                 <div style={{ float: "right" }}>
 
                                     {/* 数据预览 */}
-                                    <DataPreview
-                                        file={file}
-                                        filePathUpload={filePathUpload}
-                                        status={status}
-                                    />
+                                    <div style={{ display: 'inline', visibility: mouseEnter ? 'visible' : 'hidden' }}>
+                                        <DataPreview
+                                            file={file}
+                                            filePathUpload={filePathUpload}
+                                            status={status}
+                                        />
+                                    </div>
 
-                                    {/* 数据下载 */}
-                                    <DownloadFile
-                                        file={file}
-                                        filePathUpload={filePathUpload}
-                                        status={status}
-                                    />
+                                    <div style={{ display: 'inline', visibility: mouseEnter ? 'visible' : 'hidden' }}>
+                                        <DownloadFile
+                                            file={file}
+                                            filePathUpload={filePathUpload}
+                                            status={status}
+                                        />
+                                    </div>
 
-                                    {/* 设置为常用文件 */}
-                                    <StarCommonFile
-                                        handleUpdateFileList={handleUpdateFileList}
-                                        status={status}
-                                        filePathUpload={filePathUpload}
-                                        file={file}
-                                    />
+                                    <div style={{ minWidth: 36, display: 'inline' }}>
+                                        <StarCommonFile
+                                            mouseEnter={mouseEnter}
+                                            handleUpdateFileList={handleUpdateFileList}
+                                            status={status}
+                                            filePathUpload={filePathUpload}
+                                            file={file}
+                                        />
+                                    </div>
 
-                                    {/* 删除文件或文件夹 */}
-                                    <DeleteFile
-                                        handleUpdateFileList={handleUpdateFileList}
-                                        filePathUpload={filePathUpload}
-                                        file={file}
-                                    />
+                                    <div style={{ display: 'inline', visibility: mouseEnter ? 'visible' : 'hidden' }}>
+                                        <DeleteFile
+                                            handleUpdateFileList={handleUpdateFileList}
+                                            filePathUpload={filePathUpload}
+                                            file={file}
+                                        />
+                                    </div>
                                 </div>
                             </Col>
                         </Row>

@@ -26,8 +26,28 @@ const props = {
 
 class DataSetCard extends React.Component {
 
+    sortFileList = () => {
+        const { fileList } = this.props;
+        var sortedFileList = new Array();
+
+        for (let index = 0; index < fileList.length; index++) {
+            const file = fileList[index];
+            if (file.isDir === false) continue;
+            sortedFileList.push(file);
+        }
+        for (let index = 0; index < fileList.length; index++) {
+            const file = fileList[index];
+            if (file.isDir === true) continue;
+            sortedFileList.push(file);
+        }
+
+        return sortedFileList;
+    }
+
     render() {
-        const { fileList, filePathUpload, status, handleUpdateFileList, updateAttributes, filePath, handleClickFile } = this.props;
+        const { filePathUpload, status, handleUpdateFileList, updateAttributes, filePath, handleClickFile } = this.props;
+        const fileList = this.sortFileList();
+
         var children = new Array();
 
         // 生成fileList对应的文件夹，且最后为上传文件，
