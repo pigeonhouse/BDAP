@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component, Fragment } from 'react';
 import GGEditor, { Flow, withPropsAPI } from '@src';
 import { Row, Col, message } from 'antd';
 import { FlowToolbar } from '../../PublicComponents/EditorToolbar';
@@ -24,11 +24,11 @@ class ExperimentPanel extends Component {
     }
 
     saveStream = async (init, url, experiment) => {
-        const res = await fetchTool(url, init);
-        if (res.code === 201) {
-            this.setState({ experiment: {...experiment, experimentId: res.data.experimentId} });
-            message.success('存储成功');
-        } else if(res.code === 203) {
+        const response = await fetchTool(url, init);
+
+        if (response.status === 200) {
+            this.setState({ experiment });
+
             message.success('存储成功');
         } else {
             message.error('存储失败');
@@ -36,23 +36,13 @@ class ExperimentPanel extends Component {
     }
 
     handleSaveStream = (experiment, flowInfo) => {
-        var url = "";
         var formData = {};
+        const url = '/experiment-service/experiments';
 
-        if (experiment.experimentId !== undefined) {
-            formData = JSON.stringify(flowInfo);
-
-            url = `/experiments/${experiment.experimentId}`
-        } else {
-            formData = JSON.stringify({
-                description: {
-                    title: experiment.title,
-                    description: experiment.description,
-                },
-                experiment: flowInfo
-            });
-            url = `/experiments`
-        }
+        formData = JSON.stringify({
+            description: experiment,
+            experiment: flowInfo
+        });
 
         var init = {
             method: 'PUT',
@@ -67,9 +57,19 @@ class ExperimentPanel extends Component {
         this.saveStream(init, url, experiment);
     }
 
+    onRef = (ref) => {
+        this.child = ref;
+    }
+
+    addModel = () => {
+        this.child.addModel();
+    }
+
     render() {
         const { currentTab, clickTab } = this.props;
-        if (currentTab === '1' && clickTab === '1') {
+        if (currentTab !== '1') return <Fragment></Fragment>;
+
+        if (clickTab === '1') {
             const { experiment } = this.state;
             if (experiment !== null) {
                 this.setState({ experiment: null })
@@ -77,21 +77,18 @@ class ExperimentPanel extends Component {
             return (
                 <div className={styles.editor}>
                     <Row style={{ minHeight: 'calc(100vh - 105px)' }}>
-                        <ExperimentList
-                            handleClickEnter={this.handleClickEnter}
-                        />
+                        <ExperimentList handleClickEnter={this.handleClickEnter}/>
                     </Row>
                 </div>
             );
         }
-
         return (
             <GGEditor className={styles.editor} >
                 <Row type="flex" style={{ height: 'calc(100vh - 105px)' }}>
                     <Col span={4} style={{ backgroundColor: '#fff' }}>
                         <div style={{ height: 'calc(100vh - 105px)' }} span={4} className={styles.editorSidebar}
                             data-step="1" data-intro='在组件栏可以挑选想要的模块，左键单击拖拽添加至右侧画布内。' data-position='right'>
-                            <FlowNodePanel />
+                            <FlowNodePanel onRef={this.onRef} />
                         </div>
                     </Col>
 
@@ -112,7 +109,7 @@ class ExperimentPanel extends Component {
                         </div>
                     </Col>
                 </Row>
-                <FlowContextMenu />
+                <FlowContextMenu addModel={this.addModel} />
                 <SparkRunning running={this.props.running} stopRunning={this.props.stopRunning} ></SparkRunning>
                 <LoadStream experiment={this.state.experiment} ></LoadStream>
             </GGEditor>

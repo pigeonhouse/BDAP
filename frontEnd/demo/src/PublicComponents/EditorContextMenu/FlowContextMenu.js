@@ -1,6 +1,8 @@
-import React from 'react'
-import { Form } from 'antd';
-import {
+import React, { Fragment } from 'react'
+import GGEditor, {
+	Flow,
+	RegisterCommand,
+	withPropsAPI,
 	Command,
 	NodeMenu,
 	CanvasMenu,
@@ -8,66 +10,87 @@ import {
 } from '@src';
 import styles from './index.less';
 import iconfont from '../../theme/iconfont.less';
-import GGEditor, { Flow, RegisterCommand, withPropsAPI } from '@src';
-import Download from '../DataOperate/FileOperate/Download';
+import Download from './Download';
 import DataPreview from './DataPreview';
 import ModelEvaluation from './ModelEvaluation';
+import ModelSaving from './ModelSaving';
 
 class FlowContextMenu extends React.Component {
-	state = {
-		visible: false,
-		MlEvaluteVisible: false,
-		evaluation: [[]],
-		col: [],
-		data: [],
-		visibleChartRadio: false,
-	}
 
-	handleOk = (e) => {//处理调出页面的ok事件
-		this.setState({
-			visible: false,
-			MlEvaluteVisible: false,
-			visibleChartRadio: false,
-			col: [],
-			data: []
-		});
-	}
-
-	handleCancel = (e) => {//处理调出页面的cancel事件
-		this.setState({
-			visible: false,
-			MlEvaluteVisible: false,
-			visibleChartRadio: false,
-			col: [],
-			data: []
-		});
-	}
-
-	modelEvaluation = () => {//模型评估
+	modelEvaluation = () => {
 		const { propsAPI } = this.props;
 		const { getSelected } = propsAPI;
 		const item = getSelected()[0];
-		const currentNode = item.getModel();
-		if (currentNode.group == "ml" && currentNode.evaluation) {
-			var ev = currentNode.evaluation;
-			this.setState({ evaluation: ev })
-			this.setState({ MlEvaluteVisible: true })
-		}
-		else alert("NOT A ML MODEL")
+		if (item === undefined) return false;
+		const { groupName } = item.getModel();
+		return groupName.elabel === 'evaluation' ? true : false;
+	}
+
+	savedModel = () => {
+		const { propsAPI } = this.props;
+		const { getSelected } = propsAPI;
+		const item = getSelected()[0];
+		if (item === undefined) return false;
+		const { groupName } = item.getModel();
+		return groupName.elabel === 'machinelearning' ? true : false;
+	}
+
+	download = () => {
+		const { propsAPI } = this.props;
+		const { getSelected } = propsAPI;
+		const item = getSelected()[0];
+		if (item === undefined) return false;
+		const { groupName } = item.getModel();
+		return groupName.elabel === 'evaluation' || groupName.elabel === 'machinelearning' ? false : true;
 	}
 
 	render() {
+		const self = this;
+
 		return (
 			<ContextMenu className={styles.contextMenu}>
 				<GGEditor style={{ width: 0, height: 0 }}>
 					<Flow />
 					<RegisterCommand
-						name="showpicture"
+						name="dataPreview"
 						config={
 							{
 								queue: true,
 								enable(editor) {
 									return true;
+								},
+							}
+						}
+					/>
+					<RegisterCommand
+						name="modelEvaluation"
+						config={
+							{
+								queue: true,
+								enable(editor) {
+									return self.modelEvaluation();
+								},
+							}
+						}
+					/>
+					<RegisterCommand
+						name="saveModel"
+						config={
+							{
+								queue: true,
+								enable(editor) {
+									return self.savedModel();
+								},
+							}
+						}
+					/>
+					<RegisterCommand
+						name="download"
+						config={
+							{
+								queue: true,
+								enable(editor) {
+									return self.download();
 								},
 							}
 						}
@@ -87,8 +110,9 @@ class FlowContextMenu extends React.Component {
 						</div>
 					</Command>
 					<DataPreview></DataPreview>
-					{/* <ModelEvaluation></ModelEvaluation> */}
-					{/* <Download></Download> */}
+					<ModelSaving addModel={this.props.addModel} ></ModelSaving>
+					<ModelEvaluation></ModelEvaluation>
+					<Download></Download>
 				</NodeMenu>
 
 				<CanvasMenu>
@@ -116,4 +140,4 @@ class FlowContextMenu extends React.Component {
 		);
 	}
 }
-export default Form.create()(withPropsAPI(FlowContextMenu));
+export default withPropsAPI(FlowContextMenu);

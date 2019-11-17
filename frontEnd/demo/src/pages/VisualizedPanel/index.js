@@ -1,7 +1,6 @@
 import React from 'react';
 import { Row, Col, Radio, Button } from 'antd';
 
-import DataSource from '../../PublicComponents/VisualDataSource';
 import Filter from '../../PublicComponents/VisualFilter';
 import Summarize from '../../PublicComponents/VisualSummarize';
 import VisualChart from '../../PublicComponents/VisualChart';
@@ -17,7 +16,7 @@ class VisualizedPanel extends React.Component {
 
     state = {
         currentChart: "table",
-        rightCol: "dataSource",
+        rightCol: "filter",
         dataSourceName: 'data',
         fileName: null,
         fileColumns: [],
@@ -28,20 +27,54 @@ class VisualizedPanel extends React.Component {
         labelType: [],
         groupLabel: undefined,
         chartStyle: {
-            color:['#c23531','#2f4554', '#61a0a8', '#d48265', '#91c7ae','#749f83',  '#ca8622', '#bda29a','#6e7074', '#546570', '#c4ccd3']
-            // color: "#509ee3",
+            // color: ['#c23531', '#2f4554', '#61a0a8', '#d48265', '#91c7ae', '#749f83', '#ca8622', '#bda29a', '#6e7074', '#546570', '#c4ccd3']
+            color: "#509ee3",
         },
+        titleText: '',
+        loading: false,
     }
 
-    changeFileName = (fileName) => {
-        this.setState({ fileName });
+    async componentWillMount() {
+        const { url } = this.props;
+        
+        if (url === null || url === undefined) return;
+        const init = {
+            method: 'GET',
+            mode: 'cors',
+            headers: {
+                "Content-Type": "application/json;charset=utf-8"
+            },
+            credentials: 'include'
+        }
+        const response = await fetchTool(url, init);
+
+        if (response.status === 200) {
+            const res = await response.text();
+
+            // 通过papa转化
+            const results = Papa.parse(res, { header: true, dynamicTyping: true });
+            let labelType = {};
+            const fieldNameArray = results.meta.fields;
+
+            const result = results.data[0];
+            for (let i in result) {
+                if (typeof (result[i]) === "number") {
+                    labelType[i] = "int";
+                } else {
+                    labelType[i] = "string";
+                }
+            }
+
+            this.initLabelArray(fieldNameArray, labelType);
+            this.initDataSet(results.data, fieldNameArray.length);
+        }
     }
 
     initLabelArray = (labelArray, labelType) => {
         this.setState({ labelArray, labelType, fileColumns: labelArray });
     }
 
-    initDataSet = (dataSet, length ) => {
+    initDataSet = (dataSet, length) => {
         this.setState({ dataSet })
     }
 
@@ -53,8 +86,8 @@ class VisualizedPanel extends React.Component {
         this.setState({ dataSet })
     }
 
-    handleChangeChartStyle = (chartStyle) => {
-        this.setState({ chartStyle })
+    handleChangeChartStyle = (chartStyle, obj = {}) => {
+        this.setState({ chartStyle, ...obj })
     }
 
     //group by的label修改
@@ -111,6 +144,7 @@ class VisualizedPanel extends React.Component {
 
     // 向后端发送请求，参数为sql语句，返回值为Dataset
     getDataSetByOperate = async (dataSourceName, filter, summarize, groupLabel) => {
+        this.setState({ loading: false });
 
         var sqlCode, label;
         var where = '', group = '';
@@ -154,12 +188,13 @@ class VisualizedPanel extends React.Component {
             credentials: 'include'
         }
 
-        const res = await fetchTool("/query/sql", init);
+        const response = await fetchTool("/experiment-service/query/sql", init);
 
-        if (res.code === 200) {
+        if (response.status === 200) {
+            const res = await response.text();
 
             // 通过papa转化
-            const results = Papa.parse(res.data, { header: true, dynamicTyping: true });
+            const results = Papa.parse(res, { header: true, dynamicTyping: true });
             let labelType = {};
             const fieldNameArray = results.meta.fields;
 
@@ -174,6 +209,7 @@ class VisualizedPanel extends React.Component {
 
             this.changeLabelArray(fieldNameArray, labelType);
             this.changeDataSet(results.data, fieldNameArray.length);
+            this.setState({ loading: false });
         }
     }
 
@@ -193,14 +229,19 @@ class VisualizedPanel extends React.Component {
 
     // 右侧参数栏生成
     rightColGenerate = () => {
-        switch (this.state.rightCol) {
+        const { height } = this.props;
+        const { rightCol, filter, loading, fileColumns,
+            summarize, groupLabel, chartStyle, labelArray, labelType } = this.state;
+        switch (rightCol) {
             case 'filter':
                 return (
                     <Filter
                         handleAddFilter={this.handleAddFilter}
                         handleDeleteFilter={this.handleDeleteFilter}
-                        filter={this.state.filter}
-                        labelArray={this.state.fileColumns} />
+                        filter={filter}
+                        loading={loading}
+                        height={height}
+                        labelArray={fileColumns} />
                 )
             case 'summarize':
                 return (
@@ -208,9 +249,11 @@ class VisualizedPanel extends React.Component {
                         handleChangeGroupLabel={this.handleChangeGroupLabel}
                         handleAddSummarize={this.handleAddSummarize}
                         handleDeleteSummarize={this.handleDeleteSummarize}
-                        summarize={this.state.summarize}
-                        groupLabel={this.state.groupLabel}
-                        labelArray={this.state.fileColumns} />
+                        summarize={summarize}
+                        groupLabel={groupLabel}
+                        height={height}
+                        loading={loading}
+                        labelArray={fileColumns} />
                 )
             case 'settings':
                 return (
@@ -218,21 +261,13 @@ class VisualizedPanel extends React.Component {
                         currentChart={this.state.currentChart}
                         handleChangeChartStyle={this.handleChangeChartStyle}
                         chartSettings={chartSettings}
-                        chartStyle={this.state.chartStyle}
-                        labelArray={this.state.labelArray}
-                        labelType={this.state.labelType}
+                        chartStyle={chartStyle}
+                        labelArray={labelArray}
+                        height={height}
+                        loading={loading}
+                        labelType={labelType}
                     />
                 )
-            case 'dataSource':
-                return (
-                    <DataSource
-                        initLabelArray={this.initLabelArray}
-                        initDataSet={this.initDataSet}
-                        changeFileName={this.changeFileName}
-                        fileName={this.state.fileName}
-                        sessionFinish={this.props.sessionFinish}
-                    ></DataSource>
-                );
         }
     }
 
@@ -242,13 +277,14 @@ class VisualizedPanel extends React.Component {
     }
 
     render() {
+        const { height } = this.props;
+        const { currentChart, chartStyle, titleText, dataSet, loading, labelArray } = this.state;
         return (
-            <div style={{ height: 'calc(100vh - 105px)' }} >
+            <div style={{ height: `calc(100vh - ${height}px)` }} >
                 <Row type="flex" className={styles.header}>
                     <Col span={6} style={{ paddingLeft: "30px" }} ><h2>DataSource</h2></Col>
                     <Col span={18}>
                         <div style={{ float: "right", marginRight: 20 }} >
-                            <Button onClick={this.handleChangeRightCol.bind(this, "dataSource")} >DataSource</Button>
                             <Button onClick={this.handleChangeRightCol.bind(this, "filter")} >Filter</Button>
                             <Button onClick={this.handleChangeRightCol.bind(this, "summarize")} >Summarize</Button>
                             <Button onClick={this.handleChangeRightCol.bind(this, "settings")} >Settings</Button>
@@ -257,17 +293,22 @@ class VisualizedPanel extends React.Component {
                         </div>
                     </Col>
                 </Row>
-                <Row type="flex" className={styles.visualized}>
+                <Row type="flex" style={{ height: `calc(100vh - ${height + 40}px)` }} >
                     <Col span={19} >
                         <VisualChart
-                            currentChart={this.state.currentChart}
-                            chartStyle={this.state.chartStyle}
-                            dataSet={this.state.dataSet}
-                            labelArray={this.state.labelArray}
+                            currentChart={currentChart}
+                            chartStyle={chartStyle}
+                            titleText={titleText}
+                            dataSet={dataSet}
+                            loading={loading}
+                            labelArray={labelArray}
+                            height={height}
                         />
-                        <div className={styles.footer} style={{ textAlign: "center" }} >
+                        <div className={styles.footer}
+                            style={{ textAlign: "center", borderTop: "1px solid #ececec", paddingTop: 10 }}
+                        >
                             <Radio.Group
-                                value={this.state.currentChart}
+                                value={currentChart}
                                 buttonStyle="solid"
                                 className={styles.radioButton}
                                 onChange={this.handlechangeCurrentChart}
@@ -281,7 +322,7 @@ class VisualizedPanel extends React.Component {
                             </Radio.Group>
                         </div>
                     </Col>
-                    <Col span={5} className={styles.righter} >
+                    <Col span={5} className={styles.righter} style={{ height: `calc(100vh - ${height + 40}px)` }} >
                         {this.rightColGenerate()}
                     </Col>
                 </Row>

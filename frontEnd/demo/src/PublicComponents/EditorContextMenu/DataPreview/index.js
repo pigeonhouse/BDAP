@@ -1,100 +1,51 @@
 import React, { Component } from 'react'
 import { Modal, Icon } from 'antd';
 import { Command, withPropsAPI } from '@src';
-import TablePreview from './TablePreview';
-import { fetchTool } from '../../../FetchTool';
-import ChartPreview from './ChartPreview';
 
+import VisualizedPanel from '../../../pages/VisualizedPanel';
 import styles from '../index.less';
-import Papa from 'papaparse';
-
-var echarts = require('echarts');
 
 class DataPreview extends Component {
-
 	state = {
-		newRandomkey: 0,
 		visible: false,
-		labelArray: [],
-		dataSet: [],
-		labelType: {},
-	}
-
-	getData = async () => {
-		const { propsAPI } = this.props;
-		const { getSelected } = propsAPI;
-		const item = getSelected()[0];
-		const init = {
-			method: 'GET',
-			mode: 'cors',
-			headers: {
-				"Content-Type": "application/x-www-form-urlencoded;charset=utf-8"
-			},
-			credentials: 'include'
-		}
-
-		const res = await fetchTool(`/flow/node/data/${item.id}_0`, init);
-
-		if (res.code === 200) {
-
-			console.log(res);
-
-			// 通过papa转化
-			const results = Papa.parse(res.data, { header: true, dynamicTyping: true });
-			let labelType = {};
-			const fieldNameArray = results.meta.fields;
-
-			const result = results.data[0];
-			for (let i in result) {
-				if (typeof (result[i]) === "number") {
-					labelType[i] = "int";
-				} else {
-					labelType[i] = "string";
-				}
-			}
-
-			this.setState({ 
-				labelArray:fieldNameArray,
-				dataSet:results.data,
-				labelType
-			})
-		}
+		fileName: null,
+		newRandomkey: 0,
+		url: null,
 	}
 
 	handleOk = (e) => {//处理调出页面的ok事件
 		this.setState({
 			visible: false,
-			MlEvaluteVisible: false,
-			visibleChartRadio: false,
-			col: [],
-			data: []
 		});
 	}
 
 	handleCancel = (e) => {//处理调出页面的cancel事件
 		this.setState({
 			visible: false,
-			MlEvaluteVisible: false,
-			visibleChartRadio: false,
-			col: [],
-			data: []
 		});
 	}
 
 	showModal = () => { //让数据预览页面显示的函数
-		this.setState({
-			visible: true,
-			newRandomkey: (this.state.newRandomkey + 1) % 10
-		});
+		const { propsAPI } = this.props;
+		const { getSelected } = propsAPI;
+		const item = getSelected()[0];
+		const { labelName } = item.getModel();
+		const label = labelName.label;
 
-		this.getData();
+		this.setState({
+			url: `/experiment-service/flow/node/data/${item.id}_0`,
+			fileName: label,
+			visible: true,
+			newRandomkey: (this.state.newRandomkey + 1) % 10,
+		});
 	}
 
 	render() {
-		const { dataSet, labelArray, newRandomkey, visible } = this.state;
+		const { newRandomkey, visible, url } = this.state;
+
 		return (
 			<div>
-				<Command name="showpicture">
+				<Command name="dataPreview">
 					<div className={styles.item} onClick={this.showModal}>
 						<Icon type="form" />
 						<span>数据预览</span>
@@ -109,7 +60,9 @@ class DataPreview extends Component {
 					onOk={this.handleOk}
 					onCancel={this.handleCancel}
 				>
-					<TablePreview labelArray={labelArray} dataSet={dataSet} ></TablePreview>
+					<div style={{ height: 'calc(100vh - 225px)', }} >
+						<VisualizedPanel url={url} height={225} />
+					</div>
 				</Modal>
 			</div>
 		);

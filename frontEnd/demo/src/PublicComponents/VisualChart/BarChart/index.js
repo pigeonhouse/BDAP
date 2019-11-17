@@ -1,17 +1,27 @@
 import { getValueFromDataSet } from '../getValueFromDataSet';
 export function createBarChart(myChart, props) {
-    const { dataSet, chartStyle } = props;
+    const { dataSet, chartStyle, loading, titleText } = props;
     const { xLabel, yLabel, color } = chartStyle;
-    if(xLabel === undefined || yLabel === undefined) return;
+    if (loading === true) {
+        myChart.showLoading();
+        return;
+    } else {
+        myChart.hideLoading();
+    }
+
+    if (xLabel === undefined || yLabel === undefined) return;
     // 指定图表的配置项和数据
     var option = {
-
+        title: {
+            text: titleText,
+            x: 'center'
+        },
         xAxis: {
-            name:xLabel,
+            name: xLabel,
             data: getValueFromDataSet(xLabel, dataSet)
         },
         yAxis: {
-            name:yLabel,
+            name: yLabel,
         },
         series: [{
             name: yLabel,

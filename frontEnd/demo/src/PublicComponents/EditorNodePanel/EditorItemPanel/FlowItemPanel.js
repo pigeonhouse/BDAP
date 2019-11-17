@@ -30,38 +30,41 @@ class FlowItemModel extends React.Component {
 		return `${head}-${tail}`;
 	}
 
-	createItemPanel = (itemList, group) => {
-		var result = new Array();
-		if (itemList !== undefined) {
-			itemList.map((item, index) => {
-				if (item.groupName.elabel === group) {
-					result.push(
-						<Menu.Item key={index}><ItemPanel>
-							<Item
-								type="node"
-								size="200*40"
-								shape={this.switchShape(item.anchor)}
-								model={{
-									labelName: item.labelName,
-									groupName: item.groupName,
-									anchor: item.anchor,
-									columnsInfo: item.columnsInfo,
-									attributes: item.attributes,
-									keyConfig: {
-										color_type: '#1890FF',
-										state_icon_url: 'https://gw.alipayobjects.com/zos/rmsportal/uZVdwjJGqDooqKLKtvGA.svg',
-									}
-								}}
-							/>
-						</ItemPanel></Menu.Item>);
-				}
-			})
-		}
-		return result;
+	createItemPanel = (itemList, group, name) => {
+		var nodesModel = new Array();
+		itemList = itemList || [];
+
+		itemList.map((item, index) => {
+		
+			if (item[name] === null || item[name].elabel !== group) return;
+
+			delete item.id;
+			delete item.sourceIdList;
+			delete item.filePath;
+
+			nodesModel.push(
+				<Menu.Item key={index}><ItemPanel>
+					<Item
+						type="node"
+						size="200*40"
+						shape={this.switchShape(item.anchor)}
+						model={{
+							...item,
+							keyConfig: {
+								color_type: '#1890FF',
+								state_icon_url: 'https://gw.alipayobjects.com/zos/rmsportal/uZVdwjJGqDooqKLKtvGA.svg',
+							}
+						}}
+					/>
+				</ItemPanel></Menu.Item>);
+		})
+
+		return nodesModel;
 	}
 
 	render() {
-		const itemData = this.props.moduleNodesList;
+		const { moduleNodesList } = this.props;
+
 		return (
 			<Menu
 				mode="inline"
@@ -74,25 +77,42 @@ class FlowItemModel extends React.Component {
 					key="preprocessing"
 					title={<span><Icon type="code" /><span>数据预处理</span></span>}
 				>
-					{this.createItemPanel(itemData, "preprocessing")}
+					{this.createItemPanel(moduleNodesList, "preprocessing", "groupName")}
 				</SubMenu>
 				<SubMenu
 					key="machinelearning"
 					title={<span><Icon type="calculator" /><span>机器学习</span></span>}
 				>
-					{this.createItemPanel(itemData, "machinelearning")}
+					<SubMenu
+						key="classification"
+						title={<span><Icon type="calculator" /><span>分类</span></span>}
+					>
+						{this.createItemPanel(moduleNodesList, "classification", "algorithmType")}
+					</SubMenu>
+					<SubMenu
+						key="regression"
+						title={<span><Icon type="calculator" /><span>回归</span></span>}
+					>
+						{this.createItemPanel(moduleNodesList, "regression", "algorithmType")}
+					</SubMenu>
+					<SubMenu
+						key="clustering"
+						title={<span><Icon type="calculator" /><span>聚类</span></span>}
+					>
+						{this.createItemPanel(moduleNodesList, "clustering", "algorithmType")}
+					</SubMenu>
 				</SubMenu>
 				<SubMenu
 					key="evaluation"
 					title={<span><Icon type="calculator" /><span>评估</span></span>}
 				>
-					{this.createItemPanel(itemData, "evaluation")}
+					{this.createItemPanel(moduleNodesList, "evaluation", "groupName")}
 				</SubMenu>
 				<SubMenu
 					key="prediction"
 					title={<span><Icon type="calculator" /><span>预测</span></span>}
 				>
-					{this.createItemPanel(itemData, "prediction")}
+					{this.createItemPanel(moduleNodesList, "prediction", "groupName")}
 				</SubMenu>
 			</Menu>
 		);

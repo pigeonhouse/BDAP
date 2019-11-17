@@ -1,0 +1,32 @@
+server:
+  port: 3001
+ribbon:
+  ReadTimeout: 60000
+  ConnectTimeout: 60000
+token:
+  access-token:
+    #accessToken过期时间：十分钟
+    expireTime: 600000
+  refresh-token:
+    #livySession过期时间：五十分钟
+    expireTime: 3000000
+
+spring:
+  application:
+    name: livy-service
+  data:
+    mongodb:
+      uri: mongodb://bdapadmin:bdapadmin@10.105.222.90:27017/bdap_info?maxPoolSize=256
+  cloud:
+    consul:
+      host: localhost
+      port: 8500
+      discovery:
+        health-check-path: /actuator/health
+        health-check-interval: 10s
+
+livyAddr: 10.105.222.90:8998,10.105.222.91:8998,10.105.222.92:8998,10.105.222.93:8998
+livyNewSessionJars: hdfs:///livy_jars/scalaj-http_2.10-2.0.0.jar,hdfs:///livy_jars/fastjson-1.2.62.jar
+livyNewSessionKind: spark
+numExecutors: 1
+executorCores: 1

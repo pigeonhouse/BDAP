@@ -1,36 +1,6 @@
 import React, { Fragment } from 'react';
 import { withPropsAPI } from '@src';
 import { Form, Input, Select, InputNumber, Checkbox } from 'antd';
-
-/* 显示attrDetail，即属性的细节，取决于标签框中的attrDetail属性，目前有三种格式：
-    1.为Select即选择模式 例：
-    attrDetail:[{
-        elabel:'type',    英文标签
-        label:'填充值', 	中文标签
-        type:'Select', 		此attr类型
-        evalue:['average', 'median', 'max', 'min'],  选择值的英文名
-        value:['平均值', '中位数', '最大值', '最小值']  选择值对应的中文名
-    }]
-    2.为Input即输入模式，根据输入的正则式判定输入是否正确，例：
-    attrDetail:[{
-        elabel:'type',
-        label:'填充值', 
-        type:'Input', 
-        regexp:'^[0-9]+.?[0-9]*'  正则式
-        
-    }]
-    3.Number专门为数字类型，有上下限范围，且有步长step，例：
-    attrDetail:[{
-        elabel:'type',
-        label:'填充值', 
-        type:'Number', 
-        min:0,
-        max:100,
-        step:2 即每次增加2步长
-    }]
-
-    最后会修改attr中与elabel相同的键的值，此键可事先不设定默认值，attrDetail也可不写
-*/
 /**
  * @param {class} attributes
  */
@@ -39,10 +9,10 @@ const { Item } = Form;
 const Option = Select.Option;
 const inlineFormItemLayout = {
     labelCol: {
-        sm: { span: 8 },
+        sm: { span: 11 },
     },
     wrapperCol: {
-        sm: { span: 16 },
+        sm: { span: 13 },
     },
 };
 
@@ -91,7 +61,7 @@ class Attributes extends React.Component {
         if (!item) {
             return;
         }
-        
+
         var attributes = JSON.parse(JSON.stringify(item.model.attributes));
         attributes[index].value = value;
         executeCommand(() => {
@@ -120,6 +90,7 @@ class Attributes extends React.Component {
         const { getFieldDecorator } = form;
 
         if (item.styleType === 'Select') {
+            const menu = item.style.menu;
             return (
                 <Item style={{ margin: 0 }} label={item.labelName.label} {...inlineFormItemLayout}>
                     {
@@ -127,7 +98,7 @@ class Attributes extends React.Component {
                             initialValue: item.value,
                         })(
                             <Select onChange={this.handleSelectChange.bind(this, index)}>
-                                {item.style.menu.map((value) => {
+                                {menu.map((value) => {
                                     return <Option value={value.elabel}>{value.label}</Option>
                                 })}
                             </Select>
@@ -141,8 +112,9 @@ class Attributes extends React.Component {
                     {
                         getFieldDecorator(`attributes[${index}]`, {
                             rules: [{
-                                required: false,
-                                pattern: new RegExp('^[a-z]+.?[a-z]*', "g"),
+                                required: true,
+                                // pattern: new RegExp('^[a-z]+.?[a-z]*', "g"),
+                                pattern: new RegExp(item.style.regexp),
                                 message: '请输入正确格式'
                             }],
                             initialValue: item.value,
@@ -159,10 +131,8 @@ class Attributes extends React.Component {
                             initialValue: item.value,
                         })(
                             <InputNumber
-                                style={{ margin: 0 }}
-                                min={item.style.min}
-                                max={item.style.max}
-                                step={item.style.step}
+                                style={{ margin: 0, width: '100%' }}
+                                {...item.style}
                                 onChange={this.handleChangeNumber.bind(this, index)}
                             />)
                     }
@@ -171,14 +141,12 @@ class Attributes extends React.Component {
         }
         else if (item.styleType === 'CheckBox') {
             return (
-                <Item style={{ margin: 0 }} {...inlineFormItemLayout}>
+                <Item style={{ margin: 0, textAlign: "center" }} >
                     {
                         getFieldDecorator(`attributes[${index}]`, {
-                            initialValue: item.value === false || item.value === 'false' ? false:true,
                         })(
                             <Checkbox
-                                // checked={item.value}
-                                style={{ margin: 0, marginLeft: '30px' }}
+                                defaultChecked={item.value === false || item.value === 'false' ? false : true}
                                 onChange={this.handleChangeCheckBox.bind(this, index)}
                             >
                                 {item.labelName.label}
@@ -190,17 +158,13 @@ class Attributes extends React.Component {
     }
 
     render() {
-        const { attributes } = this.props;
-        if (attributes === undefined) {
-            return null;
-        }
+        const attributes = this.props.attributes || [];
 
         return (
             <Fragment>
-                {
-                    attributes.map((item, index) => {
-                        return this.generateAttributes(item, index);
-                    })}
+                {attributes.map((item, index) => {
+                    return this.generateAttributes(item, index);
+                })}
             </Fragment>
         );
     }

@@ -5,17 +5,17 @@
  */
 
 export function findLabelArray(attribute, sourceColumnsInfo) {
-    const { value } = attribute;
+    var { value } = attribute;
     let labelArray = new Array();
 
-    if(value === null) return new Array();
-    
+    value = value || [];
+
     value.map((label) => {
-        for(let column in sourceColumnsInfo){
+        for (let column in sourceColumnsInfo) {
 
             const { colName } = sourceColumnsInfo[column]
 
-            if(colName === label){
+            if (colName === label) {
                 labelArray.push(label);
                 return;
             }

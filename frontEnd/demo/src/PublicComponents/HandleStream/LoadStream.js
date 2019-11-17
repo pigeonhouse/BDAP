@@ -3,29 +3,32 @@ import { withPropsAPI } from '@src';
 import { downloadStream } from './downloadStream';
 import { fetchTool } from '../../FetchTool';
 
+const init = {
+    method: 'GET',
+    mode: 'cors',
+    headers: {
+        "Content-Type": "application/x-www-form-urlencoded;charset=utf-8"
+    },
+    credentials: 'include'
+}
+
 class LoadStream extends React.Component {
 
     fetchModalStream = async (experiment) => {
-        const init = {
-            method: 'GET',
-            mode: 'cors',
-            headers: {
-                "Content-Type": "application/x-www-form-urlencoded;charset=utf-8"
-            },
-            credentials: 'include'
-        }
-        const res = await fetchTool(`/experiments/${experiment.experimentId}`, init)
-        if (res.code === 200) {
-            return res.data
-        }
+        const response = await fetchTool(`/experiment-service/experiments/${experiment.experimentId}`, init)
+
+        return await response.json();
     }
 
     loadStream = async () => {
         const { propsAPI, experiment } = this.props;
         if (experiment === null) return;
-        
+
         const flowInfo = await this.fetchModalStream(experiment);
-        const flow = downloadStream(flowInfo);
+        console.log(flowInfo)
+        const { nodes, edges } = flowInfo;
+        const flow = { edges, nodes: downloadStream(nodes) };
+        
         if (flow === null) return;
         propsAPI.read(flow);
     }

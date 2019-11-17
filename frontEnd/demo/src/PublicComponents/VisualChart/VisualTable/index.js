@@ -1,5 +1,5 @@
 import React from 'react';
-import { Table, Row, Col } from 'antd';
+import { Table, Row, Col, Tooltip } from 'antd';
 
 class VisualTable extends React.Component {
     state = {
@@ -15,8 +15,6 @@ class VisualTable extends React.Component {
         });
     };
 
-
-
     setAgeSort = () => {
         this.setState({
             sortedInfo: {
@@ -27,16 +25,15 @@ class VisualTable extends React.Component {
     };
 
     render() {
+        let { labelArray, dataSet, loading } = this.props;
 
-        let { labelArray, dataSet } = this.props;
-        
         let data = [];
         let columns = [];
 
         dataSet.map((item, index) => {
             data.push({
                 key: index,
-                ...item
+                ...item,
             });
         })
 
@@ -45,26 +42,45 @@ class VisualTable extends React.Component {
                 title: item,
                 dataIndex: item,
                 key: item,
+                width: 120,
+                onCell: () => {
+                    return {
+                        style: {
+                            minWidth: 120,
+                            maxWidth: 120,
+                            overflow: 'hidden',
+                            whiteSpace: 'nowrap',
+                            textOverflow: 'ellipsis',
+                            cursor: 'pointer'
+                        }
+                    }
+                },
+                render: (text) => <Tooltip placement="topLeft" title={text}>{text}</Tooltip>
             })
         })
+
+        const width = 120 * columns.length;
 
         let { sortedInfo, filteredInfo } = this.state;
         sortedInfo = sortedInfo || {};
         filteredInfo = filteredInfo || {};
 
         return (
-            <div style={{ paddingTop: 10 }}>
+            <div style={{ paddingTop: 10 }} >
                 <Row>
-                    <Col span={2}></Col>
-                    <Col span={20}>
-                        <Table columns={columns}
+                    <Col span={3}></Col>
+                    <Col span={18} >
+                        <Table
+                            columns={columns}
                             dataSource={data}
+                            bordered
+                            loading={loading}
                             onChange={this.handleChange}
-                            pagination={{ pageSize: 50 }}
-                            scroll={{ x: "110%", y: "calc(105vh - 405px)" }}
+                            pagination={false}
+                            scroll={{ y: `calc(100vh - ${this.props.height + 270}px)`, x: `${width}px` }}
                         />
                     </Col>
-                    <Col span={2}></Col>
+                    <Col span={3}></Col>
                 </Row>
             </div>
         );

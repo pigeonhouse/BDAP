@@ -2,7 +2,7 @@ import { Component } from 'react';
 import { withPropsAPI } from '@src';
 import { generateStream } from '../../PublicComponents/HandleStream/generateStream';
 import { fetchTool } from '../../FetchTool';
-import { isLegal } from '../../PublicComponents/HandleStream/IsLegal'
+import { isLegal } from '../../PublicComponents/HandleStream/IsLegal';
 
 var current;
 var sum;
@@ -31,17 +31,17 @@ class SparkRunning extends Component {
 		const init = {
 			method: 'POST',
 			mode: 'cors',
-			body: JSON.stringify(stream),
+			body: JSON.stringify({ nodes: stream.nodes }),
 			headers: {
 				"Content-Type": "application/json;charset=utf-8"
 			},
 			credentials: 'include'
 		}
 
-		const res = await fetchTool("/flow/run", init)
-		if (res.code === 200) {
-
-			const result = res.data;
+		const response = await fetchTool("/experiment-service/flow/run", init)
+		console.log(response)
+		if (response.status === 200) {
+			const result = await response.json();
 
 			//按照工作流进行轮询
 			this.run(result);
@@ -70,27 +70,30 @@ class SparkRunning extends Component {
 			setTimeout(async () => {
 
 				const init = {
-					method: 'POST',
+					method: 'GET',
 					mode: 'cors',
-					body: JSON.stringify({ "resultUrl": result[current].resultUrl }),
 					headers: {
 						"Content-Type": "application/json;charset=utf-8"
 					},
 					credentials: 'include'
 				}
 
-				const res = await fetchTool("/flow/node/status", init)
+				const url = `/experiment-service/flow/node/status?resultUrl=${result[current].resultUrl}`;
 
-				if (res.code === 200) {
-					if (res.data.state === "available") {
+				const response = await fetchTool(url, init)
+
+				if (response.status === 200) {
+					const res = await response.text();
+					if (res === "available") {
 						this.changeStatusColor(result[current].id, 'https://gw.alipayobjects.com/zos/rmsportal/MXXetJAxlqrbisIuZxDO.svg');
 						current++;
+					} else {
+						this.changeStatusColor(result[current].id, 'https://loading.io/spinners/palette-ring/index.rotate-palette-loader.svg');
 					}
 				}
 				this.run(result);
 			}, 1000)
 		} else {
-			console.log(current, sum)
 			this.props.stopRunning();
 		}
 	}

@@ -1,102 +1,245 @@
 import React, { Fragment } from 'react';
-import { Row, Col, Input, Button, Tooltip, Upload, Icon } from 'antd';
+import { Row, Col } from 'antd';
 
-import DataCard from './DataCard';
+import FilePathShow from '../../PublicComponents/FileOperate/FilePathShow';
+import ReturnHome from '../../PublicComponents/FileOperate/ReturnHome';
+import GoBackPanel from '../../PublicComponents/FileOperate/GoBackPanel';
+import SearchFile from '../../PublicComponents/FileOperate/SearchFile';
+import CommonFileList from '../../PublicComponents/FileOperate/CommonFileList';
+import UploadFile from '../../PublicComponents/FileOperate/UploadFile';
+import SetNewDir from '../../PublicComponents/FileOperate/SetNewDir';
+import VisualizedPanel from '../VisualizedPanel';
+import DataSetCard from '../../PublicComponents/DataSetCard';
 import styles from './index.less';
 
-const { Search } = Input;
-const { Dragger } = Upload;
+import { fetchTool } from '../../FetchTool';
 
-const props = {
-    name: 'file',
-    multiple: true,
-    action: 'https://www.mocky.io/v2/5cc8019d300000980a055e76',
-    onChange(info) {
-        const { status } = info.file;
-        if (status !== 'uploading') {
-            console.log(info.file, info.fileList);
-        }
-        if (status === 'done') {
-            message.success(`${info.file.name} file uploaded successfully.`);
-        } else if (status === 'error') {
-            message.error(`${info.file.name} file upload failed.`);
-        }
+const init = {
+    method: 'GET',
+    mode: 'cors',
+    headers: {
+        "Content-Type": "application/json;charset=utf-8"
     },
 };
 
 class DataSetPanel extends React.Component {
+
+    /**
+     * filePath: 左上角展示文件路径
+     * filePathUpload：上传时直接使用的路径
+     * fileList: 当前路径下，页面显示的文件或文件夹列表
+     * status: 当前界面的状态，分为四个：normal，common，search，visiual
+     * dataPreviewUrl：可视化界面进入时的url
+     */
     state = {
-        filePath: "bdap/students/2017211511",
+        filePath: [],
+        filePathUpload: null,
+        fileList: [],
+        status: 'normal',
+        dataPreviewUrl: null,
+        loading: true
+    }
+
+    // 点击文件，跳转到可视化界面
+    handleClickFile = (file) => {
+        if (this.props.sessionFinish === false) {
+            const args = {
+                message: 'Session',
+                description:
+                    '正在创建session，请稍候',
+                key: "session"
+            };
+            notification['info'](args);
+            return;
+        }
+
+        const { filePathUpload } = this.state;
+        const { fileName, path } = file;
+        const filePath = path === undefined ? filePathUpload + fileName : path;
+
+        this.setState({
+            status: 'visiual',
+            dataPreviewUrl: `/experiment-service/query/readyForData?filePath=${filePath}`,
+        })
+
+        this.props.handleClickEnter();
+    }
+
+    // 修改父组件的值
+    updateAttributes = async (attributes) => {
+        await this.setState({ ...attributes });
+    }
+
+    // 根据filePath，返回string类型path
+    getPathByFilePath = (filePath) => {
+        var path = '/';
+        filePath.map((item) => {
+            path += item + '/';
+        })
+        return path;
+    }
+
+    // 根据path向后端请求拿到fileList
+    getFileListByPath = async (path) => {
+        const url = `/filesystem-service/ls?path=${path}`;
+
+        const response = await fetchTool(url, init);
+        if (response.status === 200) {
+            return await response.json();
+        }
+    }
+
+    async componentWillMount() {
+        const response = await this.getFileListByPath('/');
+
+        const attributes = {
+            fileList: response || [],
+            filePathUpload: '/',
+            loading: false
+        }
+
+        this.updateAttributes(attributes);
+    }
+
+    // 当前页面显示常用文件时，更新CoomonFileList
+    handleUpdateCommonFileList = async () => {
+        const response = await fetchTool("/filesystem-service/ls/common", init);
+
+        if (response.status === 200) {
+            const fileList = await response.json();
+
+            const attributes = {
+                fileList,
+                loading: false
+            };
+
+            this.updateAttributes(attributes);
+        }
+    }
+
+    // 当前页面显示为搜索文件时，更新FileBackup
+    handleUpdateSearchFileBackup = (fileList) => {
+        this.child.updateFileBackup(fileList);
+    }
+
+    onRef = (ref) => {
+        this.child = ref;
+    }
+
+    // 更新文件列表
+    handleUpdateFileList = async () => {
+        await this.setState({ loading: true });
+
+        const { filePath, status } = this.state;
+        if (status === 'common') return this.handleUpdateCommonFileList();
+
+        const path = this.getPathByFilePath(filePath);
+        const dataDir = await this.getFileListByPath(path);
+
+        this.setState({
+            fileList: dataDir,
+            filePathUpload: path,
+            loading: false
+        });
+        if (status === 'search') return this.handleUpdateSearchFileBackup(dataDir);
     }
 
     render() {
-        return (
-            <Fragment>
-                <Row className={styles.header} >
-                    <Col span={16} >
-                        <h3 className={styles.headerFont} style={{ marginLeft: "50px" }} >Dataset&nbsp;&nbsp;>&nbsp;&nbsp;</h3>
-                        <h5 className={styles.headerFont} >{this.state.filePath}</h5>
-                    </Col>
-                    <Col span={4} >
-                        <Tooltip placement="bottom" title="查询文件或文件夹" >
-                            <Search
-                                placeholder="请输入文件名"
-                                onSearch={value => console.log(value)}
-                                style={{ width: "100%", marginTop: "5px" }}
+        const { currentTab, clickTab } = this.props;
+
+        if (currentTab !== "2") return <Fragment></Fragment>;
+
+        if (clickTab === "2") {
+            const { fileList, filePath, status, filePathUpload } = this.state;
+            return (
+                <Fragment>
+                    <Row className={styles.header} >
+                        <Col span={16} >
+                            <Row>
+                                <Col span={4} style={{ paddingTop: 20 }} >
+                                    <h2 className={styles.headerFont} >DataSet</h2>
+                                </Col>
+                                <Col span={1} >
+                                    <GoBackPanel
+                                        filePath={filePath}
+                                        status={status}
+                                        updateAttributes={this.updateAttributes}
+                                        handleUpdateFileList={this.handleUpdateFileList}
+                                    />
+                                </Col>
+                                <Col span={19} style={{ paddingTop: 30, paddingLeft: 10 }} >
+                                    {/* 文件路径展示的组件 */}
+                                    <FilePathShow
+                                        updateAttributes={this.updateAttributes}
+                                        handleUpdateFileList={this.handleUpdateFileList}
+                                        filePath={filePath}
+                                        status={status}
+                                    />
+                                </Col>
+                            </Row>
+                        </Col>
+                        <Col span={3} >
+                            <SearchFile
+                                onRef={this.onRef}
+                                updateAttributes={this.updateAttributes}
+                                status={status}
+                                fileList={fileList}
                             />
-                        </Tooltip>
-                    </Col>
-                    <Col span={4} style={{ paddingLeft: "20px" }} >
-                        <Tooltip placement="bottom" title="上传文件" >
-                            <Button
-                                icon="upload"
-                                className={styles.buttonStyle}
+                        </Col>
+                        <Col span={5} style={{ paddingLeft: "20px" }} >
+
+                            {/* 上传文件 */}
+                            <UploadFile
+                                handleUpdateFileList={this.handleUpdateFileList}
+                                filePath={filePath}
+                                type="current"
+                                status={status}
                             />
-                        </Tooltip>
-                        <Tooltip placement="bottom" title="新建文件夹" >
-                            <Button
-                                icon="folder-add"
-                                className={styles.buttonStyle}
+
+                            {/* 新建文件夹 */}
+                            <SetNewDir
+                                handleUpdateFileList={this.handleUpdateFileList}
+                                filePath={filePath}
+                                status={status}
+                                type="current"
                             />
-                        </Tooltip>
-                        <Tooltip placement="bottom" title="返回根目录" >
-                            <Button
-                                icon="home"
-                                className={styles.buttonStyle}
+
+                            {/* 常用文件列表 */}
+                            <CommonFileList
+                                handleUpdateCommonFileList={this.handleUpdateFileList}
+                                updateAttributes={this.updateAttributes}
+                                status={status}
                             />
-                        </Tooltip>
-                    </Col>
-                </Row>
-                <div style={{ height: "calc(100vh - 175px)" }} >
-                    <Row style={{ paddingLeft: "60px", paddingRight: "60px" }} gutter={16}>
-                        <DataCard></DataCard>
-                        <DataCard></DataCard>
-                        <DataCard></DataCard>
-                    </Row>
-                    <Row style={{ paddingLeft: "60px", paddingRight: "60px" }} gutter={16}>
-                        <DataCard></DataCard>
-                        <DataCard></DataCard>
-                        <DataCard></DataCard>
-                    </Row>
-                    <Row style={{ paddingLeft: "60px", paddingRight: "60px" }} gutter={16}>
-                        <DataCard></DataCard>
-                        <DataCard></DataCard>
-                        <Col span={8} style={{ paddingTop: 21 }} >
-                            <Tooltip placement="bottom" title="点击上传至此文件夹" >
-                                <div>
-                                    <Dragger {...props}
-                                        className={styles.uploadStyle}
-                                        style={{ maxHeight: "70px" }}
-                                    >
-                                        <Icon type="plus" />
-                                    </Dragger>
-                                </div>
-                            </Tooltip>
+
+                            {/* 返回根目录 */}
+                            <ReturnHome
+                                updateAttributes={this.updateAttributes}
+                                handleUpdateFileList={this.handleUpdateFileList}
+                            />
                         </Col>
                     </Row>
+                    <div style={{ height: "calc(100vh - 185px)" }} >
+                        <DataSetCard
+                            handleUpdateFileList={this.handleUpdateFileList}
+                            updateAttributes={this.updateAttributes}
+                            handleClickFile={this.handleClickFile}
+                            fileList={fileList}
+                            filePathUpload={filePathUpload}
+                            status={status}
+                            filePath={filePath}
+                            loading={this.state.loading}
+                        />
+                    </div>
+                </Fragment>
+            );
+        } else {
+            const { status, dataPreviewUrl } = this.state;
+            return (
+                <div style={{ paddingTop: 25 }}>
+                    <VisualizedPanel url={status === 'visiual' ? dataPreviewUrl : null} height={130} />
                 </div>
-            </Fragment>
-        );
+            );
+        }
     }
 }
 

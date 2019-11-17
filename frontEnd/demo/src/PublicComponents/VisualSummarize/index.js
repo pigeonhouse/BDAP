@@ -55,12 +55,14 @@ class Summarize extends React.Component {
     }
 
     render() {
+        const { height } = this.props;
         return (
             <div>
                 <div className={styles.header} >
                     <h3>Summarize</h3>
                 </div>
                 <div
+                    style={{ height: `calc(100vh - ${height + 130}px)` }}
                     onMouseEnter={this.mouseEnter}
                     onMouseLeave={this.mouseLeave}
                     className={this.state.isMouseEnter ? styles.scrollapp : styles.unscrollapp}
@@ -90,6 +92,7 @@ class Summarize extends React.Component {
                     <Button
                         className={styles.button}
                         onClick={this.handleAddSummarize}
+                        loading={this.props.loading}
                         type="primary"
                     >
                         添加

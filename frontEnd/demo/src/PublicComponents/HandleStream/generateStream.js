@@ -10,25 +10,16 @@ export function generateStream(flowInfo) {
 	// 无nodes则直接返回{}，无edges，直接返回flowInfo
 	if (nodes === undefined) return {};
 	if (edges === undefined) {
-		var stream = [];
-		nodes.map((node) => {
-			const { id, labelName, groupName, anchor, attributes, size, x, y, columnsInfo } = node;
+		var stream = new Array();
 
-			if (groupName.label === "数据源") {
-				stream.push({
-					id, labelName, groupName, anchor, attributes, size, x, y, columnsInfo,
-					filePath: node.filePath, sourceIdList: []
-				});
-			}
-			else {
-				stream.push({
-					id, labelName, groupName, anchor, attributes, size, x, y, columnsInfo,
-					sourceIdList: []
-				});
-			}
+		nodes.map((node) => {
+			delete node.keyConfig;
+			delete node.size;
+
+			stream.push({ ...node, sourceIdList: [] });
 		})
-		
-		return JSON.parse(JSON.stringify({nodes:stream}));
+
+		return JSON.parse(JSON.stringify({ nodes: stream }));
 	}
 
 	var stream = { nodes: [], edges: [] };
@@ -39,7 +30,7 @@ export function generateStream(flowInfo) {
 	// nodes改为拓扑图序列
 	let deg = new Array(nodes.length).fill(0);
 	var sourceId = new Array(nodes.length).fill(0);
-	sourceId.map((item, index)=>{
+	sourceId.map((item, index) => {
 		sourceId[index] = new Array();
 	})
 
@@ -55,12 +46,12 @@ export function generateStream(flowInfo) {
 
 				// 锚点位置需要减去入度
 				let uploadAnchor = sourceAnchor - anchor;
-				
+
 				// source与sourceAnchor合成字符串展示
 				sourceId[index][targetAnchor] = source + '_' + uploadAnchor;
 			}
 		})
-		
+
 	})
 
 	// 构造拓扑图
@@ -70,25 +61,15 @@ export function generateStream(flowInfo) {
 
 			// 当入度为0时
 			if (deg[index] === 0) {
+				const { id } = node;
 
 				// 将节点push到拓扑图中
 				nodesNum++;
 				deg[index]--;
 
-				const { id, labelName, groupName, anchor, attributes, size, x, y, columnsInfo } = node;
-
-				if (groupName.label === "数据源") {
-					stream.nodes.push({
-						id, labelName, groupName, anchor, attributes, size, x, y, columnsInfo,
-						filePath: node.filePath, sourceIdList: sourceId[index]
-					});
-				}
-				else {
-					stream.nodes.push({
-						id, labelName, groupName, anchor, attributes, size, x, y, columnsInfo,
-						sourceIdList: sourceId[index]
-					});
-				}
+				delete node.keyConfig;
+				delete node.size;
+				stream.nodes.push({ ...node, sourceIdList: sourceId[index] });
 
 				edges.map((edge) => {
 					if (id === edge.source) {
@@ -107,11 +88,11 @@ export function generateStream(flowInfo) {
 	return JSON.parse(JSON.stringify(stream));
 }
 
-function findNodeBySource(source, nodes){
-	for(let index in nodes){
+function findNodeBySource(source, nodes) {
+	for (let index in nodes) {
 		const node = nodes[index];
 
-		if(node.id === source){
+		if (node.id === source) {
 			return node.anchor[0];
 		}
 	}

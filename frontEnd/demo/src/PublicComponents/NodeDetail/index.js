@@ -5,6 +5,7 @@ import { withPropsAPI } from '@src';
 import Attributes from './Attributes';
 import SelectWord from './SelectWord';
 import GetInputOutput from './GetInputOutput';
+import NewCols from './NewCols';
 
 import styles from './index.less';
 
@@ -16,10 +17,10 @@ import styles from './index.less';
 const { Item } = Form;
 const inlineFormItemLayout = {
 	labelCol: {
-		sm: { span: 8 },
+		sm: { span: 11 },
 	},
 	wrapperCol: {
-		sm: { span: 16 },
+		sm: { span: 13 },
 	},
 };
 
@@ -33,7 +34,7 @@ class NodeDetail extends React.Component {
 		if (!item) {
 			return null;
 		}
-		const { labelName, groupName, attributes } = item.getModel();
+		const { labelName, groupName, attributes, newCols } = item.getModel();
 		const { label } = labelName;
 		const { group } = groupName.label;
 
@@ -45,7 +46,7 @@ class NodeDetail extends React.Component {
 				style={{ paddingRight: 0 }}
 				className={styles.scrollapp}
 			>
-				<Form onSubmit={this.handleSubmit}>
+				<Form>
 					{/**显示label：{label}*/}
 					<Item style={{ margin: 0 }} label="label" {...inlineFormItemLayout}>
 						{
@@ -57,6 +58,9 @@ class NodeDetail extends React.Component {
 
 					{/* 显示attributes，即属性的细节，取决于标签框中的attributes属性*/}
 					<Attributes attributes={attributes} />
+
+					{/* 选择字段后后面的列可接收到新的列名 */}
+					<NewCols newCols={newCols} />
 
 					{/* 选择字段 */}
 					<SelectWord item={item} attributes={attributes} />
