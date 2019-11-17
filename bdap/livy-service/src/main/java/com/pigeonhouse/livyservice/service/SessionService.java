@@ -65,7 +65,7 @@ public class SessionService {
     }
 
 
-    public String postCode(LivySessionInfo livySessionInfo,String code) {
+    public String postCode(LivySessionInfo livySessionInfo, String code) {
         int sessionId = livySessionInfo.getId();
         String livyAddr = livySessionInfo.getLivyAddr();
         Map<String, String> map = new HashMap<>(2);
@@ -83,6 +83,7 @@ public class SessionService {
         headers.setContentType(MediaType.APPLICATION_JSON);
         HttpEntity<String> httpEntity = new HttpEntity<>(jsonData, headers);
         RestTemplate restTemplate = new RestTemplate();
+        System.out.println(availableSessionUrl);
         ResponseEntity<String> compute = restTemplate.exchange(
                 availableSessionUrl + "/statements", HttpMethod.POST, httpEntity, String.class);
 
