@@ -50,8 +50,12 @@ const dataSource = [
       },
   ];
 class NetworkPanel extends React.Component {
+    state={
+        
+    }
 render()
 {
+    if(this.state.confirmed)
     return(
     <div>
      <Row  style={{height:"60px"}}>
@@ -108,6 +112,9 @@ render()
      </Row>
     </div>
     )
+    else{
+        return(null);
+    }
 }
 }
 export default NetworkPanel;
