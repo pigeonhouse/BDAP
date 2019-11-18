@@ -37,6 +37,7 @@ class DataSetPanel extends React.Component {
         fileList: [],
         status: 'normal',
         dataPreviewUrl: null,
+        loading: true
     }
 
     // 点击文件，跳转到可视化界面
@@ -54,10 +55,11 @@ class DataSetPanel extends React.Component {
 
         const { filePathUpload } = this.state;
         const { fileName, path } = file;
-        const filePath = path === undefined ? filePathUpload : path;
+        const filePath = path === undefined ? filePathUpload + fileName : path;
 
         this.setState({
-            dataPreviewUrl: `/experiment-service/query/readyForData?filePath=${filePath}${fileName}`,
+            status: 'visiual',
+            dataPreviewUrl: `/experiment-service/query/readyForData?filePath=${filePath}`,
         })
 
         this.props.handleClickEnter();
@@ -91,9 +93,9 @@ class DataSetPanel extends React.Component {
         const response = await this.getFileListByPath('/');
 
         const attributes = {
-            fileBackup: JSON.parse(JSON.stringify(response || [])),
             fileList: response || [],
-            filePathUpload: '/'
+            filePathUpload: '/',
+            loading: false
         }
 
         this.updateAttributes(attributes);
@@ -106,7 +108,10 @@ class DataSetPanel extends React.Component {
         if (response.status === 200) {
             const fileList = await response.json();
 
-            const attributes = { fileList };
+            const attributes = {
+                fileList,
+                loading: false
+            };
 
             this.updateAttributes(attributes);
         }
@@ -123,6 +128,8 @@ class DataSetPanel extends React.Component {
 
     // 更新文件列表
     handleUpdateFileList = async () => {
+        await this.setState({ loading: true });
+
         const { filePath, status } = this.state;
         if (status === 'common') return this.handleUpdateCommonFileList();
 
@@ -131,7 +138,8 @@ class DataSetPanel extends React.Component {
 
         this.setState({
             fileList: dataDir,
-            filePathUpload: path
+            filePathUpload: path,
+            loading: false
         });
         if (status === 'search') return this.handleUpdateSearchFileBackup(dataDir);
     }
@@ -198,7 +206,7 @@ class DataSetPanel extends React.Component {
 
                             {/* 常用文件列表 */}
                             <CommonFileList
-                                handleUpdateCommonFileList={this.handleUpdateCommonFileList}
+                                handleUpdateCommonFileList={this.handleUpdateFileList}
                                 updateAttributes={this.updateAttributes}
                                 status={status}
                             />
@@ -219,6 +227,7 @@ class DataSetPanel extends React.Component {
                             filePathUpload={filePathUpload}
                             status={status}
                             filePath={filePath}
+                            loading={this.state.loading}
                         />
                     </div>
                 </Fragment>

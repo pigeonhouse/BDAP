@@ -1,3 +1,5 @@
+import org.apache.spark.sql.DataFrame
+
 object RandomSample {
 
   val input: DataFrame = null
@@ -10,15 +12,17 @@ object RandomSample {
   //  比例或大小
   val ratioOrSize: String = null
 
-  def main(args: Array[String]): Unit => {
-
-    val df = input
-    val df_count: Int = df.count ().toInt
+  def main(args: Array[String]): Unit = {
+    import org.apache.spark.sql.DataFrame
+    val df: DataFrame = input
+    val df_count: Int = df.count().toInt
     val sampleSize: Int = if (sampleType == "size") ratioOrSize.toInt else (ratioOrSize.toDouble * df_count).toInt
-    var ratio: Double = if (sampleType == "size") ratioOrSize.toDouble / df.count () else ratioOrSize.toDouble
-    ratio = if (ratio < 1) ratio else 1
+    var ratio: Double = if (sampleType == "size") ratioOrSize.toDouble / df.count() else ratioOrSize.toDouble
+    ratio = if (2 * ratio < 1) 2 * ratio else 1
 
-    val s_df = if (seed == "null") df.sample (withReplacement, ratio) else df.sample (withReplacement, ratio, seed.toLong)
-    val output = s_df.limit (sampleSize)
+    val s_df = if (seed == "null") df.sample(withReplacement, ratio) else df.sample(withReplacement, ratio, seed.toLong)
+    val output = s_df.limit(sampleSize)
+    output.show(100)
+
   }
 }

@@ -87,6 +87,8 @@ class SparkRunning extends Component {
 					if (res === "available") {
 						this.changeStatusColor(result[current].id, 'https://gw.alipayobjects.com/zos/rmsportal/MXXetJAxlqrbisIuZxDO.svg');
 						current++;
+					} else {
+						this.changeStatusColor(result[current].id, 'https://loading.io/spinners/palette-ring/index.rotate-palette-loader.svg');
 					}
 				}
 				this.run(result);

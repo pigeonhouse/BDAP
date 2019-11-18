@@ -26,6 +26,7 @@ class FileCardWithPath extends React.Component {
     }
 
     render() {
+        const { mouseEnter } = this.state;
         const { file, filePathUpload, status, handleUpdateFileList } = this.props;
 
         return (
@@ -53,38 +54,44 @@ class FileCardWithPath extends React.Component {
                                 </div>
                             </Col>
                             <Col span={12} style={{ paddingLeft: 5, marginTop: 10 }} >
-                                {this.state.mouseEnter === true ?
-                                    <div style={{ float: "right" }}>
 
-                                        {/* 数据预览 */}
+                                <div style={{ float: "right" }}>
+                                    {/* 数据预览 */}
+                                    <div style={{ display: 'inline', visibility: mouseEnter ? 'visible' : 'hidden' }}>
                                         <DataPreview
                                             file={file}
                                             filePathUpload={filePathUpload}
                                             status={status}
                                         />
+                                    </div>
 
-                                        {/* 数据下载 */}
+                                    <div style={{ display: 'inline', visibility: mouseEnter ? 'visible' : 'hidden' }}>
                                         <DownloadFile
                                             file={file}
                                             filePathUpload={filePathUpload}
                                             status={status}
                                         />
+                                    </div>
 
-                                        {/* 设置为常用文件 */}
+                                    <div style={{ minWidth: 36, display: 'inline' }}>
                                         <StarCommonFile
+                                            mouseEnter={mouseEnter}
                                             handleUpdateFileList={handleUpdateFileList}
                                             status={status}
                                             filePathUpload={filePathUpload}
                                             file={file}
                                         />
+                                    </div>
 
-                                        {/* 删除文件或文件夹 */}
+                                    <div style={{ display: 'inline', visibility: mouseEnter ? 'visible' : 'hidden' }}>
                                         <DeleteFile
                                             handleUpdateFileList={handleUpdateFileList}
                                             filePathUpload={filePathUpload}
                                             file={file}
                                         />
-                                    </div> : null}
+                                    </div>
+
+                                </div>
                             </Col>
                         </Row>
                     </Card>

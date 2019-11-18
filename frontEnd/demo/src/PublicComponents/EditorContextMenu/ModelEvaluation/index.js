@@ -26,7 +26,7 @@ class ModelEvaluation extends React.Component {
 		// 	alert("该组件未执行，请执行后再进行模型评估！");
 		// 	return;
 		// }
-		// else 
+
 		if (currentNode.groupName.elabel == "evaluation") {
 			const url = `/experiment-service/flow/node/evaluation/${item.id}_0`;
 			const init = {
@@ -40,7 +40,7 @@ class ModelEvaluation extends React.Component {
 			const response = await fetchTool(url, init);
 			if (response.status === 200) {
 				const evaluationInfo = await response.json();
-				console.log(await evaluationInfo)
+				
 				this.setState({
 					mode: currentNode.labelName.label,
 					visible: true,
@@ -48,7 +48,7 @@ class ModelEvaluation extends React.Component {
 					loading: false,
 				});
 			}
-		} else alert("该组件非模型评估组件，无法进行模型评估！");
+		}
 	}
 
 	//处理调出页面的ok事件

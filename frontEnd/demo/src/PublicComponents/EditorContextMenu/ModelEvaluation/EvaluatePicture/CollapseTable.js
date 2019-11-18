@@ -1,7 +1,6 @@
 import React from 'react';
-import { Collapse } from 'antd';
+import { Row, Col, Icon, Tooltip } from 'antd';
 
-const { Panel } = Collapse;
 const text = (
 	<p style={{ paddingLeft: 24 }}>
 		A dog is a type of domesticated animal. Known for its loyalty and faithfulness, it can be found
@@ -12,15 +11,25 @@ const text = (
 class CollapseTable extends React.Component {
 	render() {
 		return (
-			<Collapse bordered={false} style={{ height: "300px" }} >
+			<div style={{ height: "300px" }} >
 				{this.props.statistic.map((item, index) => {
+					console.log(item)
 					return (
-						<Panel header={item} key={index.toString()}>
-							{text}
-						</Panel>
+						<Row>
+							<Col span={2}></Col>
+							<Col span={18} >
+								<p style={{ color: 'rgba(0,0,0,0.45)', fontSize: 18, marginBottom: 4 }} >{item.title}</p>
+								<p style={{ color: 'rgba(0,0,0,0.85)', fontSize: 24 }} >{item.value.toFixed(8)}</p>
+							</Col>
+							<Col span={4} >
+								<Tooltip title={text}>
+									<Icon type="question-circle"></Icon>
+								</Tooltip>
+							</Col>
+						</Row>
 					);
 				})}
-			</Collapse>
+			</div>
 		);
 	}
 }

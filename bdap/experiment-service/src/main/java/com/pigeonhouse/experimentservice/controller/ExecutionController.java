@@ -63,7 +63,7 @@ public class ExecutionController {
         String userId = TokenParser.getClaimsFromToken(token).get("userId").asString();
 
         livyService.postCode(sessionInfo, "val df = dfMap(\"" + nodeId + "\")\n", userId);
-        String result = livyService.getCsv(sessionInfo, 100);
+        String result = livyService.getCsv(sessionInfo, Integer.MAX_VALUE);
         return ResponseEntity.ok(result);
     }
 

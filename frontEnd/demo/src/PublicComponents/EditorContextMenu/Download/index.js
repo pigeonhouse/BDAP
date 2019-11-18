@@ -17,9 +17,8 @@ class Download extends Component {
         const { propsAPI } = this.props;
         const { getSelected } = propsAPI;
         const item = getSelected()[0];
-        const model = item.getModel();
 
-        const url = `/experiment-service/query/readyForData?filePath=${model.filePath}`;
+        const url = `/experiment-service/flow/node/data/${item.id}_0`;
         const init = {
             method: 'GET',
             mode: 'cors',
@@ -31,7 +30,7 @@ class Download extends Component {
 
         if (response.status === 200) {
             const data = await response.text();
-            this.downFile(data);
+            this.downFile(data, item.model.labelName.label);
         }
     }
 
@@ -43,9 +42,9 @@ class Download extends Component {
     }
 
     //提供下载
-    downFile = (list) => {
+    downFile = (list, label) => {
         var elementA = document.createElement('a');
-        elementA.download = "Dataset.csv";
+        elementA.download = `${label}.csv`;
         elementA.style.display = 'none';
         var blob = new Blob([list], {
             type: "text/csv;charset=" + 'utf-8' + ";"
@@ -58,7 +57,7 @@ class Download extends Component {
 
     render() {
         return (
-            <Command name="showpicture">
+            <Command name="download">
                 <div className={styles.item} onClick={this.makeFile}>
                     <Icon type="download" />
                     <span>下载</span>

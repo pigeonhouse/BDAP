@@ -36,6 +36,7 @@ class VisualizedPanel extends React.Component {
 
     async componentWillMount() {
         const { url } = this.props;
+        
         if (url === null || url === undefined) return;
         const init = {
             method: 'GET',

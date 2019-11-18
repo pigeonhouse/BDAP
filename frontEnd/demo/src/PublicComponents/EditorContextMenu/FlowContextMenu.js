@@ -26,6 +26,24 @@ class FlowContextMenu extends React.Component {
 		return groupName.elabel === 'evaluation' ? true : false;
 	}
 
+	savedModel = () => {
+		const { propsAPI } = this.props;
+		const { getSelected } = propsAPI;
+		const item = getSelected()[0];
+		if (item === undefined) return false;
+		const { groupName } = item.getModel();
+		return groupName.elabel === 'machinelearning' ? true : false;
+	}
+
+	download = () => {
+		const { propsAPI } = this.props;
+		const { getSelected } = propsAPI;
+		const item = getSelected()[0];
+		if (item === undefined) return false;
+		const { groupName } = item.getModel();
+		return groupName.elabel === 'evaluation' || groupName.elabel === 'machinelearning' ? false : true;
+	}
+
 	render() {
 		const self = this;
 
@@ -61,7 +79,18 @@ class FlowContextMenu extends React.Component {
 							{
 								queue: true,
 								enable(editor) {
-									return true;
+									return self.savedModel();
+								},
+							}
+						}
+					/>
+					<RegisterCommand
+						name="download"
+						config={
+							{
+								queue: true,
+								enable(editor) {
+									return self.download();
 								},
 							}
 						}
@@ -83,7 +112,7 @@ class FlowContextMenu extends React.Component {
 					<DataPreview></DataPreview>
 					<ModelSaving addModel={this.props.addModel} ></ModelSaving>
 					<ModelEvaluation></ModelEvaluation>
-					{/* {this.modelEvaluation()} */}
+					<Download></Download>
 				</NodeMenu>
 
 				<CanvasMenu>

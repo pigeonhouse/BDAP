@@ -27,14 +27,14 @@ class UploadFile extends React.Component {
     createTreeData = (filePath, index, parentPath, parentKey) => {
         const children = [{
             title: filePath[index],
-            key: `${parentKey}-${index}0`,
+            key: `${parentKey}-${index}`,
             value: `${parentPath}${filePath[index]}/`
         }];
 
         if (filePath.length !== index + 1) {
             children[0].children = this.createTreeData(filePath, index + 1, children[0].value, children[0].key);
         } else if (filePath.length === index + 1) {
-            this.setState({ defaultValue: children[0].value });
+            this.setState({ defaultValue: '/' + children[0].value });
         }
 
         return children;
@@ -45,7 +45,7 @@ class UploadFile extends React.Component {
         const { type, status } = this.props;
         var path = '/';
         var treeData = [{
-            title: '根目录', key: '0', value: '/'
+            title: '/', key: '0', value: ''
         }];
 
         if (type === 'global') {
@@ -63,7 +63,7 @@ class UploadFile extends React.Component {
                     path += item + '/';
                 });
 
-                treeData[0].children = this.createTreeData(filePath, 0, '/', '0');
+                treeData[0].children = this.createTreeData(filePath, 0, '', '0');
             }
 
             this.setState({ path, treeData, visible: true });

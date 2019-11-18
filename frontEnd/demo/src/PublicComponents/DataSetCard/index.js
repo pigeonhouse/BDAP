@@ -1,5 +1,5 @@
 import React, { Fragment } from 'react';
-import { Icon, Upload, Row, Col, Tooltip } from 'antd';
+import { Icon, Upload, Row, Col, Tooltip, Spin } from 'antd';
 import FileCard from './FileCard';
 import FileFolderCard from './FileFolderCard';
 import FileCardWithPath from './FileCardWithPath';
@@ -26,8 +26,28 @@ const props = {
 
 class DataSetCard extends React.Component {
 
+    sortFileList = () => {
+        const { fileList } = this.props;
+        var sortedFileList = new Array();
+
+        for (let index = 0; index < fileList.length; index++) {
+            const file = fileList[index];
+            if (file.isDir === false) continue;
+            sortedFileList.push(file);
+        }
+        for (let index = 0; index < fileList.length; index++) {
+            const file = fileList[index];
+            if (file.isDir === true) continue;
+            sortedFileList.push(file);
+        }
+
+        return sortedFileList;
+    }
+
     render() {
-        const { fileList, filePathUpload, status, handleUpdateFileList, updateAttributes, filePath, handleClickFile } = this.props;
+        const { filePathUpload, status, handleUpdateFileList, updateAttributes, filePath, handleClickFile } = this.props;
+        const fileList = this.sortFileList();
+
         var children = new Array();
 
         // 生成fileList对应的文件夹，且最后为上传文件，
@@ -101,9 +121,12 @@ class DataSetCard extends React.Component {
             }
 
             children.push(
-                <Row style={{ paddingLeft: "60px", paddingRight: "60px" }} gutter={16}>
-                    {colChildren}
-                </Row>
+                <Spin spinning={this.props.loading}>
+                    <Row style={{ paddingLeft: "60px", paddingRight: "60px" }} gutter={16}>
+                        {colChildren}
+                    </Row>
+                </Spin>
+
             )
         }
 
