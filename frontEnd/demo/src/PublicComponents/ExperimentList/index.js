@@ -266,7 +266,6 @@ class ExperimentList extends React.Component {
 							新建项目
 						</Button>
 						<Button
-
 							onClick={this.handleDeleteButton}
 							style={{ marginBottom: 10 }}
 						>
