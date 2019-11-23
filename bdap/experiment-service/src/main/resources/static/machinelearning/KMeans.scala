@@ -1,7 +1,6 @@
 object KMeans {
 
   val trainCols: Array[String] = null
-  val predictName: String = null
   val seed: Int = null
   val input: DataFrame = null
   val categories: Int = null
@@ -21,7 +20,7 @@ object KMeans {
     val assembler = new VectorAssembler().setInputCols(trainCols).setOutputCol("features_")
     val assembled = assembler.transform(metaData)
 
-    val kmeans = new KMeans().setK(categories).setSeed(seed).setFeaturesCol("features_").setPredictionCol(predictName).setMaxIter(maxIter)
+    val kmeans = new KMeans().setK(categories).setSeed(seed).setFeaturesCol("features_").setPredictionCol("prediction").setMaxIter(maxIter)
     val Model = kmeans.fit(assembled)
 
     val centers = Model.clusterCenters

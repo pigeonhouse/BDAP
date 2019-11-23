@@ -328,7 +328,7 @@ class LocalMode extends React.Component {
 							tab={<Icon
 								type="user"
 								className={styles.iconStyle}
-								onClick={this.handleTabClick.bind(this, '2')}
+								onClick={this.handleTabClick.bind(this, '3')}
 							/>}
 							key="3"
 						>
@@ -339,7 +339,7 @@ class LocalMode extends React.Component {
 							tab={<Icon
 								type="global"
 								className={styles.iconStyle}
-								onClick={this.handleTabClick.bind(this, '2')}
+								onClick={this.handleTabClick.bind(this, '4')}
 							/>}
 							key="4"
 						>

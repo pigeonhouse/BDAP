@@ -82,7 +82,7 @@ class ModelEvaluation extends React.Component {
 					visible={visible}
 					onOk={this.handleOk}
 					onCancel={this.handleCancel}
-					width={700}
+					width={800}
 				>
 					{(() => {
 						if (visible) {
