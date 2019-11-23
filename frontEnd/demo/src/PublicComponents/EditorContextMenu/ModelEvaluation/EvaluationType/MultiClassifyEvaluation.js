@@ -7,6 +7,21 @@ const panes = [
 	{ title: '混淆矩阵表', key: 'Confusion Matrix' },
 ];
 
+const data= {
+	"weightedFMeasure": 0.8155980037859232,
+	"recallByLabel": [0.8924050632911392, 0.6708860759493671],
+	"accuracy": 0.8185654008438819,
+	"TPRByLabel": [0.8924050632911392, 0.6708860759493671],
+	"weightedPrecision": 0.8185654008438819,
+	"labels": [0.0, 1.0],
+	"weightedTPR": 0.8185654008438819,
+	"precisionByLabel": [0.844311377245509, 0.7571428571428571],
+	"fMeasureByLabel": [0.8676923076923077, 0.7114093959731544],
+	"confusionMatrix": [141.0, 26.0, 17.0, 53.0],
+	"weightedFPR": 0.2552742616033755,
+	"weightedRecall": 0.8185654008438819,
+	"FPRByLabel": [0.3291139240506329, 0.10759493670886076]
+}
 //右表数据
 const dataSource = [
 	{
