@@ -19,8 +19,6 @@ object MulticlassClassificationEvaluator {
 
     val prediction = input
 
-//    prediction.show(10)
-
     val predictionAndLabels: RDD[(Double, Double)] = prediction.select("prediction", labelCol(0)).rdd.map { case r: Row => (r(0).toString().toDouble, r(1).toString().toDouble) }
     val metrics = new MulticlassMetrics(predictionAndLabels)
 
