@@ -8,5 +8,6 @@ object Merge {
   def main(args: Array[String]): Unit = {
     // groupby并将结果合并到一个list中并去重
     val output = input.groupBy(col(refCol(0))).agg(collect_set(col(dataCol(0))) as newColName)
+    output.show()
   }
 }

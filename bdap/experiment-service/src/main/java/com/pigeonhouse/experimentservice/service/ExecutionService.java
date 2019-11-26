@@ -32,6 +32,12 @@ public class ExecutionService {
     private String generateSavedModelCode(SavedModelNodeInfo nodeInfo, String userId) {
         String id = nodeInfo.getId();
         String modelType = nodeInfo.getLabelName().getElabel();
+        System.out.println("----->"+nodeInfo.getLabelName().getElabel());
+        if(nodeInfo.getLabelName().getElabel().equals("FPGrowth")){
+            return "import org.apache.spark.ml." +"fpm"+ "." + modelType + "Model\n" +
+                    "val Model = " + modelType + "Model.load(\"hdfs:///bdap/students/" + userId + "/savedModels/" + nodeInfo.getModelId() + "\")\n" +
+                    "modelMap += (\"" + id + "_0\" -> (\"" + modelType + "Model\" , Model)) \n";
+        }
         return "import org.apache.spark.ml." + nodeInfo.getAlgorithmType() + "." + modelType + "Model\n" +
                 "val Model = " + modelType + "Model.load(\"hdfs:///bdap/students/" + userId + "/savedModels/" + nodeInfo.getModelId() + "\")\n" +
                 "modelMap += (\"" + id + "_0\" -> (\"" + modelType + "Model\" , Model)) \n";
@@ -143,6 +149,10 @@ public class ExecutionService {
     private String getOutPutCodeForML(AlgorithmNodeInfo nodeInfo) {
         String id = nodeInfo.getId();
         //为保存做准备，在算法里就不用再引model的库了
+        if(nodeInfo.getLabelName().getElabel().equals("FPGrowth")){
+            return "import org.apache.spark.ml." + "fpm" + "." + nodeInfo.getLabelName().getElabel() + "Model\n" +
+                    "modelMap += (\"" + id + "_0\" -> (\"" + nodeInfo.getLabelName().getElabel() + "Model\" , Model)) \n";
+        }
         return "import org.apache.spark.ml." + nodeInfo.getAlgorithmType().getElabel() + "." + nodeInfo.getLabelName().getElabel() + "Model\n" +
                 "modelMap += (\"" + id + "_0\" -> (\"" + nodeInfo.getLabelName().getElabel() + "Model\" , Model)) \n";
     }
