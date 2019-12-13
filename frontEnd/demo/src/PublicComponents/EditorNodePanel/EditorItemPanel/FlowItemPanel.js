@@ -35,8 +35,8 @@ class FlowItemModel extends React.Component {
 		itemList = itemList || [];
 
 		itemList.map((item, index) => {
-		
-			if (item[name] === null || item[name].elabel !== group) return;
+
+			if (item[name] === null || item[name] === undefined || item[name].elabel !== group) return;
 
 			delete item.id;
 			delete item.sourceIdList;

@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Button, Form, Modal, Input } from 'antd'
 import { withPropsAPI } from '@src';
-import { fetchTool } from '../../../FetchTool';
+import { fetchTool } from '../../../../FetchTool';
 import DragM from "dragm";
 import HdfsFileTreeModal from './HdfsFileTreeModal';
 /**
@@ -32,7 +32,9 @@ class HdfsFile extends Component {
 		oppositePath: '/',
 		treeData: [],
 		fileModalVisible: false,
-		fileOppositePath: ""
+		fileOppositePath: "",
+		dataSource: [],
+		value: null,
 	}
 
 	showModal = () => {
@@ -216,6 +218,7 @@ class HdfsFile extends Component {
 							this.handleOk()
 						}>确定</Button>
 					]}
+					width={600}
 				>
 					<HdfsFileTreeModal
 						title={title}

@@ -1,7 +1,6 @@
 import React, { Component, Fragment } from 'react';
 import { withPropsAPI } from '@src';
-
-import TransferSelect from './TransferSelect.js';
+import TransferSelect from './TransferSelect';
 
 /**
  * 选择字段组件
@@ -28,7 +27,7 @@ class SelectWord extends Component {
     render() {
         const { item } = this.props;
         const attributes = this.props.attributes || [];
-        
+
         return (
             <Fragment>
                 {attributes.map((attribute, index) => {

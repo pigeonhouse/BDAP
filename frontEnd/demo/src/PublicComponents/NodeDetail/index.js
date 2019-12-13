@@ -6,6 +6,7 @@ import Attributes from './Attributes';
 import SelectWord from './SelectWord';
 import GetInputOutput from './GetInputOutput';
 import NewCols from './NewCols';
+import { JoinColumns, NewGeneratedColumn } from './DataProcessing';
 
 import styles from './index.less';
 
@@ -67,6 +68,12 @@ class NodeDetail extends React.Component {
 
 					{/* 检测是否为输入输出Item，若是则进行相关处理 */}
 					<GetInputOutput label={label} group={group} />
+
+					{/* 检测是否为join，若是则返回JoinColumns */}
+					{label === '连接' ? <JoinColumns></JoinColumns> : null}
+
+					{/* 检测是否为join，若是则返回JoinColumns */}
+					{label === '新生成列' ? <NewGeneratedColumn></NewGeneratedColumn> : null}
 				</Form>
 			</Card>
 		);

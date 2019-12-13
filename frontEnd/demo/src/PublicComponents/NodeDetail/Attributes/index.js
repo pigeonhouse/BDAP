@@ -6,7 +6,7 @@ import { Form, Input, Select, InputNumber, Checkbox } from 'antd';
  */
 
 const { Item } = Form;
-const Option = Select.Option;
+const { Option } = Select;
 const inlineFormItemLayout = {
     labelCol: {
         sm: { span: 11 },

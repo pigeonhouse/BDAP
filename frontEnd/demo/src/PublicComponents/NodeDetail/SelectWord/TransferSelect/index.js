@@ -92,11 +92,11 @@ class TransferSelect extends React.Component {
     handleChange = (targetKeys) => {
         const { attribute } = this.props;
 
-        if(attribute.style.multiCol === "true"){
+        if (attribute.style.multiCol === "true") {
             this.setState({ targetKeys });
-        } else if(targetKeys.length <= 1){
+        } else if (targetKeys.length <= 1) {
             this.setState({ targetKeys });
-        } 
+        }
     }
 
     handleSearch = (dir, value) => {

@@ -3,7 +3,7 @@
 //'frontEndTest'
 //'backEndTest'
 //'production'
-export const mode = 'backEndTest';
+export const mode = 'frontEndTest';
 
 export async function fetchTool(url, init) {
     var newUrl = '';
