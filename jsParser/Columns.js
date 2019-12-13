@@ -1,0 +1,1 @@
+export var columns = "name|age";
