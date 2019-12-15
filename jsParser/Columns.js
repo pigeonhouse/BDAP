@@ -1,1 +1,1 @@
-export var columns = "name|age";
+export var columns = "";

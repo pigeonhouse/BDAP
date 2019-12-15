@@ -6,7 +6,7 @@ import MyEditor from './MyEditor';
 
 function App() {
   return (
-    <div style={{ margin: 100 }}>
+    <div style={{ margin: 200 }}>
       <MyEditor></MyEditor>
     </div>
   );

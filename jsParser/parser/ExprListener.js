@@ -11,12 +11,30 @@ function ExprListener() {
 ExprListener.prototype = Object.create(antlr4.tree.ParseTreeListener.prototype);
 ExprListener.prototype.constructor = ExprListener;
 
-// Enter a parse tree produced by ExprParser#basicOperation.
-ExprListener.prototype.enterBasicOperation = function(ctx) {
+// Enter a parse tree produced by ExprParser#divideExpr.
+ExprListener.prototype.enterDivideExpr = function(ctx) {
 };
 
-// Exit a parse tree produced by ExprParser#basicOperation.
-ExprListener.prototype.exitBasicOperation = function(ctx) {
+// Exit a parse tree produced by ExprParser#divideExpr.
+ExprListener.prototype.exitDivideExpr = function(ctx) {
+};
+
+
+// Enter a parse tree produced by ExprParser#addExpr.
+ExprListener.prototype.enterAddExpr = function(ctx) {
+};
+
+// Exit a parse tree produced by ExprParser#addExpr.
+ExprListener.prototype.exitAddExpr = function(ctx) {
+};
+
+
+// Enter a parse tree produced by ExprParser#mutipleExpr.
+ExprListener.prototype.enterMutipleExpr = function(ctx) {
+};
+
+// Exit a parse tree produced by ExprParser#mutipleExpr.
+ExprListener.prototype.exitMutipleExpr = function(ctx) {
 };
 
 
@@ -47,6 +65,15 @@ ExprListener.prototype.exitFunction = function(ctx) {
 };
 
 
+// Enter a parse tree produced by ExprParser#minusExpr.
+ExprListener.prototype.enterMinusExpr = function(ctx) {
+};
+
+// Exit a parse tree produced by ExprParser#minusExpr.
+ExprListener.prototype.exitMinusExpr = function(ctx) {
+};
+
+
 // Enter a parse tree produced by ExprParser#columnName.
 ExprListener.prototype.enterColumnName = function(ctx) {
 };
@@ -71,6 +98,51 @@ ExprListener.prototype.enterAbs = function(ctx) {
 
 // Exit a parse tree produced by ExprParser#abs.
 ExprListener.prototype.exitAbs = function(ctx) {
+};
+
+
+// Enter a parse tree produced by ExprParser#sin.
+ExprListener.prototype.enterSin = function(ctx) {
+};
+
+// Exit a parse tree produced by ExprParser#sin.
+ExprListener.prototype.exitSin = function(ctx) {
+};
+
+
+// Enter a parse tree produced by ExprParser#cos.
+ExprListener.prototype.enterCos = function(ctx) {
+};
+
+// Exit a parse tree produced by ExprParser#cos.
+ExprListener.prototype.exitCos = function(ctx) {
+};
+
+
+// Enter a parse tree produced by ExprParser#tan.
+ExprListener.prototype.enterTan = function(ctx) {
+};
+
+// Exit a parse tree produced by ExprParser#tan.
+ExprListener.prototype.exitTan = function(ctx) {
+};
+
+
+// Enter a parse tree produced by ExprParser#cot.
+ExprListener.prototype.enterCot = function(ctx) {
+};
+
+// Exit a parse tree produced by ExprParser#cot.
+ExprListener.prototype.exitCot = function(ctx) {
+};
+
+
+// Enter a parse tree produced by ExprParser#log.
+ExprListener.prototype.enterLog = function(ctx) {
+};
+
+// Exit a parse tree produced by ExprParser#log.
+ExprListener.prototype.exitLog = function(ctx) {
 };
 
 

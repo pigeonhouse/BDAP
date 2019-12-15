@@ -11,7 +11,7 @@ export class CustomHighlightRules extends window.ace.acequire(
         // "keyword.other": "class",
         // "storage.type": "int|float|text",
         // "storage.modifier": "private|public",
-        "support.function": "abs()",
+        "support.function": "abs()|cos()|sin()|tan()|cot()|round()|log()",
         //"constant.language": "true|false"
         "keyword.control": columns.columns
 }, "identifier");
@@ -20,7 +20,7 @@ export class CustomHighlightRules extends window.ace.acequire(
             { token : "comment", regex : "//.*$" },
             { token : "string",  regex : '["](?:(?:\\\\.)|(?:[^"\\\\]))*?["]' },
             { token : "constant.numeric", regex : "0[xX][0-9a-fA-F]+\\b" },
-            { token : "constant.numeric", regex: "[+-]?\\d+(?:(?:\\.\\d*)?(?:[eE][+-]?\\d+)?)?\\b" },
+            { token : "constant.numeric", regex: "\\d+(?:(?:\\.\\d*)?(?:[eE][+-]?\\d+)?)?\\b" },
             { token : "keyword.operator", regex : "!|%|\\\\|/|\\*|\\-|\\+|~=|==|<>|!=|<=|>=|=|<|>|&&|\\|\\|" },
             { token : "punctuation.operator", regex : "\\?|\\:|\\,|\\;|\\." },
             { token : "paren.lparen", regex : "[[({]" },
