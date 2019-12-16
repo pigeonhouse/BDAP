@@ -74,15 +74,6 @@ ExprListener.prototype.exitMinusExpr = function(ctx) {
 };
 
 
-// Enter a parse tree produced by ExprParser#columnName.
-ExprListener.prototype.enterColumnName = function(ctx) {
-};
-
-// Exit a parse tree produced by ExprParser#columnName.
-ExprListener.prototype.exitColumnName = function(ctx) {
-};
-
-
 // Enter a parse tree produced by ExprParser#round.
 ExprListener.prototype.enterRound = function(ctx) {
 };

@@ -6,12 +6,12 @@ export class CustomHighlightRules extends window.ace.acequire(
   constructor() {
     super();
     var keywordMapper = this.createKeywordMapper({
+        "support.function": "abs()|cos()|sin()|tan()|cot()|round()|log()",
         // "keyword.control": "if|then|else",
         // "keyword.operator": "and|or|not",
         // "keyword.other": "class",
         // "storage.type": "int|float|text",
         // "storage.modifier": "private|public",
-        "support.function": "abs()|cos()|sin()|tan()|cot()|round()|log()",
         //"constant.language": "true|false"
         "keyword.control": columns.columns
 }, "identifier");

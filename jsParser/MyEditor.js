@@ -43,7 +43,6 @@ KeyPrinter.prototype.enterBracketExpr = function(ctx) {
   data.push("E -> ( E )");
 };
 
-
 KeyPrinter.prototype.enterNumberExpr = function(ctx) {
   data.push("E -> number");
 };
@@ -86,7 +85,7 @@ class MyEditor extends Component {
       editor.getSession().setAnnotations([{
         row: 0, 
         column: 0, 
-        text: "第" + MyError.MyError.column + "个字符处存在语法错误", 
+        text: "第" + MyError.MyError.column + "个字符处存在错误", 
         type: "error"
       }]);
       MyError.MyError = undefined;

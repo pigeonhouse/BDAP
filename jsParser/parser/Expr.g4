@@ -6,8 +6,9 @@ e: e '+' e              # addExpr
 | e '/' e               # divideExpr
 |'(' e ')'                  # bracketExpr
 | (INT | FLOAT)             # numberExpr
-| COLUMN                # columnName
+//| COLUMN                # columnName
 | func              # function;
+         
 
 func : 'round(' e ',' INT ')'   #round
 | 'abs(' e ')'                  #abs
@@ -17,7 +18,7 @@ func : 'round(' e ',' INT ')'   #round
 | 'cot(' e ')'                  #cot
 | 'log(' e ')'                  #log;
 
-COLUMN : [a-z|A-Z]+;
+//COLUMN : [a-z|A-Z]+;
 
 INT :  DIGIT+;
 
