@@ -17,13 +17,15 @@ object Predict {
     val assembler = new VectorAssembler().setInputCols(trainCols).setOutputCol("features_")
     val assembled = assembler.transform(metaData)
 
-    val columns = assembled.columns
+    var predictions = Model.transform(assembled).drop("features_")
 
-    val predictions = {
+    val columns = predictions.columns
+
+    predictions = {
       if(columns.contains("probability")){
-        Model.transform(assembled).drop("features_").drop("rawPrediction").withColumn("Probability_", diviTensor(col("probability"))).drop("probability")
+        predictions.drop("rawPrediction").withColumn("Probability_", diviTensor(col("probability"))).drop("probability")
       } else {
-        Model.transform(assembled).drop("features_").drop("rawPrediction").withColumnRenamed(newCol, "prediction")
+        predictions.drop("rawPrediction").withColumnRenamed(newCol, "prediction")
       }
     }
 

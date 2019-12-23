@@ -17,7 +17,7 @@ object GenerateNewCol{
     val operateArray = Array("+", "-", "*", "/")
     val priorityArray = Array(0, 0, 1, 1)
 
-//    val sqlSentence = "newCol = - + Religious * Theatre + Shopping Picnic Nature"
+    val sqlSentence = "newCol = - + Religious * Theatre + Shopping Picnic Nature"
 
     val sqlWords = sqlSentence.split(" ")
     val sqlLength = sqlWords.length - 1
