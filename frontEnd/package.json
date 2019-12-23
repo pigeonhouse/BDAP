@@ -42,6 +42,7 @@
   "dependencies": {
     "@antv/g6": "^2.2.6",
     "antd": "^3.23.4",
+    "antlr4": "^4.7.2",
     "create-react-class": "^15.6.3",
     "csvtojson": "^2.0.8",
     "dragm": "0.0.5",
@@ -70,6 +71,7 @@
     "ml-regression-simple-linear": "^1.0.2",
     "ml-svm": "^2.1.2",
     "papaparse": "^4.6.3",
+    "react-ace": "^8.0.0",
     "react-burger-menu": "^2.6.11",
     "react-html-table-to-excel": "^2.0.0",
     "react-motion": "^0.5.2",

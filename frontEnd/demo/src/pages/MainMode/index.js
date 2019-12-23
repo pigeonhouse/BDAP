@@ -11,6 +11,7 @@ import AddMenu from './AddMenu'
 import { fetchTool } from '../../FetchTool';
 import styles from './index.less';
 import { relative } from 'path';
+import JsParser from '../../PublicComponents/jsParser'
 import NetworkPanel from '../Network';
 
 /**
@@ -348,6 +349,17 @@ class LocalMode extends React.Component {
 								clickTab={this.state.clickTab}
 								handleClickEnter={this.handleClickEnter}
 							/>
+						</TabPane>
+						<TabPane
+							className={styles.leftMenu}
+							tab={<Icon
+								type="global"
+								className={styles.iconStyle}
+								onClick={this.handleTabClick.bind(this, '5')}
+							/>}
+							key="5"
+						>
+							<JsParser></JsParser>
 						</TabPane>
 					</Tabs>
 				</div >
