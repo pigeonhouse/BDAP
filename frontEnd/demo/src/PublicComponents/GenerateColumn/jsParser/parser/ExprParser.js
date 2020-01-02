@@ -1,6 +1,6 @@
 // Generated from Expr.g4 by ANTLR 4.7.1
 // jshint ignore: start
-var antlr4 = require('antlr4/index');
+var antlr4 = require('../antlr4/index');
 var ExprListener = require('./ExprListener').ExprListener;
 var grammarFileName = "Expr.g4";
 

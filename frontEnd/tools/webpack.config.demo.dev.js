@@ -57,4 +57,7 @@ module.exports = merge(baseConfig, {
   devtool,
   devServer,
   output,
+  node: {
+    fs: 'empty'
+}
 });

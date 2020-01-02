@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Button, Form, Modal, Input } from 'antd'
+import { Button, Form, Modal, Input } from 'antd';
 import { withPropsAPI } from '@src';
 import { fetchTool } from '../../../../FetchTool';
 import DragM from "dragm";

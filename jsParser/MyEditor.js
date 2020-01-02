@@ -80,12 +80,11 @@ class MyEditor extends Component {
     var tree = parser.e();
     var printer = new KeyPrinter();
     antlr4.tree.ParseTreeWalker.DEFAULT.walk(printer, tree);
-
     if(MyError.MyError != undefined){
       editor.getSession().setAnnotations([{
         row: 0, 
         column: 0, 
-        text: "第" + MyError.MyError.column + "个字符处存在错误", 
+        text: "第" + MyError.MyError.column + "个字符处存在错误,错误为"+MyError.MyError.msg, 
         type: "error"
       }]);
       MyError.MyError = undefined;

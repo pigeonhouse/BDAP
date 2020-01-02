@@ -3,12 +3,12 @@ import { withPropsAPI } from '@src';
 
 import HdfsFile from './HdfsFile';
 import ExampleDataUpload from './ExampleDataUpload';
-
+import GenerateColumn from '../../GenerateColumn'
 /**
  * get输入文件
  * @param {String} label
  * @param {String} group
- */
+ */ 
 
 class GetInputOutput extends React.Component {
     // 检测是否为Input，Output Item，分为三种情况
@@ -19,11 +19,12 @@ class GetInputOutput extends React.Component {
     isInputOutput = () => {
         const { label, group } = this.props;
         if (label === 'hdfs数据') return (<HdfsFile />);
+        if (label === '计算生成列') return(<GenerateColumn/>)
         else if (group === 'datasource') {
-            switch (label) {
+            switch (label) { 
                 case 'Titanic测试': case 'Titanic训练': case 'Pokemon':
                 case 'SimpleTest': case 'SimpleTrain': return (<ExampleDataUpload fileName={label} />);
-                default: return null;
+                default: return null; 
             }
         }
     }

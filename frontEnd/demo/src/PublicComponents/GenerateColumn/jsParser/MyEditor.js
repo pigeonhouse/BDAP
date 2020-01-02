@@ -7,7 +7,7 @@ import "ace-builds/src-noconflict/theme-chrome";
 import "ace-builds/src-min-noconflict/ext-language_tools";
 
 var MyError = require('./MyError')
-var antlr4 = require('antlr4/index');
+var antlr4 = require('./antlr4/index');
 
 var ExprLexer = require('./parser/ExprLexer').ExprLexer;
 var ExprParser = require('./parser/ExprParser').ExprParser;
@@ -23,33 +23,7 @@ var data = [];
 KeyPrinter.prototype = Object.create(ExprListener.prototype);
 KeyPrinter.prototype.constructor = KeyPrinter;
 
-KeyPrinter.prototype.enterAddExpr = function(ctx) {
-  data.push("E -> E + E");
-};
 
-KeyPrinter.prototype.enterMinusExpr = function(ctx) {
-  data.push("E -> E - E");
-};
-
-KeyPrinter.prototype.enterMutipleExpr = function(ctx) {
-  data.push("E -> E * E");
-};
-
-KeyPrinter.prototype.enterDivideExpr = function(ctx) {
-  data.push("E -> E / E");
-};
-
-KeyPrinter.prototype.enterBracketExpr = function(ctx) {
-  data.push("E -> ( E )");
-};
-
-KeyPrinter.prototype.enterNumberExpr = function(ctx) {
-  data.push("E -> number");
-};
-
-KeyPrinter.prototype.enterFunction = function(ctx) {
-  data.push("E -> function( E )");
-};
 
 KeyPrinter.prototype.enterColumnName = function(ctx) {
   console.log(ctx.getText());
@@ -85,7 +59,7 @@ class MyEditor extends Component {
       editor.getSession().setAnnotations([{
         row: 0, 
         column: 0, 
-        text: "第" + MyError.MyError.column + "个字符处存在错误", 
+        text: "第" + MyError.MyError.column + "个字符处存在错误，错误为"+ MyError.MyError.msg, 
         type: "error"
       }]);
       MyError.MyError = undefined;

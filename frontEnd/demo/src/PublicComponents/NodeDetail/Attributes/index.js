@@ -159,13 +159,20 @@ class Attributes extends React.Component {
 
     render() {
         const attributes = this.props.attributes || [];
-
+        if(attributes.length===0 )
+        {
+            return( <Item style={{ margin: 0, textAlign: "center" }}/>)
+        }
         return (
+           
             <Fragment>
-                {attributes.map((item, index) => {
+                { 
+                    
+                attributes.map((item, index) => {
                     return this.generateAttributes(item, index);
                 })}
             </Fragment>
+            
         );
     }
 }
