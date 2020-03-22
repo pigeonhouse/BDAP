@@ -2,7 +2,9 @@ import React from 'react';
 import FlowDataModel from '../../PublicComponents/EditorNodePanel/EditorDataModel';
 
 /**
- * 左侧菜单栏，表示数据的组件
+ * 左侧菜单栏中，表示数据的组件
+ * 将从后端拿到的commonFileList转化为FlowDataModel可以动态生成的数据格式
+ * 返回FlowDataModel组件。
  */
 class FlowDataPanel extends React.Component {
 	render() {
@@ -17,6 +19,9 @@ class FlowDataPanel extends React.Component {
 			fileColumnsInfo: new Array(),
 		}];
 
+		/**
+		 * 将commonFileList数组中的数据转化为FlowDataModel组件可以动态生成的格式
+		 */
 		if (commonFileList !== undefined) {
 			for (let i in commonFileList) {
 				const { fileName, path, headerAttributes } = commonFileList[i];

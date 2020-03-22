@@ -1,17 +1,27 @@
 ﻿import Cookies from 'js-cookie';
+/***
+ * 存放与后端交互的函数fetchTool，负责前后端交互时发送请求信息，并将后端响应的结果返回。
+ */
 
 //'frontEndTest'
 //'backEndTest'
 //'production'
-export const mode = 'backEndTest';
+export const mode = 'frontEndTest';
 
+/**
+ * 将init作为属性，向url发送fetch请求，根据返回的状态码刷新token，返回请求结果
+ * @param {string} url 向后端发送请求所用的url
+ * @param {object} init 包括请求类型，请求头（headers）等参数
+ */
 export async function fetchTool(url, init) {
     var newUrl = '';
+
+    // 拿到Cookies中存的token，放入init中
     const token = Cookies.get('token');
     const refreshToken = Cookies.get('refreshToken');
-
     init.headers["token"] = token;
 
+    // 根据mode的不同（包括三种类型frontEndTest，backEndTest以及production），将url改为对应的newUrl
     if (mode === 'frontEndTest') {
         var frontUrl = '';
         for (let i = 0; i < url.length; i++) {
@@ -30,9 +40,20 @@ export async function fetchTool(url, init) {
         newUrl = "https://result.eolinker.com/MSwz6fu34b763a21e1f7efa84a86a16f767a756952d0f95?uri=localhost:1001" + url;
     }
 
+    // 通过fetch函数向后端发送请求
     const res = await fetch(newUrl, init);
     console.log(res)
 
+    /**
+     * 根据fetch返回结果的status值，刷新token及返回结果
+     * 1. status == 200，若Cookies并未存储token及refreshToken，则返回的
+     *    accessToken和refreshToken作为token及refreshToken放入Cookies中，
+     *    返回请求结果。
+     * 2. status == 401，则使用refreshAccessToken函数向后端发送重新获取token的请求，
+     *    a.若新请求得到的status == 200，表明拿到了正确的token，对accessToken进行刷新，
+     *      调用fetchTool再次发送请求。
+     *    b.若status == 403，表明会话超时，移除token，刷新界面。
+     */
     if (res.status === 200) {
         if (token === undefined && refreshToken === undefined) {
             const response = await res.json();
@@ -57,6 +78,9 @@ export async function fetchTool(url, init) {
     }
 }
 
+/**
+ * 获取刷新token的函数
+ */
 async function refreshAccessToken() {
     const refreshToken = Cookies.get('refreshToken');
     const init = {
