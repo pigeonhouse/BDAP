@@ -22,6 +22,12 @@ const init = {
     },
 };
 
+/**
+ * 数据交互界面
+ * 将用户从后端存储的数据以文件夹及文件的形式展示给用户，为用户提供
+ * 新建、删除文件夹，上传、下载数据（csv文件），数据可视化功能。
+ */
+
 class DataSetPanel extends React.Component {
 
     /**
@@ -40,7 +46,10 @@ class DataSetPanel extends React.Component {
         loading: true
     }
 
-    // 点击文件，跳转到可视化界面
+    /**
+     * 点击文件file后，跳转到可视化界面
+     * @param {object} file  文件的简要信息
+     */
     handleClickFile = (file) => {
         if (this.props.sessionFinish === false) {
             const args = {
@@ -65,12 +74,18 @@ class DataSetPanel extends React.Component {
         this.props.handleClickEnter();
     }
 
-    // 修改父组件的值
+    /**
+     * 按子组件传递的attribute值，修改setState中对应的值
+     * @param {object} attributes  子组件传递给DataSetPanel的需要修改的属性
+     */
     updateAttributes = async (attributes) => {
         await this.setState({ ...attributes });
     }
 
-    // 根据filePath，返回string类型path
+    /**
+     * 对于数组filePath，做一个转换，变为string类型的文件路径path
+     * @param {array} filePath  当前所处的文件路径
+     */
     getPathByFilePath = (filePath) => {
         var path = '/';
         filePath.map((item) => {
@@ -79,7 +94,10 @@ class DataSetPanel extends React.Component {
         return path;
     }
 
-    // 根据path向后端请求拿到fileList
+    /**
+     * 根据path向后端请求拿到fileList，即当前路径下的文件列表，类型为array
+     * @param {string} path  当前路径
+     */
     getFileListByPath = async (path) => {
         const url = `/filesystem-service/ls?path=${path}`;
 
@@ -89,6 +107,7 @@ class DataSetPanel extends React.Component {
         }
     }
 
+    // 初始化state中的参数
     async componentWillMount() {
         const response = await this.getFileListByPath('/');
 
@@ -101,7 +120,7 @@ class DataSetPanel extends React.Component {
         this.updateAttributes(attributes);
     }
 
-    // 当前页面显示常用文件时，更新CoomonFileList
+    // 当前页面显示常用文件时，更新CommonFileList
     handleUpdateCommonFileList = async () => {
         const response = await fetchTool("/filesystem-service/ls/common", init);
 
@@ -126,7 +145,14 @@ class DataSetPanel extends React.Component {
         this.child = ref;
     }
 
-    // 更新文件列表
+    /**
+     * 子组件用来更新文件列表的函数，在点开下一级文件夹，搜索文件或查看常用文件时使用
+     * status 有四种类别：
+     * 1.common 表示界面处在常用文件夹下
+     * 2.search 表示界面处在搜索文件下
+     * 3.normal 表明界面展示的是：默认的当前左上角显示的路径下的文件及文件夹
+     * 4.visiual 表明进入可视化界面
+     */
     handleUpdateFileList = async () => {
         await this.setState({ loading: true });
 
@@ -160,6 +186,7 @@ class DataSetPanel extends React.Component {
                                     <h2 className={styles.headerFont} >DataSet</h2>
                                 </Col>
                                 <Col span={1} >
+                                    {/* 回退到上一级路径 */}
                                     <GoBackPanel
                                         filePath={filePath}
                                         status={status}
@@ -179,6 +206,7 @@ class DataSetPanel extends React.Component {
                             </Row>
                         </Col>
                         <Col span={3} >
+                            {/* 搜索文件及文件夹 */}
                             <SearchFile
                                 onRef={this.onRef}
                                 updateAttributes={this.updateAttributes}
@@ -219,6 +247,8 @@ class DataSetPanel extends React.Component {
                         </Col>
                     </Row>
                     <div style={{ height: "calc(100vh - 185px)" }} >
+
+                        {/* 对文件及文件夹的可视化展示 */}
                         <DataSetCard
                             handleUpdateFileList={this.handleUpdateFileList}
                             updateAttributes={this.updateAttributes}
@@ -236,6 +266,7 @@ class DataSetPanel extends React.Component {
             const { status, dataPreviewUrl } = this.state;
             return (
                 <div style={{ paddingTop: 25 }}>
+                    {/* 在点开某个文件之后，将进入可视化界面 */}
                     <VisualizedPanel url={status === 'visiual' ? dataPreviewUrl : null} height={130} />
                 </div>
             );

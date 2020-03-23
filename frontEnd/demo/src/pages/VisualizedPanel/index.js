@@ -12,28 +12,55 @@ import Papa from 'papaparse';
 
 import { fetchTool } from '../../FetchTool';
 
+/**
+ * 数据可视化界面，对上传的数据进行处理和可视化展示
+ */
 class VisualizedPanel extends React.Component {
 
+    /**
+     * rightCol：string 右侧参数栏的状态，包括：filter，summarize和settings
+     * currentChart：string 当前图表的类型，包括table和各种图
+     * dataSourceName：string 向后端请求时，使用的dataName
+     * fileName：string 当前数据所在的文件名
+     * fileColumns：array 当前数据的元数据
+     * dataSet：array 当前数据
+     * filter：array 过滤有关的配置
+     * summarize：array 聚集有关的配置
+     * groupLabel：string  summarize中分组设置
+     * 
+     * labelArray：array  settings中可供选取的列的列名数组
+     * labelType：array  settings中可供选取的列的类型数组
+     * 
+     * chartStyle：图中颜色取值
+     * titleText：展示为图时，图的标题
+     */
+
     state = {
-        currentChart: "table",
         rightCol: "filter",
+        currentChart: "table",
+
         dataSourceName: 'data',
         fileName: null,
         fileColumns: [],
+        dataSet: [],
+
         filter: [],
         summarize: [],
-        dataSet: [],
+        groupLabel: undefined,
+
         labelArray: [],
         labelType: [],
-        groupLabel: undefined,
+
         chartStyle: {
-            // color: ['#c23531', '#2f4554', '#61a0a8', '#d48265', '#91c7ae', '#749f83', '#ca8622', '#bda29a', '#6e7074', '#546570', '#c4ccd3']
+            // color: ['#c23531', '#2f4554', '#61a0a8', '#d48265',
+            //  '#91c7ae', '#749f83', '#ca8622', '#bda29a', '#6e7074', '#546570', '#c4ccd3']
             color: "#509ee3",
         },
         titleText: '',
         loading: false,
     }
 
+    // 初始化，从后端拿到父组件url属性确定的数据
     async componentWillMount() {
         const { url } = this.props;
         
@@ -51,7 +78,7 @@ class VisualizedPanel extends React.Component {
         if (response.status === 200) {
             const res = await response.text();
 
-            // 通过papa转化
+            // 将后端返回的字符串，通过papa转化为可供前端展示的数组
             const results = Papa.parse(res, { header: true, dynamicTyping: true });
             let labelType = {};
             const fieldNameArray = results.meta.fields;
@@ -65,27 +92,34 @@ class VisualizedPanel extends React.Component {
                 }
             }
 
+            // 初始化元数据，每列的名字，类型
             this.initLabelArray(fieldNameArray, labelType);
+            // 初始化数据
             this.initDataSet(results.data, fieldNameArray.length);
         }
     }
 
+    // 初始化labelArray, labelType, fileColumns参数
     initLabelArray = (labelArray, labelType) => {
         this.setState({ labelArray, labelType, fileColumns: labelArray });
     }
 
+    // 初始化dataSet
     initDataSet = (dataSet, length) => {
         this.setState({ dataSet })
     }
 
+    // 修改settings可选择的列名数组及列名类型
     changeLabelArray = (labelArray, labelType) => {
         this.setState({ labelArray, labelType });
     }
 
+    // 更新过滤或聚集后的数据dataset
     changeDataSet = (dataSet, length) => {
         this.setState({ dataSet })
     }
 
+    // 更换图的样式
     handleChangeChartStyle = (chartStyle, obj = {}) => {
         this.setState({ chartStyle, ...obj })
     }
@@ -227,7 +261,10 @@ class VisualizedPanel extends React.Component {
         });
     }
 
-    // 右侧参数栏生成
+    /**
+     * 根据rightCol的值生成右侧参数栏
+     * 包括filter（过滤），summarize（聚类），settings（图可视化配置信息）三类
+     */
     rightColGenerate = () => {
         const { height } = this.props;
         const { rightCol, filter, loading, fileColumns,
@@ -271,7 +308,7 @@ class VisualizedPanel extends React.Component {
         }
     }
 
-    // 右侧参数栏变化
+    // 根据value选择展示的右侧参数栏
     handleChangeRightCol = (value) => {
         this.setState({ rightCol: value })
     }
@@ -283,6 +320,8 @@ class VisualizedPanel extends React.Component {
             <div style={{ height: `calc(100vh - ${height}px)` }} >
                 <Row type="flex" className={styles.header}>
                     <Col span={6} style={{ paddingLeft: "30px" }} ><h2>DataSource</h2></Col>
+
+                    {/* 变换右侧参数栏 */}
                     <Col span={18}>
                         <div style={{ float: "right", marginRight: 20 }} >
                             <Button onClick={this.handleChangeRightCol.bind(this, "filter")} >Filter</Button>
@@ -295,6 +334,8 @@ class VisualizedPanel extends React.Component {
                 </Row>
                 <Row type="flex" style={{ height: `calc(100vh - ${height + 40}px)` }} >
                     <Col span={19} >
+                        
+                        {/* 展示图或表格 */}
                         <VisualChart
                             currentChart={currentChart}
                             chartStyle={chartStyle}
@@ -307,6 +348,7 @@ class VisualizedPanel extends React.Component {
                         <div className={styles.footer}
                             style={{ textAlign: "center", borderTop: "1px solid #ececec", paddingTop: 10 }}
                         >
+                            {/* 转换图表 */}
                             <Radio.Group
                                 value={currentChart}
                                 buttonStyle="solid"

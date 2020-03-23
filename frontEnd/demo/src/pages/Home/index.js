@@ -7,17 +7,22 @@ import style from './index.less';
 
 /**
  * 登陆界面
- * 在检测得到正确的用户名及密码后，进行页面跳转
+ * 在后端检测得到正确的用户名及密码后，将页面跳转到mainPage
  */
 const FormItem = Form.Item;
 
 class HomePage extends React.Component {
+
 	state = {
-		//跳转所用变量
+		// 跳转所用变量
 		redirect: false,
+
+		// 将用户名与密码保存到cookie中，下次登录不必输入密码
 		username: '',
 		password: '',
 		remind: '',
+
+		// 记住密码
 		rememberPassword: false,
 		iconLoading: false,
 	}
@@ -26,7 +31,7 @@ class HomePage extends React.Component {
 		this.loadAccountInfo();
 	}
 
-	//将用户名及密码从cookie中提取出来
+	//将用户名及密码从cookie中提取出来，更新state中的password及username
 	loadAccountInfo = () => {
 		let arr, reg = new RegExp("(^| )" + 'accountInfo' + "=([^;]*)(;|$)");
 		let accountInfo = ''
@@ -56,10 +61,15 @@ class HomePage extends React.Component {
 		}
 	}
 
+	// 点击登录之后，将登录按钮变为等待状态，修改state中的iconLoading
 	enterLoading = () => {
 		this.setState({ iconLoading: true });
 	}
 
+	/**
+	 * 向后端提交用户填写的username及password，若验证成功且用户勾选记住密码，则
+	 * 将其保存到cookie中
+	 */
 	handleSubmit = (e) => {
 		e.preventDefault();
 		let userInfo = this.props.form.getFieldsValue();
@@ -78,13 +88,16 @@ class HomePage extends React.Component {
 				}
 				const res = await fetchTool('/login-service/login', init);
 
-				//验证正确，则进入界面，显示已登陆
+				//验证正确，则跳转界面，显示已登陆
 				if (res !== undefined) {
 					if (values.remember) {
+
+						// 若用户选中了保存密码，将账户信息保存到cookie中，保存时间为3天。
 						let accountInfo = '';
 						if (this.state.remind === '')
 							accountInfo = values.username + '&' + values.password + '&' + 'true';
 						else accountInfo = values.username + '&' + values.password + '&' + this.state.remind;
+
 						let Days = 3;
 						let exp = new Date();
 						exp.setTime(exp.getTime() + Days * 24 * 60 * 60 * 1000);
@@ -101,6 +114,8 @@ class HomePage extends React.Component {
 	}
 
 	render() {
+
+		// 在token存在，且登录已成功（redirect为true）时，跳转到mainPage界面
 		const token = Cookies.get('token');
 		if (this.state.redirect || token !== undefined) {
 			this.setState({ redirect: false })

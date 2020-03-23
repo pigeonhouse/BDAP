@@ -9,7 +9,7 @@ class SparkRun extends Component {
 
 	/**
 	 * 点击运行按钮后执行的函数，在session创建完毕后
-	 * 通知父组件已点击运行按钮
+	 * 通知父组件用户已点击运行按钮
 	 */
 	enterLoading = () => {
 

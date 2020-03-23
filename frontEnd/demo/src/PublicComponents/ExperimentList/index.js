@@ -75,6 +75,7 @@ class ExperimentList extends React.Component {
 		const response = await fetchTool(`/experiment-service/experiments/${experimentId}`, init);
 		return await response.json();
 	}
+
 	//当执行删除操作时，对searchData进行处理，即执行删除操作
 	getDeleteSearchData = (experimentId) => {
 		const searchData = this.state.searchData;
@@ -86,6 +87,7 @@ class ExperimentList extends React.Component {
 			}
 		}
 	}
+
 	//找到dataSoure的title对应的searchData的title
 	getDeleteTitle = (experimentId) => {
 		const searchData = this.state.searchData;
@@ -96,6 +98,7 @@ class ExperimentList extends React.Component {
 			}
 		}
 	}
+
 	//点击删除的处理
 	handleDeleteButton = () => {
 		const selectTitleDelte = this.state.selectedRowKeys;
@@ -158,12 +161,14 @@ class ExperimentList extends React.Component {
 	onInputChange = (e) => {
 		this.setState({ searchText: e.target.value });
 	}
+
 	//处理重置按钮
 	handelResetButton = () => {
 		this.setState({
 			searchText: "",
 		}, () => { this.onSearch() })
 	}
+
 	//对搜索数据的匹配
 	onSearch = () => {
 		const { searchText } = this.state;
@@ -230,7 +235,6 @@ class ExperimentList extends React.Component {
 				description: item.description,
 			})
 		})
-
 
 		const columns = [
 			{

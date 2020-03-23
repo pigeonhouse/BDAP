@@ -6,22 +6,24 @@ import { Motion, spring } from "react-motion";
 import SparkRun from '../../ClusterModeComponents/SparkRunPanel';
 import ExperimentPanel from '../ExperimentPanel';
 import DataSetPanel from '../DataSetPanel';
-import Cookies from 'js-cookie';
 import AddMenu from './AddMenu'
-import { fetchTool } from '../../FetchTool';
-import styles from './index.less';
-import { relative } from 'path';
 import JsParser from '../../PublicComponents/GenerateColumn/jsParser'
 import NetworkPanel from '../Network';
 
-/**
- * 主界面，根据link的信息，进行不同版本的组件渲染
- * 已将三个版本的界面合成一个
+import Cookies from 'js-cookie';
+
+import { fetchTool } from '../../FetchTool';
+import styles from './index.less';
+
+/** 
+ * 登陆成功后进入的主界面，在界面的左侧点击标签可更换主页面功能
  */
 const TabPane = Tabs.TabPane;
 var IntroJs = require('intro.js');
 
 class LocalMode extends React.Component {
+
+	// 用户导引相关函数
 	Intro = (key) => {
 		notification.close(key)
 		IntroJs().setOptions({
@@ -42,18 +44,31 @@ class LocalMode extends React.Component {
 	}
 
 	state = {
+		/**
+		 * 判断当前界面处于何种功能的标志
+		 * currentTab代表当前标签的序号，由上到下，从小到大
+		 * clickTab为0表示进入当前标签下其他界面，与currentTab相等表示为当前标签下的默认界面
+		 */
 		currentTab: '1',
 		clickTab: '1',
+
+		// cookie中的信息
 		username: '',
 		password: '',
 		remind: 'false',
+
+		// 表明是否创建完session
 		sessionFinish: Cookies.get('token') === undefined ? false : true,
-		connectCtrl: false,
+
+		// 实验运行的标志
 		running: false,
+
+		connectCtrl: false,
 		sliderOut: false,
 		Menuvisible: 'none'
 	}
 
+	// 用户点击右上角通知栏的用户导引不再提醒后，将此选择保存到cookie中
 	noRemind = (key) => {
 		notification.close(key)
 		let accountInfo = this.state.username + '&' + this.state.password + '&false';
@@ -93,6 +108,7 @@ class LocalMode extends React.Component {
 		);
 	}
 
+	// 从cookies中取出username，password，remind的信息
 	componentWillMount() {
 		let arr, reg = new RegExp("(^| )" + 'accountInfo' + "=([^;]*)(;|$)");
 		let accountInfo = ''
@@ -123,6 +139,7 @@ class LocalMode extends React.Component {
 		}
 	}
 
+	// 轮询后端，发送请求，确定session是否创建成功，得到肯定回复后，将state中的sessionFinish改为true
 	querySession = () => {
 		if (this.state.sessionFinish === true) return;
 		setTimeout(async () => {
@@ -152,7 +169,6 @@ class LocalMode extends React.Component {
 			this.querySession();
 		}, 1000)
 	}
-
 
 	componentDidMount() {
 		if (this.state.sessionFinish === false &&
@@ -185,6 +201,7 @@ class LocalMode extends React.Component {
 		}
 	}
 
+	// 点击左侧标签发生标签间的切换时触发的函数。
 	tabChange = (value) => {
 		this.setState({
 			currentTab: value,
@@ -192,30 +209,35 @@ class LocalMode extends React.Component {
 		})
 	}
 
+	// 同一tab下，进入内层时，将clickTab修改为0，表明进入了内层
 	handleClickEnter = () => {
 		this.setState({
 			clickTab: "0"
 		})
 	}
 
-	handleTabClick = (value) => {
+	// 再次点击标签，将clickTab修改为与currentTab相等的情况，回到初始进入tab的状态
+	handleTabClick = () => {
 		this.setState({
-			clickTab: value
+			clickTab: this.state.currentTab
 		})
 	}
 
+	// 点击运行按钮时，将running改为true，表示工作流正在运行
 	onClickButtonRunning = () => {
 		this.setState({
 			running: true
 		})
 	}
 
+	// 因执行条件不足，将running改为false，表示工作流停止运行
 	stopRunning = () => {
 		this.setState({
 			running: false
 		})
 	}
 
+	// 点击退出时，清楚token，退出mainPage
 	handleSignout = () => {
 		this.setState({ token: undefined });
 		Cookies.remove("token");
@@ -241,6 +263,7 @@ class LocalMode extends React.Component {
 		return (
 			<div style={{ width: "100%" }}>
 				<div className={styles.editor}>
+					{/* 导航条 */}
 					<Row
 						style={{ lineHeight: '40px', height: '40px', backgroundColor: backgroundColor, color: "white" }}
 					>
@@ -284,6 +307,7 @@ class LocalMode extends React.Component {
 						</a>
 					</Row>
 
+					{/* 主界面 */}
 					<Tabs
 						tabPosition='left'
 						activeKey={this.state.currentTab}
@@ -294,10 +318,11 @@ class LocalMode extends React.Component {
 							className={styles.leftMenu}
 							tab={<Icon type="credit-card"
 								className={styles.iconStyle}
-								onClick={this.handleTabClick.bind(this, '1')}
+								onClick={this.handleTabClick}
 							/>}
 							key="1"
 						>
+							{/* 工作流实验组件 */}
 							<ExperimentPanel
 								refresh={this.state.refresh}
 								currentTab={this.state.currentTab}
@@ -313,10 +338,11 @@ class LocalMode extends React.Component {
 							tab={<Icon
 								type="api"
 								className={styles.iconStyle}
-								onClick={this.handleTabClick.bind(this, '2')}
+								onClick={this.handleTabClick}
 							/>}
 							key="2"
 						>
+							{/* 文件存储、上传下载组件 */}
 							<DataSetPanel
 								currentTab={this.state.currentTab}
 								clickTab={this.state.clickTab}
@@ -329,18 +355,18 @@ class LocalMode extends React.Component {
 							tab={<Icon
 								type="user"
 								className={styles.iconStyle}
-								onClick={this.handleTabClick.bind(this, '3')}
+								onClick={this.handleTabClick}
 							/>}
 							key="3"
 						>
-							
+
 						</TabPane>
 						<TabPane
 							className={styles.leftMenu}
 							tab={<Icon
 								type="global"
 								className={styles.iconStyle}
-								onClick={this.handleTabClick.bind(this, '4')}
+								onClick={this.handleTabClick}
 							/>}
 							key="4"
 						>
@@ -349,21 +375,23 @@ class LocalMode extends React.Component {
 								clickTab={this.state.clickTab}
 								handleClickEnter={this.handleClickEnter}
 							/>
-							
+
 						</TabPane>
-						 <TabPane
+						<TabPane
 							className={styles.leftMenu}
 							tab={<Icon
 								type="global"
 								className={styles.iconStyle}
-								onClick={this.handleTabClick.bind(this, '5')}
+								onClick={this.handleTabClick}
 							/>}
 							key="5"
 						>
 							<JsParser></JsParser>
-						</TabPane> 
+						</TabPane>
 					</Tabs>
 				</div >
+
+				{/* footer */}
 				<Motion style={{ x: initialX }}>
 					{({ x }) => (
 						<div style={{ position: "relative", transform: `translateY(${x}px)`, zIndex: 999 }}>
