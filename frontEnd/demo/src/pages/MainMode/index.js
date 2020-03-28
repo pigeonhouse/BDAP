@@ -9,6 +9,7 @@ import DataSetPanel from '../DataSetPanel';
 import AddMenu from './AddMenu'
 import JsParser from '../../PublicComponents/GenerateColumn/jsParser'
 import NetworkPanel from '../Network';
+import GuideModel from "./guideModel.js"
 
 import Cookies from 'js-cookie';
 
@@ -17,6 +18,8 @@ import styles from './index.less';
 
 /** 
  * 登陆成功后进入的主界面，在界面的左侧点击标签可更换主页面功能
+ * GuideModel为用户导引的内容
+ * 
  */
 const TabPane = Tabs.TabPane;
 var IntroJs = require('intro.js');
@@ -272,8 +275,12 @@ class LocalMode extends React.Component {
 								<Icon type="bars" style={{ fontSize: 20 }} />
 							</Button>
 						</Col>
-						<Col span={20}>
+						<Col span={19}>
 							<Button style={{ border: 0, backgroundColor: backgroundColor, color: "#ddd", fontSize: 18, fontFamily: 'consolas' }}>BigDataPlayground Preview-Mode</Button>
+						</Col>
+						{/* 用户导引按钮 */}
+						<Col span={1}>
+							<GuideModel/>
 						</Col>
 						<Col span={1}>
 							<a href="https://www.yuque.com/ddrid/tx7z84" target="_blank">

@@ -75,12 +75,15 @@
     "ml-regression-simple-linear": "^1.0.2",
     "ml-svm": "^2.1.2",
     "papaparse": "^4.6.3",
+    "react": "^16.13.1",
     "react-ace": "^8.0.0",
     "react-burger-menu": "^2.6.11",
+    "react-dom": "^16.13.1",
     "react-html-table-to-excel": "^2.0.0",
     "react-motion": "^0.5.2",
-    "redux": "^4.0.1",
-    "url-loader": "^1.1.2"
+    "redux": "^4.0.5",
+    "url-loader": "^1.1.2",
+    "video-react": "^0.14.1"
   },
   "devDependencies": {
     "@babel/cli": "^7.2.3",
