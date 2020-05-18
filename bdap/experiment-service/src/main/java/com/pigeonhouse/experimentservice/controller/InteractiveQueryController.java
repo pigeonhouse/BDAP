@@ -15,6 +15,7 @@ public class InteractiveQueryController {
     LivyService livyService;
 
     @GetMapping("/query/sql")
+    //按照前端发回的筛选条件过滤指定数据源
     public ResponseEntity sqlQuery(@RequestParam("sql") String sql,
                                    @RequestHeader("token") String token) {
         LivySessionInfo sessionInfo = TokenParser.getSessionInfoFromToken(token);
@@ -28,6 +29,7 @@ public class InteractiveQueryController {
 
 
     @GetMapping("/query/readyForData")
+    //将hdfs中压缩后的orc格式文件取出并进行下载
     public ResponseEntity readyForData(@RequestParam("filePath") String filePath,
                                        @RequestHeader("token")String token) {
         LivySessionInfo sessionInfo = TokenParser.getSessionInfoFromToken(token);

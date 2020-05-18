@@ -39,6 +39,7 @@ public class StorageController {
 
 
     @GetMapping("/experiments/{experimentId}")
+    //返回指定的某条工作流信息
     public ResponseEntity getExperimentByExperimentId(@PathVariable String experimentId,
                                                       @RequestHeader("token") String token) {
         try {
@@ -51,6 +52,7 @@ public class StorageController {
     }
 
     @DeleteMapping("/experiments/{experimentId}")
+    //删除指定的某条工作流信息
     public ResponseEntity deleteExperimentByExperimentId(@PathVariable String experimentId,
                                                          @RequestHeader("token") String token) {
         String userId = TokenParser.getClaimsFromToken(token).get("userId").asString();
@@ -59,6 +61,7 @@ public class StorageController {
     }
 
     @PutMapping("/experiments")
+    //将新工作流信息放入数据库
     public ResponseEntity uploadNewExperiment(@RequestBody JSONObject descriptionAndMapInfo,
                                               @RequestHeader("token") String token) {
         String userId = TokenParser.getClaimsFromToken(token).get("userId").asString();

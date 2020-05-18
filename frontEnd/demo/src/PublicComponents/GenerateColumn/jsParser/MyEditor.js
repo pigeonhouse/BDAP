@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { List } from 'antd';
+import { List ,Button } from 'antd';
 import AceEditor from "react-ace";
 import CustomSqlMode from "./CustomSqlMode.js";
 
@@ -7,7 +7,7 @@ import "ace-builds/src-noconflict/theme-chrome";
 import "ace-builds/src-min-noconflict/ext-language_tools";
 
 var MyError = require('./MyError')
-var antlr4 = require('./antlr4/index');
+var antlr4 = require('./parser/antlr4/index');
 
 var ExprLexer = require('./parser/ExprLexer').ExprLexer;
 var ExprParser = require('./parser/ExprParser').ExprParser;
@@ -29,13 +29,62 @@ KeyPrinter.prototype.enterColumnName = function(ctx) {
   console.log(ctx.getText());
 };
 
+
 class MyEditor extends Component {
   state={
-    showData:[""]
+    showData:[""],
+    vocabulary:[],
+   
+  }
+  componentWillMount()
+  {
+      //使用xhr请求获取g4文法文件
+      /*let xhr = new XMLHttpRequest(),
+      okStatus = document.location.protocol === "file:" ? 0 : 200;
+      xhr.open('GET', './src/PublicComponents/GenerateColumn/jsParser/parser/Expr.g4', false);
+      xhr.overrideMimeType("text/html;charset=utf-8");//默认为utf-8
+      xhr.send(null);
+      let text=xhr.responseText;
+      console.log(text)
+      let rows= text.split("\n");
+      let i=0;
+      while (rows[i].indexOf("#functions")==-1&&i<rows.length)
+      {i++;
+      console.log(rows[i])
+
+      }
+      i+=2;
+      while(rows[i].indexOf("#functions-end")==-1&&i<rows.length)
+      {
+        var info=rows[i].split('#');
+        var re = new RegExp("[\u4e00-\u9fa5|a-z|A-Z]{2,}");
+        let tmp=info.length==2?info[0].match(re):rows[i].match(re);
+        let tuple={
+          name:'name',
+          value:tmp[0],
+          meta:info.length==2?info[1]:"",
+        }
+        console.log(tmp)
+        this.state.vocabulary.push(tuple)
+        i++;
+        
+      }*/
+
+
   }
   componentDidMount() {
     const customMode = new CustomSqlMode();
     this.refs.aceEditor.editor.getSession().setMode(customMode);
+  }
+  complete(editor) {
+    const {columns}=this.props;
+    //向编辑器中添加自动补全列表
+    editor.completers.push({
+      getCompletions(editor, session, pos, prefix, callback) {
+        callback(null, columns);
+      },
+
+    });
   }
   onChange = (newValue) => {
     const editor = this.refs.aceEditor.editor;
@@ -69,9 +118,14 @@ class MyEditor extends Component {
       showData: data
     });
   }
-  
+  onClick=()=>{
+
+    console.log(this.state.value);
+  }
   render() {
+    const {vocabulary}=this.state;
     return (
+      
       <div>
         <AceEditor
           ref="aceEditor"
@@ -80,11 +134,11 @@ class MyEditor extends Component {
           placeholder="请在此处输入表达式"
           width="100%"
           value={this.state.value}
-          name="UNIQUE_ID_OF_DIV"
+          name="UNIQUE"
           onChange={this.onChange}
           enableBasicAutocompletion={true}
           enableLiveAutocompletion={true}
-          setOptions={{
+            setOptions={{
             showLineNumbers: false,
             maxLines:1,
             fontSize:30
@@ -100,7 +154,9 @@ class MyEditor extends Component {
             bindKey: {win: 'Enter', mac: 'Enter'}, 
             exec: () => { console.log('key-binding used')}  
           }]}
+          onLoad={this.complete.bind(this)}
         />
+        <Button text="点击进行语义检查并提交" onClick={this.onClick}></Button>
         <div></div>
         <List
           bordered

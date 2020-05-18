@@ -31,6 +31,7 @@ public class ExecutionController {
     SavedModelDao savedModelDao;
 
     @PostMapping("/flow/run")
+    //负责启动部署于livy上的session以执行工作流图
     public ResponseEntity run(@RequestBody JSONObject nodesJson,
                               @RequestHeader("token") String token) {
 
@@ -42,6 +43,7 @@ public class ExecutionController {
     }
 
     @GetMapping("/flow/node/status")
+    //负责获取给定工作流的运行状态
     public ResponseEntity checkRunningStatus(@RequestParam("resultUrl") String resultUrl) {
         try {
             Map resultMap = new ObjectMapper().readValue(
@@ -56,6 +58,7 @@ public class ExecutionController {
 
 
     @GetMapping("/flow/node/data/{nodeId}")
+    //执行数据预览功能
     public ResponseEntity showNodeResult(@PathVariable String nodeId,
                                          @RequestHeader("token") String token) {
 
@@ -68,6 +71,7 @@ public class ExecutionController {
     }
 
     @PostMapping("/flow/node/model/{nodeId}")
+    //执行保存模型功能
     public ResponseEntity saveModel(@PathVariable String nodeId,
                                     @RequestBody SavedModel model,
                                     @RequestHeader("token") String token) {
@@ -83,6 +87,7 @@ public class ExecutionController {
 
 
     @GetMapping("/flow/node/evaluation/{nodeId}")
+    //执行模型评估功能
     public ResponseEntity showEvaluationResult(@PathVariable String nodeId,
                                                @RequestHeader("token") String token) {
 
@@ -95,6 +100,7 @@ public class ExecutionController {
     }
 
     @GetMapping("/session/status")
+    //函数识别在token中携带的session，并轮询session状态判断当前工作是否已完成。
     public ResponseEntity sessionStatus(@RequestHeader("token") String token) {
         LivySessionInfo sessionInfo = TokenParser.getSessionInfoFromToken(token);
         String status = livyService.sessionStatus(sessionInfo);

@@ -56,7 +56,7 @@ public class HdfsService {
     }
 
     /**
-     * .common 标志该目录下存在一个叫common的文件是常用文件
+     * .common 标志该目录下存在一个叫common的文件是星标文件
      */
     public void setCommonFile(String path) throws Exception {
         FileSystem fileSystem = getFileSystem();
@@ -64,14 +64,18 @@ public class HdfsService {
         String name = PathParser.getName(path);
         fileSystem.mkdirs(new Path(getHdfsPath(dirPath) + "/." + name));
     }
-
+    /**
+     * 取消星标文件的功能函数
+     */
     public void cancelCommonFile(String path) throws Exception {
         String dirPath = PathParser.getDirPath(path);
         String name = PathParser.getName(path);
         delete(dirPath + "/." + name);
     }
 
-
+    /**
+     *获取当前文件夹下的文件列表
+     */
     public List<Map<String, Object>> listFiles(String path) throws Exception {
         List<Map<String, Object>> result = new ArrayList<>();
         FileSystem fileSystem = getFileSystem();
@@ -112,7 +116,9 @@ public class HdfsService {
         return result;
 
     }
-
+    /**
+     *删除指定路径中的文件
+     */
     public void delete(String path) throws Exception {
         FileSystem fileSystem = getFileSystem();
         fileSystem.delete(new Path(getHdfsPath(path)), true);
@@ -128,7 +134,9 @@ public class HdfsService {
         }
     }
 
-
+    /**
+     *上传文件
+     */
     public void upload(MultipartFile file, String path) throws IOException {
         String fileName = file.getOriginalFilename();
         FileSystem fs = getFileSystem();
@@ -138,7 +146,9 @@ public class HdfsService {
         outputStream.close();
         close(fs);
     }
-
+    /**
+     *读取经过orc压缩后的列式存储数据源头文件
+     */
     public MetaData getMetaDataFromOrc(String userId, String path, LivySessionInfo livySessionInfo)  {
         String[] splits = path.split("/");
         String fileName = splits[splits.length - 1];

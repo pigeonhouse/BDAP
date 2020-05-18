@@ -7,7 +7,7 @@ import org.springframework.cloud.openfeign.EnableFeignClients;
 
 @EnableFeignClients
 @SpringCloudApplication
-public class ExperimentServiceApplication {
+    public class ExperimentServiceApplication {
 
     public static void main(String[] args) {
         SpringApplication.run(ExperimentServiceApplication.class, args);

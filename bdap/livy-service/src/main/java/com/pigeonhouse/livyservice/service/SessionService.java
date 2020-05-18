@@ -24,6 +24,11 @@ public class SessionService {
     @Value("${executorCores}")
     int executorCores;
 
+    /**
+     * 创建session的方法
+     * @param livyAddr
+     * @return
+     */
     public LivySessionInfo createSession(String livyAddr) {
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
@@ -64,7 +69,10 @@ public class SessionService {
         return livySessionInfo;
     }
 
+    /**
+     * 请求提交代码的函数
 
+     */
     public String postCode(LivySessionInfo livySessionInfo, String code) {
         int sessionId = livySessionInfo.getId();
         String livyAddr = livySessionInfo.getLivyAddr();
@@ -93,6 +101,11 @@ public class SessionService {
         return resultUrl;
     }
 
+    /**
+     * 请求更新livysession中运行状态的函数
+     * @param livySessionInfo
+     * @return
+     */
     public LivySessionInfo refreshSessionStatus(LivySessionInfo livySessionInfo) {
         String livyAddr = livySessionInfo.getLivyAddr();
         int sessionId = livySessionInfo.getId();

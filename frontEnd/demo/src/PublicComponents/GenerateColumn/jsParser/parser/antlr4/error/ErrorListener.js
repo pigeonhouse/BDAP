@@ -49,7 +49,7 @@ ConsoleErrorListener.INSTANCE = new ConsoleErrorListener();
 // line <em>line</em>:<em>charPositionInLine</em> <em>msg</em>
 // </pre>
 //
-var Error=require("../../MyError")
+var Error=require("../../../MyError")
 ConsoleErrorListener.prototype.syntaxError = function(recognizer, offendingSymbol, line, column, msg, e) {
    Error.MyError={line,column,msg}
 };

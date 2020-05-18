@@ -1,6 +1,6 @@
-// Generated from Expr.g4 by ANTLR 4.7.1
+// Generated from Expr.g4 by ANTLR 4.8
 // jshint ignore: start
-var antlr4 = require('../antlr4/index');
+var antlr4 = require('./antlr4/index');
 
 // This class defines a complete listener for a parse tree produced by ExprParser.
 function ExprListener() {
@@ -71,6 +71,15 @@ ExprListener.prototype.enterMinusExpr = function(ctx) {
 
 // Exit a parse tree produced by ExprParser#minusExpr.
 ExprListener.prototype.exitMinusExpr = function(ctx) {
+};
+
+
+// Enter a parse tree produced by ExprParser#columnName.
+ExprListener.prototype.enterColumnName = function(ctx) {
+};
+
+// Exit a parse tree produced by ExprParser#columnName.
+ExprListener.prototype.exitColumnName = function(ctx) {
 };
 
 

@@ -3,21 +3,31 @@ import MyEditor from './MyEditor';
 import {Collapse,Icon,Table,Row,Col,Input,Button} from 'antd';
 const { Panel } = Collapse;
 class JsParser extends Component {
+  
   render() {
-    const{dataSource}=this.props;
+    //const{dataSource}=this.props;
     const columns = [
       {
         title: '列名',
-        dataIndex: 'colName',
-        key: 'colName',
+        dataIndex: 'value',
+        key: 'value',
       },
       {
         title: '数据类型',
-        dataIndex: 'dataType',
-        key: 'age',
+        dataIndex: 'meta',
+        key: 'meta',
       }
       
     ];
+    const dataSource=[{
+      name:"name",
+      value:"列1",
+      meta:"int"
+    },{
+      name:"name",
+      value:"列2",
+      meta:"string"
+    }]//标注提示高亮的列名和方法名
     return (
      
       <div >
@@ -35,7 +45,7 @@ class JsParser extends Component {
         <Col span={1}/>
         <Col span={12}>
        
-        <MyEditor></MyEditor>
+        <MyEditor columns={dataSource}></MyEditor>
         <Collapse defaultActiveKey={['1']} >
         <Panel header="这是什么？" key="1">
            <p>这是一个表达式编辑器，您可以在其中指定某一列或者某几列的计算规则，然后根据计算规则生成一个新的列作为运算的结果</p>
