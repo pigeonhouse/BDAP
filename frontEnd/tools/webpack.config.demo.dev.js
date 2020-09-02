@@ -60,7 +60,8 @@ const devServer = {
   contentBase: path.resolve(__dirname, '..', 'demo'),
   publicPath: '/dist',
   disableHostCheck: true,
-  host:getNetworkIp()
+  host:getNetworkIp(),
+  port:8080
 };
 
 const output = {
