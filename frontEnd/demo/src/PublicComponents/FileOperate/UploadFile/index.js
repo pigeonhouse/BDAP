@@ -158,7 +158,7 @@ class UploadFile extends React.Component {
 
         const props = {
             name: 'file',
-            action: mode === 'backEndTest' ? 'http://localhost:1001/filesystem-service/file' :
+            action: mode === 'backEndTest' ? 'http://127.0.0.1:1001/filesystem-service/file' :
                 'https://result.eolinker.com/MSwz6fu34b763a21e1f7efa84a86a16f767a756952d0f95?uri=localhost:1001/filesystem-service/file',
             headers: {
                 "token": Cookies.get('token'),
