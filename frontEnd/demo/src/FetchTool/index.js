@@ -41,7 +41,7 @@ export async function fetchTool(url, init) {
     }
 
     // 通过fetch函数向后端发送请求
-    const res = await fetch(newUrl, init);
+    const res = await fetch(newUrl, init);  
     console.log(res)
 
     /**
