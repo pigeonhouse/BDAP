@@ -33,7 +33,7 @@ export async function fetchTool(url, init) {
         }
         newUrl = "https://result.eolinker.com/MSwz6fu34b763a21e1f7efa84a86a16f767a756952d0f95?uri=localhost:1001" + frontUrl;
     } else if (mode === 'backEndTest') {
-        newUrl = "http://localhost:1001" + url;
+        newUrl = "http://127.0.0.1:1001" + url;
     } else if (mode === "production") {
 
         // 待定url前缀
@@ -96,7 +96,7 @@ async function refreshAccessToken() {
     if (mode === 'frontEndTest') {
         url = "https://result.eolinker.com/MSwz6fu34b763a21e1f7efa84a86a16f767a756952d0f95?uri=localhost:1001" + newUrl;
     } else if (mode === 'backEndTest') {
-        url = "http://localhost:1001" + url;
+        url = "http://127.0.0.1:1001" + url;
     } else if (mode === "production") {
         // 待定url前缀
         url = "https://result.eolinker.com/MSwz6fu34b763a21e1f7efa84a86a16f767a756952d0f95?uri=localhost:1001" + url;
@@ -108,4 +108,4 @@ async function refreshAccessToken() {
     } else if (res.status === 403) {
         return res;
     }
-}
+}       
