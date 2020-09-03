@@ -6,7 +6,7 @@
 //'frontEndTest'
 //'backEndTest'
 //'production'
-export const mode = 'backEndTest';
+export const mode = 'frontEndTest';
 
 /**
  * 将init作为属性，向url发送fetch请求，根据返回的状态码刷新token，返回请求结果
