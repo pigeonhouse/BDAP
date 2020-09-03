@@ -6,7 +6,7 @@
 //'frontEndTest'
 //'backEndTest'
 //'production'
-export const mode = 'frontEndTest';
+export const mode = 'backEndTest';
 
 /**
  * 将init作为属性，向url发送fetch请求，根据返回的状态码刷新token，返回请求结果
@@ -41,7 +41,7 @@ export async function fetchTool(url, init) {
     }
 
     // 通过fetch函数向后端发送请求
-    const res = await fetch(newUrl, init);  
+    const res = await fetch(newUrl, init);
     console.log(res)
 
     /**
