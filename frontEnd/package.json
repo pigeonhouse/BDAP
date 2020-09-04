@@ -74,7 +74,7 @@
     "ml-regression-polynomial": "^1.0.3",
     "ml-regression-simple-linear": "^1.0.2",
     "ml-svm": "^2.1.2",
-    "papaparse": "^4.6.3",
+    "papaparse": "^5.2.0",
     "react": "^16.13.1",
     "react-ace": "^8.0.0",
     "react-burger-menu": "^2.6.11",
