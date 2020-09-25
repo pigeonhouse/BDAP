@@ -1,5 +1,5 @@
 ﻿import Cookies from 'js-cookie';
-import {localip} from './ip';
+import {ip} from './ip';
 /***
  * 存放与后端交互的函数fetchTool，负责前后端交互时发送请求信息，并将后端响应的结果返回。
  */
@@ -15,7 +15,6 @@ export const mode = 'backEndTest';
  */
 export async function fetchTool(url, init) {
     var newUrl = '';
-    const ip=localip;
     // 拿到Cookies中存的token，放入init中
     const token = Cookies.get('token');
     const refreshToken = Cookies.get('refreshToken');
