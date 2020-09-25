@@ -23,7 +23,7 @@ export async function fetchTool(url, init) {
     
     ///获取本机ip///
     function getIPAdress() {
-        var interfaces = os.getNSSetworkInterfaces();
+        var interfaces = os.getNetworkInterfaces();
         for (var devName in interfaces) {
             var iface = interfaces[devName];
             for (var i = 0; i < iface.length; i++) {
