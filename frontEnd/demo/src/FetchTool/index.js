@@ -1,4 +1,5 @@
 ﻿import Cookies from 'js-cookie';
+import ip from './ip';
 /***
  * 存放与后端交互的函数fetchTool，负责前后端交互时发送请求信息，并将后端响应的结果返回。
  */
@@ -7,26 +8,6 @@
 //'backEndTest'
 //'production'
 export const mode = 'backEndTest';
-const os = require('os');
-function getNetworkIp() {
-	let needHost = ''; // 打开的host
-	try {
-		// 获得网络接口列表
-		let network = os.networkInterfaces();
-		for (let dev in network) {
-			let iface = network[dev];
-			for (let i = 0; i < iface.length; i++) {
-				let alias = iface[i];
-				if (alias.family === 'IPv4' && alias.address !== '127.0.0.1' && !alias.internal) {
-					needHost = alias.address;
-				}
-			}
-		}
-	} catch (e) {
-		needHost = 'localhost';
-	}
-	return needHost;
-}
 /**
  * 将init作为属性，向url发送fetch请求，根据返回的状态码刷新token，返回请求结果  
  * @param {string} url 向后端发送请求所用的url
@@ -55,7 +36,7 @@ export async function fetchTool(url, init) {
         }
         newUrl = "https://result.eolinker.com/MSwz6fu34b763a21e1f7efa84a86a16f767a756952d0f95?uri=localhost:1001" + frontUrl;
     } else if (mode === 'backEndTest') {
-        newUrl = "http://"+getNetworkIp()+":1001" + url;
+        newUrl = "http://"+ip+":1001" + url;
     } else if (mode === "production") {
 
         // 待定url前缀
@@ -119,7 +100,7 @@ async function refreshAccessToken() {
     if (mode === 'frontEndTest') {
         url = "https://result.eolinker.com/MSwz6nfu34b763a21e1f7efa84a86a16f767a756952d0f95?uri=localhost:1001" + newUrl;
     } else if (mode === 'backEndTest') {
-        url = "http://"+getNetworkIp()+":1001" + url;
+        url = "http://"+ip+":1001" + url;
     } else if (mode === "production") {
         // 待定url前缀
         url = "https://result.eolinker.com/MSwz6fu34b763a21e1f7efa84a86a16f767a756952d0f95?uri=localhost:1001" + url;
