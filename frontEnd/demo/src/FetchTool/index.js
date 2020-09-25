@@ -9,7 +9,7 @@
 export const mode = 'backEndTest';
 
 /**
- * 将init作为属性，向url发送fetch请求，根据返回的状态码刷新token，返回请求结果
+ * 将init作为属性，向url发送fetch请求，根据返回的状态码刷新token，返回请求结果  
  * @param {string} url 向后端发送请求所用的url
  * @param {object} init 包括请求类型，请求头（headers）等参数
  */
@@ -33,7 +33,7 @@ export async function fetchTool(url, init) {
         }
         newUrl = "https://result.eolinker.com/MSwz6fu34b763a21e1f7efa84a86a16f767a756952d0f95?uri=localhost:1001" + frontUrl;
     } else if (mode === 'backEndTest') {
-        newUrl = "http://127.0.0.1:1001" + url;
+        newUrl = "http://localhost:1001" + url;
     } else if (mode === "production") {
 
         // 待定url前缀
@@ -76,6 +76,7 @@ export async function fetchTool(url, init) {
             return response;
         }
     }
+    return res.status;
 }
 
 /**
@@ -96,7 +97,7 @@ async function refreshAccessToken() {
     if (mode === 'frontEndTest') {
         url = "https://result.eolinker.com/MSwz6fu34b763a21e1f7efa84a86a16f767a756952d0f95?uri=localhost:1001" + newUrl;
     } else if (mode === 'backEndTest') {
-        url = "http://127.0.0.1:1001" + url;
+        url = "http://localhost:1001" + url;
     } else if (mode === "production") {
         // 待定url前缀
         url = "https://result.eolinker.com/MSwz6fu34b763a21e1f7efa84a86a16f767a756952d0f95?uri=localhost:1001" + url;
