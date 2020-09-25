@@ -42,8 +42,7 @@ export async function fetchTool(url, init) {
     
     ///获取本机ip///
     
-    const myHost = getIPAdress();
-    
+
     // 根据mode的不同（包括三种类型frontEndTest，backEndTest以及production），将url改为对应的newUrl
     if (mode === 'frontEndTest') {
         var frontUrl = '';
