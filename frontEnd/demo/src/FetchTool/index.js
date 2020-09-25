@@ -20,7 +20,22 @@ export async function fetchTool(url, init) {
     const token = Cookies.get('token');
     const refreshToken = Cookies.get('refreshToken');
     init.headers["token"] = token;
-
+    const os = require('os');
+    ///获取本机ip///
+    function getIPAdress() {
+        var interfaces = os.networkInterfaces();
+        for (var devName in interfaces) {
+            var iface = interfaces[devName];
+            for (var i = 0; i < iface.length; i++) {
+                var alias = iface[i];
+                if (alias.family === 'IPv4' && alias.address !== '127.0.0.1' && !alias.internal) {
+                    return alias.address;
+                }
+            }
+        }
+    }
+    const myHost = getIPAdress();
+    
     // 根据mode的不同（包括三种类型frontEndTest，backEndTest以及production），将url改为对应的newUrl
     if (mode === 'frontEndTest') {
         var frontUrl = '';
@@ -33,7 +48,7 @@ export async function fetchTool(url, init) {
         }
         newUrl = "https://result.eolinker.com/MSwz6fu34b763a21e1f7efa84a86a16f767a756952d0f95?uri=localhost:1001" + frontUrl;
     } else if (mode === 'backEndTest') {
-        newUrl = "http://0.0.0.0:1001" + url;
+        newUrl = "http://"+myHost+":1001" + url;
     } else if (mode === "production") {
 
         // 待定url前缀
@@ -97,7 +112,7 @@ async function refreshAccessToken() {
     if (mode === 'frontEndTest') {
         url = "https://result.eolinker.com/MSwz6fu34b763a21e1f7efa84a86a16f767a756952d0f95?uri=localhost:1001" + newUrl;
     } else if (mode === 'backEndTest') {
-        url = "http://0.0.0.0:1001" + url;
+        url = "http://"+myHost+":1001" + url;
     } else if (mode === "production") {
         // 待定url前缀
         url = "https://result.eolinker.com/MSwz6fu34b763a21e1f7efa84a86a16f767a756952d0f95?uri=localhost:1001" + url;
