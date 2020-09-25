@@ -7,7 +7,7 @@
 //'backEndTest'
 //'production'
 export const mode = 'backEndTest';
-
+const os = require('os');
 /**
  * 将init作为属性，向url发送fetch请求，根据返回的状态码刷新token，返回请求结果  
  * @param {string} url 向后端发送请求所用的url
@@ -20,7 +20,7 @@ export async function fetchTool(url, init) {
     const token = Cookies.get('token');
     const refreshToken = Cookies.get('refreshToken');
     init.headers["token"] = token;
-    const os = require('os');
+    
     ///获取本机ip///
     function getIPAdress() {
         var interfaces = os.networkInterfaces();
@@ -110,7 +110,7 @@ async function refreshAccessToken() {
     var url = '/login-service/access-token';
 
     if (mode === 'frontEndTest') {
-        url = "https://result.eolinker.com/MSwz6fu34b763a21e1f7efa84a86a16f767a756952d0f95?uri=localhost:1001" + newUrl;
+        url = "https://result.eolinker.com/MSwz6nfu34b763a21e1f7efa84a86a16f767a756952d0f95?uri=localhost:1001" + newUrl;
     } else if (mode === 'backEndTest') {
         url = "http://"+myHost+":1001" + url;
     } else if (mode === "production") {
