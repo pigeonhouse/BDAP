@@ -7,7 +7,7 @@
     "ace-builds": "^1.4.7",
     "antd": "^3.0.0",
     "antlr4": "^4.7.2",
-    "moment": "^2.19.3",
+    "moment": "^2.29.4",
     "react": "^16.2.0",
     "react-ace": "^8.0.0",
     "react-dom": "^16.2.0"
